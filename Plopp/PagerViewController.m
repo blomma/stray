@@ -49,6 +49,7 @@
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
 	[viewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+
 	_rotating = YES;
 }
 
@@ -70,8 +71,7 @@
 	CGRect frame = self.scrollView.frame;
     frame.origin.x = frame.size.width * _page;
     frame.origin.y = 0;
-	[self.scrollView scrollRectToVisible:frame animated:NO];
-    
+	[self.scrollView scrollRectToVisible:frame animated:NO];    
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
@@ -101,6 +101,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
+    
 	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
 	if (viewController.view.superview != nil) {
 		[viewController viewDidAppear:animated];
@@ -112,6 +113,7 @@
 	if (viewController.view.superview != nil) {
 		[viewController viewWillDisappear:animated];
 	}
+
 	[super viewWillDisappear:animated];
 }
 
@@ -120,12 +122,14 @@
 	if (viewController.view.superview != nil) {
 		[viewController viewDidDisappear:animated];
 	}
+
 	[super viewDidDisappear:animated];
 }
 
 - (void)loadScrollViewWithPage:(int)page {
     if (page < 0)
         return;
+    
     if (page >= [self.childViewControllers count])
         return;
     
@@ -140,7 +144,9 @@
         CGRect frame = self.scrollView.frame;
         frame.origin.x = frame.size.width * page;
         frame.origin.y = 0;
+
         controller.view.frame = frame;
+        
         [self.scrollView addSubview:controller.view];
     }
 }
@@ -167,6 +173,7 @@
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
 	UIViewController *oldViewController = [self.childViewControllers objectAtIndex:_page];
 	UIViewController *newViewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
+
 	[oldViewController viewDidDisappear:YES];
 	[newViewController viewDidAppear:YES];
     
@@ -191,12 +198,16 @@
 	if (self.pageControl.currentPage != page) {
 		UIViewController *oldViewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
 		UIViewController *newViewController = [self.childViewControllers objectAtIndex:page];
+
 		[oldViewController viewWillDisappear:YES];
 		[newViewController viewWillAppear:YES];
-		self.pageControl.currentPage = page;
-		[oldViewController viewDidDisappear:YES];
+		
+        self.pageControl.currentPage = page;
+		
+        [oldViewController viewDidDisappear:YES];
 		[newViewController viewDidAppear:YES];
-		_page = page;
+		
+        _page = page;
 	}
 }
 
