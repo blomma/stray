@@ -9,7 +9,6 @@
 #import "NDRotator.h"
 
 
-static enum NDRotatorStyle	kDefaultStyle = NDRotatorStyleRotate;
 static const CGFloat		kDefaultRadius = 1.0,
 kDefaultLinearSensitivity = 0.05,
 kDefaultMinimumValue = 0.0,
@@ -20,8 +19,7 @@ static enum NDThumbTint		kDefaultThumbTint = NDThumbTintLime;
 static const BOOL			kDefaultContinuousValue = YES,
 kDefaultWrapAroundValue = YES;
 
-static NSString			* const kStyleCodingKey = @"style",
-* const kRadiusCodingKey = @"radius",
+static NSString			* const kRadiusCodingKey = @"radius",
 * const kLinearSensitivityCodingKey = @"linearSensitivity",
 * const kMinimumValueCodingKey = @"minimumValue",
 * const kMaximumValueCodingKey = @"maximumValue",
@@ -31,7 +29,6 @@ static NSString			* const kStyleCodingKey = @"style",
 * const kContinuousCodingKey = @"continuous",
 * const kWrapAroundCodingKey = @"wrapAround";
 
-static NSString			* kRotatorStyleStrs[] = { @"disc", @"rotate", @"linear" };
 static NSString			* kThumbTintStr[] = { @"grey", @"red", @"green", @"blue", @"yellow", @"magenta", @"teal", @"orange", @"pink", @"lime", @"spring green", @"purple", @"aqua", @"black" };
 
 static const CGFloat		kThumbTintSaturation = 0.45;
@@ -201,7 +198,6 @@ minimumDomain,
 maximumDomain,
 angle,
 radius,
-style,
 linearSensitivity,
 wrapAround,
 continuous,
@@ -210,7 +206,7 @@ thumbTint;
 #pragma mark -
 #pragma mark manully implemented properties
 
-- (CGFloat)radius { return self.style == NDRotatorStyleRotate ? 1.0 : radius; }
+- (CGFloat)radius { return 1.0; }
 
 - (CGPoint)cartesianPoint { return CGPointMake(cos(self.angle)*self.radius, sin(self.angle)*self.radius ); }
 - (CGPoint)constrainedCartesianPoint
@@ -246,16 +242,7 @@ thumbTint;
 	CGFloat			theMinium = self.minimumValue,
 	theMaximum = self.maximumValue;
 	
-	switch( self.style )
-	{
-		case NDRotatorStyleDisc:
-		case NDRotatorStyleRotate:
 			self.angle = mapValue(constrainValue( self.angle, self.minimumValue, self.maximumDomain), theMinium, theMaximum, self.minimumValue, self.maximumDomain );
-			break;
-		case NDRotatorStyleLinear:
-			self.cartesianPoint = CGPointMake( self.cartesianPoint.x, constrainValue( mapValue( aValue, theMinium, theMaximum, -1.0, 1.0 ), -1.0, 1.0 ) );
-			break;
-	}
 }
 
 - (void)setAngle:(CGFloat)anAngle
@@ -277,7 +264,6 @@ thumbTint;
 {
 	if( (self = [super initWithFrame:aFrame]) != nil )
 	{
-		self.style = kDefaultStyle;
 		self.radius = kDefaultRadius;
 		self.linearSensitivity = kDefaultLinearSensitivity;
 		self.minimumValue = kDefaultMinimumValue;
@@ -362,7 +348,6 @@ static BOOL decodeBooleanWithDefault( NSCoder * aCoder, NSString * aKey, BOOL aD
 {
 	if( (self = [super initWithCoder:aDecoder]) != nil )
 	{
-			self.style = kDefaultStyle;
 			self.radius = decodeDoubleWithDefault( aDecoder, kRadiusCodingKey, kDefaultRadius );
 			self.linearSensitivity = decodeDoubleWithDefault( aDecoder, kLinearSensitivityCodingKey, kDefaultLinearSensitivity );
 			self.minimumValue = decodeDoubleWithDefault( aDecoder, kMinimumValueCodingKey, kDefaultMinimumValue );
@@ -629,17 +614,9 @@ touchDownYLocation;
 
 - (void)setLocation:(CGPoint)aPoint
 {
-	if( self.style != NDRotatorStyleLinear )
-	{
 		CGRect		theBounds = self.bodyRect,
 		theThumbRect = self.thumbRect;
 		self.cartesianPoint = mapPoint(aPoint, shrinkRect(theBounds, CGSizeMake(CGRectGetWidth(theThumbRect)*0.68,CGRectGetHeight(theThumbRect)*0.68) ), CGRectMake(-1.0, -1.0, 2.0, 2.0 ) );
-	}
-	else
-	{
-		self.angle = self.touchDownAngle - (aPoint.y - self.touchDownYLocation) * self.linearSensitivity;
-		self.radius = 1.0;
-	}
 }
 
 - (UIImage *)cachedBodyImage

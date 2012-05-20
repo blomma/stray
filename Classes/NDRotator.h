@@ -32,20 +32,6 @@
 #import <UIKit/UIKit.h>
 
 /**
- @enum NDRotatorStyle
- @abstract Constants used to control the way <NDRotator> interacts with the user.
- @constant NDRotatorStyleDisc With the disc style the user can move the control thumb through two axises, <angle> and <radius>.
- @constant NDRotatorStyleRotate With the rotate style the user can only move the control through one axises, <angle>, the <radius> value is always 1.0.
- @constant NDRotatorStyleLinear The linear style is similar to the rotate style but the user can change the angular value with a vertical movement, the <radius> value is always 1.0, the sensitivity is <linearSensitivity> property.
- */
-enum NDRotatorStyle
-{
-	NDRotatorStyleDisc,
-	NDRotatorStyleRotate,
-	NDRotatorStyleLinear
-};
-
-/**
  Constants used to change the thumb tint, this can be used to make the thumb clearer for smaller rotator controls.
  */
 enum NDThumbTint
@@ -160,10 +146,6 @@ enum NDThumbTint
  @name Modifying the Rotator’s Behavior
  */
 @property(assign)	CGFloat				linearSensitivity;
-/**
- Contains the enum value used to determine how the reciever interacts with the user.
- */
-@property			enum NDRotatorStyle			style;
 /**
  Contains the boolean used to determine how the rotator behaves when the user reaches <minimumDomain> or <maximumDomain>.
  
