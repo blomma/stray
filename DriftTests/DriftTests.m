@@ -1,6 +1,6 @@
 //
-//  PloppTests.m
-//  PloppTests
+//  DriftTests.m
+//  DriftTests
 //
 //  Created by Mikael Hultgren on 5/6/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
@@ -26,7 +26,7 @@
 
 - (void)testExample
 {
-    STFail(@"Unit tests are not implemented yet in PloppTests");
+    STFail(@"Unit tests are not implemented yet in DriftTests");
 }
 
 @end

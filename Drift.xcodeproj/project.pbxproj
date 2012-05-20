@@ -29,7 +29,7 @@
 			containerPortal = 9E42F1E115570FD60087F602 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 9E42F1E915570FD60087F602;
-			remoteInfo = Plopp;
+			remoteInfo = Drift;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -123,8 +123,7 @@
 				9E42F22815571E9C0087F602 /* CustomPagerViewController.m */,
 				9E42F1F515570FD60087F602 /* Supporting Files */,
 			);
-			name = Drift;
-			path = Plopp;
+			path = Drift;
 			sourceTree = "<group>";
 		};
 		9E42F1F515570FD60087F602 /* Supporting Files */ = {
@@ -145,8 +144,7 @@
 				9E42F21915570FD70087F602 /* DriftTests.m */,
 				9E42F21315570FD70087F602 /* Supporting Files */,
 			);
-			name = DriftTests;
-			path = PloppTests;
+			path = DriftTests;
 			sourceTree = "<group>";
 		};
 		9E42F21315570FD70087F602 /* Supporting Files */ = {
@@ -174,7 +172,7 @@
 			dependencies = (
 			);
 			name = Drift;
-			productName = Plopp;
+			productName = Drift;
 			productReference = 9E42F1EA15570FD60087F602 /* Drift.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -193,7 +191,7 @@
 				9E42F21115570FD70087F602 /* PBXTargetDependency */,
 			);
 			name = DriftTests;
-			productName = PloppTests;
+			productName = DriftTests;
 			productReference = 9E42F20B15570FD70087F602 /* DriftTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
@@ -366,8 +364,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Plopp/Drift-Prefix.pch";
-				INFOPLIST_FILE = "Plopp/Drift-Info.plist";
+				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
+				INFOPLIST_FILE = "Drift/Drift-Info.plist";
 				PRODUCT_NAME = Drift;
 				WRAPPER_EXTENSION = app;
 			};
@@ -377,8 +375,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Plopp/Drift-Prefix.pch";
-				INFOPLIST_FILE = "Plopp/Drift-Info.plist";
+				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
+				INFOPLIST_FILE = "Drift/Drift-Info.plist";
 				PRODUCT_NAME = Drift;
 				WRAPPER_EXTENSION = app;
 			};
@@ -387,14 +385,14 @@
 		9E42F22115570FD70087F602 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Plopp.app/Plopp";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Drift.app/Drift";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Plopp/Plopp-Prefix.pch";
-				INFOPLIST_FILE = "PloppTests/DriftTests-Info.plist";
+				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
+				INFOPLIST_FILE = "DriftTests/DriftTests-Info.plist";
 				PRODUCT_NAME = DriftTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
@@ -404,14 +402,14 @@
 		9E42F22215570FD70087F602 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Plopp.app/Plopp";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Drift.app/Drift";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Plopp/Plopp-Prefix.pch";
-				INFOPLIST_FILE = "PloppTests/DriftTests-Info.plist";
+				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
+				INFOPLIST_FILE = "DriftTests/DriftTests-Info.plist";
 				PRODUCT_NAME = DriftTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
