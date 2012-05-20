@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "AppDelegate.h"
+#import "DriftAppDelegate.h"
 
-@implementation AppDelegate
+@implementation DriftAppDelegate
 
 @synthesize window = _window;
 

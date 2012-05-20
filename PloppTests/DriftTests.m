@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "PloppTests.h"
+#import "DriftTests.h"
 
-@implementation PloppTests
+@implementation DriftTests
 
 - (void)setUp
 {

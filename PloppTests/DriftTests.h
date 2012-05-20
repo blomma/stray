@@ -8,6 +8,6 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-@interface PloppTests : SenTestCase
+@interface DriftTests : SenTestCase
 
 @end

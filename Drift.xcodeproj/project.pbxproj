@@ -12,14 +12,14 @@
 		9E42F1F315570FD60087F602 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F215570FD60087F602 /* CoreGraphics.framework */; };
 		9E42F1F915570FD60087F602 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F1F715570FD60087F602 /* InfoPlist.strings */; };
 		9E42F1FB15570FD60087F602 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F1FA15570FD60087F602 /* main.m */; };
-		9E42F1FF15570FD60087F602 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F1FE15570FD60087F602 /* AppDelegate.m */; };
+		9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */; };
 		9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F20015570FD60087F602 /* MainStoryboard.storyboard */; };
 		9E42F20515570FD60087F602 /* PagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F20415570FD60087F602 /* PagerViewController.m */; };
 		9E42F20D15570FD70087F602 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F20C15570FD70087F602 /* SenTestingKit.framework */; };
 		9E42F20E15570FD70087F602 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1EE15570FD60087F602 /* UIKit.framework */; };
 		9E42F20F15570FD70087F602 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F015570FD60087F602 /* Foundation.framework */; };
 		9E42F21715570FD70087F602 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F21515570FD70087F602 /* InfoPlist.strings */; };
-		9E42F21A15570FD70087F602 /* PloppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F21915570FD70087F602 /* PloppTests.m */; };
+		9E42F21A15570FD70087F602 /* DriftTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F21915570FD70087F602 /* DriftTests.m */; };
 		9E42F22915571E9C0087F602 /* CustomPagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F22815571E9C0087F602 /* CustomPagerViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -34,25 +34,25 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		9E42F1EA15570FD60087F602 /* Plopp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Plopp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E42F1EA15570FD60087F602 /* Drift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Drift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E42F1EE15570FD60087F602 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		9E42F1F015570FD60087F602 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9E42F1F215570FD60087F602 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		9E42F1F615570FD60087F602 /* Plopp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Plopp-Info.plist"; sourceTree = "<group>"; };
+		9E42F1F615570FD60087F602 /* Drift-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Drift-Info.plist"; sourceTree = "<group>"; };
 		9E42F1F815570FD60087F602 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9E42F1FA15570FD60087F602 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		9E42F1FC15570FD60087F602 /* Plopp-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Plopp-Prefix.pch"; sourceTree = "<group>"; };
-		9E42F1FD15570FD60087F602 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		9E42F1FE15570FD60087F602 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		9E42F1FC15570FD60087F602 /* Drift-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Drift-Prefix.pch"; sourceTree = "<group>"; };
+		9E42F1FD15570FD60087F602 /* DriftAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriftAppDelegate.h; sourceTree = "<group>"; };
+		9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DriftAppDelegate.m; sourceTree = "<group>"; };
 		9E42F20115570FD60087F602 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		9E42F20315570FD60087F602 /* PagerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PagerViewController.h; sourceTree = "<group>"; };
 		9E42F20415570FD60087F602 /* PagerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PagerViewController.m; sourceTree = "<group>"; };
-		9E42F20B15570FD70087F602 /* PloppTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PloppTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E42F20B15570FD70087F602 /* DriftTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DriftTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E42F20C15570FD70087F602 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		9E42F21415570FD70087F602 /* PloppTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PloppTests-Info.plist"; sourceTree = "<group>"; };
+		9E42F21415570FD70087F602 /* DriftTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DriftTests-Info.plist"; sourceTree = "<group>"; };
 		9E42F21615570FD70087F602 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		9E42F21815570FD70087F602 /* PloppTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PloppTests.h; sourceTree = "<group>"; };
-		9E42F21915570FD70087F602 /* PloppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PloppTests.m; sourceTree = "<group>"; };
+		9E42F21815570FD70087F602 /* DriftTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriftTests.h; sourceTree = "<group>"; };
+		9E42F21915570FD70087F602 /* DriftTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DriftTests.m; sourceTree = "<group>"; };
 		9E42F22715571E9C0087F602 /* CustomPagerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomPagerViewController.h; sourceTree = "<group>"; };
 		9E42F22815571E9C0087F602 /* CustomPagerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomPagerViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -84,8 +84,8 @@
 		9E42F1DF15570FD60087F602 = {
 			isa = PBXGroup;
 			children = (
-				9E42F1F415570FD60087F602 /* Plopp */,
-				9E42F21215570FD70087F602 /* PloppTests */,
+				9E42F1F415570FD60087F602 /* Drift */,
+				9E42F21215570FD70087F602 /* DriftTests */,
 				9E42F1ED15570FD60087F602 /* Frameworks */,
 				9E42F1EB15570FD60087F602 /* Products */,
 			);
@@ -94,8 +94,8 @@
 		9E42F1EB15570FD60087F602 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9E42F1EA15570FD60087F602 /* Plopp.app */,
-				9E42F20B15570FD70087F602 /* PloppTests.octest */,
+				9E42F1EA15570FD60087F602 /* Drift.app */,
+				9E42F20B15570FD70087F602 /* DriftTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -111,11 +111,11 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		9E42F1F415570FD60087F602 /* Plopp */ = {
+		9E42F1F415570FD60087F602 /* Drift */ = {
 			isa = PBXGroup;
 			children = (
-				9E42F1FD15570FD60087F602 /* AppDelegate.h */,
-				9E42F1FE15570FD60087F602 /* AppDelegate.m */,
+				9E42F1FD15570FD60087F602 /* DriftAppDelegate.h */,
+				9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */,
 				9E42F20015570FD60087F602 /* MainStoryboard.storyboard */,
 				9E42F20315570FD60087F602 /* PagerViewController.h */,
 				9E42F20415570FD60087F602 /* PagerViewController.m */,
@@ -123,34 +123,36 @@
 				9E42F22815571E9C0087F602 /* CustomPagerViewController.m */,
 				9E42F1F515570FD60087F602 /* Supporting Files */,
 			);
+			name = Drift;
 			path = Plopp;
 			sourceTree = "<group>";
 		};
 		9E42F1F515570FD60087F602 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				9E42F1F615570FD60087F602 /* Plopp-Info.plist */,
+				9E42F1F615570FD60087F602 /* Drift-Info.plist */,
 				9E42F1F715570FD60087F602 /* InfoPlist.strings */,
 				9E42F1FA15570FD60087F602 /* main.m */,
-				9E42F1FC15570FD60087F602 /* Plopp-Prefix.pch */,
+				9E42F1FC15570FD60087F602 /* Drift-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		9E42F21215570FD70087F602 /* PloppTests */ = {
+		9E42F21215570FD70087F602 /* DriftTests */ = {
 			isa = PBXGroup;
 			children = (
-				9E42F21815570FD70087F602 /* PloppTests.h */,
-				9E42F21915570FD70087F602 /* PloppTests.m */,
+				9E42F21815570FD70087F602 /* DriftTests.h */,
+				9E42F21915570FD70087F602 /* DriftTests.m */,
 				9E42F21315570FD70087F602 /* Supporting Files */,
 			);
+			name = DriftTests;
 			path = PloppTests;
 			sourceTree = "<group>";
 		};
 		9E42F21315570FD70087F602 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				9E42F21415570FD70087F602 /* PloppTests-Info.plist */,
+				9E42F21415570FD70087F602 /* DriftTests-Info.plist */,
 				9E42F21515570FD70087F602 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -159,9 +161,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9E42F1E915570FD60087F602 /* Plopp */ = {
+		9E42F1E915570FD60087F602 /* Drift */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9E42F21D15570FD70087F602 /* Build configuration list for PBXNativeTarget "Plopp" */;
+			buildConfigurationList = 9E42F21D15570FD70087F602 /* Build configuration list for PBXNativeTarget "Drift" */;
 			buildPhases = (
 				9E42F1E615570FD60087F602 /* Sources */,
 				9E42F1E715570FD60087F602 /* Frameworks */,
@@ -171,14 +173,14 @@
 			);
 			dependencies = (
 			);
-			name = Plopp;
+			name = Drift;
 			productName = Plopp;
-			productReference = 9E42F1EA15570FD60087F602 /* Plopp.app */;
+			productReference = 9E42F1EA15570FD60087F602 /* Drift.app */;
 			productType = "com.apple.product-type.application";
 		};
-		9E42F20A15570FD70087F602 /* PloppTests */ = {
+		9E42F20A15570FD70087F602 /* DriftTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9E42F22015570FD70087F602 /* Build configuration list for PBXNativeTarget "PloppTests" */;
+			buildConfigurationList = 9E42F22015570FD70087F602 /* Build configuration list for PBXNativeTarget "DriftTests" */;
 			buildPhases = (
 				9E42F20615570FD70087F602 /* Sources */,
 				9E42F20715570FD70087F602 /* Frameworks */,
@@ -190,9 +192,9 @@
 			dependencies = (
 				9E42F21115570FD70087F602 /* PBXTargetDependency */,
 			);
-			name = PloppTests;
+			name = DriftTests;
 			productName = PloppTests;
-			productReference = 9E42F20B15570FD70087F602 /* PloppTests.octest */;
+			productReference = 9E42F20B15570FD70087F602 /* DriftTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -203,7 +205,7 @@
 			attributes = {
 				LastUpgradeCheck = 0430;
 			};
-			buildConfigurationList = 9E42F1E415570FD60087F602 /* Build configuration list for PBXProject "Plopp" */;
+			buildConfigurationList = 9E42F1E415570FD60087F602 /* Build configuration list for PBXProject "Drift" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -215,8 +217,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9E42F1E915570FD60087F602 /* Plopp */,
-				9E42F20A15570FD70087F602 /* PloppTests */,
+				9E42F1E915570FD60087F602 /* Drift */,
+				9E42F20A15570FD70087F602 /* DriftTests */,
 			);
 		};
 /* End PBXProject section */
@@ -263,7 +265,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E42F1FB15570FD60087F602 /* main.m in Sources */,
-				9E42F1FF15570FD60087F602 /* AppDelegate.m in Sources */,
+				9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */,
 				9E42F20515570FD60087F602 /* PagerViewController.m in Sources */,
 				9E42F22915571E9C0087F602 /* CustomPagerViewController.m in Sources */,
 			);
@@ -273,7 +275,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E42F21A15570FD70087F602 /* PloppTests.m in Sources */,
+				9E42F21A15570FD70087F602 /* DriftTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,7 +284,7 @@
 /* Begin PBXTargetDependency section */
 		9E42F21115570FD70087F602 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 9E42F1E915570FD60087F602 /* Plopp */;
+			target = 9E42F1E915570FD60087F602 /* Drift */;
 			targetProxy = 9E42F21015570FD70087F602 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -364,9 +366,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Plopp/Plopp-Prefix.pch";
-				INFOPLIST_FILE = "Plopp/Plopp-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "Plopp/Drift-Prefix.pch";
+				INFOPLIST_FILE = "Plopp/Drift-Info.plist";
+				PRODUCT_NAME = Drift;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -375,9 +377,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Plopp/Plopp-Prefix.pch";
-				INFOPLIST_FILE = "Plopp/Plopp-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "Plopp/Drift-Prefix.pch";
+				INFOPLIST_FILE = "Plopp/Drift-Info.plist";
+				PRODUCT_NAME = Drift;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -392,8 +394,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Plopp/Plopp-Prefix.pch";
-				INFOPLIST_FILE = "PloppTests/PloppTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "PloppTests/DriftTests-Info.plist";
+				PRODUCT_NAME = DriftTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -409,8 +411,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Plopp/Plopp-Prefix.pch";
-				INFOPLIST_FILE = "PloppTests/PloppTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "PloppTests/DriftTests-Info.plist";
+				PRODUCT_NAME = DriftTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -419,7 +421,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9E42F1E415570FD60087F602 /* Build configuration list for PBXProject "Plopp" */ = {
+		9E42F1E415570FD60087F602 /* Build configuration list for PBXProject "Drift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9E42F21B15570FD70087F602 /* Debug */,
@@ -428,21 +430,23 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9E42F21D15570FD70087F602 /* Build configuration list for PBXNativeTarget "Plopp" */ = {
+		9E42F21D15570FD70087F602 /* Build configuration list for PBXNativeTarget "Drift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9E42F21E15570FD70087F602 /* Debug */,
 				9E42F21F15570FD70087F602 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
-		9E42F22015570FD70087F602 /* Build configuration list for PBXNativeTarget "PloppTests" */ = {
+		9E42F22015570FD70087F602 /* Build configuration list for PBXNativeTarget "DriftTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9E42F22115570FD70087F602 /* Debug */,
 				9E42F22215570FD70087F602 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
