@@ -16,8 +16,7 @@ kDefaultMaximumValue = 1.0,
 kDefaultMinimumDomain = 0.0*M_PI,
 kDefaultMaximumDomain = 2.0*M_PI;
 static enum NDThumbTint		kDefaultThumbTint = NDThumbTintLime;
-static const BOOL			kDefaultContinuousValue = YES,
-kDefaultWrapAroundValue = YES;
+static const BOOL			kDefaultContinuousValue = YES;
 
 static NSString			* const kRadiusCodingKey = @"radius",
 * const kLinearSensitivityCodingKey = @"linearSensitivity",
@@ -26,8 +25,7 @@ static NSString			* const kRadiusCodingKey = @"radius",
 * const kMinimumDomainCodingKey = @"minimumDomain",
 * const kMaximumDomainCodingKey = @"maximumDomain",
 * const kThumbTintCodingKey = @"thumbTint",
-* const kContinuousCodingKey = @"continuous",
-* const kWrapAroundCodingKey = @"wrapAround";
+* const kContinuousCodingKey = @"continuous";
 
 static NSString			* kThumbTintStr[] = { @"grey", @"red", @"green", @"blue", @"yellow", @"magenta", @"teal", @"orange", @"pink", @"lime", @"spring green", @"purple", @"aqua", @"black" };
 
@@ -199,7 +197,6 @@ maximumDomain,
 angle,
 radius,
 linearSensitivity,
-wrapAround,
 continuous,
 thumbTint;
 
@@ -247,9 +244,7 @@ thumbTint;
 
 - (void)setAngle:(CGFloat)anAngle
 {
-	angle = self.wrapAround != NO
-	? wrapValue( anAngle, self.minimumDomain, self.maximumDomain )
-	: constrainValue( anAngle, self.minimumDomain, self.maximumDomain );
+	angle = wrapValue( anAngle, self.minimumDomain, self.maximumDomain );
 }
 
 - (void)setThumbTint:(enum NDThumbTint)aThumbTint
@@ -272,7 +267,6 @@ thumbTint;
 		self.maximumDomain = kDefaultMaximumDomain;
 		self.thumbTint = kDefaultThumbTint;
 		self.continuous = kDefaultContinuousValue;
-		self.wrapAround = kDefaultWrapAroundValue;
 	}
 	
 	return self;
@@ -356,7 +350,6 @@ static BOOL decodeBooleanWithDefault( NSCoder * aCoder, NSString * aKey, BOOL aD
 			self.maximumDomain = decodeDoubleWithDefault( aDecoder, kMaximumDomainCodingKey, kDefaultMaximumDomain );
 			self.thumbTint = kDefaultThumbTint;
 			self.continuous = decodeBooleanWithDefault( aDecoder, kContinuousCodingKey, kDefaultContinuousValue );
-			self.wrapAround = decodeBooleanWithDefault( aDecoder, kWrapAroundCodingKey, kDefaultWrapAroundValue );
 	}
 	
 	return self;
@@ -371,7 +364,6 @@ static BOOL decodeBooleanWithDefault( NSCoder * aCoder, NSString * aKey, BOOL aD
 		[anEncoder encodeDouble:self.minimumDomain forKey:kMinimumDomainCodingKey];
 		[anEncoder encodeDouble:self.maximumDomain forKey:kMaximumDomainCodingKey];
 		[anEncoder encodeBool:self.continuous forKey:kContinuousCodingKey];
-		[anEncoder encodeBool:self.wrapAround forKey:kWrapAroundCodingKey];
 }
 
 #pragma mark -

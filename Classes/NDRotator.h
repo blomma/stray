@@ -147,14 +147,6 @@ enum NDThumbTint
  */
 @property(assign)	CGFloat				linearSensitivity;
 /**
- Contains the boolean used to determine how the rotator behaves when the user reaches <minimumDomain> or <maximumDomain>.
- 
- If <wrapAround> is YES then when the <angle> value reaches <minimumDomain> the <angle> value continues by wrapping the value up to <maximumDomain>, and similarly when the <angle> value reaches <maximumDomain> the <angle> value continues by wrapping the value down to <minimumDomain>. If NO then the rotator will simple stop when the <minimumDomain> or <maximumDomain> is reached. If <wrapAround> is YES and the difference between <minimumDomain> and <maximumDomain> is not exactly a multiple 2π then an undesired jump may occur.
- 
- The default value of this property is YES.
- */
-@property			BOOL						wrapAround;
-/**
  Contains a boolean value indicating whether changes in the sliders value generate continuous update events.
  
  If YES, the slider sends update events continuously to the associated target's action method. If NO, the slider only sends an action event when the user releases the slider’s thumb control to set the final value.
