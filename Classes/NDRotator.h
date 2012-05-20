@@ -147,15 +147,6 @@ enum NDThumbTint
  */
 @property(assign)	CGFloat				linearSensitivity;
 /**
- Contains a boolean value indicating whether changes in the sliders value generate continuous update events.
- 
- If YES, the slider sends update events continuously to the associated target's action method. If NO, the slider only sends an action event when the user releases the slider’s thumb control to set the final value.
- 
- The default value of this property is YES.
- */
-@property(nonatomic, getter=isContinuous) BOOL	continuous;
-
-/**
  @name Changing the Rotator’s Appearance
  */
 /**

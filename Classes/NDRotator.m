@@ -16,7 +16,6 @@ kDefaultMaximumValue = 1.0,
 kDefaultMinimumDomain = 0.0*M_PI,
 kDefaultMaximumDomain = 2.0*M_PI;
 static enum NDThumbTint		kDefaultThumbTint = NDThumbTintLime;
-static const BOOL			kDefaultContinuousValue = YES;
 
 static NSString			* const kRadiusCodingKey = @"radius",
 * const kLinearSensitivityCodingKey = @"linearSensitivity",
@@ -24,8 +23,7 @@ static NSString			* const kRadiusCodingKey = @"radius",
 * const kMaximumValueCodingKey = @"maximumValue",
 * const kMinimumDomainCodingKey = @"minimumDomain",
 * const kMaximumDomainCodingKey = @"maximumDomain",
-* const kThumbTintCodingKey = @"thumbTint",
-* const kContinuousCodingKey = @"continuous";
+* const kThumbTintCodingKey = @"thumbTint";
 
 static NSString			* kThumbTintStr[] = { @"grey", @"red", @"green", @"blue", @"yellow", @"magenta", @"teal", @"orange", @"pink", @"lime", @"spring green", @"purple", @"aqua", @"black" };
 
@@ -197,7 +195,6 @@ maximumDomain,
 angle,
 radius,
 linearSensitivity,
-continuous,
 thumbTint;
 
 #pragma mark -
@@ -266,7 +263,6 @@ thumbTint;
 		self.minimumDomain = kDefaultMinimumDomain;
 		self.maximumDomain = kDefaultMaximumDomain;
 		self.thumbTint = kDefaultThumbTint;
-		self.continuous = kDefaultContinuousValue;
 	}
 	
 	return self;
@@ -349,7 +345,6 @@ static BOOL decodeBooleanWithDefault( NSCoder * aCoder, NSString * aKey, BOOL aD
 			self.minimumDomain = decodeDoubleWithDefault( aDecoder, kMinimumDomainCodingKey, kDefaultMinimumDomain );
 			self.maximumDomain = decodeDoubleWithDefault( aDecoder, kMaximumDomainCodingKey, kDefaultMaximumDomain );
 			self.thumbTint = kDefaultThumbTint;
-			self.continuous = decodeBooleanWithDefault( aDecoder, kContinuousCodingKey, kDefaultContinuousValue );
 	}
 	
 	return self;
@@ -363,7 +358,6 @@ static BOOL decodeBooleanWithDefault( NSCoder * aCoder, NSString * aKey, BOOL aD
 		[anEncoder encodeDouble:self.maximumValue forKey:kMaximumValueCodingKey];
 		[anEncoder encodeDouble:self.minimumDomain forKey:kMinimumDomainCodingKey];
 		[anEncoder encodeDouble:self.maximumDomain forKey:kMaximumDomainCodingKey];
-		[anEncoder encodeBool:self.continuous forKey:kContinuousCodingKey];
 }
 
 #pragma mark -
@@ -377,8 +371,7 @@ static BOOL decodeBooleanWithDefault( NSCoder * aCoder, NSString * aKey, BOOL aD
 	self.touchDownYLocation = thePoint.y;
 	self.touchDownAngle = self.angle;
 	self.location = thePoint;
-	if( self.isContinuous )
-		[self sendActionsForControlEvents:UIControlEventValueChanged];
+	[self sendActionsForControlEvents:UIControlEventValueChanged];
 	[self setNeedsDisplay];
 	return YES;
 }
@@ -386,8 +379,7 @@ static BOOL decodeBooleanWithDefault( NSCoder * aCoder, NSString * aKey, BOOL aD
 - (BOOL)continueTrackingWithTouch:(UITouch *)aTouch withEvent:(UIEvent *)anEvent
 {
 	self.location = [aTouch locationInView:self];
-	if( self.isContinuous )
-		[self sendActionsForControlEvents:UIControlEventValueChanged];
+	[self sendActionsForControlEvents:UIControlEventValueChanged];
 	[self setNeedsDisplay];
 	return YES;
 }
