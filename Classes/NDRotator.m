@@ -1,11 +1,3 @@
-/*
- NDRotator.m
- RotatingControllerView
- 
- Created by Nathan Day on 7/07/11.
- Copyright 2011 Nathan Day. All rights reserved.
- */
-
 #import "NDRotator.h"
 
 // Contains the radius value of the receiver where 0.0 puts the thumb at the center and 1.0 puts the thumb at margin. 
@@ -27,18 +19,6 @@ static NSString			* const kMinimumValueCodingKey = @"minimumValue",
 static NSString			* kThumbTintStr[] = { @"grey", @"red", @"green", @"blue", @"yellow", @"magenta", @"teal", @"orange", @"pink", @"lime", @"spring green", @"purple", @"aqua", @"black" };
 
 static const CGFloat		kThumbTintSaturation = 0.45;
-
-static NSString * stringForInteger( NSUInteger aValue, NSString ** aStrList, NSUInteger aCount ) { return aValue < aCount ? aStrList[aValue] : nil; }
-
-static NSUInteger integerValueForString( NSString * aStr, NSString ** aStrList, NSUInteger aCount, NSUInteger aDefault )
-{
-	for( NSInteger i = 0; i < aCount; i++ )
-	{
-		if( [aStr isEqualToString:aStrList[i]] )
-			return i;
-	}
-	return aDefault;
-}
 
 static void componentsForTint( CGFloat * comp, CGFloat v, enum NDThumbTint t )
 {
@@ -122,10 +102,6 @@ static inline CGFloat mathMod(CGFloat x, CGFloat y) { CGFloat r = fmodf(x,y); re
 static CGFloat constrainValue( CGFloat v, CGFloat min, CGFloat max ) { return v < min ? min : (v > max ? max : v); }
 static CGFloat wrapValue( CGFloat v, CGFloat min, CGFloat max ) { return mathMod(v-min,max-min)+min; }
 static CGFloat mapValue( CGFloat v, CGFloat minV, CGFloat maxV, CGFloat minR, CGFloat maxR ) { return ((v-minV)/(maxV-minV)) * (maxR - minR) + minR; }
-static CGPoint constrainPoint( const CGPoint v, const CGRect m )
-{
-	return CGPointMake( constrainValue( v.x, CGRectGetMinX(m), CGRectGetMaxX(m) ), constrainValue( v.y, CGRectGetMinY(m), CGRectGetMaxY(m) ) );
-}
 static CGPoint mapPoint( const CGPoint v, const CGRect rangeV, const CGRect rangeR )
 {
 	return CGPointMake(
@@ -142,27 +118,6 @@ static CGRect largestSquareWithinRect( const CGRect r )
 {
 	CGFloat		theScale = MIN( CGRectGetWidth(r), CGRectGetHeight(r) );
 	return CGRectMake( CGRectGetMinX(r), CGRectGetMinY(r), theScale, theScale );
-}
-
-static CGFloat differenceMagnitude( CGFloat a, CGFloat b ) { return a > b ? a - b : b - a; }
-
-static CGFloat largestFloat( const CGFloat * f, NSUInteger c )
-{
-	CGFloat		r = 1.0;
-	for( NSUInteger i = 0; i < c; i++ )
-	{
-		if( f[i] > r )
-			r = f[i];
-	}
-	return r;
-}
-
-static CGFloat meanFloat( const CGFloat * f, NSUInteger c )
-{
-	CGFloat		r = 0.0;
-	for( NSUInteger i = 0; i < c; i++ )
-		r += f[i];
-	return r/(CGFloat)c;
 }
 
 @interface NDRotator ()
@@ -416,7 +371,6 @@ static BOOL decodeBooleanWithDefault( NSCoder * aCoder, NSString * aKey, BOOL aD
 		[self.cachedBodyImage drawInRect:self.bounds];
 	else
 		[self.cachedHilightedBodyImage drawInRect:self.bounds];
-	//	[self drawBodyRect:aRect];
 	CGPoint		theThumbLocation = self.location;
 	CGRect		theThumbRect = self.thumbRect;
 	theThumbRect.origin.x += theThumbLocation.x;
