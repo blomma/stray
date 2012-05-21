@@ -12,15 +12,13 @@
 // The values can be greater than 1.0, to reflect user movements outside of the control.
 static const CGFloat kRadius = 1.0;
 
-static const CGFloat		kDefaultLinearSensitivity = 0.05,
-kDefaultMinimumValue = 0.0,
+static const CGFloat		kDefaultMinimumValue = 0.0,
 kDefaultMaximumValue = 1.0,
 kDefaultMinimumDomain = 0.0*M_PI,
 kDefaultMaximumDomain = 2.0*M_PI;
 static enum NDThumbTint		kDefaultThumbTint = NDThumbTintLime;
 
-static NSString			* const kLinearSensitivityCodingKey = @"linearSensitivity",
-* const kMinimumValueCodingKey = @"minimumValue",
+static NSString			* const kMinimumValueCodingKey = @"minimumValue",
 * const kMaximumValueCodingKey = @"maximumValue",
 * const kMinimumDomainCodingKey = @"minimumDomain",
 * const kMaximumDomainCodingKey = @"maximumDomain",
@@ -194,7 +192,6 @@ maximumValue,
 minimumDomain,
 maximumDomain,
 angle,
-linearSensitivity,
 thumbTint;
 
 #pragma mark -
@@ -253,7 +250,6 @@ thumbTint;
 {
 	if( (self = [super initWithFrame:aFrame]) != nil )
 	{
-		self.linearSensitivity = kDefaultLinearSensitivity;
 		self.minimumValue = kDefaultMinimumValue;
 		self.maximumValue = kDefaultMaximumValue;
 		self.minimumDomain = kDefaultMinimumDomain;
@@ -333,7 +329,6 @@ static BOOL decodeBooleanWithDefault( NSCoder * aCoder, NSString * aKey, BOOL aD
 {
 	if( (self = [super initWithCoder:aDecoder]) != nil )
 	{
-		self.linearSensitivity = decodeDoubleWithDefault( aDecoder, kLinearSensitivityCodingKey, kDefaultLinearSensitivity );
 		self.minimumValue = decodeDoubleWithDefault( aDecoder, kMinimumValueCodingKey, kDefaultMinimumValue );
 		self.maximumValue = decodeDoubleWithDefault( aDecoder, kMaximumValueCodingKey, kDefaultMaximumValue );
 		self.minimumDomain = decodeDoubleWithDefault( aDecoder, kMinimumDomainCodingKey, kDefaultMinimumDomain );
@@ -346,7 +341,6 @@ static BOOL decodeBooleanWithDefault( NSCoder * aCoder, NSString * aKey, BOOL aD
 
 - (void)encodeWithCoder:(NSCoder *)anEncoder
 {
-	[anEncoder encodeDouble:self.linearSensitivity forKey:kLinearSensitivityCodingKey];
 	[anEncoder encodeDouble:self.minimumValue forKey:kMinimumValueCodingKey];
 	[anEncoder encodeDouble:self.maximumValue forKey:kMaximumValueCodingKey];
 	[anEncoder encodeDouble:self.minimumDomain forKey:kMinimumDomainCodingKey];

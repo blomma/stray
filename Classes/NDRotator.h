@@ -131,16 +131,6 @@ enum NDThumbTint
  */
 @property(assign)	CGFloat				maximumDomain;
 /**
- Contains the value used to determin how vertical movement is mapped to angular movement of the control when the style is <NDRotatorStyleLinear>.
- The <angle> is propertional to y-value * <linearSensitivity>.
- The default value of this property is 0.05.
- */
-
-/**
- @name Modifying the Rotator’s Behavior
- */
-@property(assign)	CGFloat				linearSensitivity;
-/**
  @name Changing the Rotator’s Appearance
  */
 /**
