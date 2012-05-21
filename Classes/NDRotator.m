@@ -8,17 +8,18 @@
 
 #import "NDRotator.h"
 
+// Contains the radius value of the receiver where 0.0 puts the thumb at the center and 1.0 puts the thumb at margin. 
+// The values can be greater than 1.0, to reflect user movements outside of the control.
+static const CGFloat kRadius = 1.0;
 
-static const CGFloat		kDefaultRadius = 1.0,
-kDefaultLinearSensitivity = 0.05,
+static const CGFloat		kDefaultLinearSensitivity = 0.05,
 kDefaultMinimumValue = 0.0,
 kDefaultMaximumValue = 1.0,
 kDefaultMinimumDomain = 0.0*M_PI,
 kDefaultMaximumDomain = 2.0*M_PI;
 static enum NDThumbTint		kDefaultThumbTint = NDThumbTintLime;
 
-static NSString			* const kRadiusCodingKey = @"radius",
-* const kLinearSensitivityCodingKey = @"linearSensitivity",
+static NSString			* const kLinearSensitivityCodingKey = @"linearSensitivity",
 * const kMinimumValueCodingKey = @"minimumValue",
 * const kMaximumValueCodingKey = @"maximumValue",
 * const kMinimumDomainCodingKey = @"minimumDomain",
@@ -193,19 +194,16 @@ maximumValue,
 minimumDomain,
 maximumDomain,
 angle,
-radius,
 linearSensitivity,
 thumbTint;
 
 #pragma mark -
 #pragma mark manully implemented properties
 
-- (CGFloat)radius { return 1.0; }
-
-- (CGPoint)cartesianPoint { return CGPointMake(cos(self.angle)*self.radius, sin(self.angle)*self.radius ); }
+- (CGPoint)cartesianPoint { return CGPointMake(cos(self.angle)*kRadius, sin(self.angle)*kRadius ); }
 - (CGPoint)constrainedCartesianPoint
 {
-	CGFloat			theRadius = constrainValue(self.radius, 0.0, 1.0 );
+	CGFloat			theRadius = constrainValue(kRadius, 0.0, 1.0 );
 	return CGPointMake(cos(self.angle)*theRadius,sin(self.angle)*theRadius );
 }
 
@@ -226,7 +224,6 @@ thumbTint;
 		theAngle += 2.0*M_PI;
 	
 	self.angle = theAngle;
-	self.radius = sqrt( aPoint.x*aPoint.x + aPoint.y*aPoint.y );
 }
 
 - (CGFloat)value { return mapValue(self.angle, self.minimumDomain, self.maximumDomain, self.minimumValue, self.maximumValue ); }
@@ -256,7 +253,6 @@ thumbTint;
 {
 	if( (self = [super initWithFrame:aFrame]) != nil )
 	{
-		self.radius = kDefaultRadius;
 		self.linearSensitivity = kDefaultLinearSensitivity;
 		self.minimumValue = kDefaultMinimumValue;
 		self.maximumValue = kDefaultMaximumValue;
@@ -305,7 +301,7 @@ thumbTint;
 		strcat( theAutoResizeMaskStr, "BM" );
 	}
 	
-	return [NSString stringWithFormat:@"<UISlider: %p; frame = (%.0f %.0f; %.0f %.0f); opaque = %s; autoresize = %s; layer = <CALayer: %p>; value: %.2f; angle: %.2f; radius: %.2f; x: %.2f; y: %.2f>",
+	return [NSString stringWithFormat:@"<UISlider: %p; frame = (%.0f %.0f; %.0f %.0f); opaque = %s; autoresize = %s; layer = <CALayer: %p>; value: %.2f; angle: %.2f; x: %.2f; y: %.2f>",
 			self,
 			CGRectGetMinX(self.frame),
 			CGRectGetMinY(self.frame),
@@ -316,7 +312,6 @@ thumbTint;
 			self.layer,
 			self.value,
 			self.angle,
-			self.radius,
 			self.cartesianPoint.x,
 			self.cartesianPoint.y];
 }
@@ -338,13 +333,12 @@ static BOOL decodeBooleanWithDefault( NSCoder * aCoder, NSString * aKey, BOOL aD
 {
 	if( (self = [super initWithCoder:aDecoder]) != nil )
 	{
-			self.radius = decodeDoubleWithDefault( aDecoder, kRadiusCodingKey, kDefaultRadius );
-			self.linearSensitivity = decodeDoubleWithDefault( aDecoder, kLinearSensitivityCodingKey, kDefaultLinearSensitivity );
-			self.minimumValue = decodeDoubleWithDefault( aDecoder, kMinimumValueCodingKey, kDefaultMinimumValue );
-			self.maximumValue = decodeDoubleWithDefault( aDecoder, kMaximumValueCodingKey, kDefaultMaximumValue );
-			self.minimumDomain = decodeDoubleWithDefault( aDecoder, kMinimumDomainCodingKey, kDefaultMinimumDomain );
-			self.maximumDomain = decodeDoubleWithDefault( aDecoder, kMaximumDomainCodingKey, kDefaultMaximumDomain );
-			self.thumbTint = kDefaultThumbTint;
+		self.linearSensitivity = decodeDoubleWithDefault( aDecoder, kLinearSensitivityCodingKey, kDefaultLinearSensitivity );
+		self.minimumValue = decodeDoubleWithDefault( aDecoder, kMinimumValueCodingKey, kDefaultMinimumValue );
+		self.maximumValue = decodeDoubleWithDefault( aDecoder, kMaximumValueCodingKey, kDefaultMaximumValue );
+		self.minimumDomain = decodeDoubleWithDefault( aDecoder, kMinimumDomainCodingKey, kDefaultMinimumDomain );
+		self.maximumDomain = decodeDoubleWithDefault( aDecoder, kMaximumDomainCodingKey, kDefaultMaximumDomain );
+		self.thumbTint = kDefaultThumbTint;
 	}
 	
 	return self;
@@ -352,12 +346,11 @@ static BOOL decodeBooleanWithDefault( NSCoder * aCoder, NSString * aKey, BOOL aD
 
 - (void)encodeWithCoder:(NSCoder *)anEncoder
 {
-		[anEncoder encodeDouble:self.radius forKey:kRadiusCodingKey];
-		[anEncoder encodeDouble:self.linearSensitivity forKey:kLinearSensitivityCodingKey];
-		[anEncoder encodeDouble:self.minimumValue forKey:kMinimumValueCodingKey];
-		[anEncoder encodeDouble:self.maximumValue forKey:kMaximumValueCodingKey];
-		[anEncoder encodeDouble:self.minimumDomain forKey:kMinimumDomainCodingKey];
-		[anEncoder encodeDouble:self.maximumDomain forKey:kMaximumDomainCodingKey];
+	[anEncoder encodeDouble:self.linearSensitivity forKey:kLinearSensitivityCodingKey];
+	[anEncoder encodeDouble:self.minimumValue forKey:kMinimumValueCodingKey];
+	[anEncoder encodeDouble:self.maximumValue forKey:kMaximumValueCodingKey];
+	[anEncoder encodeDouble:self.minimumDomain forKey:kMinimumDomainCodingKey];
+	[anEncoder encodeDouble:self.maximumDomain forKey:kMaximumDomainCodingKey];
 }
 
 #pragma mark -

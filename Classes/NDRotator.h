@@ -90,12 +90,6 @@ enum NDThumbTint
  */
 @property(assign,nonatomic)	CGFloat			angle;
 /**
- Contains the radius value of the receiver where 0.0 puts the thumb at the center and 1.0 puts the thumb at margin.
- 
- The values can be greater than 1.0, to reflect user movements outside of the control.
- */
-@property(assign,nonatomic)	CGFloat			radius;
-/**
  Contains the thumb point where (0.0,0.0) is the center, (1.0,0.0) is at 3 oclock and (0.0,-1.0) is at 12 oclock etc.
  
  The point can go beyound the bounds (-1.0,-1.0) and (1.0,1.0) for <radius> values greated the 1.0.
