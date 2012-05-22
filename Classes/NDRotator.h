@@ -51,7 +51,7 @@ enum NDThumbTint
 /**
  This is a value taken from the <angle> property and mapped from the domain (<minimumDomain>,<maximumDomain>) to the range (<minimumValue>,<maximumValue>).
  */
-@property(assign)	CGFloat			value;
+//@property(assign)	CGFloat			value;
 /**
  Contains the angle of the receiver in radians.
  

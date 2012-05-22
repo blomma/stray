@@ -4,21 +4,22 @@
 // The values can be greater than 1.0, to reflect user movements outside of the control.
 static const CGFloat kRadius = 1.0;
 
-static const CGFloat		kDefaultMinimumValue = 0.0,
-kDefaultMaximumValue = 1.0,
-kDefaultMinimumDomain = 0.0*M_PI,
-kDefaultMaximumDomain = 2.0*M_PI;
-static enum NDThumbTint		kDefaultThumbTint = NDThumbTintLime;
+static const CGFloat	kDefaultMinimumValue = 0.0,
+						kDefaultMaximumValue = 1.0,
+						kDefaultMinimumDomain = 0.0*M_PI,
+						kDefaultMaximumDomain = 2.0*M_PI;
 
-static NSString			* const kMinimumValueCodingKey = @"minimumValue",
-* const kMaximumValueCodingKey = @"maximumValue",
-* const kMinimumDomainCodingKey = @"minimumDomain",
-* const kMaximumDomainCodingKey = @"maximumDomain",
-* const kThumbTintCodingKey = @"thumbTint";
+static enum NDThumbTint	kDefaultThumbTint = NDThumbTintLime;
 
-static NSString			* kThumbTintStr[] = { @"grey", @"red", @"green", @"blue", @"yellow", @"magenta", @"teal", @"orange", @"pink", @"lime", @"spring green", @"purple", @"aqua", @"black" };
+static NSString	* const kMinimumValueCodingKey = @"minimumValue",
+				* const kMaximumValueCodingKey = @"maximumValue",
+				* const kMinimumDomainCodingKey = @"minimumDomain",
+				* const kMaximumDomainCodingKey = @"maximumDomain",
+				* const kThumbTintCodingKey = @"thumbTint";
 
-static const CGFloat		kThumbTintSaturation = 0.45;
+static NSString	* kThumbTintStr[] = { @"grey", @"red", @"green", @"blue", @"yellow", @"magenta", @"teal", @"orange", @"pink", @"lime", @"spring green", @"purple", @"aqua", @"black" };
+
+static const CGFloat kThumbTintSaturation = 0.45;
 
 static void componentsForTint( CGFloat * comp, CGFloat v, enum NDThumbTint t )
 {
@@ -98,113 +99,138 @@ static void componentsForTint( CGFloat * comp, CGFloat v, enum NDThumbTint t )
 	}
 }
 
-static inline CGFloat mathMod(CGFloat x, CGFloat y) { CGFloat r = fmodf(x,y); return r < 0.0 ? r + y : r; }
-static CGFloat constrainValue( CGFloat v, CGFloat min, CGFloat max ) { return v < min ? min : (v > max ? max : v); }
-static CGFloat wrapValue( CGFloat v, CGFloat min, CGFloat max ) { return mathMod(v-min,max-min)+min; }
-static CGFloat mapValue( CGFloat v, CGFloat minV, CGFloat maxV, CGFloat minR, CGFloat maxR ) { return ((v-minV)/(maxV-minV)) * (maxR - minR) + minR; }
-static CGPoint mapPoint( const CGPoint v, const CGRect rangeV, const CGRect rangeR )
-{
+static inline CGFloat mathMod(CGFloat x, CGFloat y) { 
+	CGFloat r = fmodf(x,y); 
+	
+	return r < 0.0 ? r + y : r; 
+}
+
+static CGFloat constrainValue(CGFloat value, CGFloat min, CGFloat max) { 
+	return value < min ? min : (value > max ? max : value); 
+}
+
+static CGFloat wrapValue(CGFloat v, CGFloat min, CGFloat max) { 
+	return mathMod(v-min,max-min)+min; 
+}
+
+static CGFloat mapValue(CGFloat value, CGFloat minValue, CGFloat maxValue, CGFloat minR, CGFloat maxR) { 
+	return ((value-minValue)/(maxValue-minValue)) * (maxR - minR) + minR; 
+}
+
+static CGPoint mapPoint(const CGPoint value, const CGRect rangeV, const CGRect rangeR) {
 	return CGPointMake(
-					   mapValue( v.x, CGRectGetMinX(rangeV), CGRectGetMaxX(rangeV), CGRectGetMinX(rangeR), CGRectGetMaxX(rangeR)),
-					   mapValue( v.y, CGRectGetMinY(rangeV), CGRectGetMaxY(rangeV), CGRectGetMinY(rangeR), CGRectGetMaxY(rangeR)));
+					   mapValue( 
+								value.x, 
+								CGRectGetMinX(rangeV), 
+								CGRectGetMaxX(rangeV), 
+								CGRectGetMinX(rangeR), 
+								CGRectGetMaxX(rangeR)),
+					   mapValue( 
+								value.y, 
+								CGRectGetMinY(rangeV), 
+								CGRectGetMaxY(rangeV), 
+								CGRectGetMinY(rangeR), 
+								CGRectGetMaxY(rangeR)));
 }
 
-static CGRect shrinkRect( const CGRect v, CGSize s )
-{
-	return CGRectMake( CGRectGetMinX(v)+s.width, CGRectGetMinY(v)+s.height, CGRectGetWidth(v)-2.0*s.width, CGRectGetHeight(v)-2.0*s.height );
+static CGRect shrinkRect(const CGRect v, CGSize s) {
+	return CGRectMake( 
+					  CGRectGetMinX(v)+s.width, 
+					  CGRectGetMinY(v)+s.height, 
+					  CGRectGetWidth(v)-2.0*s.width, 
+					  CGRectGetHeight(v)-2.0*s.height);
 }
 
-static CGRect largestSquareWithinRect( const CGRect r )
-{
-	CGFloat		theScale = MIN( CGRectGetWidth(r), CGRectGetHeight(r) );
-	return CGRectMake( CGRectGetMinX(r), CGRectGetMinY(r), theScale, theScale );
+static CGRect largestSquareWithinRect(const CGRect r) {
+	CGFloat	scale = MIN(CGRectGetWidth(r), CGRectGetHeight(r));
+
+	return CGRectMake( 
+					  CGRectGetMinX(r), 
+					  CGRectGetMinY(r), 
+					  scale, 
+					  scale);
 }
 
 @interface NDRotator ()
 {
 @private
-	CGFloat			touchDownAngle,
-	touchDownYLocation;
-	UIImage			* cachedBodyImage,
-	* cachedHilightedBodyImage,
-	* cachedThumbImage,
-	* cachedHilightedThumbImage;
-}
-@property(assign) CGPoint		location;
-@property(assign) CGFloat		touchDownAngle,
-touchDownYLocation;
-@property(readonly) UIImage		* cachedBodyImage,
-* cachedHilightedBodyImage,
-* cachedThumbImage,
-* cachedHilightedThumbImage;
+	CGFloat	touchDownAngle,
+			touchDownYLocation;
 
+	UIImage	* cachedBodyImage,
+			* cachedHilightedBodyImage,
+			* cachedThumbImage,
+			* cachedHilightedThumbImage;
+}
+@property(assign) CGPoint	location;
+
+@property(assign) CGFloat	touchDownAngle,
+							touchDownYLocation;
+
+@property(readonly) UIImage	* cachedBodyImage,
+							* cachedHilightedBodyImage,
+							* cachedThumbImage,
+							* cachedHilightedThumbImage;
 @end
 
 @implementation NDRotator
 
-@synthesize		minimumValue,
-maximumValue,
-minimumDomain,
-maximumDomain,
-angle,
-thumbTint;
+@synthesize	minimumValue,
+			maximumValue,
+			minimumDomain,
+			maximumDomain,
+			angle,
+			thumbTint;
 
 #pragma mark -
 #pragma mark manully implemented properties
 
-- (CGPoint)cartesianPoint { return CGPointMake(cos(self.angle)*kRadius, sin(self.angle)*kRadius ); }
-- (CGPoint)constrainedCartesianPoint
-{
-	CGFloat			theRadius = constrainValue(kRadius, 0.0, 1.0 );
-	return CGPointMake(cos(self.angle)*theRadius,sin(self.angle)*theRadius );
+- (CGPoint)cartesianPoint { 
+	return CGPointMake(
+					   cos(self.angle)*kRadius, 
+					   sin(self.angle)*kRadius); 
 }
 
-- (void)setCartesianPoint:(CGPoint)aPoint
-{
-	CGFloat		thePreviousAngle = angle,
-	theAngle = atan( aPoint.y/aPoint.x );
-	
-	if( aPoint.x < 0.0 )
-		theAngle = M_PI + theAngle;
-	else if( aPoint.y < 0 )
-		theAngle += 2*M_PI;
-	
-	while( theAngle - thePreviousAngle > M_PI )
-		theAngle -= 2.0*M_PI;
-	
-	while( thePreviousAngle - theAngle > M_PI )
-		theAngle += 2.0*M_PI;
-	
-	self.angle = theAngle;
+- (CGPoint)constrainedCartesianPoint {
+	CGFloat	radius = constrainValue(kRadius, 0.0, 1.0 );
+
+	return CGPointMake(
+					   cos(self.angle)*radius,
+					   sin(self.angle)*radius);
 }
 
-- (CGFloat)value { return mapValue(self.angle, self.minimumDomain, self.maximumDomain, self.minimumValue, self.maximumValue ); }
-
-- (void)setValue:(CGFloat)aValue
-{
-	CGFloat			theMinium = self.minimumValue,
-	theMaximum = self.maximumValue;
+- (void)setCartesianPoint:(CGPoint)point {
+	CGFloat	previousAngle = self.angle,
+			newAngle = atan(point.y/point.x);
 	
-			self.angle = mapValue(constrainValue( self.angle, self.minimumValue, self.maximumDomain), theMinium, theMaximum, self.minimumValue, self.maximumDomain );
+	if(point.x < 0.0)
+		newAngle = M_PI+newAngle;
+	else if(point.y < 0)
+		newAngle += 2*M_PI;
+
+	while(newAngle - previousAngle > M_PI)
+		newAngle -= 2.0*M_PI;
+	
+	while(previousAngle - newAngle > M_PI)
+		newAngle += 2.0*M_PI;
+	
+	self.angle = newAngle;
 }
 
-- (void)setAngle:(CGFloat)anAngle
-{
-	angle = wrapValue( anAngle, self.minimumDomain, self.maximumDomain );
+- (void)setAngle:(CGFloat)v {
+	angle = wrapValue(v, self.minimumDomain, self.maximumDomain);
 }
 
-- (void)setThumbTint:(enum NDThumbTint)aThumbTint
-{
-	thumbTint = aThumbTint;
+- (void)setThumbTint:(enum NDThumbTint)value {
+	thumbTint = value;
+
 	[self deleteThumbCache];
 }
 
 #pragma mark -
 #pragma mark creation and destruction
-- (id)initWithFrame:(CGRect)aFrame
-{
-	if( (self = [super initWithFrame:aFrame]) != nil )
-	{
+- (id)initWithFrame:(CGRect)frame {
+	if ((self = [super initWithFrame:frame]) != nil) {
 		self.minimumValue = kDefaultMinimumValue;
 		self.maximumValue = kDefaultMaximumValue;
 		self.minimumDomain = kDefaultMinimumDomain;
@@ -215,156 +241,108 @@ thumbTint;
 	return self;
 }
 
-- (NSString *)description
-{
-	char					theAutoResizeMaskStr[20] = "";
-	UIViewAutoresizing		theAutoResizeMask = self.autoresizingMask;
-	
-	if( (theAutoResizeMask & UIViewAutoresizingFlexibleRightMargin) == 0 )
-	{
-		if( *theAutoResizeMaskStr != '\0' ) strcat( theAutoResizeMaskStr, "*" );
-		strcat( theAutoResizeMaskStr, "RM" );
-	}
-	if( (theAutoResizeMask & UIViewAutoresizingFlexibleWidth) == 0 )
-	{
-		if( *theAutoResizeMaskStr != '\0' ) strcat( theAutoResizeMaskStr, "*" );
-		strcat( theAutoResizeMaskStr, "W" );
-	}
-	if( (theAutoResizeMask & UIViewAutoresizingFlexibleLeftMargin) == 0 )
-	{
-		if( *theAutoResizeMaskStr != '\0' ) strcat( theAutoResizeMaskStr, "*" );
-		strcat( theAutoResizeMaskStr, "LM" );
-	}
-	
-	if( (theAutoResizeMask & UIViewAutoresizingFlexibleTopMargin) == 0 )
-	{
-		if( *theAutoResizeMaskStr != '\0' ) strcat( theAutoResizeMaskStr, "*" );
-		strcat( theAutoResizeMaskStr, "TM" );
-	}
-	if( (theAutoResizeMask & UIViewAutoresizingFlexibleHeight) == 0 )
-	{
-		if( *theAutoResizeMaskStr != '\0' ) strcat( theAutoResizeMaskStr, "*" );
-		strcat( theAutoResizeMaskStr, "H" );
-	}
-	if( (theAutoResizeMask & UIViewAutoresizingFlexibleBottomMargin) == 0 )
-	{
-		if( *theAutoResizeMaskStr != '\0' ) strcat( theAutoResizeMaskStr, "*" );
-		strcat( theAutoResizeMaskStr, "BM" );
-	}
-	
-	return [NSString stringWithFormat:@"<UISlider: %p; frame = (%.0f %.0f; %.0f %.0f); opaque = %s; autoresize = %s; layer = <CALayer: %p>; value: %.2f; angle: %.2f; x: %.2f; y: %.2f>",
-			self,
-			CGRectGetMinX(self.frame),
-			CGRectGetMinY(self.frame),
-			CGRectGetWidth(self.frame),
-			CGRectGetHeight(self.frame),
-			self.opaque ? "YES" : "NO",
-			theAutoResizeMaskStr,
-			self.layer,
-			self.value,
-			self.angle,
-			self.cartesianPoint.x,
-			self.cartesianPoint.y];
-}
-
 #pragma mark -
 #pragma mark NSCoding Protocol methods
-static CGFloat decodeDoubleWithDefault( NSCoder * aCoder, NSString * aKey, CGFloat aDefault )
-{
-	NSNumber		* theValue = [aCoder decodeObjectForKey:aKey];
-	return theValue != nil ? theValue.doubleValue : aDefault;
-}
-static BOOL decodeBooleanWithDefault( NSCoder * aCoder, NSString * aKey, BOOL aDefault )
-{
-	NSNumber		* theValue = [aCoder decodeObjectForKey:aKey];
-	return theValue != nil ? theValue.boolValue : aDefault;
+
+static CGFloat decodeDoubleWithDefault(NSCoder * coder, NSString * key, CGFloat defaultValue) {
+	NSNumber * value = [coder decodeObjectForKey:key];
+
+	return value != nil ? value.doubleValue : defaultValue;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-	if( (self = [super initWithCoder:aDecoder]) != nil )
-	{
-		self.minimumValue = decodeDoubleWithDefault( aDecoder, kMinimumValueCodingKey, kDefaultMinimumValue );
-		self.maximumValue = decodeDoubleWithDefault( aDecoder, kMaximumValueCodingKey, kDefaultMaximumValue );
-		self.minimumDomain = decodeDoubleWithDefault( aDecoder, kMinimumDomainCodingKey, kDefaultMinimumDomain );
-		self.maximumDomain = decodeDoubleWithDefault( aDecoder, kMaximumDomainCodingKey, kDefaultMaximumDomain );
+static BOOL decodeBooleanWithDefault(NSCoder * coder, NSString * key, BOOL defaultValue) {
+	NSNumber * value = [coder decodeObjectForKey:key];
+
+	return value != nil ? value.boolValue : defaultValue;
+}
+
+- (id)initWithCoder:(NSCoder *)coder {
+	if ((self = [super initWithCoder:coder]) != nil) {
+		self.minimumValue = decodeDoubleWithDefault( coder, kMinimumValueCodingKey, kDefaultMinimumValue );
+		self.maximumValue = decodeDoubleWithDefault( coder, kMaximumValueCodingKey, kDefaultMaximumValue );
+		self.minimumDomain = decodeDoubleWithDefault( coder, kMinimumDomainCodingKey, kDefaultMinimumDomain );
+		self.maximumDomain = decodeDoubleWithDefault( coder, kMaximumDomainCodingKey, kDefaultMaximumDomain );
 		self.thumbTint = kDefaultThumbTint;
 	}
 	
 	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)anEncoder
-{
-	[anEncoder encodeDouble:self.minimumValue forKey:kMinimumValueCodingKey];
-	[anEncoder encodeDouble:self.maximumValue forKey:kMaximumValueCodingKey];
-	[anEncoder encodeDouble:self.minimumDomain forKey:kMinimumDomainCodingKey];
-	[anEncoder encodeDouble:self.maximumDomain forKey:kMaximumDomainCodingKey];
+- (void)encodeWithCoder:(NSCoder *)coder {
+	[coder encodeDouble:self.minimumValue forKey:kMinimumValueCodingKey];
+	[coder encodeDouble:self.maximumValue forKey:kMaximumValueCodingKey];
+	[coder encodeDouble:self.minimumDomain forKey:kMinimumDomainCodingKey];
+	[coder encodeDouble:self.maximumDomain forKey:kMaximumDomainCodingKey];
 }
 
 #pragma mark -
 #pragma mark UIControl
 
-- (UIControlEvents)allControlEvents { return UIControlEventValueChanged; }
+- (UIControlEvents)allControlEvents { 
+	return UIControlEventValueChanged; 
+}
 
-- (BOOL)beginTrackingWithTouch:(UITouch *)aTouch withEvent:(UIEvent *)anEvent
-{
-	CGPoint			thePoint = [aTouch locationInView:self];
-	self.touchDownYLocation = thePoint.y;
+- (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
+	CGPoint	point = [touch locationInView:self];
+
+	self.touchDownYLocation = point.y;
 	self.touchDownAngle = self.angle;
-	self.location = thePoint;
+	self.location = point;
+	
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
 	[self setNeedsDisplay];
+
 	return YES;
 }
 
-- (BOOL)continueTrackingWithTouch:(UITouch *)aTouch withEvent:(UIEvent *)anEvent
-{
-	self.location = [aTouch locationInView:self];
+- (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
+	self.location = [touch locationInView:self];
+	
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
 	[self setNeedsDisplay];
+
 	return YES;
 }
 
-- (void)endTrackingWithTouch:(UITouch *)aTouch withEvent:(UIEvent *)anEvent
-{
-	self.location = [aTouch locationInView:self];
+- (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
+	self.location = [touch locationInView:self];
+
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
 	[self setNeedsDisplay];
 }
 
-- (void)cancelTrackingWithEvent:(UIEvent *)anEvent { [self setNeedsDisplay]; }
+- (void)cancelTrackingWithEvent:(UIEvent *)anEvent { 
+	[self setNeedsDisplay]; 
+}
 
 #pragma mark -
 #pragma mark UIView
 
-- (void)setFrame:(CGRect)aRect
-{
+- (void)setFrame:(CGRect)rect {
 	[self deleteThumbCache];
 	[self deleteBodyCache];
-	[super setFrame:aRect];
+
+	[super setFrame:rect];
 }
 
-- (void)setBounds:(CGRect)aRect
-{
+- (void)setBounds:(CGRect)rect {
 	[self deleteThumbCache];
 	[self deleteBodyCache];
-	[super setBounds:aRect];
+	
+	[super setBounds:rect];
 }
 
-- (CGSize)sizeThatFits:(CGSize)aSize
-{
-	return aSize.width < aSize.height
-	? CGSizeMake(aSize.width, aSize.width)
-	: CGSizeMake(aSize.height, aSize.height);
+- (CGSize)sizeThatFits:(CGSize)size {
+	return size.width < size.height
+	? CGSizeMake(size.width, size.width)
+	: CGSizeMake(size.height, size.height);
 }
 
-- (void)drawRect:(CGRect)aRect
-{
+- (void)drawRect:(CGRect)rect {
 	if( self.isOpaque )
 	{
 		[self.backgroundColor set];
-		UIRectFill( aRect );
+		UIRectFill( rect );
 	}
 	
 	if( self.state & UIControlStateHighlighted )
@@ -401,85 +379,105 @@ static BOOL decodeBooleanWithDefault( NSCoder * aCoder, NSString * aKey, BOOL aD
 
 - (CGRect)bodyRect
 {
-	CGRect		theResult = self.bounds;
-	CGRect		theBounds = theResult;
-	theResult.size.height = floorf( CGRectGetHeight(theResult) * 0.95);
-	theResult.size.width = floorf( CGRectGetWidth(theResult) * 0.95);
-	theResult.origin.y += ceilf( CGRectGetHeight(theResult) * 0.01);
-	theResult.origin.x += ceilf( ( CGRectGetWidth(theBounds) - CGRectGetWidth(theResult)) * 0.5);
-	theResult = shrinkRect(theResult, CGSizeMake(1.0,1.0));
-	return largestSquareWithinRect(theResult);
+	CGRect	bodyBounds = self.bounds;
+
+	bodyBounds.size.height = floorf(CGRectGetHeight(bodyBounds) * 0.95);
+	bodyBounds.size.width = floorf(CGRectGetWidth(bodyBounds) * 0.95);
+	bodyBounds.origin.y += ceilf(CGRectGetHeight(bodyBounds) * 0.01);
+	bodyBounds.origin.x += ceilf((CGRectGetWidth(self.bounds) - CGRectGetWidth(bodyBounds)) * 0.5);
+	bodyBounds = shrinkRect(bodyBounds, CGSizeMake(1.0,1.0));
+
+	return largestSquareWithinRect(bodyBounds);
 }
 
 - (CGRect)thumbRect
 {
-	CGRect			theBounds = self.bodyRect;
-	CGFloat			theBoundsSize = MIN(CGRectGetWidth(theBounds), CGRectGetHeight(theBounds));
-	CGFloat			theThumbDiam = theBoundsSize * 0.25;
-	if( theThumbDiam < 5.0 )
-		theThumbDiam = 5.0;
-	if( theThumbDiam > theBoundsSize * 0.5 )
-		theThumbDiam = theBoundsSize * 0.5;
-	
-	
-	CGFloat			theThumbRadius = theThumbDiam/2.0;
-	CGRect			theThumbBounds = CGRectMake( -theThumbRadius, -theThumbRadius, theThumbDiam, theThumbDiam );
-	return shrinkRect(theThumbBounds, CGSizeMake(-1.0,-1.0) );
+	CGFloat	 thumbBoundsSize = MIN(CGRectGetWidth(self.bodyRect), CGRectGetHeight(self.bodyRect));
+	CGFloat	 thumbDiameter = thumbBoundsSize * 0.25;
+
+	if( thumbDiameter < 5.0 )
+		thumbDiameter = 5.0;
+	if( thumbDiameter > thumbBoundsSize * 0.5 )
+		thumbDiameter = thumbBoundsSize * 0.5;
+
+	CGFloat	 thumbRadius = thumbDiameter/2.0;
+	CGRect thumbBounds = CGRectMake(-thumbRadius, -thumbRadius, thumbDiameter, thumbDiameter);
+
+	return shrinkRect(thumbBounds, CGSizeMake(-1.0,-1.0));
 }
 
-static CGGradientRef shadowBodyGradient( CGColorSpaceRef aColorSpace )
+static CGGradientRef shadowBodyGradient(CGColorSpaceRef colorSpace)
 {
-	CGFloat			theLocations[] = { 0.0, 0.3, 0.6, 1.0 };
-	CGFloat			theComponents[sizeof(theLocations)/sizeof(*theLocations)*4] = { 0.0, 0.0, 0.0, 0.25,  // 0
+	CGFloat	 locations[] = { 0.0, 0.3, 0.6, 1.0 };
+	CGFloat	 components[sizeof(locations)/sizeof(*locations)*4] = {
+		0.0, 0.0, 0.0, 0.25,  // 0
 		0.0, 0.0, 0.0, 0.125, // 1
 		0.0, 0.0, 0.0, 0.0225, // 1
 		0.0, 0.0, 0.0, 0.0 }; // 2
-	return CGGradientCreateWithColorComponents( aColorSpace, theComponents, theLocations, sizeof(theLocations)/sizeof(*theLocations) );
+
+	return CGGradientCreateWithColorComponents(
+											   colorSpace, 
+											   components, 
+											   locations, 
+											   sizeof(locations)/sizeof(*locations));
 }
 
-static CGGradientRef hilightBodyGradient( CGColorSpaceRef aColorSpace, BOOL aHilighted )
+static CGGradientRef hilightBodyGradient(CGColorSpaceRef colorSpace, BOOL hilighted)
 {
-	CGFloat			theLocations[] = { 0.0, 0.3, 0.6, 1.0 };
-	CGFloat			theModifier = aHilighted ? 1.0 : 0.33;
-	CGFloat			theComponents[sizeof(theLocations)/sizeof(*theLocations)*4] = { 1.0, 1.0, 1.0, 0.0225,  // 0
-		1.0, 1.0, 1.0, 0.33 * theModifier, // 1
+	CGFloat	 locations[] = { 0.0, 0.3, 0.6, 1.0 };
+	CGFloat	 modifier = hilighted ? 1.0 : 0.33;
+	CGFloat	 components[sizeof(locations)/sizeof(*locations)*4] = { 
+		1.0, 1.0, 1.0, 0.0225,  // 0
+		1.0, 1.0, 1.0, 0.33 * modifier, // 1
 		1.0, 1.0, 1.0, 0.0225, // 1
 		1.0, 1.0, 1.0, 0.0 }; // 2
-	return CGGradientCreateWithColorComponents( aColorSpace, theComponents, theLocations, sizeof(theLocations)/sizeof(*theLocations) );
+
+	return CGGradientCreateWithColorComponents(
+											   colorSpace, 
+											   components, 
+											   locations, 
+											   sizeof(locations)/sizeof(*locations));
 }
 
-- (BOOL)drawBodyInRect:(CGRect)aRect hilighted:(BOOL)aHilighted
-{
-	CGContextRef	theContext = UIGraphicsGetCurrentContext();
-	CGContextSaveGState( theContext );
+- (BOOL)drawBodyInRect:(CGRect)rect hilighted:(BOOL)hilighted {
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	CGContextSaveGState(context);
 	
-	CGFloat			theStartRadius = CGRectGetHeight( aRect )*0.50;
-	CGPoint			theStartCenter = CGPointMake( CGRectGetMidX(aRect), CGRectGetMidY(aRect) ),
-	theShadowEndCenter = CGPointMake(theStartCenter.x, theStartCenter.y-0.05*theStartRadius ),
-	theHilightEndCenter = CGPointMake(theStartCenter.x, theStartCenter.y+0.1*theStartRadius );
-	CGColorSpaceRef	theColorSpace = CGColorGetColorSpace(self.backgroundColor.CGColor);
-	CGFloat			theBodyShadowColorComponents[] = { 0.0, 0.0, 0.0, 0.2 };
+	CGFloat		startRadius = CGRectGetHeight(rect) * 0.50,
+				bodyShadowColorComponents[] = { 0.0, 0.0, 0.0, 0.2 };
+
+	CGPoint		startCenter = CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect)),
+				shadowEndCenter = CGPointMake(startCenter.x, startCenter.y-0.05*startRadius ),
+				hilightEndCenter = CGPointMake(startCenter.x, startCenter.y+0.1*startRadius );
 	
-	if( aHilighted )
-		CGContextSetRGBFillColor( theContext, 0.9, 0.9, 0.9, 1.0);
+	CGColorSpaceRef	colorSpace = CGColorGetColorSpace(self.backgroundColor.CGColor);
+	
+	if (hilighted)
+		CGContextSetRGBFillColor(context, 0.9, 0.9, 0.9, 1.0);
 	else
-		CGContextSetRGBFillColor( theContext, 0.8, 0.8, 0.8, 1.0);
+		CGContextSetRGBFillColor(context, 0.8, 0.8, 0.8, 1.0);
 	
-	CGContextSetRGBStrokeColor(theContext, 0.75, 0.75, 0.75, 1.0);
-	CGContextRef	theBaseContext = UIGraphicsGetCurrentContext();
-	CGContextSaveGState( theBaseContext );
-	CGContextSetShadowWithColor( theBaseContext, CGSizeMake(0.0, theStartRadius*0.05), 2.0, CGColorCreate( theColorSpace, theBodyShadowColorComponents ) );
-	CGContextFillEllipseInRect( theBaseContext, aRect );
-	CGContextRestoreGState( theBaseContext );
+	CGContextSetRGBStrokeColor(context, 0.75, 0.75, 0.75, 1.0);
+
+	CGContextRef baseContext = UIGraphicsGetCurrentContext();
+	CGContextSaveGState(baseContext);
+	CGContextSetShadowWithColor(
+								baseContext, 
+								CGSizeMake(0.0, startRadius*0.05), 
+								2.0, 
+								CGColorCreate(colorSpace, bodyShadowColorComponents));
+	CGContextFillEllipseInRect(baseContext, rect);
+	CGContextRestoreGState(baseContext);
 	
-	CGContextDrawRadialGradient( theContext, hilightBodyGradient(theColorSpace,aHilighted), theStartCenter, theStartRadius, theHilightEndCenter, theStartRadius*0.85, 0.0 );
-	CGContextDrawRadialGradient( theContext, shadowBodyGradient(theColorSpace), theStartCenter, theStartRadius, theShadowEndCenter, theStartRadius*0.85, 0.0 );
+//	CGContextDrawRadialGradient( context, hilightBodyGradient(colorSpace,hilighted), startCenter, startRadius, hilightEndCenter, startRadius*0.85, 0.0 );
+//	CGContextDrawRadialGradient( context, shadowBodyGradient(colorSpace), startCenter, startRadius, shadowEndCenter, startRadius*0.85, 0.0 );
 	
-	CGContextSetAllowsAntialiasing( theContext, YES );
-	CGContextSetRGBStrokeColor( theContext, 0.5, 0.5, 0.5, 1.0 );
-	CGContextStrokeEllipseInRect( theContext, aRect );
+	CGContextSetAllowsAntialiasing(context, YES);
+	CGContextSetRGBStrokeColor(context, 0.5, 0.5, 0.5, 1.0);
+	CGContextStrokeEllipseInRect(context, rect);
 	
-	CGContextRestoreGState( theContext );
+	CGContextRestoreGState(context);
+
 	return YES;
 }
 
@@ -527,62 +525,57 @@ static CGGradientRef thumbGradient( CGColorSpaceRef aColorSpace, enum NDThumbTin
 #pragma mark -
 #pragma mark Private
 
-@synthesize 	touchDownAngle,
-touchDownYLocation;
+@synthesize	touchDownAngle,
+			touchDownYLocation;
 
-- (CGPoint)location
-{
-	CGRect			theBounds = self.bodyRect,
-	theThumbRect = self.thumbRect;
-	return mapPoint( self.constrainedCartesianPoint, CGRectMake(-1.0, -1.0, 2.0, 2.0), shrinkRect(theBounds, CGSizeMake(CGRectGetWidth(theThumbRect)*0.68,CGRectGetHeight(theThumbRect)*0.68) ) );
+- (CGPoint)location {
+	CGRect thumbRect = self.thumbRect;
+
+	return mapPoint( self.constrainedCartesianPoint, CGRectMake(-1.0, -1.0, 2.0, 2.0), shrinkRect(self.bodyRect, CGSizeMake(CGRectGetWidth(thumbRect)*0.68,CGRectGetHeight(thumbRect)*0.68) ) );
 }
 
-- (void)setLocation:(CGPoint)aPoint
-{
-		CGRect		theBounds = self.bodyRect,
-		theThumbRect = self.thumbRect;
-		self.cartesianPoint = mapPoint(aPoint, shrinkRect(theBounds, CGSizeMake(CGRectGetWidth(theThumbRect)*0.68,CGRectGetHeight(theThumbRect)*0.68) ), CGRectMake(-1.0, -1.0, 2.0, 2.0 ) );
+- (void)setLocation:(CGPoint)point {
+		CGRect thumbRect = self.thumbRect;
+		self.cartesianPoint = mapPoint(point, shrinkRect(self.bodyRect, CGSizeMake(CGRectGetWidth(thumbRect)*0.68,CGRectGetHeight(thumbRect)*0.68) ), CGRectMake(-1.0, -1.0, 2.0, 2.0 ) );
 }
 
-- (UIImage *)cachedBodyImage
-{
-	if( cachedBodyImage == nil )
+- (UIImage *)cachedBodyImage {
+	if (cachedBodyImage == nil)
 	{
-		CGRect		theBounds = self.bounds;
-		UIGraphicsBeginImageContext( theBounds.size );
-		if( [self drawBodyInRect:self.bodyRect hilighted:NO] )
+		UIGraphicsBeginImageContext(self.bounds.size);
+		if ([self drawBodyInRect:self.bodyRect hilighted:NO])
 			cachedBodyImage = UIGraphicsGetImageFromCurrentImageContext();
 		else
 			cachedBodyImage = self.cachedHilightedBodyImage;
 		UIGraphicsEndImageContext();
 	}
+
 	return cachedBodyImage;
 }
 
-- (UIImage *)cachedHilightedBodyImage
-{
-	if( cachedHilightedBodyImage == nil )
+- (UIImage *)cachedHilightedBodyImage {
+	if (cachedHilightedBodyImage == nil)
 	{
-		CGRect		theBounds = self.bounds;
-		UIGraphicsBeginImageContext( theBounds.size );
-		if( [self drawBodyInRect:self.bodyRect hilighted:YES] )
+		UIGraphicsBeginImageContext(self.bounds.size);
+		if ([self drawBodyInRect:self.bodyRect hilighted:YES])
 			cachedHilightedBodyImage = UIGraphicsGetImageFromCurrentImageContext();
 		else
 			cachedHilightedBodyImage = self.cachedBodyImage;
 		UIGraphicsEndImageContext();
 	}
+	
 	return cachedHilightedBodyImage;
 }
 
-- (UIImage *)cachedThumbImage
-{
-	if( cachedThumbImage == nil )
+- (UIImage *)cachedThumbImage {
+	if (cachedThumbImage == nil)
 	{
-		CGRect		theThumbRect = self.thumbRect;
-		theThumbRect.origin.x = 0;
-		theThumbRect.origin.y = 0;
-		UIGraphicsBeginImageContext( theThumbRect.size );
-		if( [self drawThumbInRect:theThumbRect hilighted:NO] )
+		CGRect thumbRect = self.thumbRect;
+		thumbRect.origin.x = 0;
+		thumbRect.origin.y = 0;
+
+		UIGraphicsBeginImageContext(thumbRect.size);
+		if ([self drawThumbInRect:thumbRect hilighted:NO])
 			cachedThumbImage = UIGraphicsGetImageFromCurrentImageContext();
 		else
 			cachedThumbImage = self.cachedHilightedThumbImage;
@@ -591,20 +584,21 @@ touchDownYLocation;
 	return cachedThumbImage;
 }
 
-- (UIImage *)cachedHilightedThumbImage
-{
-	if( cachedHilightedThumbImage == nil )
+- (UIImage *)cachedHilightedThumbImage {
+	if (cachedHilightedThumbImage == nil)
 	{
-		CGRect		theThumbRect = self.thumbRect;
-		theThumbRect.origin.x = 0;
-		theThumbRect.origin.y = 0;
-		UIGraphicsBeginImageContext( theThumbRect.size );
-		if( [self drawThumbInRect:theThumbRect hilighted:YES] )
+		CGRect thumbRect = self.thumbRect;
+		thumbRect.origin.x = 0;
+		thumbRect.origin.y = 0;
+
+		UIGraphicsBeginImageContext(thumbRect.size);
+		if ([self drawThumbInRect:thumbRect hilighted:YES])
 			cachedHilightedThumbImage = UIGraphicsGetImageFromCurrentImageContext();
 		else
 			cachedHilightedThumbImage = self.cachedThumbImage;
 		UIGraphicsEndImageContext();
 	}
+
 	return cachedHilightedThumbImage;
 }
 
