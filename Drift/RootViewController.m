@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "CustomPagerViewController.h"
+#import "RootViewController.h"
 
-@interface CustomPagerViewController ()
+@interface RootViewController ()
 
 @end
 
-@implementation CustomPagerViewController
+@implementation RootViewController
 
 - (void)viewDidLoad
 {

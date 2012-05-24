@@ -8,6 +8,6 @@
 
 #import "PagerViewController.h"
 
-@interface CustomPagerViewController : PagerViewController
+@interface RootViewController : PagerViewController
 
 @end
