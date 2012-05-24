@@ -22,6 +22,7 @@
 		9E42F21A15570FD70087F602 /* DriftTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F21915570FD70087F602 /* DriftTests.m */; };
 		9E42F22915571E9C0087F602 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F22815571E9C0087F602 /* RootViewController.m */; };
 		9EEDD293156E262200132008 /* NDRotator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EEDD292156E262200132008 /* NDRotator.m */; };
+		9EEDD29A156E5CD300132008 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EEDD299156E5CD300132008 /* Utility.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,8 @@
 		9E42F22815571E9C0087F602 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		9EEDD291156E262200132008 /* NDRotator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDRotator.h; sourceTree = "<group>"; };
 		9EEDD292156E262200132008 /* NDRotator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDRotator.m; sourceTree = "<group>"; };
+		9EEDD298156E5CD300132008 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
+		9EEDD299156E5CD300132008 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utility.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +168,8 @@
 				9E42F20415570FD60087F602 /* PagerViewController.m */,
 				9EEDD291156E262200132008 /* NDRotator.h */,
 				9EEDD292156E262200132008 /* NDRotator.m */,
+				9EEDD298156E5CD300132008 /* Utility.h */,
+				9EEDD299156E5CD300132008 /* Utility.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -280,6 +285,7 @@
 				9E42F20515570FD60087F602 /* PagerViewController.m in Sources */,
 				9E42F22915571E9C0087F602 /* RootViewController.m in Sources */,
 				9EEDD293156E262200132008 /* NDRotator.m in Sources */,
+				9EEDD29A156E5CD300132008 /* Utility.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,4 +1,5 @@
 #import "NDRotator.h"
+#import "Utility.h"
 
 // Contains the radius value of the receiver where 0.0 puts the thumb at the center and 1.0 puts the thumb at margin.
 // The values can be greater than 1.0, to reflect user movements outside of the control.
@@ -18,62 +19,6 @@ static void componentsForTint(CGFloat * component, CGFloat value) {
 	component[0] = value*(0.55*0.5);
 	component[1] = value;
 	component[2] = value*(0.55);
-}
-
-static inline CGFloat mathMod(CGFloat x, CGFloat y) {
-	CGFloat r = fmodf(x,y);
-
-	return r < 0.0
-		? r + y
-		: r;
-}
-
-static CGFloat constrainValue(CGFloat value, CGFloat min, CGFloat max) {
-	return value < min
-		? min
-		: (value > max ? max : value);
-}
-
-static CGFloat wrapValue(CGFloat value, CGFloat min, CGFloat max) {
-	return mathMod(value-min,max-min)+min;
-}
-
-static CGFloat mapValue(CGFloat value, CGFloat minValue, CGFloat maxValue, CGFloat minR, CGFloat maxR) {
-	return ((value-minValue)/(maxValue-minValue)) * (maxR - minR) + minR;
-}
-
-static CGPoint mapPoint(const CGPoint value, const CGRect rangeV, const CGRect rangeR) {
-	return CGPointMake(
-					   mapValue(
-								value.x,
-								CGRectGetMinX(rangeV),
-								CGRectGetMaxX(rangeV),
-								CGRectGetMinX(rangeR),
-								CGRectGetMaxX(rangeR)),
-					   mapValue(
-								value.y,
-								CGRectGetMinY(rangeV),
-								CGRectGetMaxY(rangeV),
-								CGRectGetMinY(rangeR),
-								CGRectGetMaxY(rangeR)));
-}
-
-static CGRect shrinkRect(const CGRect v, CGSize s) {
-	return CGRectMake(
-					  CGRectGetMinX(v)+s.width,
-					  CGRectGetMinY(v)+s.height,
-					  CGRectGetWidth(v)-2.0*s.width,
-					  CGRectGetHeight(v)-2.0*s.height);
-}
-
-static CGRect largestSquareWithinRect(const CGRect r) {
-	CGFloat	scale = MIN(CGRectGetWidth(r), CGRectGetHeight(r));
-
-	return CGRectMake(
-					  CGRectGetMinX(r),
-					  CGRectGetMinY(r),
-					  scale,
-					  scale);
 }
 
 @interface NDRotator ()
@@ -124,7 +69,7 @@ static CGRect largestSquareWithinRect(const CGRect r) {
 }
 
 - (CGPoint)constrainedCartesianPoint {
-	CGFloat	radius = constrainValue(kRadius, 0.0, 1.0 );
+	CGFloat radius = [Utility constrainValue:kRadius min:0.0 max:1.0];
 
 	return CGPointMake(
 					   cos(self.angle)*radius,
@@ -132,7 +77,7 @@ static CGRect largestSquareWithinRect(const CGRect r) {
 }
 
 - (void)setAngle:(CGFloat)v {
-	angle = wrapValue(v, self.minimumDomain, self.maximumDomain);
+	angle = [Utility wrapValue:v min:self.minimumDomain max:self.maximumDomain];
 }
 
 #pragma mark -
@@ -141,23 +86,19 @@ static CGRect largestSquareWithinRect(const CGRect r) {
 - (CGPoint)location {
 	CGRect thumbRect = self.thumbRect;
 
-	return mapPoint(
-					self.constrainedCartesianPoint,
-					CGRectMake(-1.0, -1.0, 2.0, 2.0),
-					shrinkRect(
-							   self.bodyRect,
-							   CGSizeMake(CGRectGetWidth(thumbRect)*0.68,CGRectGetHeight(thumbRect)*0.68)));
+	return [Utility mapPoint:self.constrainedCartesianPoint 
+					  rangeV:CGRectMake(-1.0, -1.0, 2.0, 2.0) 
+					  rangeR:[Utility shrinkRect:self.bodyRect 
+											size:CGSizeMake(CGRectGetWidth(thumbRect)*0.68,CGRectGetHeight(thumbRect)*0.68)]];
 }
 
 - (void)setLocation:(CGPoint)point {
 	CGRect thumbRect = self.thumbRect;
 
-	self.cartesianPoint = mapPoint(
-								   point,
-								   shrinkRect(self.bodyRect,
-											  CGSizeMake(CGRectGetWidth(thumbRect)*0.68,
-														 CGRectGetHeight(thumbRect)*0.68)),
-								   CGRectMake(-1.0, -1.0, 2.0, 2.0));
+	self.cartesianPoint = [Utility mapPoint:point 
+									 rangeV:[Utility shrinkRect:self.bodyRect 
+														   size:CGSizeMake(CGRectGetWidth(thumbRect)*0.68, CGRectGetHeight(thumbRect)*0.68)]
+									 rangeR:CGRectMake(-1.0, -1.0, 2.0, 2.0)];
 }
 
 - (UIImage *)cachedBodyImage {
@@ -221,6 +162,7 @@ static CGRect largestSquareWithinRect(const CGRect r) {
 
 #pragma mark -
 #pragma mark creation and destruction
+
 - (id)initWithFrame:(CGRect)frame {
 	if ((self = [super initWithFrame:frame]) != nil) {
 		self.minimumValue = kDefaultMinimumValue;
@@ -235,28 +177,12 @@ static CGRect largestSquareWithinRect(const CGRect r) {
 #pragma mark -
 #pragma mark NSCoding Protocol methods
 
-static CGFloat decodeDoubleWithDefault(NSCoder * coder, NSString * key, CGFloat defaultValue) {
-	NSNumber * value = [coder decodeObjectForKey:key];
-
-	return value != nil
-		? value.doubleValue
-		: defaultValue;
-}
-
-static BOOL decodeBooleanWithDefault(NSCoder * coder, NSString * key, BOOL defaultValue) {
-	NSNumber * value = [coder decodeObjectForKey:key];
-
-	return value != nil
-		? value.boolValue
-		: defaultValue;
-}
-
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super initWithCoder:coder]) != nil) {
-		self.minimumValue = decodeDoubleWithDefault( coder, kMinimumValueCodingKey, kDefaultMinimumValue );
-		self.maximumValue = decodeDoubleWithDefault( coder, kMaximumValueCodingKey, kDefaultMaximumValue );
-		self.minimumDomain = decodeDoubleWithDefault( coder, kMinimumDomainCodingKey, kDefaultMinimumDomain );
-		self.maximumDomain = decodeDoubleWithDefault( coder, kMaximumDomainCodingKey, kDefaultMaximumDomain );
+		self.minimumValue = [Utility decodeDoubleWithDefault:coder key:kMinimumValueCodingKey defaultValue:kDefaultMinimumValue];
+		self.maximumValue = [Utility decodeDoubleWithDefault:coder key:kMaximumValueCodingKey defaultValue:kDefaultMaximumValue];
+		self.minimumDomain = [Utility decodeDoubleWithDefault:coder key:kMinimumDomainCodingKey defaultValue:kDefaultMinimumDomain];
+		self.maximumDomain = [Utility decodeDoubleWithDefault:coder key:kMaximumDomainCodingKey defaultValue:kDefaultMaximumDomain];
 	}
 
 	return self;
@@ -378,9 +304,9 @@ static BOOL decodeBooleanWithDefault(NSCoder * coder, NSString * key, BOOL defau
 	bodyBounds.size.width = floorf(CGRectGetWidth(bodyBounds) * 0.95);
 	bodyBounds.origin.y += ceilf(CGRectGetHeight(bodyBounds) * 0.01);
 	bodyBounds.origin.x += ceilf((CGRectGetWidth(self.bounds) - CGRectGetWidth(bodyBounds)) * 0.5);
-	bodyBounds = shrinkRect(bodyBounds, CGSizeMake(1.0,1.0));
+	bodyBounds = [Utility shrinkRect:bodyBounds size:CGSizeMake(1.0, 1.0)];
 
-	return largestSquareWithinRect(bodyBounds);
+	return [Utility largestSquareWithinRect:bodyBounds];
 }
 
 - (CGRect)thumbRect {
@@ -395,7 +321,7 @@ static BOOL decodeBooleanWithDefault(NSCoder * coder, NSString * key, BOOL defau
 	CGFloat	thumbRadius = thumbDiameter/2.0;
 	CGRect thumbBounds = CGRectMake(-thumbRadius, -thumbRadius, thumbDiameter, thumbDiameter);
 
-	return shrinkRect(thumbBounds, CGSizeMake(-1.0,-1.0));
+	return [Utility shrinkRect:thumbBounds size:CGSizeMake(-1.0, -1.0)];
 }
 
 static CGGradientRef createShadowBodyGradient(CGColorSpaceRef colorSpace) {

@@ -7,6 +7,7 @@
 //
 
 #import "PagerViewController.h"
+#import "Utility.h"
 
 @interface PagerViewController ()
 
@@ -28,7 +29,7 @@
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
+	[super viewDidLoad];
 }
 
 - (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers {
