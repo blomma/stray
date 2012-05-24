@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9E31E079156947510071AD2D /* NDRotator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E31E077156947510071AD2D /* NDRotator.m */; };
 		9E42F1EF15570FD60087F602 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1EE15570FD60087F602 /* UIKit.framework */; };
 		9E42F1F115570FD60087F602 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F015570FD60087F602 /* Foundation.framework */; };
 		9E42F1F315570FD60087F602 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F215570FD60087F602 /* CoreGraphics.framework */; };
@@ -22,6 +21,7 @@
 		9E42F21715570FD70087F602 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F21515570FD70087F602 /* InfoPlist.strings */; };
 		9E42F21A15570FD70087F602 /* DriftTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F21915570FD70087F602 /* DriftTests.m */; };
 		9E42F22915571E9C0087F602 /* CustomPagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F22815571E9C0087F602 /* CustomPagerViewController.m */; };
+		9EEDD293156E262200132008 /* NDRotator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EEDD292156E262200132008 /* NDRotator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,8 +35,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		9E31E076156947510071AD2D /* NDRotator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDRotator.h; sourceTree = "<group>"; };
-		9E31E077156947510071AD2D /* NDRotator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDRotator.m; sourceTree = "<group>"; };
 		9E42F1EA15570FD60087F602 /* Drift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Drift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E42F1EE15570FD60087F602 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		9E42F1F015570FD60087F602 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -58,6 +56,8 @@
 		9E42F21915570FD70087F602 /* DriftTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DriftTests.m; sourceTree = "<group>"; };
 		9E42F22715571E9C0087F602 /* CustomPagerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomPagerViewController.h; sourceTree = "<group>"; };
 		9E42F22815571E9C0087F602 /* CustomPagerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomPagerViewController.m; sourceTree = "<group>"; };
+		9EEDD291156E262200132008 /* NDRotator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDRotator.h; sourceTree = "<group>"; };
+		9EEDD292156E262200132008 /* NDRotator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDRotator.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,19 +84,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9E31E073156947510071AD2D /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				9E31E076156947510071AD2D /* NDRotator.h */,
-				9E31E077156947510071AD2D /* NDRotator.m */,
-			);
-			path = Classes;
-			sourceTree = "<group>";
-		};
 		9E42F1DF15570FD60087F602 = {
 			isa = PBXGroup;
 			children = (
-				9E31E073156947510071AD2D /* Classes */,
 				9E42F1F415570FD60087F602 /* Drift */,
 				9E42F21215570FD70087F602 /* DriftTests */,
 				9E42F1ED15570FD60087F602 /* Frameworks */,
@@ -127,11 +117,10 @@
 		9E42F1F415570FD60087F602 /* Drift */ = {
 			isa = PBXGroup;
 			children = (
+				9EEDD290156E25FC00132008 /* Classes */,
 				9E42F1FD15570FD60087F602 /* DriftAppDelegate.h */,
 				9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */,
 				9E42F20015570FD60087F602 /* MainStoryboard.storyboard */,
-				9E42F20315570FD60087F602 /* PagerViewController.h */,
-				9E42F20415570FD60087F602 /* PagerViewController.m */,
 				9E42F22715571E9C0087F602 /* CustomPagerViewController.h */,
 				9E42F22815571E9C0087F602 /* CustomPagerViewController.m */,
 				9E42F1F515570FD60087F602 /* Supporting Files */,
@@ -167,6 +156,17 @@
 				9E42F21515570FD70087F602 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9EEDD290156E25FC00132008 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				9E42F20315570FD60087F602 /* PagerViewController.h */,
+				9E42F20415570FD60087F602 /* PagerViewController.m */,
+				9EEDD291156E262200132008 /* NDRotator.h */,
+				9EEDD292156E262200132008 /* NDRotator.m */,
+			);
+			name = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -279,7 +279,7 @@
 				9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */,
 				9E42F20515570FD60087F602 /* PagerViewController.m in Sources */,
 				9E42F22915571E9C0087F602 /* CustomPagerViewController.m in Sources */,
-				9E31E079156947510071AD2D /* NDRotator.m in Sources */,
+				9EEDD293156E262200132008 /* NDRotator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
