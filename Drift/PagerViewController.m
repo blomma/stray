@@ -29,13 +29,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-	// Do any additional setup after loading the view, typically from a nib.
-	[self.scrollView setPagingEnabled:YES];
-	[self.scrollView setScrollEnabled:YES];
-	[self.scrollView setShowsHorizontalScrollIndicator:NO];
-	[self.scrollView setShowsVerticalScrollIndicator:NO];
-	[self.scrollView setDelegate:self];
 }
 
 - (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers {
