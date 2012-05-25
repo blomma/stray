@@ -29,7 +29,7 @@
 
  This value will be constrained by the values (<minimumDomain>,<maximumDomain>) and so can represent a range of values greater than one turn.
  */
-@property(nonatomic)	CGFloat	angle;
+@property(nonatomic) CGFloat angle;
 
 /**
  Contains the thumb point where (0.0,0.0) is the center, (1.0,0.0) is at 3 oclock and (0.0,-1.0) is at 12 oclock etc.
@@ -55,7 +55,7 @@
 
  The default value of this property is 0.0.
  */
-@property CGFloat	minimumValue;
+@property CGFloat minimumValue;
 
 /**
  Contains the maximum value of the receiver.
@@ -63,19 +63,19 @@
 
  The default value of this property is 1.0.
  */
-@property CGFloat	maximumValue;
+@property CGFloat maximumValue;
 
 /**
  Contains the minimum <angle> of the receiver.
  The default value of this property is 0.0.
  */
-@property CGFloat	minimumDomain;
+@property CGFloat minimumDomain;
 
 /**
  Contains the maximum <angle> of the receiver.
  The default value of this property is 2.0pi.
  */
-@property CGFloat	maximumDomain;
+@property CGFloat maximumDomain;
 
 /**
  @name Changing the Rotator’s Appearance
@@ -112,15 +112,16 @@
  */
 @property(readonly) CGRect thumbRect;
 
-@property(readonly) UIImage	* cachedBodyImage,
-							* cachedHilightedBodyImage,
-							* cachedThumbImage,
-							* cachedHilightedThumbImage;
+@property(weak, readonly) UIImage 	* cachedBodyImage,
+									* cachedHilightedBodyImage,
+									* cachedThumbImage,
+									* cachedHilightedThumbImage;
 
 @property CGPoint location;
 
-@property CGFloat	touchDownAngle,
-					touchDownYLocation;
+@property CGFloat touchDownAngle;
+
+@property CGFloat touchDownYLocation;
 
 /**
  draw the control body into the given <rect>.
