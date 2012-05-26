@@ -10,4 +10,6 @@
 
 @interface RootViewController : PagerViewController
 
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
 @end
