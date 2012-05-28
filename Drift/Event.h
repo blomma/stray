@@ -12,8 +12,8 @@
 
 @interface Event : NSManagedObject
 
-@property (nonatomic) NSDate * startDate;
-@property (nonatomic) NSDate * stopDate;
-@property (nonatomic) NSString * tag;
+@property (nonatomic) NSDate *startDate;
+@property (nonatomic) NSDate *stopDate;
+@property (nonatomic) NSString *tag;
 
 @end

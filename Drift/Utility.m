@@ -21,7 +21,7 @@
 #pragma mark NSCoding Protocol methods
 
 + (CGFloat)decodeDoubleWithDefault:(NSCoder *)coder key:(NSString *)key defaultValue:(CGFloat)defaultValue {
-	NSNumber * value = [coder decodeObjectForKey:key];
+	NSNumber *value = [coder decodeObjectForKey:key];
 	
 	return value != nil
 		? value.doubleValue
@@ -29,7 +29,7 @@
 }
 
 + (CGFloat)decodeBooleanWithDefault:(NSCoder *)coder key:(NSString *)key defaultValue:(BOOL)defaultValue {
-	NSNumber * value = [coder decodeObjectForKey:key];
+	NSNumber *value = [coder decodeObjectForKey:key];
 	
 	return value != nil
 		? value.boolValue
@@ -81,8 +81,8 @@
 	return CGRectMake(
 					  CGRectGetMinX(rect)+size.width,
 					  CGRectGetMinY(rect)+size.height,
-					  CGRectGetWidth(rect)-2.0*size.width,
-					  CGRectGetHeight(rect)-2.0*size.height);
+					  CGRectGetWidth(rect)-2.0 * size.width,
+					  CGRectGetHeight(rect)-2.0 * size.height);
 }
 
 + (CGRect)largestSquareWithinRect:(const CGRect)rect {

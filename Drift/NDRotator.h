@@ -112,10 +112,10 @@
  */
 @property(readonly) CGRect thumbRect;
 
-@property(strong, readonly) UIImage 	* cachedBodyImage,
-									* cachedHilightedBodyImage,
-									* cachedThumbImage,
-									* cachedHilightedThumbImage;
+@property(strong, readonly) UIImage	*cachedBodyImage,
+									*cachedHilightedBodyImage,
+									*cachedThumbImage,
+									*cachedHilightedThumbImage;
 
 @property CGPoint location;
 

@@ -7,27 +7,27 @@ static const CGFloat kRadius = 1.0;
 
 static const CGFloat	kDefaultMinimumValue = 0.0,
 						kDefaultMaximumValue = 1.0,
-						kDefaultMinimumDomain = 0.0*M_PI,
-						kDefaultMaximumDomain = 2.0*M_PI;
+						kDefaultMinimumDomain = 0.0 * M_PI,
+						kDefaultMaximumDomain = 2.0 * M_PI;
 
-static NSString	* const kMinimumValueCodingKey = @"minimumValue",
-				* const kMaximumValueCodingKey = @"maximumValue",
-				* const kMinimumDomainCodingKey = @"minimumDomain",
-				* const kMaximumDomainCodingKey = @"maximumDomain";
+static NSString	*const kMinimumValueCodingKey = @"minimumValue",
+				*const kMaximumValueCodingKey = @"maximumValue",
+				*const kMinimumDomainCodingKey = @"minimumDomain",
+				*const kMaximumDomainCodingKey = @"maximumDomain";
 
-static void componentsForTint(CGFloat * component, CGFloat value) {
-	component[0] = value*(0.55*0.5);
+static void componentsForTint(CGFloat *component, CGFloat value) {
+	component[0] = value * (0.55 * 0.5);
 	component[1] = value;
-	component[2] = value*(0.55);
+	component[2] = value * (0.55);
 }
 
 @interface NDRotator ()
 {
 @private
-	UIImage	* cachedBodyImage,
-			* cachedHilightedBodyImage,
-			* cachedThumbImage,
-			* cachedHilightedThumbImage;
+	UIImage	*cachedBodyImage,
+			*cachedHilightedBodyImage,
+			*cachedThumbImage,
+			*cachedHilightedThumbImage;
 }
 @end
 
@@ -46,8 +46,8 @@ static void componentsForTint(CGFloat * component, CGFloat value) {
 
 - (CGPoint)cartesianPoint {
 	return CGPointMake(
-					   cos(self.angle)*kRadius,
-					   sin(self.angle)*kRadius);
+					   cos(self.angle) * kRadius,
+					   sin(self.angle) * kRadius);
 }
 
 - (void)setCartesianPoint:(CGPoint)point {
@@ -57,13 +57,13 @@ static void componentsForTint(CGFloat * component, CGFloat value) {
 	if (point.x < 0.0)
 		newAngle = M_PI+newAngle;
 	else if (point.y < 0)
-		newAngle += 2*M_PI;
+		newAngle += 2 * M_PI;
 
 	while (newAngle - previousAngle > M_PI)
-		newAngle -= 2.0*M_PI;
+		newAngle -= 2.0 * M_PI;
 
 	while (previousAngle - newAngle > M_PI)
-		newAngle += 2.0*M_PI;
+		newAngle += 2.0 * M_PI;
 
 	self.angle = newAngle;
 }
@@ -72,8 +72,8 @@ static void componentsForTint(CGFloat * component, CGFloat value) {
 	CGFloat radius = [Utility constrainValue:kRadius min:0.0 max:1.0];
 
 	return CGPointMake(
-					   cos(self.angle)*radius,
-					   sin(self.angle)*radius);
+					   cos(self.angle) * radius,
+					   sin(self.angle) * radius);
 }
 
 - (void)setAngle:(CGFloat)v {
@@ -89,7 +89,7 @@ static void componentsForTint(CGFloat * component, CGFloat value) {
 	return [Utility mapPoint:self.constrainedCartesianPoint 
 					  rangeV:CGRectMake(-1.0, -1.0, 2.0, 2.0) 
 					  rangeR:[Utility shrinkRect:self.bodyRect 
-											size:CGSizeMake(CGRectGetWidth(thumbRect)*0.68,CGRectGetHeight(thumbRect)*0.68)]];
+											size:CGSizeMake(CGRectGetWidth(thumbRect) * 0.68,CGRectGetHeight(thumbRect) * 0.68)]];
 }
 
 - (void)setLocation:(CGPoint)point {
@@ -97,7 +97,7 @@ static void componentsForTint(CGFloat * component, CGFloat value) {
 
 	self.cartesianPoint = [Utility mapPoint:point 
 									 rangeV:[Utility shrinkRect:self.bodyRect 
-														   size:CGSizeMake(CGRectGetWidth(thumbRect)*0.68, CGRectGetHeight(thumbRect)*0.68)]
+														   size:CGSizeMake(CGRectGetWidth(thumbRect) * 0.68, CGRectGetHeight(thumbRect) * 0.68)]
 									 rangeR:CGRectMake(-1.0, -1.0, 2.0, 2.0)];
 }
 
@@ -326,7 +326,7 @@ static void componentsForTint(CGFloat * component, CGFloat value) {
 
 static CGGradientRef createShadowBodyGradient(CGColorSpaceRef colorSpace) {
 	CGFloat	 locations[] = { 0.0, 0.3, 0.6, 1.0 };
-	CGFloat	 components[sizeof(locations)/sizeof(*locations)*4] = {
+	CGFloat	 components[sizeof(locations)/sizeof(*locations) * 4] = {
 		0.0, 0.0, 0.0, 0.25,  // 0
 		0.0, 0.0, 0.0, 0.125, // 1
 		0.0, 0.0, 0.0, 0.0225, // 1
@@ -342,7 +342,7 @@ static CGGradientRef createShadowBodyGradient(CGColorSpaceRef colorSpace) {
 static CGGradientRef createHilightBodyGradient(CGColorSpaceRef colorSpace, BOOL hilighted) {
 	CGFloat	 locations[] = { 0.0, 0.3, 0.6, 1.0 };
 	CGFloat	 modifier = hilighted ? 1.0 : 0.33;
-	CGFloat	 components[sizeof(locations)/sizeof(*locations)*4] = {
+	CGFloat	 components[sizeof(locations)/sizeof(*locations) * 4] = {
 		1.0, 1.0, 1.0, 0.0225,  // 0
 		1.0, 1.0, 1.0, 0.33 * modifier, // 1
 		1.0, 1.0, 1.0, 0.0225, // 1
@@ -363,8 +363,8 @@ static CGGradientRef createHilightBodyGradient(CGColorSpaceRef colorSpace, BOOL 
 				bodyShadowColorComponents[] = { 0.0, 0.0, 0.0, 0.2 };
 
 	CGPoint		startCenter = CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect)),
-				shadowEndCenter = CGPointMake(startCenter.x, startCenter.y-0.05*startRadius ),
-				hilightEndCenter = CGPointMake(startCenter.x, startCenter.y+0.1*startRadius );
+				shadowEndCenter = CGPointMake(startCenter.x, startCenter.y-0.05 * startRadius ),
+				hilightEndCenter = CGPointMake(startCenter.x, startCenter.y+0.1 * startRadius );
 
 	CGColorSpaceRef	colorSpace = CGColorGetColorSpace(self.backgroundColor.CGColor);
 
@@ -381,14 +381,14 @@ static CGGradientRef createHilightBodyGradient(CGColorSpaceRef colorSpace, BOOL 
 	CGColorRef baseColor = CGColorCreate(colorSpace, bodyShadowColorComponents);
 	CGContextSetShadowWithColor(
 								baseContext,
-								CGSizeMake(0.0, startRadius*0.05),
+								CGSizeMake(0.0, startRadius * 0.05),
 								2.0,
 								baseColor);
 	CGContextFillEllipseInRect(baseContext, rect);
 	CGContextRestoreGState(baseContext);
 
-	CGContextDrawRadialGradient(context, createHilightBodyGradient(colorSpace,hilighted), startCenter, startRadius, hilightEndCenter, startRadius*0.85, 0.0);
-	CGContextDrawRadialGradient(context, createShadowBodyGradient(colorSpace), startCenter, startRadius, shadowEndCenter, startRadius*0.85, 0.0);
+	CGContextDrawRadialGradient(context, createHilightBodyGradient(colorSpace,hilighted), startCenter, startRadius, hilightEndCenter, startRadius * 0.85, 0.0);
+	CGContextDrawRadialGradient(context, createShadowBodyGradient(colorSpace), startCenter, startRadius, shadowEndCenter, startRadius * 0.85, 0.0);
 
 	CGContextSetAllowsAntialiasing(context, YES);
 	CGContextSetRGBStrokeColor(context, 0.5, 0.5, 0.5, 1.0);
@@ -401,7 +401,7 @@ static CGGradientRef createHilightBodyGradient(CGColorSpaceRef colorSpace, BOOL 
 
 static CGGradientRef createThumbGradient(CGColorSpaceRef colorSpace) {
 	CGFloat			locations[] = { 0.0, 1.0 };
-	CGFloat			components[sizeof(locations)/sizeof(*locations)*4] = {
+	CGFloat			components[sizeof(locations)/sizeof(*locations) * 4] = {
 		0.72, 0.72, 0.72, 1.0, 0.99, 0.99, 0.99, 1.0
 	};
 
@@ -427,9 +427,9 @@ static CGGradientRef createThumbGradient(CGColorSpaceRef colorSpace) {
 		CGContextAddEllipseInRect(thumbContext, thumbBounds);
 		CGContextClip(thumbContext);
 
-		CGPoint	startThumbPoint = CGPointMake(thumbCenter.x, thumbCenter.y-thumbDiam/2.0-thumbDiam*1.3),
+		CGPoint	startThumbPoint = CGPointMake(thumbCenter.x, thumbCenter.y-thumbDiam/2.0-thumbDiam * 1.3),
 				endThumbPoint = CGPointMake(thumbCenter.x, thumbCenter.y+thumbDiam/2.0-thumbDiam);
-		CGContextDrawRadialGradient(thumbContext, createThumbGradient(colorSpace), startThumbPoint, 1.3*thumbDiam, endThumbPoint, thumbDiam, 0.0);
+		CGContextDrawRadialGradient(thumbContext, createThumbGradient(colorSpace), startThumbPoint, 1.3 * thumbDiam, endThumbPoint, thumbDiam, 0.0);
 
 		CGContextRestoreGState(thumbContext);
 		CGContextSetRGBStrokeColor(context, 0.3, 0.3, 0.3, 0.15);
