@@ -16,8 +16,7 @@
 
 @synthesize managedObjectContext = _managedObjectContext;
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
 	// Do any additional setup after loading the view, typically from a nib.
     [super viewDidLoad];
 
