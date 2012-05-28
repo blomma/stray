@@ -14,7 +14,7 @@
 
 @implementation RootViewController
 
-@synthesize managedObjectContext = __managedObjectContext;
+@synthesize managedObjectContext = _managedObjectContext;
 
 - (void)viewDidLoad
 {

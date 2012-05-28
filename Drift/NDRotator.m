@@ -33,13 +33,13 @@ static void componentsForTint(CGFloat * component, CGFloat value) {
 
 @implementation NDRotator
 
-@synthesize	minimumValue,
-			maximumValue,
-			minimumDomain,
-			maximumDomain,
-			angle,
-			touchDownAngle,
-			touchDownYLocation;
+@synthesize	minimumValue = _minimumValue;
+@synthesize	maximumValue = _maximumValue;
+@synthesize	minimumDomain = _minimumDomain;
+@synthesize	maximumDomain = _maximumDomain;
+@synthesize	angle = _angle;
+@synthesize	touchDownAngle = _touchDownAngle;
+@synthesize	touchDownYLocation = _touchDownYLocation;
 
 #pragma mark -
 #pragma mark public properties
@@ -77,7 +77,7 @@ static void componentsForTint(CGFloat * component, CGFloat value) {
 }
 
 - (void)setAngle:(CGFloat)v {
-	angle = [Utility wrapValue:v min:self.minimumDomain max:self.maximumDomain];
+	_angle = [Utility wrapValue:v min:self.minimumDomain max:self.maximumDomain];
 }
 
 #pragma mark -
