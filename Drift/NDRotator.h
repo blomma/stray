@@ -112,7 +112,7 @@
  */
 @property(readonly) CGRect thumbRect;
 
-@property(weak, readonly) UIImage 	* cachedBodyImage,
+@property(strong, readonly) UIImage 	* cachedBodyImage,
 									* cachedHilightedBodyImage,
 									* cachedThumbImage,
 									* cachedHilightedThumbImage;
