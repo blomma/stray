@@ -22,27 +22,25 @@ static void componentsForTint(CGFloat *component, CGFloat value) {
 }
 
 @interface NDRotator ()
-{
-@private
-	UIImage	*cachedBodyImage,
-			*cachedHilightedBodyImage,
-			*cachedThumbImage,
-			*cachedHilightedThumbImage;
-}
+
+@property(strong, nonatomic) UIImage *cachedBodyImage;
+@property(strong, nonatomic) UIImage *cachedHilightedBodyImage;
+@property(strong, nonatomic) UIImage *cachedThumbImage;
+@property(strong, nonatomic) UIImage *cachedHilightedThumbImage;
+@property(nonatomic) CGPoint location;
+
 @end
 
 @implementation NDRotator
+
+#pragma mark -
+#pragma mark public properties
 
 @synthesize	minimumValue = _minimumValue;
 @synthesize	maximumValue = _maximumValue;
 @synthesize	minimumDomain = _minimumDomain;
 @synthesize	maximumDomain = _maximumDomain;
 @synthesize	angle = _angle;
-@synthesize	touchDownAngle = _touchDownAngle;
-@synthesize	touchDownYLocation = _touchDownYLocation;
-
-#pragma mark -
-#pragma mark public properties
 
 - (CGPoint)cartesianPoint {
 	return CGPointMake(
@@ -76,12 +74,17 @@ static void componentsForTint(CGFloat *component, CGFloat value) {
 					   sin(self.angle) * radius);
 }
 
-- (void)setAngle:(CGFloat)v {
-	_angle = [Utility wrapValue:v min:self.minimumDomain max:self.maximumDomain];
+- (void)setAngle:(CGFloat)angle {
+	_angle = [Utility wrapValue:angle min:self.minimumDomain max:self.maximumDomain];
 }
 
 #pragma mark -
 #pragma mark private properties
+
+@synthesize	cachedBodyImage = _cachedBodyImage;
+@synthesize	cachedHilightedBodyImage = _cachedHilightedBodyImage;
+@synthesize	cachedThumbImage = _cachedThumbImage;
+@synthesize	cachedHilightedThumbImage = _cachedHilightedThumbImage;
 
 - (CGPoint)location {
 	CGRect thumbRect = self.thumbRect;
@@ -102,62 +105,62 @@ static void componentsForTint(CGFloat *component, CGFloat value) {
 }
 
 - (UIImage *)cachedBodyImage {
-	if (cachedBodyImage == nil) {
+	if (_cachedBodyImage == nil) {
 		UIGraphicsBeginImageContext(self.bounds.size);
 		if ([self drawBodyInRect:self.bodyRect hilighted:NO])
-			cachedBodyImage = UIGraphicsGetImageFromCurrentImageContext();
+			_cachedBodyImage = UIGraphicsGetImageFromCurrentImageContext();
 		else
-			cachedBodyImage = self.cachedHilightedBodyImage;
+			_cachedBodyImage = self.cachedHilightedBodyImage;
 		UIGraphicsEndImageContext();
 	}
 
-	return cachedBodyImage;
+	return _cachedBodyImage;
 }
 
 - (UIImage *)cachedHilightedBodyImage {
-	if (cachedHilightedBodyImage == nil) {
+	if (_cachedHilightedBodyImage == nil) {
 		UIGraphicsBeginImageContext(self.bounds.size);
 		if ([self drawBodyInRect:self.bodyRect hilighted:YES])
-			cachedHilightedBodyImage = UIGraphicsGetImageFromCurrentImageContext();
+			_cachedHilightedBodyImage = UIGraphicsGetImageFromCurrentImageContext();
 		else
-			cachedHilightedBodyImage = self.cachedBodyImage;
+			_cachedHilightedBodyImage = self.cachedBodyImage;
 		UIGraphicsEndImageContext();
 	}
 
-	return cachedHilightedBodyImage;
+	return _cachedHilightedBodyImage;
 }
 
 - (UIImage *)cachedThumbImage {
-	if (cachedThumbImage == nil) {
+	if (_cachedThumbImage == nil) {
 		CGRect thumbRect = self.thumbRect;
 		thumbRect.origin.x = 0;
 		thumbRect.origin.y = 0;
 
 		UIGraphicsBeginImageContext(thumbRect.size);
 		if ([self drawThumbInRect:thumbRect hilighted:NO])
-			cachedThumbImage = UIGraphicsGetImageFromCurrentImageContext();
+			_cachedThumbImage = UIGraphicsGetImageFromCurrentImageContext();
 		else
-			cachedThumbImage = self.cachedHilightedThumbImage;
+			_cachedThumbImage = self.cachedHilightedThumbImage;
 		UIGraphicsEndImageContext();
 	}
-	return cachedThumbImage;
+	return _cachedThumbImage;
 }
 
 - (UIImage *)cachedHilightedThumbImage {
-	if (cachedHilightedThumbImage == nil) {
+	if (_cachedHilightedThumbImage == nil) {
 		CGRect thumbRect = self.thumbRect;
 		thumbRect.origin.x = 0;
 		thumbRect.origin.y = 0;
 
 		UIGraphicsBeginImageContext(thumbRect.size);
 		if ([self drawThumbInRect:thumbRect hilighted:YES])
-			cachedHilightedThumbImage = UIGraphicsGetImageFromCurrentImageContext();
+			_cachedHilightedThumbImage = UIGraphicsGetImageFromCurrentImageContext();
 		else
-			cachedHilightedThumbImage = self.cachedThumbImage;
+			_cachedHilightedThumbImage = self.cachedThumbImage;
 		UIGraphicsEndImageContext();
 	}
 
-	return cachedHilightedThumbImage;
+	return _cachedHilightedThumbImage;
 }
 
 #pragma mark -
@@ -205,8 +208,6 @@ static void componentsForTint(CGFloat *component, CGFloat value) {
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
 	CGPoint	point = [touch locationInView:self];
 
-	self.touchDownYLocation = point.y;
-	self.touchDownAngle = self.angle;
 	self.location = point;
 
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
@@ -276,22 +277,22 @@ static void componentsForTint(CGFloat *component, CGFloat value) {
 	thumbRect.origin.y += thumbLocation.y;
 
 	if (self.state & UIControlStateHighlighted)
-		[[self cachedHilightedThumbImage] drawInRect:thumbRect];
+		[self.cachedHilightedThumbImage drawInRect:thumbRect];
 	else
-		[[self cachedThumbImage] drawInRect:thumbRect];
+		[self.cachedThumbImage drawInRect:thumbRect];
 }
 
 #pragma mark -
 #pragma mark methods and properties to call when subclassing <NDRotator>.
 
 - (void)deleteThumbCache {
-	cachedThumbImage = nil;
-	cachedHilightedThumbImage = nil;
+	self.cachedThumbImage = nil;
+	self.cachedHilightedThumbImage = nil;
 }
 
 - (void)deleteBodyCache {
-	cachedBodyImage = nil;
-	cachedHilightedBodyImage = nil;
+	self.cachedBodyImage = nil;
+	self.cachedHilightedBodyImage = nil;
 }
 
 #pragma mark -

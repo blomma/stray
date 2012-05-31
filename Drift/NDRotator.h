@@ -36,14 +36,14 @@
 
  The point can go beyound the bounds (-1.0,-1.0) and (1.0,1.0) for <radius> values greated the 1.0.
  */
-@property CGPoint cartesianPoint;
+@property(nonatomic) CGPoint cartesianPoint;
 
 /**
  Contains the thumb point where (0.0,0.0) is the center, (1.0,0.0) is at 3 oclock and (0.0,-1.0) is at 12 oclock etc. The value is generated from a <radius> constrained to (0.0,1.0).
 
  This value is similar to <cartesianPoint> give a <radius> constrained to (0.0,1.0).
  */
-@property(readonly)	CGPoint	constrainedCartesianPoint;
+@property(nonatomic, readonly)	CGPoint	constrainedCartesianPoint;
 
 /**
  @name Accessing the Rotator’s Value Limits
@@ -55,7 +55,7 @@
 
  The default value of this property is 0.0.
  */
-@property CGFloat minimumValue;
+@property(nonatomic) CGFloat minimumValue;
 
 /**
  Contains the maximum value of the receiver.
@@ -63,19 +63,19 @@
 
  The default value of this property is 1.0.
  */
-@property CGFloat maximumValue;
+@property(nonatomic) CGFloat maximumValue;
 
 /**
  Contains the minimum <angle> of the receiver.
  The default value of this property is 0.0.
  */
-@property CGFloat minimumDomain;
+@property(nonatomic) CGFloat minimumDomain;
 
 /**
  Contains the maximum <angle> of the receiver.
  The default value of this property is 2.0pi.
  */
-@property CGFloat maximumDomain;
+@property(nonatomic) CGFloat maximumDomain;
 
 /**
  @name Changing the Rotator’s Appearance
@@ -104,24 +104,13 @@
  The rect used for the controls body.
  This rect may be smaller than the bounds of the control to allow for shadow effects. This rect is used to workout where the thumb position, the center of the rect is the point which the thumb rotates around.
  */
-@property(readonly) CGRect bodyRect;
+@property(nonatomic, readonly) CGRect bodyRect;
 
 /**
  The rect used to contain the thumb image.
  This point (0.0,0.0) in the rect used to position the thumb, for a symetrical thumb the point (0.0,0.0) is the center of the rect.
  */
-@property(readonly) CGRect thumbRect;
-
-@property(strong, readonly) UIImage	*cachedBodyImage,
-									*cachedHilightedBodyImage,
-									*cachedThumbImage,
-									*cachedHilightedThumbImage;
-
-@property CGPoint location;
-
-@property CGFloat touchDownAngle;
-
-@property CGFloat touchDownYLocation;
+@property(nonatomic, readonly) CGRect thumbRect;
 
 /**
  draw the control body into the given <rect>.
