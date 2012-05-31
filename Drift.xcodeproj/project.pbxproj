@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9E00A75F157734AE002FC707 /* TimerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E00A75E157734AE002FC707 /* TimerViewController.m */; };
+		9E00A76315773859002FC707 /* TimerArchiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E00A76215773859002FC707 /* TimerArchiveViewController.m */; };
 		9E21F926156EA9510075EAAC /* Drift.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F924156EA9510075EAAC /* Drift.xcdatamodeld */; };
 		9E21F929156EAA2F0075EAAC /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F928156EAA2F0075EAAC /* Event.m */; };
 		9E42F1EF15570FD60087F602 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1EE15570FD60087F602 /* UIKit.framework */; };
@@ -43,6 +44,8 @@
 /* Begin PBXFileReference section */
 		9E00A75D157734AE002FC707 /* TimerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimerViewController.h; sourceTree = "<group>"; };
 		9E00A75E157734AE002FC707 /* TimerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimerViewController.m; sourceTree = "<group>"; };
+		9E00A76115773859002FC707 /* TimerArchiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimerArchiveViewController.h; sourceTree = "<group>"; };
+		9E00A76215773859002FC707 /* TimerArchiveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimerArchiveViewController.m; sourceTree = "<group>"; };
 		9E21F925156EA9510075EAAC /* Drift.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Drift.xcdatamodel; sourceTree = "<group>"; };
 		9E21F927156EAA2F0075EAAC /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		9E21F928156EAA2F0075EAAC /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
@@ -143,6 +146,8 @@
 				9E42F20015570FD60087F602 /* MainStoryboard.storyboard */,
 				9E00A75D157734AE002FC707 /* TimerViewController.h */,
 				9E00A75E157734AE002FC707 /* TimerViewController.m */,
+				9E00A76115773859002FC707 /* TimerArchiveViewController.h */,
+				9E00A76215773859002FC707 /* TimerArchiveViewController.m */,
 				9E42F22715571E9C0087F602 /* RootViewController.h */,
 				9E42F22815571E9C0087F602 /* RootViewController.m */,
 				9E42F1F515570FD60087F602 /* Supporting Files */,
@@ -318,6 +323,7 @@
 				9E21F926156EA9510075EAAC /* Drift.xcdatamodeld in Sources */,
 				9E21F929156EAA2F0075EAAC /* Event.m in Sources */,
 				9E00A75F157734AE002FC707 /* TimerViewController.m in Sources */,
+				9E00A76315773859002FC707 /* TimerArchiveViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
