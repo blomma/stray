@@ -91,7 +91,7 @@
 {
 	[super viewWillAppear:animated];
 
-	for (NSUInteger i =0; i < [self.childViewControllers count]; i++) 
+	for (NSUInteger i =0; i < [self.childViewControllers count]; i++)
 	{
 		[self loadScrollViewWithPage:i];
 	}
@@ -101,7 +101,7 @@
 	[self.pageControl setNumberOfPages:[self.childViewControllers count]];
 
 	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
-	if (viewController.view.superview != nil) 
+	if (viewController.view.superview != nil)
 	{
 		[viewController viewWillAppear:animated];
 	}
@@ -115,18 +115,14 @@
 
 	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
 	if (viewController.view.superview != nil) 
-	{
 		[viewController viewDidAppear:animated];
-	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated 
 {
 	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
-	if (viewController.view.superview != nil) 
-	{
+	if (viewController.view.superview != nil)
 		[viewController viewWillDisappear:animated];
-	}
 
 	[super viewWillDisappear:animated];
 }
@@ -134,10 +130,8 @@
 - (void)viewDidDisappear:(BOOL)animated 
 {
 	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
-	if (viewController.view.superview != nil) 
-	{
+	if (viewController.view.superview != nil)
 		[viewController viewDidDisappear:animated];
-	}
 
 	[super viewDidDisappear:animated];
 }
