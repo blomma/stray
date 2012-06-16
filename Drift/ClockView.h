@@ -3,11 +3,14 @@
 //  Drift
 //
 //  Created by Mikael Hultgren on 6/16/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
 @interface ClockView : UIControl
+
+- (void)startUpdates;
+- (void)stopUpdates;
 
 @end
