@@ -21,17 +21,21 @@
 @implementation ClockView
 
 #pragma mark -
-#pragma mark public properties
+#pragma mark private properties
 
 @synthesize updateTimer = updateTimer_;
 @synthesize hourHand = hourHand_;
 @synthesize minuteHand = minuteHand_;
 @synthesize secondHand = secondHand_;
 
+#pragma mark -
+#pragma mark public properties
+
+@synthesize startDate = startDate_;
+
 - (id)initWithCoder:(NSCoder *)aDecoder 
 {
-    if ((self = [super initWithCoder:aDecoder]))
-	{
+    if ((self = [super initWithCoder:aDecoder])) {
         [self setUpClock];
     }
 	
@@ -169,7 +173,12 @@
 
 - (void)startUpdates 
 {
-    self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateHands) userInfo:nil repeats:YES];
+	[self updateHands];
+    self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 
+														target:self 
+													  selector:@selector(updateHands) 
+													  userInfo:nil 
+													   repeats:YES];
 }
 
 - (void)stopUpdates 

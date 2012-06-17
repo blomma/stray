@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ClockView.h"
 
 @interface TimerViewController : UIViewController
+
+@property (weak, nonatomic) IBOutlet ClockView *clock;
+
+- (IBAction)startTimer:(id)sender;
 
 @end

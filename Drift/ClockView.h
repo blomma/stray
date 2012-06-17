@@ -10,6 +10,8 @@
 
 @interface ClockView : UIControl
 
+@property(nonatomic) NSDate *startDate;
+
 - (void)startUpdates;
 - (void)stopUpdates;
 

@@ -11,6 +11,4 @@
 
 @interface TimerArchiveViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet ClockView *clockView;
-
 @end

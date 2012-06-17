@@ -7,6 +7,7 @@
 //
 
 #import "TimerArchiveViewController.h"
+#import "Event.h"
 
 @interface TimerArchiveViewController ()
 
@@ -14,7 +15,8 @@
 
 @implementation TimerArchiveViewController
 
-@synthesize clockView = _clockView;
+#pragma mark -
+#pragma mark Application lifecycle
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -28,19 +30,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
 }
 
 - (void)viewDidUnload
 {
-	[self setClockView:nil];
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-	[[self clockView] startUpdates];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
