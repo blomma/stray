@@ -67,7 +67,7 @@
 		9E7CEEA4157BD7A700718FA6 /* MagicalRecord+Setup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE86157BD7A700718FA6 /* MagicalRecord+Setup.m */; };
 		9E7CEEA5157BD7A700718FA6 /* MagicalRecord+ShorthandSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE88157BD7A700718FA6 /* MagicalRecord+ShorthandSupport.m */; };
 		9E7CEEA6157BD7A700718FA6 /* MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE8A157BD7A700718FA6 /* MagicalRecord.m */; };
-		9EE6EC5D158CF5F70063E666 /* ClockView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* ClockView.m */; };
+		9EE6EC5D158CF5F70063E666 /* TimerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* TimerView.m */; };
 		9EE6EC60158CF7B40063E666 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */; };
 		9EEDD293156E262200132008 /* NDRotator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EEDD292156E262200132008 /* NDRotator.m */; };
 		9EEDD29A156E5CD300132008 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EEDD299156E5CD300132008 /* Utility.m */; };
@@ -169,8 +169,8 @@
 		9E7CEE8A157BD7A700718FA6 /* MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicalRecord.m; sourceTree = "<group>"; };
 		9E7CEE8B157BD7A700718FA6 /* MagicalRecordShorthand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordShorthand.h; sourceTree = "<group>"; };
 		9E7CEE8C157BD7A700718FA6 /* CoreData+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CoreData+MagicalRecord.h"; sourceTree = "<group>"; };
-		9EE6EC5B158CF5F70063E666 /* ClockView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ClockView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		9EE6EC5C158CF5F70063E666 /* ClockView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ClockView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		9EE6EC5B158CF5F70063E666 /* TimerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lineEnding = 0; path = TimerView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		9EE6EC5C158CF5F70063E666 /* TimerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TimerView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9EEDD291156E262200132008 /* NDRotator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDRotator.h; sourceTree = "<group>"; };
 		9EEDD292156E262200132008 /* NDRotator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDRotator.m; sourceTree = "<group>"; };
@@ -408,8 +408,8 @@
 				9EEDD292156E262200132008 /* NDRotator.m */,
 				9EEDD298156E5CD300132008 /* Utility.h */,
 				9EEDD299156E5CD300132008 /* Utility.m */,
-				9EE6EC5B158CF5F70063E666 /* ClockView.h */,
-				9EE6EC5C158CF5F70063E666 /* ClockView.m */,
+				9EE6EC5B158CF5F70063E666 /* TimerView.h */,
+				9EE6EC5C158CF5F70063E666 /* TimerView.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -572,7 +572,7 @@
 				9E7CEEA4157BD7A700718FA6 /* MagicalRecord+Setup.m in Sources */,
 				9E7CEEA5157BD7A700718FA6 /* MagicalRecord+ShorthandSupport.m in Sources */,
 				9E7CEEA6157BD7A700718FA6 /* MagicalRecord.m in Sources */,
-				9EE6EC5D158CF5F70063E666 /* ClockView.m in Sources */,
+				9EE6EC5D158CF5F70063E666 /* TimerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

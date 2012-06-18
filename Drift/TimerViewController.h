@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ClockView.h"
+#import "TimerView.h"
 
 @interface TimerViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet ClockView *clock;
+@property (weak, nonatomic) IBOutlet TimerView *timerView;
+@property (weak, nonatomic) IBOutlet UIButton *toggleStartStopButton;
 
-- (IBAction)startTimer:(id)sender;
+- (IBAction)toggleTimer:(id)sender;
 
 @end

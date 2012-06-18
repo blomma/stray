@@ -5,17 +5,17 @@
 // The values can be greater than 1.0, to reflect user movements outside of the control.
 static const CGFloat kRadius = 1.0;
 
-static const CGFloat	kDefaultMinimumValue = 0.0,
-						kDefaultMaximumValue = 1.0,
+static const CGFloat    kDefaultMinimumValue = 0.0,
+                        kDefaultMaximumValue = 1.0,
 						kDefaultMinimumDomain = 0.0 * M_PI,
 						kDefaultMaximumDomain = 2.0 * M_PI;
 
 static NSString	*const kMinimumValueCodingKey = @"minimumValue",
-				*const kMaximumValueCodingKey = @"maximumValue",
-				*const kMinimumDomainCodingKey = @"minimumDomain",
-				*const kMaximumDomainCodingKey = @"maximumDomain";
+                *const kMaximumValueCodingKey = @"maximumValue",
+                *const kMinimumDomainCodingKey = @"minimumDomain",
+                *const kMaximumDomainCodingKey = @"maximumDomain";
 
-static void componentsForTint(CGFloat *component, CGFloat value) 
+static void componentsForTint(CGFloat *component, CGFloat value)
 {
 	component[0] = value * (0.55 * 0.5);
 	component[1] = value;
@@ -43,14 +43,14 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 @synthesize	maximumDomain = _maximumDomain;
 @synthesize	angle = _angle;
 
-- (CGPoint)cartesianPoint 
+- (CGPoint)cartesianPoint
 {
 	return CGPointMake(
 					   cos(self.angle) * kRadius,
 					   sin(self.angle) * kRadius);
 }
 
-- (void)setCartesianPoint:(CGPoint)point 
+- (void)setCartesianPoint:(CGPoint)point
 {
 	CGFloat	previousAngle = self.angle,
 			newAngle = atan(point.y/point.x);
@@ -69,7 +69,7 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 	self.angle = newAngle;
 }
 
-- (CGPoint)constrainedCartesianPoint 
+- (CGPoint)constrainedCartesianPoint
 {
 	CGFloat radius = [Utility constrainValue:kRadius min:0.0 max:1.0];
 
@@ -78,7 +78,7 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 					   sin(self.angle) * radius);
 }
 
-- (void)setAngle:(CGFloat)angle 
+- (void)setAngle:(CGFloat)angle
 {
 	_angle = [Utility wrapValue:angle min:self.minimumDomain max:self.maximumDomain];
 }
@@ -91,29 +91,28 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 @synthesize	cachedThumbImage = _cachedThumbImage;
 @synthesize	cachedHilightedThumbImage = _cachedHilightedThumbImage;
 
-- (CGPoint)location 
+- (CGPoint)location
 {
 	CGRect thumbRect = self.thumbRect;
 
-	return [Utility mapPoint:self.constrainedCartesianPoint 
-					  rangeV:CGRectMake(-1.0, -1.0, 2.0, 2.0) 
-					  rangeR:[Utility shrinkRect:self.bodyRect 
+	return [Utility mapPoint:self.constrainedCartesianPoint
+					  rangeV:CGRectMake(-1.0, -1.0, 2.0, 2.0)
+					  rangeR:[Utility shrinkRect:self.bodyRect
 											size:CGSizeMake(CGRectGetWidth(thumbRect) * 0.68,CGRectGetHeight(thumbRect) * 0.68)]];
 }
 
-- (void)setLocation:(CGPoint)point 
+- (void)setLocation:(CGPoint)point
 {
 	CGRect thumbRect = self.thumbRect;
 
-	self.cartesianPoint = [Utility mapPoint:point 
-									 rangeV:[Utility shrinkRect:self.bodyRect 
-														   size:CGSizeMake(CGRectGetWidth(thumbRect) * 0.68, CGRectGetHeight(thumbRect) * 0.68)]
+	self.cartesianPoint = [Utility mapPoint:point
+									 rangeV:[Utility shrinkRect:self.bodyRect size:CGSizeMake(CGRectGetWidth(thumbRect) * 0.68,CGRectGetHeight(thumbRect) * 0.68)]
 									 rangeR:CGRectMake(-1.0, -1.0, 2.0, 2.0)];
 }
 
-- (UIImage *)cachedBodyImage 
+- (UIImage *)cachedBodyImage
 {
-	if (_cachedBodyImage == nil) 
+	if (_cachedBodyImage == nil)
 	{
 		UIGraphicsBeginImageContext(self.bounds.size);
 		if ([self drawBodyInRect:self.bodyRect hilighted:NO])
@@ -126,9 +125,9 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 	return _cachedBodyImage;
 }
 
-- (UIImage *)cachedHilightedBodyImage 
+- (UIImage *)cachedHilightedBodyImage
 {
-	if (_cachedHilightedBodyImage == nil) 
+	if (_cachedHilightedBodyImage == nil)
 	{
 		UIGraphicsBeginImageContext(self.bounds.size);
 		if ([self drawBodyInRect:self.bodyRect hilighted:YES])
@@ -141,9 +140,9 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 	return _cachedHilightedBodyImage;
 }
 
-- (UIImage *)cachedThumbImage 
+- (UIImage *)cachedThumbImage
 {
-	if (_cachedThumbImage == nil) 
+	if (_cachedThumbImage == nil)
 	{
 		CGRect thumbRect = self.thumbRect;
 		thumbRect.origin.x = 0;
@@ -159,9 +158,9 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 	return _cachedThumbImage;
 }
 
-- (UIImage *)cachedHilightedThumbImage 
+- (UIImage *)cachedHilightedThumbImage
 {
-	if (_cachedHilightedThumbImage == nil) 
+	if (_cachedHilightedThumbImage == nil)
 	{
 		CGRect thumbRect = self.thumbRect;
 		thumbRect.origin.x = 0;
@@ -181,9 +180,9 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 #pragma mark -
 #pragma mark creation and destruction
 
-- (id)initWithFrame:(CGRect)frame 
+- (id)initWithFrame:(CGRect)frame
 {
-	if ((self = [super initWithFrame:frame]) != nil) 
+	if ((self = [super initWithFrame:frame]) != nil)
 	{
 		self.minimumValue = kDefaultMinimumValue;
 		self.maximumValue = kDefaultMaximumValue;
@@ -197,9 +196,9 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 #pragma mark -
 #pragma mark NSCoding Protocol methods
 
-- (id)initWithCoder:(NSCoder *)coder 
+- (id)initWithCoder:(NSCoder *)coder
 {
-	if ((self = [super initWithCoder:coder]) != nil) 
+	if ((self = [super initWithCoder:coder]) != nil)
 	{
 		self.minimumValue = [Utility decodeDoubleWithDefault:coder key:kMinimumValueCodingKey defaultValue:kDefaultMinimumValue];
 		self.maximumValue = [Utility decodeDoubleWithDefault:coder key:kMaximumValueCodingKey defaultValue:kDefaultMaximumValue];
@@ -210,7 +209,7 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder 
+- (void)encodeWithCoder:(NSCoder *)coder
 {
 	[coder encodeDouble:self.minimumValue forKey:kMinimumValueCodingKey];
 	[coder encodeDouble:self.maximumValue forKey:kMaximumValueCodingKey];
@@ -221,12 +220,12 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 #pragma mark -
 #pragma mark UIControl
 
-- (UIControlEvents)allControlEvents 
+- (UIControlEvents)allControlEvents
 {
 	return UIControlEventValueChanged;
 }
 
-- (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event 
+- (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
 	CGPoint	point = [touch locationInView:self];
 
@@ -238,7 +237,7 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 	return YES;
 }
 
-- (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event 
+- (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
 	self.location = [touch locationInView:self];
 
@@ -248,7 +247,7 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 	return YES;
 }
 
-- (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event 
+- (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
 	self.location = [touch locationInView:self];
 
@@ -256,7 +255,7 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 	[self setNeedsDisplay];
 }
 
-- (void)cancelTrackingWithEvent:(UIEvent *)event 
+- (void)cancelTrackingWithEvent:(UIEvent *)event
 {
 	[self setNeedsDisplay];
 }
@@ -264,7 +263,7 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 #pragma mark -
 #pragma mark UIView
 
-- (void)setFrame:(CGRect)rect 
+- (void)setFrame:(CGRect)rect
 {
 	[self deleteThumbCache];
 	[self deleteBodyCache];
@@ -272,7 +271,7 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 	[super setFrame:rect];
 }
 
-- (void)setBounds:(CGRect)rect 
+- (void)setBounds:(CGRect)rect
 {
 	[self deleteThumbCache];
 	[self deleteBodyCache];
@@ -280,16 +279,16 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 	[super setBounds:rect];
 }
 
-- (CGSize)sizeThatFits:(CGSize)size 
+- (CGSize)sizeThatFits:(CGSize)size
 {
 	return size.width < size.height
 		? CGSizeMake(size.width, size.width)
 		: CGSizeMake(size.height, size.height);
 }
 
-- (void)drawRect:(CGRect)rect 
+- (void)drawRect:(CGRect)rect
 {
-	if (self.isOpaque) 
+	if (self.isOpaque)
 	{
 		[self.backgroundColor set];
 		UIRectFill( rect );
@@ -315,13 +314,13 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 #pragma mark -
 #pragma mark methods and properties to call when subclassing <NDRotator>.
 
-- (void)deleteThumbCache 
+- (void)deleteThumbCache
 {
 	self.cachedThumbImage = nil;
 	self.cachedHilightedThumbImage = nil;
 }
 
-- (void)deleteBodyCache 
+- (void)deleteBodyCache
 {
 	self.cachedBodyImage = nil;
 	self.cachedHilightedBodyImage = nil;
@@ -330,7 +329,7 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 #pragma mark -
 #pragma mark methods to override to change look
 
-- (CGRect)bodyRect 
+- (CGRect)bodyRect
 {
 	CGRect bodyBounds = self.bounds;
 
@@ -343,7 +342,7 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 	return [Utility largestSquareWithinRect:bodyBounds];
 }
 
-- (CGRect)thumbRect 
+- (CGRect)thumbRect
 {
 	CGFloat	 thumbBoundsSize = MIN(CGRectGetWidth(self.bodyRect), CGRectGetHeight(self.bodyRect));
 	CGFloat	 thumbDiameter = thumbBoundsSize * 0.25;
@@ -359,7 +358,7 @@ static void componentsForTint(CGFloat *component, CGFloat value)
 	return [Utility shrinkRect:thumbBounds size:CGSizeMake(-1.0, -1.0)];
 }
 
-static CGGradientRef createShadowBodyGradient(CGColorSpaceRef colorSpace) 
+static CGGradientRef createShadowBodyGradient(CGColorSpaceRef colorSpace)
 {
 	CGFloat	 locations[] = { 0.0, 0.3, 0.6, 1.0 };
 	CGFloat	 components[sizeof(locations)/sizeof(*locations) * 4] = {
@@ -375,11 +374,11 @@ static CGGradientRef createShadowBodyGradient(CGColorSpaceRef colorSpace)
 											   sizeof(locations)/sizeof(*locations));
 }
 
-static CGGradientRef createHilightBodyGradient(CGColorSpaceRef colorSpace, BOOL hilighted) 
+static CGGradientRef createHilightBodyGradient(CGColorSpaceRef colorSpace, BOOL hilighted)
 {
 	CGFloat	 locations[] = { 0.0, 0.3, 0.6, 1.0 };
 	CGFloat	 modifier = hilighted ? 1.0 : 0.33;
-	CGFloat	 components[sizeof(locations)/sizeof(*locations) * 4] = 
+	CGFloat	 components[sizeof(locations)/sizeof(*locations) * 4] =
 	{
 		1.0, 1.0, 1.0, 0.0225,  		// 0
 		1.0, 1.0, 1.0, 0.33 * modifier, // 1
@@ -394,7 +393,7 @@ static CGGradientRef createHilightBodyGradient(CGColorSpaceRef colorSpace, BOOL 
 											   sizeof(locations)/sizeof(*locations));
 }
 
-- (BOOL)drawBodyInRect:(CGRect)rect hilighted:(BOOL)hilighted 
+- (BOOL)drawBodyInRect:(CGRect)rect hilighted:(BOOL)hilighted
 {
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	CGContextSaveGState(context);
@@ -439,10 +438,10 @@ static CGGradientRef createHilightBodyGradient(CGColorSpaceRef colorSpace, BOOL 
 	return YES;
 }
 
-static CGGradientRef createThumbGradient(CGColorSpaceRef colorSpace) 
+static CGGradientRef createThumbGradient(CGColorSpaceRef colorSpace)
 {
 	CGFloat			locations[] = { 0.0, 1.0 };
-	CGFloat			components[sizeof(locations)/sizeof(*locations) * 4] = 
+	CGFloat			components[sizeof(locations)/sizeof(*locations) * 4] =
 	{
 		0.72, 0.72, 0.72, 1.0, 0.99, 0.99, 0.99, 1.0
 	};
@@ -453,9 +452,9 @@ static CGGradientRef createThumbGradient(CGColorSpaceRef colorSpace)
 	return CGGradientCreateWithColorComponents(colorSpace, components, locations, sizeof(locations)/sizeof(*locations));
 }
 
-- (BOOL)drawThumbInRect:(CGRect)rect hilighted:(BOOL)hilighted 
+- (BOOL)drawThumbInRect:(CGRect)rect hilighted:(BOOL)hilighted
 {
-	if (!hilighted) 
+	if (!hilighted)
 	{
 		CGContextRef context = UIGraphicsGetCurrentContext();
 		CGContextSaveGState(context);

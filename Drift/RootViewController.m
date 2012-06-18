@@ -1,5 +1,5 @@
 //
-//  CustomPagerViewController.m
+//  RootViewController.m
 //  Dift
 //
 //  Created by Mikael Hultgren on 5/6/12.
@@ -14,9 +14,7 @@
 
 @implementation RootViewController
 
-@synthesize managedObjectContext = _managedObjectContext;
-
-- (void)viewDidLoad 
+- (void)viewDidLoad
 {
 	// Do any additional setup after loading the view, typically from a nib.
     [super viewDidLoad];

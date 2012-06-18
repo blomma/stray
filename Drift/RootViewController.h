@@ -1,5 +1,5 @@
 //
-//  CustomPagerViewController.h
+//  RootViewController.h
 //  Drift
 //
 //  Created by Mikael Hultgren on 5/6/12.
@@ -9,7 +9,5 @@
 #import "PagerViewController.h"
 
 @interface RootViewController : PagerViewController
-
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @end

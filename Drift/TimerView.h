@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ClockView : UIControl
+@interface TimerView : UIControl
 
 @property(nonatomic) NSDate *startDate;
 

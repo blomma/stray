@@ -27,22 +27,22 @@
 @synthesize page = _page;
 @synthesize rotating = _rotating;
 
-- (void)viewDidLoad 
+- (void)viewDidLoad
 {
 	[super viewDidLoad];
 }
 
-- (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers 
+- (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers
 {
 	return NO;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
 	return YES;
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration 
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
 	[viewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
@@ -50,24 +50,24 @@
 	self.rotating = YES;
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration 
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 
 	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
 	[viewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 
 	self.scrollView.contentSize = CGSizeMake(
-											 self.scrollView.frame.size.width * [self.childViewControllers count], 
+											 self.scrollView.frame.size.width * [self.childViewControllers count],
 											 self.scrollView.frame.size.height);
 
 	NSUInteger page = 0;
-	
-	for (viewController in self.childViewControllers) 
+
+	for (viewController in self.childViewControllers)
 	{
 		CGRect frame = self.scrollView.frame;
 		frame.origin.x = frame.size.width * page;
 		frame.origin.y = 0;
-		
+
 		viewController.view.frame = frame;
 		page++;
 	}
@@ -79,7 +79,7 @@
 	[self.scrollView scrollRectToVisible:frame animated:NO];
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
 	self.rotating = NO;
 
@@ -87,7 +87,7 @@
 	[viewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
-- (void)viewWillAppear:(BOOL)animated 
+- (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
 
@@ -109,16 +109,16 @@
 	self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width * [self.childViewControllers count], self.scrollView.frame.size.height);
 }
 
-- (void)viewDidAppear:(BOOL)animated 
+- (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
 
 	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
-	if (viewController.view.superview != nil) 
+	if (viewController.view.superview != nil)
 		[viewController viewDidAppear:animated];
 }
 
-- (void)viewWillDisappear:(BOOL)animated 
+- (void)viewWillDisappear:(BOOL)animated
 {
 	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
 	if (viewController.view.superview != nil)
@@ -127,7 +127,7 @@
 	[super viewWillDisappear:animated];
 }
 
-- (void)viewDidDisappear:(BOOL)animated 
+- (void)viewDidDisappear:(BOOL)animated
 {
 	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
 	if (viewController.view.superview != nil)
@@ -136,7 +136,7 @@
 	[super viewDidDisappear:animated];
 }
 
-- (void)loadScrollViewWithPage:(int)page 
+- (void)loadScrollViewWithPage:(int)page
 {
     if (page < 0)
         return;
@@ -146,11 +146,11 @@
 
 	// replace the placeholder if necessary
     UIViewController *controller = [self.childViewControllers objectAtIndex:page];
-    if (controller == nil) 
+    if (controller == nil)
 		return;
 
 	// add the controller's view to the scroll view
-    if (controller.view.superview == nil) 
+    if (controller.view.superview == nil)
 	{
         CGRect frame = self.scrollView.frame;
         frame.origin.x = frame.size.width * page;
@@ -162,7 +162,7 @@
     }
 }
 
-- (IBAction)changePage:(id)sender 
+- (IBAction)changePage:(id)sender
 {
     int page = ((UIPageControl *)sender).currentPage;
 
@@ -182,7 +182,7 @@
     self.pageControlUsed = YES;
 }
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView 
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
 	UIViewController *oldViewController = [self.childViewControllers objectAtIndex:self.page];
 	UIViewController *newViewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
@@ -196,7 +196,7 @@
 #pragma mark -
 #pragma mark UIScrollViewDelegate methods
 
-- (void)scrollViewDidScroll:(UIScrollView *)sender 
+- (void)scrollViewDidScroll:(UIScrollView *)sender
 {
     // We don't want a "feedback loop" between the UIPageControl and the scroll delegate in
     // which a scroll event generated from the user hitting the page control triggers updates from
@@ -208,7 +208,7 @@
     // Switch the indicator when more than 50% of the previous/next page is visible
     CGFloat pageWidth = self.scrollView.frame.size.width;
     int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-	if (self.pageControl.currentPage != page) 
+	if (self.pageControl.currentPage != page)
 	{
 		UIViewController *oldViewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
 		UIViewController *newViewController = [self.childViewControllers objectAtIndex:page];
@@ -226,13 +226,13 @@
 }
 
 // At the begin of scroll dragging, reset the boolean used when scrolls originate from the UIPageControl
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     self.pageControlUsed = NO;
 }
 
 // At the end of scroll animation, reset the boolean used when scrolls originate from the UIPageControl
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     self.pageControlUsed = NO;
 }

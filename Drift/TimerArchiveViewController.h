@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ClockView.h"
 
 @interface TimerArchiveViewController : UIViewController
 
