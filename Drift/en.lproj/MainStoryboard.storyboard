@@ -25,7 +25,7 @@
                             </scrollView>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" id="6vV-6U-vZ1">
                                 <rect key="frame" x="0.0" y="424" width="320" height="36"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" red="0.14509804546833038" green="0.14509804546833038" blue="0.14509804546833038" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <action selector="changePage:" destination="2" eventType="valueChanged" id="Iia-ac-IvU"/>
@@ -103,9 +103,6 @@
         </scene>
     </scenes>
     <classes>
-        <class className="ClockView" superclassName="UIControl">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ClockView.h"/>
-        </class>
         <class className="PagerViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PagerViewController.h"/>
             <relationships>
@@ -120,12 +117,15 @@
         <class className="TimerArchiveViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerArchiveViewController.h"/>
         </class>
+        <class className="TimerView" superclassName="UIControl">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerView.h"/>
+        </class>
         <class className="TimerViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerViewController.h"/>
             <relationships>
                 <relationship kind="action" name="toggleTimer:"/>
-                <relationship kind="outlet" name="clock" candidateClass="ClockView"/>
-                <relationship kind="outlet" name="toggleLabel" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="timerView" candidateClass="TimerView"/>
+                <relationship kind="outlet" name="toggleStartStopButton" candidateClass="UIButton"/>
             </relationships>
         </class>
     </classes>
