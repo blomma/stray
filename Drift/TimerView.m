@@ -12,7 +12,7 @@
 
 @property(nonatomic) NSTimer *updateTimer;
 
-@property(nonatomic) CAShapeLayer *minuteHand;
+@property(nonatomic) CAShapeLayer *nowHand;
 @property(nonatomic) CAShapeLayer *secondHand;
 
 @end
@@ -23,7 +23,7 @@
 #pragma mark private properties
 
 @synthesize updateTimer = _updateTimer;
-@synthesize minuteHand = _minuteHand;
+@synthesize nowHand = _nowHand;
 @synthesize secondHand = _secondHand;
 
 #pragma mark -
@@ -102,7 +102,7 @@
     [self.layer addSublayer:self.secondHand];
 
     // minute hand
-    self.minuteHand = [CAShapeLayer layer];
+    self.nowHand = [CAShapeLayer layer];
 
     path = CGPathCreateMutable();
 
@@ -114,16 +114,16 @@
     CGPathAddLineToPoint(path, NULL, 9.0, 0.0);
     CGPathCloseSubpath(path);
 
-    self.minuteHand.fillColor = [[UIColor colorWithRed:0.098 green:0.800 blue:0.000 alpha:1.000] CGColor];
-    self.minuteHand.lineWidth = 1.0;
+    self.nowHand.fillColor = [[UIColor colorWithRed:0.098 green:0.800 blue:0.000 alpha:1.000] CGColor];
+    self.nowHand.lineWidth = 1.0;
 
-    self.minuteHand.bounds = CGRectMake(0.0, 0.0, 9.0, self.bounds.size.height / 2.0 + 22);
-    self.minuteHand.position = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-    self.minuteHand.anchorPoint = CGPointMake(0.5, 1.0);
-	self.minuteHand.transform = CATransform3DMakeRotation((M_PI * 2) / 60.0 * 60, 0, 0, 1);
-    self.minuteHand.path = path;
+    self.nowHand.bounds = CGRectMake(0.0, 0.0, 9.0, self.bounds.size.height / 2.0 + 22);
+    self.nowHand.position = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+    self.nowHand.anchorPoint = CGPointMake(0.5, 1.0);
+	self.nowHand.transform = CATransform3DMakeRotation((M_PI * 2) / 60.0 * 60, 0, 0, 1);
+    self.nowHand.path = path;
 
-    [self.layer addSublayer:self.minuteHand];
+    [self.layer addSublayer:self.nowHand];
 }
 
 #pragma mark -
@@ -152,7 +152,7 @@
 	float percentageMilliSecondsIntoHour = elapsedMinutesSinceStartDate	% 60 / 60.0;
 
     self.secondHand.transform = CATransform3DMakeRotation((M_PI * 2) * percentageMilliSecondsIntoMinute, 0, 0, 1);
-    self.minuteHand.transform = CATransform3DMakeRotation((M_PI * 2) * percentageMilliSecondsIntoHour, 0, 0, 1);
+    self.nowHand.transform = CATransform3DMakeRotation((M_PI * 2) * percentageMilliSecondsIntoHour, 0, 0, 1);
 }
 
 
