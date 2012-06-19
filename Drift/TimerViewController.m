@@ -11,12 +11,26 @@
 
 @interface TimerViewController ()
 
+@property(nonatomic) NSTimer *updateTimer;
+@property(nonatomic) Event *currentEvent;
+
 @end
 
 @implementation TimerViewController
 
+#pragma mark -
+#pragma mark private properties
+
+@synthesize updateTimer = _updateTimer;
+@synthesize currentEvent = _currentEvent;
+
+#pragma mark -
+#pragma mark public properties
+
 @synthesize timerView = _timerView;
 @synthesize toggleStartStopButton = _toggleStartStopButton;
+@synthesize startDateLabel = _startDateLabel;
+@synthesize runningTimeLabel = _runningTimeLabel;
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -30,20 +44,39 @@
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+	if ([self.currentEvent runningValue])
+	{
+		NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+		[formatter setDateFormat: @"yyyy-MM-dd HH:mm"];
+		self.startDateLabel.text = [formatter stringFromDate:self.currentEvent.startDate];
+
+		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
+	} else {
+		[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
+	}
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-	// Do we have a timer running?
+	// Do we have a running event
 	NSArray *eventArray = [Event MR_findByAttribute:@"running" withValue:[NSNumber numberWithBool:TRUE]];
 	if ([eventArray count] == 1) {
-		// We have a timer running, fetch it and stop it
-		Event *event = [eventArray objectAtIndex:0];
-		self.timerView.startDate = event.startDate;
-		[self.timerView startUpdates];
-
-		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
+		self.currentEvent = [eventArray objectAtIndex:0];
 	}
+
+	self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
+														target:self
+													  selector:@selector(timerUpdate)
+													  userInfo:nil
+													   repeats:YES];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(handleDataModelChange:)
@@ -56,6 +89,8 @@
 	[self setTimerView:nil];
 	[self setToggleStartStopButton:nil];
 
+    [self setStartDateLabel:nil];
+    [self setRunningTimeLabel:nil];
     [super viewDidUnload];
 }
 
@@ -67,27 +102,27 @@
 - (IBAction)toggleTimer:(id)sender
 {
 	// Do we have a event that is running
-	//	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"running == %@", [NSNumber numberWithBool:TRUE]];
-	//	NSNumber *numberOfResults = [Event MR_numberOfEntitiesWithPredicate:predicate];
-
-	NSArray *eventArray = [Event MR_findByAttribute:@"running" withValue:[NSNumber numberWithBool:TRUE]];
-
-	NSDate *now = [NSDate date];
-	if ([eventArray count] == 0) {
-		// We dont have a timmer running currently
-		// create a new one
+	if (![self.currentEvent runningValue]) {
+		// No, lets create a new one
 		Event *event = [Event MR_createEntity];
-		event.startDate = now;
+		event.startDate = [NSDate date];
 		event.runningValue = TRUE;
 
+		// Stow it away for easy access
+		self.currentEvent = event;
+
+		// Update start time
+		NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+		[formatter setDateFormat: @"yyyy-MM-dd HH:mm"];
+		self.startDateLabel.text = [formatter stringFromDate:self.currentEvent.startDate];
+
+		// Toggle button to stop state
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
 	} else {
-		// We have a timer running, fetch it and stop it
-		// We should get one and only one entry from this
-		Event *event = [eventArray objectAtIndex:0];
-		event.runningValue = FALSE;
-		event.stopDate = now;
+		self.currentEvent.runningValue = FALSE;
+		self.currentEvent.stopDate = [NSDate date];
 
+		// Toggle button to start state
 		[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
 	}
 
@@ -95,7 +130,24 @@
 }
 
 #pragma mark -
-#pragma mark Instance methods
+#pragma mark Private Instance methods
+
+- (void)timerUpdate
+{
+	if ([self.currentEvent runningValue]) {
+		double elapsedSecondsSinceStartDate = [self.currentEvent.startDate timeIntervalSinceNow];
+		float elapsedMilliSecondsSinceStartDate = elapsedSecondsSinceStartDate * -1000.0;
+		
+		// Update the timer face
+		[self.timerView updateForElapsedMilliseconds:elapsedMilliSecondsSinceStartDate];
+
+		NSDate *timerDate = [NSDate dateWithTimeIntervalSince1970:elapsedSecondsSinceStartDate * -1.0];
+		NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+		[formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
+		[formatter setDateFormat:@"HH:mm:ss.SS"];
+		self.runningTimeLabel.text = [formatter stringFromDate:timerDate];
+	}
+}
 
 - (void)handleDataModelChange:(NSNotification *)note;
 {
@@ -106,13 +158,10 @@
 	// If we got a new Event then start a timer with the date set in it
 	if ([insertedObjects count] == 1) {
 		for (Event *event in insertedObjects) {
-			self.timerView.startDate = event.startDate;
-			[self.timerView startUpdates];
 		}
 	} else if ([updatedObjects count] == 1) {
 		// We got a updated object, since we only allow one timer this is a running object that got updated for some reason
 		for (Event *event in updatedObjects) {
-			[self.timerView stopUpdates];
 		}
 	}
 }

@@ -13,6 +13,8 @@
 
 @property (weak, nonatomic) IBOutlet TimerView *timerView;
 @property (weak, nonatomic) IBOutlet UIButton *toggleStartStopButton;
+@property (weak, nonatomic) IBOutlet UILabel *startDateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *runningTimeLabel;
 
 - (IBAction)toggleTimer:(id)sender;
 

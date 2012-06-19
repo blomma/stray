@@ -10,9 +10,6 @@
 
 @interface TimerView : UIControl
 
-@property(nonatomic) NSDate *startDate;
-
-- (void)startUpdates;
-- (void)stopUpdates;
+- (void)updateForElapsedMilliseconds:(float)milliSeconds;
 
 @end

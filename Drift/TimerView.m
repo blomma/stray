@@ -10,8 +10,7 @@
 
 @interface TimerView ()
 
-@property(nonatomic) NSTimer *updateTimer;
-
+@property(nonatomic) CAShapeLayer *startHand;
 @property(nonatomic) CAShapeLayer *nowHand;
 @property(nonatomic) CAShapeLayer *secondHand;
 
@@ -20,16 +19,14 @@
 @implementation TimerView
 
 #pragma mark -
-#pragma mark private properties
+#pragma mark Private properties
 
-@synthesize updateTimer = _updateTimer;
+@synthesize startHand = _startHand;
 @synthesize nowHand = _nowHand;
 @synthesize secondHand = _secondHand;
 
 #pragma mark -
-#pragma mark public properties
-
-@synthesize startDate = _startDate;
+#pragma mark Application lifecycle
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -39,6 +36,9 @@
 
     return self;
 }
+
+#pragma mark -
+#pragma mark Private instance methods
 
 - (void)setUpClock
 {
@@ -101,7 +101,7 @@
 
     [self.layer addSublayer:self.secondHand];
 
-    // minute hand
+    // now hand
     self.nowHand = [CAShapeLayer layer];
 
     path = CGPathCreateMutable();
@@ -127,33 +127,18 @@
 }
 
 #pragma mark -
+#pragma mark Public instance methods
 
-- (void)startUpdates
+- (void)updateForElapsedMilliseconds:(float)milliSeconds
 {
-    self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
-														target:self
-													  selector:@selector(updateHands)
-													  userInfo:nil
-													   repeats:YES];
-}
-
-- (void)stopUpdates
-{
-    [self.updateTimer invalidate];
-    self.updateTimer = nil;
-}
-
-- (void)updateHands
-{
-	float elapsedMilliSecondsSinceStartDate = [self.startDate timeIntervalSinceNow] * -1000.0;
-    float percentageMilliSecondsIntoMinute = fmodf(elapsedMilliSecondsSinceStartDate, 60000.0) / 60000.0;
-
-	int elapsedMinutesSinceStartDate = floor(elapsedMilliSecondsSinceStartDate / 60000.0);
+    float percentageMilliSecondsIntoMinute = fmodf(milliSeconds, 60000.0) / 60000.0;
+	
+	int elapsedMinutesSinceStartDate = floor(milliSeconds / 60000.0);
 	float percentageMilliSecondsIntoHour = elapsedMinutesSinceStartDate	% 60 / 60.0;
-
+	
     self.secondHand.transform = CATransform3DMakeRotation((M_PI * 2) * percentageMilliSecondsIntoMinute, 0, 0, 1);
     self.nowHand.transform = CATransform3DMakeRotation((M_PI * 2) * percentageMilliSecondsIntoHour, 0, 0, 1);
+	
 }
-
 
 @end
