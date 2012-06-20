@@ -53,13 +53,24 @@
 		self.startDateLabel.text = [formatter stringFromDate:self.currentEvent.startDate];
 
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
+
+		if (![self.updateTimer isValid]) {
+			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
+																target:self
+															  selector:@selector(timerUpdate)
+															  userInfo:nil
+															   repeats:YES];
+		}
+
+		[self.updateTimer fire];
 	} else {
 		[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
 	}
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void)viewDidDisappear:(BOOL)animated
 {
+	[self.updateTimer invalidate];
 }
 
 - (void)viewDidLoad
@@ -71,12 +82,6 @@
 	if ([eventArray count] == 1) {
 		self.currentEvent = [eventArray objectAtIndex:0];
 	}
-
-	self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
-														target:self
-													  selector:@selector(timerUpdate)
-													  userInfo:nil
-													   repeats:YES];
 
 //    [[NSNotificationCenter defaultCenter] addObserver:self
 //											 selector:@selector(handleDataModelChange:)
@@ -118,7 +123,19 @@
 
 		// Toggle button to stop state
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
+		
+		if (![self.updateTimer isValid]) {
+			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
+																target:self
+															  selector:@selector(timerUpdate)
+															  userInfo:nil
+															   repeats:YES];
+		}
+		
+		[self.updateTimer fire];
 	} else {
+		[self.updateTimer invalidate];
+
 		self.currentEvent.runningValue = FALSE;
 		self.currentEvent.stopDate = [NSDate date];
 
@@ -148,6 +165,7 @@
 		// Update the timer face
 		[self.timerView updateForElapsedSecondsIntoHour:fmod(timeInterval, 3600)];
 
+		// And finally update the running timer
 		self.runningTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", components.hour, components.minute, components.second];
 	}
 }
