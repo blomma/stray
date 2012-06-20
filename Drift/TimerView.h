@@ -10,6 +10,6 @@
 
 @interface TimerView : UIControl
 
-- (void)updateForElapsedMilliseconds:(float)milliSeconds;
+- (void)updateForElapsedMilliseconds:(double)milliSeconds;
 
 @end

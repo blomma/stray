@@ -129,12 +129,12 @@
 #pragma mark -
 #pragma mark Public instance methods
 
-- (void)updateForElapsedMilliseconds:(float)milliSeconds
+- (void)updateForElapsedMilliseconds:(double)milliSeconds
 {
-    float percentageMilliSecondsIntoMinute = fmodf(milliSeconds, 60000.0) / 60000.0;
+    double percentageMilliSecondsIntoMinute = fmod(milliSeconds, 60000.0) / 60000.0;
 	
 	int elapsedMinutesSinceStartDate = floor(milliSeconds / 60000.0);
-	float percentageMilliSecondsIntoHour = elapsedMinutesSinceStartDate	% 60 / 60.0;
+	double percentageMilliSecondsIntoHour = elapsedMinutesSinceStartDate % 60 / 60.0;
 	
     self.secondHand.transform = CATransform3DMakeRotation((M_PI * 2) * percentageMilliSecondsIntoMinute, 0, 0, 1);
     self.nowHand.transform = CATransform3DMakeRotation((M_PI * 2) * percentageMilliSecondsIntoHour, 0, 0, 1);
