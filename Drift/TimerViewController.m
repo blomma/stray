@@ -78,10 +78,10 @@
 													  userInfo:nil
 													   repeats:YES];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(handleDataModelChange:)
-												 name:NSManagedObjectContextObjectsDidChangeNotification
-											   object:[NSManagedObjectContext MR_defaultContext]];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//											 selector:@selector(handleDataModelChange:)
+//												 name:NSManagedObjectContextObjectsDidChangeNotification
+//											   object:[NSManagedObjectContext MR_defaultContext]];
 }
 
 - (void)viewDidUnload
@@ -135,35 +135,38 @@
 - (void)timerUpdate
 {
 	if ([self.currentEvent runningValue]) {
-		double elapsedSecondsSinceStartDate = [self.currentEvent.startDate timeIntervalSinceNow];
-		float elapsedMilliSecondsSinceStartDate = elapsedSecondsSinceStartDate * -1000.0;
+		NSDate *now = [NSDate date];
+
+		// The time interval 
+		NSTimeInterval timeInterval = [now timeIntervalSinceDate:self.currentEvent.startDate];
+		
+		// Get conversion to months, days, hours, minutes
+		unsigned int unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+		
+		NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:self.currentEvent.startDate toDate:now  options:0];
 		
 		// Update the timer face
-		[self.timerView updateForElapsedMilliseconds:elapsedMilliSecondsSinceStartDate];
+		[self.timerView updateForElapsedMilliseconds:timeInterval * 1000.0];
 
-		NSDate *timerDate = [NSDate dateWithTimeIntervalSince1970:elapsedSecondsSinceStartDate * -1.0];
-		NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-		[formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
-		[formatter setDateFormat:@"HH:mm:ss.SS"];
-		self.runningTimeLabel.text = [formatter stringFromDate:timerDate];
+		self.runningTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", components.hour, components.minute, components.second];
 	}
 }
 
-- (void)handleDataModelChange:(NSNotification *)note;
-{
-    NSSet *updatedObjects = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
-    NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
-    NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
-
-	// If we got a new Event then start a timer with the date set in it
-	if ([insertedObjects count] == 1) {
-		for (Event *event in insertedObjects) {
-		}
-	} else if ([updatedObjects count] == 1) {
-		// We got a updated object, since we only allow one timer this is a running object that got updated for some reason
-		for (Event *event in updatedObjects) {
-		}
-	}
-}
+//- (void)handleDataModelChange:(NSNotification *)note;
+//{
+//    NSSet *updatedObjects = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
+//    NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
+//    NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
+//
+//	// If we got a new Event then start a timer with the date set in it
+//	if ([insertedObjects count] == 1) {
+//		for (Event *event in insertedObjects) {
+//		}
+//	} else if ([updatedObjects count] == 1) {
+//		// We got a updated object, since we only allow one timer this is a running object that got updated for some reason
+//		for (Event *event in updatedObjects) {
+//		}
+//	}
+//}
 
 @end
