@@ -146,7 +146,7 @@
 		NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:self.currentEvent.startDate toDate:now  options:0];
 		
 		// Update the timer face
-		[self.timerView updateForElapsedMilliseconds:timeInterval * 1000.0];
+		[self.timerView updateForElapsedSecondsIntoHour:fmod(timeInterval, 3600)];
 
 		self.runningTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", components.hour, components.minute, components.second];
 	}

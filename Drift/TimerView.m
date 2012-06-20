@@ -129,16 +129,16 @@
 #pragma mark -
 #pragma mark Public instance methods
 
-- (void)updateForElapsedMilliseconds:(double)milliSeconds
+- (void)updateForElapsedSecondsIntoHour:(double)seconds
 {
-    double percentageMilliSecondsIntoMinute = fmod(milliSeconds, 60000.0) / 60000.0;
+	// We want fluid updates to the seconds
+    double percentageSecondsIntoMinute = fmod(seconds, 60) / 60.0;
 	
-	int elapsedMinutesSinceStartDate = floor(milliSeconds / 60000.0);
-	double percentageMilliSecondsIntoHour = elapsedMinutesSinceStartDate % 60 / 60.0;
+	// And for the minutes we want a more tick/tock behavior
+	double percentageMinutesIntoHour = floor(seconds / 60) / 60;
 	
-    self.secondHand.transform = CATransform3DMakeRotation((M_PI * 2) * percentageMilliSecondsIntoMinute, 0, 0, 1);
-    self.nowHand.transform = CATransform3DMakeRotation((M_PI * 2) * percentageMilliSecondsIntoHour, 0, 0, 1);
-	
+    self.secondHand.transform = CATransform3DMakeRotation((M_PI * 2) * percentageSecondsIntoMinute, 0, 0, 1);
+    self.nowHand.transform = CATransform3DMakeRotation((M_PI * 2) * percentageMinutesIntoHour, 0, 0, 1);
 }
 
 @end
