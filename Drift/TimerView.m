@@ -15,6 +15,8 @@
 @property(nonatomic) CAShapeLayer *secondHand;
 @property(nonatomic) CAShapeLayer *secondHandProgressTicks;
 
+- (void)updateSecondTickMarksForElapsedSecondsIntoMinute:(double)seconds;
+
 @end
 
 @implementation TimerView
@@ -155,6 +157,24 @@
     [self.layer addSublayer:self.minuteHand];
 }
 
+- (void)updateSecondTickMarksForElapsedSecondsIntoMinute:(double)seconds
+{
+	int secondsIntoMinute = floor(fmod(seconds, 60));
+	
+	int i = 1;
+	for (CALayer *layer in self.secondHandProgressTicks.sublayers)
+	{
+		if (i <= secondsIntoMinute) {
+			layer.transform = CATransform3DMakeRotation((M_PI * 2) / 60.0 * i, 0, 0, 1);
+			layer.hidden = FALSE;
+		} else {
+			layer.hidden = TRUE;
+		}
+		
+		i++;
+	}
+}
+
 #pragma mark -
 #pragma mark Public instance methods
 
@@ -170,24 +190,6 @@
     self.minuteHand.transform = CATransform3DMakeRotation((M_PI * 2) * percentageMinutesIntoHour, 0, 0, 1);
 
 	[self updateSecondTickMarksForElapsedSecondsIntoMinute:seconds];
-}
-
-- (void)updateSecondTickMarksForElapsedSecondsIntoMinute:(double)seconds
-{
-	int secondsIntoMinute = floor(fmod(seconds, 60));
-	
-	int i = 1;
-	for (CALayer *layer in self.secondHandProgressTicks.sublayers)
-	{
-		if (i <= secondsIntoMinute) {
-			layer.transform = CATransform3DMakeRotation((M_PI * 2) / 60.0 * i, 0, 0, 1);
-			layer.hidden = FALSE;
-		} else {
-			layer.hidden = TRUE;
-		}
-
-		i++;
-	}
 }
 
 @end
