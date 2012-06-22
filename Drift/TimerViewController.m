@@ -104,16 +104,6 @@
 //											   object:[NSManagedObjectContext MR_defaultContext]];
 }
 
-- (void)viewDidUnload
-{
-	[self setTimerView:nil];
-	[self setToggleStartStopButton:nil];
-
-    [self setStartDateLabel:nil];
-    [self setRunningTimeLabel:nil];
-    [super viewDidUnload];
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
