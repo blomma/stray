@@ -67,13 +67,7 @@
 		9E7CEEA4157BD7A700718FA6 /* MagicalRecord+Setup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE86157BD7A700718FA6 /* MagicalRecord+Setup.m */; };
 		9E7CEEA5157BD7A700718FA6 /* MagicalRecord+ShorthandSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE88157BD7A700718FA6 /* MagicalRecord+ShorthandSupport.m */; };
 		9E7CEEA6157BD7A700718FA6 /* MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE8A157BD7A700718FA6 /* MagicalRecord.m */; };
-		9E9FFF9B1592681600BA5200 /* segoeui.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFF971592681600BA5200 /* segoeui.ttf */; };
-		9E9FFF9C1592681600BA5200 /* segoeuib.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFF981592681600BA5200 /* segoeuib.ttf */; };
-		9E9FFF9D1592681600BA5200 /* segoeuil.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFF991592681600BA5200 /* segoeuil.ttf */; };
-		9E9FFF9E1592681600BA5200 /* seguisb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFF9A1592681600BA5200 /* seguisb.ttf */; };
 		9E9FFFA0159384E200BA5200 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFF9F159384E200BA5200 /* bg.png */; };
-		9E9FFFAF1594943900BA5200 /* JosefinSansStd-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFFAE1594943900BA5200 /* JosefinSansStd-Light.otf */; };
-		9E9FFFC01594946E00BA5200 /* Chunk.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFFBF1594946E00BA5200 /* Chunk.otf */; };
 		9E9FFFC21594948900BA5200 /* League Gothic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFFC11594948900BA5200 /* League Gothic.otf */; };
 		9E9FFFC81594AF0F00BA5200 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E9FFFC41594AF0F00BA5200 /* libTestFlight.a */; };
 		9E9FFFC91594AF0F00BA5200 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFFC51594AF0F00BA5200 /* README.txt */; };
@@ -181,13 +175,7 @@
 		9E7CEE8A157BD7A700718FA6 /* MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicalRecord.m; sourceTree = "<group>"; };
 		9E7CEE8B157BD7A700718FA6 /* MagicalRecordShorthand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordShorthand.h; sourceTree = "<group>"; };
 		9E7CEE8C157BD7A700718FA6 /* CoreData+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CoreData+MagicalRecord.h"; sourceTree = "<group>"; };
-		9E9FFF971592681600BA5200 /* segoeui.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = segoeui.ttf; sourceTree = "<group>"; };
-		9E9FFF981592681600BA5200 /* segoeuib.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = segoeuib.ttf; sourceTree = "<group>"; };
-		9E9FFF991592681600BA5200 /* segoeuil.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = segoeuil.ttf; sourceTree = "<group>"; };
-		9E9FFF9A1592681600BA5200 /* seguisb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = seguisb.ttf; sourceTree = "<group>"; };
 		9E9FFF9F159384E200BA5200 /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
-		9E9FFFAE1594943900BA5200 /* JosefinSansStd-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JosefinSansStd-Light.otf"; sourceTree = "<group>"; };
-		9E9FFFBF1594946E00BA5200 /* Chunk.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Chunk.otf; sourceTree = "<group>"; };
 		9E9FFFC11594948900BA5200 /* League Gothic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "League Gothic.otf"; sourceTree = "<group>"; };
 		9E9FFFC41594AF0F00BA5200 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
 		9E9FFFC51594AF0F00BA5200 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
@@ -433,13 +421,7 @@
 			isa = PBXGroup;
 			children = (
 				9E9FFFC11594948900BA5200 /* League Gothic.otf */,
-				9E9FFFBF1594946E00BA5200 /* Chunk.otf */,
-				9E9FFFAE1594943900BA5200 /* JosefinSansStd-Light.otf */,
 				9E9FFF9F159384E200BA5200 /* bg.png */,
-				9E9FFF971592681600BA5200 /* segoeui.ttf */,
-				9E9FFF981592681600BA5200 /* segoeuib.ttf */,
-				9E9FFF991592681600BA5200 /* segoeuil.ttf */,
-				9E9FFF9A1592681600BA5200 /* seguisb.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -545,12 +527,7 @@
 			files = (
 				9E42F1F915570FD60087F602 /* InfoPlist.strings in Resources */,
 				9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */,
-				9E9FFF9B1592681600BA5200 /* segoeui.ttf in Resources */,
-				9E9FFF9C1592681600BA5200 /* segoeuib.ttf in Resources */,
-				9E9FFF9D1592681600BA5200 /* segoeuil.ttf in Resources */,
-				9E9FFF9E1592681600BA5200 /* seguisb.ttf in Resources */,
 				9E9FFFA0159384E200BA5200 /* bg.png in Resources */,
-				9E9FFFC01594946E00BA5200 /* Chunk.otf in Resources */,
 				9E9FFFC21594948900BA5200 /* League Gothic.otf in Resources */,
 				9E9FFFC91594AF0F00BA5200 /* README.txt in Resources */,
 				9E9FFFCA1594AF0F00BA5200 /* release_notes.txt in Resources */,
@@ -562,7 +539,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E42F21715570FD70087F602 /* InfoPlist.strings in Resources */,
-				9E9FFFAF1594943900BA5200 /* JosefinSansStd-Light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

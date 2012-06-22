@@ -26,13 +26,7 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>segoeui.ttf</string>
-		<string>segoeuib.ttf</string>
-		<string>segoeuil.ttf</string>
-		<string>seguisb.ttf</string>
 		<string>League Gothic.otf</string>
-		<string>Chunk.otf</string>
-		<string>JosefinSansStd-Light.otf</string>
 	</array>
 	<key>UIMainStoryboardFile</key>
 	<string>MainStoryboard</string>

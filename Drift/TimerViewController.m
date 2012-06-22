@@ -32,7 +32,12 @@
 @synthesize timerView = _timerView;
 @synthesize toggleStartStopButton = _toggleStartStopButton;
 @synthesize startDateLabel = _startDateLabel;
-@synthesize runningTimeLabel = _runningTimeLabel;
+
+@synthesize runningTimerHourLabel = _runningTimerHourLabel;
+@synthesize runningTimerMinuteLabel = _runningTimerMinuteLabel;
+@synthesize runningTimerSecondLabel = _runningTimerSecondLabel;
+@synthesize runningTimerHourMinuteDividerLabel = _runningTimerHourMinuteDividerLabel;
+@synthesize runningTimerMinuteSecondDividerLabel = _runningTimerMinuteSecondDividerLabel;
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -90,18 +95,16 @@
 		self.currentEvent = [eventArray objectAtIndex:0];
 	}
 
-//	self.startDateLabel.font = [UIFont fontWithName:@"SegoeUI-SemiBold" size:18];
-//	self.runningTimeLabel.font = [UIFont fontWithName:@"SegoeUI-Light" size:55];
-//	self.toggleStartStopButton.titleLabel.font = [UIFont fontWithName:@"SegoeUI-Light" size:50];
-
 	self.startDateLabel.font = [UIFont fontWithName:@"LeagueGothic" size:18];
-	self.runningTimeLabel.font = [UIFont fontWithName:@"LeagueGothic" size:55];
-	self.toggleStartStopButton.titleLabel.font = [UIFont fontWithName:@"LeagueGothic" size:50];
 
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//											 selector:@selector(handleDataModelChange:)
-//												 name:NSManagedObjectContextObjectsDidChangeNotification
-//											   object:[NSManagedObjectContext MR_defaultContext]];
+	self.runningTimerHourMinuteDividerLabel.font = [UIFont fontWithName:@"LeagueGothic" size:54];
+	self.runningTimerMinuteSecondDividerLabel.font = [UIFont fontWithName:@"LeagueGothic" size:54];
+
+	self.runningTimerHourLabel.font = [UIFont fontWithName:@"LeagueGothic" size:55];
+	self.runningTimerMinuteLabel.font = [UIFont fontWithName:@"LeagueGothic" size:55];
+	self.runningTimerSecondLabel.font = [UIFont fontWithName:@"LeagueGothic" size:55];
+	
+	self.toggleStartStopButton.titleLabel.font = [UIFont fontWithName:@"LeagueGothic" size:50];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -178,25 +181,10 @@
 		[self.timerView updateForElapsedSecondsIntoHour:fmod(timeInterval, 3600)];
 
 		// And finally update the running timer
-		self.runningTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", components.hour, components.minute, components.second];
+		self.runningTimerHourLabel.text = [NSString stringWithFormat:@"%02d", components.hour];
+		self.runningTimerMinuteLabel.text = [NSString stringWithFormat:@"%02d", components.minute];
+		self.runningTimerSecondLabel.text = [NSString stringWithFormat:@"%02d", components.second];
 	}
 }
-
-//- (void)handleDataModelChange:(NSNotification *)note;
-//{
-//    NSSet *updatedObjects = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
-//    NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
-//    NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
-//
-//	// If we got a new Event then start a timer with the date set in it
-//	if ([insertedObjects count] == 1) {
-//		for (Event *event in insertedObjects) {
-//		}
-//	} else if ([updatedObjects count] == 1) {
-//		// We got a updated object, since we only allow one timer this is a running object that got updated for some reason
-//		for (Event *event in updatedObjects) {
-//		}
-//	}
-//}
 
 @end
