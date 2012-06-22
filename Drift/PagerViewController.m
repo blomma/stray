@@ -30,6 +30,9 @@
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
+	
+	self.pageControl.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"bg.png"]];
+	self.scrollView.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"bg.png"]];
 }
 
 - (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers
@@ -56,8 +59,7 @@
 	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
 	[viewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 
-	self.scrollView.contentSize = CGSizeMake(
-											 self.scrollView.frame.size.width * [self.childViewControllers count],
+	self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width * [self.childViewControllers count],
 											 self.scrollView.frame.size.height);
 
 	NSUInteger page = 0;

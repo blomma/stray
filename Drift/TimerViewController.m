@@ -14,6 +14,8 @@
 @property(nonatomic) NSTimer *updateTimer;
 @property(nonatomic) Event *currentEvent;
 
+- (void)timerUpdate;
+
 @end
 
 @implementation TimerViewController
@@ -46,6 +48,11 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+	DLog(@"%@", [UIFont fontNamesForFamilyName:@"Segoe UI"]);
+	DLog(@"%@", [UIFont fontNamesForFamilyName:@"League Gothic"]);
+	DLog(@"%@", [UIFont fontNamesForFamilyName:@"Josefin Sans Std"]);
+	DLog(@"%@", [UIFont fontNamesForFamilyName:@"ChunkFive"]);
+
 	if ([self.currentEvent runningValue])
 	{
 		NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -83,6 +90,14 @@
 		self.currentEvent = [eventArray objectAtIndex:0];
 	}
 
+//	self.startDateLabel.font = [UIFont fontWithName:@"SegoeUI-SemiBold" size:18];
+//	self.runningTimeLabel.font = [UIFont fontWithName:@"SegoeUI-Light" size:55];
+//	self.toggleStartStopButton.titleLabel.font = [UIFont fontWithName:@"SegoeUI-Light" size:50];
+
+	self.startDateLabel.font = [UIFont fontWithName:@"LeagueGothic" size:18];
+	self.runningTimeLabel.font = [UIFont fontWithName:@"LeagueGothic" size:55];
+	self.toggleStartStopButton.titleLabel.font = [UIFont fontWithName:@"LeagueGothic" size:50];
+
 //    [[NSNotificationCenter defaultCenter] addObserver:self
 //											 selector:@selector(handleDataModelChange:)
 //												 name:NSManagedObjectContextObjectsDidChangeNotification
@@ -108,6 +123,8 @@
 {
 	// Do we have a event that is running
 	if (![self.currentEvent runningValue]) {
+		[TestFlight passCheckpoint:@"START TIMER"];
+		
 		// No, lets create a new one
 		Event *event = [Event MR_createEntity];
 		event.startDate = [NSDate date];
@@ -123,7 +140,7 @@
 
 		// Toggle button to stop state
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
-		
+
 		if (![self.updateTimer isValid]) {
 			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
 																target:self
@@ -131,9 +148,11 @@
 															  userInfo:nil
 															   repeats:YES];
 		}
-		
+
 		[self.updateTimer fire];
 	} else {
+		[TestFlight passCheckpoint:@"STOP TIMER"];
+
 		[self.updateTimer invalidate];
 
 		self.currentEvent.runningValue = FALSE;
@@ -154,14 +173,14 @@
 	if ([self.currentEvent runningValue]) {
 		NSDate *now = [NSDate date];
 
-		// The time interval 
+		// The time interval
 		NSTimeInterval timeInterval = [now timeIntervalSinceDate:self.currentEvent.startDate];
-		
+
 		// Get conversion to months, days, hours, minutes
 		unsigned int unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
-		
+
 		NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:self.currentEvent.startDate toDate:now  options:0];
-		
+
 		// Update the timer face
 		[self.timerView updateForElapsedSecondsIntoHour:fmod(timeInterval, 3600)];
 

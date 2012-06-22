@@ -67,6 +67,18 @@
 		9E7CEEA4157BD7A700718FA6 /* MagicalRecord+Setup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE86157BD7A700718FA6 /* MagicalRecord+Setup.m */; };
 		9E7CEEA5157BD7A700718FA6 /* MagicalRecord+ShorthandSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE88157BD7A700718FA6 /* MagicalRecord+ShorthandSupport.m */; };
 		9E7CEEA6157BD7A700718FA6 /* MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE8A157BD7A700718FA6 /* MagicalRecord.m */; };
+		9E9FFF9B1592681600BA5200 /* segoeui.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFF971592681600BA5200 /* segoeui.ttf */; };
+		9E9FFF9C1592681600BA5200 /* segoeuib.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFF981592681600BA5200 /* segoeuib.ttf */; };
+		9E9FFF9D1592681600BA5200 /* segoeuil.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFF991592681600BA5200 /* segoeuil.ttf */; };
+		9E9FFF9E1592681600BA5200 /* seguisb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFF9A1592681600BA5200 /* seguisb.ttf */; };
+		9E9FFFA0159384E200BA5200 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFF9F159384E200BA5200 /* bg.png */; };
+		9E9FFFAF1594943900BA5200 /* JosefinSansStd-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFFAE1594943900BA5200 /* JosefinSansStd-Light.otf */; };
+		9E9FFFC01594946E00BA5200 /* Chunk.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFFBF1594946E00BA5200 /* Chunk.otf */; };
+		9E9FFFC21594948900BA5200 /* League Gothic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFFC11594948900BA5200 /* League Gothic.otf */; };
+		9E9FFFC81594AF0F00BA5200 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E9FFFC41594AF0F00BA5200 /* libTestFlight.a */; };
+		9E9FFFC91594AF0F00BA5200 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFFC51594AF0F00BA5200 /* README.txt */; };
+		9E9FFFCA1594AF0F00BA5200 /* release_notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFFC61594AF0F00BA5200 /* release_notes.txt */; };
+		9E9FFFCC1594AF7400BA5200 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E9FFFCB1594AF7400BA5200 /* libz.dylib */; };
 		9EE6EC5D158CF5F70063E666 /* TimerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* TimerView.m */; };
 		9EE6EC60158CF7B40063E666 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */; };
 		9EEDD293156E262200132008 /* NDRotator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EEDD292156E262200132008 /* NDRotator.m */; };
@@ -169,6 +181,19 @@
 		9E7CEE8A157BD7A700718FA6 /* MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicalRecord.m; sourceTree = "<group>"; };
 		9E7CEE8B157BD7A700718FA6 /* MagicalRecordShorthand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordShorthand.h; sourceTree = "<group>"; };
 		9E7CEE8C157BD7A700718FA6 /* CoreData+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CoreData+MagicalRecord.h"; sourceTree = "<group>"; };
+		9E9FFF971592681600BA5200 /* segoeui.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = segoeui.ttf; sourceTree = "<group>"; };
+		9E9FFF981592681600BA5200 /* segoeuib.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = segoeuib.ttf; sourceTree = "<group>"; };
+		9E9FFF991592681600BA5200 /* segoeuil.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = segoeuil.ttf; sourceTree = "<group>"; };
+		9E9FFF9A1592681600BA5200 /* seguisb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = seguisb.ttf; sourceTree = "<group>"; };
+		9E9FFF9F159384E200BA5200 /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
+		9E9FFFAE1594943900BA5200 /* JosefinSansStd-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JosefinSansStd-Light.otf"; sourceTree = "<group>"; };
+		9E9FFFBF1594946E00BA5200 /* Chunk.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Chunk.otf; sourceTree = "<group>"; };
+		9E9FFFC11594948900BA5200 /* League Gothic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "League Gothic.otf"; sourceTree = "<group>"; };
+		9E9FFFC41594AF0F00BA5200 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		9E9FFFC51594AF0F00BA5200 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		9E9FFFC61594AF0F00BA5200 /* release_notes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.txt; sourceTree = "<group>"; };
+		9E9FFFC71594AF0F00BA5200 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		9E9FFFCB1594AF7400BA5200 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		9EE6EC5B158CF5F70063E666 /* TimerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = TimerView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9EE6EC5C158CF5F70063E666 /* TimerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TimerView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -183,11 +208,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E9FFFCC1594AF7400BA5200 /* libz.dylib in Frameworks */,
 				9EE6EC60158CF7B40063E666 /* QuartzCore.framework in Frameworks */,
 				9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */,
 				9E42F1EF15570FD60087F602 /* UIKit.framework in Frameworks */,
 				9E42F1F115570FD60087F602 /* Foundation.framework in Frameworks */,
 				9E42F1F315570FD60087F602 /* CoreGraphics.framework in Frameworks */,
+				9E9FFFC81594AF0F00BA5200 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,6 +234,8 @@
 		9E42F1DF15570FD60087F602 = {
 			isa = PBXGroup;
 			children = (
+				9E9FFFCB1594AF7400BA5200 /* libz.dylib */,
+				9E9FFFC31594AF0F00BA5200 /* TestFlightSDK1.0 */,
 				9E7CEE51157BD7A700718FA6 /* MagicalRecord */,
 				9E42F1F415570FD60087F602 /* Drift */,
 				9E42F21215570FD70087F602 /* DriftTests */,
@@ -240,6 +269,7 @@
 		9E42F1F415570FD60087F602 /* Drift */ = {
 			isa = PBXGroup;
 			children = (
+				9E9FFF9215925CAE00BA5200 /* Resources */,
 				9E63BBF6156EAAA80006FEFC /* Model */,
 				9EEDD290156E25FC00132008 /* Classes */,
 				9E42F1FD15570FD60087F602 /* DriftAppDelegate.h */,
@@ -399,6 +429,32 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
+		9E9FFF9215925CAE00BA5200 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9E9FFFC11594948900BA5200 /* League Gothic.otf */,
+				9E9FFFBF1594946E00BA5200 /* Chunk.otf */,
+				9E9FFFAE1594943900BA5200 /* JosefinSansStd-Light.otf */,
+				9E9FFF9F159384E200BA5200 /* bg.png */,
+				9E9FFF971592681600BA5200 /* segoeui.ttf */,
+				9E9FFF981592681600BA5200 /* segoeuib.ttf */,
+				9E9FFF991592681600BA5200 /* segoeuil.ttf */,
+				9E9FFF9A1592681600BA5200 /* seguisb.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		9E9FFFC31594AF0F00BA5200 /* TestFlightSDK1.0 */ = {
+			isa = PBXGroup;
+			children = (
+				9E9FFFC41594AF0F00BA5200 /* libTestFlight.a */,
+				9E9FFFC51594AF0F00BA5200 /* README.txt */,
+				9E9FFFC61594AF0F00BA5200 /* release_notes.txt */,
+				9E9FFFC71594AF0F00BA5200 /* TestFlight.h */,
+			);
+			path = TestFlightSDK1.0;
+			sourceTree = "<group>";
+		};
 		9EEDD290156E25FC00132008 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -421,6 +477,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9E42F21D15570FD70087F602 /* Build configuration list for PBXNativeTarget "Drift" */;
 			buildPhases = (
+				9E9FFFCD1594CDB900BA5200 /* Bump build number */,
 				9E42F1E615570FD60087F602 /* Sources */,
 				9E42F1E715570FD60087F602 /* Frameworks */,
 				9E42F1E815570FD60087F602 /* Resources */,
@@ -488,6 +545,15 @@
 			files = (
 				9E42F1F915570FD60087F602 /* InfoPlist.strings in Resources */,
 				9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */,
+				9E9FFF9B1592681600BA5200 /* segoeui.ttf in Resources */,
+				9E9FFF9C1592681600BA5200 /* segoeuib.ttf in Resources */,
+				9E9FFF9D1592681600BA5200 /* segoeuil.ttf in Resources */,
+				9E9FFF9E1592681600BA5200 /* seguisb.ttf in Resources */,
+				9E9FFFA0159384E200BA5200 /* bg.png in Resources */,
+				9E9FFFC01594946E00BA5200 /* Chunk.otf in Resources */,
+				9E9FFFC21594948900BA5200 /* League Gothic.otf in Resources */,
+				9E9FFFC91594AF0F00BA5200 /* README.txt in Resources */,
+				9E9FFFCA1594AF0F00BA5200 /* release_notes.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,6 +562,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E42F21715570FD70087F602 /* InfoPlist.strings in Resources */,
+				9E9FFFAF1594943900BA5200 /* JosefinSansStd-Light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,6 +594,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd Drift\n/Users/blomma/Opt/homebrew/bin/mogenerator --template-var arc=true -m Drift.xcdatamodeld/Drift.xcdatamodel/";
+		};
+		9E9FFFCD1594CDB900BA5200 /* Bump build number */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Bump build number";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash    \nbN=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbN=$((0x$bN)) \nbN=$(($bN + 1)) \nbN=$(printf \"%X\" $bN)\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $bN\" \"$INFOPLIST_FILE\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -628,7 +709,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -644,6 +725,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Debug;
 		};
@@ -653,8 +735,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -663,6 +745,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -670,10 +753,18 @@
 		9E42F21E15570FD70087F602 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TestFlightSDK1.0\"",
+				);
 				PRODUCT_NAME = Drift;
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -681,10 +772,18 @@
 		9E42F21F15570FD70087F602 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TestFlightSDK1.0\"",
+				);
 				PRODUCT_NAME = Drift;
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -737,6 +836,72 @@
 			};
 			name = Release;
 		};
+		9E8B8AE21594DA5100C8413E /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "ADHOC=1";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Ad Hoc";
+		};
+		9E8B8AE31594DA5100C8413E /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
+				INFOPLIST_FILE = "Drift/Drift-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TestFlightSDK1.0\"",
+				);
+				PRODUCT_NAME = Drift;
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				WRAPPER_EXTENSION = app;
+			};
+			name = "Ad Hoc";
+		};
+		9E8B8AE41594DA5100C8413E /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Drift.app/Drift";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
+				INFOPLIST_FILE = "DriftTests/DriftTests-Info.plist";
+				PRODUCT_NAME = DriftTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = "Ad Hoc";
+		};
+		9E8B8AE51594DA5100C8413E /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Ad Hoc";
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -745,6 +910,7 @@
 			buildConfigurations = (
 				9E42F21B15570FD70087F602 /* Debug */,
 				9E42F21C15570FD70087F602 /* Release */,
+				9E8B8AE21594DA5100C8413E /* Ad Hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -754,6 +920,7 @@
 			buildConfigurations = (
 				9E42F21E15570FD70087F602 /* Debug */,
 				9E42F21F15570FD70087F602 /* Release */,
+				9E8B8AE31594DA5100C8413E /* Ad Hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -763,6 +930,7 @@
 			buildConfigurations = (
 				9E42F22115570FD70087F602 /* Debug */,
 				9E42F22215570FD70087F602 /* Release */,
+				9E8B8AE41594DA5100C8413E /* Ad Hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -772,6 +940,7 @@
 			buildConfigurations = (
 				9E7CEDED157B755000718FA6 /* Debug */,
 				9E7CEDEE157B755000718FA6 /* Release */,
+				9E8B8AE51594DA5100C8413E /* Ad Hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
