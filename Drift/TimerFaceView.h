@@ -1,5 +1,5 @@
 //
-//  ClockView.h
+//  TimerFaceView.h
 //  Drift
 //
 //  Created by Mikael Hultgren on 6/16/12.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TimerView : UIControl
+@interface TimerFaceView : UIControl
 
 - (void)updateForElapsedSecondsIntoHour:(double)seconds;
 

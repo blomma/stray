@@ -52,7 +52,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view opaque="NO" contentMode="scaleToFill" id="IgW-Dr-4Bj" customClass="TimerView">
+                            <view opaque="NO" contentMode="scaleToFill" id="IgW-Dr-4Bj" customClass="TimerFaceView">
                                 <rect key="frame" x="35" y="39" width="250" height="250"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -127,7 +127,7 @@
                         <outlet property="runningTimerMinuteSecondDividerLabel" destination="MhE-3r-SyZ" id="jaK-eK-ivn"/>
                         <outlet property="runningTimerSecondLabel" destination="gTZ-P0-TV9" id="Jmu-ZW-CUT"/>
                         <outlet property="startDateLabel" destination="W98-oL-Wio" id="bgX-ud-jjb"/>
-                        <outlet property="timerView" destination="IgW-Dr-4Bj" id="TLn-uF-kwb"/>
+                        <outlet property="timerFaceView" destination="IgW-Dr-4Bj" id="ve6-Cc-gVf"/>
                         <outlet property="toggleStartStopButton" destination="dP9-OE-O85" id="ZPS-ao-uD9"/>
                     </connections>
                 </viewController>

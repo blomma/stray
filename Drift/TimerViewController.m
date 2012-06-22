@@ -29,7 +29,7 @@
 #pragma mark -
 #pragma mark public properties
 
-@synthesize timerView = _timerView;
+@synthesize timerFaceView = _timerFaceView;
 @synthesize toggleStartStopButton = _toggleStartStopButton;
 @synthesize startDateLabel = _startDateLabel;
 
@@ -178,7 +178,7 @@
 		NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:self.currentEvent.startDate toDate:now  options:0];
 
 		// Update the timer face
-		[self.timerView updateForElapsedSecondsIntoHour:fmod(timeInterval, 3600)];
+		[self.timerFaceView updateForElapsedSecondsIntoHour:fmod(timeInterval, 3600)];
 
 		// And finally update the running timer
 		self.runningTimerHourLabel.text = [NSString stringWithFormat:@"%02d", components.hour];
