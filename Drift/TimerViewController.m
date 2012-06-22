@@ -109,6 +109,9 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+#pragma mark -
+#pragma mark Public instance methods
+
 - (IBAction)toggleTimer:(id)sender
 {
 	// Do we have a event that is running
