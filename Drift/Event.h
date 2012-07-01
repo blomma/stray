@@ -1,5 +1,7 @@
 #import "_Event.h"
 
 @interface Event : _Event {}
-// Custom logic goes here.
+
+- (NSComparisonResult)compare:(id)element;
+
 @end
