@@ -149,11 +149,22 @@
 	} else {
 		[TestFlight passCheckpoint:@"STOP TIMER"];
 
+		NSDate *now = [NSDate date];
+		
 		[self.updateTimer invalidate];
 
 		self.currentEvent.runningValue = FALSE;
-		self.currentEvent.stopDate = [NSDate date];
+		self.currentEvent.stopDate = now;
 
+		// Get conversion to months, days, hours, minutes
+		unsigned int unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+		
+		NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:self.currentEvent.startDate toDate:now  options:0];
+		
+		self.currentEvent.runningTimeHours = [NSNumber numberWithInt:components.hour];
+		self.currentEvent.runningTimeMinutes = [NSNumber numberWithInt:components.minute];
+		self.currentEvent.runningTimeSeconds = [NSNumber numberWithInt:components.second];
+	
 		// Toggle button to start state
 		[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
 	}
