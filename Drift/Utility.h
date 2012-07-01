@@ -21,3 +21,15 @@
 + (CGRect)largestSquareWithinRect:(const CGRect)rect;
 
 @end
+
+@interface UIColor (Utility)
+
+/** 
+ Returns an autoreleased UIColor instance with the hexadecimal color.
+
+ @param hex A color in hexadecimal notation: `0xCCCCCC`, `0xF7F7F7`, etc. 
+ @return A new autoreleased UIColor instance. 
+ */
++ (UIColor *) colorWithHex:(int)hex;
+
+@end
