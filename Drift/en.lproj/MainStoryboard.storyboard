@@ -68,7 +68,6 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="changeStart:" destination="Twv-sO-qJY" eventType="touchUpInside" id="Wxn-Pl-dQe"/>
                                             <action selector="toggleTimer:" destination="pW2-Iw-5Bg" eventType="touchUpInside" id="jUL-9g-3XY"/>
                                         </connections>
                                     </button>
@@ -134,23 +133,35 @@
             </objects>
             <point key="canvasLocation" x="550" y="-211"/>
         </scene>
-        <!--Timer Archive View Controller-->
-        <scene sceneID="4eI-yk-1Xh">
+        <!--Timer Archive View Controller - Timer Archive View-->
+        <scene sceneID="D42-xN-Jny">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="bsz-e9-YEk" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController storyboardIdentifier="TimerArchiveView" title="Timer Archive View" id="Twv-sO-qJY" userLabel="Timer Archive View Controller" customClass="TimerArchiveViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="gxp-uQ-yFz">
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Xlh-Fa-V4n" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewController storyboardIdentifier="TimerArchiveView" title="Timer Archive View" id="2cF-t7-BY6" customClass="TimerArchiveViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Bla-gS-XRc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </view>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TimerEventCell" id="UtO-Rb-o4n">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="2cF-t7-BY6" id="2SP-eZ-vsM"/>
+                            <outlet property="delegate" destination="2cF-t7-BY6" id="nfy-aF-Had"/>
+                        </connections>
+                    </tableView>
                     <nil key="simulatedStatusBarMetrics"/>
-                    <connections>
-                        <outlet property="clockView" destination="IgW-Dr-4Bj" id="z6A-oA-AHQ"/>
-                    </connections>
-                </viewController>
+                </tableViewController>
             </objects>
-            <point key="canvasLocation" x="550" y="364"/>
+            <point key="canvasLocation" x="550" y="354"/>
         </scene>
     </scenes>
     <classes>
@@ -165,11 +176,11 @@
         <class className="RootViewController" superclassName="PagerViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RootViewController.h"/>
         </class>
-        <class className="TimerArchiveViewController" superclassName="UIViewController">
+        <class className="TimerArchiveViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerArchiveViewController.h"/>
         </class>
-        <class className="TimerView" superclassName="UIControl">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerView.h"/>
+        <class className="TimerFaceView" superclassName="UIControl">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerFaceView.h"/>
         </class>
         <class className="TimerViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerViewController.h"/>
@@ -181,7 +192,7 @@
                 <relationship kind="outlet" name="runningTimerMinuteSecondDividerLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="runningTimerSecondLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="startDateLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="timerView" candidateClass="TimerView"/>
+                <relationship kind="outlet" name="timerFaceView" candidateClass="TimerFaceView"/>
                 <relationship kind="outlet" name="toggleStartStopButton" candidateClass="UIButton"/>
             </relationships>
         </class>
