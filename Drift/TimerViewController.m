@@ -66,6 +66,9 @@
 
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
 
+		// Set the starttime of the face
+		self.timerFaceView.startTime = self.currentEvent.startDate;
+
 		if (![self.updateTimer isValid]) {
 			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
 																target:self
@@ -136,6 +139,9 @@
 
 		// Toggle button to stop state
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
+
+		// Set the starttime of the face
+		self.timerFaceView.startTime = event.startDate;
 
 		if (![self.updateTimer isValid]) {
 			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1

@@ -22,6 +22,23 @@
 @implementation TimerFaceView
 
 #pragma mark -
+#pragma mark Public properties
+
+@synthesize startTime = _startTime;
+
+- (void)setStartTime:(NSDate *)startTime
+{
+	_startTime = startTime;
+
+	NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:(NSMinuteCalendarUnit) fromDate:self.startTime];
+
+	NSInteger minute = [dateComponents minute];
+	double percentageMinutesIntoHour = minute / 60.0;
+	
+    self.startHand.transform = CATransform3DMakeRotation((M_PI * 2) * percentageMinutesIntoHour, 0, 0, 1);
+}
+
+#pragma mark -
 #pragma mark Private properties
 
 @synthesize startHand = _startHand;
@@ -81,6 +98,54 @@
         [self.layer addSublayer:tick];
     }
 
+    // minute hand
+    self.minuteHand = [CAShapeLayer layer];
+	
+    path = CGPathCreateMutable();
+	
+    // start at top
+    CGPathMoveToPoint(path, NULL, 5.0, 17.0);
+    // move to bottom left
+    CGPathAddLineToPoint(path, NULL, 0.0, 0.0);
+    // move to bottom right
+    CGPathAddLineToPoint(path, NULL, 9.0, 0.0);
+    CGPathCloseSubpath(path);
+	
+    self.minuteHand.fillColor = [[UIColor colorWithRed:0.098 green:0.800 blue:0.000 alpha:1.000] CGColor];
+    self.minuteHand.lineWidth = 1.0;
+	
+    self.minuteHand.bounds = CGRectMake(0.0, 0.0, 9.0, self.bounds.size.height / 2.0 + 22);
+    self.minuteHand.position = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+    self.minuteHand.anchorPoint = CGPointMake(0.5, 1.0);
+	self.minuteHand.transform = CATransform3DMakeRotation((M_PI * 2) / 60.0 * 60, 0, 0, 1);
+    self.minuteHand.path = path;
+	
+    [self.layer addSublayer:self.minuteHand];
+	
+    // start hand
+    self.startHand = [CAShapeLayer layer];
+	
+    path = CGPathCreateMutable();
+	
+    // start at top
+    CGPathMoveToPoint(path, NULL, 5, 0.0);
+    // move to bottom left
+    CGPathAddLineToPoint(path, NULL, 0.0, 17.0);
+    // move to bottom right
+    CGPathAddLineToPoint(path, NULL, 9.0, 17.0);
+    CGPathCloseSubpath(path);
+	
+    self.startHand.fillColor = [[UIColor colorWithRed:1.000 green:0.600 blue:0.008 alpha:1.000] CGColor];
+    self.startHand.lineWidth = 1.0;
+	
+    self.startHand.bounds = CGRectMake(0.0, 0.0, 9.0, self.bounds.size.height / 2.0 - 26);
+    self.startHand.position = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+    self.startHand.anchorPoint = CGPointMake(0.5, 1.0);
+	self.startHand.transform = CATransform3DMakeRotation((M_PI * 2) / 60.0 * 60, 0, 0, 1);
+    self.startHand.path = path;
+	
+    [self.layer addSublayer:self.startHand];
+
     // second hand
     self.secondHand = [CAShapeLayer layer];
 
@@ -131,30 +196,6 @@
 		
 		[self.secondHandProgressTicks addSublayer:tick];
 	}
-
-    // minute hand
-    self.minuteHand = [CAShapeLayer layer];
-
-    path = CGPathCreateMutable();
-
-    // start at top
-    CGPathMoveToPoint(path, NULL, 5.0, 17.0);
-    // move to bottom left
-    CGPathAddLineToPoint(path, NULL, 0.0, 0.0);
-    // move to bottom right
-    CGPathAddLineToPoint(path, NULL, 9.0, 0.0);
-    CGPathCloseSubpath(path);
-
-    self.minuteHand.fillColor = [[UIColor colorWithRed:0.098 green:0.800 blue:0.000 alpha:1.000] CGColor];
-    self.minuteHand.lineWidth = 1.0;
-
-    self.minuteHand.bounds = CGRectMake(0.0, 0.0, 9.0, self.bounds.size.height / 2.0 + 22);
-    self.minuteHand.position = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-    self.minuteHand.anchorPoint = CGPointMake(0.5, 1.0);
-	self.minuteHand.transform = CATransform3DMakeRotation((M_PI * 2) / 60.0 * 60, 0, 0, 1);
-    self.minuteHand.path = path;
-
-    [self.layer addSublayer:self.minuteHand];
 }
 
 - (void)updateSecondTickMarksForElapsedSecondsIntoMinute:(double)seconds
