@@ -1,14 +1,14 @@
 //
-//  TimerFaceView.m
+//  TimerFaceControl.m
 //  Drift
 //
 //  Created by Mikael Hultgren on 6/16/12.
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "TimerFaceView.h"
+#import "TimerFaceControl.h"
 
-@interface TimerFaceView ()
+@interface TimerFaceControl ()
 
 @property (nonatomic) CAShapeLayer *startHand;
 @property (nonatomic) CAShapeLayer *minuteHand;
@@ -25,7 +25,7 @@
 
 @end
 
-@implementation TimerFaceView
+@implementation TimerFaceControl
 
 #pragma mark -
 #pragma mark Public properties

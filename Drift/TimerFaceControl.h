@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TimerFaceView : UIControl
+@interface TimerFaceControl : UIControl
 
 @property(nonatomic) NSDate *startDate;
 @property(nonatomic) NSDate *nowDate;

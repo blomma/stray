@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TimerFaceView.h"
+#import "TimerFaceControl.h"
 
 @interface TimerViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet TimerFaceView *timerFaceView;
+@property (weak, nonatomic) IBOutlet TimerFaceControl *timerFaceControl;
 @property (weak, nonatomic) IBOutlet UIButton *toggleStartStopButton;
 @property (weak, nonatomic) IBOutlet UILabel *startDateLabel;
 

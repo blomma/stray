@@ -29,7 +29,7 @@
 #pragma mark -
 #pragma mark public properties
 
-@synthesize timerFaceView = _timerFaceView;
+@synthesize timerFaceControl = _timerFaceControl;
 @synthesize toggleStartStopButton = _toggleStartStopButton;
 @synthesize startDateLabel = _startDateLabel;
 
@@ -53,11 +53,6 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-	DLog(@"%@", [UIFont fontNamesForFamilyName:@"Segoe UI"]);
-	DLog(@"%@", [UIFont fontNamesForFamilyName:@"League Gothic"]);
-	DLog(@"%@", [UIFont fontNamesForFamilyName:@"Josefin Sans Std"]);
-	DLog(@"%@", [UIFont fontNamesForFamilyName:@"ChunkFive"]);
-
 	if ([self.currentEvent runningValue])
 	{
 		NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -67,7 +62,7 @@
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
 
 		// Set the starttime of the face
-		self.timerFaceView.startTime = self.currentEvent.startDate;
+		self.timerFaceControl.startDate = self.currentEvent.startDate;
 
 		if (![self.updateTimer isValid]) {
 			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
@@ -141,7 +136,7 @@
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
 
 		// Set the starttime of the face
-		self.timerFaceView.startTime = event.startDate;
+		self.timerFaceControl.startDate = event.startDate;
 
 		if (![self.updateTimer isValid]) {
 			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
@@ -171,6 +166,8 @@
 		self.currentEvent.runningTimeMinutes = [NSNumber numberWithInt:components.minute];
 		self.currentEvent.runningTimeSeconds = [NSNumber numberWithInt:components.second];
 	
+		self.timerFaceControl.stopDate = now;
+
 		// Toggle button to start state
 		[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
 	}
@@ -186,16 +183,12 @@
 	if ([self.currentEvent runningValue]) {
 		NSDate *now = [NSDate date];
 
-		// The time interval
-		NSTimeInterval timeInterval = [now timeIntervalSinceDate:self.currentEvent.startDate];
-
+		// Update the timer face
+		self.timerFaceControl.nowDate = now;
+		
 		// Get conversion to months, days, hours, minutes
 		unsigned int unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
-
 		NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:self.currentEvent.startDate toDate:now  options:0];
-
-		// Update the timer face
-		[self.timerFaceView updateForElapsedSecondsIntoHour:fmod(timeInterval, 3600)];
 
 		// And finally update the running timer
 		self.runningTimerHourLabel.text = [NSString stringWithFormat:@"%02d", components.hour];
