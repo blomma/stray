@@ -10,8 +10,8 @@
 
 @interface TimerFaceView : UIControl
 
-@property(nonatomic) NSDate *startTime;
-
-- (void)updateForElapsedSecondsIntoHour:(double)seconds;
+@property(nonatomic) NSDate *startDate;
+@property(nonatomic) NSDate *nowDate;
+@property(nonatomic) NSDate *stopDate;
 
 @end
