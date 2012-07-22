@@ -10,8 +10,11 @@
 
 @interface TimerFaceControl : UIControl
 
-@property(nonatomic) NSDate *startDate;
-@property(nonatomic) NSDate *nowDate;
-@property(nonatomic) NSDate *stopDate;
+@property(nonatomic, readonly) NSDate *startDate;
+@property(nonatomic, readonly) NSDate *nowDate;
+@property(nonatomic, readonly) NSDate *stopDate;
+
+- (void)startWithDate:(NSDate *)date;
+- (void)stopWithDate:(NSDate *)date;
 
 @end

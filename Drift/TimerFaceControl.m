@@ -8,19 +8,47 @@
 
 #import "TimerFaceControl.h"
 
+static CGFloat calculateDifferenceBetweenAngles(CGFloat a, CGFloat b) {
+	CGFloat difference = b - a;
+
+	while (difference < -M_PI) {
+		difference += 2 * M_PI;
+	}
+	while (difference > M_PI) {
+		difference -= 2 * M_PI;
+	}
+
+	return difference;
+}
+
+static NSTimeInterval secondsFromAngle(CGFloat angle) {
+	CGFloat hours = angle / (2 * M_PI);
+	return hours * 3600;
+}
+
 @interface TimerFaceControl ()
 
-@property (nonatomic) CAShapeLayer *startHand;
-@property (nonatomic) CAShapeLayer *minuteHand;
-@property (nonatomic) CAShapeLayer *secondHand;
-@property (nonatomic) CAShapeLayer *secondHandProgressTicks;
+// Redefine public properties
+@property(nonatomic, readwrite) NSDate *startDate;
+@property(nonatomic, readwrite) NSDate *nowDate;
+@property(nonatomic, readwrite) NSDate *stopDate;
 
+// Private properties
+@property (nonatomic) NSTimer *updateTimer;
+@property (nonatomic) BOOL isRunning;
+
+@property (nonatomic) CAShapeLayer *startHandLayer;
+@property (nonatomic) CAShapeLayer *minuteHandLayer;
+@property (nonatomic) CAShapeLayer *secondHandLayer;
+@property (nonatomic) CAShapeLayer *secondHandProgressTicksLayer;
+
+@property (nonatomic) CGFloat startHandAngle;
 @property (nonatomic) CGFloat minuteHandAngle;
 @property (nonatomic) CGFloat secondHandAngle;
 
-@property (nonatomic) CGFloat startHandAngle;
-@property (nonatomic) CGFloat startHandDeltaAngle;
-@property (nonatomic) CATransform3D startHandTransform;
+@property (nonatomic) CGFloat deltaAngle;
+@property (nonatomic) CGFloat startAngle;
+@property (nonatomic) CATransform3D startTransform;
 @property (nonatomic) BOOL isStartHandTransforming;
 
 @end
@@ -34,36 +62,132 @@
 @synthesize nowDate   = _nowDate;
 @synthesize stopDate  = _stopDate;
 
-- (void)setStartDate:(NSDate *)startDate {
-	_startDate = startDate;
+#pragma mark -
+#pragma mark Private properties
 
-	NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:(NSMinuteCalendarUnit) fromDate:startDate];
+@synthesize updateTimer                  = _updateTimer;
+@synthesize isRunning                    = _isRunning;
 
-	// We want the startHand to have a tick tock behavior, just like the minuteHand
-	CGFloat a = (M_PI * 2) * [dateComponents minute] / 60.0;
-	if (a != self.startHandAngle) {
-		self.startHandAngle      = a;
-		self.startHand.transform = CATransform3DMakeRotation(self.startHandAngle, 0, 0, 1);
+@synthesize startHandLayer               = _startHandLayer;
+@synthesize minuteHandLayer              = _minuteHandLayer;
+@synthesize secondHandLayer              = _secondHandLayer;
+@synthesize secondHandProgressTicksLayer = _secondHandProgressTicksLayer;
+
+@synthesize startHandAngle               = _startHandAngle;
+@synthesize minuteHandAngle              = _minuteHandAngle;
+@synthesize secondHandAngle              = _secondHandAngle;
+
+@synthesize deltaAngle                   = _deltaAngle;
+@synthesize startAngle                   = _startAngle;
+@synthesize startTransform               = _startTransform;
+@synthesize isStartHandTransforming      = _isStartHandTransforming;
+
+#pragma mark -
+#pragma mark Application lifecycle
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if ((self = [super initWithCoder:aDecoder])) {
+		[self setUpClock];
+	}
+
+	return self;
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+	if ([self.updateTimer isValid]) {
+		[self.updateTimer invalidate];
 	}
 }
 
-- (void)setNowDate:(NSDate *)nowDate {
-	_nowDate = nowDate;
+- (void)viewWillAppear:(BOOL)animated {
+	if (self.isRunning) {
+		if (![self.updateTimer isValid]) {
+			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
+			                                                    target:self
+			                                                  selector:@selector(timerUpdate)
+			                                                  userInfo:nil
+			                                                   repeats:YES];
+		}
 
+		[self.updateTimer fire];
+	}
+}
+
+#pragma mark -
+#pragma mark Public instance methods
+
+- (void)startWithDate:(NSDate *)date {
+	self.startDate = date;
+
+	self.isRunning = YES;
+
+	[self drawStart];
+
+	// Scehdule a timer to update the face
+	if (![self.updateTimer isValid]) {
+		self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
+		                                                    target:self
+		                                                  selector:@selector(timerUpdate)
+		                                                  userInfo:nil
+		                                                   repeats:YES];
+	}
+
+	// Do a initial fire of the event to get things started
+	[self.updateTimer fire];
+}
+
+- (void)stopWithDate:(NSDate *)date {
+	[self.updateTimer invalidate];
+
+	// Sync stop and now
+	self.nowDate   = date;
+	self.stopDate  = date;
+
+	self.isRunning = NO;
+
+	// And make a final update to the face
+	[self drawNow];
+}
+
+#pragma mark -
+#pragma mark Private instance methods
+
+- (void)timerUpdate {
+	if ([self.updateTimer isValid]) {
+		NSDate *now = [NSDate date];
+
+		// Update the timer face
+		self.nowDate = now;
+
+		[self drawNow];
+	}
+}
+
+- (void)drawStart {
+	// Set up the inital starting positon for the hand
+	NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:(NSMinuteCalendarUnit) fromDate:self.startDate];
+
+	// We want the startHand to have a tick tock behavior, just like the minuteHand
+	CGFloat a = (M_PI * 2) * [dateComponents minute] / 60.0;
+	self.startHandAngle           = a;
+	self.startHandLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
+}
+
+- (void)drawNow {
 	NSTimeInterval timeInterval   = [self.nowDate timeIntervalSinceDate:self.startDate];
-	double elapsedSecondsIntoHour = fmod(timeInterval, 3600);
+	CGFloat elapsedSecondsIntoHour = fmod(timeInterval, 3600);
 
 	// We want fluid updates to the seconds
 	CGFloat a = (M_PI * 2) * fmod(elapsedSecondsIntoHour, 60) / 60.0;
 
-	self.secondHandAngle      = a;
-	self.secondHand.transform = CATransform3DMakeRotation(self.secondHandAngle, 0, 0, 1);
+	self.secondHandAngle           = a;
+	self.secondHandLayer.transform = CATransform3DMakeRotation(self.secondHandAngle, 0, 0, 1);
 
 	// Update the tick marks for the second hand
 	int secondsIntoMinute = floor(fmod(elapsedSecondsIntoHour, 60));
 
-	for (int i = 0; i < self.secondHandProgressTicks.sublayers.count; i++) {
-		CALayer *layer = [self.secondHandProgressTicks.sublayers objectAtIndex:i];
+	for (int i = 0; i < self.secondHandProgressTicksLayer.sublayers.count; i++) {
+		CALayer *layer = [self.secondHandProgressTicksLayer.sublayers objectAtIndex:i];
 
 		if (i < secondsIntoMinute) {
 			if (layer.hidden) {
@@ -80,50 +204,12 @@
 	// And for the minutes we want a more tick/tock behavior
 	a = (M_PI * 2) * floor(elapsedSecondsIntoHour / 60) / 60;
 	if (a != self.minuteHandAngle) {
-		self.minuteHandAngle      = a;
-		self.minuteHand.transform = CATransform3DMakeRotation(self.minuteHandAngle, 0, 0, 1);
+		self.minuteHandAngle           = a;
+		self.minuteHandLayer.transform = CATransform3DMakeRotation(self.minuteHandAngle, 0, 0, 1);
 	}
 }
-
-#pragma mark -
-#pragma mark Private properties
-
-@synthesize startHand               = _startHand;
-@synthesize minuteHand              = _minuteHand;
-@synthesize secondHand              = _secondHand;
-@synthesize secondHandProgressTicks = _secondHandProgressTicks;
-
-@synthesize startHandAngle          = _startHandAngle;
-@synthesize minuteHandAngle         = _minuteHandAngle;
-@synthesize secondHandAngle         = _secondHandAngle;
-
-@synthesize startHandDeltaAngle     = _startHandDeltaAngle;
-@synthesize startHandTransform      = _startHandTransform;
-@synthesize isStartHandTransforming = _isStartHandTransforming;
-
-#pragma mark -
-#pragma mark Application lifecycle
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	if ((self = [super initWithCoder:aDecoder])) {
-		self.startHandAngle          = 0.0;
-		self.minuteHandAngle         = 0.0;
-		self.secondHandAngle         = 0.0;
-
-		self.startHandDeltaAngle     = 0.0;
-		self.isStartHandTransforming = NO;
-
-		[self setUpClock];
-	}
-
-	return self;
-}
-
-#pragma mark -
-#pragma mark Private instance methods
 
 - (void)setUpClock {
-
 	CGMutablePathRef path;
 	CGFloat angle;
 
@@ -163,9 +249,9 @@
 	}
 
 	// minute hand
-	self.minuteHand = [CAShapeLayer layer];
+	self.minuteHandLayer = [CAShapeLayer layer];
 
-	path            = CGPathCreateMutable();
+	path                 = CGPathCreateMutable();
 
 	// start at top
 	CGPathMoveToPoint(path, NULL, 5.0, 17.0);
@@ -175,21 +261,21 @@
 	CGPathAddLineToPoint(path, NULL, 9.0, 0.0);
 	CGPathCloseSubpath(path);
 
-	self.minuteHand.fillColor   = [[UIColor colorWithRed:0.098 green:0.800 blue:0.000 alpha:1.000] CGColor];
-	self.minuteHand.lineWidth   = 1.0;
+	self.minuteHandLayer.fillColor   = [[UIColor colorWithRed:0.098 green:0.800 blue:0.000 alpha:1.000] CGColor];
+	self.minuteHandLayer.lineWidth   = 1.0;
 
-	self.minuteHand.bounds      = CGRectMake(0.0, 0.0, 9.0, self.bounds.size.height / 2.0 - 12);
-	self.minuteHand.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-	self.minuteHand.anchorPoint = CGPointMake(0.5, 1.0);
-	self.minuteHand.transform   = CATransform3DMakeRotation(self.minuteHandAngle, 0, 0, 1);
-	self.minuteHand.path        = path;
+	self.minuteHandLayer.bounds      = CGRectMake(0.0, 0.0, 9.0, self.bounds.size.height / 2.0 - 12);
+	self.minuteHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+	self.minuteHandLayer.anchorPoint = CGPointMake(0.5, 1.0);
+	self.minuteHandLayer.transform   = CATransform3DMakeRotation(self.minuteHandAngle, 0, 0, 1);
+	self.minuteHandLayer.path        = path;
 
-	[self.layer addSublayer:self.minuteHand];
+	[self.layer addSublayer:self.minuteHandLayer];
 
 	// start hand
-	self.startHand = [CAShapeLayer layer];
+	self.startHandLayer = [CAShapeLayer layer];
 
-	path           = CGPathCreateMutable();
+	path                = CGPathCreateMutable();
 
 	// start at top
 	CGPathMoveToPoint(path, NULL, 5, 0.0);
@@ -199,21 +285,21 @@
 	CGPathAddLineToPoint(path, NULL, 9.0, 17.0);
 	CGPathCloseSubpath(path);
 
-	self.startHand.fillColor   = [[UIColor colorWithRed:1.000 green:0.600 blue:0.008 alpha:1.000] CGColor];
-	self.startHand.lineWidth   = 1.0;
+	self.startHandLayer.fillColor   = [[UIColor colorWithRed:1.000 green:0.600 blue:0.008 alpha:1.000] CGColor];
+	self.startHandLayer.lineWidth   = 1.0;
 
-	self.startHand.bounds      = CGRectMake(0.0, 0.0, 9.0, self.bounds.size.height / 2 - 50);
-	self.startHand.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-	self.startHand.anchorPoint = CGPointMake(0.5, 1.0);
-	self.startHand.transform   = CATransform3DMakeRotation(self.startHandAngle, 0, 0, 1);
-	self.startHand.path        = path;
+	self.startHandLayer.bounds      = CGRectMake(0.0, 0.0, 9.0, self.bounds.size.height / 2 - 50);
+	self.startHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+	self.startHandLayer.anchorPoint = CGPointMake(0.5, 1.0);
+	self.startHandLayer.transform   = CATransform3DMakeRotation(self.startHandAngle, 0, 0, 1);
+	self.startHandLayer.path        = path;
 
-	[self.layer addSublayer:self.startHand];
+	[self.layer addSublayer:self.startHandLayer];
 
 	// second hand
-	self.secondHand = [CAShapeLayer layer];
+	self.secondHandLayer = [CAShapeLayer layer];
 
-	path            = CGPathCreateMutable();
+	path                 = CGPathCreateMutable();
 
 	// start at top
 	CGPathMoveToPoint(path, NULL, 3.5, 0.0);
@@ -223,23 +309,23 @@
 	CGPathAddLineToPoint(path, NULL, 7.0, 7.0);
 	CGPathCloseSubpath(path);
 
-	self.secondHand.fillColor   = [[UIColor redColor] CGColor];
-	self.secondHand.lineWidth   = 1.0;
+	self.secondHandLayer.fillColor   = [[UIColor redColor] CGColor];
+	self.secondHandLayer.lineWidth   = 1.0;
 
-	self.secondHand.bounds      = CGRectMake(0.0, 0.0, 7.0, self.bounds.size.height / 2.0 - 62);
-	self.secondHand.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-	self.secondHand.anchorPoint = CGPointMake(0.5, 1.0);
-	self.secondHand.transform   = CATransform3DMakeRotation(self.secondHandAngle, 0, 0, 1);
-	self.secondHand.path        = path;
+	self.secondHandLayer.bounds      = CGRectMake(0.0, 0.0, 7.0, self.bounds.size.height / 2.0 - 62);
+	self.secondHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+	self.secondHandLayer.anchorPoint = CGPointMake(0.5, 1.0);
+	self.secondHandLayer.transform   = CATransform3DMakeRotation(self.secondHandAngle, 0, 0, 1);
+	self.secondHandLayer.path        = path;
 
-	[self.layer addSublayer:self.secondHand];
+	[self.layer addSublayer:self.secondHandLayer];
 
 	// second hand progress ticks
-	self.secondHandProgressTicks             = [CAShapeLayer layer];
-	self.secondHandProgressTicks.bounds      = CGRectMake(0.0, 0.0, self.bounds.size.width - 100, self.bounds.size.height - 100);
-	self.secondHandProgressTicks.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-	self.secondHandProgressTicks.anchorPoint = CGPointMake(0.5, 0.5);
-	[self.layer addSublayer:self.secondHandProgressTicks];
+	self.secondHandProgressTicksLayer             = [CAShapeLayer layer];
+	self.secondHandProgressTicksLayer.bounds      = CGRectMake(0.0, 0.0, self.bounds.size.width - 100, self.bounds.size.height - 100);
+	self.secondHandProgressTicksLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+	self.secondHandProgressTicksLayer.anchorPoint = CGPointMake(0.5, 0.5);
+	[self.layer addSublayer:self.secondHandProgressTicksLayer];
 
 	// paint the second hand tick marks
 	for (NSInteger i = 1; i <= 60; ++i) {
@@ -253,13 +339,13 @@
 		tick.fillColor   = [[UIColor redColor] CGColor];
 		tick.lineWidth   = 1;
 
-		tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.secondHandProgressTicks.bounds.size.height / 2);
+		tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.secondHandProgressTicksLayer.bounds.size.height / 2);
 		tick.anchorPoint = CGPointMake(0.5, 1.0);
-		tick.position    = CGPointMake(CGRectGetMidX(self.secondHandProgressTicks.bounds), CGRectGetMidY(self.secondHandProgressTicks.bounds));
+		tick.position    = CGPointMake(CGRectGetMidX(self.secondHandProgressTicksLayer.bounds), CGRectGetMidY(self.secondHandProgressTicksLayer.bounds));
 		tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
 		tick.path        = path;
 
-		[self.secondHandProgressTicks addSublayer:tick];
+		[self.secondHandProgressTicksLayer addSublayer:tick];
 	}
 }
 
@@ -277,64 +363,97 @@
 	CGPoint point = [touch locationInView:self];
 
 	CGFloat cx, cy, dx, dy, a;
+	CAShapeLayer *layer;
 
 	self.isStartHandTransforming = NO;
 
 	// Was this a touch on the startHand and is the timer started
-	if ([self.startHand.presentationLayer hitTest:point] && self.startDate) {
+	if ([self.startHandLayer.presentationLayer hitTest:point] && self.isRunning) {
 		self.isStartHandTransforming = YES;
-
-		// Calculate the angle in radians
-		cx = self.startHand.position.x;
-		cy = self.startHand.position.y;
-
-		dx = point.x - cx;
-		dy = point.y - cy;
-
-		a  = atan2(dy,dx);
-
-		// Save them for later use
-		self.startHandDeltaAngle = a;   //+ M_PI_2;
-		self.startHandTransform  = self.startHand.transform;
-
-		[self sendActionsForControlEvents:UIControlEventValueChanged];
-
-		return YES;
+		layer                        = self.startHandLayer;
 	}
+
+	// Calculate the angle in radians
+	cx = layer.position.x;
+	cy = layer.position.y;
+
+	dx = point.x - cx;
+	dy = point.y - cy;
+
+	a  = atan2(dy,dx);
+
+	// Save them for later use
+	self.startAngle     = a;
+	self.deltaAngle     = 0.0;
+	self.startTransform = layer.transform;
 
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
 
-	return NO;
+	if (self.isStartHandTransforming) {
+		return YES;
+	}
+	else  {
+		return NO;
+	}
 }
 
 - (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
 	CGPoint point = [touch locationInView:self];
 
 	CGFloat cx, cy, dx, dy, a, da;
+	CAShapeLayer *layer;
 
 	// What are we tracking
 	if (self.isStartHandTransforming) {
-		// TODO: Check constraint, the starHand can't go
-		// further than the current time
-
-		// Calculate the angle in radians
-		cx = self.startHand.position.x;
-		cy = self.startHand.position.y;
-
-		dx = point.x - cx;
-		dy = point.y - cy;
-
-		a  = atan2(dy,dx);
-		da = self.startHandDeltaAngle - a;
-
-		[CATransaction begin];
-		[CATransaction setDisableActions:YES];
-
-		self.startHand.transform = CATransform3DRotate(self.startHandTransform, -da, 0, 0, 1);
-
-		[CATransaction commit];
+		layer = self.startHandLayer;
 	}
 
+	// Calculate the angle in radians
+	cx = layer.position.x;
+	cy = layer.position.y;
+
+	dx = point.x - cx;
+	dy = point.y - cy;
+
+	a  = atan2(dy,dx);
+	da = self.startAngle - a;
+
+	// The old transform
+	CATransform3D t              = layer.transform;
+	CGFloat angleBeforeTransform = atan2(t.m12, t.m11);
+
+	// The new transform applied
+	t = CATransform3DRotate(self.startTransform, -da, 0, 0, 1);
+	CGFloat angleAfterTransform = atan2(t.m12, t.m11);
+
+	CGFloat difference          = calculateDifferenceBetweenAngles(angleBeforeTransform, angleAfterTransform);
+	self.deltaAngle = difference;
+
+	// If we are tracking the start hand then
+	// we cant move past the now
+	if (self.isStartHandTransforming) {
+		CGFloat seconds       = secondsFromAngle(self.deltaAngle);
+		
+		DLog(@"seconds:%f", seconds);
+		NSDate *startHandDate = [self.startDate dateByAddingTimeInterval:seconds];
+		
+		// A positive time diff is further from the now
+		NSTimeInterval timeDiff = [self.nowDate timeIntervalSinceDate:startHandDate];
+		if (timeDiff < 0) {
+			// Just return YES
+			return YES;
+		}		
+
+		self.startDate = startHandDate;
+	}
+
+	[CATransaction begin];
+	[CATransaction setDisableActions:YES];
+	
+	layer.transform = t;
+	
+	[CATransaction commit];
+	
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
 
 	return YES;

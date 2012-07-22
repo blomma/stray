@@ -11,10 +11,7 @@
 
 @interface TimerViewController ()
 
-@property (nonatomic) NSTimer *updateTimer;
 @property (nonatomic) Event *currentEvent;
-
-- (void)timerUpdate;
 
 @end
 
@@ -23,7 +20,6 @@
 #pragma mark -
 #pragma mark private properties
 
-@synthesize updateTimer  = _updateTimer;
 @synthesize currentEvent = _currentEvent;
 
 #pragma mark -
@@ -54,30 +50,16 @@
 	if ([self.currentEvent runningValue]) {
 		NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 		[formatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+
 		self.startDateLabel.text = [formatter stringFromDate:self.currentEvent.startDate];
 
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
-
-		// Set the starttime of the face
-		self.timerFaceControl.startDate = self.currentEvent.startDate;
-
-		if (![self.updateTimer isValid]) {
-			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
-			                                                    target:self
-			                                                  selector:@selector(timerUpdate)
-			                                                  userInfo:nil
-			                                                   repeats:YES];
-		}
-
-		[self.updateTimer fire];
+		
+		[self.timerFaceControl startWithDate:self.currentEvent.startDate];
 	}
 	else {
 		[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
 	}
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-	[self.updateTimer invalidate];
 }
 
 - (void)viewDidLoad {
@@ -99,6 +81,22 @@
 	self.runningTimerSecondLabel.font              = [UIFont fontWithName:@"LeagueGothic" size:55];
 
 	self.toggleStartStopButton.titleLabel.font     = [UIFont fontWithName:@"LeagueGothic" size:50];
+	
+	// Start observing
+	[self.timerFaceControl addObserver:self 
+							forKeyPath:@"startDate" 
+							   options:NSKeyValueObservingOptionNew 
+							   context:NULL];
+
+	[self.timerFaceControl addObserver:self 
+							forKeyPath:@"nowDate" 
+							   options:NSKeyValueObservingOptionNew 
+							   context:NULL];
+
+	[self.timerFaceControl addObserver:self 
+							forKeyPath:@"stopDate" 
+							   options:NSKeyValueObservingOptionNew 
+							   context:NULL];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -109,59 +107,31 @@
 #pragma mark Public instance methods
 
 - (IBAction)toggleTimer:(id)sender {
+	NSDate *now = [NSDate date];
+
 	// Do we have a event that is running
 	if (![self.currentEvent runningValue]) {
 		[TestFlight passCheckpoint:@"START TIMER"];
 
 		// No, lets create a new one
 		Event *event = [Event MR_createEntity];
-		event.startDate    = [NSDate date];
 		event.runningValue = TRUE;
 
 		// Stow it away for easy access
 		self.currentEvent = event;
 
-		// Update start time
-		NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-		[formatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-		self.startDateLabel.text = [formatter stringFromDate:self.currentEvent.startDate];
+		// Finally start up the face
+		[self.timerFaceControl startWithDate:now];
 
 		// Toggle button to stop state
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
-
-		// Set the starttime of the face
-		self.timerFaceControl.startDate = event.startDate;
-
-		if (![self.updateTimer isValid]) {
-			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
-			                                                    target:self
-			                                                  selector:@selector(timerUpdate)
-			                                                  userInfo:nil
-			                                                   repeats:YES];
-		}
-
-		[self.updateTimer fire];
 	}
 	else {
 		[TestFlight passCheckpoint:@"STOP TIMER"];
 
-		NSDate *now = [NSDate date];
-
-		[self.updateTimer invalidate];
-
 		self.currentEvent.runningValue = FALSE;
-		self.currentEvent.stopDate     = now;
 
-		// Get conversion to months, days, hours, minutes
-		unsigned int unitFlags       = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
-
-		NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:self.currentEvent.startDate toDate:now options:0];
-
-		self.currentEvent.runningTimeHours   = [NSNumber numberWithInt:components.hour];
-		self.currentEvent.runningTimeMinutes = [NSNumber numberWithInt:components.minute];
-		self.currentEvent.runningTimeSeconds = [NSNumber numberWithInt:components.second];
-
-		self.timerFaceControl.stopDate       = now;
+		[self.timerFaceControl stopWithDate:now];
 
 		// Toggle button to start state
 		[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
@@ -173,22 +143,45 @@
 #pragma mark -
 #pragma mark Private Instance methods
 
-- (void)timerUpdate {
-	if ([self.currentEvent runningValue]) {
-		NSDate *now = [NSDate date];
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if ([keyPath isEqualToString:@"startDate"]) {
+		NSDate *startDate = [change objectForKey:NSKeyValueChangeNewKey];
 
-		// Update the timer face
-		self.timerFaceControl.nowDate = now;
+		// Update the event
+		self.currentEvent.startDate = startDate;
+
+		// Update start time
+		NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+		[formatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+		self.startDateLabel.text = [formatter stringFromDate:startDate];
+	} else if ([keyPath isEqualToString:@"nowDate"]) {
+		NSDate *nowDate = [change objectForKey:NSKeyValueChangeNewKey];
 
 		// Get conversion to months, days, hours, minutes
 		unsigned int unitFlags       = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
-		NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:self.currentEvent.startDate toDate:now options:0];
-
+		NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:self.currentEvent.startDate toDate:nowDate options:0];
+			
 		// And finally update the running timer
 		self.runningTimerHourLabel.text   = [NSString stringWithFormat:@"%02d", components.hour];
 		self.runningTimerMinuteLabel.text = [NSString stringWithFormat:@"%02d", components.minute];
 		self.runningTimerSecondLabel.text = [NSString stringWithFormat:@"%02d", components.second];
+	} else if ([keyPath isEqualToString:@"stopDate"]) {
+		NSDate *stopDate = [change objectForKey:NSKeyValueChangeNewKey];
+
+		// Update the event
+		self.currentEvent.stopDate = stopDate;
+
+		// Get conversion to months, days, hours, minutes
+		unsigned int unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+		
+		NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:self.currentEvent.startDate toDate:stopDate options:0];
+		
+		self.currentEvent.runningTimeHours   = [NSNumber numberWithInt:components.hour];
+		self.currentEvent.runningTimeMinutes = [NSNumber numberWithInt:components.minute];
+		self.currentEvent.runningTimeSeconds = [NSNumber numberWithInt:components.second];
 	}
+
+	//[[NSManagedObjectContext MR_defaultContext] MR_save];
 }
 
 @end
