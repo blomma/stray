@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
+#import "Constants.h"
 #import "TimerFaceControl.h"
 
 static CGFloat calculateDifferenceBetweenAngles(CGFloat a, CGFloat b) {
@@ -21,7 +22,7 @@ static CGFloat calculateDifferenceBetweenAngles(CGFloat a, CGFloat b) {
 	return difference;
 }
 
-static NSTimeInterval secondsFromAngle(CGFloat angle) {
+static NSTimeInterval angleToSeconds(CGFloat angle) {
 	CGFloat hours = angle / (2 * M_PI);
 	return hours * 3600;
 }
@@ -29,27 +30,26 @@ static NSTimeInterval secondsFromAngle(CGFloat angle) {
 @interface TimerFaceControl ()
 
 // Redefine public properties
-@property(nonatomic, readwrite) NSDate *startDate;
-@property(nonatomic, readwrite) NSDate *nowDate;
-@property(nonatomic, readwrite) NSDate *stopDate;
+@property (nonatomic, readwrite) NSDate *startDate;
+@property (nonatomic, readwrite) NSDate *nowDate;
+@property (nonatomic, readwrite) NSDate *stopDate;
 
 // Private properties
 @property (nonatomic) NSTimer *updateTimer;
-@property (nonatomic) BOOL isRunning;
+@property (nonatomic) BOOL isTimerRunning;
 
 @property (nonatomic) CAShapeLayer *startHandLayer;
 @property (nonatomic) CAShapeLayer *minuteHandLayer;
 @property (nonatomic) CAShapeLayer *secondHandLayer;
 @property (nonatomic) CAShapeLayer *secondHandProgressTicksLayer;
 
-@property (nonatomic) CGFloat startHandAngle;
-@property (nonatomic) CGFloat minuteHandAngle;
-@property (nonatomic) CGFloat secondHandAngle;
-
-@property (nonatomic) CGFloat deltaAngle;
+// Touch transforming
+@property (nonatomic) NSDate *deltaDate;
 @property (nonatomic) CGFloat startAngle;
+@property (nonatomic) CGFloat deltaAngle;
 @property (nonatomic) CATransform3D startTransform;
-@property (nonatomic) BOOL isStartHandTransforming;
+@property (nonatomic) CATransform3D deltaTransform;
+@property (nonatomic) CAShapeLayer *layerTransforming;
 
 @end
 
@@ -66,21 +66,19 @@ static NSTimeInterval secondsFromAngle(CGFloat angle) {
 #pragma mark Private properties
 
 @synthesize updateTimer                  = _updateTimer;
-@synthesize isRunning                    = _isRunning;
+@synthesize isTimerRunning               = _isTimerRunning;
 
 @synthesize startHandLayer               = _startHandLayer;
 @synthesize minuteHandLayer              = _minuteHandLayer;
 @synthesize secondHandLayer              = _secondHandLayer;
 @synthesize secondHandProgressTicksLayer = _secondHandProgressTicksLayer;
 
-@synthesize startHandAngle               = _startHandAngle;
-@synthesize minuteHandAngle              = _minuteHandAngle;
-@synthesize secondHandAngle              = _secondHandAngle;
-
-@synthesize deltaAngle                   = _deltaAngle;
+@synthesize deltaDate                    = _deltaDate;
 @synthesize startAngle                   = _startAngle;
+@synthesize deltaAngle                   = _deltaAngle;
 @synthesize startTransform               = _startTransform;
-@synthesize isStartHandTransforming      = _isStartHandTransforming;
+@synthesize deltaTransform               = _deltaTransform;
+@synthesize layerTransforming            = _layerTransforming;
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -100,7 +98,7 @@ static NSTimeInterval secondsFromAngle(CGFloat angle) {
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	if (self.isRunning) {
+	if (self.isTimerRunning) {
 		if (![self.updateTimer isValid]) {
 			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
 			                                                    target:self
@@ -119,9 +117,10 @@ static NSTimeInterval secondsFromAngle(CGFloat angle) {
 - (void)startWithDate:(NSDate *)date {
 	self.startDate = date;
 
-	self.isRunning = YES;
+//	[[NSNotificationCenter defaultCenter] postNotificationName:KTimerStartDateChanged
+//	                                                    object:self.startDate];
 
-	[self drawStart];
+	self.isTimerRunning = YES;
 
 	// Scehdule a timer to update the face
 	if (![self.updateTimer isValid]) {
@@ -132,20 +131,21 @@ static NSTimeInterval secondsFromAngle(CGFloat angle) {
 		                                                   repeats:YES];
 	}
 
-	// Do a initial fire of the event to get things started
-	[self.updateTimer fire];
+	[self drawStart];
 }
 
 - (void)stopWithDate:(NSDate *)date {
 	[self.updateTimer invalidate];
 
+	self.isTimerRunning = NO;
+
 	// Sync stop and now
-	self.nowDate   = date;
-	self.stopDate  = date;
+	self.nowDate  = date;
+	self.stopDate = date;
 
-	self.isRunning = NO;
+//	[[NSNotificationCenter defaultCenter] postNotificationName:KTimerStopDateChanged
+//	                                                    object:self.stopDate];
 
-	// And make a final update to the face
 	[self drawNow];
 }
 
@@ -154,34 +154,24 @@ static NSTimeInterval secondsFromAngle(CGFloat angle) {
 
 - (void)timerUpdate {
 	if ([self.updateTimer isValid]) {
-		NSDate *now = [NSDate date];
-
-		// Update the timer face
-		self.nowDate = now;
+		self.nowDate = [NSDate date];
 
 		[self drawNow];
 	}
 }
 
 - (void)drawStart {
-	// Set up the inital starting positon for the hand
-	NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:(NSMinuteCalendarUnit) fromDate:self.startDate];
-
-	// We want the startHand to have a tick tock behavior, just like the minuteHand
-	CGFloat a = (M_PI * 2) * [dateComponents minute] / 60.0;
-	self.startHandAngle           = a;
+	CGFloat a = (M_PI * 2) * 0;
 	self.startHandLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
 }
 
 - (void)drawNow {
-	NSTimeInterval timeInterval   = [self.nowDate timeIntervalSinceDate:self.startDate];
+	NSTimeInterval timeInterval    = [self.nowDate timeIntervalSinceDate:self.startDate];
 	CGFloat elapsedSecondsIntoHour = fmod(timeInterval, 3600);
 
 	// We want fluid updates to the seconds
 	CGFloat a = (M_PI * 2) * fmod(elapsedSecondsIntoHour, 60) / 60.0;
-
-	self.secondHandAngle           = a;
-	self.secondHandLayer.transform = CATransform3DMakeRotation(self.secondHandAngle, 0, 0, 1);
+	self.secondHandLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
 
 	// Update the tick marks for the second hand
 	int secondsIntoMinute = floor(fmod(elapsedSecondsIntoHour, 60));
@@ -202,11 +192,8 @@ static NSTimeInterval secondsFromAngle(CGFloat angle) {
 	}
 
 	// And for the minutes we want a more tick/tock behavior
-	a = (M_PI * 2) * floor(elapsedSecondsIntoHour / 60) / 60;
-	if (a != self.minuteHandAngle) {
-		self.minuteHandAngle           = a;
-		self.minuteHandLayer.transform = CATransform3DMakeRotation(self.minuteHandAngle, 0, 0, 1);
-	}
+	a                              = (M_PI * 2) * floor(elapsedSecondsIntoHour / 60) / 60;
+	self.minuteHandLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
 }
 
 - (void)setUpClock {
@@ -267,7 +254,7 @@ static NSTimeInterval secondsFromAngle(CGFloat angle) {
 	self.minuteHandLayer.bounds      = CGRectMake(0.0, 0.0, 9.0, self.bounds.size.height / 2.0 - 12);
 	self.minuteHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.minuteHandLayer.anchorPoint = CGPointMake(0.5, 1.0);
-	self.minuteHandLayer.transform   = CATransform3DMakeRotation(self.minuteHandAngle, 0, 0, 1);
+	self.minuteHandLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
 	self.minuteHandLayer.path        = path;
 
 	[self.layer addSublayer:self.minuteHandLayer];
@@ -291,7 +278,7 @@ static NSTimeInterval secondsFromAngle(CGFloat angle) {
 	self.startHandLayer.bounds      = CGRectMake(0.0, 0.0, 9.0, self.bounds.size.height / 2 - 50);
 	self.startHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.startHandLayer.anchorPoint = CGPointMake(0.5, 1.0);
-	self.startHandLayer.transform   = CATransform3DMakeRotation(self.startHandAngle, 0, 0, 1);
+	self.startHandLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
 	self.startHandLayer.path        = path;
 
 	[self.layer addSublayer:self.startHandLayer];
@@ -315,7 +302,7 @@ static NSTimeInterval secondsFromAngle(CGFloat angle) {
 	self.secondHandLayer.bounds      = CGRectMake(0.0, 0.0, 7.0, self.bounds.size.height / 2.0 - 62);
 	self.secondHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.secondHandLayer.anchorPoint = CGPointMake(0.5, 1.0);
-	self.secondHandLayer.transform   = CATransform3DMakeRotation(self.secondHandAngle, 0, 0, 1);
+	self.secondHandLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
 	self.secondHandLayer.path        = path;
 
 	[self.layer addSublayer:self.secondHandLayer];
@@ -363,97 +350,105 @@ static NSTimeInterval secondsFromAngle(CGFloat angle) {
 	CGPoint point = [touch locationInView:self];
 
 	CGFloat cx, cy, dx, dy, a;
-	CAShapeLayer *layer;
 
-	self.isStartHandTransforming = NO;
+	self.layerTransforming = NULL;
 
 	// Was this a touch on the startHand and is the timer started
-	if ([self.startHandLayer.presentationLayer hitTest:point] && self.isRunning) {
-		self.isStartHandTransforming = YES;
-		layer                        = self.startHandLayer;
+	if ([self.startHandLayer.presentationLayer hitTest:point] && self.isTimerRunning) {
+		self.layerTransforming = self.startHandLayer;
 	}
 
-	// Calculate the angle in radians
-	cx = layer.position.x;
-	cy = layer.position.y;
+	if (self.layerTransforming != NULL) {
+		// Calculate the angle in radians
+		cx = self.layerTransforming.position.x;
+		cy = self.layerTransforming.position.y;
 
-	dx = point.x - cx;
-	dy = point.y - cy;
+		dx = point.x - cx;
+		dy = point.y - cy;
 
-	a  = atan2(dy,dx);
+		a  = atan2(dy,dx);
 
-	// Save them for later use
-	self.startAngle     = a;
-	self.deltaAngle     = 0.0;
-	self.startTransform = layer.transform;
+		// Save them for later use
+		if (self.startHandLayer == self.layerTransforming) {
+			self.deltaDate = self.startDate;
+		}
+
+		self.startAngle     = a;
+		self.deltaAngle     = 0;
+
+		self.startTransform = self.layerTransforming.transform;
+		self.deltaTransform = self.layerTransforming.transform;
+
+		// Temporarily disable the passing of time
+		[self.updateTimer invalidate];
+	}
 
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
 
-	if (self.isStartHandTransforming) {
-		return YES;
-	}
-	else  {
-		return NO;
-	}
+	return self.layerTransforming != NULL;
 }
 
 - (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
 	CGPoint point = [touch locationInView:self];
 
 	CGFloat cx, cy, dx, dy, a, da;
-	CAShapeLayer *layer;
 
-	// What are we tracking
-	if (self.isStartHandTransforming) {
-		layer = self.startHandLayer;
+	if (self.layerTransforming != NULL) {
+		// Calculate the angle in radians
+		cx = self.layerTransforming.position.x;
+		cy = self.layerTransforming.position.y;
+
+		dx = point.x - cx;
+		dy = point.y - cy;
+
+		a  = atan2(dy, dx);
+		da = self.startAngle - a;
+
+		// The transform before we apply the new transform
+		CATransform3D t              = self.deltaTransform;
+		CGFloat angleBeforeTransform = atan2(t.m12, t.m11);
+
+		// The new transform applied
+		t = CATransform3DRotate(self.startTransform, -da, 0, 0, 1);
+		CGFloat angleAfterTransform = atan2(t.m12, t.m11);
+
+		CGFloat angleDifference     = calculateDifferenceBetweenAngles(angleBeforeTransform, angleAfterTransform);
+
+		self.deltaAngle += angleDifference;
+		DLog(@"deltaAngle:%f", self.deltaAngle);
+
+		self.deltaTransform = t;
+
+		// If we are tracking the start hand then
+		// we cant move past the now
+		if (self.layerTransforming == self.startHandLayer) {
+			CGFloat seconds = angleToSeconds(self.deltaAngle);
+			DLog(@"seconds:%f", seconds);
+
+			NSDate *startHandDate = [self.deltaDate dateByAddingTimeInterval:seconds];
+//			self.deltaDate = startHandDate;
+
+			// A negative time diff is past the now, if so we set
+			// startDate to the now
+			NSTimeInterval timeDiff = [self.nowDate timeIntervalSinceDate:startHandDate];
+			if (timeDiff < 0) {
+				startHandDate = self.nowDate;
+				t             = self.minuteHandLayer.transform;
+			}
+
+			//				[[NSNotificationCenter defaultCenter] postNotificationName:KTimerStartDateChanged
+			//				                                                    object:self.startDate];
+			self.startDate = startHandDate;
+
+			[CATransaction begin];
+			[CATransaction setDisableActions:YES];
+
+			self.layerTransforming.transform = t;
+
+			[CATransaction commit];
+		}
 	}
 
-	// Calculate the angle in radians
-	cx = layer.position.x;
-	cy = layer.position.y;
-
-	dx = point.x - cx;
-	dy = point.y - cy;
-
-	a  = atan2(dy,dx);
-	da = self.startAngle - a;
-
-	// The old transform
-	CATransform3D t              = layer.transform;
-	CGFloat angleBeforeTransform = atan2(t.m12, t.m11);
-
-	// The new transform applied
-	t = CATransform3DRotate(self.startTransform, -da, 0, 0, 1);
-	CGFloat angleAfterTransform = atan2(t.m12, t.m11);
-
-	CGFloat difference          = calculateDifferenceBetweenAngles(angleBeforeTransform, angleAfterTransform);
-	self.deltaAngle = difference;
-
-	// If we are tracking the start hand then
-	// we cant move past the now
-	if (self.isStartHandTransforming) {
-		CGFloat seconds       = secondsFromAngle(self.deltaAngle);
-		
-		DLog(@"seconds:%f", seconds);
-		NSDate *startHandDate = [self.startDate dateByAddingTimeInterval:seconds];
-		
-		// A positive time diff is further from the now
-		NSTimeInterval timeDiff = [self.nowDate timeIntervalSinceDate:startHandDate];
-		if (timeDiff < 0) {
-			// Just return YES
-			return YES;
-		}		
-
-		self.startDate = startHandDate;
-	}
-
-	[CATransaction begin];
-	[CATransaction setDisableActions:YES];
-	
-	layer.transform = t;
-	
-	[CATransaction commit];
-	
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
 
 	return YES;
@@ -462,12 +457,36 @@ static NSTimeInterval secondsFromAngle(CGFloat angle) {
 - (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
 	CGPoint point = [touch locationInView:self];
 
-	// We need to snap the startHand to the closest minute
+	DLog(@"endTrackingWithTouch");
 
+	// We need to snap the startHand to the closest minute
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
+
+	// Resume the passing of time
+	if (![self.updateTimer isValid]) {
+		self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
+		                                                    target:self
+		                                                  selector:@selector(timerUpdate)
+		                                                  userInfo:nil
+		                                                   repeats:YES];
+	}
+
+	// Do a initial fire of the event to get things started
+	[self.updateTimer fire];
 }
 
 - (void)cancelTrackingWithEvent:(UIEvent *)event {
+	// Resume the passing of time
+	if (![self.updateTimer isValid]) {
+		self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
+		                                                    target:self
+		                                                  selector:@selector(timerUpdate)
+		                                                  userInfo:nil
+		                                                   repeats:YES];
+	}
+
+	// Do a initial fire of the event to get things started
+	[self.updateTimer fire];
 }
 
 #pragma mark -
