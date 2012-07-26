@@ -52,12 +52,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view opaque="NO" contentMode="scaleToFill" id="IgW-Dr-4Bj" customClass="TimerFaceView">
-                                <rect key="frame" x="35" y="39" width="250" height="250"/>
+                            <view opaque="NO" contentMode="scaleToFill" id="IgW-Dr-4Bj" customClass="TimerFaceControl">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="dP9-OE-O85">
-                                        <rect key="frame" x="51" y="101" width="148" height="48"/>
+                                        <rect key="frame" x="86" y="136" width="148" height="48"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                         <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="40"/>
                                         <state key="normal" title="START">
@@ -126,7 +126,7 @@
                         <outlet property="runningTimerMinuteSecondDividerLabel" destination="MhE-3r-SyZ" id="jaK-eK-ivn"/>
                         <outlet property="runningTimerSecondLabel" destination="gTZ-P0-TV9" id="Jmu-ZW-CUT"/>
                         <outlet property="startDateLabel" destination="W98-oL-Wio" id="bgX-ud-jjb"/>
-                        <outlet property="timerFaceView" destination="IgW-Dr-4Bj" id="ve6-Cc-gVf"/>
+                        <outlet property="timerFaceControl" destination="IgW-Dr-4Bj" id="tcH-a2-bxt"/>
                         <outlet property="toggleStartStopButton" destination="dP9-OE-O85" id="ZPS-ao-uD9"/>
                     </connections>
                 </viewController>
@@ -143,14 +143,24 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TimerEventCell" id="UtO-Rb-o4n">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TimerEventCell" textLabel="BXq-j5-Dxc" style="IBUITableViewCellStyleDefault" id="UtO-Rb-o4n" customClass="TimerArchiveEventCell">
                                 <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="BXq-j5-Dxc">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -173,8 +183,17 @@
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
             </relationships>
         </class>
+        <class className="PrettyTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PrettyTableViewCell.h"/>
+        </class>
         <class className="RootViewController" superclassName="PagerViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RootViewController.h"/>
+        </class>
+        <class className="TimerArchiveEventCell" superclassName="PrettyTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerArchiveEventCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="nameLabel" candidateClass="UILabel"/>
+            </relationships>
         </class>
         <class className="TimerArchiveViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerArchiveViewController.h"/>

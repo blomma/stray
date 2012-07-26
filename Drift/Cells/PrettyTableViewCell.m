@@ -29,7 +29,7 @@
 
 #import "PrettyTableViewCell.h"
 #import <QuartzCore/QuartzCore.h>
-#import "PrettyDrawing.h"
+#import "Utility.h"
 
 #define shadow_margin           4
 #define default_shadow_opacity  0.7
@@ -82,7 +82,7 @@ typedef enum {
 
 @interface PrettyTableViewCellBackground : UIView
 
-@property (nonatomic, assign) PrettyTableViewCell *cell;
+@property (nonatomic, unsafe_unretained) PrettyTableViewCell *cell;
 @property (nonatomic, assign) CellBackgroundBehavior behavior;
 
 - (id) initWithFrame:(CGRect)frame behavior:(CellBackgroundBehavior)behavior;
@@ -101,7 +101,7 @@ typedef enum {
 	}
 	
     UIRectCorner corners;
-
+	
     switch (self.cell.position) {
         case PrettyTableViewCellPositionTop:
             corners = UIRectCornerTopLeft | UIRectCornerTopRight;
@@ -116,7 +116,7 @@ typedef enum {
             corners = UIRectCornerAllCorners;
             break;
     }
-
+	
     UIBezierPath *thePath = [UIBezierPath bezierPathWithRoundedRect:rect
                                                   byRoundingCorners:corners
                                                         cornerRadii:CGSizeMake(self.cell.cornerRadius, self.cell.cornerRadius)];    
@@ -144,7 +144,7 @@ typedef enum {
     path = [self createRoundedPath:rect];
     
     CGContextAddPath(ctx, path);
-        
+	
     CGGradientRef gradient = [self createGradientFromType:type];
     
     CGPoint startPoint = CGPointMake(CGRectGetMidX(rect), CGRectGetMinY(rect));
@@ -178,12 +178,12 @@ typedef enum {
     // draws body
     CGPathRef path;
     path = [self createRoundedPath:rect];
-
+	
     CGContextAddPath(ctx, path);
-
+	
     CGContextSetFillColorWithColor(ctx, self.cell.backgroundColor.CGColor);
     CGContextFillPath(ctx);
-
+	
     CGContextRestoreGState(ctx);
 }
 
@@ -195,12 +195,12 @@ typedef enum {
     
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
-
+	
     // draws body
-
+	
     CGContextMoveToPoint(ctx, CGRectGetMinX(rect), CGRectGetMaxY(rect));
     CGContextAddLineToPoint(ctx, CGRectGetMaxX(rect), CGRectGetMaxY(rect));
- 
+	
     CGContextSetStrokeColorWithColor(ctx, self.cell.customSeparatorColor.CGColor);
     CGContextSetLineWidth(ctx, 1);
     CGContextStrokePath(ctx);
@@ -220,14 +220,14 @@ typedef enum {
     CGContextAddLineToPoint(ctx, CGRectGetMaxX(rect), CGRectGetMinY(rect));
     CGContextSetStrokeColorWithColor(ctx, self.cell.borderColor.CGColor);
     CGContextSetLineWidth(ctx, 5);
-
+	
     UIColor *shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:self.cell.shadowOpacity];
     CGContextSetShadowWithColor(ctx, CGSizeMake(0, -1), 3, shadowColor.CGColor);
-
+	
     CGContextStrokePath(ctx);
     
     CGContextRestoreGState(ctx);
-
+	
 }
 
 - (void) drawBorder:(CGRect)rect shadow:(BOOL)shadow 
@@ -243,15 +243,15 @@ typedef enum {
     {
         [self fixShadow:ctx rect:innerRect];
     }
-
+	
     
     CGContextSaveGState(ctx);
-
+	
     // draws body
     
     CGPathRef path = [self createRoundedPath:innerRect];
     CGContextAddPath(ctx, path);
-
+	
     if (shadow) {
         UIColor *shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:self.cell.shadowOpacity];
         CGContextSetShadowWithColor(ctx, CGSizeMake(0, 1), 3, shadowColor.CGColor);
@@ -315,7 +315,6 @@ typedef enum {
 {
     self.cell = nil;
     
-    [super dealloc];
 }
 
 - (id) initWithFrame:(CGRect)frame behavior:(CellBackgroundBehavior)bbehavior 
@@ -349,16 +348,8 @@ typedef enum {
 - (void) dealloc
 {
     [self.contentView removeObserver:self forKeyPath:@"frame"];
-    self.borderColor = nil;
     self.tableViewBackgroundColor = nil;
-    self.customSeparatorColor = nil;
-    self.selectionGradientStartColor = nil;
-    self.selectionGradientEndColor = nil;
-    self.customBackgroundColor = nil;
-    self.gradientStartColor = nil;
-    self.gradientEndColor = nil;
     
-    [super dealloc];
 }
 
 - (void)initializeVars
@@ -380,21 +371,19 @@ typedef enum {
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-
+		
         [self.contentView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionOld context:nil];
-
+		
         
         PrettyTableViewCellBackground *bg = [[PrettyTableViewCellBackground alloc] initWithFrame:self.frame 
-                                                                                  behavior:CellBackgroundBehaviorNormal];
+																						behavior:CellBackgroundBehaviorNormal];
         bg.cell = self;
         self.backgroundView = bg;
-        [bg release];
         
         bg = [[PrettyTableViewCellBackground alloc] initWithFrame:self.frame
-                                                      behavior:CellBackgroundBehaviorSelected];
+														 behavior:CellBackgroundBehaviorSelected];
         bg.cell = self;
         self.selectedBackgroundView = bg;
-        [bg release];
         
         [self initializeVars];
     }
@@ -415,7 +404,7 @@ typedef enum {
     {
         return PrettyTableViewCellPositionBottom;
     }
-
+	
     return PrettyTableViewCellPositionMiddle;
 }
 
@@ -458,7 +447,7 @@ typedef enum {
     {        
         UIView *contentView = (UIView *) object;
         CGRect originalFrame = contentView.frame;
-
+		
         float shadowMargin = [self shadowMargin];
         
         float y = contentView_margin;
@@ -492,10 +481,6 @@ typedef enum {
 
 - (void) setTableViewBackgroundColor:(UIColor *)aBackgroundColor 
 {
-    [aBackgroundColor retain];
-    if (tableViewBackgroundColor != nil) {
-        [tableViewBackgroundColor release];
-    }
     tableViewBackgroundColor = aBackgroundColor;
     
     self.backgroundView.backgroundColor = aBackgroundColor;
@@ -568,8 +553,8 @@ typedef enum {
     CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
     maskLayer.frame = maskRect;
     maskLayer.path = maskPath.CGPath;
-
-    return [maskLayer autorelease];
+	
+    return maskLayer;
 }
 
 - (BOOL) dropsShadow 
@@ -594,7 +579,7 @@ typedef enum {
     NSArray *colors = [NSArray arrayWithObjects:(id)self.selectionGradientStartColor.CGColor, (id)self.selectionGradientEndColor.CGColor, nil];
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, 
-                                                        (CFArrayRef) colors, locations);
+                                                        (__bridge CFArrayRef) colors, locations);
     CGColorSpaceRelease(colorSpace);
     
     return gradient;
@@ -607,7 +592,7 @@ typedef enum {
     NSArray *colors = [NSArray arrayWithObjects:(id)self.gradientStartColor.CGColor, (id)self.gradientEndColor.CGColor, nil];
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, 
-                                                        (CFArrayRef) colors, locations);
+                                                        (__bridge CFArrayRef) colors, locations);
     CGColorSpaceRelease(colorSpace);
     
     return gradient;

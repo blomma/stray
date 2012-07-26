@@ -36,11 +36,11 @@
  inside the contentView!*), and masks it to the cell's shape. So you can add
  an image, for example, and it will get masked to the cell's shape, with the
  rounded corners.
-*/
+ */
 
 @interface PrettyCustomViewTableViewCell : PrettyTableViewCell
 
 /** Holds a reference to the custom view. */
-@property (nonatomic, retain) UIView *customView;
+@property (nonatomic) UIView *customView;
 
 @end

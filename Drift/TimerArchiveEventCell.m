@@ -8,15 +8,20 @@
 
 #import "TimerArchiveEventCell.h"
 
+@interface TimerArchiveEventCell ()
+
+@end
+
 @implementation TimerArchiveEventCell
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+@synthesize nameLabel = _nameLabel;
+
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    self = [super initWithCoder:aDecoder];
     if (self) {
-        // Initialization code
-    }
-    return self;
+	}
+    return self;	
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

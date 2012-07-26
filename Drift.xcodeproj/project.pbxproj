@@ -67,6 +67,9 @@
 		9E7CEEA4157BD7A700718FA6 /* MagicalRecord+Setup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE86157BD7A700718FA6 /* MagicalRecord+Setup.m */; };
 		9E7CEEA5157BD7A700718FA6 /* MagicalRecord+ShorthandSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE88157BD7A700718FA6 /* MagicalRecord+ShorthandSupport.m */; };
 		9E7CEEA6157BD7A700718FA6 /* MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE8A157BD7A700718FA6 /* MagicalRecord.m */; };
+		9E89816F15A0BC2900E22EA7 /* TimerArchiveEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89816E15A0BC2900E22EA7 /* TimerArchiveEventCell.m */; };
+		9E8981A015A0E5E000E22EA7 /* PrettyCustomViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89819915A0E5E000E22EA7 /* PrettyCustomViewTableViewCell.m */; };
+		9E8981A315A0E5E000E22EA7 /* PrettyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89819F15A0E5E000E22EA7 /* PrettyTableViewCell.m */; };
 		9E9FFFA0159384E200BA5200 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFF9F159384E200BA5200 /* bg.png */; };
 		9E9FFFC21594948900BA5200 /* League Gothic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFFC11594948900BA5200 /* League Gothic.otf */; };
 		9E9FFFC81594AF0F00BA5200 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E9FFFC41594AF0F00BA5200 /* libTestFlight.a */; };
@@ -175,6 +178,12 @@
 		9E7CEE8A157BD7A700718FA6 /* MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicalRecord.m; sourceTree = "<group>"; };
 		9E7CEE8B157BD7A700718FA6 /* MagicalRecordShorthand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordShorthand.h; sourceTree = "<group>"; };
 		9E7CEE8C157BD7A700718FA6 /* CoreData+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CoreData+MagicalRecord.h"; sourceTree = "<group>"; };
+		9E89816D15A0BC2900E22EA7 /* TimerArchiveEventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimerArchiveEventCell.h; sourceTree = "<group>"; };
+		9E89816E15A0BC2900E22EA7 /* TimerArchiveEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimerArchiveEventCell.m; sourceTree = "<group>"; };
+		9E89819815A0E5E000E22EA7 /* PrettyCustomViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrettyCustomViewTableViewCell.h; sourceTree = "<group>"; };
+		9E89819915A0E5E000E22EA7 /* PrettyCustomViewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrettyCustomViewTableViewCell.m; sourceTree = "<group>"; };
+		9E89819E15A0E5E000E22EA7 /* PrettyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrettyTableViewCell.h; sourceTree = "<group>"; };
+		9E89819F15A0E5E000E22EA7 /* PrettyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrettyTableViewCell.m; sourceTree = "<group>"; };
 		9E9FFF9F159384E200BA5200 /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
 		9E9FFFC11594948900BA5200 /* League Gothic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "League Gothic.otf"; sourceTree = "<group>"; };
 		9E9FFFC41594AF0F00BA5200 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
@@ -419,6 +428,17 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
+		9E89819715A0E5E000E22EA7 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				9E89819815A0E5E000E22EA7 /* PrettyCustomViewTableViewCell.h */,
+				9E89819915A0E5E000E22EA7 /* PrettyCustomViewTableViewCell.m */,
+				9E89819E15A0E5E000E22EA7 /* PrettyTableViewCell.h */,
+				9E89819F15A0E5E000E22EA7 /* PrettyTableViewCell.m */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		9E9FFF9215925CAE00BA5200 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -442,12 +462,15 @@
 		9EEDD290156E25FC00132008 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				9E89819715A0E5E000E22EA7 /* Cells */,
 				9E42F20315570FD60087F602 /* PagerViewController.h */,
 				9E42F20415570FD60087F602 /* PagerViewController.m */,
 				9EEDD298156E5CD300132008 /* Utility.h */,
 				9EEDD299156E5CD300132008 /* Utility.m */,
 				9EE6EC5B158CF5F70063E666 /* TimerFaceControl.h */,
 				9EE6EC5C158CF5F70063E666 /* TimerFaceControl.m */,
+				9E89816D15A0BC2900E22EA7 /* TimerArchiveEventCell.h */,
+				9E89816E15A0BC2900E22EA7 /* TimerArchiveEventCell.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -629,6 +652,10 @@
 				9E7CEEA5157BD7A700718FA6 /* MagicalRecord+ShorthandSupport.m in Sources */,
 				9E7CEEA6157BD7A700718FA6 /* MagicalRecord.m in Sources */,
 				9EE6EC5D158CF5F70063E666 /* TimerFaceControl.m in Sources */,
+				9E89816F15A0BC2900E22EA7 /* TimerArchiveEventCell.m in Sources */,
+				9E8981A015A0E5E000E22EA7 /* PrettyCustomViewTableViewCell.m in Sources */,
+				9E8981A315A0E5E000E22EA7 /* PrettyTableViewCell.m in Sources */,
+				9EEA276215C09EB5008B6D04 /* EventDataManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

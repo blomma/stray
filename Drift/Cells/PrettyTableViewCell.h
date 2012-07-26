@@ -53,7 +53,7 @@ typedef enum {
  In your `dataSource` `tableView:cellForRowAtIndexPath:` body, change all
  references to `UITableViewCell` to `PrettyTableViewCell`, and add this call:
  
-    [cell prepareForTableView:tableView indexPath:indexPath];
+ [cell prepareForTableView:tableView indexPath:indexPath];
  
  Just by doing that you'll have a nice cell, like the cells below:
  
@@ -83,7 +83,7 @@ typedef enum {
  - cell's selection gradient.
  
  ![](../docs/Screenshots/plain_cells.png)
-
+ 
  
  ### Performance
  
@@ -129,19 +129,19 @@ typedef enum {
  `backgroundColor` property.
  
  Change this property to override the background color in plain table views. */
-@property (nonatomic, retain) UIColor *customBackgroundColor;
+@property (nonatomic) UIColor *customBackgroundColor;
 
 /** Specifies the background gradient start color to use. */
-@property (nonatomic, retain) UIColor *gradientStartColor;
+@property (nonatomic) UIColor *gradientStartColor;
 
 /** Specifies the background gradient end color to use. */
-@property (nonatomic, retain) UIColor *gradientEndColor;
+@property (nonatomic) UIColor *gradientEndColor;
 
 /** Specifies the color used for the cell's border. 
  
  If dropsShadow is set to `YES`, borderColor will be ignored. This property
  has a gray color by default. */
-@property (nonatomic, retain) UIColor *borderColor;
+@property (nonatomic) UIColor *borderColor;
 
 /** Specifies the radio used for the cell's corners. 
  
@@ -151,7 +151,7 @@ typedef enum {
 /** Specifies the color used for the tableView's background. 
  
  This property has a clearColor by default.  */
-@property (nonatomic, retain) UIColor *tableViewBackgroundColor;
+@property (nonatomic) UIColor *tableViewBackgroundColor;
 
 /** Specifies if a custom separator should be drawn. 
  
@@ -162,7 +162,7 @@ typedef enum {
 /** Specifies the color used for the cell's separator line.
  
  This property has a light gray color by default. */
-@property (nonatomic, retain) UIColor *customSeparatorColor;
+@property (nonatomic) UIColor *customSeparatorColor;
 
 
 /** Specifies the start color for the selection gradient. 
@@ -171,7 +171,7 @@ typedef enum {
  
  If UITableViewCell's `selectionStyle` property is set to 
  `UITableViewCellSelectionStyleNone`, no gradient will be shown. */
-@property (nonatomic, retain) UIColor *selectionGradientStartColor;
+@property (nonatomic) UIColor *selectionGradientStartColor;
 
 /** Specifies the end color for the selection gradient. 
  
@@ -179,7 +179,7 @@ typedef enum {
  
  If UITableViewCell's `selectionStyle` property is set to 
  `UITableViewCellSelectionStyleNone`, no gradient will be shown. */
-@property (nonatomic, retain) UIColor *selectionGradientEndColor;
+@property (nonatomic) UIColor *selectionGradientEndColor;
 
 
 /** @name Cell configuration */
@@ -225,7 +225,7 @@ typedef enum {
 @property (nonatomic, readonly) CGRect innerFrame;
 
 /** Returns a mask with the rounded corners. */
-@property (nonatomic, readonly) CAShapeLayer *mask;
+@property (unsafe_unretained, nonatomic, readonly) CAShapeLayer *mask;
 
 /** Returns a new gradient with the configured selection gradient colors. 
  

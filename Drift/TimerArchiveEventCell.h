@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PrettyTableViewCell.h"
 
-@interface TimerArchiveEventCell : UITableViewCell
+@interface TimerArchiveEventCell : PrettyTableViewCell
+
+@property (nonatomic, strong) IBOutlet UILabel *nameLabel;
 
 @end
