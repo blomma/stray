@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "Constants.h"
 #import "TimerFaceControl.h"
 
 static CGFloat calculateDifferenceBetweenAngles(CGFloat a, CGFloat b) {
@@ -117,9 +116,6 @@ static NSTimeInterval angleToSeconds(CGFloat angle) {
 - (void)startWithDate:(NSDate *)date {
 	self.startDate = date;
 
-//	[[NSNotificationCenter defaultCenter] postNotificationName:KTimerStartDateChanged
-//	                                                    object:self.startDate];
-
 	self.isTimerRunning = YES;
 
 	// Scehdule a timer to update the face
@@ -142,9 +138,6 @@ static NSTimeInterval angleToSeconds(CGFloat angle) {
 	// Sync stop and now
 	self.nowDate  = date;
 	self.stopDate = date;
-
-//	[[NSNotificationCenter defaultCenter] postNotificationName:KTimerStopDateChanged
-//	                                                    object:self.stopDate];
 
 	[self drawNow];
 }
@@ -436,8 +429,6 @@ static NSTimeInterval angleToSeconds(CGFloat angle) {
 				t             = self.minuteHandLayer.transform;
 			}
 
-			//				[[NSNotificationCenter defaultCenter] postNotificationName:KTimerStartDateChanged
-			//				                                                    object:self.startDate];
 			self.startDate = startHandDate;
 
 			[CATransaction begin];
