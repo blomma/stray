@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ModelManager : NSObject
+@interface EventDataManager : NSObject
+
+@property (nonatomic) Event *currentEvent;
+
++ (id)sharedManager;
+
+- (void)createEvent;
+- (void)persistCurrentEvent;
 
 @end
