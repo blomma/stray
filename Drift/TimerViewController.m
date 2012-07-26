@@ -18,24 +18,6 @@
 @implementation TimerViewController
 
 #pragma mark -
-#pragma mark private properties
-
-@synthesize currentEvent = _currentEvent;
-
-#pragma mark -
-#pragma mark public properties
-
-@synthesize timerFaceControl                     = _timerFaceControl;
-@synthesize toggleStartStopButton                = _toggleStartStopButton;
-@synthesize startDateLabel                       = _startDateLabel;
-
-@synthesize runningTimerHourLabel                = _runningTimerHourLabel;
-@synthesize runningTimerMinuteLabel              = _runningTimerMinuteLabel;
-@synthesize runningTimerSecondLabel              = _runningTimerSecondLabel;
-@synthesize runningTimerHourMinuteDividerLabel   = _runningTimerHourMinuteDividerLabel;
-@synthesize runningTimerMinuteSecondDividerLabel = _runningTimerMinuteSecondDividerLabel;
-
-#pragma mark -
 #pragma mark Application lifecycle
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {

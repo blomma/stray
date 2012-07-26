@@ -57,27 +57,7 @@ static NSTimeInterval angleToSeconds(CGFloat angle) {
 #pragma mark -
 #pragma mark Public properties
 
-@synthesize startDate = _startDate;
-@synthesize nowDate   = _nowDate;
-@synthesize stopDate  = _stopDate;
 
-#pragma mark -
-#pragma mark Private properties
-
-@synthesize updateTimer                  = _updateTimer;
-@synthesize isTimerRunning               = _isTimerRunning;
-
-@synthesize startHandLayer               = _startHandLayer;
-@synthesize minuteHandLayer              = _minuteHandLayer;
-@synthesize secondHandLayer              = _secondHandLayer;
-@synthesize secondHandProgressTicksLayer = _secondHandProgressTicksLayer;
-
-@synthesize deltaDate                    = _deltaDate;
-@synthesize startAngle                   = _startAngle;
-@synthesize deltaAngle                   = _deltaAngle;
-@synthesize startTransform               = _startTransform;
-@synthesize deltaTransform               = _deltaTransform;
-@synthesize layerTransforming            = _layerTransforming;
 
 #pragma mark -
 #pragma mark Application lifecycle

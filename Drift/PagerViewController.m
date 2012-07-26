@@ -21,12 +21,6 @@
 
 @implementation PagerViewController
 
-@synthesize scrollView = _scrollView;
-@synthesize pageControl = _pageControl;
-@synthesize pageControlUsed = _pageControlUsed;
-@synthesize page = _page;
-@synthesize rotating = _rotating;
-
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
