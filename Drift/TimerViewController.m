@@ -176,9 +176,6 @@
 		
 		NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:self.currentEvent.startDate toDate:stopDate options:0];
 		
-		self.currentEvent.runningTimeHours   = [NSNumber numberWithInt:components.hour];
-		self.currentEvent.runningTimeMinutes = [NSNumber numberWithInt:components.minute];
-		self.currentEvent.runningTimeSeconds = [NSNumber numberWithInt:components.second];
 	}
 
 	//[[NSManagedObjectContext MR_defaultContext] MR_save];

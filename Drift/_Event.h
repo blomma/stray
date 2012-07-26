@@ -6,10 +6,6 @@
 
 extern const struct EventAttributes {
 	__unsafe_unretained NSString *running;
-	__unsafe_unretained NSString *runningTimeHours;
-	__unsafe_unretained NSString *runningTimeMilliseconds;
-	__unsafe_unretained NSString *runningTimeMinutes;
-	__unsafe_unretained NSString *runningTimeSeconds;
 	__unsafe_unretained NSString *startDate;
 	__unsafe_unretained NSString *stopDate;
 	__unsafe_unretained NSString *tag;
@@ -20,10 +16,6 @@ extern const struct EventRelationships {
 
 extern const struct EventFetchedProperties {
 } EventFetchedProperties;
-
-
-
-
 
 
 
@@ -51,54 +43,6 @@ extern const struct EventFetchedProperties {
 - (void)setRunningValue:(BOOL)value_;
 
 //- (BOOL)validateRunning:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, strong) NSNumber* runningTimeHours;
-
-
-@property int64_t runningTimeHoursValue;
-- (int64_t)runningTimeHoursValue;
-- (void)setRunningTimeHoursValue:(int64_t)value_;
-
-//- (BOOL)validateRunningTimeHours:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, strong) NSNumber* runningTimeMilliseconds;
-
-
-@property int16_t runningTimeMillisecondsValue;
-- (int16_t)runningTimeMillisecondsValue;
-- (void)setRunningTimeMillisecondsValue:(int16_t)value_;
-
-//- (BOOL)validateRunningTimeMilliseconds:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, strong) NSNumber* runningTimeMinutes;
-
-
-@property int16_t runningTimeMinutesValue;
-- (int16_t)runningTimeMinutesValue;
-- (void)setRunningTimeMinutesValue:(int16_t)value_;
-
-//- (BOOL)validateRunningTimeMinutes:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, strong) NSNumber* runningTimeSeconds;
-
-
-@property int16_t runningTimeSecondsValue;
-- (int16_t)runningTimeSecondsValue;
-- (void)setRunningTimeSecondsValue:(int16_t)value_;
-
-//- (BOOL)validateRunningTimeSeconds:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -143,42 +87,6 @@ extern const struct EventFetchedProperties {
 
 - (BOOL)primitiveRunningValue;
 - (void)setPrimitiveRunningValue:(BOOL)value_;
-
-
-
-
-- (NSNumber*)primitiveRunningTimeHours;
-- (void)setPrimitiveRunningTimeHours:(NSNumber*)value;
-
-- (int64_t)primitiveRunningTimeHoursValue;
-- (void)setPrimitiveRunningTimeHoursValue:(int64_t)value_;
-
-
-
-
-- (NSNumber*)primitiveRunningTimeMilliseconds;
-- (void)setPrimitiveRunningTimeMilliseconds:(NSNumber*)value;
-
-- (int16_t)primitiveRunningTimeMillisecondsValue;
-- (void)setPrimitiveRunningTimeMillisecondsValue:(int16_t)value_;
-
-
-
-
-- (NSNumber*)primitiveRunningTimeMinutes;
-- (void)setPrimitiveRunningTimeMinutes:(NSNumber*)value;
-
-- (int16_t)primitiveRunningTimeMinutesValue;
-- (void)setPrimitiveRunningTimeMinutesValue:(int16_t)value_;
-
-
-
-
-- (NSNumber*)primitiveRunningTimeSeconds;
-- (void)setPrimitiveRunningTimeSeconds:(NSNumber*)value;
-
-- (int16_t)primitiveRunningTimeSecondsValue;
-- (void)setPrimitiveRunningTimeSecondsValue:(int16_t)value_;
 
 
 
