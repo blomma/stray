@@ -67,6 +67,7 @@
 		9E7CEEA4157BD7A700718FA6 /* MagicalRecord+Setup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE86157BD7A700718FA6 /* MagicalRecord+Setup.m */; };
 		9E7CEEA5157BD7A700718FA6 /* MagicalRecord+ShorthandSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE88157BD7A700718FA6 /* MagicalRecord+ShorthandSupport.m */; };
 		9E7CEEA6157BD7A700718FA6 /* MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE8A157BD7A700718FA6 /* MagicalRecord.m */; };
+		9E8399B815C3FF2400B0243F /* Altgot2n.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E8399B715C3FF2400B0243F /* Altgot2n.ttf */; };
 		9E89816F15A0BC2900E22EA7 /* TimerArchiveEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89816E15A0BC2900E22EA7 /* TimerArchiveEventCell.m */; };
 		9E8981A015A0E5E000E22EA7 /* PrettyCustomViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89819915A0E5E000E22EA7 /* PrettyCustomViewTableViewCell.m */; };
 		9E8981A315A0E5E000E22EA7 /* PrettyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89819F15A0E5E000E22EA7 /* PrettyTableViewCell.m */; };
@@ -178,6 +179,7 @@
 		9E7CEE8A157BD7A700718FA6 /* MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicalRecord.m; sourceTree = "<group>"; };
 		9E7CEE8B157BD7A700718FA6 /* MagicalRecordShorthand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordShorthand.h; sourceTree = "<group>"; };
 		9E7CEE8C157BD7A700718FA6 /* CoreData+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CoreData+MagicalRecord.h"; sourceTree = "<group>"; };
+		9E8399B715C3FF2400B0243F /* Altgot2n.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Altgot2n.ttf; sourceTree = "<group>"; };
 		9E89816D15A0BC2900E22EA7 /* TimerArchiveEventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimerArchiveEventCell.h; sourceTree = "<group>"; };
 		9E89816E15A0BC2900E22EA7 /* TimerArchiveEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimerArchiveEventCell.m; sourceTree = "<group>"; };
 		9E89819815A0E5E000E22EA7 /* PrettyCustomViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrettyCustomViewTableViewCell.h; sourceTree = "<group>"; };
@@ -442,6 +444,7 @@
 		9E9FFF9215925CAE00BA5200 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9E8399B715C3FF2400B0243F /* Altgot2n.ttf */,
 				9E9FFFC11594948900BA5200 /* League Gothic.otf */,
 				9E9FFF9F159384E200BA5200 /* bg.png */,
 			);
@@ -554,6 +557,7 @@
 				9E9FFFC21594948900BA5200 /* League Gothic.otf in Resources */,
 				9E9FFFC91594AF0F00BA5200 /* README.txt in Resources */,
 				9E9FFFCA1594AF0F00BA5200 /* release_notes.txt in Resources */,
+				9E8399B815C3FF2400B0243F /* Altgot2n.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

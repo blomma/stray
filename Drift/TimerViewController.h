@@ -15,12 +15,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *toggleStartStopButton;
 @property (weak, nonatomic) IBOutlet UILabel *startDateLabel;
 
-@property (weak, nonatomic) IBOutlet UILabel *runningTimerHourLabel;
-@property (weak, nonatomic) IBOutlet UILabel *runningTimerMinuteLabel;
-@property (weak, nonatomic) IBOutlet UILabel *runningTimerSecondLabel;
-
-@property (weak, nonatomic) IBOutlet UILabel *runningTimerHourMinuteDividerLabel;
-@property (weak, nonatomic) IBOutlet UILabel *runningTimerMinuteSecondDividerLabel;
+@property (weak, nonatomic) IBOutlet UILabel *runningTimeLabel;
 
 - (IBAction)toggleTimer:(id)sender;
 
