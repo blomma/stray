@@ -26,21 +26,22 @@
 - (void)viewWillAppear:(BOOL)animated {
 	Event *currentEvent = [[EventDataManager sharedManager] currentEvent];
 
-	if (currentEvent.runningValue) {
+	if (currentEvent) {
 		[self updateStartLabel:currentEvent.startDate];
 
-		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
-		[self.timerFaceControl startWithDate:currentEvent.startDate];
-	} else {
-		[self updateStartLabel:currentEvent.startDate];
+		if (currentEvent.runningValue) {
+			[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
+			[self.timerFaceControl startWithDate:currentEvent.startDate];
+		} else {
+			[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
 
-		[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
-
-		self.timerFaceControl.startDate = currentEvent.startDate;
-		self.timerFaceControl.nowDate = currentEvent.stopDate;
 		self.timerFaceControl.stopDate = currentEvent.stopDate;
+			self.timerFaceControl.startDate = currentEvent.startDate;
+			self.timerFaceControl.nowDate   = currentEvent.stopDate;
+			self.timerFaceControl.stopDate  = currentEvent.stopDate;
 
-		[self updateNowLabel:currentEvent.stopDate];
+			[self updateNowLabel:currentEvent.stopDate];
+		}
 	}
 }
 

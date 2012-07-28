@@ -49,8 +49,6 @@
 	if ([Event MR_countOfEntities] > 0) {
 		NSArray *eventArray = [Event MR_findAllSortedBy:@"startDate" ascending:NO];
 		self.currentEvent = [eventArray objectAtIndex:0];
-	} else {
-		self.currentEvent = [Event MR_createEntity];
 	}
 	//	NSArray *eventArray = [Event MR_findByAttribute:@"running" withValue:[NSNumber numberWithBool:TRUE]];
 }
