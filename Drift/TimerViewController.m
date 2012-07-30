@@ -47,8 +47,6 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-	NSLog(@"%@", [UIFont fontNamesForFamilyName:@"Segoe UI"]);
-
 	self.startDateLabel.font                   = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
 
 	self.runningTimeLabel.font                 = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:55];
