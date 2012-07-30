@@ -463,7 +463,6 @@
 		9EEDD290156E25FC00132008 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				9E89819715A0E5E000E22EA7 /* Cells */,
 				9E42F20315570FD60087F602 /* PagerViewController.h */,
 				9E42F20415570FD60087F602 /* PagerViewController.m */,
 				9EEDD298156E5CD300132008 /* Utility.h */,
