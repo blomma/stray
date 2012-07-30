@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "TimerFaceControl.h"
 #import "Event.h"
 #import "EventDataManager.h"
