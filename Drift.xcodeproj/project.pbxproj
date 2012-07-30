@@ -75,10 +75,6 @@
 		9E9FFFC91594AF0F00BA5200 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFFC51594AF0F00BA5200 /* README.txt */; };
 		9E9FFFCA1594AF0F00BA5200 /* release_notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFFC61594AF0F00BA5200 /* release_notes.txt */; };
 		9E9FFFCC1594AF7400BA5200 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E9FFFCB1594AF7400BA5200 /* libz.dylib */; };
-		9EAA1EEA15C13EF20022ED40 /* segoeui.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9EAA1EE615C13EF20022ED40 /* segoeui.ttf */; };
-		9EAA1EEB15C13EF20022ED40 /* segoeuib.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9EAA1EE715C13EF20022ED40 /* segoeuib.ttf */; };
-		9EAA1EEC15C13EF20022ED40 /* segoeuil.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9EAA1EE815C13EF20022ED40 /* segoeuil.ttf */; };
-		9EAA1EED15C13EF20022ED40 /* seguisb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9EAA1EE915C13EF20022ED40 /* seguisb.ttf */; };
 		9EE6EC5D158CF5F70063E666 /* TimerFaceControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* TimerFaceControl.m */; };
 		9EE6EC60158CF7B40063E666 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */; };
 		9EEA276215C09EB5008B6D04 /* EventDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EEA276115C09EB5008B6D04 /* EventDataManager.m */; };
@@ -191,10 +187,6 @@
 		9E9FFFC61594AF0F00BA5200 /* release_notes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.txt; sourceTree = "<group>"; };
 		9E9FFFC71594AF0F00BA5200 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		9E9FFFCB1594AF7400BA5200 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		9EAA1EE615C13EF20022ED40 /* segoeui.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = segoeui.ttf; sourceTree = "<group>"; };
-		9EAA1EE715C13EF20022ED40 /* segoeuib.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = segoeuib.ttf; sourceTree = "<group>"; };
-		9EAA1EE815C13EF20022ED40 /* segoeuil.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = segoeuil.ttf; sourceTree = "<group>"; };
-		9EAA1EE915C13EF20022ED40 /* seguisb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = seguisb.ttf; sourceTree = "<group>"; };
 		9EE6EC5B158CF5F70063E666 /* TimerFaceControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = TimerFaceControl.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9EE6EC5C158CF5F70063E666 /* TimerFaceControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TimerFaceControl.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -436,13 +428,6 @@
 			isa = PBXGroup;
 			children = (
 				9E8399B715C3FF2400B0243F /* Altgot2n.ttf */,
-<<<<<<< HEAD
-=======
-				9EAA1EE615C13EF20022ED40 /* segoeui.ttf */,
-				9EAA1EE715C13EF20022ED40 /* segoeuib.ttf */,
-				9EAA1EE815C13EF20022ED40 /* segoeuil.ttf */,
-				9EAA1EE915C13EF20022ED40 /* seguisb.ttf */,
->>>>>>> First stab at archive view
 				9E9FFFC11594948900BA5200 /* League Gothic.otf */,
 				9E9FFF9F159384E200BA5200 /* bg.png */,
 			);
@@ -463,6 +448,7 @@
 		9EEDD290156E25FC00132008 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				9E89819715A0E5E000E22EA7 /* Cells */,
 				9E42F20315570FD60087F602 /* PagerViewController.h */,
 				9E42F20415570FD60087F602 /* PagerViewController.m */,
 				9EEDD298156E5CD300132008 /* Utility.h */,
@@ -554,13 +540,6 @@
 				9E9FFFC21594948900BA5200 /* League Gothic.otf in Resources */,
 				9E9FFFC91594AF0F00BA5200 /* README.txt in Resources */,
 				9E9FFFCA1594AF0F00BA5200 /* release_notes.txt in Resources */,
-<<<<<<< HEAD
-=======
-				9EAA1EEA15C13EF20022ED40 /* segoeui.ttf in Resources */,
-				9EAA1EEB15C13EF20022ED40 /* segoeuib.ttf in Resources */,
-				9EAA1EEC15C13EF20022ED40 /* segoeuil.ttf in Resources */,
-				9EAA1EED15C13EF20022ED40 /* seguisb.ttf in Resources */,
->>>>>>> First stab at archive view
 				9E8399B815C3FF2400B0243F /* Altgot2n.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

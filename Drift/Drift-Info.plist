@@ -21,16 +21,12 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>32A</string>
+	<string>32B</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>League Gothic.otf</string>
-		<string>segoeui.ttf</string>
-		<string>segoeuib.ttf</string>
-		<string>segoeuil.ttf</string>
-		<string>seguisb.ttf</string>
 		<string>Altgot2n.ttf</string>
 	</array>
 	<key>UIMainStoryboardFile</key>
