@@ -2,26 +2,21 @@
 //  TimerArchiveEventCell.m
 //  Drift
 //
-//  Created by Mikael Hultgren on 7/1/12.
+//  Created by Mikael Hultgren on 7/28/12.
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
 #import "TimerArchiveEventCell.h"
 
-@interface TimerArchiveEventCell ()
-
-@end
-
 @implementation TimerArchiveEventCell
 
-@synthesize nameLabel = _nameLabel;
-
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
-    self = [super initWithCoder:aDecoder];
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-	}
-    return self;	
+        // Initialization code
+    }
+    return self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
