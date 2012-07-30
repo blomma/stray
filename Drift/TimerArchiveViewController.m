@@ -7,8 +7,9 @@
 //
 
 #import "TimerArchiveViewController.h"
-#import "Event.h"
 #import "TimerArchiveEventCell.h"
+#import "Event.h"
+#import "EventDataManager.h"
 
 @interface TimerArchiveViewController ()
 
@@ -20,8 +21,6 @@
 
 #pragma mark -
 #pragma mark private properties
-
-@synthesize timerEvents = _timerEvents;
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -84,15 +83,44 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *CellIdentifier = @"TimerEventCell";
+	static NSString *CellIdentifier = @"TimerArchiveEventCell";
 
 	Event *event = [self.timerEvents objectAtIndex:indexPath.row];
 	
 	TimerArchiveEventCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	cell.nameLabel.font = [UIFont fontWithName:@"LeagueGothic" size:20];
-	cell.nameLabel.text = [NSDateFormatter localizedStringFromDate:event.startDate 
-														 dateStyle:NSDateFormatterShortStyle 
-														 timeStyle:NSDateFormatterFullStyle];
+
+	NSDate *startDate = event.startDate;
+	NSDate *stopDate;
+	if (event.runningValue) {
+		stopDate = [NSDate date];
+	} else {
+		stopDate = event.stopDate;
+	}
+
+	unsigned int unitFlags       = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+	NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:startDate toDate:stopDate options:0];
+
+	// And finally update the running timer
+	cell.runningTimeHours.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:96];
+	cell.runningTimeHours.text = [NSString stringWithFormat:@"%02d", components.hour];
+
+	cell.runningTimeMinutes.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:40];
+	cell.runningTimeMinutes.text = [NSString stringWithFormat:@"%02d", components.minute];
+
+
+	cell.dateDay.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:36];
+	cell.dateDay.text = @"17";
+
+	cell.dateYear.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
+	cell.dateYear.text = @"2012";
+
+	cell.dateMonth.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
+	cell.dateMonth.text = @"september";
+
+	//	cell.nameLabel.font = [UIFont fontWithName:@"LeagueGothic" size:20];
+//	cell.nameLabel.text = [NSDateFormatter localizedStringFromDate:event.startDate
+//														 dateStyle:NSDateFormatterShortStyle
+//														 timeStyle:NSDateFormatterFullStyle];
 
 	return cell;
 }
