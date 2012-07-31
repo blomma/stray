@@ -6,11 +6,11 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "TimerFaceControl.h"
+#import "EventTimerControl.h"
 
 @interface EventViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet TimerFaceControl *timerFaceControl;
+@property (weak, nonatomic) IBOutlet EventTimerControl *eventTimerControl;
 @property (weak, nonatomic) IBOutlet UIButton *toggleStartStopButton;
 @property (weak, nonatomic) IBOutlet UILabel *startDateLabel;
 

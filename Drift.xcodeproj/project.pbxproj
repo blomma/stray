@@ -77,7 +77,7 @@
 		9E9FFFC91594AF0F00BA5200 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFFC51594AF0F00BA5200 /* README.txt */; };
 		9E9FFFCA1594AF0F00BA5200 /* release_notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFFC61594AF0F00BA5200 /* release_notes.txt */; };
 		9E9FFFCC1594AF7400BA5200 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E9FFFCB1594AF7400BA5200 /* libz.dylib */; };
-		9EE6EC5D158CF5F70063E666 /* TimerFaceControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* TimerFaceControl.m */; };
+		9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */; };
 		9EE6EC60158CF7B40063E666 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */; };
 		9EEA276215C09EB5008B6D04 /* EventDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EEA276115C09EB5008B6D04 /* EventDataManager.m */; };
 		9EEDD29A156E5CD300132008 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EEDD299156E5CD300132008 /* Utility.m */; };
@@ -193,8 +193,8 @@
 		9E9FFFC61594AF0F00BA5200 /* release_notes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.txt; sourceTree = "<group>"; };
 		9E9FFFC71594AF0F00BA5200 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		9E9FFFCB1594AF7400BA5200 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		9EE6EC5B158CF5F70063E666 /* TimerFaceControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = TimerFaceControl.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		9EE6EC5C158CF5F70063E666 /* TimerFaceControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TimerFaceControl.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EventTimerControl.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventTimerControl.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9EEA276015C09EB5008B6D04 /* EventDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDataManager.h; sourceTree = "<group>"; };
 		9EEA276115C09EB5008B6D04 /* EventDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventDataManager.m; sourceTree = "<group>"; };
@@ -462,8 +462,8 @@
 				9E42F20415570FD60087F602 /* PagerViewController.m */,
 				9EEDD298156E5CD300132008 /* Utility.h */,
 				9EEDD299156E5CD300132008 /* Utility.m */,
-				9EE6EC5B158CF5F70063E666 /* TimerFaceControl.h */,
-				9EE6EC5C158CF5F70063E666 /* TimerFaceControl.m */,
+				9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */,
+				9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */,
 				9E89816D15A0BC2900E22EA7 /* EventGroupTableViewCell.h */,
 				9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */,
 			);
@@ -647,7 +647,7 @@
 				9E7CEEA4157BD7A700718FA6 /* MagicalRecord+Setup.m in Sources */,
 				9E7CEEA5157BD7A700718FA6 /* MagicalRecord+ShorthandSupport.m in Sources */,
 				9E7CEEA6157BD7A700718FA6 /* MagicalRecord.m in Sources */,
-				9EE6EC5D158CF5F70063E666 /* TimerFaceControl.m in Sources */,
+				9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */,
 				9E89816F15A0BC2900E22EA7 /* EventGroupTableViewCell.m in Sources */,
 				9EEA276215C09EB5008B6D04 /* EventDataManager.m in Sources */,
 				9E51511615C7CEF100901655 /* EventGroup.m in Sources */,

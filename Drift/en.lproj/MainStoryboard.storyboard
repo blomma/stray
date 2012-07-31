@@ -52,7 +52,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view opaque="NO" contentMode="scaleToFill" id="IgW-Dr-4Bj" customClass="TimerFaceControl">
+                            <view opaque="NO" contentMode="scaleToFill" id="IgW-Dr-4Bj" customClass="EventTimerControl">
                                 <rect key="frame" x="0.0" y="124" width="320" height="320"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -92,9 +92,9 @@
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="eventTimerControl" destination="IgW-Dr-4Bj" id="Zds-ja-YxN"/>
                         <outlet property="runningTimeLabel" destination="n39-IM-ZTu" id="BWS-zL-naa"/>
                         <outlet property="startDateLabel" destination="W98-oL-Wio" id="bgX-ud-jjb"/>
-                        <outlet property="timerFaceControl" destination="IgW-Dr-4Bj" id="tcH-a2-bxt"/>
                         <outlet property="toggleStartStopButton" destination="dP9-OE-O85" id="ZPS-ao-uD9"/>
                     </connections>
                 </viewController>

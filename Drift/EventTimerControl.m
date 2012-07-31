@@ -1,5 +1,5 @@
 //
-//  TimerFaceControl.m
+//  EventTimerControl.m
 //  Drift
 //
 //  Created by Mikael Hultgren on 6/16/12.
@@ -8,15 +8,15 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-#import "TimerFaceControl.h"
+#import "EventTimerControl.h"
 #import "Event.h"
 #import "EventDataManager.h"
 
-@interface TimerFaceControl ()
+@interface EventTimerControl ()
 
 // Private properties
 @property (nonatomic) NSTimer *updateTimer;
-@property (nonatomic) BOOL isTimerRunning;
+@property (nonatomic) BOOL isEventRunning;
 
 @property (nonatomic) CAShapeLayer *startHandLayer;
 @property (nonatomic) CAShapeLayer *minuteHandLayer;
@@ -31,7 +31,7 @@
 
 @end
 
-@implementation TimerFaceControl
+@implementation EventTimerControl
 
 #pragma mark -
 #pragma mark Public properties
@@ -70,7 +70,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	if (self.isTimerRunning) {
+	if (self.isEventRunning) {
 		if (![self.updateTimer isValid]) {
 			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
 			                                                    target:self
@@ -89,7 +89,7 @@
 - (void)startWithDate:(NSDate *)date  {
 	self.startDate = date;
 
-	self.isTimerRunning = YES;
+	self.isEventRunning = YES;
 
 	// Scehdule a timer to update the face
 	if (![self.updateTimer isValid]) {
@@ -106,7 +106,7 @@
 - (void)stopWithDate:(NSDate *)date {
 	[self.updateTimer invalidate];
 
-	self.isTimerRunning = NO;
+	self.isEventRunning = NO;
 
 	// Sync stop and now
 	self.nowDate  = date;
@@ -329,7 +329,7 @@
 	self.deltaLayer = NULL;
 
 	// Was this a touch on the startHand and is the timer started
-	if ([self.startHandLayer.presentationLayer hitTest:point] && self.isTimerRunning) {
+	if ([self.startHandLayer.presentationLayer hitTest:point] && self.isEventRunning) {
 		self.deltaLayer = self.startHandLayer;
 		self.deltaDate  = self.startDate;
 	}

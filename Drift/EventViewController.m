@@ -31,13 +31,13 @@
 
 		if (currentEvent.runningValue) {
 			[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
-			[self.timerFaceControl startWithDate:currentEvent.startDate];
+			[self.eventTimerControl startWithDate:currentEvent.startDate];
 		} else {
 			[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
 
-			self.timerFaceControl.startDate = currentEvent.startDate;
-			self.timerFaceControl.nowDate   = currentEvent.stopDate;
-			self.timerFaceControl.stopDate  = currentEvent.stopDate;
+			self.eventTimerControl.startDate = currentEvent.startDate;
+			self.eventTimerControl.nowDate   = currentEvent.stopDate;
+			self.eventTimerControl.stopDate  = currentEvent.stopDate;
 
 			[self updateNowLabel:currentEvent.stopDate];
 		}
@@ -53,17 +53,17 @@
 
 	self.toggleStartStopButton.titleLabel.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:50];
 
-	[self.timerFaceControl addObserver:self
+	[self.eventTimerControl addObserver:self
 	                        forKeyPath:@"startDate"
 	                           options:NSKeyValueObservingOptionNew
 	                           context:NULL];
 
-	[self.timerFaceControl addObserver:self
+	[self.eventTimerControl addObserver:self
 	                        forKeyPath:@"nowDate"
 	                           options:NSKeyValueObservingOptionNew
 	                           context:NULL];
 
-	[self.timerFaceControl addObserver:self
+	[self.eventTimerControl addObserver:self
 	                        forKeyPath:@"stopDate"
 	                           options:NSKeyValueObservingOptionNew
 	                           context:NULL];
@@ -89,7 +89,7 @@
 		currentEvent.stopDate     = now;
 
 		// Stop the face
-		[self.timerFaceControl stopWithDate:now];
+		[self.eventTimerControl stopWithDate:now];
 
 		// Toggle button to start state
 		[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
@@ -103,7 +103,7 @@
 		currentEvent.startDate    = now;
 
 		// Start up the face
-		[self.timerFaceControl startWithDate:now];
+		[self.eventTimerControl startWithDate:now];
 
 		// Toggle button to stop state
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
