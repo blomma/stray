@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "TimerArchiveEventCell.h"
+#import "EventGroupTableViewCell.h"
 
-@implementation TimerArchiveEventCell
+@implementation EventGroupTableViewCell
 
 - (void)awakeFromNib {
 	self.runningTimeHours.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:96];

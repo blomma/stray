@@ -7,7 +7,7 @@
 //
 
 #import "TimerArchiveViewController.h"
-#import "TimerArchiveEventCell.h"
+#import "EventGroupTableViewCell.h"
 #import "Event.h"
 #import "EventDataManager.h"
 
@@ -83,11 +83,11 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *CellIdentifier = @"TimerArchiveEventCell";
+	static NSString *CellIdentifier = @"EventGroupCell";
 
 	Event *event = [self.timerEvents objectAtIndex:indexPath.row];
 	
-	TimerArchiveEventCell *cell = (TimerArchiveEventCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	EventGroupTableViewCell *cell = (EventGroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 
 	NSDate *startDate = event.startDate;
 	NSDate *stopDate;

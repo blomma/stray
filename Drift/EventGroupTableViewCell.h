@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-@interface TimerArchiveEventCell : UITableViewCell
+@interface EventGroupTableViewCell : UITableViewCell
 
 @property (nonatomic) IBOutlet UILabel *runningTimeHours;
 @property (nonatomic) IBOutlet UILabel *runningTimeMinutes;

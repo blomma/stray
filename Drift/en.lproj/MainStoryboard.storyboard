@@ -111,7 +111,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TimerArchiveEventCell" rowHeight="100" id="UtO-Rb-o4n" customClass="TimerArchiveEventCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="EventGroupCell" rowHeight="100" id="UtO-Rb-o4n" customClass="EventGroupTableViewCell">
                                 <rect key="frame" x="0.0" y="22" width="320" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -177,45 +177,6 @@
             <point key="canvasLocation" x="550" y="354"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="PagerViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PagerViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="changePage:"/>
-                <relationship kind="outlet" name="pageControl" candidateClass="UIPageControl"/>
-                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
-            </relationships>
-        </class>
-        <class className="RootViewController" superclassName="PagerViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RootViewController.h"/>
-        </class>
-        <class className="TimerArchiveEventCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerArchiveEventCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="dateDay" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="dateMonth" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="dateYear" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="runningTimeHours" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="runningTimeMinutes" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="TimerArchiveViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerArchiveViewController.h"/>
-        </class>
-        <class className="TimerFaceControl" superclassName="UIControl">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerFaceControl.h"/>
-        </class>
-        <class className="TimerViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="toggleTimer:"/>
-                <relationship kind="outlet" name="runningTimeLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="startDateLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="timerFaceControl" candidateClass="TimerFaceControl"/>
-                <relationship kind="outlet" name="toggleStartStopButton" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
