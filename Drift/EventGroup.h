@@ -10,8 +10,8 @@
 
 @interface EventGroup : NSObject
 
-@property (nonatomic) NSDate * groupDate;
-@property (nonatomic, readonly) NSArray * groupEvents;
+@property (nonatomic) NSDate *groupDate;
+@property (nonatomic, readonly) NSArray *groupEvents;
 @property (nonatomic, readonly) NSDateComponents *groupRunningTime;
 
 - (void)addEvent:(Event *)event;

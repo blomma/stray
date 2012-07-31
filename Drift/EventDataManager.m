@@ -52,4 +52,5 @@
 	}
 	//	NSArray *eventArray = [Event MR_findByAttribute:@"running" withValue:[NSNumber numberWithBool:TRUE]];
 }
+
 @end

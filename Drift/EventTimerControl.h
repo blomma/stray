@@ -8,9 +8,9 @@
 
 @interface EventTimerControl : UIControl
 
-@property(nonatomic) NSDate *startDate;
-@property(nonatomic) NSDate *nowDate;
-@property(nonatomic) NSDate *stopDate;
+@property (nonatomic) NSDate *startDate;
+@property (nonatomic) NSDate *nowDate;
+@property (nonatomic) NSDate *stopDate;
 
 - (void)startWithDate:(NSDate *)date;
 - (void)stopWithDate:(NSDate *)date;

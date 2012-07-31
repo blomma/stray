@@ -13,106 +13,95 @@
 #pragma mark -
 #pragma mark Conversion methods
 
-+ (NSString *)boolToString:(BOOL)value
-{
++ (NSString *)boolToString:(BOOL)value {
 	return value ? @"TRUE" : @"FALSE";
 }
 
 #pragma mark -
 #pragma mark NSCoding Protocol methods
 
-+ (CGFloat)decodeDoubleWithDefault:(NSCoder *)coder key:(NSString *)key defaultValue:(CGFloat)defaultValue
-{
++ (CGFloat)decodeDoubleWithDefault:(NSCoder *)coder key:(NSString *)key defaultValue:(CGFloat)defaultValue {
 	NSNumber *value = [coder decodeObjectForKey:key];
 
 	return value != nil
-		? value.doubleValue
-		: defaultValue;
+	       ? value.doubleValue
+	       : defaultValue;
 }
 
-+ (CGFloat)decodeBooleanWithDefault:(NSCoder *)coder key:(NSString *)key defaultValue:(BOOL)defaultValue
-{
++ (CGFloat)decodeBooleanWithDefault:(NSCoder *)coder key:(NSString *)key defaultValue:(BOOL)defaultValue {
 	NSNumber *value = [coder decodeObjectForKey:key];
 
 	return value != nil
-		? value.boolValue
-		: defaultValue;
+	       ? value.boolValue
+	       : defaultValue;
 }
 
 #pragma mark -
 #pragma mark Calculation methods
 
-+ (CGFloat)constrainValue:(CGFloat)value min:(CGFloat)min max:(CGFloat)max
-{
++ (CGFloat)constrainValue:(CGFloat)value min:(CGFloat)min max:(CGFloat)max {
 	return value < min
-		? min
-		: (value > max ? max : value);
+	       ? min
+	       : (value > max ? max : value);
 }
 
-+ (CGFloat)wrapValue:(CGFloat)value min:(CGFloat)min max:(CGFloat)max
-{
-	CGFloat x = value-min,
-			y = max-min;
++ (CGFloat)wrapValue:(CGFloat)value min:(CGFloat)min max:(CGFloat)max {
+	CGFloat x = value - min,
+	        y = max - min;
 
 	CGFloat r = fmodf(x,y);
 
 	r = r < 0.0
-		? r + y
-		: r;
+	    ? r + y
+	    : r;
 
-	return r+min;
+	return r + min;
 }
 
-+ (CGFloat)mapValue:(CGFloat)value minValue:(CGFloat)minValue maxValue:(CGFloat)maxValue minR:(CGFloat)minR maxR:(CGFloat)maxR
-{
-	return ((value-minValue)/(maxValue-minValue)) * (maxR - minR) + minR;
++ (CGFloat)mapValue:(CGFloat)value minValue:(CGFloat)minValue maxValue:(CGFloat)maxValue minR:(CGFloat)minR maxR:(CGFloat)maxR {
+	return ((value - minValue) / (maxValue - minValue)) * (maxR - minR) + minR;
 }
 
-+ (CGPoint)mapPoint:(const CGPoint)value rangeV:(const CGRect)rangeV rangeR:(const CGRect)rangeR
-{
++ (CGPoint)mapPoint:(const CGPoint)value rangeV:(const CGRect)rangeV rangeR:(const CGRect)rangeR {
 	return CGPointMake(
-					   [Utility mapValue:value.x
-								minValue:CGRectGetMinX(rangeV)
-								maxValue:CGRectGetMaxX(rangeV)
-									minR:CGRectGetMinX(rangeR)
-									maxR:CGRectGetMaxX(rangeR)],
-					   [Utility mapValue:value.y
-								minValue:CGRectGetMinY(rangeV)
-								maxValue:CGRectGetMaxY(rangeV)
-									minR:CGRectGetMinY(rangeR)
-									maxR:CGRectGetMaxY(rangeR)]);
+	               [Utility mapValue:value.x
+	                        minValue:CGRectGetMinX(rangeV)
+	                        maxValue:CGRectGetMaxX(rangeV)
+	                            minR:CGRectGetMinX(rangeR)
+	                            maxR:CGRectGetMaxX(rangeR)],
+	               [Utility mapValue:value.y
+	                        minValue:CGRectGetMinY(rangeV)
+	                        maxValue:CGRectGetMaxY(rangeV)
+	                            minR:CGRectGetMinY(rangeR)
+	                            maxR:CGRectGetMaxY(rangeR)]);
 }
 
-+ (CGRect)shrinkRect:(const CGRect)rect size:(CGSize)size
-{
++ (CGRect)shrinkRect:(const CGRect)rect size:(CGSize)size {
 	return CGRectMake(
-					  CGRectGetMinX(rect)+size.width,
-					  CGRectGetMinY(rect)+size.height,
-					  CGRectGetWidth(rect)-2.0 * size.width,
-					  CGRectGetHeight(rect)-2.0 * size.height);
+	               CGRectGetMinX(rect) + size.width,
+	               CGRectGetMinY(rect) + size.height,
+	               CGRectGetWidth(rect) - 2.0 * size.width,
+	               CGRectGetHeight(rect) - 2.0 * size.height);
 }
 
-+ (CGRect)largestSquareWithinRect:(const CGRect)rect
-{
-	CGFloat	scale = MIN(CGRectGetWidth(rect), CGRectGetHeight(rect));
++ (CGRect)largestSquareWithinRect:(const CGRect)rect {
+	CGFloat scale = MIN(CGRectGetWidth(rect), CGRectGetHeight(rect));
 
 	return CGRectMake(
-					  CGRectGetMinX(rect),
-					  CGRectGetMinY(rect),
-					  scale,
-					  scale);
+	               CGRectGetMinX(rect),
+	               CGRectGetMinY(rect),
+	               scale,
+	               scale);
 }
 
 @end
 
 @implementation UIColor (Utility)
 
-+ (UIColor *) colorWithHex:(int)hex
-{
-    return [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16))/255.0
-                           green:((float)((hex & 0xFF00) >> 8))/255.0
-                            blue:((float)(hex & 0xFF))/255.0 alpha:1.0];
++ (UIColor *)colorWithHex:(int)hex {
+	return [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0
+	                       green:((float)((hex & 0xFF00) >> 8)) / 255.0
+	                        blue:((float)(hex & 0xFF)) / 255.0 alpha:1.0];
 }
-
 
 @end

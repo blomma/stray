@@ -3,9 +3,8 @@
 @implementation Event
 
 // Custom logic goes here.
-- (NSComparisonResult)compare:(id)element
-{
-	NSComparisonResult res = [[self startDate] compare: [element startDate]];
+- (NSComparisonResult)compare:(id)element {
+	NSComparisonResult res = [[self startDate] compare:[element startDate]];
 	return res;
 }
 

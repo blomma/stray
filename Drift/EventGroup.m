@@ -41,9 +41,9 @@
 
 	unsigned int unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
 	return [[NSCalendar currentCalendar] components:unitFlags
-										   fromDate:self.startDate
-											 toDate:self.stopDate
-											options:0];
+	                                       fromDate:self.startDate
+	                                         toDate:self.stopDate
+	                                        options:0];
 }
 
 #pragma mark -
@@ -61,9 +61,8 @@
 	[self.events sortUsingSelector:@selector(compare:)];
 }
 
-- (NSComparisonResult)compare:(id)element
-{
-	NSComparisonResult res = [[self groupDate] compare: [element groupDate]];
+- (NSComparisonResult)compare:(id)element {
+	NSComparisonResult res = [[self groupDate] compare:[element groupDate]];
 	return res;
 }
 

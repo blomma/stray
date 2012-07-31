@@ -38,7 +38,7 @@
 
 - (void)setStartDate:(NSDate *)startDate {
 	_startDate = startDate;
-	
+
 	if (self.deltaLayer == NULL) {
 		[self drawStart];
 	}
@@ -46,7 +46,7 @@
 
 - (void)setNowDate:(NSDate *)nowDate {
 	_nowDate = nowDate;
-	
+
 	if (self.deltaLayer == NULL) {
 		[self drawNow];
 	}
@@ -87,7 +87,7 @@
 #pragma mark Public instance methods
 
 - (void)startWithDate:(NSDate *)date  {
-	self.startDate = date;
+	self.startDate      = date;
 
 	self.isEventRunning = YES;
 
@@ -425,7 +425,7 @@
 
 			[[EventDataManager sharedManager] persistCurrentEvent];
 		}
-		
+
 		self.deltaLayer = NULL;
 	}
 

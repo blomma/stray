@@ -14,5 +14,4 @@
 @property (nonatomic) IBOutlet UILabel *dateMonth;
 @property (nonatomic) IBOutlet UILabel *dateYear;
 
-
 @end

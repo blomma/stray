@@ -55,18 +55,18 @@
 	NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
 
 //	if ([insertedObjects count] > 0) {
-		NSMutableArray *array = [NSMutableArray arrayWithArray:[insertedObjects allObjects]];
-		[array sortUsingSelector:@selector(compare:)];
+	NSMutableArray *array = [NSMutableArray arrayWithArray:[insertedObjects allObjects]];
+	[array sortUsingSelector:@selector(compare:)];
 
 //		[self.tableView beginUpdates];
 //
 //		[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
 
-		for (Event *event in array) {
-			[self.timerEvents insertObject:event atIndex:0];
+	for (Event *event in array) {
+		[self.timerEvents insertObject:event atIndex:0];
 //			[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]]
 //			                      withRowAnimation:UITableViewRowAnimationTop];
-		}
+	}
 
 //		[self.tableView endUpdates];
 //	}
@@ -85,11 +85,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *CellIdentifier = @"EventGroupCell";
 
-	Event *event = [self.timerEvents objectAtIndex:indexPath.row];
-	
-	EventGroupTableViewCell *cell = (EventGroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	Event *event                    = [self.timerEvents objectAtIndex:indexPath.row];
 
-	NSDate *startDate = event.startDate;
+	EventGroupTableViewCell *cell   = (EventGroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+
+	NSDate *startDate               = event.startDate;
 	NSDate *stopDate;
 	if (event.runningValue) {
 		stopDate = [NSDate date];
@@ -101,11 +101,11 @@
 	NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:startDate toDate:stopDate options:0];
 
 	// And finally update the running timer
-	cell.runningTimeHours.text = [NSString stringWithFormat:@"%02d", components.hour];
+	cell.runningTimeHours.text   = [NSString stringWithFormat:@"%02d", components.hour];
 	cell.runningTimeMinutes.text = [NSString stringWithFormat:@"%02d", components.minute];
-	cell.dateDay.text = @"17";
-	cell.dateYear.text = @"2012";
-	cell.dateMonth.text = @"september";
+	cell.dateDay.text            = @"17";
+	cell.dateYear.text           = @"2012";
+	cell.dateMonth.text          = @"september";
 
 	//	cell.nameLabel.font = [UIFont fontWithName:@"LeagueGothic" size:20];
 //	cell.nameLabel.text = [NSDateFormatter localizedStringFromDate:event.startDate

@@ -30,7 +30,7 @@
 
 - (void)addEvent:(Event *)event {
 	NSDate *startDate = event.startDate;
-	NSDate *stopDate = event.stopDate;
+	NSDate *stopDate  = event.stopDate;
 
 	// Is the event running, if so set the stopDate to now
 	if (event.runningValue) {

@@ -54,19 +54,19 @@
 	self.toggleStartStopButton.titleLabel.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:50];
 
 	[self.eventTimerControl addObserver:self
-	                        forKeyPath:@"startDate"
-	                           options:NSKeyValueObservingOptionNew
-	                           context:NULL];
+	                         forKeyPath:@"startDate"
+	                            options:NSKeyValueObservingOptionNew
+	                            context:NULL];
 
 	[self.eventTimerControl addObserver:self
-	                        forKeyPath:@"nowDate"
-	                           options:NSKeyValueObservingOptionNew
-	                           context:NULL];
+	                         forKeyPath:@"nowDate"
+	                            options:NSKeyValueObservingOptionNew
+	                            context:NULL];
 
 	[self.eventTimerControl addObserver:self
-	                        forKeyPath:@"stopDate"
-	                           options:NSKeyValueObservingOptionNew
-	                           context:NULL];
+	                         forKeyPath:@"stopDate"
+	                            options:NSKeyValueObservingOptionNew
+	                            context:NULL];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
