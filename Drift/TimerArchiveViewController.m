@@ -87,7 +87,7 @@
 
 	Event *event = [self.timerEvents objectAtIndex:indexPath.row];
 	
-	TimerArchiveEventCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	TimerArchiveEventCell *cell = (TimerArchiveEventCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 
 	NSDate *startDate = event.startDate;
 	NSDate *stopDate;
@@ -101,20 +101,10 @@
 	NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:startDate toDate:stopDate options:0];
 
 	// And finally update the running timer
-	cell.runningTimeHours.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:96];
 	cell.runningTimeHours.text = [NSString stringWithFormat:@"%02d", components.hour];
-
-	cell.runningTimeMinutes.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:40];
 	cell.runningTimeMinutes.text = [NSString stringWithFormat:@"%02d", components.minute];
-
-
-	cell.dateDay.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:36];
 	cell.dateDay.text = @"17";
-
-	cell.dateYear.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
 	cell.dateYear.text = @"2012";
-
-	cell.dateMonth.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
 	cell.dateMonth.text = @"september";
 
 	//	cell.nameLabel.font = [UIFont fontWithName:@"LeagueGothic" size:20];

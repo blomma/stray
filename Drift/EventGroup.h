@@ -6,8 +6,17 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "Event.h"
 
 @interface EventGroup : NSObject
+
+@property (nonatomic) NSDate * groupDate;
+@property (nonatomic, readonly) NSArray * groupEvents;
+@property (nonatomic, readonly) NSDateComponents *groupRunningTime;
+
+- (void)addEvent:(Event *)event;
+- (void)removeEvent:(Event *)event;
+
+- (NSComparisonResult)compare:(id)element;
 
 @end
