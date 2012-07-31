@@ -39,6 +39,8 @@
 		9E42F21715570FD70087F602 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F21515570FD70087F602 /* InfoPlist.strings */; };
 		9E42F21A15570FD70087F602 /* DriftTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F21915570FD70087F602 /* DriftTests.m */; };
 		9E42F22915571E9C0087F602 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F22815571E9C0087F602 /* RootViewController.m */; };
+		9E51511615C7CEF100901655 /* EventGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511315C7CEF100901655 /* EventGroup.m */; };
+		9E51511715C7CEF100901655 /* EventGroups.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511515C7CEF100901655 /* EventGroups.m */; };
 		9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E63BBF3156EAA710006FEFC /* CoreData.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9E7CEDF4157B778300718FA6 /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEDF3157B778300718FA6 /* _Event.m */; };
 		9E7CEE8D157BD7A700718FA6 /* MagicalImportFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEE55157BD7A700718FA6 /* MagicalImportFunctions.m */; };
@@ -120,6 +122,10 @@
 		9E42F21915570FD70087F602 /* DriftTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DriftTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9E42F22715571E9C0087F602 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = RootViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9E42F22815571E9C0087F602 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RootViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		9E51511215C7CEF100901655 /* EventGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroup.h; sourceTree = "<group>"; };
+		9E51511315C7CEF100901655 /* EventGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroup.m; sourceTree = "<group>"; };
+		9E51511415C7CEF100901655 /* EventGroups.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroups.h; sourceTree = "<group>"; };
+		9E51511515C7CEF100901655 /* EventGroups.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroups.m; sourceTree = "<group>"; };
 		9E63BBF3156EAA710006FEFC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		9E7CEDF2157B778300718FA6 /* _Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Event.h; sourceTree = "<group>"; };
 		9E7CEDF3157B778300718FA6 /* _Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Event.m; sourceTree = "<group>"; };
@@ -448,7 +454,10 @@
 		9EEDD290156E25FC00132008 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				9E89819715A0E5E000E22EA7 /* Cells */,
+				9E51511215C7CEF100901655 /* EventGroup.h */,
+				9E51511315C7CEF100901655 /* EventGroup.m */,
+				9E51511415C7CEF100901655 /* EventGroups.h */,
+				9E51511515C7CEF100901655 /* EventGroups.m */,
 				9E42F20315570FD60087F602 /* PagerViewController.h */,
 				9E42F20415570FD60087F602 /* PagerViewController.m */,
 				9EEDD298156E5CD300132008 /* Utility.h */,
@@ -641,6 +650,8 @@
 				9EE6EC5D158CF5F70063E666 /* TimerFaceControl.m in Sources */,
 				9E89816F15A0BC2900E22EA7 /* TimerArchiveEventCell.m in Sources */,
 				9EEA276215C09EB5008B6D04 /* EventDataManager.m in Sources */,
+				9E51511615C7CEF100901655 /* EventGroup.m in Sources */,
+				9E51511715C7CEF100901655 /* EventGroups.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
