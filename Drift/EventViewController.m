@@ -1,5 +1,5 @@
 //
-//  TimerViewController.m
+//  EventViewController.m
 //  Drift
 //
 //  Created by Mikael Hultgren on 5/31/12.
@@ -76,14 +76,14 @@
 #pragma mark -
 #pragma mark Public instance methods
 
-- (IBAction)toggleTimer:(id)sender {
+- (IBAction)toggleEvent:(id)sender {
 	Event *currentEvent = [[EventDataManager sharedManager] currentEvent];
 
 	NSDate *now         = [NSDate date];
 
 	// Do we have a event that is running
 	if ([currentEvent runningValue]) {
-		[TestFlight passCheckpoint:@"STOP TIMER"];
+		[TestFlight passCheckpoint:@"STOP EVENT"];
 
 		currentEvent.runningValue = NO;
 		currentEvent.stopDate     = now;
@@ -94,7 +94,7 @@
 		// Toggle button to start state
 		[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
 	} else {
-		[TestFlight passCheckpoint:@"START TIMER"];
+		[TestFlight passCheckpoint:@"START EVENT"];
 
 		// No, lets create a new one
 		[[EventDataManager sharedManager] createEvent];

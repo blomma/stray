@@ -68,7 +68,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="toggleTimer:" destination="pW2-Iw-5Bg" eventType="touchUpInside" id="jUL-9g-3XY"/>
+                                            <action selector="toggleEvent:" destination="pW2-Iw-5Bg" eventType="touchUpInside" id="IPe-YN-lmd"/>
                                         </connections>
                                     </button>
                                 </subviews>

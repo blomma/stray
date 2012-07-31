@@ -1,5 +1,5 @@
 //
-//  TimerArchiveViewController.h
+//  EventGroupsViewController.h
 //  Drift
 //
 //  Created by Mikael Hultgren on 5/31/12.

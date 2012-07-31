@@ -1,5 +1,5 @@
 //
-//  TimerViewController.h
+//  EventViewController.h
 //  Drift
 //
 //  Created by Mikael Hultgren on 5/31/12.
@@ -16,6 +16,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *runningTimeLabel;
 
-- (IBAction)toggleTimer:(id)sender;
+- (IBAction)toggleEvent:(id)sender;
 
 @end

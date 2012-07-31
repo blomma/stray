@@ -1,5 +1,5 @@
 //
-//  TimerArchiveEventCell.h
+//  EventGroupTableViewCell.h
 //  Drift
 //
 //  Created by Mikael Hultgren on 7/28/12.
