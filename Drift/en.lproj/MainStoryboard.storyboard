@@ -43,11 +43,11 @@
             </objects>
             <point key="canvasLocation" x="122" y="157"/>
         </scene>
-        <!--Timer View Controller-->
+        <!--Event View Controller - Timer View-->
         <scene sceneID="HBC-Pb-M3Y">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9TD-yZ-86c" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController storyboardIdentifier="TimerView" title="Timer View" id="pW2-Iw-5Bg" userLabel="Timer View Controller" customClass="TimerViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventViewController" title="Timer View" id="pW2-Iw-5Bg" customClass="EventViewController" sceneMemberID="viewController">
                     <view key="view" opaque="NO" contentMode="scaleToFill" id="8Qo-UI-s2h">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -191,6 +191,16 @@
         <class className="EventGroupsViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/EventGroupsViewController.h"/>
         </class>
+        <class className="EventViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="toggleTimer:"/>
+                <relationship kind="outlet" name="runningTimeLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="startDateLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="timerFaceControl" candidateClass="TimerFaceControl"/>
+                <relationship kind="outlet" name="toggleStartStopButton" candidateClass="UIButton"/>
+            </relationships>
+        </class>
         <class className="PagerViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PagerViewController.h"/>
             <relationships>
@@ -204,16 +214,6 @@
         </class>
         <class className="TimerFaceControl" superclassName="UIControl">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerFaceControl.h"/>
-        </class>
-        <class className="TimerViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="toggleTimer:"/>
-                <relationship kind="outlet" name="runningTimeLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="startDateLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="timerFaceControl" candidateClass="TimerFaceControl"/>
-                <relationship kind="outlet" name="toggleStartStopButton" candidateClass="UIButton"/>
-            </relationships>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

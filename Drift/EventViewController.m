@@ -6,11 +6,11 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "TimerViewController.h"
+#import "EventViewController.h"
 #import "Event.h"
 #import "EventDataManager.h"
 
-@implementation TimerViewController
+@implementation EventViewController
 
 #pragma mark -
 #pragma mark Application lifecycle

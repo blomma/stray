@@ -19,7 +19,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
     [super viewDidLoad];
 
-	[self addChildViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"TimerView"]];
+	[self addChildViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"EventViewController"]];
 	[self addChildViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"EventGroupsViewController"]];
 }
 

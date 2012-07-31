@@ -8,7 +8,7 @@
 
 #import "TimerFaceControl.h"
 
-@interface TimerViewController : UIViewController
+@interface EventViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet TimerFaceControl *timerFaceControl;
 @property (weak, nonatomic) IBOutlet UIButton *toggleStartStopButton;
