@@ -20,7 +20,7 @@
     [super viewDidLoad];
 
 	[self addChildViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"TimerView"]];
-	[self addChildViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"TimerArchiveView"]];
+	[self addChildViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"EventGroupsViewController"]];
 }
 
 @end

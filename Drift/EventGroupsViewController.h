@@ -6,6 +6,6 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-@interface TimerArchiveViewController : UITableViewController <UITableViewDataSource>
+@interface EventGroupsViewController : UITableViewController <UITableViewDataSource>
 
 @end

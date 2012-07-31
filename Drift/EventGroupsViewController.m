@@ -6,18 +6,18 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "TimerArchiveViewController.h"
+#import "EventGroupsViewController.h"
 #import "EventGroupTableViewCell.h"
 #import "Event.h"
 #import "EventDataManager.h"
 
-@interface TimerArchiveViewController ()
+@interface EventGroupsViewController ()
 
 @property (nonatomic, strong) NSMutableArray *timerEvents;
 
 @end
 
-@implementation TimerArchiveViewController
+@implementation EventGroupsViewController
 
 #pragma mark -
 #pragma mark private properties
