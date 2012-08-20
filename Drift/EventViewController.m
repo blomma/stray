@@ -7,6 +7,7 @@
 //
 
 #import "EventViewController.h"
+
 #import "Event.h"
 #import "EventDataManager.h"
 
@@ -15,8 +16,8 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	self = [super initWithCoder:aDecoder];
 	if (self) {
 	}
 
@@ -48,9 +49,7 @@
 	[super viewDidLoad];
 
 	self.startDateLabel.font                   = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
-
 	self.runningTimeLabel.font                 = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:55];
-
 	self.toggleStartStopButton.titleLabel.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:50];
 
 	[self.eventTimerControl addObserver:self
@@ -60,11 +59,6 @@
 
 	[self.eventTimerControl addObserver:self
 	                         forKeyPath:@"nowDate"
-	                            options:NSKeyValueObservingOptionNew
-	                            context:NULL];
-
-	[self.eventTimerControl addObserver:self
-	                         forKeyPath:@"stopDate"
 	                            options:NSKeyValueObservingOptionNew
 	                            context:NULL];
 }
@@ -141,13 +135,6 @@
 		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
 
 		[self updateNowLabel:date];
-	} else if ([keyPath isEqualToString:@"stopDate"]) {
-//		NSDate *stopDate = [change objectForKey:NSKeyValueChangeNewKey];
-//
-//		// Get conversion to months, days, hours, minutes
-//		unsigned int unitFlags       = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
-//
-//		NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:self.currentEvent.startDate toDate:stopDate options:0];
 	}
 }
 
