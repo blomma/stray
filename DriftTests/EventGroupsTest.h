@@ -8,6 +8,6 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-@interface DriftDateCalculation : SenTestCase
+@interface EventGroupsTest : SenTestCase
 
 @end

@@ -31,4 +31,8 @@
 	return endOfDay;
 }
 
+- (BOOL)isBetweenDate:(NSDate *)beginDate andDate:(NSDate *)endDate {
+	return (([self compare:beginDate] != NSOrderedAscending) && ([self compare:endDate] != NSOrderedDescending));
+}
+
 @end

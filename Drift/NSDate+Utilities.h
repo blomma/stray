@@ -18,5 +18,6 @@
 
 - (NSDate *)beginningOfDay;
 - (NSDate *)endOfDay;
+- (BOOL)isBetweenDate:(NSDate *)beginDate andDate:(NSDate *)endDate;
 
 @end

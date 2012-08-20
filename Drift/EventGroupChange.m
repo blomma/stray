@@ -8,6 +8,10 @@
 
 #import "EventGroupChange.h"
 
+NSString *const EventGroupChangeInsert = @"EventGroupChangeInsert";
+NSString *const EventGroupChangeDelete = @"EventGroupChangeDelete";
+NSString *const EventGroupChangeUpdate = @"EventGroupChangeUpdate";
+
 @implementation EventGroupChange
 
 @end

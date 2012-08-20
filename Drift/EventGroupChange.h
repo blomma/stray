@@ -6,8 +6,14 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+FOUNDATION_EXPORT NSString *const EventGroupChangeInsert;
+FOUNDATION_EXPORT NSString *const EventGroupChangeDelete;
+FOUNDATION_EXPORT NSString *const EventGroupChangeUpdate;
 
 @interface EventGroupChange : NSObject
+
+@property (nonatomic) NSString *GUID;
+@property (nonatomic) NSUInteger index;
+@property (nonatomic) NSString *type;
 
 @end

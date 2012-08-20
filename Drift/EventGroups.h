@@ -6,12 +6,21 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #import "Event.h"
+#import "EventGroup.h"
 
 @interface EventGroups : NSObject
 
-- (void)addEvent:(Event *)event;
+- (id)init;
+- (id)initWithEvents:(NSArray *)events;
+
+- (NSArray *)addEvent:(Event *)event;
+- (NSArray *)removeEvent:(Event *)event withConditionIsInvalid:(BOOL)condition;
+- (NSArray *)updateEvent:(Event *)event;
+
+- (NSUInteger)count;
+
+- (EventGroup *)eventGroupAtIndex:(NSUInteger)index;
+- (EventGroup *)eventGroupAtDate:(NSDate *)date;
 
 @end
