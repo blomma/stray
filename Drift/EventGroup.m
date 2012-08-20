@@ -16,7 +16,7 @@
 @property (nonatomic) NSDate *startDate;
 @property (nonatomic) NSDate *stopDate;
 @property (nonatomic) NSString *GUID;
-@property (nonatomic, readwrite) BOOL isRunning;
+@property (nonatomic, readwrite) BOOL isActive;
 @property (nonatomic) NSDateComponents *totalTimeRunningComponents;
 @property (nonatomic) BOOL totalTimeRunningComponentsNeedsRecalculation;
 
@@ -43,7 +43,7 @@
 #pragma mark Public properties
 
 - (NSDateComponents *)groupTime {
-	if (self.isRunning || self.totalTimeRunningComponentsNeedsRecalculation) {
+	if (self.isActive || self.totalTimeRunningComponentsNeedsRecalculation) {
 		[self calculateTotalTimeRunning];
 	}
 
@@ -65,11 +65,15 @@
 		stopDate = [NSDate date];
 	}
 
-	return [self.groupDate isBetweenDate:event.startDate andDate:stopDate];
+	NSDate *startDate = [event.startDate beginningOfDay];
+
+	BOOL isBetween = [self.groupDate isBetweenDate:startDate andDate:stopDate];
+	return isBetween;
 }
 
 - (BOOL)containsEvent:(Event *)event {
-	return [self.events containsObject:event];
+	BOOL contains = [self.events containsObject:event];;
+	return contains;
 }
 
 - (void)addEvent:(Event *)event {
@@ -79,8 +83,7 @@
 
 	[self.events addObject:event];
 
-	// Is this running
-	self.isRunning = [self containsRunningEvent];
+	self.isActive = [self containsActiveEvent];
 
 	[self.events sortUsingSelector:@selector(compare:)];
 
@@ -94,8 +97,7 @@
 
 	[self.events removeObject:event];
 
-	// Is this running
-	self.isRunning = [self containsRunningEvent];
+	self.isActive = [self containsActiveEvent];
 
 	[self.events sortUsingSelector:@selector(compare:)];
 
@@ -103,12 +105,21 @@
 }
 
 - (void)updateEvent:(Event *)event {
-	// Is this running
-	self.isRunning = [self containsRunningEvent];
+	self.isActive = [self containsActiveEvent];
 
 	[self.events sortUsingSelector:@selector(compare:)];
 
 	self.totalTimeRunningComponentsNeedsRecalculation = YES;
+}
+
+- (Event *)activeEvent {
+	for (Event *event in self.events) {
+		if (event.runningValue) {
+			return event;
+		}
+	}
+
+	return nil;
 }
 
 - (NSUInteger)count {
@@ -130,7 +141,7 @@
 #pragma mark -
 #pragma mark Private instance methods
 
-- (BOOL)containsRunningEvent {
+- (BOOL)containsActiveEvent {
 	for (Event *event in self.events){
 		if (event.runningValue) {
 			return YES;

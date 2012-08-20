@@ -12,7 +12,6 @@
 
 @property (nonatomic, readwrite) EventGroup *eventGroup;
 @property (nonatomic) NSArray *monthNames;
-@property (nonatomic) NSTimer *updateTimer;
 
 @end
 
@@ -21,55 +20,33 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
-//- (void)awakeFromNib {
-//	self.runningTimeHours.font   = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:96];
-//	self.runningTimeMinutes.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:40];
-//	self.dateDay.font            = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:36];
-//	self.dateYear.font           = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
-//	self.dateMonth.font          = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
-//}
+- (void)awakeFromNib {
+	self.runningTimeHours.font   = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:96];
+	self.runningTimeMinutes.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:40];
+	self.dateDay.font            = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:36];
+	self.dateYear.font           = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
+	self.dateMonth.font          = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
+}
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
-		NSDateFormatter *dateFormatter = [NSDateFormatter new];
-		self.monthNames = [dateFormatter standaloneMonthSymbols];
+		self.monthNames = [[NSDateFormatter new] standaloneMonthSymbols];
 	}
 
 	return self;
-}
-
-- (void)willMoveToSuperview:(UIView *)newSuperview {
-	if (!newSuperview) {
-		[self.updateTimer invalidate];
-	}
 }
 
 #pragma mark -
 #pragma mark Public instance methods
 
 - (void)addEventGroup:(EventGroup *)eventGroup {
-	[self.updateTimer invalidate];
-
 	self.eventGroup = eventGroup;
-
-	if (self.eventGroup.isRunning) {
-		// Add timer to update the time
-		self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:60
-															target:self
-														  selector:@selector(timerUpdate)
-														  userInfo:nil
-														   repeats:YES];
-	}
 
 	[self updateTime];
 }
 
 #pragma mark -
 #pragma mark Private instance methods
-
-- (void)timerUpdate {
-	[self updateTime];
-}
 
 - (void)updateTime {
 	NSDateComponents *components = self.eventGroup.groupTime;

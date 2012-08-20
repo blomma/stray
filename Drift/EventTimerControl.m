@@ -13,11 +13,12 @@
 #import "Event.h"
 #import "EventDataManager.h"
 
+
 @interface EventTimerControl ()
 
 // Private properties
 @property (nonatomic) NSTimer *updateTimer;
-@property (nonatomic) BOOL isEventRunning;
+@property (nonatomic) BOOL isEventActive;
 
 @property (nonatomic) CAShapeLayer *startHandLayer;
 @property (nonatomic) CAShapeLayer *minuteHandLayer;
@@ -71,7 +72,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	if (self.isEventRunning) {
+	if (self.isEventActive) {
 		if (![self.updateTimer isValid]) {
 			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
 			                                                    target:self
@@ -91,7 +92,7 @@
 	self.startDate = date;
 	[self drawStart];
 
-	self.isEventRunning = YES;
+	self.isEventActive = YES;
 
 	// Scehdule a timer to update the face
 	if (![self.updateTimer isValid]) {
@@ -108,7 +109,7 @@
 - (void)stopWithDate:(NSDate *)date {
 	[self.updateTimer invalidate];
 
-	self.isEventRunning = NO;
+	self.isEventActive = NO;
 
 	// Sync stop and now
 	self.nowDate  = date;
@@ -331,7 +332,7 @@
 	self.deltaLayer = NULL;
 
 	// Was this a touch on the startHand and is the timer started
-	if ([self.startHandLayer.presentationLayer hitTest:point] && self.isEventRunning) {
+	if ([self.startHandLayer.presentationLayer hitTest:point] && self.isEventActive) {
 		self.deltaLayer = self.startHandLayer;
 		self.deltaDate  = self.startDate;
 	}

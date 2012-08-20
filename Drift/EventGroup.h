@@ -14,7 +14,7 @@
 @property (nonatomic) NSDate *groupDate;
 @property (nonatomic, readonly) NSDateComponents *groupTime;
 @property (nonatomic, readonly) NSString *GUID;
-@property (nonatomic, readonly) BOOL isRunning;
+@property (nonatomic, readonly) BOOL isActive;
 
 - (id)initWithDate:(NSDate *)groupDate;
 - (BOOL)containsEvent:(Event *)event;
@@ -25,6 +25,8 @@
 
 - (BOOL)canContainDate:(NSDate *)date;
 - (BOOL)canContainEvent:(Event *)event;
+
+- (Event *)activeEvent;
 
 - (NSUInteger)count;
 

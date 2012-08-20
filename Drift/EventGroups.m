@@ -223,6 +223,16 @@
 	return [changes copy];
 }
 
+- (NSArray *)updateActiveEvent {
+	for (EventGroup *eventGroup in self.eventGroups) {
+		if ([eventGroup isActive]) {
+			return [self updateEvent:[eventGroup activeEvent]];
+		}
+	}
+
+	return [NSArray array];
+}
+
 - (NSUInteger)count {
 	return self.eventGroups.count;
 }
@@ -232,16 +242,13 @@
 }
 
 - (EventGroup *)eventGroupAtDate:(NSDate *)date {
-	EventGroup *foundEventGroup;
-
 	for (EventGroup *eventGroup in self.eventGroups) {
 		if ([eventGroup canContainDate:date]) {
-			foundEventGroup = eventGroup;
-			break;
+			return eventGroup;
 		}
 	}
 
-	return foundEventGroup;
+	return nil;
 }
 
 #pragma mark -
