@@ -49,7 +49,7 @@
 #pragma mark Private instance methods
 
 - (void)updateTime {
-	NSDateComponents *components = self.eventGroup.groupTime;
+	NSDateComponents *components = self.eventGroup.timeActiveComponents;
 
 	// And finally update the running timer
 	self.runningTimeHours.text   = [NSString stringWithFormat:@"%02d", components.hour];

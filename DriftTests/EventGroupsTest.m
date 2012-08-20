@@ -54,7 +54,7 @@
 	STAssertTrue(eventGroup.count == 5, @"count");
 
 	// We added a 5 events spanning 5 hours, lets see if that checks out
-	STAssertTrue(eventGroup.groupTime.hour == 5, @"groupTime");
+	STAssertTrue(eventGroup.timeActiveComponents.hour == 5, @"groupTime");
 }
 
 - (void)testAddEventToEventGroupsThatSpanMultipleDays {
@@ -78,7 +78,7 @@
 
 	EventGroup *eventGroup = [eventGroups eventGroupAtDate:now];
 
-	STAssertTrue(eventGroup.groupTime.hour == 12, @"groupTime");
+	STAssertTrue(eventGroup.timeActiveComponents.hour == 12, @"groupTime");
 }
 
 - (void)testAddEventsToEventGroupsThatAreNotFollowingOnEachOthersHeels {
@@ -116,7 +116,7 @@
 
 	EventGroup *eventGroup = [eventGroups eventGroupAtDate:now];
 
-	STAssertTrue(eventGroup.groupTime.hour == 4, @"groupTime");
+	STAssertTrue(eventGroup.timeActiveComponents.hour == 4, @"groupTime");
 }
 
 - (NSDate *)dateFromString:(NSString *)date {

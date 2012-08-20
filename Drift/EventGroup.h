@@ -12,7 +12,7 @@
 
 @property (nonatomic, readonly) NSMutableArray *events;
 @property (nonatomic) NSDate *groupDate;
-@property (nonatomic, readonly) NSDateComponents *groupTime;
+@property (nonatomic, readonly) NSDateComponents *timeActiveComponents;
 @property (nonatomic, readonly) NSString *GUID;
 @property (nonatomic, readonly) BOOL isActive;
 

@@ -13,12 +13,15 @@
 @interface EventGroup ()
 
 @property (nonatomic, readwrite) NSMutableArray *events;
+
 @property (nonatomic) NSDate *startDate;
 @property (nonatomic) NSDate *stopDate;
+
 @property (nonatomic) NSString *GUID;
 @property (nonatomic, readwrite) BOOL isActive;
-@property (nonatomic) NSDateComponents *totalTimeRunningComponents;
-@property (nonatomic) BOOL totalTimeRunningComponentsNeedsRecalculation;
+
+@property (nonatomic) NSDateComponents *timeActiveComponentsCache;
+@property (nonatomic) BOOL timeActiveComponentsCacheInvalid;
 
 @end
 
@@ -30,10 +33,10 @@
 		self.events    = [NSMutableArray array];
 		self.GUID      = [[NSProcessInfo processInfo] globallyUniqueString];
 
-		self.totalTimeRunningComponents = [[NSDateComponents alloc] init];
-		self.totalTimeRunningComponents.hour   = 0;
-		self.totalTimeRunningComponents.minute = 0;
-		self.totalTimeRunningComponents.second = 0;
+		self.timeActiveComponentsCache = [[NSDateComponents alloc] init];
+		self.timeActiveComponentsCache.hour   = 0;
+		self.timeActiveComponentsCache.minute = 0;
+		self.timeActiveComponentsCache.second = 0;
 	}
 
 	return self;
@@ -42,12 +45,12 @@
 #pragma mark -
 #pragma mark Public properties
 
-- (NSDateComponents *)groupTime {
-	if (self.isActive || self.totalTimeRunningComponentsNeedsRecalculation) {
+- (NSDateComponents *)timeActiveComponents {
+	if (self.isActive || self.timeActiveComponentsCacheInvalid) {
 		[self calculateTotalTimeRunning];
 	}
 
-	return self.totalTimeRunningComponents;
+	return self.timeActiveComponentsCache;
 }
 
 #pragma mark -
@@ -87,7 +90,7 @@
 
 	[self.events sortUsingSelector:@selector(compare:)];
 
-	self.totalTimeRunningComponentsNeedsRecalculation = YES;
+	self.timeActiveComponentsCacheInvalid = YES;
 }
 
 - (void)removeEvent:(Event *)event {
@@ -101,7 +104,7 @@
 
 	[self.events sortUsingSelector:@selector(compare:)];
 
-	self.totalTimeRunningComponentsNeedsRecalculation = YES;
+	self.timeActiveComponentsCacheInvalid = YES;
 }
 
 - (void)updateEvent:(Event *)event {
@@ -109,7 +112,7 @@
 
 	[self.events sortUsingSelector:@selector(compare:)];
 
-	self.totalTimeRunningComponentsNeedsRecalculation = YES;
+	self.timeActiveComponentsCacheInvalid = YES;
 }
 
 - (Event *)activeEvent {
@@ -178,12 +181,12 @@
 											options:0];
 	}
 
-	self.totalTimeRunningComponents	= [calender components:unitFlags
+	self.timeActiveComponentsCache	= [calender components:unitFlags
 												  fromDate:deltaStart
 													toDate:deltaEnd
 												   options:0];
 
-	self.totalTimeRunningComponentsNeedsRecalculation = NO;
+	self.timeActiveComponentsCacheInvalid = NO;
 }
 
 @end
