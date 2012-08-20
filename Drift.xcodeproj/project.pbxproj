@@ -38,7 +38,6 @@
 		9E42F20E15570FD70087F602 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1EE15570FD60087F602 /* UIKit.framework */; };
 		9E42F20F15570FD70087F602 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F015570FD60087F602 /* Foundation.framework */; };
 		9E42F21715570FD70087F602 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F21515570FD70087F602 /* InfoPlist.strings */; };
-		9E42F21A15570FD70087F602 /* DriftTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F21915570FD70087F602 /* DriftTests.m */; };
 		9E42F22915571E9C0087F602 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F22815571E9C0087F602 /* RootViewController.m */; };
 		9E51511615C7CEF100901655 /* EventGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511315C7CEF100901655 /* EventGroup.m */; };
 		9E51511715C7CEF100901655 /* EventGroups.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511515C7CEF100901655 /* EventGroups.m */; };
@@ -83,7 +82,6 @@
 		9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */; };
 		9EE6EC60158CF7B40063E666 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */; };
 		9EEA276215C09EB5008B6D04 /* EventDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EEA276115C09EB5008B6D04 /* EventDataManager.m */; };
-		9EEDD29A156E5CD300132008 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EEDD299156E5CD300132008 /* Utility.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,8 +121,6 @@
 		9E42F20C15570FD70087F602 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		9E42F21415570FD70087F602 /* DriftTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DriftTests-Info.plist"; sourceTree = "<group>"; };
 		9E42F21615570FD70087F602 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		9E42F21815570FD70087F602 /* DriftTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DriftTests.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		9E42F21915570FD70087F602 /* DriftTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DriftTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9E42F22715571E9C0087F602 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = RootViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9E42F22815571E9C0087F602 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RootViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9E51511215C7CEF100901655 /* EventGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroup.h; sourceTree = "<group>"; };
@@ -207,8 +203,6 @@
 		9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9EEA276015C09EB5008B6D04 /* EventDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDataManager.h; sourceTree = "<group>"; };
 		9EEA276115C09EB5008B6D04 /* EventDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventDataManager.m; sourceTree = "<group>"; };
-		9EEDD298156E5CD300132008 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Utility.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		9EEDD299156E5CD300132008 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Utility.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -311,8 +305,6 @@
 		9E42F21215570FD70087F602 /* DriftTests */ = {
 			isa = PBXGroup;
 			children = (
-				9E42F21815570FD70087F602 /* DriftTests.h */,
-				9E42F21915570FD70087F602 /* DriftTests.m */,
 				9E1D218015DEB12E00FB7C28 /* EventGroupsTest.h */,
 				9E1D218115DEB12E00FB7C28 /* EventGroupsTest.m */,
 				9E42F21315570FD70087F602 /* Supporting Files */,
@@ -481,8 +473,6 @@
 				9E51511515C7CEF100901655 /* EventGroups.m */,
 				9E42F20315570FD60087F602 /* PagerViewController.h */,
 				9E42F20415570FD60087F602 /* PagerViewController.m */,
-				9EEDD298156E5CD300132008 /* Utility.h */,
-				9EEDD299156E5CD300132008 /* Utility.m */,
 				9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */,
 				9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */,
 				9E89816D15A0BC2900E22EA7 /* EventGroupTableViewCell.h */,
@@ -638,7 +628,6 @@
 				9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */,
 				9E42F20515570FD60087F602 /* PagerViewController.m in Sources */,
 				9E42F22915571E9C0087F602 /* RootViewController.m in Sources */,
-				9EEDD29A156E5CD300132008 /* Utility.m in Sources */,
 				9E21F926156EA9510075EAAC /* Drift.xcdatamodeld in Sources */,
 				9E21F929156EAA2F0075EAAC /* Event.m in Sources */,
 				9E00A75F157734AE002FC707 /* EventViewController.m in Sources */,
@@ -684,7 +673,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E42F21A15570FD70087F602 /* DriftTests.m in Sources */,
 				9E1D218215DEB12E00FB7C28 /* EventGroupsTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
