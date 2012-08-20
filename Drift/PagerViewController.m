@@ -7,13 +7,12 @@
 //
 
 #import "PagerViewController.h"
-#import "Utility.h"
 
 @interface PagerViewController ()
 
-@property (assign) BOOL pageControlUsed;
-@property (assign) NSUInteger page;
-@property (assign) BOOL rotating;
+@property (nonatomic, assign) BOOL pageControlUsed;
+@property (nonatomic, assign) NSUInteger page;
+@property (nonatomic, assign) BOOL rotating;
 
 - (void)loadScrollViewWithPage:(int)page;
 
@@ -37,7 +36,7 @@
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
+	UIViewController *viewController = [self.childViewControllers objectAtIndex:(NSUInteger)self.pageControl.currentPage];
 	[viewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 
 	self.rotating = YES;
@@ -45,7 +44,7 @@
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 
-	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
+	UIViewController *viewController = [self.childViewControllers objectAtIndex:(NSUInteger)self.pageControl.currentPage];
 	[viewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 
 	self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width * [self.childViewControllers count],
@@ -72,7 +71,7 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 	self.rotating = NO;
 
-	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
+	UIViewController *viewController = [self.childViewControllers objectAtIndex:(NSUInteger)self.pageControl.currentPage];
 	[viewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
@@ -80,14 +79,14 @@
 	[super viewWillAppear:animated];
 
 	for (NSUInteger i = 0; i < [self.childViewControllers count]; i++) {
-		[self loadScrollViewWithPage:i];
+		[self loadScrollViewWithPage:(NSInteger)i];
 	}
 
 	self.pageControl.currentPage = 0;
 	self.page                    = 0;
-	[self.pageControl setNumberOfPages:[self.childViewControllers count]];
+	[self.pageControl setNumberOfPages:(NSInteger)[self.childViewControllers count]];
 
-	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
+	UIViewController *viewController = [self.childViewControllers objectAtIndex:(NSUInteger)self.pageControl.currentPage];
 	if (viewController.view.superview != nil) {
 		[viewController viewWillAppear:animated];
 	}
@@ -98,13 +97,13 @@
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 
-	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
+	UIViewController *viewController = [self.childViewControllers objectAtIndex:(NSUInteger)self.pageControl.currentPage];
 	if (viewController.view.superview != nil)
 		[viewController viewDidAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
+	UIViewController *viewController = [self.childViewControllers objectAtIndex:(NSUInteger)self.pageControl.currentPage];
 	if (viewController.view.superview != nil)
 		[viewController viewWillDisappear:animated];
 
@@ -112,7 +111,7 @@
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-	UIViewController *viewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
+	UIViewController *viewController = [self.childViewControllers objectAtIndex:(NSUInteger)self.pageControl.currentPage];
 	if (viewController.view.superview != nil)
 		[viewController viewDidDisappear:animated];
 
@@ -123,11 +122,11 @@
 	if (page < 0)
 		return;
 
-	if (page >= [self.childViewControllers count])
+	if (page >= (NSInteger)[self.childViewControllers count])
 		return;
 
 	// replace the placeholder if necessary
-	UIViewController *controller = [self.childViewControllers objectAtIndex:page];
+	UIViewController *controller = [self.childViewControllers objectAtIndex:(NSUInteger)page];
 	if (controller == nil)
 		return;
 
@@ -152,7 +151,7 @@
 	frame.origin.y = 0;
 
 	UIViewController *oldViewController = [self.childViewControllers objectAtIndex:self.page];
-	UIViewController *newViewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
+	UIViewController *newViewController = [self.childViewControllers objectAtIndex:(NSUInteger)self.pageControl.currentPage];
 	[oldViewController viewWillDisappear:YES];
 	[newViewController viewWillAppear:YES];
 
@@ -164,7 +163,7 @@
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
 	UIViewController *oldViewController = [self.childViewControllers objectAtIndex:self.page];
-	UIViewController *newViewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
+	UIViewController *newViewController = [self.childViewControllers objectAtIndex:(NSUInteger)self.pageControl.currentPage];
 
 	[oldViewController viewDidDisappear:YES];
 	[newViewController viewDidAppear:YES];
@@ -185,10 +184,12 @@
 
 	// Switch the indicator when more than 50% of the previous/next page is visible
 	CGFloat pageWidth = self.scrollView.frame.size.width;
-	int page          = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+	NSInteger page    = (NSInteger)floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth);
+	page += 1;
+
 	if (self.pageControl.currentPage != page) {
-		UIViewController *oldViewController = [self.childViewControllers objectAtIndex:self.pageControl.currentPage];
-		UIViewController *newViewController = [self.childViewControllers objectAtIndex:page];
+		UIViewController *oldViewController = [self.childViewControllers objectAtIndex:(NSUInteger)self.pageControl.currentPage];
+		UIViewController *newViewController = [self.childViewControllers objectAtIndex:(NSUInteger)page];
 
 		[oldViewController viewWillDisappear:YES];
 		[newViewController viewWillAppear:YES];

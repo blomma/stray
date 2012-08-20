@@ -9,6 +9,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "EventTimerControl.h"
+
 #import "Event.h"
 #import "EventDataManager.h"
 
@@ -87,7 +88,8 @@
 #pragma mark Public instance methods
 
 - (void)startWithDate:(NSDate *)date  {
-	self.startDate      = date;
+	self.startDate = date;
+	[self drawStart];
 
 	self.isEventRunning = YES;
 
@@ -100,7 +102,7 @@
 		                                                   repeats:YES];
 	}
 
-	[self drawStart];
+	//[self.updateTimer fire];
 }
 
 - (void)stopWithDate:(NSDate *)date {
@@ -119,7 +121,7 @@
 #pragma mark Private instance methods
 
 - (NSTimeInterval)angleToTimeInterval:(CGFloat)a {
-	CGFloat seconds = (a / (2 * M_PI)) * 3600;
+	CGFloat seconds = (CGFloat)((a / (2 * M_PI)) * 3600);
 	return seconds;
 }
 
@@ -151,16 +153,16 @@
 
 - (void)drawNow {
 	NSTimeInterval timeInterval    = [self.nowDate timeIntervalSinceDate:self.startDate];
-	CGFloat elapsedSecondsIntoHour = fmod(timeInterval, 3600);
+	CGFloat elapsedSecondsIntoHour = (CGFloat)fmod(timeInterval, 3600);
 
 	// We want fluid updates to the seconds
-	CGFloat a = (M_PI * 2) * fmod(elapsedSecondsIntoHour, 60) / 60.0;
+	CGFloat a = (CGFloat)((M_PI * 2) * fmod(elapsedSecondsIntoHour, 60) / 60);
 	self.secondHandLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
 
 	// Update the tick marks for the second hand
-	int secondsIntoMinute = floor(fmod(elapsedSecondsIntoHour, 60));
+	CGFloat secondsIntoMinute = (CGFloat)floor(fmod(elapsedSecondsIntoHour, 60));
 
-	for (int i = 0; i < self.secondHandProgressTicksLayer.sublayers.count; i++) {
+	for (NSUInteger i = 0; i < self.secondHandProgressTicksLayer.sublayers.count; i++) {
 		CALayer *layer = [self.secondHandProgressTicksLayer.sublayers objectAtIndex:i];
 
 		if (i < secondsIntoMinute) {
@@ -175,7 +177,7 @@
 	}
 
 	// And for the minutes we want a more tick/tock behavior
-	a                              = (M_PI * 2) * floor(elapsedSecondsIntoHour / 60) / 60;
+	a                              = (CGFloat)((M_PI * 2) * floor(elapsedSecondsIntoHour / 60) / 60);
 	self.minuteHandLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
 }
 
@@ -188,7 +190,7 @@
 		CAShapeLayer *tick = [CAShapeLayer layer];
 
 		path  = CGPathCreateMutable();
-		angle = (M_PI * 2) / 60.0 * i;
+		angle = (CGFloat)((M_PI * 2) / 60.0 * i);
 
 		if (i % 10 == 0) {
 			CGPathAddRect(path, nil, CGRectMake(0.0, 0.0, 4.0, 14));
@@ -298,7 +300,7 @@
 
 	// paint the second hand tick marks
 	for (NSInteger i = 1; i <= 60; ++i) {
-		angle = (M_PI * 2) / 60.0 * i;
+		angle = (CGFloat)((M_PI * 2) / 60.0 * i);
 
 		CAShapeLayer *tick = [CAShapeLayer layer];
 		path = CGPathCreateMutable();
@@ -342,7 +344,7 @@
 		dx = point.x - cx;
 		dy = point.y - cy;
 
-		a  = atan2(dy,dx);
+		a  = (CGFloat)atan2(dy,dx);
 
 		// Save them away for future iteration
 		self.deltaAngle     = a;
@@ -370,7 +372,7 @@
 		dx = point.x - cx;
 		dy = point.y - cy;
 
-		a  = atan2(dy, dx);
+		a  = (CGFloat)atan2(dy, dx);
 		da = [self deltaBetweenAngleA:self.deltaAngle AngleB:a];
 
 		// The deltaangle applied to the transform
@@ -383,7 +385,7 @@
 		// If we are tracking the start hand then
 		// we cant move past the now
 		if (self.deltaLayer == self.startHandLayer) {
-			CGFloat seconds       = [self angleToTimeInterval:da];
+			CGFloat seconds       = (CGFloat)[self angleToTimeInterval:da];
 
 			NSDate *startHandDate = [self.deltaDate dateByAddingTimeInterval:seconds];
 			self.deltaDate = startHandDate;
