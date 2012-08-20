@@ -133,7 +133,7 @@
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="19" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="CfG-GK-mXX" userLabel="DateDay">
-                                            <rect key="frame" x="194" y="7" width="25" height="28"/>
+                                            <rect key="frame" x="194" y="7" width="29" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="1" green="0.59999999999999998" blue="0.0078431372549019607" alpha="1" colorSpace="calibratedRGB"/>
@@ -147,7 +147,7 @@
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="September" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="rcY-LZ-Run" userLabel="DateMonth">
-                                            <rect key="frame" x="220" y="14" width="76" height="27"/>
+                                            <rect key="frame" x="224" y="14" width="76" height="27"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="1" green="0.59999999999999998" blue="0.0078431372550000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -191,13 +191,16 @@
         <class className="EventGroupsViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/EventGroupsViewController.h"/>
         </class>
+        <class className="EventTimerControl" superclassName="UIControl">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventTimerControl.h"/>
+        </class>
         <class className="EventViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/EventViewController.h"/>
             <relationships>
-                <relationship kind="action" name="toggleTimer:"/>
+                <relationship kind="action" name="toggleEvent:"/>
+                <relationship kind="outlet" name="eventTimerControl" candidateClass="EventTimerControl"/>
                 <relationship kind="outlet" name="runningTimeLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="startDateLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="timerFaceControl" candidateClass="TimerFaceControl"/>
                 <relationship kind="outlet" name="toggleStartStopButton" candidateClass="UIButton"/>
             </relationships>
         </class>
@@ -211,9 +214,6 @@
         </class>
         <class className="RootViewController" superclassName="PagerViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RootViewController.h"/>
-        </class>
-        <class className="TimerFaceControl" superclassName="UIControl">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TimerFaceControl.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
