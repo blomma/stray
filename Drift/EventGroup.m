@@ -57,8 +57,7 @@
 #pragma mark Public instance methods
 
 - (BOOL)canContainDate:(NSDate *)date {
-	NSDate *beginningOfDay = [date beginningOfDay];
-	return [beginningOfDay isEqualToDate:self.groupDate];
+	return [date isEqualToDateIgnoringTime:self.groupDate];
 }
 
 - (BOOL)canContainEvent:(Event *)event {
