@@ -11,7 +11,7 @@
 #import "../Drift/EventGroup.h"
 #import "../Drift/EventGroups.h"
 #import "../Drift/NSDate+Utilities.h"
-#import "../MagicalRecord/CoreData+MagicalRecord.h"
+#import "../Vendor/MagicalRecord/CoreData+MagicalRecord.h"
 
 @implementation EventGroupsTest
 
