@@ -8,16 +8,15 @@
 
 #import "NSDate+Utilities.h"
 
-#define DATE_COMPONENTS (NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekCalendarUnit |  NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit | NSWeekdayOrdinalCalendarUnit)
-#define CURRENT_CALENDAR [NSCalendar currentCalendar]
+static NSUInteger DATE_COMPONENTS = (NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekCalendarUnit |  NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit | NSWeekdayOrdinalCalendarUnit);
 
 @implementation NSDate (Utilities)
 
 - (NSDate *)beginningOfDay {
     // Get the weekday component of the current date
-	NSDateComponents *components = [CURRENT_CALENDAR components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
+	NSDateComponents *components = [[NSCalendar currentCalendar] components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
 											   fromDate:self];
-	return [CURRENT_CALENDAR dateFromComponents:components];
+	return [[NSCalendar currentCalendar] dateFromComponents:components];
 }
 
 - (NSDate *)endOfDay {
@@ -25,7 +24,7 @@
 	// to get the end of day for a particular date, add 1 day
 	[componentsToAdd setDay:1];
 
-	NSDate *endOfDay = [CURRENT_CALENDAR dateByAddingComponents:componentsToAdd
+	NSDate *endOfDay = [[NSCalendar currentCalendar] dateByAddingComponents:componentsToAdd
 												 toDate:[self beginningOfDay]
 												options:0];
 
@@ -37,8 +36,8 @@
 }
 
 - (BOOL)isEqualToDateIgnoringTime:(NSDate *)date {
-	NSDateComponents *components1 = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:self];
-	NSDateComponents *components2 = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:date];
+	NSDateComponents *components1 = [[NSCalendar currentCalendar] components:DATE_COMPONENTS fromDate:self];
+	NSDateComponents *components2 = [[NSCalendar currentCalendar] components:DATE_COMPONENTS fromDate:date];
 
 	return ((components1.year  == components2.year) &&
 			(components1.month == components2.month) &&
