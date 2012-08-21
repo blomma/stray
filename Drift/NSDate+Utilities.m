@@ -15,7 +15,7 @@ static NSUInteger DATE_COMPONENTS = (NSYearCalendarUnit| NSMonthCalendarUnit | N
 - (NSDate *)beginningOfDay {
     // Get the weekday component of the current date
 	NSDateComponents *components = [[NSCalendar currentCalendar] components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
-											   fromDate:self];
+																   fromDate:self];
 	return [[NSCalendar currentCalendar] dateFromComponents:components];
 }
 
@@ -25,8 +25,8 @@ static NSUInteger DATE_COMPONENTS = (NSYearCalendarUnit| NSMonthCalendarUnit | N
 	[componentsToAdd setDay:1];
 
 	NSDate *endOfDay = [[NSCalendar currentCalendar] dateByAddingComponents:componentsToAdd
-												 toDate:[self beginningOfDay]
-												options:0];
+																	 toDate:[self beginningOfDay]
+																	options:0];
 
 	return endOfDay;
 }
