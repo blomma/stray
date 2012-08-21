@@ -443,7 +443,7 @@
 
 	// Do a initial fire of the event to get things started
 	[self.updateTimer fire];
-
+	
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 

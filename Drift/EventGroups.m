@@ -84,7 +84,7 @@
 		if (![eventGroup containsEvent:event]) {
 			EventGroupChange *eventGroupChange = [EventGroupChange new];
 
-			if (eventGroup) {	
+			if (eventGroup) {
 				eventGroupChange.type = EventGroupChangeUpdate;
 			} else {
 				eventGroup = [[EventGroup alloc] initWithDate:startDate];
@@ -247,7 +247,7 @@
 			return eventGroup;
 		}
 	}
-
+	
 	return nil;
 }
 

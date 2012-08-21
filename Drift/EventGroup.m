@@ -149,7 +149,7 @@
 
 - (void)calculateTotalTimeRunning {
 	static NSUInteger DATE_COMPONENTS = (NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit);
-	
+
 	NSCalendar *calender = [NSCalendar currentCalendar];
 
 	NSDate *endOfDay = [self.groupDate endOfDay];
@@ -176,9 +176,9 @@
 	}
 
 	self.timeActiveComponentsCache	= [calender components:DATE_COMPONENTS
-												  fromDate:deltaStart
-													toDate:deltaEnd
-												   options:0];
+												 fromDate:deltaStart
+												   toDate:deltaEnd
+												  options:0];
 
 	self.timeActiveComponentsCacheInvalid = NO;
 }
