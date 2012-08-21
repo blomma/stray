@@ -87,8 +87,6 @@
 
 	self.isActive = [self containsActiveEvent];
 
-	[self.events sortUsingSelector:@selector(compare:)];
-
 	self.timeActiveComponentsCacheInvalid = YES;
 }
 
@@ -101,15 +99,11 @@
 
 	self.isActive = [self containsActiveEvent];
 
-	[self.events sortUsingSelector:@selector(compare:)];
-
 	self.timeActiveComponentsCacheInvalid = YES;
 }
 
 - (void)updateEvent:(Event *)event {
 	self.isActive = [self containsActiveEvent];
-
-	[self.events sortUsingSelector:@selector(compare:)];
 
 	self.timeActiveComponentsCacheInvalid = YES;
 }
@@ -154,7 +148,8 @@
 }
 
 - (void)calculateTotalTimeRunning {
-	unsigned int unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+	static NSUInteger DATE_COMPONENTS = (NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit);
+	
 	NSCalendar *calender = [NSCalendar currentCalendar];
 
 	NSDate *endOfDay = [self.groupDate endOfDay];
@@ -170,7 +165,7 @@
 		}
 		stopDate = [stopDate earlierDate:endOfDay];
 
-		NSDateComponents *components = [calender components:unitFlags
+		NSDateComponents *components = [calender components:DATE_COMPONENTS
 												   fromDate:startDate
 													 toDate:stopDate
 													options:0];
@@ -180,7 +175,7 @@
 											options:0];
 	}
 
-	self.timeActiveComponentsCache	= [calender components:unitFlags
+	self.timeActiveComponentsCache	= [calender components:DATE_COMPONENTS
 												  fromDate:deltaStart
 													toDate:deltaEnd
 												   options:0];
