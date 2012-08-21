@@ -30,7 +30,7 @@
 	if (currentEvent) {
 		[self updateStartLabel:currentEvent.startDate];
 
-		if (currentEvent.runningValue) {
+		if (currentEvent.isActiveValue) {
 			[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
 			[self.eventTimerControl startWithDate:currentEvent.startDate];
 		} else {
@@ -76,10 +76,10 @@
 	NSDate *now         = [NSDate date];
 
 	// Do we have a event that is running
-	if ([currentEvent runningValue]) {
+	if (currentEvent.isActiveValue) {
 		[TestFlight passCheckpoint:@"STOP EVENT"];
 
-		currentEvent.runningValue = NO;
+		currentEvent.isActiveValue = NO;
 		currentEvent.stopDate     = now;
 
 		// Stop the face
@@ -92,9 +92,9 @@
 
 		// No, lets create a new one
 		[[EventDataManager sharedManager] createEvent];
-		currentEvent              = [[EventDataManager sharedManager] currentEvent];
-		currentEvent.runningValue = YES;
-		currentEvent.startDate    = now;
+		currentEvent               = [[EventDataManager sharedManager] currentEvent];
+		currentEvent.isActiveValue = YES;
+		currentEvent.startDate     = now;
 
 		// Start up the face
 		[self.eventTimerControl startWithDate:now];

@@ -63,7 +63,7 @@
 - (BOOL)canContainEvent:(Event *)event {
 	NSDate *stopDate = event.stopDate;
 
-	if (event.runningValue) {
+	if (event.isActiveValue) {
 		stopDate = [NSDate date];
 	}
 
@@ -110,7 +110,7 @@
 
 - (Event *)activeEvent {
 	for (Event *event in self.events) {
-		if (event.runningValue) {
+		if (event.isActiveValue) {
 			return event;
 		}
 	}
@@ -139,7 +139,7 @@
 
 - (BOOL)containsActiveEvent {
 	for (Event *event in self.events){
-		if (event.runningValue) {
+		if (event.isActiveValue) {
 			return YES;
 		}
 	}
@@ -160,7 +160,7 @@
 	for (Event *event in self.events) {
 		NSDate *startDate = [event.startDate laterDate:self.groupDate];
 		NSDate *stopDate = event.stopDate;
-		if (event.runningValue) {
+		if (event.isActiveValue) {
 			stopDate = [NSDate date];
 		}
 		stopDate = [stopDate earlierDate:endOfDay];

@@ -51,7 +51,7 @@
 	NSDate *stopDate  = event.stopDate;
 
 	// Is the event running, if so set the stopDate to now
-	if (event.runningValue) {
+	if (event.isActiveValue) {
 		stopDate = [NSDate date];
 	}
 

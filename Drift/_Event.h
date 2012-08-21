@@ -5,7 +5,7 @@
 
 
 extern const struct EventAttributes {
-	__unsafe_unretained NSString *running;
+	__unsafe_unretained NSString *isActive;
 	__unsafe_unretained NSString *startDate;
 	__unsafe_unretained NSString *stopDate;
 	__unsafe_unretained NSString *tag;
@@ -35,14 +35,14 @@ extern const struct EventFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSNumber* running;
+@property (nonatomic, strong) NSNumber* isActive;
 
 
-@property BOOL runningValue;
-- (BOOL)runningValue;
-- (void)setRunningValue:(BOOL)value_;
+@property BOOL isActiveValue;
+- (BOOL)isActiveValue;
+- (void)setIsActiveValue:(BOOL)value_;
 
-//- (BOOL)validateRunning:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateIsActive:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -82,11 +82,11 @@ extern const struct EventFetchedProperties {
 @interface _Event (CoreDataGeneratedPrimitiveAccessors)
 
 
-- (NSNumber*)primitiveRunning;
-- (void)setPrimitiveRunning:(NSNumber*)value;
+- (NSNumber*)primitiveIsActive;
+- (void)setPrimitiveIsActive:(NSNumber*)value;
 
-- (BOOL)primitiveRunningValue;
-- (void)setPrimitiveRunningValue:(BOOL)value_;
+- (BOOL)primitiveIsActiveValue;
+- (void)setPrimitiveIsActiveValue:(BOOL)value_;
 
 
 

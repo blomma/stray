@@ -4,7 +4,7 @@
 #import "_Event.h"
 
 const struct EventAttributes EventAttributes = {
-	.running = @"running",
+	.isActive = @"isActive",
 	.startDate = @"startDate",
 	.stopDate = @"stopDate",
 	.tag = @"tag",
@@ -42,8 +42,8 @@ const struct EventFetchedProperties EventFetchedProperties = {
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
-	if ([key isEqualToString:@"runningValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"running"];
+	if ([key isEqualToString:@"isActiveValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"isActive"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 	}
 
@@ -53,26 +53,26 @@ const struct EventFetchedProperties EventFetchedProperties = {
 
 
 
-@dynamic running;
+@dynamic isActive;
 
 
 
-- (BOOL)runningValue {
-	NSNumber *result = [self running];
+- (BOOL)isActiveValue {
+	NSNumber *result = [self isActive];
 	return [result boolValue];
 }
 
-- (void)setRunningValue:(BOOL)value_ {
-	[self setRunning:[NSNumber numberWithBool:value_]];
+- (void)setIsActiveValue:(BOOL)value_ {
+	[self setIsActive:[NSNumber numberWithBool:value_]];
 }
 
-- (BOOL)primitiveRunningValue {
-	NSNumber *result = [self primitiveRunning];
+- (BOOL)primitiveIsActiveValue {
+	NSNumber *result = [self primitiveIsActive];
 	return [result boolValue];
 }
 
-- (void)setPrimitiveRunningValue:(BOOL)value_ {
-	[self setPrimitiveRunning:[NSNumber numberWithBool:value_]];
+- (void)setPrimitiveIsActiveValue:(BOOL)value_ {
+	[self setPrimitiveIsActive:[NSNumber numberWithBool:value_]];
 }
 
 
