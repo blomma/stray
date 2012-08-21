@@ -21,11 +21,11 @@
 #pragma mark Application lifecycle
 
 - (void)awakeFromNib {
-	self.runningTimeHours.font   = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:96];
-	self.runningTimeMinutes.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:40];
-	self.dateDay.font            = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:36];
-	self.dateYear.font           = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
-	self.dateMonth.font          = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
+	self.hours.font   = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:96];
+	self.minutes.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:40];
+	self.day.font            = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:36];
+	self.year.font           = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
+	self.month.font          = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -52,15 +52,15 @@
 	NSDateComponents *components = self.eventGroup.timeActiveComponents;
 
 	// And finally update the running timer
-	self.runningTimeHours.text   = [NSString stringWithFormat:@"%02d", components.hour];
-	self.runningTimeMinutes.text = [NSString stringWithFormat:@"%02d", components.minute];
+	self.hours.text   = [NSString stringWithFormat:@"%02d", components.hour];
+	self.minutes.text = [NSString stringWithFormat:@"%02d", components.minute];
 
 	unsigned int unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit;
 	components = [[NSCalendar currentCalendar] components:unitFlags fromDate:self.eventGroup.groupDate];
 
-	self.dateDay.text   = [NSString stringWithFormat:@"%02d", components.day];
-	self.dateYear.text  = [NSString stringWithFormat:@"%04d", components.year];
-	self.dateMonth.text = [self.monthNames objectAtIndex:(components.month - 1)];
+	self.day.text   = [NSString stringWithFormat:@"%02d", components.day];
+	self.year.text  = [NSString stringWithFormat:@"%04d", components.year];
+	self.month.text = [self.monthNames objectAtIndex:(components.month - 1)];
 }
 
 @end

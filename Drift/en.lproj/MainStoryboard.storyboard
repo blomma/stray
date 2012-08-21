@@ -158,11 +158,11 @@
                                 </view>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
-                                    <outlet property="dateDay" destination="CfG-GK-mXX" id="Nfx-X5-wHh"/>
-                                    <outlet property="dateMonth" destination="rcY-LZ-Run" id="yxh-Qg-s4G"/>
-                                    <outlet property="dateYear" destination="g5d-wH-aLq" id="UVt-Oc-eXz"/>
-                                    <outlet property="runningTimeHours" destination="qPF-v3-4Dm" id="yJb-9Z-B2s"/>
-                                    <outlet property="runningTimeMinutes" destination="Zam-CZ-wC7" id="DRd-xj-kPf"/>
+                                    <outlet property="day" destination="CfG-GK-mXX" id="rf3-4m-1TJ"/>
+                                    <outlet property="hours" destination="qPF-v3-4Dm" id="oRu-Ps-kjN"/>
+                                    <outlet property="minutes" destination="Zam-CZ-wC7" id="qP2-Tg-iaC"/>
+                                    <outlet property="month" destination="rcY-LZ-Run" id="48J-b5-USf"/>
+                                    <outlet property="year" destination="g5d-wH-aLq" id="HyJ-Z4-74G"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

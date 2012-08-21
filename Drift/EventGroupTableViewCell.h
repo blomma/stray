@@ -10,11 +10,11 @@
 
 @interface EventGroupTableViewCell : UITableViewCell
 
-@property (nonatomic) IBOutlet UILabel *runningTimeHours;
-@property (nonatomic) IBOutlet UILabel *runningTimeMinutes;
-@property (nonatomic) IBOutlet UILabel *dateDay;
-@property (nonatomic) IBOutlet UILabel *dateMonth;
-@property (nonatomic) IBOutlet UILabel *dateYear;
+@property (nonatomic) IBOutlet UILabel *hours;
+@property (nonatomic) IBOutlet UILabel *minutes;
+@property (nonatomic) IBOutlet UILabel *day;
+@property (nonatomic) IBOutlet UILabel *month;
+@property (nonatomic) IBOutlet UILabel *year;
 
 @property (nonatomic, readonly) EventGroup *eventGroup;
 
