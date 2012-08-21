@@ -601,7 +601,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd Drift\n/Users/blomma/Opt/homebrew/bin/mogenerator --template-var arc=true -m Drift.xcdatamodeld/Drift.xcdatamodel/";
+			shellScript = "cd Drift\n/usr/local/bin/mogenerator --template-var arc=true -m Drift.xcdatamodeld/Drift.xcdatamodel/";
 		};
 		9E9FFFCD1594CDB900BA5200 /* Bump build number */ = {
 			isa = PBXShellScriptBuildPhase;
