@@ -18,7 +18,7 @@
 
 - (NSArray *)addEvent:(Event *)event;
 - (NSArray *)removeEvent:(Event *)event withConditionIsInvalid:(BOOL)condition;
-- (NSArray *)updateEvent:(Event *)event;
+- (NSArray *)updateEvent:(Event *)event withConditionIsActive:(BOOL)condition;
 - (NSArray *)updateActiveEvent;
 
 - (NSUInteger)count;

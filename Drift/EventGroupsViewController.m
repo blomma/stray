@@ -118,7 +118,7 @@
 	DLog(@"updatedEvents %d", updatedEvents.count);
 
 	for (Event *event in updatedEvents) {
-		NSArray *changes = [self.eventGroups updateEvent:event];
+		NSArray *changes = [self.eventGroups updateEvent:event withConditionIsActive:NO];
 
 		for (EventGroupChange *eventGroupChange in changes) {
 			if ([eventGroupChange.type isEqualToString:EventGroupChangeUpdate]) {

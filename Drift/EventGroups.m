@@ -44,8 +44,6 @@
 #pragma mark Public instance methods
 
 - (NSArray *)addEvent:(Event *)event {
-	DLog(@"start self.eventGroups.count %d", self.eventGroups.count);
-
 	NSDate *startDate = event.startDate;
 	NSDate *stopDate  = event.stopDate;
 
@@ -69,8 +67,6 @@
 	NSMutableArray *changes = [NSMutableArray array];
 
 	// Loop over it until there are no more future time left in it
-	DLog(@"eventSecondsComponent %@", eventSecondsComponent.description);
-
 	while (eventSecondsComponent.second >= 0) {
 		startDate = [calender dateByAddingComponents:totalSecondsComponent
 											  toDate:event.startDate
@@ -126,8 +122,6 @@
 
 		eventGroupChange.index = i;
 	}
-
-	DLog(@"end self.eventGroups.count %d", self.eventGroups.count);
 
 	[self updateExistsActiveEventGroup];
 
@@ -188,12 +182,19 @@
 	return [changes copy];
 }
 
-- (NSArray *)updateEvent:(Event *)event {
+- (NSArray *)updateEvent:(Event *)event withConditionIsActive:(BOOL)condition {
 	NSMutableArray *changes = [NSMutableArray array];
 
 	// Update the event in any groups that contains it and can contain it, later we remove it from invalid groups
 	for (EventGroup *eventGroup in self.eventGroups) {
-		if ([eventGroup containsEvent:event] && [eventGroup isValidForEvent:event]) {
+		BOOL process = [eventGroup containsEvent:event] && [eventGroup isValidForEvent:event];
+
+		// Check if condition is given and if so only update if it is active
+		if (condition && !eventGroup.isActive) {
+			process = NO;
+		}
+
+		if (process) {
 			EventGroupChange *eventGroupChange = [EventGroupChange new];
 			eventGroupChange.GUID = eventGroup.GUID;
 			eventGroupChange.type = EventGroupChangeUpdate;
@@ -231,7 +232,7 @@
 - (NSArray *)updateActiveEvent {
 	EventGroup *eventGroup = [self activeEventGroup];
 	if (eventGroup) {
-		return [self updateEvent:[eventGroup activeEvent]];
+		return [self updateEvent:[eventGroup activeEvent] withConditionIsActive:YES];
 	} else {
 		return nil;
 	}
