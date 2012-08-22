@@ -13,11 +13,8 @@
 @interface EventGroup ()
 
 @property (nonatomic, readwrite) NSMutableArray *events;
-
-@property (nonatomic) NSDate *startDate;
-@property (nonatomic) NSDate *stopDate;
-
-@property (nonatomic) NSString *GUID;
+@property (nonatomic, readwrite) NSDate *groupDate;
+@property (nonatomic, readwrite) NSString *GUID;
 @property (nonatomic, readwrite) BOOL isActive;
 
 @property (nonatomic) NSDateComponents *timeActiveComponentsCache;
@@ -27,9 +24,9 @@
 
 @implementation EventGroup
 
-- (id)initWithDate:(NSDate *)groupDate {
+- (id)initWithDate:(NSDate *)date {
 	if ((self = [super init])) {
-		self.groupDate = [groupDate beginningOfDay];
+		self.groupDate = [date beginningOfDay];
 		self.events    = [NSMutableArray array];
 		self.GUID      = [[NSProcessInfo processInfo] globallyUniqueString];
 
@@ -60,7 +57,7 @@
 	return [date isEqualToDateIgnoringTime:self.groupDate];
 }
 
-- (BOOL)canContainEvent:(Event *)event {
+- (BOOL)isValidForEvent:(Event *)event {
 	NSDate *stopDate = event.stopDate;
 
 	if (event.isActiveValue) {
@@ -103,6 +100,10 @@
 }
 
 - (void)updateEvent:(Event *)event {
+	if (![self.events containsObject:event]) {
+		return;
+	}
+
 	self.isActive = [self containsActiveEvent];
 
 	self.timeActiveComponentsCacheInvalid = YES;
@@ -138,13 +139,24 @@
 #pragma mark Private instance methods
 
 - (BOOL)containsActiveEvent {
+	NSDate *stopDate = self.groupDate;
+
 	for (Event *event in self.events){
 		if (event.isActiveValue) {
-			return YES;
+			stopDate = [stopDate laterDate:[NSDate date]];
+		} else {
+			stopDate = [stopDate laterDate:event.stopDate];
 		}
 	}
 
-	return NO;
+	// If endOfDay is later than calculated stopDate
+	// then this is the most recent event that is running
+	// so it is active
+	if ([[self.groupDate endOfDay] laterDate:stopDate]) {
+		return YES;
+	} else {
+		return NO;
+	}
 }
 
 - (void)calculateTotalTimeRunning {

@@ -11,6 +11,8 @@
 
 @interface EventGroups : NSObject
 
+@property (nonatomic) BOOL existsActiveEventGroup;
+
 - (id)init;
 - (id)initWithEvents:(NSArray *)events;
 

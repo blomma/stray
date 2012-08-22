@@ -11,7 +11,7 @@
 @interface EventGroup : NSObject
 
 @property (nonatomic, readonly) NSMutableArray *events;
-@property (nonatomic) NSDate *groupDate;
+@property (nonatomic, readonly) NSDate *groupDate;
 @property (nonatomic, readonly) NSDateComponents *timeActiveComponents;
 @property (nonatomic, readonly) NSString *GUID;
 @property (nonatomic, readonly) BOOL isActive;
@@ -24,12 +24,13 @@
 - (void)updateEvent:(Event *)event;
 
 - (BOOL)canContainDate:(NSDate *)date;
-- (BOOL)canContainEvent:(Event *)event;
+- (BOOL)isValidForEvent:(Event *)event;
 
 - (Event *)activeEvent;
 
 - (NSUInteger)count;
 
 - (NSComparisonResult)compare:(id)element;
+- (NSComparisonResult)reverseCompare:(id)element;
 
 @end

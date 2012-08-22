@@ -130,6 +130,8 @@
 
 	DLog(@"end self.eventGroups.count %d", self.eventGroups.count);
 
+	[self updateExistsActiveEventGroup];
+
 	return [changes copy];
 }
 
@@ -140,7 +142,7 @@
 		BOOL process = [eventGroup containsEvent:event];
 
 		// Check if condition is given and if so only remove event if it is invalid
-		if (condition && [eventGroup canContainEvent:event]) {
+		if (condition && [eventGroup isValidForEvent:event]) {
 			process = NO;
 		}
 
@@ -182,6 +184,8 @@
 		}
 	}
 
+	[self updateExistsActiveEventGroup];
+
 	return [changes copy];
 }
 
@@ -190,7 +194,7 @@
 
 	// Update the event in any groups that contains it and can contain it, later we remove it from invalid groups
 	for (EventGroup *eventGroup in self.eventGroups) {
-		if ([eventGroup containsEvent:event] && [eventGroup canContainEvent:event]) {
+		if ([eventGroup containsEvent:event] && [eventGroup isValidForEvent:event]) {
 			EventGroupChange *eventGroupChange = [EventGroupChange new];
 			eventGroupChange.GUID = eventGroup.GUID;
 			eventGroupChange.type = EventGroupChangeUpdate;
@@ -220,17 +224,18 @@
 	NSArray *insertChanges = [self addEvent:event];
 	[changes addObjectsFromArray:insertChanges];
 
+	[self updateExistsActiveEventGroup];
+
 	return [changes copy];
 }
 
 - (NSArray *)updateActiveEvent {
-	for (EventGroup *eventGroup in self.eventGroups) {
-		if ([eventGroup isActive]) {
-			return [self updateEvent:[eventGroup activeEvent]];
-		}
+	EventGroup *eventGroup = [self activeEventGroup];
+	if (eventGroup) {
+		return [self updateEvent:[eventGroup activeEvent]];
+	} else {
+		return nil;
 	}
-
-	return [NSArray array];
 }
 
 - (NSUInteger)count {
@@ -253,6 +258,26 @@
 
 #pragma mark -
 #pragma mark Private instance methods
+
+- (EventGroup *)activeEventGroup {
+	if (self.eventGroups.count > 0) {
+		EventGroup *eventGroup = [self.eventGroups objectAtIndex:0];
+		if (eventGroup.isActive) {
+			return eventGroup;
+		}
+	}
+
+	return nil;
+}
+
+- (void)updateExistsActiveEventGroup {
+	EventGroup *eventGroup = [self activeEventGroup];
+	if (eventGroup) {
+		self.existsActiveEventGroup = YES;
+	} else {
+		self.existsActiveEventGroup = NO;
+	}
+}
 
 
 @end

@@ -18,6 +18,7 @@
 @interface EventGroupsViewController ()
 
 @property (nonatomic, strong) EventGroups *eventGroups;
+@property (nonatomic) NSTimer *updateTimer;
 
 @end
 
@@ -38,29 +39,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	NSMutableArray *insertIndexPaths = [NSMutableArray array];
-	NSMutableArray *deleteIndexPaths = [NSMutableArray array];
-	NSMutableArray *updateIndexPaths = [NSMutableArray array];
-
-	NSArray *changes = [self.eventGroups updateActiveEvent];
-
-	for (EventGroupChange *eventGroupChange in changes) {
-		if ([eventGroupChange.type isEqualToString:EventGroupChangeUpdate]) {
-			[updateIndexPaths addObject:[NSIndexPath indexPathForRow:(NSInteger)eventGroupChange.index inSection:0]];
-		} else if ([eventGroupChange.type isEqualToString:EventGroupChangeInsert]) {
-			[insertIndexPaths addObject:[NSIndexPath indexPathForRow:(NSInteger)eventGroupChange.index inSection:0]];
-		} else if ([eventGroupChange.type isEqualToString:EventGroupChangeDelete]) {
-			[deleteIndexPaths addObject:[NSIndexPath indexPathForRow:(NSInteger)eventGroupChange.index inSection:0]];
-		}
-	}
-
-	[self.tableView beginUpdates];
-
-	[self.tableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationRight];
-	[self.tableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationFade];
-	[self.tableView reloadRowsAtIndexPaths:updateIndexPaths withRowAnimation:UITableViewRowAnimationNone];
-
-	[self.tableView endUpdates];
+	[self updateActiveEventGroups];
 }
 
 - (void)viewDidLoad {
@@ -75,6 +54,20 @@
 	                                         selector:@selector(handleDataModelChange:)
 	                                             name:NSManagedObjectContextObjectsDidChangeNotification
 	                                           object:[NSManagedObjectContext MR_defaultContext]];
+
+	[self.eventGroups addObserver:self
+					   forKeyPath:@"existsActiveEventGroup"
+						  options:NSKeyValueObservingOptionNew
+						  context:NULL];
+
+	// Do an inital check to see if there is an active event group
+	if (self.eventGroups.existsActiveEventGroup) {
+		self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:60
+															target:self
+														  selector:@selector(timerUpdate)
+														  userInfo:nil
+														   repeats:YES];
+	}
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -168,13 +161,54 @@
 	return cell;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-	// If the cell contains a eventGroup that is active then we need to update it
-	if ([(EventGroupTableViewCell *)cell eventGroup].isActive) {
-		[(EventGroupTableViewCell *)cell updateTime];
+#pragma mark -
+#pragma mark Private methods
+
+- (void)timerUpdate {
+	[self updateActiveEventGroups];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if ([keyPath isEqualToString:@"existsActiveEventGroup"]) {
+		BOOL existsActiveEventGroup = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+		if (existsActiveEventGroup) {
+			if (!self.updateTimer.isValid) {
+				self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:60
+																	target:self
+																  selector:@selector(timerUpdate)
+																  userInfo:nil
+																   repeats:YES];
+			}
+		} else {
+			[self.updateTimer invalidate];
+		}
 	}
 }
 
-#pragma mark - Table view delegate
+- (void)updateActiveEventGroups {
+	NSMutableArray *insertIndexPaths = [NSMutableArray array];
+	NSMutableArray *deleteIndexPaths = [NSMutableArray array];
+	NSMutableArray *updateIndexPaths = [NSMutableArray array];
+
+	NSArray *changes = [self.eventGroups updateActiveEvent];
+
+	for (EventGroupChange *eventGroupChange in changes) {
+		if ([eventGroupChange.type isEqualToString:EventGroupChangeUpdate]) {
+			[updateIndexPaths addObject:[NSIndexPath indexPathForRow:(NSInteger)eventGroupChange.index inSection:0]];
+		} else if ([eventGroupChange.type isEqualToString:EventGroupChangeInsert]) {
+			[insertIndexPaths addObject:[NSIndexPath indexPathForRow:(NSInteger)eventGroupChange.index inSection:0]];
+		} else if ([eventGroupChange.type isEqualToString:EventGroupChangeDelete]) {
+			[deleteIndexPaths addObject:[NSIndexPath indexPathForRow:(NSInteger)eventGroupChange.index inSection:0]];
+		}
+	}
+
+	[self.tableView beginUpdates];
+
+	[self.tableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationRight];
+	[self.tableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationFade];
+	[self.tableView reloadRowsAtIndexPaths:updateIndexPaths withRowAnimation:UITableViewRowAnimationNone];
+
+	[self.tableView endUpdates];
+}
 
 @end
