@@ -6,11 +6,10 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventGroups.h"
-
 #import "Event.h"
 #import "EventGroup.h"
 #import "EventGroupChange.h"
+#import "EventGroups.h"
 #import "NSDate+Utilities.h"
 
 @interface EventGroups ()

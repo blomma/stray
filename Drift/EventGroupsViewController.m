@@ -6,14 +6,13 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventGroupsViewController.h"
-
 #import "Event.h"
 #import "EventDataManager.h"
 #import "EventGroup.h"
 #import "EventGroupChange.h"
-#import "EventGroups.h"
 #import "EventGroupTableViewCell.h"
+#import "EventGroups.h"
+#import "EventGroupsViewController.h"
 
 @interface EventGroupsViewController ()
 

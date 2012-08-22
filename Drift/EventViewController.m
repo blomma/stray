@@ -6,10 +6,9 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventViewController.h"
-
 #import "Event.h"
 #import "EventDataManager.h"
+#import "EventViewController.h"
 
 @implementation EventViewController
 

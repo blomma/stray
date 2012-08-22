@@ -6,13 +6,10 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import <QuartzCore/QuartzCore.h>
-
-#import "EventTimerControl.h"
-
 #import "Event.h"
 #import "EventDataManager.h"
-
+#import "EventTimerControl.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface EventTimerControl ()
 

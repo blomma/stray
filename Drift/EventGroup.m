@@ -7,7 +7,6 @@
 //
 
 #import "EventGroup.h"
-
 #import "NSDate+Utilities.h"
 
 @interface EventGroup ()
