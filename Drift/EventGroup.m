@@ -139,19 +139,23 @@
 
 - (BOOL)containsActiveEvent {
 	NSDate *stopDate = self.groupDate;
+	NSDate *toDay = [NSDate date];
+
+	BOOL isActive = NO;
 
 	for (Event *event in self.events){
 		if (event.isActiveValue) {
-			stopDate = [stopDate laterDate:[NSDate date]];
+			isActive = YES;
+			stopDate = [stopDate laterDate:toDay];
 		} else {
 			stopDate = [stopDate laterDate:event.stopDate];
 		}
 	}
 
 	// If endOfDay is later than calculated stopDate
-	// then this is the most recent event that is running
-	// so it is active
-	if ([[self.groupDate endOfDay] laterDate:stopDate]) {
+	// and groupDate is today
+	// and we found an event that is active
+	if ([[self.groupDate endOfDay] laterDate:stopDate] && [self.groupDate isEqualToDateIgnoringTime:toDay] && isActive) {
 		return YES;
 	} else {
 		return NO;
