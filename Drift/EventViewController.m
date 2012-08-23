@@ -47,10 +47,6 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-	self.startDateLabel.font                   = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
-	self.runningTimeLabel.font                 = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:55];
-	self.toggleStartStopButton.titleLabel.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:50];
-
 	[self.eventTimerControl addObserver:self
 	                         forKeyPath:@"startDate"
 	                            options:NSKeyValueObservingOptionNew

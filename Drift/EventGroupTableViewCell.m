@@ -21,11 +21,6 @@
 #pragma mark Application lifecycle
 
 - (void)awakeFromNib {
-	self.hours.font   = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:96];
-	self.minutes.font = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:40];
-	self.day.font            = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:36];
-	self.year.font           = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
-	self.month.font          = [UIFont fontWithName:@"AlternateGothicNo2BT-Regular" size:18];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
