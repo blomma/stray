@@ -6,12 +6,12 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventGroupsTest.h"
 #import "../Drift/Event.h"
 #import "../Drift/EventGroup.h"
 #import "../Drift/EventGroups.h"
 #import "../Drift/NSDate+Utilities.h"
 #import "../Vendor/MagicalRecord/CoreData+MagicalRecord.h"
+#import "EventGroupsTest.h"
 
 @implementation EventGroupsTest
 
@@ -45,7 +45,9 @@
 	// There should be exactly 1 eventGroup
 	STAssertTrue(eventGroups.count == 1, @"count");
 
-	EventGroup *eventGroup = [eventGroups eventGroupAtDate:now];
+    NSUInteger index = [eventGroups indexForGroupDate:now];
+    STAssertTrue(index != NSNotFound, @"indexForGroupDate");
+	EventGroup *eventGroup = [eventGroups eventGroupAtIndex:index];
 
 	// Check groupDate
 	STAssertTrue([[now beginningOfDay] isEqualToDate:eventGroup.groupDate], @"groupDate");
@@ -76,7 +78,9 @@
 
 	STAssertTrue(eventGroups.count == 2, @"count");
 
-	EventGroup *eventGroup = [eventGroups eventGroupAtDate:now];
+    NSUInteger index = [eventGroups indexForGroupDate:now];
+    STAssertTrue(index != NSNotFound, @"indexForGroupDate");
+	EventGroup *eventGroup = [eventGroups eventGroupAtIndex:index];
 
 	STAssertTrue(eventGroup.timeActiveComponents.hour == 12, @"groupTime");
 }
@@ -114,7 +118,9 @@
 
 	STAssertTrue(eventGroups.count == 1, @"count");
 
-	EventGroup *eventGroup = [eventGroups eventGroupAtDate:now];
+    NSUInteger index = [eventGroups indexForGroupDate:now];
+    STAssertTrue(index != NSNotFound, @"indexForGroupDate");
+	EventGroup *eventGroup = [eventGroups eventGroupAtIndex:index];
 
 	STAssertTrue(eventGroup.timeActiveComponents.hour == 4, @"groupTime");
 }
