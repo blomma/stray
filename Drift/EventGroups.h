@@ -17,13 +17,15 @@
 - (id)initWithEvents:(NSArray *)events;
 
 - (NSArray *)addEvent:(Event *)event;
+- (void)addEvents:(NSArray *)events;
+
 - (NSArray *)removeEvent:(Event *)event withConditionIsInvalid:(BOOL)condition;
 - (NSArray *)updateEvent:(Event *)event withConditionIsActive:(BOOL)condition;
 - (NSArray *)updateActiveEvent;
 
 - (NSUInteger)count;
 
+- (NSUInteger)indexForGroupDate:(NSDate *)date;
 - (EventGroup *)eventGroupAtIndex:(NSUInteger)index;
-- (EventGroup *)eventGroupAtDate:(NSDate *)date;
 
 @end

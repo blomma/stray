@@ -31,10 +31,7 @@
 	if ((self = [super init])) {
 		self.eventGroups = [NSMutableArray array];
 
-		for (Event *event in events) {
-			// TODO: Create an optimized version of addEvent that doesnt return a change set for use here
-			[self addEvent:event];
-		}
+        [self addEvents:events];
 	}
 
 	return self;
@@ -42,6 +39,73 @@
 
 #pragma mark -
 #pragma mark Public instance methods
+
+- (void)addEvents:(NSArray *)events {
+    for (Event *event in events) {
+        NSDate *startDate = event.startDate;
+        NSDate *stopDate  = event.stopDate;
+
+        // Is the event running, if so set the stopDate to now
+        if (event.isActiveValue) {
+            stopDate = [NSDate date];
+        }
+
+        NSCalendar *calender = [NSCalendar currentCalendar];
+
+        // Calculate how many seconds this event spans
+        unsigned int unitFlags = NSSecondCalendarUnit;
+        NSDateComponents *eventSecondsComponent = [calender components:unitFlags
+                                                              fromDate:startDate
+                                                                toDate:stopDate
+                                                               options:0];
+
+        NSDateComponents *totalSecondsComponent = [[NSDateComponents alloc] init];
+        totalSecondsComponent.second = 0;
+
+        // Loop over it until there are no more future time left in it
+        while (eventSecondsComponent.second >= 0) {
+            startDate = [calender dateByAddingComponents:totalSecondsComponent
+                                                  toDate:event.startDate
+                                                 options:0];
+
+            // Find a EventGroup for this startDate
+            EventGroup *eventGroup;
+            NSUInteger index = [self indexForGroupDate:startDate];
+
+            if (index == NSNotFound) {
+                eventGroup = [[EventGroup alloc] initWithDate:startDate];
+            } else {
+                eventGroup = [self.eventGroups objectAtIndex:index];
+            }
+
+            // Check if this eventGroup already has this event
+            if (index == NSNotFound || ![eventGroup containsEvent:event]) {
+                if (index == NSNotFound) {
+                    index = [self insertionIndexForGroupDate:eventGroup.groupDate];
+                    [self.eventGroups insertObject:eventGroup atIndex:index];
+                }
+
+                // Add the event
+                [eventGroup addEvent:event];
+            }
+
+            // We want to add the delta between the startDate day and end of startDate day
+            // this only nets us enough delta to make it to the end of the day so
+            // we need to add one second to this to tip it over
+            NSDate *endOfDay = [startDate endOfDay];
+            NSDateComponents *deltaSecondsComponent = [calender components:unitFlags
+                                                                  fromDate:startDate
+                                                                    toDate:endOfDay
+                                                                   options:0];
+            deltaSecondsComponent.second += 1;
+            
+            totalSecondsComponent.second += deltaSecondsComponent.second;
+            eventSecondsComponent.second -= deltaSecondsComponent.second;
+        }
+    }
+
+	[self updateExistsActiveEventGroup];
+}
 
 - (NSArray *)addEvent:(Event *)event {
 	NSDate *startDate = event.startDate;
@@ -73,25 +137,33 @@
 											 options:0];
 
 		// Find a EventGroup for this startDate
-		EventGroup *eventGroup = [self eventGroupAtDate:startDate];
+		EventGroup *eventGroup;
+        NSUInteger index = [self indexForGroupDate:startDate];
+
+        if (index == NSNotFound) {
+            eventGroup = [[EventGroup alloc] initWithDate:startDate];
+        } else {
+            eventGroup = [self.eventGroups objectAtIndex:index];
+        }
 
 		// Check if this eventGroup already has this event
-		if (![eventGroup containsEvent:event]) {
+		if (index == NSNotFound || ![eventGroup containsEvent:event]) {
 			EventGroupChange *eventGroupChange = [EventGroupChange new];
 
-			if (eventGroup) {
-				eventGroupChange.type = EventGroupChangeUpdate;
-			} else {
-				eventGroup = [[EventGroup alloc] initWithDate:startDate];
-				[self.eventGroups addObject:eventGroup];
-
+			if (index == NSNotFound) {
 				eventGroupChange.type = EventGroupChangeInsert;
+
+                index = [self insertionIndexForGroupDate:eventGroup.groupDate];
+				[self.eventGroups insertObject:eventGroup atIndex:index];
+			} else {
+				eventGroupChange.type = EventGroupChangeUpdate;
 			}
 
 			// Add the event
 			[eventGroup addEvent:event];
 
 			eventGroupChange.GUID = eventGroup.GUID;
+            eventGroupChange.index = index;
 
 			// Add the change
 			[changes addObject:eventGroupChange];
@@ -112,19 +184,8 @@
 		eventSecondsComponent.second -= deltaSecondsComponent.second;
 	}
 
-	[self.eventGroups sortUsingSelector:@selector(reverseCompare:)];
-
-	// Update the index for the changes
-	for (EventGroupChange *eventGroupChange in changes) {
-		NSUInteger i = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
-			return [[(EventGroup *) obj GUID] isEqualToString:eventGroupChange.GUID];
-		}];
-
-		eventGroupChange.index = i;
-	}
-
 	[self updateExistsActiveEventGroup];
-
+    
 	return [changes copy];
 }
 
@@ -135,7 +196,7 @@
 		BOOL process = [eventGroup containsEvent:event];
 
 		// Check if condition is given and if so only remove event if it is invalid
-		if (condition && [eventGroup isValidForEvent:event]) {
+		if (condition && process && [eventGroup isValidForEvent:event]) {
 			process = NO;
 		}
 
@@ -148,17 +209,6 @@
 
 			[eventGroup removeEvent:event];
 		}
-	}
-
-	[self.eventGroups sortUsingSelector:@selector(reverseCompare:)];
-
-	// Update the index
-	for (EventGroupChange *eventGroupChange in changes) {
-		NSUInteger i = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
-			return [[(EventGroup *) obj GUID] isEqualToString:eventGroupChange.GUID];
-		}];
-
-		eventGroupChange.index = i;
 	}
 
 	// Remove empty eventGroups, we do this step seperatly from
@@ -205,17 +255,6 @@
 		}
 	}
 
-	[self.eventGroups sortUsingSelector:@selector(reverseCompare:)];
-
-	// Update the index for the update changes
-	for (EventGroupChange *eventGroupChange in changes) {
-		NSUInteger i = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
-			return [[(EventGroup *) obj GUID] isEqualToString:eventGroupChange.GUID];
-		}];
-
-		eventGroupChange.index = i;
-	}
-
 	// Remove this event from any groups that it no longer can be in
 	NSArray *deleteChanges = [self removeEvent:event withConditionIsInvalid:YES];
 	[changes addObjectsFromArray:deleteChanges];
@@ -246,18 +285,28 @@
 	return [self.eventGroups objectAtIndex:index];
 }
 
-- (EventGroup *)eventGroupAtDate:(NSDate *)date {
-	for (EventGroup *eventGroup in self.eventGroups) {
-		if ([eventGroup canContainDate:date]) {
-			return eventGroup;
-		}
-	}
-	
-	return nil;
+- (NSUInteger)indexForGroupDate:(NSDate *)date {
+    NSUInteger index = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
+        return [(EventGroup *) obj canContainDate:date];
+    }];
+
+    return index;
 }
 
 #pragma mark -
 #pragma mark Private instance methods
+
+- (NSUInteger)insertionIndexForGroupDate:(NSDate *)date {
+    NSUInteger index = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
+        return [[(EventGroup *) obj groupDate] compare:date] == NSOrderedAscending;
+    }];
+
+    if (index == NSNotFound) {
+        index = self.eventGroups.count;
+    }
+
+    return index;
+}
 
 - (EventGroup *)activeEventGroup {
 	if (self.eventGroups.count > 0) {
