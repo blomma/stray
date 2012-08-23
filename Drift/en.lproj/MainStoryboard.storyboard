@@ -119,16 +119,16 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="00" lineBreakMode="tailTruncation" minimumFontSize="10" adjustsFontSizeToFit="NO" id="qPF-v3-4Dm" userLabel="RunningTimeHours">
-                                            <rect key="frame" x="7" y="18" width="61" height="63"/>
+                                            <rect key="frame" x="7" y="18" width="88" height="63"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="73"/>
+                                            <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="73"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="00" lineBreakMode="tailTruncation" minimumFontSize="10" adjustsFontSizeToFit="NO" id="Zam-CZ-wC7" userLabel="RunningTimeMinutes">
-                                            <rect key="frame" x="71" y="15" width="43" height="35"/>
+                                            <rect key="frame" x="95" y="15" width="43" height="35"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="31"/>
+                                            <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="31"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
@@ -153,6 +153,13 @@
                                             <color key="textColor" red="1" green="0.59999999999999998" blue="0.0078431372550000003" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Mond" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="EdD-0m-87w">
+                                            <rect key="frame" x="156" y="11" width="53" height="28"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="27"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </label>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
@@ -162,6 +169,7 @@
                                     <outlet property="hours" destination="qPF-v3-4Dm" id="oRu-Ps-kjN"/>
                                     <outlet property="minutes" destination="Zam-CZ-wC7" id="qP2-Tg-iaC"/>
                                     <outlet property="month" destination="rcY-LZ-Run" id="48J-b5-USf"/>
+                                    <outlet property="weekDay" destination="EdD-0m-87w" id="kRD-9M-kQg"/>
                                     <outlet property="year" destination="g5d-wH-aLq" id="HyJ-Z4-74G"/>
                                 </connections>
                             </tableViewCell>
@@ -185,6 +193,7 @@
                 <relationship kind="outlet" name="hours" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="minutes" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="month" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="weekDay" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="year" candidateClass="UILabel"/>
             </relationships>
         </class>

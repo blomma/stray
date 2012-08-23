@@ -81,7 +81,6 @@
 	// Inserted Events
 	NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
 	NSMutableArray *insertedEvents = [NSMutableArray arrayWithArray:[insertedObjects allObjects]];
-	DLog(@"insertedEvents %d", insertedEvents.count);
 
 	for (Event *event in insertedEvents) {
 		NSArray *changes = [self.eventGroups addEvent:event];
@@ -98,7 +97,6 @@
 	// Deleted Events
 	NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
 	NSMutableArray *deletedEvents = [NSMutableArray arrayWithArray:[deletedObjects allObjects]];
-	DLog(@"deletedEvents %d", deletedEvents.count);
 
 	for (Event *event in deletedEvents) {
 		NSArray *changes = [self.eventGroups removeEvent:event withConditionIsInvalid:NO];
@@ -115,7 +113,6 @@
 	// Updated Events
 	NSSet *updatedObjects = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
 	NSMutableArray *updatedEvents = [NSMutableArray arrayWithArray:[updatedObjects allObjects]];
-	DLog(@"updatedEvents %d", updatedEvents.count);
 
 	for (Event *event in updatedEvents) {
 		NSArray *changes = [self.eventGroups updateEvent:event withConditionIsActive:NO];
@@ -143,7 +140,6 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	DLog(@"count %d", self.eventGroups.count);
 	return (NSInteger)self.eventGroups.count;
 }
 
@@ -152,12 +148,27 @@
 
 	EventGroup *eventGroup = [self.eventGroups eventGroupAtIndex:(NSUInteger)indexPath.row];
 
-	DLog(@"row %d", indexPath.row);
 	EventGroupTableViewCell *cell = (EventGroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-
+    cell.position = [self positionForTableViewCellAtindexPath:indexPath];
 	[cell addEventGroup:eventGroup];
 
 	return cell;
+}
+
+- (EventGroupTableViewCellPosition)positionForTableViewCellAtindexPath:(NSIndexPath *)indexPath {
+    if ([self tableView:self.tableView numberOfRowsInSection:indexPath.section] == 1) {
+        return EventGroupTableViewCellPositionAlone;
+    }
+
+    if (indexPath.row == 0) {
+        return EventGroupTableViewCellPositionTop;
+    }
+
+	if ([self tableView:self.tableView numberOfRowsInSection:indexPath.section] == indexPath.row + 1) {
+        return EventGroupTableViewCellPositionBottom;
+    }
+
+    return EventGroupTableViewCellPositionMiddle;
 }
 
 #pragma mark -
