@@ -65,20 +65,14 @@
 
 	NSDate *startDate = [event.startDate beginningOfDay];
 
-	BOOL isBetween = [self.groupDate isBetweenDate:startDate andDate:stopDate];
-	return isBetween;
+	return [self.groupDate isBetweenDate:startDate andDate:stopDate];
 }
 
 - (BOOL)containsEvent:(Event *)event {
-	BOOL contains = [self.events containsObject:event];;
-	return contains;
+	return [self.events containsObject:event];;
 }
 
 - (void)addEvent:(Event *)event {
-	if ([self.events containsObject:event]) {
-		return;
-	}
-
 	[self.events addObject:event];
 
 	self.isActive = [self containsActiveEvent];
@@ -87,10 +81,6 @@
 }
 
 - (void)removeEvent:(Event *)event {
-	if (![self.events containsObject:event]) {
-		return;
-	}
-
 	[self.events removeObject:event];
 
 	self.isActive = [self containsActiveEvent];
@@ -99,10 +89,6 @@
 }
 
 - (void)updateEvent:(Event *)event {
-	if (![self.events containsObject:event]) {
-		return;
-	}
-
 	self.isActive = [self containsActiveEvent];
 
 	self.timeActiveComponentsCacheInvalid = YES;
@@ -123,15 +109,11 @@
 }
 
 - (NSComparisonResult)reverseCompare:(id)element {
-	NSComparisonResult res = [[element groupDate] compare:[self groupDate]];
-
-	return res;
+	return [[element groupDate] compare:[self groupDate]];
 }
 
 - (NSComparisonResult)compare:(id)element {
-	NSComparisonResult res = [[self groupDate] compare:[element groupDate]];
-
-	return res;
+	return [[self groupDate] compare:[element groupDate]];
 }
 
 #pragma mark -
