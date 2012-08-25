@@ -19,6 +19,8 @@
 @property (nonatomic) NSDateComponents *timeActiveComponentsCache;
 @property (nonatomic) BOOL timeActiveComponentsCacheInvalid;
 
+@property (nonatomic) NSCalendar *calendar;
+
 @end
 
 @implementation EventGroup
@@ -28,6 +30,8 @@
 		self.groupDate = [date beginningOfDay];
 		self.events    = [NSMutableArray array];
 		self.GUID      = [[NSProcessInfo processInfo] globallyUniqueString];
+
+        self.calendar  = [NSCalendar currentCalendar];
 
 		self.timeActiveComponentsCache = [[NSDateComponents alloc] init];
 		self.timeActiveComponentsCache.hour   = 0;
@@ -147,8 +151,6 @@
 - (void)calculateTotalTimeRunning {
 	static NSUInteger DATE_COMPONENTS = (NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit);
 
-	NSCalendar *calender = [NSCalendar currentCalendar];
-
 	NSDate *endOfDay = [self.groupDate endOfDay];
 
 	NSDate *deltaStart = [self.groupDate copy];
@@ -162,20 +164,20 @@
 		}
 		stopDate = [stopDate earlierDate:endOfDay];
 
-		NSDateComponents *components = [calender components:DATE_COMPONENTS
-												   fromDate:startDate
-													 toDate:stopDate
-													options:0];
+		NSDateComponents *components = [self.calendar components:DATE_COMPONENTS
+                                                        fromDate:startDate
+                                                          toDate:stopDate
+                                                         options:0];
 
-		deltaEnd = [calender dateByAddingComponents:components
-											 toDate:deltaEnd
-											options:0];
+		deltaEnd = [self.calendar dateByAddingComponents:components
+                                                  toDate:deltaEnd
+                                                 options:0];
 	}
 
-	self.timeActiveComponentsCache	= [calender components:DATE_COMPONENTS
-												 fromDate:deltaStart
-												   toDate:deltaEnd
-												  options:0];
+	self.timeActiveComponentsCache	= [self.calendar components:DATE_COMPONENTS
+                                                      fromDate:deltaStart
+                                                        toDate:deltaEnd
+                                                       options:0];
 
 	self.timeActiveComponentsCacheInvalid = NO;
 }

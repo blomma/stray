@@ -16,6 +16,8 @@
 
 @property (nonatomic) NSMutableArray *eventGroups;
 
+@property (nonatomic) NSCalendar *calendar;
+
 @end
 
 @implementation EventGroups
@@ -30,6 +32,7 @@
 - (id)initWithEvents:(NSArray *)events {
 	if ((self = [super init])) {
 		self.eventGroups = [NSMutableArray array];
+        self.calendar    = [NSCalendar currentCalendar];
 
         [self addEvents:events];
 	}
@@ -50,23 +53,21 @@
             stopDate = [NSDate date];
         }
 
-        NSCalendar *calender = [NSCalendar currentCalendar];
-
         // Calculate how many seconds this event spans
         unsigned int unitFlags = NSSecondCalendarUnit;
-        NSDateComponents *eventSecondsComponent = [calender components:unitFlags
-                                                              fromDate:startDate
-                                                                toDate:stopDate
-                                                               options:0];
+        NSDateComponents *eventSecondsComponent = [self.calendar components:unitFlags
+                                                                   fromDate:startDate
+                                                                     toDate:stopDate
+                                                                    options:0];
 
         NSDateComponents *totalSecondsComponent = [[NSDateComponents alloc] init];
         totalSecondsComponent.second = 0;
 
         // Loop over it until there are no more future time left in it
         while (eventSecondsComponent.second >= 0) {
-            startDate = [calender dateByAddingComponents:totalSecondsComponent
-                                                  toDate:event.startDate
-                                                 options:0];
+            startDate = [self.calendar dateByAddingComponents:totalSecondsComponent
+                                                       toDate:event.startDate
+                                                      options:0];
 
             // Find a EventGroup for this startDate
             EventGroup *eventGroup;
@@ -93,10 +94,10 @@
             // this only nets us enough delta to make it to the end of the day so
             // we need to add one second to this to tip it over
             NSDate *endOfDay = [startDate endOfDay];
-            NSDateComponents *deltaSecondsComponent = [calender components:unitFlags
-                                                                  fromDate:startDate
-                                                                    toDate:endOfDay
-                                                                   options:0];
+            NSDateComponents *deltaSecondsComponent = [self.calendar components:unitFlags
+                                                                       fromDate:startDate
+                                                                         toDate:endOfDay
+                                                                        options:0];
             deltaSecondsComponent.second += 1;
             
             totalSecondsComponent.second += deltaSecondsComponent.second;
@@ -118,14 +119,12 @@
 		stopDate = [NSDate date];
 	}
 
-	NSCalendar *calender = [NSCalendar currentCalendar];
-
 	// Calculate how many seconds this event spans
 	unsigned int unitFlags = NSSecondCalendarUnit;
-	NSDateComponents *eventSecondsComponent = [calender components:unitFlags
-														  fromDate:startDate
-															toDate:stopDate
-														   options:0];
+	NSDateComponents *eventSecondsComponent = [self.calendar components:unitFlags
+                                                               fromDate:startDate
+                                                                 toDate:stopDate
+                                                                options:0];
 
 	NSDateComponents *totalSecondsComponent = [[NSDateComponents alloc] init];
 	totalSecondsComponent.second = 0;
@@ -134,9 +133,9 @@
 
 	// Loop over it until there are no more future time left in it
 	while (eventSecondsComponent.second >= 0) {
-		startDate = [calender dateByAddingComponents:totalSecondsComponent
-											  toDate:event.startDate
-											 options:0];
+		startDate = [self.calendar dateByAddingComponents:totalSecondsComponent
+                                                   toDate:event.startDate
+                                                  options:0];
 
 		// Find a EventGroup for this startDate
 		EventGroup *eventGroup;
@@ -174,10 +173,10 @@
 		// this only nets us enough delta to make it to the end of the day so
 		// we need to add one second to this to tip it over
 		NSDate *endOfDay = [startDate endOfDay];
-		NSDateComponents *deltaSecondsComponent = [calender components:unitFlags
-															  fromDate:startDate
-																toDate:endOfDay
-															   options:0];
+		NSDateComponents *deltaSecondsComponent = [self.calendar components:unitFlags
+                                                                   fromDate:startDate
+                                                                     toDate:endOfDay
+                                                                    options:0];
 		deltaSecondsComponent.second += 1;
 
 		totalSecondsComponent.second += deltaSecondsComponent.second;

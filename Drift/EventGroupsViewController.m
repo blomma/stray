@@ -38,7 +38,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	[self updateActiveEventGroups];
+	[self updateActiveEventGroup];
 }
 
 - (void)viewDidLoad {
@@ -176,7 +176,7 @@
 #pragma mark Private methods
 
 - (void)timerUpdate {
-	[self updateActiveEventGroups];
+	[self updateActiveEventGroup];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -196,7 +196,7 @@
 	}
 }
 
-- (void)updateActiveEventGroups {
+- (void)updateActiveEventGroup {
 	NSMutableArray *insertIndexPaths = [NSMutableArray array];
 	NSMutableArray *deleteIndexPaths = [NSMutableArray array];
 	NSMutableArray *updateIndexPaths = [NSMutableArray array];

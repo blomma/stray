@@ -13,7 +13,7 @@
 @interface EventViewController ()
 
 @property (nonatomic) NSDateFormatter *startDateFormatter;
-@property (nonatomic) NSCalendar *calender;
+@property (nonatomic) NSCalendar *calendar;
 
 @end
 
@@ -30,7 +30,7 @@
         [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         self.startDateFormatter = formatter;
 
-        self.calender = [NSCalendar currentCalendar];
+        self.calendar = [NSCalendar currentCalendar];
 }
 
 	return self;
@@ -121,7 +121,7 @@
 	Event *event = [[EventDataManager sharedManager] currentEvent];
 
 	unsigned int static unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
-	NSDateComponents *components = [self.calender components:unitFlags fromDate:event.startDate toDate:date options:0];
+	NSDateComponents *components = [self.calendar components:unitFlags fromDate:event.startDate toDate:date options:0];
 
 	// And finally update the running timer
 	self.runningTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", components.hour, components.minute, components.second];

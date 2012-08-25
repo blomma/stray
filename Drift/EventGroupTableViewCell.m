@@ -11,6 +11,7 @@
 @interface EventGroupTableViewCell ()
 
 @property (nonatomic, readwrite) EventGroup *eventGroup;
+@property (nonatomic) NSCalendar *calendar;
 
 @end
 
@@ -25,6 +26,7 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
+        self.calendar = [NSCalendar currentCalendar];
 	}
 
 	return self;
@@ -93,7 +95,7 @@
 	self.minutes.text = [NSString stringWithFormat:@"%02d", components.minute];
 
 	unsigned int unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
-	components = [[NSCalendar currentCalendar] components:unitFlags fromDate:self.eventGroup.groupDate];
+	components = [self.calendar components:unitFlags fromDate:self.eventGroup.groupDate];
 
 	self.day.text   = [NSString stringWithFormat:@"%02d", components.day];
 	self.year.text  = [NSString stringWithFormat:@"%04d", components.year];
