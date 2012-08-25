@@ -10,6 +10,13 @@
 #import "EventDataManager.h"
 #import "EventViewController.h"
 
+@interface EventViewController ()
+
+@property (nonatomic) NSDateFormatter *startDateFormatter;
+@property (nonatomic) NSCalendar *calender;
+
+@end
+
 @implementation EventViewController
 
 #pragma mark -
@@ -18,7 +25,13 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
 	if (self) {
-	}
+        // Startdate formatter
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        self.startDateFormatter = formatter;
+
+        self.calender = [NSCalendar currentCalendar];
+}
 
 	return self;
 }
@@ -101,17 +114,14 @@
 #pragma mark Private Instance methods
 
 - (void)updateStartLabel:(NSDate *)date {
-	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-	[formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-
-	self.startDateLabel.text = [formatter stringFromDate:date];
+	self.startDateLabel.text = [self.startDateFormatter stringFromDate:date];
 }
 
 - (void)updateNowLabel:(NSDate *)date {
-	Event *currentEvent          = [[EventDataManager sharedManager] currentEvent];
+	Event *event = [[EventDataManager sharedManager] currentEvent];
 
-	unsigned int unitFlags       = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
-	NSDateComponents *components = [[NSCalendar currentCalendar] components:unitFlags fromDate:currentEvent.startDate toDate:date options:0];
+	unsigned int static unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+	NSDateComponents *components = [self.calender components:unitFlags fromDate:event.startDate toDate:date options:0];
 
 	// And finally update the running timer
 	self.runningTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", components.hour, components.minute, components.second];

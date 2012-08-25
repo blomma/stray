@@ -28,6 +28,9 @@
 @property (nonatomic) CATransform3D deltaTransform;
 @property (nonatomic) CAShapeLayer *deltaLayer;
 
+// Caches
+@property (nonatomic) CGFloat previousSecondTicks;
+
 @end
 
 @implementation EventTimerControl
@@ -71,7 +74,7 @@
 - (void)viewWillAppear:(BOOL)animated {
 	if (self.isEventActive) {
 		if (![self.updateTimer isValid]) {
-			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
+			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
 			                                                    target:self
 			                                                  selector:@selector(timerUpdate)
 			                                                  userInfo:nil
@@ -93,14 +96,14 @@
 
 	// Scehdule a timer to update the face
 	if (![self.updateTimer isValid]) {
-		self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
+		self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
 		                                                    target:self
 		                                                  selector:@selector(timerUpdate)
 		                                                  userInfo:nil
 		                                                   repeats:YES];
 	}
 
-	//[self.updateTimer fire];
+	[self.updateTimer fire];
 }
 
 - (void)stopWithDate:(NSDate *)date {
@@ -158,21 +161,24 @@
 	self.secondHandLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
 
 	// Update the tick marks for the second hand
-	CGFloat secondsIntoMinute = (CGFloat)floor(fmod(elapsedSecondsIntoHour, 60));
+	CGFloat secondTicks = (CGFloat)floor(fmod(elapsedSecondsIntoHour, 60));
 
-	for (NSUInteger i = 0; i < self.secondHandProgressTicksLayer.sublayers.count; i++) {
-		CALayer *layer = [self.secondHandProgressTicksLayer.sublayers objectAtIndex:i];
+    if (secondTicks != self.previousSecondTicks) {
+        for (NSUInteger i = 0; i < self.secondHandProgressTicksLayer.sublayers.count; i++) {
+            CALayer *layer = [self.secondHandProgressTicksLayer.sublayers objectAtIndex:i];
 
-		if (i < secondsIntoMinute) {
-			if (layer.hidden) {
-				layer.hidden = NO;
-			}
-		} else {
-			if (!layer.hidden) {
-				layer.hidden = YES;
-			}
-		}
-	}
+            if (i < secondTicks) {
+                if (layer.hidden) {
+                    layer.hidden = NO;
+                }
+            } else {
+                if (!layer.hidden) {
+                    layer.hidden = YES;
+                }
+            }
+        }
+        self.previousSecondTicks = secondTicks;
+    }
 
 	// And for the minutes we want a more tick/tock behavior
 	a                              = (CGFloat)((M_PI * 2) * floor(elapsedSecondsIntoHour / 60) / 60);
@@ -431,7 +437,7 @@
 
 	// Resume the passing of time
 	if (![self.updateTimer isValid]) {
-		self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
+		self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
 		                                                    target:self
 		                                                  selector:@selector(timerUpdate)
 		                                                  userInfo:nil
