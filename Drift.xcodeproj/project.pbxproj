@@ -50,8 +50,6 @@
 		9E01308715E38EAA005C8765 /* MagicalRecord+ShorthandSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E01306A15E38EAA005C8765 /* MagicalRecord+ShorthandSupport.m */; };
 		9E01308815E38EAA005C8765 /* MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E01306C15E38EAA005C8765 /* MagicalRecord.m */; };
 		9E01308E15E38EB3005C8765 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E01308A15E38EB3005C8765 /* libTestFlight.a */; };
-		9E01308F15E38EB3005C8765 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9E01308B15E38EB3005C8765 /* README.txt */; };
-		9E01309015E38EB3005C8765 /* release_notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9E01308C15E38EB3005C8765 /* release_notes.txt */; };
 		9E1D218215DEB12E00FB7C28 /* EventGroupsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E1D218115DEB12E00FB7C28 /* EventGroupsTest.m */; };
 		9E21F926156EA9510075EAAC /* Drift.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F924156EA9510075EAAC /* Drift.xcdatamodeld */; };
 		9E21F929156EAA2F0075EAAC /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F928156EAA2F0075EAAC /* Event.m */; };
@@ -73,10 +71,8 @@
 		9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E63BBF3156EAA710006FEFC /* CoreData.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9E7A19F715D993DA00C9A443 /* EventGroupChange.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7A19F615D993DA00C9A443 /* EventGroupChange.m */; };
 		9E7CEDF4157B778300718FA6 /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEDF3157B778300718FA6 /* _Event.m */; };
-		9E8399B815C3FF2400B0243F /* Altgot2n.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E8399B715C3FF2400B0243F /* Altgot2n.ttf */; };
 		9E89816F15A0BC2900E22EA7 /* EventGroupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */; };
 		9E9FFFA0159384E200BA5200 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFF9F159384E200BA5200 /* bg.png */; };
-		9E9FFFC21594948900BA5200 /* League Gothic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFFC11594948900BA5200 /* League Gothic.otf */; };
 		9E9FFFCC1594AF7400BA5200 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E9FFFCB1594AF7400BA5200 /* libz.dylib */; };
 		9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB520E15C9553C008952FB /* NSDate+Utilities.m */; };
 		9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */; };
@@ -190,11 +186,9 @@
 		9E7A19F615D993DA00C9A443 /* EventGroupChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroupChange.m; sourceTree = "<group>"; };
 		9E7CEDF2157B778300718FA6 /* _Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Event.h; sourceTree = "<group>"; };
 		9E7CEDF3157B778300718FA6 /* _Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Event.m; sourceTree = "<group>"; };
-		9E8399B715C3FF2400B0243F /* Altgot2n.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Altgot2n.ttf; sourceTree = "<group>"; };
 		9E89816D15A0BC2900E22EA7 /* EventGroupTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroupTableViewCell.h; sourceTree = "<group>"; };
 		9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroupTableViewCell.m; sourceTree = "<group>"; };
 		9E9FFF9F159384E200BA5200 /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
-		9E9FFFC11594948900BA5200 /* League Gothic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "League Gothic.otf"; sourceTree = "<group>"; };
 		9E9FFFCB1594AF7400BA5200 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		9EAB520D15C9553C008952FB /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
 		9EAB520E15C9553C008952FB /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utilities.m"; sourceTree = "<group>"; };
@@ -475,8 +469,6 @@
 		9E9FFF9215925CAE00BA5200 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				9E8399B715C3FF2400B0243F /* Altgot2n.ttf */,
-				9E9FFFC11594948900BA5200 /* League Gothic.otf */,
 				9E9FFF9F159384E200BA5200 /* bg.png */,
 			);
 			name = Resources;
@@ -567,10 +559,6 @@
 				9E42F1F915570FD60087F602 /* InfoPlist.strings in Resources */,
 				9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */,
 				9E9FFFA0159384E200BA5200 /* bg.png in Resources */,
-				9E9FFFC21594948900BA5200 /* League Gothic.otf in Resources */,
-				9E8399B815C3FF2400B0243F /* Altgot2n.ttf in Resources */,
-				9E01308F15E38EB3005C8765 /* README.txt in Resources */,
-				9E01309015E38EB3005C8765 /* release_notes.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
