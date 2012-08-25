@@ -16,9 +16,9 @@
 
 @interface NSDate (Utilities)
 
-- (NSDate *)beginningOfDay;
-- (NSDate *)endOfDay;
+- (NSDate *)beginningOfDayWithCalendar:(NSCalendar *)calendar;
+- (NSDate *)endOfDayWithCalendar:(NSCalendar *)calendar;
 - (BOOL)isBetweenDate:(NSDate *)beginDate andDate:(NSDate *)endDate;
-- (BOOL)isEqualToDateIgnoringTime:(NSDate *)date;
+- (BOOL)isEqualToDateIgnoringTime:(NSDate *)date withCalendar:(NSCalendar *)calendar;
 
 @end

@@ -15,7 +15,6 @@
 @interface EventGroups ()
 
 @property (nonatomic) NSMutableArray *eventGroups;
-
 @property (nonatomic) NSCalendar *calendar;
 
 @end
@@ -93,7 +92,7 @@
             // We want to add the delta between the startDate day and end of startDate day
             // this only nets us enough delta to make it to the end of the day so
             // we need to add one second to this to tip it over
-            NSDate *endOfDay = [startDate endOfDay];
+            NSDate *endOfDay = [startDate endOfDayWithCalendar:self.calendar];
             NSDateComponents *deltaSecondsComponent = [self.calendar components:unitFlags
                                                                        fromDate:startDate
                                                                          toDate:endOfDay
@@ -172,7 +171,7 @@
 		// We want to add the delta between the startDate day and end of startDate day
 		// this only nets us enough delta to make it to the end of the day so
 		// we need to add one second to this to tip it over
-		NSDate *endOfDay = [startDate endOfDay];
+		NSDate *endOfDay = [startDate endOfDayWithCalendar:self.calendar];
 		NSDateComponents *deltaSecondsComponent = [self.calendar components:unitFlags
                                                                    fromDate:startDate
                                                                      toDate:endOfDay

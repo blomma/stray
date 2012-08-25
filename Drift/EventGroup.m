@@ -27,11 +27,11 @@
 
 - (id)initWithDate:(NSDate *)date {
 	if ((self = [super init])) {
-		self.groupDate = [date beginningOfDay];
+        self.calendar  = [NSCalendar currentCalendar];
+
+		self.groupDate = [date beginningOfDayWithCalendar:self.calendar];
 		self.events    = [NSMutableArray array];
 		self.GUID      = [[NSProcessInfo processInfo] globallyUniqueString];
-
-        self.calendar  = [NSCalendar currentCalendar];
 
 		self.timeActiveComponentsCache = [[NSDateComponents alloc] init];
 		self.timeActiveComponentsCache.hour   = 0;
@@ -57,7 +57,7 @@
 #pragma mark Public instance methods
 
 - (BOOL)canContainDate:(NSDate *)date {
-	return [date isEqualToDateIgnoringTime:self.groupDate];
+	return [date isEqualToDateIgnoringTime:self.groupDate withCalendar:self.calendar];
 }
 
 - (BOOL)isValidForEvent:(Event *)event {
@@ -67,7 +67,7 @@
 		stopDate = [NSDate date];
 	}
 
-	NSDate *startDate = [event.startDate beginningOfDay];
+	NSDate *startDate = [event.startDate beginningOfDayWithCalendar:self.calendar];
 
 	return [self.groupDate isBetweenDate:startDate andDate:stopDate];
 }
@@ -141,7 +141,9 @@
 	// If endOfDay is later than calculated stopDate
 	// and groupDate is today
 	// and we found an event that is active
-	if ([[self.groupDate endOfDay] laterDate:stopDate] && [self.groupDate isEqualToDateIgnoringTime:toDay] && isActive) {
+	if ([[self.groupDate endOfDayWithCalendar:self.calendar] laterDate:stopDate] &&
+        [self.groupDate isEqualToDateIgnoringTime:toDay withCalendar:self.calendar] &&
+        isActive) {
 		return YES;
 	} else {
 		return NO;
@@ -151,7 +153,7 @@
 - (void)calculateTotalTimeRunning {
 	static NSUInteger DATE_COMPONENTS = (NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit);
 
-	NSDate *endOfDay = [self.groupDate endOfDay];
+	NSDate *endOfDay = [self.groupDate endOfDayWithCalendar:self.calendar];
 
 	NSDate *deltaStart = [self.groupDate copy];
 	NSDate *deltaEnd   = [self.groupDate copy];

@@ -8,25 +8,23 @@
 
 #import "NSDate+Utilities.h"
 
-static NSUInteger DATE_COMPONENTS = (NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekCalendarUnit |  NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit | NSWeekdayOrdinalCalendarUnit);
-
 @implementation NSDate (Utilities)
 
-- (NSDate *)beginningOfDay {
+- (NSDate *)beginningOfDayWithCalendar:(NSCalendar *)calendar {
     // Get the weekday component of the current date
-	NSDateComponents *components = [[NSCalendar currentCalendar] components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
+	NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
 																   fromDate:self];
-	return [[NSCalendar currentCalendar] dateFromComponents:components];
+	return [calendar dateFromComponents:components];
 }
 
-- (NSDate *)endOfDay {
+- (NSDate *)endOfDayWithCalendar:(NSCalendar *)calendar {
 	NSDateComponents *componentsToAdd = [[NSDateComponents alloc] init];
 	// to get the end of day for a particular date, add 1 day
 	[componentsToAdd setDay:1];
 
-	NSDate *endOfDay = [[NSCalendar currentCalendar] dateByAddingComponents:componentsToAdd
-																	 toDate:[self beginningOfDay]
-																	options:0];
+	NSDate *endOfDay = [calendar dateByAddingComponents:componentsToAdd
+                                                 toDate:[self beginningOfDayWithCalendar:calendar]
+                                                options:0];
 
 	return endOfDay;
 }
@@ -35,9 +33,11 @@ static NSUInteger DATE_COMPONENTS = (NSYearCalendarUnit| NSMonthCalendarUnit | N
 	return (([self compare:beginDate] != NSOrderedAscending) && ([self compare:endDate] != NSOrderedDescending));
 }
 
-- (BOOL)isEqualToDateIgnoringTime:(NSDate *)date {
-	NSDateComponents *components1 = [[NSCalendar currentCalendar] components:DATE_COMPONENTS fromDate:self];
-	NSDateComponents *components2 = [[NSCalendar currentCalendar] components:DATE_COMPONENTS fromDate:date];
+- (BOOL)isEqualToDateIgnoringTime:(NSDate *)date withCalendar:(NSCalendar *)calendar {
+    static NSUInteger units = (NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekCalendarUnit |  NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit | NSWeekdayOrdinalCalendarUnit);
+    
+	NSDateComponents *components1 = [calendar components:units fromDate:self];
+	NSDateComponents *components2 = [calendar components:units fromDate:date];
 
 	return ((components1.year  == components2.year) &&
 			(components1.month == components2.month) &&
