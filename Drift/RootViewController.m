@@ -22,4 +22,8 @@
 	[self addChildViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"EventGroupsViewController"]];
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+	return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
 @end
