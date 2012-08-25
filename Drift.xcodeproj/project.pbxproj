@@ -55,7 +55,6 @@
 		9E21F929156EAA2F0075EAAC /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F928156EAA2F0075EAAC /* Event.m */; };
 		9E42F1EF15570FD60087F602 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1EE15570FD60087F602 /* UIKit.framework */; };
 		9E42F1F115570FD60087F602 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F015570FD60087F602 /* Foundation.framework */; };
-		9E42F1F315570FD60087F602 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F215570FD60087F602 /* CoreGraphics.framework */; };
 		9E42F1F915570FD60087F602 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F1F715570FD60087F602 /* InfoPlist.strings */; };
 		9E42F1FB15570FD60087F602 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F1FA15570FD60087F602 /* main.m */; };
 		9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */; };
@@ -69,14 +68,16 @@
 		9E51511615C7CEF100901655 /* EventGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511315C7CEF100901655 /* EventGroup.m */; };
 		9E51511715C7CEF100901655 /* EventGroups.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511515C7CEF100901655 /* EventGroups.m */; };
 		9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E63BBF3156EAA710006FEFC /* CoreData.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		9E63E1CB15E91743009C0A2D /* EventGroupsViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E63E1CA15E91742009C0A2D /* EventGroupsViewModel.m */; };
 		9E7A19F715D993DA00C9A443 /* EventGroupChange.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7A19F615D993DA00C9A443 /* EventGroupChange.m */; };
 		9E7CEDF4157B778300718FA6 /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEDF3157B778300718FA6 /* _Event.m */; };
+		9E7EB52C15E8F89C00604B79 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */; };
+		9E7EB52D15E8F8C100604B79 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F215570FD60087F602 /* CoreGraphics.framework */; };
 		9E89816F15A0BC2900E22EA7 /* EventGroupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */; };
 		9E9FFFA0159384E200BA5200 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFF9F159384E200BA5200 /* bg.png */; };
 		9E9FFFCC1594AF7400BA5200 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E9FFFCB1594AF7400BA5200 /* libz.dylib */; };
 		9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB520E15C9553C008952FB /* NSDate+Utilities.m */; };
 		9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */; };
-		9EE6EC60158CF7B40063E666 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */; };
 		9EEA276215C09EB5008B6D04 /* EventDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EEA276115C09EB5008B6D04 /* EventDataManager.m */; };
 /* End PBXBuildFile section */
 
@@ -182,6 +183,8 @@
 		9E51511415C7CEF100901655 /* EventGroups.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroups.h; sourceTree = "<group>"; };
 		9E51511515C7CEF100901655 /* EventGroups.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroups.m; sourceTree = "<group>"; };
 		9E63BBF3156EAA710006FEFC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		9E63E1C915E91742009C0A2D /* EventGroupsViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroupsViewModel.h; sourceTree = "<group>"; };
+		9E63E1CA15E91742009C0A2D /* EventGroupsViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroupsViewModel.m; sourceTree = "<group>"; };
 		9E7A19F515D993DA00C9A443 /* EventGroupChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroupChange.h; sourceTree = "<group>"; };
 		9E7A19F615D993DA00C9A443 /* EventGroupChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroupChange.m; sourceTree = "<group>"; };
 		9E7CEDF2157B778300718FA6 /* _Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Event.h; sourceTree = "<group>"; };
@@ -204,12 +207,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E7EB52D15E8F8C100604B79 /* CoreGraphics.framework in Frameworks */,
+				9E7EB52C15E8F89C00604B79 /* QuartzCore.framework in Frameworks */,
 				9E9FFFCC1594AF7400BA5200 /* libz.dylib in Frameworks */,
-				9EE6EC60158CF7B40063E666 /* QuartzCore.framework in Frameworks */,
 				9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */,
 				9E42F1EF15570FD60087F602 /* UIKit.framework in Frameworks */,
 				9E42F1F115570FD60087F602 /* Foundation.framework in Frameworks */,
-				9E42F1F315570FD60087F602 /* CoreGraphics.framework in Frameworks */,
 				9E01308E15E38EB3005C8765 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -407,6 +410,10 @@
 				9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */,
 				9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */,
 				9E89816D15A0BC2900E22EA7 /* EventGroupTableViewCell.h */,
+				9E63E1C915E91742009C0A2D /* EventGroupsViewModel.h */,
+				9E63E1CA15E91742009C0A2D /* EventGroupsViewModel.m */,
+				9E00A76115773859002FC707 /* EventGroupsViewController.h */,
+				9E00A76215773859002FC707 /* EventGroupsViewController.m */,
 				9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */,
 				9E7A19F515D993DA00C9A443 /* EventGroupChange.h */,
 				9E7A19F615D993DA00C9A443 /* EventGroupChange.m */,
@@ -414,8 +421,6 @@
 				9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */,
 				9E00A75D157734AE002FC707 /* EventViewController.h */,
 				9E00A75E157734AE002FC707 /* EventViewController.m */,
-				9E00A76115773859002FC707 /* EventGroupsViewController.h */,
-				9E00A76215773859002FC707 /* EventGroupsViewController.m */,
 				9E42F22715571E9C0087F602 /* RootViewController.h */,
 				9E42F22815571E9C0087F602 /* RootViewController.m */,
 				9EEA276015C09EB5008B6D04 /* EventDataManager.h */,
@@ -662,6 +667,7 @@
 				9E01308615E38EAA005C8765 /* MagicalRecord+Setup.m in Sources */,
 				9E01308715E38EAA005C8765 /* MagicalRecord+ShorthandSupport.m in Sources */,
 				9E01308815E38EAA005C8765 /* MagicalRecord.m in Sources */,
+				9E63E1CB15E91743009C0A2D /* EventGroupsViewModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
