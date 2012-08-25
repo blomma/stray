@@ -21,11 +21,11 @@
 
 - (NSArray *)removeEvent:(Event *)event withConditionIsInvalid:(BOOL)condition;
 - (NSArray *)updateEvent:(Event *)event withConditionIsActive:(BOOL)condition;
-- (NSArray *)updateActiveEvent;
 
 - (NSUInteger)count;
 
 - (NSUInteger)indexForGroupDate:(NSDate *)date;
 - (EventGroup *)eventGroupAtIndex:(NSUInteger)index;
+- (NSUInteger)indexForActiveGroupEvent;
 
 @end

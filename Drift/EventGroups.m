@@ -104,6 +104,8 @@
         }
     }
 
+    [self.eventGroups sortUsingSelector:@selector(reverseCompare:)];
+
 	[self updateExistsActiveEventGroup];
 }
 
@@ -163,11 +165,9 @@
 			[eventGroup addEvent:event];
 
 			eventGroupChange.GUID = eventGroup.GUID;
-            eventGroupChange.index = index;
 
 			// Add the change
 			[changes addObject:eventGroupChange];
-
 		}
 
 		// We want to add the delta between the startDate day and end of startDate day
@@ -184,6 +184,14 @@
 		eventSecondsComponent.second -= deltaSecondsComponent.second;
 	}
 
+	for (EventGroupChange *eventGroupChange in changes) {
+		NSUInteger i = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
+			return [[(EventGroup *) obj GUID] isEqualToString:eventGroupChange.GUID];
+		}];
+
+		eventGroupChange.index = i;
+	}
+
 	[self updateExistsActiveEventGroup];
     
 	return [changes copy];
@@ -192,7 +200,9 @@
 - (NSArray *)removeEvent:(Event *)event withConditionIsInvalid:(BOOL)condition {
 	NSMutableArray *changes = [NSMutableArray array];
 
-	for (EventGroup *eventGroup in self.eventGroups) {
+    for (NSUInteger i = 0; i < self.eventGroups.count; i++) {
+        EventGroup *eventGroup = [self.eventGroups objectAtIndex:i];
+
 		BOOL process = [eventGroup containsEvent:event];
 
 		// Check if condition is given and if so only remove event if it is invalid
@@ -202,17 +212,16 @@
 
 		if (process) {
 			EventGroupChange *eventGroupChange = [EventGroupChange new];
-			eventGroupChange.GUID = eventGroup.GUID;
-			eventGroupChange.type = EventGroupChangeUpdate;
-
+			eventGroupChange.GUID  = eventGroup.GUID;
+			eventGroupChange.type  = EventGroupChangeUpdate;
+            eventGroupChange.index = i;
+            
 			[changes addObject:eventGroupChange];
 
 			[eventGroup removeEvent:event];
 		}
 	}
 
-	// Remove empty eventGroups, we do this step seperatly from
-	// the index build since what we want is the index of the entry before the delete
 	for (EventGroupChange *eventGroupChange in changes) {
 		// We cant trust the index, so we look it up again
 		NSUInteger i = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
@@ -236,7 +245,8 @@
 	NSMutableArray *changes = [NSMutableArray array];
 
 	// Update the event in any groups that contains it and can contain it, later we remove it from invalid groups
-	for (EventGroup *eventGroup in self.eventGroups) {
+    for (NSUInteger i = 0; i < self.eventGroups.count; i++) {
+        EventGroup *eventGroup = [self.eventGroups objectAtIndex:i];
 		BOOL process = [eventGroup containsEvent:event] && [eventGroup isValidForEvent:event];
 
 		// Check if condition is given and if so only update if it is active
@@ -246,8 +256,9 @@
 
 		if (process) {
 			EventGroupChange *eventGroupChange = [EventGroupChange new];
-			eventGroupChange.GUID = eventGroup.GUID;
-			eventGroupChange.type = EventGroupChangeUpdate;
+			eventGroupChange.GUID  = eventGroup.GUID;
+			eventGroupChange.type  = EventGroupChangeUpdate;
+            eventGroupChange.index = i;
 
 			[changes addObject:eventGroupChange];
 
@@ -268,15 +279,6 @@
 	return [changes copy];
 }
 
-- (NSArray *)updateActiveEvent {
-	EventGroup *eventGroup = [self activeEventGroup];
-	if (eventGroup) {
-		return [self updateEvent:[eventGroup activeEvent] withConditionIsActive:YES];
-	} else {
-		return nil;
-	}
-}
-
 - (NSUInteger)count {
 	return self.eventGroups.count;
 }
@@ -291,6 +293,17 @@
     }];
 
     return index;
+}
+
+- (NSUInteger)indexForActiveGroupEvent {
+	if (self.eventGroups.count > 0) {
+		EventGroup *eventGroup = [self.eventGroups objectAtIndex:0];
+		if (eventGroup.isActive) {
+			return 0;
+		}
+	}
+
+    return NSNotFound;
 }
 
 #pragma mark -
@@ -308,24 +321,9 @@
     return index;
 }
 
-- (EventGroup *)activeEventGroup {
-	if (self.eventGroups.count > 0) {
-		EventGroup *eventGroup = [self.eventGroups objectAtIndex:0];
-		if (eventGroup.isActive) {
-			return eventGroup;
-		}
-	}
-
-	return nil;
-}
-
 - (void)updateExistsActiveEventGroup {
-	EventGroup *eventGroup = [self activeEventGroup];
-	if (eventGroup) {
-		self.existsActiveEventGroup = YES;
-	} else {
-		self.existsActiveEventGroup = NO;
-	}
+    NSUInteger index = [self indexForActiveGroupEvent];
+    self.existsActiveEventGroup = (index == NSNotFound ? NO : YES);
 }
 
 

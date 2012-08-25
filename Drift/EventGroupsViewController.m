@@ -111,6 +111,7 @@
 	}
 
 	// Updated Events
+    // this can generate update, insert and delete changes
 	NSSet *updatedObjects = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
 	NSMutableArray *updatedEvents = [NSMutableArray arrayWithArray:[updatedObjects allObjects]];
 
@@ -120,6 +121,10 @@
 		for (EventGroupChange *eventGroupChange in changes) {
 			if ([eventGroupChange.type isEqualToString:EventGroupChangeUpdate]) {
 				[updateIndexPaths addObject:[NSIndexPath indexPathForRow:(NSInteger)eventGroupChange.index inSection:0]];
+			} else if ([eventGroupChange.type isEqualToString:EventGroupChangeDelete]) {
+				[deleteIndexPaths addObject:[NSIndexPath indexPathForRow:(NSInteger)eventGroupChange.index inSection:0]];
+			} else if ([eventGroupChange.type isEqualToString:EventGroupChangeInsert]) {
+				[insertIndexPaths addObject:[NSIndexPath indexPathForRow:(NSInteger)eventGroupChange.index inSection:0]];
 			}
 		}
 	}
@@ -200,7 +205,14 @@
 	NSMutableArray *deleteIndexPaths = [NSMutableArray array];
 	NSMutableArray *updateIndexPaths = [NSMutableArray array];
 
-	NSArray *changes = [self.eventGroups updateActiveEvent];
+    NSUInteger index = [self.eventGroups indexForActiveGroupEvent];
+    if (index == NSNotFound) {
+        return;
+    }
+
+    Event *event = [[self.eventGroups eventGroupAtIndex:index] activeEvent];
+
+	NSArray *changes = [self.eventGroups updateEvent:event withConditionIsActive:YES];
 
 	for (EventGroupChange *eventGroupChange in changes) {
 		if ([eventGroupChange.type isEqualToString:EventGroupChangeUpdate]) {
