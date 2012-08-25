@@ -30,6 +30,7 @@
 
 // Caches
 @property (nonatomic) CGFloat previousSecondTicks;
+@property (nonatomic) CGFloat previousMinute;
 
 @end
 
@@ -181,8 +182,11 @@
     }
 
 	// And for the minutes we want a more tick/tock behavior
-	a                              = (CGFloat)((M_PI * 2) * floor(elapsedSecondsIntoHour / 60) / 60);
-	self.minuteHandLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
+	a = (CGFloat)((M_PI * 2) * floor(elapsedSecondsIntoHour / 60) / 60);
+    if (a != self.previousMinute) {
+        self.minuteHandLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
+        self.previousMinute = a;
+    }
 }
 
 - (void)setUpClock {

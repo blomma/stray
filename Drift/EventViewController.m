@@ -15,6 +15,7 @@
 @property (nonatomic) NSDateFormatter *startDateFormatter;
 @property (nonatomic) NSCalendar *calendar;
 
+@property (nonatomic) NSDateComponents *previousNowComponents;
 @end
 
 @implementation EventViewController
@@ -27,7 +28,7 @@
 	if (self) {
         // Startdate formatter
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        [formatter setDateFormat:@"yyyy-MM-dd HH:mm"];
         self.startDateFormatter = formatter;
 
         self.calendar = [NSCalendar currentCalendar];
@@ -122,8 +123,10 @@
 	unsigned int static unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
 	NSDateComponents *components = [self.calendar components:unitFlags fromDate:event.startDate toDate:date options:0];
 
-	// And finally update the running timer
-	self.runningTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", components.hour, components.minute, components.second];
+    if (components.hour != self.previousNowComponents.hour || components.minute != self.previousNowComponents.minute || components.second != self.previousNowComponents.second) {
+        self.runningTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", components.hour, components.minute, components.second];
+        self.previousNowComponents = components;
+    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
