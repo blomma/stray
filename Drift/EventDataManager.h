@@ -14,7 +14,7 @@
 
 + (id)sharedManager;
 
-- (void)createEvent;
+- (Event *)createEvent;
 - (void)persistCurrentEvent;
 
 @end

@@ -95,8 +95,7 @@
 		[TestFlight passCheckpoint:@"START EVENT"];
 
 		// No, lets create a new one
-		[[EventDataManager sharedManager] createEvent];
-		currentEvent               = [[EventDataManager sharedManager] currentEvent];
+		currentEvent               = [[EventDataManager sharedManager] createEvent];
 		currentEvent.isActiveValue = YES;
 		currentEvent.startDate     = now;
 

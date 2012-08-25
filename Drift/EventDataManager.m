@@ -38,8 +38,9 @@
 	[[NSManagedObjectContext MR_defaultContext] MR_save];
 }
 
-- (void)createEvent {
+- (Event *)createEvent {
 	self.currentEvent = [Event MR_createEntity];
+    return self.currentEvent;
 }
 
 #pragma mark -
