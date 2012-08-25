@@ -69,10 +69,6 @@
 	}
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 - (void)handleDataModelChange:(NSNotification *)note {
 	NSMutableArray *insertIndexPaths = [NSMutableArray array];
 	NSMutableArray *deleteIndexPaths = [NSMutableArray array];
