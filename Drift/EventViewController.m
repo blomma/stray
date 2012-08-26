@@ -70,6 +70,11 @@
 	                         forKeyPath:@"nowDate"
 	                            options:NSKeyValueObservingOptionNew
 	                            context:NULL];
+
+	[self.eventTimerControl addObserver:self
+	                         forKeyPath:@"startHandIsTransforming"
+	                            options:NSKeyValueObservingOptionNew
+	                            context:NULL];
 }
 
 #pragma mark -
@@ -138,7 +143,14 @@
 		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
 
 		[self updateNowLabel:date];
-	}
+	} else if ([keyPath isEqualToString:@"startHandIsTransforming"]) {
+        BOOL isTransforming = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+        if (isTransforming) {
+            self.startDateLabel.font = [self.startDateLabel.font fontWithSize:30];
+        } else {
+            self.startDateLabel.font = [self.startDateLabel.font fontWithSize:14];
+        }
+    }
 }
 
 @end

@@ -10,6 +10,7 @@
 #import "EventDataManager.h"
 #import "EventTimerControl.h"
 #import <QuartzCore/QuartzCore.h>
+#import "NoHitCAShapeLayer.h"
 
 @interface EventTimerControl ()
 
@@ -19,8 +20,8 @@
 
 @property (nonatomic) CAShapeLayer *startHandLayer;
 @property (nonatomic) CAShapeLayer *minuteHandLayer;
-@property (nonatomic) CAShapeLayer *secondHandLayer;
-@property (nonatomic) CAShapeLayer *secondHandProgressTicksLayer;
+@property (nonatomic) NoHitCAShapeLayer *secondHandLayer;
+@property (nonatomic) NoHitCAShapeLayer *secondHandProgressTicksLayer;
 
 // Touch transforming
 @property (nonatomic) NSDate *deltaDate;
@@ -190,130 +191,130 @@
 }
 
 - (void)setUpClock {
-	CGMutablePathRef path;
 	CGFloat angle;
 
-	// ticks
-	for (NSInteger i = 1; i <= 60; ++i) {
-		CAShapeLayer *tick = [CAShapeLayer layer];
+    self.layer.contentsScale = [UIScreen mainScreen].scale;
 
-		path  = CGPathCreateMutable();
+    // =====================
+    // = Ticks initializer =
+    // =====================
+    UIBezierPath *largeTickPath = [UIBezierPath bezierPathWithRect:CGRectMake(0.0, 0.0, 4.0, 14)];
+    UIBezierPath *smallTickPath = [UIBezierPath bezierPathWithRect:CGRectMake(0.0, 0.0, 3.0, 11.0)];
+
+	for (NSInteger i = 1; i <= 60; ++i) {
+		NoHitCAShapeLayer *tick = [NoHitCAShapeLayer layer];
+        tick.contentsScale = [UIScreen mainScreen].scale;
+
 		angle = (CGFloat)((M_PI * 2) / 60.0 * i);
 
 		if (i % 10 == 0) {
-			CGPathAddRect(path, nil, CGRectMake(0.0, 0.0, 4.0, 14));
-
 			tick.fillColor   = [[UIColor whiteColor] CGColor];
 			tick.lineWidth   = 1;
-
 			tick.bounds      = CGRectMake(0.0, 0.0, 4.0, self.bounds.size.height / 2 - 30);
 			tick.anchorPoint = CGPointMake(0.5, 1.0);
 			tick.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 			tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
-			tick.path        = path;
+			tick.path        = largeTickPath.CGPath;
 		} else {
-			CGPathAddRect(path, nil, CGRectMake(0.0, 0.0, 3.0, 11.0));
-
 			tick.fillColor   = [[UIColor colorWithWhite:0.651 alpha:1.000] CGColor];
 			tick.lineWidth   = 1;
-
 			tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.bounds.size.height / 2.0 - 31.5);
 			tick.anchorPoint = CGPointMake(0.5, 1.0);
 			tick.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 			tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
-			tick.path        = path;
+			tick.path        = smallTickPath.CGPath;
 		}
 
 		[self.layer addSublayer:tick];
 	}
 
-	// minute hand
+    // ==========================
+    // = Minutehand initializer =
+    // ==========================
 	self.minuteHandLayer = [CAShapeLayer layer];
+    self.minuteHandLayer.contentsScale = [UIScreen mainScreen].scale;
 
-	path                 = CGPathCreateMutable();
+    UIBezierPath *minuteHandPath = [UIBezierPath bezierPath];
+    [minuteHandPath moveToPoint:CGPointMake(5, 17)];    // Start at the top
+    [minuteHandPath addLineToPoint:CGPointMake(0, 0)]; // Move to bottom left
+    [minuteHandPath addLineToPoint:CGPointMake(9, 0)]; // Move to bottom right
 
-	// start at top
-	CGPathMoveToPoint(path, NULL, 5.0, 17.0);
-	// move to bottom left
-	CGPathAddLineToPoint(path, NULL, 0.0, 0.0);
-	// move to bottom right
-	CGPathAddLineToPoint(path, NULL, 9.0, 0.0);
-	CGPathCloseSubpath(path);
-
-	self.minuteHandLayer.fillColor   = [[UIColor colorWithRed:0.098 green:0.800 blue:0.000 alpha:1.000] CGColor];
-	self.minuteHandLayer.lineWidth   = 1.0;
-
-	self.minuteHandLayer.bounds      = CGRectMake(0.0, 0.0, 9.0, self.bounds.size.height / 2.0 - 12);
+	self.minuteHandLayer.bounds      = CGRectMake(0.0, 0.0, 9.0, self.bounds.size.height / 2.0 - 7);
 	self.minuteHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.minuteHandLayer.anchorPoint = CGPointMake(0.5, 1.0);
 	self.minuteHandLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
-	self.minuteHandLayer.path        = path;
+	self.minuteHandLayer.fillColor   = [[UIColor colorWithRed:0.098 green:0.800 blue:0.000 alpha:1.000] CGColor];
+	self.minuteHandLayer.lineWidth   = 1.0;
+	self.minuteHandLayer.path        = minuteHandPath.CGPath;
 
 	[self.layer addSublayer:self.minuteHandLayer];
 
-	// start hand
+    // =========================
+    // = Starthand initializer =
+    // =========================
 	self.startHandLayer = [CAShapeLayer layer];
+    self.startHandLayer.contentsScale = [UIScreen mainScreen].scale;
 
-	path                = CGPathCreateMutable();
+    // We make the bounds larger for the hit test, otherwise the target is
+    // to damn small for human hands, martians not included
+    UIBezierPath *startHandPath = [UIBezierPath bezierPath];
+    [startHandPath moveToPoint:CGPointMake(10, 0)];     // Start at the top
+    [startHandPath addLineToPoint:CGPointMake(5, 17)];  // Move to bottom left
+    [startHandPath addLineToPoint:CGPointMake(15, 17)]; // Move to bottom right
 
-	// start at top
-	CGPathMoveToPoint(path, NULL, 5, 0.0);
-	// move to bottom left
-	CGPathAddLineToPoint(path, NULL, 0.0, 17.0);
-	// move to bottom right
-	CGPathAddLineToPoint(path, NULL, 9.0, 17.0);
-	CGPathCloseSubpath(path);
+    // position
+    self.startHandLayer.bounds      = CGRectMake(0.0, 0.0, 19, 19);
+	self.startHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+	self.startHandLayer.anchorPoint = CGPointMake(0.5, 5.8);
 
+    // drawing
+	self.startHandLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
 	self.startHandLayer.fillColor   = [[UIColor colorWithRed:1.000 green:0.600 blue:0.008 alpha:1.000] CGColor];
 	self.startHandLayer.lineWidth   = 1.0;
-
-	self.startHandLayer.bounds      = CGRectMake(0.0, 0.0, 9.0, self.bounds.size.height / 2 - 50);
-	self.startHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-	self.startHandLayer.anchorPoint = CGPointMake(0.5, 1.0);
-	self.startHandLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
-	self.startHandLayer.path        = path;
+	self.startHandLayer.path        = startHandPath.CGPath;
 
 	[self.layer addSublayer:self.startHandLayer];
 
-	// second hand
-	self.secondHandLayer = [CAShapeLayer layer];
+    // ==========================
+    // = Secondhand initializer =
+    // ==========================
+	self.secondHandLayer = [NoHitCAShapeLayer layer];
+    self.secondHandLayer.contentsScale = [UIScreen mainScreen].scale;
 
-	path                 = CGPathCreateMutable();
-
-	// start at top
-	CGPathMoveToPoint(path, NULL, 3.5, 0.0);
-	// move to bottom left
-	CGPathAddLineToPoint(path, NULL, 0.0, 7.0);
-	// move to bottom right
-	CGPathAddLineToPoint(path, NULL, 7.0, 7.0);
-	CGPathCloseSubpath(path);
+    UIBezierPath *secondHandPath = [UIBezierPath bezierPath];
+    [secondHandPath moveToPoint:CGPointMake(3.5, 0)];  // Start at the top
+    [secondHandPath addLineToPoint:CGPointMake(0, 7)]; // Move to bottom left
+    [secondHandPath addLineToPoint:CGPointMake(7, 7)]; // Move to bottom right
 
 	self.secondHandLayer.fillColor   = [[UIColor redColor] CGColor];
 	self.secondHandLayer.lineWidth   = 1.0;
-
 	self.secondHandLayer.bounds      = CGRectMake(0.0, 0.0, 7.0, self.bounds.size.height / 2.0 - 62);
 	self.secondHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.secondHandLayer.anchorPoint = CGPointMake(0.5, 1.0);
 	self.secondHandLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
-	self.secondHandLayer.path        = path;
+	self.secondHandLayer.path        = secondHandPath.CGPath;
 
 	[self.layer addSublayer:self.secondHandLayer];
 
-	// second hand progress ticks
-	self.secondHandProgressTicksLayer             = [CAShapeLayer layer];
+    // =========================================
+    // = Secondhand progress ticks initializer =
+    // =========================================
+	self.secondHandProgressTicksLayer             = [NoHitCAShapeLayer layer];
+    self.secondHandProgressTicksLayer.contentsScale = [UIScreen mainScreen].scale;
+
 	self.secondHandProgressTicksLayer.bounds      = CGRectMake(0.0, 0.0, self.bounds.size.width - 100, self.bounds.size.height - 100);
 	self.secondHandProgressTicksLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.secondHandProgressTicksLayer.anchorPoint = CGPointMake(0.5, 0.5);
+
 	[self.layer addSublayer:self.secondHandProgressTicksLayer];
 
-	// paint the second hand tick marks
+    UIBezierPath *secondHandTickPath = [UIBezierPath bezierPathWithRect:CGRectMake(0.0, 0.0, 3.0, 2.0)];
 	for (NSInteger i = 1; i <= 60; ++i) {
 		angle = (CGFloat)((M_PI * 2) / 60.0 * i);
 
-		CAShapeLayer *tick = [CAShapeLayer layer];
-		path = CGPathCreateMutable();
+		NoHitCAShapeLayer *tick = [NoHitCAShapeLayer layer];
+        tick.contentsScale = [UIScreen mainScreen].scale;
 
-		CGPathAddRect(path, nil, CGRectMake(0.0, 0.0, 3.0, 2.0));
 
 		tick.fillColor   = [[UIColor redColor] CGColor];
 		tick.lineWidth   = 1;
@@ -322,7 +323,7 @@
 		tick.anchorPoint = CGPointMake(0.5, 1.0);
 		tick.position    = CGPointMake(CGRectGetMidX(self.secondHandProgressTicksLayer.bounds), CGRectGetMidY(self.secondHandProgressTicksLayer.bounds));
 		tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
-		tick.path        = path;
+		tick.path        = secondHandTickPath.CGPath;
 
 		[self.secondHandProgressTicksLayer addSublayer:tick];
 	}
@@ -338,10 +339,10 @@
 
 	self.deltaLayer = NULL;
 
-	// Was this a touch on the startHand and is the timer started
 	if ([self.startHandLayer.presentationLayer hitTest:point] && self.isEventActive) {
 		self.deltaLayer = self.startHandLayer;
 		self.deltaDate  = self.startDate;
+        self.startHandIsTransforming = YES;
 	}
 
 	if (self.deltaLayer != NULL) {
@@ -432,6 +433,8 @@
 			// Lets persist this new fangled startDate
 			Event *currentEvent = [[EventDataManager sharedManager] currentEvent];
 			currentEvent.startDate = self.startDate;
+
+            self.startHandIsTransforming = NO;
 
 			[[EventDataManager sharedManager] persistCurrentEvent];
 		}

@@ -69,6 +69,7 @@
 		9E51511715C7CEF100901655 /* EventGroups.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511515C7CEF100901655 /* EventGroups.m */; };
 		9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E63BBF3156EAA710006FEFC /* CoreData.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9E63E1CB15E91743009C0A2D /* EventGroupsViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E63E1CA15E91742009C0A2D /* EventGroupsViewModel.m */; };
+		9E63E1D715EA3339009C0A2D /* NoHitCAShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */; };
 		9E7A19F715D993DA00C9A443 /* EventGroupChange.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7A19F615D993DA00C9A443 /* EventGroupChange.m */; };
 		9E7CEDF4157B778300718FA6 /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEDF3157B778300718FA6 /* _Event.m */; };
 		9E7EB52C15E8F89C00604B79 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */; };
@@ -185,6 +186,8 @@
 		9E63BBF3156EAA710006FEFC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		9E63E1C915E91742009C0A2D /* EventGroupsViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroupsViewModel.h; sourceTree = "<group>"; };
 		9E63E1CA15E91742009C0A2D /* EventGroupsViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroupsViewModel.m; sourceTree = "<group>"; };
+		9E63E1D515EA3338009C0A2D /* NoHitCAShapeLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoHitCAShapeLayer.h; sourceTree = "<group>"; };
+		9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoHitCAShapeLayer.m; sourceTree = "<group>"; };
 		9E7A19F515D993DA00C9A443 /* EventGroupChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroupChange.h; sourceTree = "<group>"; };
 		9E7A19F615D993DA00C9A443 /* EventGroupChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroupChange.m; sourceTree = "<group>"; };
 		9E7CEDF2157B778300718FA6 /* _Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Event.h; sourceTree = "<group>"; };
@@ -412,6 +415,8 @@
 				9E89816D15A0BC2900E22EA7 /* EventGroupTableViewCell.h */,
 				9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */,
 				9E63E1C915E91742009C0A2D /* EventGroupsViewModel.h */,
+				9E63E1D515EA3338009C0A2D /* NoHitCAShapeLayer.h */,
+				9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */,
 				9E63E1CA15E91742009C0A2D /* EventGroupsViewModel.m */,
 				9E00A76115773859002FC707 /* EventGroupsViewController.h */,
 				9E00A76215773859002FC707 /* EventGroupsViewController.m */,
@@ -668,6 +673,7 @@
 				9E01308715E38EAA005C8765 /* MagicalRecord+ShorthandSupport.m in Sources */,
 				9E01308815E38EAA005C8765 /* MagicalRecord.m in Sources */,
 				9E63E1CB15E91743009C0A2D /* EventGroupsViewModel.m in Sources */,
+				9E63E1D715EA3339009C0A2D /* NoHitCAShapeLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

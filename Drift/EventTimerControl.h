@@ -12,6 +12,8 @@
 @property (nonatomic) NSDate *nowDate;
 @property (nonatomic) NSDate *stopDate;
 
+@property (nonatomic) BOOL startHandIsTransforming;
+
 - (void)startWithDate:(NSDate *)date;
 - (void)stopWithDate:(NSDate *)date;
 

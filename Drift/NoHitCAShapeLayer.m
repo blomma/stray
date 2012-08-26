@@ -10,4 +10,8 @@
 
 @implementation NoHitCAShapeLayer
 
+- (BOOL)containsPoint:(CGPoint)point {
+    return NO;
+}
+
 @end
