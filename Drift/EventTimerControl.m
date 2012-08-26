@@ -198,7 +198,7 @@
     // =====================
     // = Ticks initializer =
     // =====================
-    UIBezierPath *largeTickPath = [UIBezierPath bezierPathWithRect:CGRectMake(0.0, 0.0, 4.0, 14)];
+    UIBezierPath *largeTickPath = [UIBezierPath bezierPathWithRect:CGRectMake(0.0, 0.0, 5.0, 14)];
     UIBezierPath *smallTickPath = [UIBezierPath bezierPathWithRect:CGRectMake(0.0, 0.0, 3.0, 11.0)];
 
 	for (NSInteger i = 1; i <= 60; ++i) {
@@ -210,7 +210,7 @@
 		if (i % 10 == 0) {
 			tick.fillColor   = [[UIColor whiteColor] CGColor];
 			tick.lineWidth   = 1;
-			tick.bounds      = CGRectMake(0.0, 0.0, 4.0, self.bounds.size.height / 2 - 30);
+			tick.bounds      = CGRectMake(0.0, 0.0, 5.0, self.bounds.size.height / 2 - 30);
 			tick.anchorPoint = CGPointMake(0.5, 1.0);
 			tick.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 			tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
@@ -237,9 +237,9 @@
     UIBezierPath *minuteHandPath = [UIBezierPath bezierPath];
     [minuteHandPath moveToPoint:CGPointMake(5, 17)];    // Start at the top
     [minuteHandPath addLineToPoint:CGPointMake(0, 0)]; // Move to bottom left
-    [minuteHandPath addLineToPoint:CGPointMake(9, 0)]; // Move to bottom right
+    [minuteHandPath addLineToPoint:CGPointMake(10, 0)]; // Move to bottom right
 
-	self.minuteHandLayer.bounds      = CGRectMake(0.0, 0.0, 9.0, self.bounds.size.height / 2.0 - 7);
+	self.minuteHandLayer.bounds      = CGRectMake(0.0, 0.0, 10, self.bounds.size.height / 2.0 - 7);
 	self.minuteHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.minuteHandLayer.anchorPoint = CGPointMake(0.5, 1.0);
 	self.minuteHandLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
@@ -263,7 +263,7 @@
     [startHandPath addLineToPoint:CGPointMake(15, 17)]; // Move to bottom right
 
     // position
-    self.startHandLayer.bounds      = CGRectMake(0.0, 0.0, 19, 19);
+    self.startHandLayer.bounds      = CGRectMake(0.0, 0.0, 20, 19);
 	self.startHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.startHandLayer.anchorPoint = CGPointMake(0.5, 5.8);
 
