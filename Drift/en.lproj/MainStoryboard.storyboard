@@ -73,10 +73,10 @@
                                     </button>
                                 </subviews>
                             </view>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="W98-oL-Wio" userLabel="Start date label">
-                                <rect key="frame" x="99" y="35" width="123" height="21"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="12:12:12 12:12:12" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="W98-oL-Wio" userLabel="Start date label">
+                                <rect key="frame" x="0.0" y="18" width="320" height="56"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="20"/>
+                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="24"/>
                                 <color key="textColor" red="1" green="0.59999999999999998" blue="0.0078431372549019607" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -126,7 +126,7 @@
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="00" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" adjustsFontSizeToFit="NO" id="Zam-CZ-wC7" userLabel="RunningTimeMinutes">
-                                            <rect key="frame" x="95" y="15" width="43" height="35"/>
+                                            <rect key="frame" x="89" y="15" width="43" height="35"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="31"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

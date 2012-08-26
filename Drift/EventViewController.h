@@ -13,7 +13,6 @@
 @property (weak, nonatomic) IBOutlet EventTimerControl *eventTimerControl;
 @property (weak, nonatomic) IBOutlet UIButton *toggleStartStopButton;
 @property (weak, nonatomic) IBOutlet UILabel *startDateLabel;
-
 @property (weak, nonatomic) IBOutlet UILabel *runningTimeLabel;
 
 - (IBAction)toggleEvent:(id)sender;
