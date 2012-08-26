@@ -29,7 +29,7 @@
 @property (nonatomic) CAShapeLayer *deltaLayer;
 
 // Caches
-@property (nonatomic) CGFloat previousSecondTicks;
+@property (nonatomic) CGFloat previousSecondTick;
 @property (nonatomic) CGFloat previousMinute;
 
 @end
@@ -162,13 +162,13 @@
 	self.secondHandLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
 
 	// Update the tick marks for the second hand
-	CGFloat secondTicks = (CGFloat)floor(fmod(elapsedSecondsIntoHour, 60));
+	CGFloat secondTick = (CGFloat)floor(fmod(elapsedSecondsIntoHour, 60));
 
-    if (secondTicks != self.previousSecondTicks) {
+    if (secondTick != self.previousSecondTick) {
         for (NSUInteger i = 0; i < self.secondHandProgressTicksLayer.sublayers.count; i++) {
             CALayer *layer = [self.secondHandProgressTicksLayer.sublayers objectAtIndex:i];
 
-            if (i < secondTicks) {
+            if (i < secondTick) {
                 if (layer.hidden) {
                     layer.hidden = NO;
                 }
@@ -178,7 +178,7 @@
                 }
             }
         }
-        self.previousSecondTicks = secondTicks;
+        self.previousSecondTick = secondTick;
     }
 
 	// And for the minutes we want a more tick/tock behavior
