@@ -621,7 +621,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash    \nbN=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbN=$((0x$bN)) \nbN=$(($bN + 1)) \nbN=$(printf \"%X\" $bN)\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $bN\" \"$INFOPLIST_FILE\"";
+			shellScript = "# Assumes that you tag versions with the version number (e.g., \"1.1\") and then the build number is\n# that plus the number of commits since the tag (e.g., \"1.1.17\")\n\necho \"Updating version/build number from git...\"\nplist=${PROJECT_DIR}/${INFOPLIST_FILE}\n\n# increment the build number (ie 115 to 116)\nversionnum=`git describe | awk '{split($0,a,\"-\"); print a[1]}'`\nbuildnum=`git describe | awk '{split($0,a,\"-\"); print a[1] \".\" a[2]}'`\n\nif [[ \"${versionnum}\" == \"\" ]]; then\necho \"No version number from git\"\nexit 2\nfi\n\nif [[ \"${buildnum}\" == \"\" ]]; then\necho \"No build number from git\"\nexit 2\nfi\n\n/usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $versionnum\" \"${plist}\"\necho \"Updated version number to $versionnum\"\n\n/usr/libexec/Plistbuddy -c \"Set CFBundleVersion $buildnum\" \"${plist}\"\necho \"Updated build number to $buildnum\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
