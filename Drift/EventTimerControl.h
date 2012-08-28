@@ -6,13 +6,19 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
+typedef enum : NSInteger {
+    EventTimerTransformingNone = 0,
+    EventTimerTransformingStartHandStart,
+    EventTimerTransformingStartHandStop
+} EventTimerTransformingEnum;
+
 @interface EventTimerControl : UIControl
 
 @property (nonatomic) NSDate *startDate;
 @property (nonatomic) NSDate *nowDate;
 @property (nonatomic) NSDate *stopDate;
 
-@property (nonatomic) BOOL startHandIsTransforming;
+@property (nonatomic) EventTimerTransformingEnum isTransforming;
 
 - (void)startWithDate:(NSDate *)date;
 - (void)stopWithDate:(NSDate *)date;

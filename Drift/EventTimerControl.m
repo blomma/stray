@@ -339,10 +339,10 @@
 
 	self.deltaLayer = NULL;
 
-	if ([self.startHandLayer.presentationLayer hitTest:point] && self.isEventActive) {
+	if ([self.startHandLayer.presentationLayer hitTest:point]) {
 		self.deltaLayer = self.startHandLayer;
 		self.deltaDate  = self.startDate;
-        self.startHandIsTransforming = YES;
+        self.isTransforming = EventTimerTransformingStartHandStart;
 	}
 
 	if (self.deltaLayer != NULL) {
@@ -434,7 +434,7 @@
 			Event *currentEvent = [[EventDataManager sharedManager] currentEvent];
 			currentEvent.startDate = self.startDate;
 
-            self.startHandIsTransforming = NO;
+            self.isTransforming = EventTimerTransformingStartHandStop;
 
 			[[EventDataManager sharedManager] persistCurrentEvent];
 		}

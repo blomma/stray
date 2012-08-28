@@ -76,7 +76,7 @@
 	                            context:NULL];
 
 	[self.eventTimerControl addObserver:self
-	                         forKeyPath:@"startHandIsTransforming"
+	                         forKeyPath:@"isTransforming"
 	                            options:NSKeyValueObservingOptionNew
 	                            context:NULL];
 }
@@ -241,10 +241,15 @@
 		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
 
 		[self updateNowLabel:date];
-	} else if ([keyPath isEqualToString:@"startHandIsTransforming"]) {
-        BOOL isTransforming = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
-        [self animateStartDateIsTransforming:isTransforming];
-        [self animateTimeRunningIsTransforming:isTransforming];
+	} else if ([keyPath isEqualToString:@"isTransforming"]) {
+        EventTimerTransformingEnum isTransforming = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+        if (isTransforming == EventTimerTransformingStartHandStart) {
+            [self animateStartDateIsTransforming:YES];
+            [self animateTimeRunningIsTransforming:YES];
+        } else if (isTransforming == EventTimerTransformingStartHandStop) {
+            [self animateStartDateIsTransforming:NO];
+            [self animateTimeRunningIsTransforming:NO];
+        }
     }
 }
 
