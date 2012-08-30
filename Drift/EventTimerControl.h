@@ -9,7 +9,9 @@
 typedef enum : NSInteger {
     EventTimerTransformingNone = 0,
     EventTimerTransformingStartHandStart,
-    EventTimerTransformingStartHandStop
+    EventTimerTransformingStartHandStop,
+    EventTimerTransformingStopHandStart,
+    EventTimerTransformingStopHandStop
 } EventTimerTransformingEnum;
 
 @interface EventTimerControl : UIControl

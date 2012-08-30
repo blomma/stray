@@ -61,7 +61,7 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if ((self = [super initWithCoder:aDecoder])) {
-		[self setUpClock];
+        [self setUpClock];
 	}
 
 	return self;
@@ -210,7 +210,7 @@
 		if (i % 10 == 0) {
 			tick.fillColor   = [[UIColor whiteColor] CGColor];
 			tick.lineWidth   = 1;
-			tick.bounds      = CGRectMake(0.0, 0.0, 5.0, self.bounds.size.height / 2 - 30);
+			tick.bounds      = CGRectMake(0.0, 0.0, 5.0, self.bounds.size.width / 2 - 30);
 			tick.anchorPoint = CGPointMake(0.5, 1.0);
 			tick.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 			tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
@@ -218,7 +218,7 @@
 		} else {
 			tick.fillColor   = [[UIColor colorWithWhite:0.651 alpha:1.000] CGColor];
 			tick.lineWidth   = 1;
-			tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.bounds.size.height / 2.0 - 31.5);
+			tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.bounds.size.width / 2.0 - 31.5);
 			tick.anchorPoint = CGPointMake(0.5, 1.0);
 			tick.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 			tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
@@ -234,14 +234,19 @@
 	self.minuteHandLayer = [CAShapeLayer layer];
     self.minuteHandLayer.contentsScale = [UIScreen mainScreen].scale;
 
+    // We make the bounds larger for the hit test, otherwise the target is
+    // to damn small for human hands, martians not included
     UIBezierPath *minuteHandPath = [UIBezierPath bezierPath];
-    [minuteHandPath moveToPoint:CGPointMake(5, 17)];    // Start at the top
-    [minuteHandPath addLineToPoint:CGPointMake(0, 0)]; // Move to bottom left
-    [minuteHandPath addLineToPoint:CGPointMake(10, 0)]; // Move to bottom right
+    [minuteHandPath moveToPoint:CGPointMake(10, 17)];   // Start at the top
+    [minuteHandPath addLineToPoint:CGPointMake(5, 0)];  // Move to bottom left
+    [minuteHandPath addLineToPoint:CGPointMake(15, 0)]; // Move to bottom right
 
-	self.minuteHandLayer.bounds      = CGRectMake(0.0, 0.0, 10, self.bounds.size.height / 2.0 - 7);
+    // position
+	self.minuteHandLayer.bounds      = CGRectMake(0.0, 0.0, 20, 19);
 	self.minuteHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-	self.minuteHandLayer.anchorPoint = CGPointMake(0.5, 1.0);
+	self.minuteHandLayer.anchorPoint = CGPointMake(0.5, 8.05);
+
+    // drawing
 	self.minuteHandLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
 	self.minuteHandLayer.fillColor   = [[UIColor colorWithRed:0.098 green:0.800 blue:0.000 alpha:1.000] CGColor];
 	self.minuteHandLayer.lineWidth   = 1.0;
@@ -288,7 +293,7 @@
 
 	self.secondHandLayer.fillColor   = [[UIColor redColor] CGColor];
 	self.secondHandLayer.lineWidth   = 1.0;
-	self.secondHandLayer.bounds      = CGRectMake(0.0, 0.0, 7.0, self.bounds.size.height / 2.0 - 62);
+	self.secondHandLayer.bounds      = CGRectMake(0.0, 0.0, 7.0, self.bounds.size.width / 2.0 - 62);
 	self.secondHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.secondHandLayer.anchorPoint = CGPointMake(0.5, 1.0);
 	self.secondHandLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
@@ -302,7 +307,7 @@
 	self.secondHandProgressTicksLayer             = [NoHitCAShapeLayer layer];
     self.secondHandProgressTicksLayer.contentsScale = [UIScreen mainScreen].scale;
 
-	self.secondHandProgressTicksLayer.bounds      = CGRectMake(0.0, 0.0, self.bounds.size.width - 100, self.bounds.size.height - 100);
+	self.secondHandProgressTicksLayer.bounds      = CGRectMake(0.0, 0.0, self.bounds.size.width - 100, self.bounds.size.width - 100);
 	self.secondHandProgressTicksLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.secondHandProgressTicksLayer.anchorPoint = CGPointMake(0.5, 0.5);
 
@@ -319,7 +324,7 @@
 		tick.fillColor   = [[UIColor redColor] CGColor];
 		tick.lineWidth   = 1;
 
-		tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.secondHandProgressTicksLayer.bounds.size.height / 2);
+		tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.secondHandProgressTicksLayer.bounds.size.width / 2);
 		tick.anchorPoint = CGPointMake(0.5, 1.0);
 		tick.position    = CGPointMake(CGRectGetMidX(self.secondHandProgressTicksLayer.bounds), CGRectGetMidY(self.secondHandProgressTicksLayer.bounds));
 		tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
@@ -343,7 +348,11 @@
 		self.deltaLayer = self.startHandLayer;
 		self.deltaDate  = self.startDate;
         self.isTransforming = EventTimerTransformingStartHandStart;
-	}
+	} else if ([self.minuteHandLayer.presentationLayer hitTest:point] && !self.isEventActive) {
+		self.deltaLayer = self.minuteHandLayer;
+		self.deltaDate  = self.startDate;
+        self.isTransforming = EventTimerTransformingStopHandStart;
+    }
 
 	if (self.deltaLayer != NULL) {
 		// Calculate the angle in radians
@@ -360,7 +369,9 @@
 		self.deltaTransform = self.deltaLayer.transform;
 
 		// Temporarily disable the passing of time
-		[self.updateTimer invalidate];
+        if (self.updateTimer.isValid) {
+            [self.updateTimer invalidate];
+        }
 	}
 
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
@@ -408,14 +419,29 @@
 			}
 
 			self.startDate = startHandDate;
+		} else if (self.deltaLayer == self.minuteHandLayer) {
+			CGFloat seconds       = (CGFloat)[self angleToTimeInterval:da];
 
-			[CATransaction begin];
-			[CATransaction setDisableActions:YES];
+			NSDate *stopHandDate = [self.deltaDate dateByAddingTimeInterval:seconds];
+			self.deltaDate = stopHandDate;
 
-			self.deltaLayer.transform = transform;
+			// A negative time diff is past the now, if so we set
+			// startDate to the now
+			NSTimeInterval timeDiff = [self.startDate timeIntervalSinceDate:stopHandDate];
+			if (timeDiff < 0) {
+				stopHandDate = self.startDate;
+				transform     = self.startHandLayer.transform;
+			}
 
-			[CATransaction commit];
-		}
+			self.nowDate = stopHandDate;
+        }
+
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
+
+        self.deltaLayer.transform = transform;
+
+        [CATransaction commit];
 	}
 
 	[self sendActionsForControlEvents:UIControlEventValueChanged];

@@ -23,8 +23,8 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-	self.pageControl.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"bg.png"]];
-	self.scrollView.backgroundColor  = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"bg.png"]];
+	self.pageControl.backgroundColor = [UIColor colorWithRed:0.075 green:0.075 blue:0.075 alpha:1];
+	self.scrollView.backgroundColor  = [UIColor colorWithRed:0.075 green:0.075 blue:0.075 alpha:1];
 }
 
 - (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers {
