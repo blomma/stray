@@ -7,10 +7,10 @@ const struct EventAttributes EventAttributes = {
 	.isActive = @"isActive",
 	.startDate = @"startDate",
 	.stopDate = @"stopDate",
-	.tag = @"tag",
 };
 
 const struct EventRelationships EventRelationships = {
+	.inTag = @"inTag",
 };
 
 const struct EventFetchedProperties EventFetchedProperties = {
@@ -93,12 +93,9 @@ const struct EventFetchedProperties EventFetchedProperties = {
 
 
 
-@dynamic tag;
+@dynamic inTag;
 
-
-
-
-
+	
 
 
 

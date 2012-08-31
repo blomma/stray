@@ -19,7 +19,7 @@
 @property (nonatomic) BOOL isEventActive;
 
 @property (nonatomic) CAShapeLayer *startHandLayer;
-@property (nonatomic) CAShapeLayer *minuteHandLayer;
+@property (nonatomic) CAShapeLayer *nowHandLayer;
 @property (nonatomic) NoHitCAShapeLayer *secondHandLayer;
 @property (nonatomic) NoHitCAShapeLayer *secondHandProgressTicksLayer;
 
@@ -31,7 +31,7 @@
 
 // Caches
 @property (nonatomic) CGFloat previousSecondTick;
-@property (nonatomic) CGFloat previousMinute;
+@property (nonatomic) CGFloat previousNow;
 
 @end
 
@@ -184,9 +184,9 @@
 
 	// And for the minutes we want a more tick/tock behavior
 	a = (CGFloat)((M_PI * 2) * floor(elapsedSecondsIntoHour / 60) / 60);
-    if (a != self.previousMinute) {
-        self.minuteHandLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
-        self.previousMinute = a;
+    if (a != self.previousNow) {
+        self.nowHandLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
+        self.previousNow = a;
     }
 }
 
@@ -231,28 +231,28 @@
     // ==========================
     // = Minutehand initializer =
     // ==========================
-	self.minuteHandLayer = [CAShapeLayer layer];
-    self.minuteHandLayer.contentsScale = [UIScreen mainScreen].scale;
+	self.nowHandLayer = [CAShapeLayer layer];
+    self.nowHandLayer.contentsScale = [UIScreen mainScreen].scale;
 
     // We make the bounds larger for the hit test, otherwise the target is
     // to damn small for human hands, martians not included
-    UIBezierPath *minuteHandPath = [UIBezierPath bezierPath];
-    [minuteHandPath moveToPoint:CGPointMake(10, 17)];   // Start at the top
-    [minuteHandPath addLineToPoint:CGPointMake(5, 0)];  // Move to bottom left
-    [minuteHandPath addLineToPoint:CGPointMake(15, 0)]; // Move to bottom right
+    UIBezierPath *nowHandPath = [UIBezierPath bezierPath];
+    [nowHandPath moveToPoint:CGPointMake(10, 17)];   // Start at the top
+    [nowHandPath addLineToPoint:CGPointMake(5, 0)];  // Move to bottom left
+    [nowHandPath addLineToPoint:CGPointMake(15, 0)]; // Move to bottom right
 
     // position
-	self.minuteHandLayer.bounds      = CGRectMake(0.0, 0.0, 20, 19);
-	self.minuteHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-	self.minuteHandLayer.anchorPoint = CGPointMake(0.5, 8.05);
+	self.nowHandLayer.bounds      = CGRectMake(0.0, 0.0, 20, 19);
+	self.nowHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+	self.nowHandLayer.anchorPoint = CGPointMake(0.5, 8.05);
 
     // drawing
-	self.minuteHandLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
-	self.minuteHandLayer.fillColor   = [[UIColor colorWithRed:0.098 green:0.800 blue:0.000 alpha:1.000] CGColor];
-	self.minuteHandLayer.lineWidth   = 1.0;
-	self.minuteHandLayer.path        = minuteHandPath.CGPath;
+	self.nowHandLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
+	self.nowHandLayer.fillColor   = [[UIColor colorWithRed:0.098 green:0.800 blue:0.000 alpha:1.000] CGColor];
+	self.nowHandLayer.lineWidth   = 1.0;
+	self.nowHandLayer.path        = nowHandPath.CGPath;
 
-	[self.layer addSublayer:self.minuteHandLayer];
+	[self.layer addSublayer:self.nowHandLayer];
 
     // =========================
     // = Starthand initializer =
@@ -348,9 +348,9 @@
 		self.deltaLayer = self.startHandLayer;
 		self.deltaDate  = self.startDate;
         self.isTransforming = EventTimerTransformingStartHandStart;
-	} else if ([self.minuteHandLayer.presentationLayer hitTest:point] && !self.isEventActive) {
-		self.deltaLayer = self.minuteHandLayer;
-		self.deltaDate  = self.startDate;
+	} else if ([self.nowHandLayer.presentationLayer hitTest:point] && !self.isEventActive) {
+		self.deltaLayer = self.nowHandLayer;
+		self.deltaDate  = self.stopDate;
         self.isTransforming = EventTimerTransformingStopHandStart;
     }
 
@@ -415,25 +415,26 @@
 			NSTimeInterval timeDiff = [self.nowDate timeIntervalSinceDate:startHandDate];
 			if (timeDiff < 0) {
 				startHandDate = self.nowDate;
-				transform     = self.minuteHandLayer.transform;
+				transform     = self.nowHandLayer.transform;
 			}
 
 			self.startDate = startHandDate;
-		} else if (self.deltaLayer == self.minuteHandLayer) {
+		} else if (self.deltaLayer == self.nowHandLayer) {
 			CGFloat seconds       = (CGFloat)[self angleToTimeInterval:da];
 
 			NSDate *stopHandDate = [self.deltaDate dateByAddingTimeInterval:seconds];
 			self.deltaDate = stopHandDate;
 
-			// A negative time diff is past the now, if so we set
+			// A negative time diff is past the start, if so we set
 			// startDate to the now
 			NSTimeInterval timeDiff = [self.startDate timeIntervalSinceDate:stopHandDate];
-			if (timeDiff < 0) {
+			if (timeDiff > 0) {
 				stopHandDate = self.startDate;
 				transform     = self.startHandLayer.transform;
 			}
 
 			self.nowDate = stopHandDate;
+            self.stopDate = stopHandDate;
         }
 
         [CATransaction begin];
@@ -463,23 +464,31 @@
             self.isTransforming = EventTimerTransformingStartHandStop;
 
 			[[EventDataManager sharedManager] persistCurrentEvent];
-		}
+
+            // Resume the passing of time
+            if (![self.updateTimer isValid]) {
+                self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
+                                                                    target:self
+                                                                  selector:@selector(timerUpdate)
+                                                                  userInfo:nil
+                                                                   repeats:YES];
+            }
+            
+            // Do a initial fire of the event to get things started
+            [self.updateTimer fire];
+		} else if (self.deltaLayer == self.nowHandLayer) {
+			// Lets persist this new fangled startDate
+			Event *currentEvent = [[EventDataManager sharedManager] currentEvent];
+			currentEvent.stopDate = self.stopDate;
+
+            self.isTransforming = EventTimerTransformingStartHandStop;
+
+			[[EventDataManager sharedManager] persistCurrentEvent];
+        }
 
 		self.deltaLayer = NULL;
 	}
 
-	// Resume the passing of time
-	if (![self.updateTimer isValid]) {
-		self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
-		                                                    target:self
-		                                                  selector:@selector(timerUpdate)
-		                                                  userInfo:nil
-		                                                   repeats:YES];
-	}
-
-	// Do a initial fire of the event to get things started
-	[self.updateTimer fire];
-	
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 

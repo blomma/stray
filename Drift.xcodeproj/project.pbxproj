@@ -75,6 +75,7 @@
 		9E7EB52C15E8F89C00604B79 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */; };
 		9E7EB52D15E8F8C100604B79 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F215570FD60087F602 /* CoreGraphics.framework */; };
 		9E89816F15A0BC2900E22EA7 /* EventGroupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */; };
+		9E92637115EF350D00393946 /* _Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E92637015EF350D00393946 /* _Tag.m */; };
 		9E9FFFA0159384E200BA5200 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9FFF9F159384E200BA5200 /* bg.png */; };
 		9E9FFFCC1594AF7400BA5200 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E9FFFCB1594AF7400BA5200 /* libz.dylib */; };
 		9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB520E15C9553C008952FB /* NSDate+Utilities.m */; };
@@ -194,6 +195,9 @@
 		9E7CEDF3157B778300718FA6 /* _Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Event.m; sourceTree = "<group>"; };
 		9E89816D15A0BC2900E22EA7 /* EventGroupTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroupTableViewCell.h; sourceTree = "<group>"; };
 		9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroupTableViewCell.m; sourceTree = "<group>"; };
+		9E92636D15EF2C9400393946 /* Drift 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Drift 2.xcdatamodel"; sourceTree = "<group>"; };
+		9E92636F15EF350D00393946 /* _Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Tag.h; sourceTree = "<group>"; };
+		9E92637015EF350D00393946 /* _Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Tag.m; sourceTree = "<group>"; };
 		9E9FFF9F159384E200BA5200 /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
 		9E9FFFCB1594AF7400BA5200 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		9EAB520D15C9553C008952FB /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
@@ -467,6 +471,8 @@
 		9E63BBF6156EAAA80006FEFC /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9E92636F15EF350D00393946 /* _Tag.h */,
+				9E92637015EF350D00393946 /* _Tag.m */,
 				9E7CEDF2157B778300718FA6 /* _Event.h */,
 				9E7CEDF3157B778300718FA6 /* _Event.m */,
 				9E21F924156EA9510075EAAC /* Drift.xcdatamodeld */,
@@ -607,7 +613,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd Drift\n/usr/local/bin/mogenerator --template-var arc=true -m Drift.xcdatamodeld/Drift.xcdatamodel/";
+			shellScript = "cd Drift\n/usr/local/bin/mogenerator --template-var arc=true -m \"Drift.xcdatamodeld/Drift 2.xcdatamodel/\"";
 		};
 		9E9FFFCD1594CDB900BA5200 /* Bump build number */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -674,6 +680,7 @@
 				9E01308815E38EAA005C8765 /* MagicalRecord.m in Sources */,
 				9E63E1CB15E91743009C0A2D /* EventGroupsViewModel.m in Sources */,
 				9E63E1D715EA3339009C0A2D /* NoHitCAShapeLayer.m in Sources */,
+				9E92637115EF350D00393946 /* _Tag.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1013,9 +1020,10 @@
 		9E21F924156EA9510075EAAC /* Drift.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				9E92636D15EF2C9400393946 /* Drift 2.xcdatamodel */,
 				9E21F925156EA9510075EAAC /* Drift.xcdatamodel */,
 			);
-			currentVersion = 9E21F925156EA9510075EAAC /* Drift.xcdatamodel */;
+			currentVersion = 9E92636D15EF2C9400393946 /* Drift 2.xcdatamodel */;
 			path = Drift.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

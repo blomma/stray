@@ -4,9 +4,14 @@
         <attribute name="isActive" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="startDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="stopDate" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="tag" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="inTag" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tag" inverseName="heldBy" inverseEntity="Tag" syncable="YES"/>
+    </entity>
+    <entity name="Tag" representedClassName="Tag" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="heldBy" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="inTag" inverseEntity="Event" syncable="YES"/>
     </entity>
     <elements>
         <element name="Event" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="Tag" positionX="369" positionY="189" width="128" height="73"/>
     </elements>
 </model>
