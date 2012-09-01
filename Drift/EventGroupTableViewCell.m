@@ -32,14 +32,6 @@
 	return self;
 }
 
-//- (void)drawRect:(CGRect)rect {
-//    if (self.position == EventGroupTableViewCellPositionTop
-//        || self.position == EventGroupTableViewCellPositionMiddle) {
-//        [self drawLineSeparator:CGRectMake(rect.origin.x, rect.origin.y,
-//                                           rect.size.width, rect.size.height)];
-//    }
-//}
-
 #pragma mark -
 #pragma mark Public instance methods
 
@@ -69,23 +61,6 @@
 
 #pragma mark -
 #pragma mark Private instance methods
-
-- (void) drawLineSeparator:(CGRect)rect {
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(ctx);
-
-    CGContextMoveToPoint(ctx, CGRectGetMinX(rect), CGRectGetMaxY(rect));
-    CGContextAddLineToPoint(ctx, CGRectGetMaxX(rect), CGRectGetMaxY(rect));
-
-    CGFloat dashes[] = { 3, 20 };
-    CGContextSetLineDash(ctx, 0, dashes, 2);
-    CGColorRef color = [[UIColor colorWithRed:1.000 green:0.600 blue:0.008 alpha:1.000] CGColor];
-    CGContextSetStrokeColorWithColor(ctx, color);
-    CGContextSetLineWidth(ctx, 1);
-    CGContextStrokePath(ctx);
-
-    CGContextRestoreGState(ctx);
-}
 
 - (void)updateTime {
 	NSDateComponents *components = self.eventGroup.timeActiveComponents;
