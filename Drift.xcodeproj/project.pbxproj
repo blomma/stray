@@ -195,7 +195,7 @@
 		9E7CEDF3157B778300718FA6 /* _Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Event.m; sourceTree = "<group>"; };
 		9E89816D15A0BC2900E22EA7 /* EventGroupTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroupTableViewCell.h; sourceTree = "<group>"; };
 		9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroupTableViewCell.m; sourceTree = "<group>"; };
-		9E92636D15EF2C9400393946 /* Drift 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Drift 2.xcdatamodel"; sourceTree = "<group>"; };
+		9E92636D15EF2C9400393946 /* Drift 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Drift 2.xcdatamodel"; sourceTree = "<group>"; };
 		9E92636F15EF350D00393946 /* _Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Tag.h; sourceTree = "<group>"; };
 		9E92637015EF350D00393946 /* _Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Tag.m; sourceTree = "<group>"; };
 		9E9FFF9F159384E200BA5200 /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
@@ -408,32 +408,11 @@
 				9E9FFF9215925CAE00BA5200 /* Resources */,
 				9E63BBF6156EAAA80006FEFC /* Model */,
 				9E01309215E39D20005C8765 /* Storyboard */,
-				9E51511215C7CEF100901655 /* EventGroup.h */,
-				9E51511315C7CEF100901655 /* EventGroup.m */,
-				9E51511415C7CEF100901655 /* EventGroups.h */,
-				9E51511515C7CEF100901655 /* EventGroups.m */,
-				9E42F20315570FD60087F602 /* PagerViewController.h */,
-				9E42F20415570FD60087F602 /* PagerViewController.m */,
-				9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */,
-				9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */,
-				9E89816D15A0BC2900E22EA7 /* EventGroupTableViewCell.h */,
-				9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */,
-				9E63E1C915E91742009C0A2D /* EventGroupsViewModel.h */,
-				9E63E1CA15E91742009C0A2D /* EventGroupsViewModel.m */,
-				9E63E1D515EA3338009C0A2D /* NoHitCAShapeLayer.h */,
-				9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */,
-				9E00A76115773859002FC707 /* EventGroupsViewController.h */,
-				9E00A76215773859002FC707 /* EventGroupsViewController.m */,
-				9E7A19F515D993DA00C9A443 /* EventGroupChange.h */,
-				9E7A19F615D993DA00C9A443 /* EventGroupChange.m */,
+				9E9C232D15F288D400572FB7 /* Controllers */,
+				9E9C232F15F2895000572FB7 /* Classes */,
 				9E42F1FD15570FD60087F602 /* DriftAppDelegate.h */,
 				9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */,
-				9E00A75D157734AE002FC707 /* EventViewController.h */,
-				9E00A75E157734AE002FC707 /* EventViewController.m */,
-				9E42F22715571E9C0087F602 /* RootViewController.h */,
-				9E42F22815571E9C0087F602 /* RootViewController.m */,
-				9EEA276015C09EB5008B6D04 /* EventDataManager.h */,
-				9EEA276115C09EB5008B6D04 /* EventDataManager.m */,
+				9E42F1FA15570FD60087F602 /* main.m */,
 			);
 			path = Drift;
 			sourceTree = "<group>";
@@ -443,7 +422,6 @@
 			children = (
 				9E42F1F615570FD60087F602 /* Drift-Info.plist */,
 				9E42F1F715570FD60087F602 /* InfoPlist.strings */,
-				9E42F1FA15570FD60087F602 /* main.m */,
 				9E42F1FC15570FD60087F602 /* Drift-Prefix.pch */,
 			);
 			name = "Supporting Files";
@@ -480,6 +458,44 @@
 				9E21F928156EAA2F0075EAAC /* Event.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		9E9C232D15F288D400572FB7 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				9E42F22715571E9C0087F602 /* RootViewController.h */,
+				9E42F22815571E9C0087F602 /* RootViewController.m */,
+				9E42F20315570FD60087F602 /* PagerViewController.h */,
+				9E42F20415570FD60087F602 /* PagerViewController.m */,
+				9E00A75D157734AE002FC707 /* EventViewController.h */,
+				9E00A75E157734AE002FC707 /* EventViewController.m */,
+				9E00A76115773859002FC707 /* EventGroupsViewController.h */,
+				9E00A76215773859002FC707 /* EventGroupsViewController.m */,
+				9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */,
+				9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		9E9C232F15F2895000572FB7 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				9EEA276015C09EB5008B6D04 /* EventDataManager.h */,
+				9EEA276115C09EB5008B6D04 /* EventDataManager.m */,
+				9E7A19F515D993DA00C9A443 /* EventGroupChange.h */,
+				9E7A19F615D993DA00C9A443 /* EventGroupChange.m */,
+				9E63E1D515EA3338009C0A2D /* NoHitCAShapeLayer.h */,
+				9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */,
+				9E89816D15A0BC2900E22EA7 /* EventGroupTableViewCell.h */,
+				9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */,
+				9E63E1C915E91742009C0A2D /* EventGroupsViewModel.h */,
+				9E63E1CA15E91742009C0A2D /* EventGroupsViewModel.m */,
+				9E51511215C7CEF100901655 /* EventGroup.h */,
+				9E51511315C7CEF100901655 /* EventGroup.m */,
+				9E51511415C7CEF100901655 /* EventGroups.h */,
+				9E51511515C7CEF100901655 /* EventGroups.m */,
+			);
+			name = Classes;
 			sourceTree = "<group>";
 		};
 		9E9FFF9215925CAE00BA5200 /* Resources */ = {
