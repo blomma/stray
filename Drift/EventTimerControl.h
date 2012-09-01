@@ -8,10 +8,10 @@
 
 typedef enum : NSInteger {
     EventTimerTransformingNone = 0,
-    EventTimerTransformingStartHandStart,
-    EventTimerTransformingStartHandStop,
-    EventTimerTransformingStopHandStart,
-    EventTimerTransformingStopHandStop
+    EventTimerTransformingStartDateStart,
+    EventTimerTransformingStartDateStop,
+    EventTimerTransformingStopDateStart,
+    EventTimerTransformingStopDateStop
 } EventTimerTransformingEnum;
 
 @interface EventTimerControl : UIControl
@@ -22,7 +22,7 @@ typedef enum : NSInteger {
 
 @property (nonatomic) EventTimerTransformingEnum isTransforming;
 
-- (void)startWithDate:(NSDate *)date;
-- (void)stopWithDate:(NSDate *)date;
+- (void)startWithEvent:(Event *)event;
+- (void)stop;
 
 @end

@@ -27,7 +27,6 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
 	if (self) {
-        // Startdate formatter
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"HH:mm '@' d LLL, y"];
         self.startDateFormatter = formatter;
@@ -41,21 +40,14 @@
 - (void)viewWillAppear:(BOOL)animated {
 	Event *currentEvent = [[EventDataManager sharedManager] currentEvent];
 
+    if (currentEvent.isActiveValue) {
+        [self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
+    } else {
+        [self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
+    }
+
 	if (currentEvent) {
-		[self updateStartLabel:currentEvent.startDate];
-
-		if (currentEvent.isActiveValue) {
-			[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
-			[self.eventTimerControl startWithDate:currentEvent.startDate];
-		} else {
-			[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
-
-			self.eventTimerControl.startDate = currentEvent.startDate;
-			self.eventTimerControl.nowDate   = currentEvent.stopDate;
-			self.eventTimerControl.stopDate  = currentEvent.stopDate;
-
-			[self updateNowLabel:currentEvent.stopDate];
-		}
+        [self.eventTimerControl startWithEvent:currentEvent];
 	}
 }
 
@@ -63,7 +55,7 @@
 	[super viewDidLoad];
 
     // Scale down the startDate
-    self.startDateLabel.layer.transform = CATransform3DMakeScale(0.6f, 0.6f, 1); // Scale in x and y
+    self.startDateLabel.layer.transform = CATransform3DMakeScale(0.6f, 0.6f, 1);
 
 	[self.eventTimerControl addObserver:self
 	                         forKeyPath:@"startDate"
@@ -72,6 +64,11 @@
 
 	[self.eventTimerControl addObserver:self
 	                         forKeyPath:@"nowDate"
+	                            options:NSKeyValueObservingOptionNew
+	                            context:NULL];
+
+	[self.eventTimerControl addObserver:self
+	                         forKeyPath:@"stopDate"
 	                            options:NSKeyValueObservingOptionNew
 	                            context:NULL];
 
@@ -87,7 +84,7 @@
 - (IBAction)toggleEvent:(id)sender {
 	Event *currentEvent = [[EventDataManager sharedManager] currentEvent];
 
-	NSDate *now         = [NSDate date];
+	NSDate *now = [NSDate date];
 
 	// Do we have a event that is running
 	if (currentEvent.isActiveValue) {
@@ -96,8 +93,7 @@
 		currentEvent.isActiveValue = NO;
 		currentEvent.stopDate     = now;
 
-		// Stop the face
-		[self.eventTimerControl stopWithDate:now];
+        [self.eventTimerControl stop];
 
 		// Toggle button to start state
 		[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
@@ -109,8 +105,7 @@
 		currentEvent.isActiveValue = YES;
 		currentEvent.startDate     = now;
 
-		// Start up the face
-		[self.eventTimerControl startWithDate:now];
+		[self.eventTimerControl startWithEvent:currentEvent];
 
 		// Toggle button to stop state
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
@@ -122,22 +117,27 @@
 #pragma mark -
 #pragma mark Private Instance methods
 
-- (void)updateStartLabel:(NSDate *)date {
+- (void)updateStartLabelWithDate:(NSDate *)date {
 	self.startDateLabel.text = [self.startDateFormatter stringFromDate:date];
 }
 
-- (void)updateNowLabel:(NSDate *)date {
+- (void)updateNowLabelWithDate:(NSDate *)date {
 	Event *event = [[EventDataManager sharedManager] currentEvent];
 
 	unsigned int static unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
 	NSDateComponents *components = [self.calendar components:unitFlags fromDate:event.startDate toDate:date options:0];
 
-    if (components.hour != self.previousNowComponents.hour || components.minute != self.previousNowComponents.minute || components.second != self.previousNowComponents.second) {
+    if (components.hour != self.previousNowComponents.hour
+        || components.minute != self.previousNowComponents.minute
+        || components.second != self.previousNowComponents.second) {
         self.runningTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", components.hour, components.minute, components.second];
         self.previousNowComponents = components;
     }
 }
 
+- (void)updateStopLabelWithDate:(NSDate *)date {
+    
+}
 - (void)animateTimeRunningIsTransforming:(BOOL)isTransforming {
     if (isTransforming) {
         // Create the keyframe animation object
@@ -236,19 +236,32 @@
 	if ([keyPath isEqualToString:@"startDate"]) {
 		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
 
-		[self updateStartLabel:date];
+        Event *event = [[EventDataManager sharedManager] currentEvent];
+        event.startDate = date;
+
+		[self updateStartLabelWithDate:date];
+		[self updateNowLabelWithDate:self.eventTimerControl.nowDate];
 	} else if ([keyPath isEqualToString:@"nowDate"]) {
 		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
 
-		[self updateNowLabel:date];
+		[self updateNowLabelWithDate:date];
+	} else if ([keyPath isEqualToString:@"stopDate"]) {
+		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
+
+        Event *event = [[EventDataManager sharedManager] currentEvent];
+        event.stopDate = date;
+
+		[self updateStopLabelWithDate:date];
 	} else if ([keyPath isEqualToString:@"isTransforming"]) {
         EventTimerTransformingEnum isTransforming = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
-        if (isTransforming == EventTimerTransformingStartHandStart) {
+        if (isTransforming == EventTimerTransformingStartDateStart) {
             [self animateStartDateIsTransforming:YES];
             [self animateTimeRunningIsTransforming:YES];
-        } else if (isTransforming == EventTimerTransformingStartHandStop) {
+        } else if (isTransforming == EventTimerTransformingStartDateStop) {
             [self animateStartDateIsTransforming:NO];
             [self animateTimeRunningIsTransforming:NO];
+
+            [[EventDataManager sharedManager] persistCurrentEvent];
         }
     }
 }

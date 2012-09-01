@@ -16,12 +16,13 @@
 
 // Private properties
 @property (nonatomic) NSTimer *updateTimer;
-@property (nonatomic) BOOL isEventActive;
 
 @property (nonatomic) CAShapeLayer *startHandLayer;
 @property (nonatomic) CAShapeLayer *nowHandLayer;
 @property (nonatomic) NoHitCAShapeLayer *secondHandLayer;
 @property (nonatomic) NoHitCAShapeLayer *secondHandProgressTicksLayer;
+
+@property (nonatomic) Event *event;
 
 // Touch transforming
 @property (nonatomic) NSDate *deltaDate;
@@ -39,22 +40,6 @@
 
 #pragma mark -
 #pragma mark Public properties
-
-- (void)setStartDate:(NSDate *)startDate {
-	_startDate = startDate;
-
-	if (self.deltaLayer == NULL) {
-		[self drawStart];
-	}
-}
-
-- (void)setNowDate:(NSDate *)nowDate {
-	_nowDate = nowDate;
-
-	if (self.deltaLayer == NULL) {
-		[self drawNow];
-	}
-}
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -74,7 +59,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	if (self.isEventActive) {
+	if (self.event.isActiveValue) {
 		if (![self.updateTimer isValid]) {
 			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
 			                                                    target:self
@@ -90,32 +75,37 @@
 #pragma mark -
 #pragma mark Public instance methods
 
-- (void)startWithDate:(NSDate *)date  {
-	self.startDate = date;
-	[self drawStart];
+- (void)startWithEvent:(Event *)event {
+    self.startDate = event.startDate;
 
-	self.isEventActive = YES;
+    if (event.stopDate) {
+        self.nowDate  = event.stopDate;
+        self.stopDate = event.stopDate;
+    } else {
+        self.nowDate = [NSDate date];
+    }
 
-	// Scehdule a timer to update the face
-	if (![self.updateTimer isValid]) {
-		self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
-		                                                    target:self
-		                                                  selector:@selector(timerUpdate)
-		                                                  userInfo:nil
-		                                                   repeats:YES];
-	}
+    self.event = event;
 
-	[self.updateTimer fire];
+    [self drawStart];
+	[self drawNow];
+
+    if (self.event.isActiveValue) {
+        if (![self.updateTimer isValid]) {
+            self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
+                                                                target:self
+                                                              selector:@selector(timerUpdate)
+                                                              userInfo:nil
+                                                               repeats:YES];
+        }
+    }
 }
 
-- (void)stopWithDate:(NSDate *)date {
+- (void)stop {
 	[self.updateTimer invalidate];
 
-	self.isEventActive = NO;
-
-	// Sync stop and now
-	self.nowDate  = date;
-	self.stopDate = date;
+	self.nowDate  = self.event.stopDate;
+	self.stopDate = self.event.stopDate;
 
 	[self drawNow];
 }
@@ -150,8 +140,7 @@
 }
 
 - (void)drawStart {
-	CGFloat a = (M_PI * 2) * 0;
-	self.startHandLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
+	self.startHandLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
 }
 
 - (void)drawNow {
@@ -347,11 +336,14 @@
 	if ([self.startHandLayer.presentationLayer hitTest:point]) {
 		self.deltaLayer = self.startHandLayer;
 		self.deltaDate  = self.startDate;
-        self.isTransforming = EventTimerTransformingStartHandStart;
-	} else if ([self.nowHandLayer.presentationLayer hitTest:point] && !self.isEventActive) {
+        self.isTransforming = EventTimerTransformingStartDateStart;
+
+		// Temporarily disable the passing of time
+        [self.updateTimer invalidate];
+	} else if ([self.nowHandLayer.presentationLayer hitTest:point] && !self.event.isActiveValue) {
 		self.deltaLayer = self.nowHandLayer;
-		self.deltaDate  = self.stopDate;
-        self.isTransforming = EventTimerTransformingStopHandStart;
+		self.deltaDate  = self.nowDate;
+        self.isTransforming = EventTimerTransformingStopDateStart;
     }
 
 	if (self.deltaLayer != NULL) {
@@ -367,11 +359,6 @@
 		// Save them away for future iteration
 		self.deltaAngle     = a;
 		self.deltaTransform = self.deltaLayer.transform;
-
-		// Temporarily disable the passing of time
-        if (self.updateTimer.isValid) {
-            [self.updateTimer invalidate];
-        }
 	}
 
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
@@ -405,36 +392,30 @@
 		// If we are tracking the start hand then
 		// we cant move past the now
 		if (self.deltaLayer == self.startHandLayer) {
-			CGFloat seconds       = (CGFloat)[self angleToTimeInterval:da];
+			CGFloat seconds = (CGFloat)[self angleToTimeInterval:da];
 
-			NSDate *startHandDate = [self.deltaDate dateByAddingTimeInterval:seconds];
-			self.deltaDate = startHandDate;
+			NSDate *startDate = [self.deltaDate dateByAddingTimeInterval:seconds];
+			self.deltaDate    = startDate;
 
-			// A negative time diff is past the now, if so we set
-			// startDate to the now
-			NSTimeInterval timeDiff = [self.nowDate timeIntervalSinceDate:startHandDate];
-			if (timeDiff < 0) {
-				startHandDate = self.nowDate;
-				transform     = self.nowHandLayer.transform;
+            if ([[startDate laterDate:self.nowDate] isEqualToDate:startDate]) {
+				startDate = self.nowDate;
+				transform = self.nowHandLayer.transform;
 			}
 
-			self.startDate = startHandDate;
+			self.startDate = startDate;
 		} else if (self.deltaLayer == self.nowHandLayer) {
-			CGFloat seconds       = (CGFloat)[self angleToTimeInterval:da];
+			CGFloat seconds = (CGFloat)[self angleToTimeInterval:da];
 
-			NSDate *stopHandDate = [self.deltaDate dateByAddingTimeInterval:seconds];
-			self.deltaDate = stopHandDate;
+			NSDate *nowDate = [self.deltaDate dateByAddingTimeInterval:seconds];
+			self.deltaDate  = nowDate;
 
-			// A negative time diff is past the start, if so we set
-			// startDate to the now
-			NSTimeInterval timeDiff = [self.startDate timeIntervalSinceDate:stopHandDate];
-			if (timeDiff > 0) {
-				stopHandDate = self.startDate;
-				transform     = self.startHandLayer.transform;
+			if ([[nowDate earlierDate:self.startDate] isEqualToDate:nowDate]) {
+				nowDate   = self.startDate;
+				transform = self.startHandLayer.transform;
 			}
 
-			self.nowDate = stopHandDate;
-            self.stopDate = stopHandDate;
+            self.nowDate  = nowDate;
+            self.stopDate = nowDate;
         }
 
         [CATransaction begin];
@@ -455,35 +436,21 @@
 		// If we are tracking the start hand then
 		// we want to move the startHand to it's start position
 		if (self.deltaLayer == self.startHandLayer) {
-			self.deltaLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
+            [self drawStart];
+            [self drawNow];
 
-			// Lets persist this new fangled startDate
-			Event *currentEvent = [[EventDataManager sharedManager] currentEvent];
-			currentEvent.startDate = self.startDate;
-
-            self.isTransforming = EventTimerTransformingStartHandStop;
-
-			[[EventDataManager sharedManager] persistCurrentEvent];
+            self.isTransforming = EventTimerTransformingStartDateStop;
 
             // Resume the passing of time
-            if (![self.updateTimer isValid]) {
+            if (![self.updateTimer isValid] && self.event.isActiveValue) {
                 self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
                                                                     target:self
                                                                   selector:@selector(timerUpdate)
                                                                   userInfo:nil
                                                                    repeats:YES];
-            }
-            
-            // Do a initial fire of the event to get things started
-            [self.updateTimer fire];
+            }            
 		} else if (self.deltaLayer == self.nowHandLayer) {
-			// Lets persist this new fangled startDate
-			Event *currentEvent = [[EventDataManager sharedManager] currentEvent];
-			currentEvent.stopDate = self.stopDate;
-
-            self.isTransforming = EventTimerTransformingStartHandStop;
-
-			[[EventDataManager sharedManager] persistCurrentEvent];
+            self.isTransforming = EventTimerTransformingStopDateStop;
         }
 
 		self.deltaLayer = NULL;
