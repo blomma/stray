@@ -168,9 +168,13 @@ fi
 # Get build notes from commit messages, from the last build tag (if present, otherwise all)
 if [ -n "${OLD_BUILD_TAG}" ]
 then
-  BUILD_NOTES=$(git log "${OLD_BUILD_TAG}".. --format=oneline --abbrev=6 --abbrev-commit)
+  BUILD_SUMMARY=$(git summary "${OLD_BUILD_TAG}"..)
+  BUILD_LOG=$(git log "${OLD_BUILD_TAG}".. --pretty="format:  - %s")
+  BUILD_NOTES="${BUILD_LOG}\\n\\n\\n${BUILD_SUMMARY}"
 else
-  BUILD_NOTES=$(git log --format=oneline --abbrev=6 --abbrev-commit)
+  BUILD_SUMMARY=$(git summary)
+  BUILD_LOG=$(git log --pretty="format:  - %s")
+  BUILD_NOTES="${BUILD_LOG}\\n\\n\\n${BUILD_SUMMARY}"
 fi
 
 # Commit version bump and tag build
