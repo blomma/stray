@@ -35,9 +35,13 @@
 
     self.calendar = [NSCalendar currentCalendar];
 
-    // Scale down the startDate
+    // Scale down the startDate and stopDate
     self.startDateLabel.layer.transform = CATransform3DMakeScale(0.6f, 0.6f, 1);
+    self.stopDateLabel.layer.transform = CATransform3DMakeScale(0.6f, 0.6f, 1);
 
+    // Colors
+    [self.stopDateLabel setTextColor:[UIColor colorWithRed:0.098f green:0.800f blue:0.000 alpha:1.000]];
+    
 	// Get notified of new things happening
 	[[NSNotificationCenter defaultCenter] addObserver:self
 	                                         selector:@selector(handleDataModelChange:)
@@ -135,7 +139,7 @@
 }
 
 - (void)updateStopLabelWithDate:(NSDate *)date {
-    
+	self.stopDateLabel.text = [self.startDateFormatter stringFromDate:date];
 }
 
 - (void)animateTimeRunningIsTransforming:(BOOL)isTransforming {
@@ -233,7 +237,50 @@
 }
 
 - (void)animateStopDateIsTransforming:(BOOL)isTransforming {
+    if (isTransforming) {
+        // Create the keyframe animation object
+        CAKeyframeAnimation *scaleAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
 
+        // Create the transform; we'll scale x and y by 1.5, leaving z alone
+        // since this is a 2D animation.
+        CATransform3D transform = CATransform3DMakeScale(1, 1, 1); // Scale in x and y
+
+        // Add the keyframes.  Note we have to start and end with CATransformIdentity,
+        // so that the label starts from and returns to its non-transformed state.
+        [scaleAnimation setValues:@[
+         [NSValue valueWithCATransform3D:self.stopDateLabel.layer.transform],
+         [NSValue valueWithCATransform3D:transform]
+         ]];
+
+        // set the duration of the animation
+        [scaleAnimation setDuration: .3];
+
+        scaleAnimation.fillMode = kCAFillModeForwards;
+        scaleAnimation.removedOnCompletion = NO;
+
+        // animate your label layer = rock and roll!
+        [[self.stopDateLabel layer] addAnimation:scaleAnimation forKey:@"scaleText"];
+    } else {
+        // Create the keyframe animation object
+        CAKeyframeAnimation *scaleAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+
+        // Create the transform; we'll scale x and y by 1.5, leaving z alone
+        // since this is a 2D animation.
+        CATransform3D transform = CATransform3DMakeScale(0.6f, 0.6f, 1); // Scale in x and y
+
+        // Add the keyframes.  Note we have to start and end with CATransformIdentity,
+        // so that the label starts from and returns to its non-transformed state.
+        [scaleAnimation setValues:@[
+         [NSValue valueWithCATransform3D:CATransform3DIdentity],
+         [NSValue valueWithCATransform3D:transform],
+         ]];
+
+        // set the duration of the animation
+        [scaleAnimation setDuration: .3];
+
+        // animate your label layer = rock and roll!
+        [[self.stopDateLabel layer] addAnimation:scaleAnimation forKey:@"scaleText"];
+    }
 }
 
 - (void)handleDataModelChange:(NSNotification *)note {
