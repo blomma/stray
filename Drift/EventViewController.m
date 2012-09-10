@@ -79,7 +79,7 @@
 	if (self.currentEvent) {
         [self.eventTimerControl startWithEvent:self.currentEvent];
 	} else {
-        [self.eventTimerControl reset];
+        [self reset];
     }
 }
 
@@ -120,6 +120,16 @@
 
 #pragma mark -
 #pragma mark Private methods
+
+- (void)reset {
+    [self.eventTimerControl reset];
+
+    self.currentEvent = nil;
+
+    self.startDateLabel.text   = @"";
+    self.runningTimeLabel.text = @"00:00:00";
+    self.stopDateLabel.text    = @"";
+}
 
 - (void)updateStartLabelWithDate:(NSDate *)date {
 	self.startDateLabel.text = [self.startDateFormatter stringFromDate:date];
@@ -291,7 +301,7 @@
         NSUInteger index = [deletedEvents indexOfObject:self.currentEvent];
 
         if (index != NSNotFound) {
-            self.currentEvent = nil;
+            [self reset];
         }
     }
 }
