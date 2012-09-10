@@ -66,7 +66,7 @@ TESTFLIGHT_GROUPS="Alpha"
 # GIT SETTINGS
 #
 # The prefix for build tags.  Change this if "build-n" will collide with other tags you create in git.
-GIT_TAG_PREFIX=ipa-
+GIT_TAG_PREFIX=
 GIT_BRANCH=$(git name-rev --name-only HEAD)
 GIT_REMOTE=$(git branch -r | grep -v \/HEAD | grep \/${GIT_BRANCH} | sed -E 's/ +([^\/]+).*/\1/g')
 
@@ -109,7 +109,7 @@ fi
 
 VERSION_NUMBER=$(agvtool what-marketing-version -terse1)
 BUILD_NUMBER=$(agvtool what-version -terse)
-VERSION_STRING="${VERSION_NUMBER}.${BUILD_NUMBER}"
+VERSION_STRING="${VERSION_NUMBER} (${BUILD_NUMBER})"
 
 # Determine the build tag that the last built version had
 OLD_BUILD_TAG="${GIT_TAG_PREFIX}${VERSION_STRING}"
@@ -125,7 +125,7 @@ OLD_BUILD_TAG=$(git tag -l "${OLD_BUILD_TAG}")
 agvtool bump -all
 VERSION_NUMBER=$(agvtool what-marketing-version -terse1)
 BUILD_NUMBER=$(agvtool what-version -terse)
-VERSION_STRING="${VERSION_NUMBER}.${BUILD_NUMBER}"
+VERSION_STRING="${VERSION_NUMBER} (${BUILD_NUMBER})"
 BUILD_TAG="${GIT_TAG_PREFIX}${VERSION_STRING}"
 
 # Build target
@@ -170,11 +170,11 @@ if [ -n "${OLD_BUILD_TAG}" ]
 then
   BUILD_SUMMARY=$(git summary "${OLD_BUILD_TAG}"..)
   BUILD_LOG=$(git log "${OLD_BUILD_TAG}".. --pretty="format:  - %s")
-  BUILD_NOTES="${BUILD_LOG}\\n\\n\\n${BUILD_SUMMARY}"
+  BUILD_NOTES="${BUILD_LOG}\\n\\n${BUILD_SUMMARY}"
 else
   BUILD_SUMMARY=$(git summary)
   BUILD_LOG=$(git log --pretty="format:  - %s")
-  BUILD_NOTES="${BUILD_LOG}\\n\\n\\n${BUILD_SUMMARY}"
+  BUILD_NOTES="${BUILD_LOG}\\n\\n${BUILD_SUMMARY}"
 fi
 
 # Commit version bump and tag build
