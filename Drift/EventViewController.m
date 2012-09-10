@@ -15,47 +15,34 @@
 
 @property (nonatomic) NSDateFormatter *startDateFormatter;
 @property (nonatomic) NSCalendar *calendar;
-
 @property (nonatomic) NSDateComponents *previousNowComponents;
+@property (nonatomic) Event *currentEvent;
+
 @end
 
 @implementation EventViewController
 
 #pragma mark -
-#pragma mark Application lifecycle
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	self = [super initWithCoder:aDecoder];
-	if (self) {
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"HH:mm '@' d LLL, y"];
-        self.startDateFormatter = formatter;
-
-        self.calendar = [NSCalendar currentCalendar];
-}
-
-	return self;
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-	Event *currentEvent = [[EventDataManager sharedManager] currentEvent];
-
-    if (currentEvent.isActiveValue) {
-        [self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
-    } else {
-        [self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
-    }
-
-	if (currentEvent) {
-        [self.eventTimerControl startWithEvent:currentEvent];
-	}
-}
+#pragma mark Lifecycle
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
+    self.currentEvent = [[EventDataManager sharedManager] latestEvent];
+
+    self.startDateFormatter = [[NSDateFormatter alloc] init];
+    [self.startDateFormatter setDateFormat:@"HH:mm '@' d LLL, y"];
+
+    self.calendar = [NSCalendar currentCalendar];
+
     // Scale down the startDate
     self.startDateLabel.layer.transform = CATransform3DMakeScale(0.6f, 0.6f, 1);
+
+	// Get notified of new things happening
+	[[NSNotificationCenter defaultCenter] addObserver:self
+	                                         selector:@selector(handleDataModelChange:)
+	                                             name:NSManagedObjectContextObjectsDidChangeNotification
+	                                           object:[NSManagedObjectContext MR_defaultContext]];
 
 	[self.eventTimerControl addObserver:self
 	                         forKeyPath:@"startDate"
@@ -78,20 +65,30 @@
 	                            context:NULL];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    if ([self.currentEvent isActive]) {
+        [self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
+    } else {
+        [self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
+    }
+
+	if (self.currentEvent) {
+        [self.eventTimerControl startWithEvent:self.currentEvent];
+	} else {
+        [self.eventTimerControl reset];
+    }
+}
+
 #pragma mark -
-#pragma mark Public instance methods
+#pragma mark Public methods
 
 - (IBAction)toggleEvent:(id)sender {
-	Event *currentEvent = [[EventDataManager sharedManager] currentEvent];
-
 	NSDate *now = [NSDate date];
 
-	// Do we have a event that is running
-	if (currentEvent.isActiveValue) {
+	if ([self.currentEvent isActive]) {
 		[TestFlight passCheckpoint:@"STOP EVENT"];
 
-		currentEvent.isActiveValue = NO;
-		currentEvent.stopDate     = now;
+		self.currentEvent.stopDate = now;
 
         [self.eventTimerControl stop];
 
@@ -101,11 +98,10 @@
 		[TestFlight passCheckpoint:@"START EVENT"];
 
 		// No, lets create a new one
-		currentEvent               = [[EventDataManager sharedManager] createEvent];
-		currentEvent.isActiveValue = YES;
-		currentEvent.startDate     = now;
+		self.currentEvent           = [[EventDataManager sharedManager] createEvent];
+		self.currentEvent.startDate = now;
 
-		[self.eventTimerControl startWithEvent:currentEvent];
+		[self.eventTimerControl startWithEvent:self.currentEvent];
 
 		// Toggle button to stop state
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
@@ -114,18 +110,21 @@
 	[[EventDataManager sharedManager] persistCurrentEvent];
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+	return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
 #pragma mark -
-#pragma mark Private Instance methods
+#pragma mark Private methods
 
 - (void)updateStartLabelWithDate:(NSDate *)date {
 	self.startDateLabel.text = [self.startDateFormatter stringFromDate:date];
 }
 
 - (void)updateNowLabelWithDate:(NSDate *)date {
-	Event *event = [[EventDataManager sharedManager] currentEvent];
+	static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
 
-	unsigned int static unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
-	NSDateComponents *components = [self.calendar components:unitFlags fromDate:event.startDate toDate:date options:0];
+	NSDateComponents *components = [self.calendar components:unitFlags fromDate:self.currentEvent.startDate toDate:date options:0];
 
     if (components.hour != self.previousNowComponents.hour
         || components.minute != self.previousNowComponents.minute
@@ -138,6 +137,7 @@
 - (void)updateStopLabelWithDate:(NSDate *)date {
     
 }
+
 - (void)animateTimeRunningIsTransforming:(BOOL)isTransforming {
     if (isTransforming) {
         // Create the keyframe animation object
@@ -149,10 +149,10 @@
 
         // Add the keyframes.  Note we have to start and end with CATransformIdentity,
         // so that the label starts from and returns to its non-transformed state.
-        [scaleAnimation setValues:[NSArray arrayWithObjects:
-                                   [NSValue valueWithCATransform3D:CATransform3DIdentity],
-                                   [NSValue valueWithCATransform3D:transform],
-                                   nil]];
+        [scaleAnimation setValues:@[
+         [NSValue valueWithCATransform3D:CATransform3DIdentity],
+         [NSValue valueWithCATransform3D:transform]
+         ]];
 
         // set the duration of the animation
         [scaleAnimation setDuration: .3];
@@ -172,10 +172,10 @@
 
         // Add the keyframes.  Note we have to start and end with CATransformIdentity,
         // so that the label starts from and returns to its non-transformed state.
-        [scaleAnimation setValues:[NSArray arrayWithObjects:
-                                   [NSValue valueWithCATransform3D:transform],
-                                   [NSValue valueWithCATransform3D:CATransform3DIdentity],
-                                   nil]];
+        [scaleAnimation setValues:@[
+         [NSValue valueWithCATransform3D:transform],
+         [NSValue valueWithCATransform3D:CATransform3DIdentity]
+         ]];
 
         // set the duration of the animation
         [scaleAnimation setDuration: .3];
@@ -196,10 +196,10 @@
 
         // Add the keyframes.  Note we have to start and end with CATransformIdentity,
         // so that the label starts from and returns to its non-transformed state.
-        [scaleAnimation setValues:[NSArray arrayWithObjects:
-                                   [NSValue valueWithCATransform3D:self.startDateLabel.layer.transform],
-                                   [NSValue valueWithCATransform3D:transform],
-                                   nil]];
+        [scaleAnimation setValues:@[
+         [NSValue valueWithCATransform3D:self.startDateLabel.layer.transform],
+         [NSValue valueWithCATransform3D:transform]
+         ]];
 
         // set the duration of the animation
         [scaleAnimation setDuration: .3];
@@ -219,10 +219,10 @@
 
         // Add the keyframes.  Note we have to start and end with CATransformIdentity,
         // so that the label starts from and returns to its non-transformed state.
-        [scaleAnimation setValues:[NSArray arrayWithObjects:
-                                   [NSValue valueWithCATransform3D:CATransform3DIdentity],
-                                   [NSValue valueWithCATransform3D:transform],
-                                   nil]];
+        [scaleAnimation setValues:@[
+         [NSValue valueWithCATransform3D:CATransform3DIdentity],
+         [NSValue valueWithCATransform3D:transform],
+         ]];
 
         // set the duration of the animation
         [scaleAnimation setDuration: .3];
@@ -232,12 +232,27 @@
     }
 }
 
+- (void)animateStopDateIsTransforming:(BOOL)isTransforming {
+
+}
+
+- (void)handleDataModelChange:(NSNotification *)note {
+	NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
+    if (deletedObjects) {
+        NSArray *deletedEvents = [deletedObjects allObjects];
+
+        NSUInteger index = [deletedEvents indexOfObject:self.currentEvent];
+
+        if (index != NSNotFound) {
+            self.currentEvent = nil;
+        }
+    }
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([keyPath isEqualToString:@"startDate"]) {
 		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
-
-        Event *event = [[EventDataManager sharedManager] currentEvent];
-        event.startDate = date;
+        self.currentEvent.startDate = date;
 
 		[self updateStartLabelWithDate:date];
 		[self updateNowLabelWithDate:self.eventTimerControl.nowDate];
@@ -247,18 +262,25 @@
 		[self updateNowLabelWithDate:date];
 	} else if ([keyPath isEqualToString:@"stopDate"]) {
 		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
+        self.currentEvent.stopDate = date;
 
-        Event *event = [[EventDataManager sharedManager] currentEvent];
-        event.stopDate = date;
-
+		[self updateNowLabelWithDate:self.eventTimerControl.nowDate];
 		[self updateStopLabelWithDate:date];
 	} else if ([keyPath isEqualToString:@"isTransforming"]) {
         EventTimerTransformingEnum isTransforming = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
         if (isTransforming == EventTimerTransformingStartDateStart) {
             [self animateStartDateIsTransforming:YES];
             [self animateTimeRunningIsTransforming:YES];
+        } else if (isTransforming == EventTimerTransformingStopDateStart) {
+            [self animateStopDateIsTransforming:YES];
+            [self animateTimeRunningIsTransforming:YES];
         } else if (isTransforming == EventTimerTransformingStartDateStop) {
             [self animateStartDateIsTransforming:NO];
+            [self animateTimeRunningIsTransforming:NO];
+
+            [[EventDataManager sharedManager] persistCurrentEvent];
+        } else if (isTransforming == EventTimerTransformingStopDateStop) {
+            [self animateStopDateIsTransforming:NO];
             [self animateTimeRunningIsTransforming:NO];
 
             [[EventDataManager sharedManager] persistCurrentEvent];

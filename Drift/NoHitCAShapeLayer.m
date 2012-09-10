@@ -10,6 +10,9 @@
 
 @implementation NoHitCAShapeLayer
 
+#pragma mark -
+#pragma mark CAShapeLayer
+
 - (BOOL)containsPoint:(CGPoint)point {
     return NO;
 }

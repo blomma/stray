@@ -1,5 +1,5 @@
 //
-//  ModelManager.h
+//  EventDataManager.h
 //  Drift
 //
 //  Created by Mikael Hultgren on 7/25/12.
@@ -10,11 +10,11 @@
 
 @interface EventDataManager : NSObject
 
-@property (nonatomic) Event *currentEvent;
-
 + (id)sharedManager;
 
 - (Event *)createEvent;
+- (void)deleteEvent:(Event *)event;
+- (Event *)latestEvent;
 - (void)persistCurrentEvent;
 
 @end

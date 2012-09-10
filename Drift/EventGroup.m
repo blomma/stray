@@ -8,6 +8,7 @@
 
 #import "EventGroup.h"
 #import "NSDate+Utilities.h"
+#import "EventChange.h"
 
 @interface EventGroup ()
 
@@ -21,9 +22,14 @@
 
 @property (nonatomic) NSCalendar *calendar;
 
+@property (nonatomic, readwrite) NSArray *changes;
+
 @end
 
 @implementation EventGroup
+
+#pragma mark -
+#pragma mark Lifecycle
 
 - (id)initWithDate:(NSDate *)date {
 	if ((self = [super init])) {
@@ -54,7 +60,7 @@
 }
 
 #pragma mark -
-#pragma mark Public instance methods
+#pragma mark Public methods
 
 - (BOOL)canContainDate:(NSDate *)date {
 	return [date isEqualToDateIgnoringTime:self.groupDate withCalendar:self.calendar];
@@ -63,7 +69,7 @@
 - (BOOL)isValidForEvent:(Event *)event {
 	NSDate *stopDate = event.stopDate;
 
-	if (event.isActiveValue) {
+	if ([event isActive]) {
 		stopDate = [NSDate date];
 	}
 
@@ -73,7 +79,7 @@
 }
 
 - (BOOL)containsEvent:(Event *)event {
-	return [self.events containsObject:event];;
+	return [self.events containsObject:event];
 }
 
 - (void)addEvent:(Event *)event {
@@ -82,25 +88,47 @@
 	self.isActive = [self containsActiveEvent];
 
 	self.timeActiveComponentsCacheInvalid = YES;
+
+    EventChange *change = [EventChange new];
+    change.GUID = event.GUID;
+    change.index = [self.events indexOfObject:event];
+    change.type = EventChangeInsert;
+
+    self.changes = @[ change ];
 }
 
 - (void)removeEvent:(Event *)event {
-	[self.events removeObject:event];
+    NSUInteger index = [self.events indexOfObject:event];
+    [self.events removeObjectAtIndex:index];
 
 	self.isActive = [self containsActiveEvent];
 
 	self.timeActiveComponentsCacheInvalid = YES;
+
+    EventChange *change = [EventChange new];
+    change.GUID = event.GUID;
+    change.index = index;
+    change.type = EventChangeDelete;
+
+    self.changes = @[ change ];
 }
 
 - (void)updateEvent:(Event *)event {
 	self.isActive = [self containsActiveEvent];
 
 	self.timeActiveComponentsCacheInvalid = YES;
+
+    EventChange *change = [EventChange new];
+    change.GUID = event.GUID;
+    change.index = [self.events indexOfObject:event];
+    change.type = EventChangeUpdate;
+
+    self.changes = @[ change ];
 }
 
 - (Event *)activeEvent {
 	for (Event *event in self.events) {
-		if (event.isActiveValue) {
+		if ([event isActive]) {
 			return event;
 		}
 	}
@@ -121,7 +149,7 @@
 }
 
 #pragma mark -
-#pragma mark Private instance methods
+#pragma mark Private methods
 
 - (BOOL)containsActiveEvent {
 	NSDate *stopDate = self.groupDate;
@@ -130,7 +158,7 @@
 	BOOL isActive = NO;
 
 	for (Event *event in self.events){
-		if (event.isActiveValue) {
+		if ([event isActive]) {
 			isActive = YES;
 			stopDate = [stopDate laterDate:toDay];
 		} else {
@@ -151,7 +179,7 @@
 }
 
 - (void)calculateTotalTimeRunning {
-	static NSUInteger DATE_COMPONENTS = (NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit);
+	static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
 
 	NSDate *endOfDay = [self.groupDate endOfDayWithCalendar:self.calendar];
 
@@ -161,12 +189,12 @@
 	for (Event *event in self.events) {
 		NSDate *startDate = [event.startDate laterDate:self.groupDate];
 		NSDate *stopDate = event.stopDate;
-		if (event.isActiveValue) {
+		if ([event isActive]) {
 			stopDate = [NSDate date];
 		}
 		stopDate = [stopDate earlierDate:endOfDay];
 
-		NSDateComponents *components = [self.calendar components:DATE_COMPONENTS
+		NSDateComponents *components = [self.calendar components:unitFlags
                                                         fromDate:startDate
                                                           toDate:stopDate
                                                          options:0];
@@ -176,7 +204,7 @@
                                                  options:0];
 	}
 
-	self.timeActiveComponentsCache	= [self.calendar components:DATE_COMPONENTS
+	self.timeActiveComponentsCache	= [self.calendar components:unitFlags
                                                       fromDate:deltaStart
                                                         toDate:deltaEnd
                                                        options:0];

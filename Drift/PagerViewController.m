@@ -1,5 +1,5 @@
 //
-//  ViewController.m
+//  PagerViewController.m
 //  Drift
 //
 //  Created by Mikael Hultgren on 5/6/12.
@@ -10,15 +10,18 @@
 
 @interface PagerViewController ()
 
-@property (nonatomic, assign) BOOL pageControlUsed;
-@property (nonatomic, assign) NSUInteger page;
-@property (nonatomic, assign) BOOL rotating;
+@property (nonatomic) BOOL pageControlUsed;
+@property (nonatomic) NSUInteger page;
+@property (nonatomic) BOOL rotating;
 
 - (void)loadScrollViewWithPage:(int)page;
 
 @end
 
 @implementation PagerViewController
+
+#pragma mark -
+#pragma mark Lifecycle
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
@@ -32,7 +35,7 @@
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return NO;
+	return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -172,7 +175,7 @@
 }
 
 #pragma mark -
-#pragma mark UIScrollViewDelegate methods
+#pragma mark UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
 	// We don't want a "feedback loop" between the UIPageControl and the scroll delegate in

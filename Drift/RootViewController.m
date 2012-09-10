@@ -8,18 +8,17 @@
 
 #import "RootViewController.h"
 
-@interface RootViewController ()
-
-@end
-
 @implementation RootViewController
+
+#pragma mark -
+#pragma mark Lifecycle
 
 - (void)viewDidLoad {
 	// Do any additional setup after loading the view, typically from a nib.
 	[super viewDidLoad];
 
 	[self addChildViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"EventViewController"]];
-	[self addChildViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"EventGroupsViewController"]];
+	[self addChildViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"EventGroupsTableViewController"]];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

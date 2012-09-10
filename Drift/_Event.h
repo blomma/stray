@@ -5,7 +5,6 @@
 
 
 extern const struct EventAttributes {
-	__unsafe_unretained NSString *isActive;
 	__unsafe_unretained NSString *startDate;
 	__unsafe_unretained NSString *stopDate;
 } EventAttributes;
@@ -22,7 +21,6 @@ extern const struct EventFetchedProperties {
 
 
 
-
 @interface EventID : NSManagedObjectID {}
 @end
 
@@ -31,18 +29,6 @@ extern const struct EventFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (EventID*)objectID;
-
-
-
-
-@property (nonatomic, strong) NSNumber* isActive;
-
-
-@property BOOL isActiveValue;
-- (BOOL)isActiveValue;
-- (void)setIsActiveValue:(BOOL)value_;
-
-//- (BOOL)validateIsActive:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -79,15 +65,6 @@ extern const struct EventFetchedProperties {
 @end
 
 @interface _Event (CoreDataGeneratedPrimitiveAccessors)
-
-
-- (NSNumber*)primitiveIsActive;
-- (void)setPrimitiveIsActive:(NSNumber*)value;
-
-- (BOOL)primitiveIsActiveValue;
-- (void)setPrimitiveIsActiveValue:(BOOL)value_;
-
-
 
 
 - (NSDate*)primitiveStartDate;

@@ -15,6 +15,7 @@
 @property (nonatomic, readonly) NSDateComponents *timeActiveComponents;
 @property (nonatomic, readonly) NSString *GUID;
 @property (nonatomic, readonly) BOOL isActive;
+@property (nonatomic, readonly) NSArray *changes;
 
 - (id)initWithDate:(NSDate *)groupDate;
 - (BOOL)containsEvent:(Event *)event;

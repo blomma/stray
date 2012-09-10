@@ -21,6 +21,9 @@
 
 @implementation EventGroups
 
+#pragma mark -
+#pragma mark Lifecycle
+
 - (id)init {
 	return [self initWithEvents:[NSArray array]];
 }
@@ -40,7 +43,7 @@
 }
 
 #pragma mark -
-#pragma mark Public instance methods
+#pragma mark Public methods
 
 - (void)addEvents:(NSArray *)events {
     for (Event *event in events) {
@@ -48,7 +51,7 @@
         NSDate *stopDate  = event.stopDate;
 
         // Is the event running, if so set the stopDate to now
-        if (event.isActiveValue) {
+        if ([event isActive]) {
             stopDate = [NSDate date];
         }
 
@@ -114,7 +117,7 @@
 	NSDate *stopDate  = event.stopDate;
 
 	// Is the event running, if so set the stopDate to now
-	if (event.isActiveValue) {
+	if ([event isActive]) {
 		stopDate = [NSDate date];
 	}
 
@@ -287,7 +290,7 @@
 
 - (NSUInteger)indexForGroupDate:(NSDate *)date {
     NSUInteger index = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
-        return [(EventGroup *) obj canContainDate:date];
+        return [(EventGroup *)obj canContainDate:date];
     }];
 
     return index;
@@ -305,7 +308,7 @@
 }
 
 #pragma mark -
-#pragma mark Private instance methods
+#pragma mark Private methods
 
 - (NSUInteger)insertionIndexForGroupDate:(NSDate *)date {
     NSUInteger index = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {

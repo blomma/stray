@@ -14,14 +14,11 @@
 
 @interface EventTimerControl ()
 
-// Private properties
 @property (nonatomic) NSTimer *updateTimer;
-
 @property (nonatomic) CAShapeLayer *startHandLayer;
 @property (nonatomic) CAShapeLayer *nowHandLayer;
 @property (nonatomic) NoHitCAShapeLayer *secondHandLayer;
 @property (nonatomic) NoHitCAShapeLayer *secondHandProgressTicksLayer;
-
 @property (nonatomic) Event *event;
 
 // Touch transforming
@@ -39,27 +36,22 @@
 @implementation EventTimerControl
 
 #pragma mark -
-#pragma mark Public properties
-
-#pragma mark -
-#pragma mark Application lifecycle
+#pragma mark Lifecycle
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if ((self = [super initWithCoder:aDecoder])) {
-        [self setUpClock];
+        [self drawClockFace];
 	}
 
 	return self;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-	if ([self.updateTimer isValid]) {
-		[self.updateTimer invalidate];
-	}
+    [self.updateTimer invalidate];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	if (self.event.isActiveValue) {
+	if ([self.event isActive]) {
 		if (![self.updateTimer isValid]) {
 			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
 			                                                    target:self
@@ -72,32 +64,36 @@
 	}
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+	return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
 #pragma mark -
-#pragma mark Public instance methods
+#pragma mark Public methods
 
 - (void)startWithEvent:(Event *)event {
-    self.startDate = event.startDate;
+    [self prepareForReuse];
 
-    if (event.stopDate) {
-        self.nowDate  = event.stopDate;
+    self.event = event;
+
+    self.startDate = event.startDate;
+    [self drawStart];
+
+    if (![event isActive]) {
+        self.nowDate = event.stopDate;
         self.stopDate = event.stopDate;
     } else {
         self.nowDate = [NSDate date];
     }
 
-    self.event = event;
-
-    [self drawStart];
 	[self drawNow];
 
-    if (self.event.isActiveValue) {
-        if (![self.updateTimer isValid]) {
-            self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
-                                                                target:self
-                                                              selector:@selector(timerUpdate)
-                                                              userInfo:nil
-                                                               repeats:YES];
-        }
+    if ([event isActive]) {
+        self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
+                                                            target:self
+                                                          selector:@selector(timerUpdate)
+                                                          userInfo:nil
+                                                           repeats:YES];
     }
 }
 
@@ -110,12 +106,31 @@
 	[self drawNow];
 }
 
+- (void)reset {
+	[self.updateTimer invalidate];
+
+	self.secondHandLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
+    self.startHandLayer.transform  = CATransform3DMakeRotation(0, 0, 0, 1);
+    self.nowHandLayer.transform    = CATransform3DMakeRotation(0, 0, 0, 1);
+
+    for (NSUInteger i = 0; i < self.secondHandProgressTicksLayer.sublayers.count; i++) {
+        NoHitCAShapeLayer *layer = [self.secondHandProgressTicksLayer.sublayers objectAtIndex:i];
+        layer.hidden = NO;
+    }
+}
+
 #pragma mark -
-#pragma mark Private instance methods
+#pragma mark Private methods
+
+- (void)prepareForReuse {
+    self.previousSecondTick = -1;
+    self.previousNow        = -1;
+
+    [self.updateTimer invalidate];
+}
 
 - (NSTimeInterval)angleToTimeInterval:(CGFloat)a {
-	CGFloat seconds = (CGFloat)((a / (2 * M_PI)) * 3600);
-	return seconds;
+	return ((a / (2 * M_PI)) * 3600);
 }
 
 - (CGFloat)deltaBetweenAngleA:(CGFloat)a AngleB:(CGFloat)b {
@@ -132,11 +147,8 @@
 }
 
 - (void)timerUpdate {
-	if ([self.updateTimer isValid]) {
-		self.nowDate = [NSDate date];
-
-		[self drawNow];
-	}
+    self.nowDate = [NSDate date];
+    [self drawNow];
 }
 
 - (void)drawStart {
@@ -156,18 +168,15 @@
 
     if (secondTick != self.previousSecondTick) {
         for (NSUInteger i = 0; i < self.secondHandProgressTicksLayer.sublayers.count; i++) {
-            CALayer *layer = [self.secondHandProgressTicksLayer.sublayers objectAtIndex:i];
+            NoHitCAShapeLayer *layer = [self.secondHandProgressTicksLayer.sublayers objectAtIndex:i];
 
             if (i < secondTick) {
-                if (layer.hidden) {
-                    layer.hidden = NO;
-                }
+                layer.hidden = NO;
             } else {
-                if (!layer.hidden) {
-                    layer.hidden = YES;
-                }
+                layer.hidden = YES;
             }
         }
+
         self.previousSecondTick = secondTick;
     }
 
@@ -179,7 +188,7 @@
     }
 }
 
-- (void)setUpClock {
+- (void)drawClockFace {
 	CGFloat angle;
 
     self.layer.contentsScale = [UIScreen mainScreen].scale;
@@ -197,20 +206,26 @@
 		angle = (CGFloat)((M_PI * 2) / 60.0 * i);
 
 		if (i % 10 == 0) {
+            // position
+			tick.bounds      = CGRectMake(0.0, 0.0, 5.0, self.bounds.size.width / 2 - 30);
+			tick.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+			tick.anchorPoint = CGPointMake(0.5, 1.0);
+
+            // drawing
+			tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
 			tick.fillColor   = [[UIColor whiteColor] CGColor];
 			tick.lineWidth   = 1;
-			tick.bounds      = CGRectMake(0.0, 0.0, 5.0, self.bounds.size.width / 2 - 30);
-			tick.anchorPoint = CGPointMake(0.5, 1.0);
-			tick.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-			tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
 			tick.path        = largeTickPath.CGPath;
 		} else {
+            // position
+			tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.bounds.size.width / 2.0 - 31.5);
+			tick.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+			tick.anchorPoint = CGPointMake(0.5, 1.0);
+
+            // drawing
+			tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
 			tick.fillColor   = [[UIColor colorWithWhite:0.651 alpha:1.000] CGColor];
 			tick.lineWidth   = 1;
-			tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.bounds.size.width / 2.0 - 31.5);
-			tick.anchorPoint = CGPointMake(0.5, 1.0);
-			tick.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-			tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
 			tick.path        = smallTickPath.CGPath;
 		}
 
@@ -280,12 +295,15 @@
     [secondHandPath addLineToPoint:CGPointMake(0, 7)]; // Move to bottom left
     [secondHandPath addLineToPoint:CGPointMake(7, 7)]; // Move to bottom right
 
-	self.secondHandLayer.fillColor   = [[UIColor redColor] CGColor];
-	self.secondHandLayer.lineWidth   = 1.0;
+    // position
 	self.secondHandLayer.bounds      = CGRectMake(0.0, 0.0, 7.0, self.bounds.size.width / 2.0 - 62);
 	self.secondHandLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.secondHandLayer.anchorPoint = CGPointMake(0.5, 1.0);
+
+    // drawing
 	self.secondHandLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
+	self.secondHandLayer.fillColor   = [[UIColor redColor] CGColor];
+	self.secondHandLayer.lineWidth   = 1.0;
 	self.secondHandLayer.path        = secondHandPath.CGPath;
 
 	[self.layer addSublayer:self.secondHandLayer];
@@ -296,6 +314,7 @@
 	self.secondHandProgressTicksLayer             = [NoHitCAShapeLayer layer];
     self.secondHandProgressTicksLayer.contentsScale = [UIScreen mainScreen].scale;
 
+    // position
 	self.secondHandProgressTicksLayer.bounds      = CGRectMake(0.0, 0.0, self.bounds.size.width - 100, self.bounds.size.width - 100);
 	self.secondHandProgressTicksLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.secondHandProgressTicksLayer.anchorPoint = CGPointMake(0.5, 0.5);
@@ -309,14 +328,15 @@
 		NoHitCAShapeLayer *tick = [NoHitCAShapeLayer layer];
         tick.contentsScale = [UIScreen mainScreen].scale;
 
+        // position
+		tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.secondHandProgressTicksLayer.bounds.size.width / 2);
+		tick.position    = CGPointMake(CGRectGetMidX(self.secondHandProgressTicksLayer.bounds), CGRectGetMidY(self.secondHandProgressTicksLayer.bounds));
+		tick.anchorPoint = CGPointMake(0.5, 1.0);
 
+        // drawing
+		tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
 		tick.fillColor   = [[UIColor redColor] CGColor];
 		tick.lineWidth   = 1;
-
-		tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.secondHandProgressTicksLayer.bounds.size.width / 2);
-		tick.anchorPoint = CGPointMake(0.5, 1.0);
-		tick.position    = CGPointMake(CGRectGetMidX(self.secondHandProgressTicksLayer.bounds), CGRectGetMidY(self.secondHandProgressTicksLayer.bounds));
-		tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
 		tick.path        = secondHandTickPath.CGPath;
 
 		[self.secondHandProgressTicksLayer addSublayer:tick];
@@ -331,22 +351,23 @@
 
 	CGFloat cx, cy, dx, dy, a;
 
-	self.deltaLayer = NULL;
+	self.deltaLayer = nil;
 
 	if ([self.startHandLayer.presentationLayer hitTest:point]) {
 		self.deltaLayer = self.startHandLayer;
 		self.deltaDate  = self.startDate;
+
         self.isTransforming = EventTimerTransformingStartDateStart;
 
-		// Temporarily disable the passing of time
         [self.updateTimer invalidate];
-	} else if ([self.nowHandLayer.presentationLayer hitTest:point] && !self.event.isActiveValue) {
+	} else if ([self.nowHandLayer.presentationLayer hitTest:point] && ![self.event isActive]) {
 		self.deltaLayer = self.nowHandLayer;
 		self.deltaDate  = self.nowDate;
+
         self.isTransforming = EventTimerTransformingStopDateStart;
     }
 
-	if (self.deltaLayer != NULL) {
+	if (self.deltaLayer != nil) {
 		// Calculate the angle in radians
 		cx = self.deltaLayer.position.x;
 		cy = self.deltaLayer.position.y;
@@ -363,7 +384,7 @@
 
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
 
-	return self.deltaLayer != NULL;
+	return self.deltaLayer != nil;
 }
 
 - (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
@@ -371,7 +392,7 @@
 
 	CGFloat cx, cy, dx, dy, a, da;
 
-	if (self.deltaLayer != NULL) {
+	if (self.deltaLayer != nil) {
 		// Calculate the angle in radians
 		cx = self.deltaLayer.position.x;
 		cy = self.deltaLayer.position.y;
@@ -428,11 +449,11 @@
 
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
 
-	return self.deltaLayer != NULL;
+	return self.deltaLayer != nil;
 }
 
 - (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-	if (self.deltaLayer != NULL) {
+	if (self.deltaLayer != nil) {
 		// If we are tracking the start hand then
 		// we want to move the startHand to it's start position
 		if (self.deltaLayer == self.startHandLayer) {
@@ -442,7 +463,7 @@
             self.isTransforming = EventTimerTransformingStartDateStop;
 
             // Resume the passing of time
-            if (![self.updateTimer isValid] && self.event.isActiveValue) {
+            if (![self.updateTimer isValid] && [self.event isActive]) {
                 self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
                                                                     target:self
                                                                   selector:@selector(timerUpdate)
@@ -453,7 +474,7 @@
             self.isTransforming = EventTimerTransformingStopDateStop;
         }
 
-		self.deltaLayer = NULL;
+		self.deltaLayer = nil;
 	}
 
 	[self sendActionsForControlEvents:UIControlEventValueChanged];

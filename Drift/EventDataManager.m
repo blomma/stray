@@ -1,5 +1,5 @@
 //
-//  ModelManager.m
+//  EventDataManager.m
 //  Drift
 //
 //  Created by Mikael Hultgren on 7/25/12.
@@ -11,16 +11,18 @@
 
 @implementation EventDataManager
 
+#pragma mark -
+#pragma mark Lifecycle
+
 - (id)init {
 	if (self = [super init]) {
-		[self setupLatestEvent];
 	}
 
 	return self;
 }
 
 #pragma mark -
-#pragma mark Singleton Methods
+#pragma mark Class methods
 
 + (id)sharedManager {
 	static EventDataManager *sharedEventDataManager = nil;
@@ -32,25 +34,30 @@
 }
 
 #pragma mark -
-#pragma mark Public instance methods
+#pragma mark Public methods
 
 - (void)persistCurrentEvent {
 	[[NSManagedObjectContext MR_defaultContext] MR_save];
 }
 
 - (Event *)createEvent {
-	self.currentEvent = [Event MR_createEntity];
-    return self.currentEvent;
+	return [Event MR_createEntity];
+}
+
+- (void)deleteEvent:(Event *)event {
+    [event MR_deleteEntity];
+}
+
+- (Event *)latestEvent {
+	if ([Event MR_countOfEntities] > 0) {
+		NSArray *eventArray = [Event MR_findAllSortedBy:@"startDate" ascending:NO];
+		return [eventArray objectAtIndex:0];
+	}
+
+    return nil;
 }
 
 #pragma mark -
-#pragma mark Private instance methods
-
-- (void)setupLatestEvent {
-	if ([Event MR_countOfEntities] > 0) {
-		NSArray *eventArray = [Event MR_findAllSortedBy:@"startDate" ascending:NO];
-		self.currentEvent = [eventArray objectAtIndex:0];
-	}
-}
+#pragma mark Private methods
 
 @end

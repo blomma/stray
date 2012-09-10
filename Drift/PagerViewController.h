@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  PagerViewController.h
 //  Drift
 //
 //  Created by Mikael Hultgren on 5/6/12.

@@ -24,5 +24,6 @@ typedef enum : NSInteger {
 
 - (void)startWithEvent:(Event *)event;
 - (void)stop;
+- (void)reset;
 
 @end
