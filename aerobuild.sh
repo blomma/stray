@@ -107,8 +107,12 @@ then
   fi
 fi
 
+VERSION_NUMBER=$(agvtool what-marketing-version -terse1)
+BUILD_NUMBER=$(agvtool what-version -terse)
+VERSION_STRING="${VERSION_NUMBER}.${BUILD_NUMBER}"
+
 # Determine the build tag that the last built version had
-OLD_BUILD_TAG="${GIT_TAG_PREFIX}$(agvtool what-version -terse)"
+OLD_BUILD_TAG="${GIT_TAG_PREFIX}${VERSION_STRING}"
 
 # Check if the tag actually exists in git
 if [ "x" != "x"${GIT_REMOTE} ]
@@ -121,8 +125,8 @@ OLD_BUILD_TAG=$(git tag -l "${OLD_BUILD_TAG}")
 agvtool bump -all
 VERSION_NUMBER=$(agvtool what-marketing-version -terse1)
 BUILD_NUMBER=$(agvtool what-version -terse)
-VERSION_STRING="${VERSION_NUMBER} (${BUILD_NUMBER})"
-BUILD_TAG="${GIT_TAG_PREFIX}${BUILD_NUMBER}"
+VERSION_STRING="${VERSION_NUMBER}.${BUILD_NUMBER}"
+BUILD_TAG="${GIT_TAG_PREFIX}${VERSION_STRING}"
 
 # Build target
 echo
