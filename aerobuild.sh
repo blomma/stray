@@ -50,7 +50,7 @@ CONFIGURATION="Ad Hoc"
 PROVISIONING="5F857C24-02AE-48ED-9488-37FB1CE756F4.mobileprovision"
 
 # Code signing identity, as it appears in Xcode's Organizer (e.g. "iPhone Developer: John Doe")
-SIGNER="Mikael Hultgren"
+SIGNER="iPhone Distribution: Mikael Hultgren"
 
 #
 # TESTFLIGHT SETTINGS
