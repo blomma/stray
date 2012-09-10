@@ -148,8 +148,8 @@ echo
 
 xcrun -sdk "${TARGET_SDK}" \
   PackageApplication \
-  -v ${APP_PATH} \
-  -o ${OUTPUT_PATH} \
+  -v "${APP_PATH}" \
+  -o "${OUTPUT_PATH}" \
   --sign "${SIGNER}" \
   --embed "${PROFILES_PATH}${PROVISIONING}"
 
