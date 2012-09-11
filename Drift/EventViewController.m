@@ -101,6 +101,8 @@
 	} else {
 		[TestFlight passCheckpoint:@"START EVENT"];
 
+        [self reset];
+
 		// No, lets create a new one
 		self.currentEvent           = [[EventDataManager sharedManager] createEvent];
 		self.currentEvent.startDate = now;
