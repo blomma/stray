@@ -38,6 +38,7 @@
     ];
 
     self.dataSource = self;
+    self.delegate = self;
 
     [self setViewControllers:@[[self.dataModel objectAtIndex:0]]
                    direction:UIPageViewControllerNavigationDirectionForward
@@ -72,12 +73,15 @@
     return [self.dataModel objectAtIndex:index - 1];
 }
 
-- (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController {
-    return (NSInteger)self.dataModel.count;
-}
+//- (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController {
+//    return (NSInteger)self.dataModel.count;
+//}
+//
+//- (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController {
+//    return 0;
+//}
 
-- (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController {
-    return 0;
-}
+#pragma mark -
+#pragma mark UIPageViewControllerDelegate
 
 @end

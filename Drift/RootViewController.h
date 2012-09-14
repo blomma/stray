@@ -6,6 +6,6 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-@interface RootViewController : UIPageViewController <UIPageViewControllerDataSource>
+@interface RootViewController : UIPageViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 
 @end
