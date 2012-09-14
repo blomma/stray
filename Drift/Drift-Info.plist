@@ -15,6 +15,8 @@
 			<key>CFBundleIconFiles</key>
 			<array>
 				<string></string>
+				<string>iPhone@2x.png</string>
+				<string>iPhone.png</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<true/>

@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "PagerViewController.h"
-
-@interface RootViewController : PagerViewController
+@interface RootViewController : UIPageViewController <UIPageViewControllerDataSource>
 
 @end

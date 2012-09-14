@@ -49,10 +49,6 @@
     self.eventGroup = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 #pragma mark -
 #pragma mark Private properties
 
@@ -115,7 +111,7 @@
 #pragma mark Public methods
 
 - (IBAction)closeModal:(id)sender {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 #pragma mark -

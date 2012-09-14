@@ -90,7 +90,6 @@
 	self.timeActiveComponentsCacheInvalid = YES;
 
     EventChange *change = [EventChange new];
-    change.GUID = event.GUID;
     change.index = [self.events indexOfObject:event];
     change.type = EventChangeInsert;
 
@@ -106,7 +105,6 @@
 	self.timeActiveComponentsCacheInvalid = YES;
 
     EventChange *change = [EventChange new];
-    change.GUID = event.GUID;
     change.index = index;
     change.type = EventChangeDelete;
 
@@ -119,7 +117,6 @@
 	self.timeActiveComponentsCacheInvalid = YES;
 
     EventChange *change = [EventChange new];
-    change.GUID = event.GUID;
     change.index = [self.events indexOfObject:event];
     change.type = EventChangeUpdate;
 

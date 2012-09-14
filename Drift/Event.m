@@ -2,15 +2,12 @@
 
 @interface Event ()
 
-@property (nonatomic, readwrite) NSString *GUID;
-
 @end
 
 @implementation Event
 
 - (id)init {
 	if ((self = [super init])) {
-		self.GUID = [[NSProcessInfo processInfo] globallyUniqueString];
 	}
 
 	return self;

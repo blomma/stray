@@ -64,10 +64,6 @@
 	[self updateActiveEventGroup];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     EventGroupViewController *eventGroupViewController = [segue destinationViewController];
 

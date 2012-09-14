@@ -39,9 +39,6 @@
     self.startDateLabel.layer.transform = CATransform3DMakeScale(0.6f, 0.6f, 1);
     self.stopDateLabel.layer.transform = CATransform3DMakeScale(0.6f, 0.6f, 1);
 
-    // Colors
-    [self.stopDateLabel setTextColor:[UIColor colorWithRed:0.098f green:0.800f blue:0.000 alpha:1.000]];
-    
 	// Get notified of new things happening
 	[[NSNotificationCenter defaultCenter] addObserver:self
 	                                         selector:@selector(handleDataModelChange:)
@@ -116,10 +113,6 @@
 	[[EventDataManager sharedManager] persistCurrentEvent];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 #pragma mark -
 #pragma mark Private methods
 
@@ -134,19 +127,23 @@
 }
 
 - (void)updateStartLabelWithDate:(NSDate *)date {
-	self.startDateLabel.text = [self.startDateFormatter stringFromDate:date];
+    if (date) {
+        self.startDateLabel.text = [self.startDateFormatter stringFromDate:date];
+    }
 }
 
 - (void)updateNowLabelWithDate:(NSDate *)date {
-	static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+    if (date) {
+        static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
 
-	NSDateComponents *components = [self.calendar components:unitFlags fromDate:self.currentEvent.startDate toDate:date options:0];
+        NSDateComponents *components = [self.calendar components:unitFlags fromDate:self.currentEvent.startDate toDate:date options:0];
 
-    if (components.hour != self.previousNowComponents.hour
-        || components.minute != self.previousNowComponents.minute
-        || components.second != self.previousNowComponents.second) {
-        self.runningTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", components.hour, components.minute, components.second];
-        self.previousNowComponents = components;
+        if (components.hour != self.previousNowComponents.hour
+            || components.minute != self.previousNowComponents.minute
+            || components.second != self.previousNowComponents.second) {
+            self.runningTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", components.hour, components.minute, components.second];
+            self.previousNowComponents = components;
+        }
     }
 }
 
