@@ -38,8 +38,6 @@
 	                                         selector:@selector(handleDataModelChange:)
 	                                             name:NSManagedObjectContextObjectsDidChangeNotification
 	                                           object:[NSManagedObjectContext MR_defaultContext]];
-
-	self.view.backgroundColor = [UIColor colorWithRed:0.075 green:0.075 blue:0.075 alpha:1];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
