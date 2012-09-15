@@ -160,12 +160,9 @@
     if (changes.count > 0) {
         NSMutableArray *insertIndexPaths = [NSMutableArray array];
         NSMutableArray *deleteIndexPaths = [NSMutableArray array];
-        NSMutableArray *updateIndexPaths = [NSMutableArray array];
 
         for (EventChange *eventChange in changes) {
-            if ([eventChange.type isEqualToString:EventChangeUpdate]) {
-                [updateIndexPaths addObject:[NSIndexPath indexPathForRow:(NSInteger)eventChange.index inSection:0]];
-            } else if ([eventChange.type isEqualToString:EventChangeDelete]) {
+            if ([eventChange.type isEqualToString:EventChangeDelete]) {
                 [deleteIndexPaths addObject:[NSIndexPath indexPathForRow:(NSInteger)eventChange.index inSection:0]];
             } else if ([eventChange.type isEqualToString:EventChangeInsert]) {
                 [insertIndexPaths addObject:[NSIndexPath indexPathForRow:(NSInteger)eventChange.index inSection:0]];
@@ -176,7 +173,6 @@
 
         [self.eventGroupTableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationRight];
         [self.eventGroupTableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationFade];
-        [self.eventGroupTableView reloadRowsAtIndexPaths:updateIndexPaths withRowAnimation:UITableViewRowAnimationNone];
 
         [self.eventGroupTableView endUpdates];
     }
