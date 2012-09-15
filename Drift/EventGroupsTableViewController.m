@@ -65,6 +65,8 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    [sender setSelected:NO animated:YES];
+
     EventGroupViewController *eventGroupViewController = [segue destinationViewController];
 
     EventGroup *eventGroup = [self.dataSource.eventGroups eventGroupAtIndex:(NSUInteger)[self.tableView indexPathForSelectedRow].row];
