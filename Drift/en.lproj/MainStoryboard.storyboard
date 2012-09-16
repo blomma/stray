@@ -49,17 +49,17 @@
                             <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="10:40 @ 13 sep, 2012" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="W98-oL-Wio" userLabel="Start date label">
                                 <rect key="frame" x="0.0" y="29" width="320" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.074509806931018829" green="0.074509806931018829" blue="0.074509806931018829" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.074509803921568626" green="0.074509803921568626" blue="0.074509803921568626" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="24"/>
-                                <color key="textColor" red="1" green="0.59999999999999998" blue="0.0078431372549019607" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.9137254901960784" green="0.64313725490196072" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="10:40 @ 13 sep, 2012" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="34X-33-FWq" userLabel="Stop date label">
                                 <rect key="frame" x="0.0" y="99" width="320" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.074509806931018829" green="0.074509806931018829" blue="0.074509806931018829" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.074509803921568626" green="0.074509803921568626" blue="0.074509803921568626" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="24"/>
-                                <color key="textColor" red="0.098039215686274508" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.50980392156862742" green="0.72549019607843135" blue="0.43137254901960786" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="n39-IM-ZTu" userLabel="Running time label">
@@ -123,7 +123,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.074509803920000006" green="0.074509803920000006" blue="0.074509803920000006" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="21"/>
-                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="textColor" red="0.31372549019607843" green="0.70196078431372544" blue="0.81568627450980391" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="31" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="CfG-GK-mXX" userLabel="DateDay">
@@ -131,7 +131,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.074509803920000006" green="0.074509803920000006" blue="0.074509803920000006" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="42"/>
-                                            <color key="textColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.91372549020000005" green="0.64313725489999995" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="September" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="rcY-LZ-Run" userLabel="DateMonth">
@@ -139,7 +139,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.074509803920000006" green="0.074509803920000006" blue="0.074509803920000006" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="17"/>
-                                            <color key="textColor" red="1" green="0.59999999999999998" blue="0.0078431372550000003" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.91372549020000005" green="0.64313725489999995" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="2012" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="g5d-wH-aLq" userLabel="DateYear">
@@ -147,7 +147,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.074509803920000006" green="0.074509803920000006" blue="0.074509803920000006" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="17"/>
-                                            <color key="textColor" red="1" green="0.59999999999999998" blue="0.0078431372550000003" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.91372549020000005" green="0.64313725489999995" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                     </subviews>

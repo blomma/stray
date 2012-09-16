@@ -221,7 +221,7 @@
 
             // drawing
 			tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
-			tick.fillColor   = [[UIColor colorWithWhite:0.651 alpha:1.000] CGColor];
+			tick.fillColor   = [[UIColor colorWithWhite:0.551 alpha:1.000] CGColor];
 			tick.lineWidth   = 1;
 			tick.path        = smallTickPath.CGPath;
 		}
@@ -249,7 +249,7 @@
 
     // drawing
 	self.nowLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
-	self.nowLayer.fillColor   = [[UIColor colorWithRed:0.098 green:0.800 blue:0.000 alpha:1.000] CGColor];
+	self.nowLayer.fillColor   = [[UIColor colorWithRed:0.510 green:0.725 blue:0.431 alpha:1] CGColor];
 	self.nowLayer.lineWidth   = 1.0;
 	self.nowLayer.path        = nowHandPath.CGPath;
 
@@ -275,7 +275,7 @@
 
     // drawing
 	self.startLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
-	self.startLayer.fillColor   = [[UIColor colorWithRed:1.000 green:0.600 blue:0.008 alpha:1.000] CGColor];
+	self.startLayer.fillColor   = [[UIColor colorWithRed:0.914 green:0.643 blue:0.267 alpha:1] CGColor];
 	self.startLayer.lineWidth   = 1.0;
 	self.startLayer.path        = startHandPath.CGPath;
 
@@ -299,7 +299,7 @@
 
     // drawing
 	self.secondLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
-	self.secondLayer.fillColor   = [[UIColor redColor] CGColor];
+	self.secondLayer.fillColor   = [[UIColor colorWithRed:0.843 green:0.306 blue:0.314 alpha:1] CGColor];
 	self.secondLayer.lineWidth   = 1.0;
 	self.secondLayer.path        = secondHandPath.CGPath;
 
@@ -332,7 +332,7 @@
 
         // drawing
 		tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
-		tick.fillColor   = [[UIColor redColor] CGColor];
+		tick.fillColor   = [[UIColor colorWithRed:0.843 green:0.306 blue:0.314 alpha:1] CGColor];
 		tick.lineWidth   = 1;
 		tick.path        = secondHandTickPath.CGPath;
 
