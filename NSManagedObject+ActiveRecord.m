@@ -13,6 +13,7 @@
 + (NSManagedObjectContext *)defaultContext {
     return [[CoreDataManager instance] managedObjectContext];
 }
+
 @end
 
 @implementation NSManagedObject (ActiveRecord)
@@ -99,7 +100,6 @@
 + (NSPredicate *)predicateFromStringOrDict:(id)condition {
     if ([condition isKindOfClass:[NSString class]])
         return [NSPredicate predicateWithFormat:condition];
-    
     else if ([condition isKindOfClass:[NSDictionary class]])
         return [NSPredicate predicateWithFormat:[self queryStringFromDictionary:condition]];
     

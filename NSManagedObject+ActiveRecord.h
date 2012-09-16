@@ -11,7 +11,9 @@
 #import "NSArray+Accessors.h"
 
 @interface NSManagedObjectContext (ActiveRecord)
+
 + (NSManagedObjectContext *)defaultContext;
+
 @end
 
 @interface NSManagedObject (ActiveRecord)

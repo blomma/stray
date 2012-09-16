@@ -48,8 +48,7 @@ static NSString *CUSTOM_DATABASE_NAME = nil;
 
 #pragma mark - Public
 
-- (NSManagedObjectContext *)managedObjectContext
-{
+- (NSManagedObjectContext *)managedObjectContext {
     if (!_managedObjectContext) {
         if (self.persistentStoreCoordinator) {
             _managedObjectContext = [[NSManagedObjectContext alloc] init];
@@ -60,8 +59,7 @@ static NSString *CUSTOM_DATABASE_NAME = nil;
     return _managedObjectContext;
 }
 
-- (NSManagedObjectModel *)managedObjectModel
-{
+- (NSManagedObjectModel *)managedObjectModel {
     if (!_managedObjectModel) {
         NSURL *modelURL = [[NSBundle mainBundle] URLForResource:[self modelName] withExtension:@"momd"];
         _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
@@ -80,12 +78,15 @@ static NSString *CUSTOM_DATABASE_NAME = nil;
                              [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
                              [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
     
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error])
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+                                                   configuration:nil
+                                                             URL:storeURL
+                                                         options:options
+                                                           error:&error])
         NSLog(@"ERROR IN PERSISTENT STORE COORDINATOR! %@, %@", error, [error userInfo]);
 }
 
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
-{
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
     if (!_persistentStoreCoordinator) {
         [self setUpPersistentStoreCoordinator];
     }
@@ -113,6 +114,5 @@ static NSString *CUSTOM_DATABASE_NAME = nil;
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory 
                                                    inDomains:NSUserDomainMask] lastObject];
 }
-
 
 @end
