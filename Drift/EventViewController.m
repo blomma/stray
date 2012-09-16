@@ -28,6 +28,8 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
+    [self reset];
+
     NSArray *events = [Event all];
     if (events) {
         self.currentEvent = [[events sortedArrayUsingSelector:@selector(compare:)] objectAtIndex:0];

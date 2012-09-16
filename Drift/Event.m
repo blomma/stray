@@ -14,7 +14,7 @@
 }
 
 - (NSComparisonResult)compare:(id)element {
-	return [[self startDate] compare:[element startDate]];
+	return [[element startDate] compare:[self startDate]];
 }
 
 - (BOOL)isActive {
