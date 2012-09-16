@@ -9,7 +9,6 @@
 #import "EventGroupViewController.h"
 #import "EventGroupTableViewDataSource.h"
 #import "Event.h"
-#import "EventDataManager.h"
 #import "EventChange.h"
 #import "EventTableViewCell.h"
 
@@ -36,8 +35,19 @@
 	// Get notified of new things happening
 	[[NSNotificationCenter defaultCenter] addObserver:self
 	                                         selector:@selector(handleDataModelChange:)
-	                                             name:NSManagedObjectContextObjectsDidChangeNotification
-	                                           object:[NSManagedObjectContext MR_defaultContext]];
+	                                             name:NSManagedObjectContextDidSaveNotification
+	                                           object:[[CoreDataManager instance] managedObjectContext]];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    NSIndexPath *path = [NSIndexPath indexPathForRow:0
+                                            inSection:0];
+
+    [self.eventGroupTableView selectRowAtIndexPath:path
+                                          animated:YES
+                                    scrollPosition:UITableViewScrollPositionTop];
+
+    [self didSelectRowAtIndexPath:path];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -126,6 +136,11 @@
             self.selectedEvent = nil;
             [self.eventTimerControl reset];
         }
+
+        // Was this the last event in the group, if so close the window
+        if (self.eventGroup.count == 0) {
+            [self dismissViewControllerAnimated:YES completion:NULL];
+        }
     }
 }
 
@@ -142,12 +157,10 @@
         [self.dataSource tableView:self.eventGroupTableView refreshCell:self.selectedCell];
     } else if ([keyPath isEqualToString:@"isTransforming"]) {
         EventTimerTransformingEnum isTransforming = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
-        if (isTransforming == EventTimerTransformingStartDateStart) {
-        } else if (isTransforming == EventTimerTransformingStopDateStart) {
-        } else if (isTransforming == EventTimerTransformingStartDateStop) {
-            [[EventDataManager sharedManager] persistCurrentEvent];
+        if (isTransforming == EventTimerTransformingStartDateStop) {
+            [[CoreDataManager instance] saveContext];
         } else if (isTransforming == EventTimerTransformingStopDateStop) {
-            [[EventDataManager sharedManager] persistCurrentEvent];
+            [[CoreDataManager instance] saveContext];
         }
     } else if ([keyPath isEqualToString:@"changes"]) {
 		NSArray *changes = [change objectForKey:NSKeyValueChangeNewKey];
@@ -178,16 +191,20 @@
     }
 }
 
-#pragma mark -
-#pragma mark UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.selectedCell = (EventTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+- (void)didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.selectedCell = (EventTableViewCell *)[self.eventGroupTableView cellForRowAtIndexPath:indexPath];
 
     Event *event = [self.dataSource eventAtIndex:(NSUInteger)indexPath.row];
     self.selectedEvent = event;
 
     [self.eventTimerControl startWithEvent:event];
+}
+
+#pragma mark -
+#pragma mark UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self didSelectRowAtIndexPath:indexPath];
 }
 
 @end

@@ -7,9 +7,9 @@
 //
 
 #import "Event.h"
-#import "EventDataManager.h"
 #import "EventViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "NSManagedObject+ActiveRecord.h"
 
 @interface EventViewController ()
 
@@ -28,7 +28,10 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-    self.currentEvent = [[EventDataManager sharedManager] latestEvent];
+    NSArray *events = [Event all];
+    if (events) {
+        self.currentEvent = [[events sortedArrayUsingSelector:@selector(compare:)] objectAtIndex:0];
+    }
 
     self.startDateFormatter = [[NSDateFormatter alloc] init];
     [self.startDateFormatter setDateFormat:@"HH:mm '@' d LLL, y"];
@@ -42,8 +45,8 @@
 	// Get notified of new things happening
 	[[NSNotificationCenter defaultCenter] addObserver:self
 	                                         selector:@selector(handleDataModelChange:)
-	                                             name:NSManagedObjectContextObjectsDidChangeNotification
-	                                           object:[NSManagedObjectContext MR_defaultContext]];
+	                                             name:NSManagedObjectContextDidSaveNotification
+	                                           object:[[CoreDataManager instance] managedObjectContext]];
 
 	[self.eventTimerControl addObserver:self
 	                         forKeyPath:@"startDate"
@@ -101,7 +104,7 @@
         [self reset];
 
 		// No, lets create a new one
-		self.currentEvent           = [[EventDataManager sharedManager] createEvent];
+        self.currentEvent = [Event create];
 		self.currentEvent.startDate = now;
 
 		[self.eventTimerControl startWithEvent:self.currentEvent];
@@ -110,7 +113,7 @@
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
 	}
 
-	[[EventDataManager sharedManager] persistCurrentEvent];
+    [[CoreDataManager instance] saveContext];
 }
 
 #pragma mark -
@@ -311,7 +314,6 @@
         self.currentEvent.startDate = date;
 
 		[self updateStartLabelWithDate:date];
-		[self updateNowLabelWithDate:self.eventTimerControl.nowDate];
 	} else if ([keyPath isEqualToString:@"nowDate"]) {
 		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
 
@@ -320,7 +322,6 @@
 		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
         self.currentEvent.stopDate = date;
 
-		[self updateNowLabelWithDate:self.eventTimerControl.nowDate];
 		[self updateStopLabelWithDate:date];
 	} else if ([keyPath isEqualToString:@"isTransforming"]) {
         EventTimerTransformingEnum isTransforming = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
@@ -334,12 +335,12 @@
             [self animateStartDateIsTransforming:NO];
             [self animateTimeRunningIsTransforming:NO];
 
-            [[EventDataManager sharedManager] persistCurrentEvent];
+            [[CoreDataManager instance] saveContext];
         } else if (isTransforming == EventTimerTransformingStopDateStop) {
             [self animateStopDateIsTransforming:NO];
             [self animateTimeRunningIsTransforming:NO];
 
-            [[EventDataManager sharedManager] persistCurrentEvent];
+            [[CoreDataManager instance] saveContext];
         }
     }
 }

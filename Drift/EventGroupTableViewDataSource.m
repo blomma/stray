@@ -10,7 +10,7 @@
 #import "Event.h"
 #import "EventTableViewCell.h"
 #import "EventChange.h"
-#import "EventDataManager.h"
+#import "NSManagedObject+ActiveRecord.h"
 
 @interface EventGroupTableViewDataSource ()
 
@@ -59,7 +59,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         Event *event = [self.eventGroup.events objectAtIndex:(NSUInteger)indexPath.row];
 
-        [[EventDataManager sharedManager] deleteEvent:event];
+        [event delete];
     }
 }
 

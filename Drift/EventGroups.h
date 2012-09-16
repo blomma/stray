@@ -26,6 +26,6 @@
 
 - (NSUInteger)indexForGroupDate:(NSDate *)date;
 - (EventGroup *)eventGroupAtIndex:(NSUInteger)index;
-- (NSUInteger)indexForActiveGroupEvent;
+- (NSUInteger)indexForActiveEventGroup;
 
 @end

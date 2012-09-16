@@ -42,7 +42,7 @@
 
     [self setViewControllers:@[[self.dataModel objectAtIndex:0]]
                    direction:UIPageViewControllerNavigationDirectionForward
-                    animated:NO
+                    animated:YES
                   completion:nil];
 }
 
@@ -83,5 +83,8 @@
 
 #pragma mark -
 #pragma mark UIPageViewControllerDelegate
+
+#pragma mark -
+#pragma mark Private methods
 
 @end

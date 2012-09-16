@@ -15,5 +15,6 @@
 @property (nonatomic) EventGroups *eventGroups;
 
 - (void)tableView:(UITableView *)tableView refreshCell:(EventGroupTableViewCell *)cell;
+- (void)tableView:(UITableView *)tableView refreshRowsAtIndexPaths:(NSArray *)indexPaths;
 
 @end

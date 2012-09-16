@@ -13,6 +13,7 @@
 #import "EventGroupsTableViewController.h"
 #import "EventGroupsTableViewDataSource.h"
 #import "EventGroupViewController.h"
+#import "NSManagedObject+ActiveRecord.h"
 
 @interface EventGroupsTableViewController ()
 
@@ -36,14 +37,13 @@
     self.eventGroupViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"EventGroupViewController"];
 
 	// Get starting list
-	NSArray *events = [Event MR_findAll];
+	NSArray *events = [Event all];
 	self.dataSource.eventGroups = [[EventGroups alloc] initWithEvents:events];
 
-	// Get notified of new things happening
 	[[NSNotificationCenter defaultCenter] addObserver:self
 	                                         selector:@selector(handleDataModelChange:)
-	                                             name:NSManagedObjectContextObjectsDidChangeNotification
-	                                           object:[NSManagedObjectContext MR_defaultContext]];
+	                                             name:NSManagedObjectContextDidSaveNotification
+	                                           object:[[CoreDataManager instance] managedObjectContext]];
 
 	[self.dataSource.eventGroups addObserver:self
                                   forKeyPath:@"existsActiveEventGroup"
@@ -61,7 +61,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	[self updateActiveEventGroup];
+    [self updateActiveEventGroup];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -84,8 +84,8 @@
     EventGroups *eventGroups = self.dataSource.eventGroups;
     NSMutableArray *changes = [NSMutableArray array];
 
-	// Inserted Events
-	NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
+    // Inserted Events
+    NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
     if (insertedObjects) {
         NSArray *insertedEvents = [insertedObjects allObjects];
 
@@ -95,8 +95,8 @@
         }
     }
 
-	// Deleted Events
-	NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
+    // Deleted Events
+    NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
     if (deletedObjects) {
         NSArray *deletedEvents = [deletedObjects allObjects];
 
@@ -106,9 +106,9 @@
         }
     }
 
-	// Updated Events
+    // Updated Events
     // this can generate update, insert and delete changes
-	NSSet *updatedObjects = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
+    NSSet *updatedObjects = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
     if (updatedObjects) {
         NSArray *updatedEvents = [updatedObjects allObjects];
 
@@ -128,12 +128,13 @@
         NSMutableArray *updateIndexPaths = [NSMutableArray array];
 
         for (EventGroupChange *eventGroupChange in changes) {
+            NSIndexPath *path = [NSIndexPath indexPathForRow:(NSInteger)eventGroupChange.index inSection:0];
             if ([eventGroupChange.type isEqualToString:EventGroupChangeUpdate]) {
-                [updateIndexPaths addObject:[NSIndexPath indexPathForRow:(NSInteger)eventGroupChange.index inSection:0]];
+                [updateIndexPaths addObject:path];
             } else if ([eventGroupChange.type isEqualToString:EventGroupChangeDelete]) {
-                [deleteIndexPaths addObject:[NSIndexPath indexPathForRow:(NSInteger)eventGroupChange.index inSection:0]];
+                [deleteIndexPaths addObject:path];
             } else if ([eventGroupChange.type isEqualToString:EventGroupChangeInsert]) {
-                [insertIndexPaths addObject:[NSIndexPath indexPathForRow:(NSInteger)eventGroupChange.index inSection:0]];
+                [insertIndexPaths addObject:path];
             }
         }
 
@@ -141,9 +142,10 @@
 
         [self.tableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationRight];
         [self.tableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView reloadRowsAtIndexPaths:updateIndexPaths withRowAnimation:UITableViewRowAnimationNone];
-        
+
         [self.tableView endUpdates];
+
+        [self.dataSource tableView:self.tableView refreshRowsAtIndexPaths:updateIndexPaths];
     }
 }
 
@@ -171,7 +173,7 @@
 - (void)updateActiveEventGroup {
     EventGroups *eventGroups = self.dataSource.eventGroups;
 
-    NSUInteger index = [eventGroups indexForActiveGroupEvent];
+    NSUInteger index = [eventGroups indexForActiveEventGroup];
     if (index == NSNotFound) {
         return;
     }

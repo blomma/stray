@@ -296,7 +296,7 @@
     return index;
 }
 
-- (NSUInteger)indexForActiveGroupEvent {
+- (NSUInteger)indexForActiveEventGroup {
 	if (self.eventGroups.count > 0) {
 		EventGroup *eventGroup = [self.eventGroups objectAtIndex:0];
 		if (eventGroup.isActive) {
@@ -323,7 +323,7 @@
 }
 
 - (void)updateExistsActiveEventGroup {
-    NSUInteger index = [self indexForActiveGroupEvent];
+    NSUInteger index = [self indexForActiveEventGroup];
     self.existsActiveEventGroup = (index == NSNotFound ? NO : YES);
 }
 
