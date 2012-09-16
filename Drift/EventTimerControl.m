@@ -238,14 +238,14 @@
     // We make the bounds larger for the hit test, otherwise the target is
     // to damn small for human hands, martians not included
     UIBezierPath *nowHandPath = [UIBezierPath bezierPath];
-    [nowHandPath moveToPoint:CGPointMake(10, 17)];   // Start at the top
-    [nowHandPath addLineToPoint:CGPointMake(5, 0)];  // Move to bottom left
-    [nowHandPath addLineToPoint:CGPointMake(15, 0)]; // Move to bottom right
+    [nowHandPath moveToPoint:CGPointMake(15, 17)];   // Start at the top
+    [nowHandPath addLineToPoint:CGPointMake(10, 0)];  // Move to bottom left
+    [nowHandPath addLineToPoint:CGPointMake(20, 0)]; // Move to bottom right
 
     // position
-	self.nowLayer.bounds      = CGRectMake(0.0, 0.0, 20, 19);
+	self.nowLayer.bounds      = CGRectMake(0.0, 0.0, 30, 30);
 	self.nowLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-	self.nowLayer.anchorPoint = CGPointMake(0.5, 8.05);
+	self.nowLayer.anchorPoint = CGPointMake(0.5, 5);
 
     // drawing
 	self.nowLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
@@ -264,14 +264,14 @@
     // We make the bounds larger for the hit test, otherwise the target is
     // to damn small for human hands, martians not included
     UIBezierPath *startHandPath = [UIBezierPath bezierPath];
-    [startHandPath moveToPoint:CGPointMake(10, 0)];     // Start at the top
-    [startHandPath addLineToPoint:CGPointMake(5, 17)];  // Move to bottom left
-    [startHandPath addLineToPoint:CGPointMake(15, 17)]; // Move to bottom right
+    [startHandPath moveToPoint:CGPointMake(15, 0)];     // Start at the top
+    [startHandPath addLineToPoint:CGPointMake(10, 17)];  // Move to bottom left
+    [startHandPath addLineToPoint:CGPointMake(20, 17)]; // Move to bottom right
 
     // position
-    self.startLayer.bounds      = CGRectMake(0.0, 0.0, 20, 19);
+    self.startLayer.bounds      = CGRectMake(0.0, 0.0, 30, 30);
 	self.startLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-	self.startLayer.anchorPoint = CGPointMake(0.5, 5.8);
+	self.startLayer.anchorPoint = CGPointMake(0.5, 3.6);
 
     // drawing
 	self.startLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
