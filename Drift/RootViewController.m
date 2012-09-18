@@ -73,13 +73,13 @@
     return [self.dataModel objectAtIndex:index - 1];
 }
 
-//- (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController {
-//    return (NSInteger)self.dataModel.count;
-//}
-//
-//- (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController {
-//    return 0;
-//}
+- (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController {
+    return (NSInteger)self.dataModel.count;
+}
+
+- (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController {
+    return 0;
+}
 
 #pragma mark -
 #pragma mark UIPageViewControllerDelegate
