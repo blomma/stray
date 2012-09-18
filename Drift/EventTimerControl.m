@@ -77,6 +77,7 @@
     if ([event isActive]) {
         self.nowDate = [NSDate date];
     } else {
+        self.nowDate = event.stopDate;
         self.stopDate = event.stopDate;
     }
 
