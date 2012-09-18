@@ -325,18 +325,18 @@
 		[self updateStopLabelWithDate:date];
 	} else if ([keyPath isEqualToString:@"isTransforming"]) {
         EventTimerTransformingEnum isTransforming = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
-        if (isTransforming == EventTimerTransformingStartDateStart) {
+        if (isTransforming == EventTimerStartDateTransformingStart) {
             [self animateStartDateIsTransforming:YES];
             [self animateTimeRunningIsTransforming:YES];
-        } else if (isTransforming == EventTimerTransformingStopDateStart) {
+        } else if (isTransforming == EventTimerStopDateTransformingStart) {
             [self animateStopDateIsTransforming:YES];
             [self animateTimeRunningIsTransforming:YES];
-        } else if (isTransforming == EventTimerTransformingStartDateStop) {
+        } else if (isTransforming == EventTimerStartDateTransformingStop) {
             [self animateStartDateIsTransforming:NO];
             [self animateTimeRunningIsTransforming:NO];
 
             [[CoreDataManager instance] saveContext];
-        } else if (isTransforming == EventTimerTransformingStopDateStop) {
+        } else if (isTransforming == EventTimerStopDateTransformingStop) {
             [self animateStopDateIsTransforming:NO];
             [self animateTimeRunningIsTransforming:NO];
 

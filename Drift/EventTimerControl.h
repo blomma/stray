@@ -7,11 +7,10 @@
 //
 
 typedef enum : NSInteger {
-    EventTimerTransformingNone = 0,
-    EventTimerTransformingStartDateStart,
-    EventTimerTransformingStartDateStop,
-    EventTimerTransformingStopDateStart,
-    EventTimerTransformingStopDateStop
+    EventTimerStartDateTransformingStart,
+    EventTimerStartDateTransformingStop,
+    EventTimerStopDateTransformingStart,
+    EventTimerStopDateTransformingStop
 } EventTimerTransformingEnum;
 
 @interface EventTimerControl : UIControl

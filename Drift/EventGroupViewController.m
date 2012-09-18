@@ -157,9 +157,9 @@
         [self.dataSource tableView:self.eventGroupTableView refreshCell:self.selectedCell];
     } else if ([keyPath isEqualToString:@"isTransforming"]) {
         EventTimerTransformingEnum isTransforming = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
-        if (isTransforming == EventTimerTransformingStartDateStop) {
+        if (isTransforming == EventTimerStartDateTransformingStop) {
             [[CoreDataManager instance] saveContext];
-        } else if (isTransforming == EventTimerTransformingStopDateStop) {
+        } else if (isTransforming == EventTimerStopDateTransformingStop) {
             [[CoreDataManager instance] saveContext];
         }
     } else if ([keyPath isEqualToString:@"changes"]) {

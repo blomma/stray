@@ -359,14 +359,14 @@
 		self.deltaLayer = self.startLayer;
 		self.deltaDate  = self.startDate;
 
-        self.isTransforming = EventTimerTransformingStartDateStart;
+        self.isTransforming = EventTimerStartDateTransformingStart;
 
         [self.updateTimer invalidate];
 	} else if ([self.nowLayer.presentationLayer hitTest:point] && ![self.event isActive]) {
 		self.deltaLayer = self.nowLayer;
 		self.deltaDate  = self.stopDate;
 
-        self.isTransforming = EventTimerTransformingStopDateStart;
+        self.isTransforming = EventTimerStopDateTransformingStart;
     }
 
 	if (self.deltaLayer != nil) {
@@ -463,7 +463,7 @@
             [self drawStart];
             [self drawNow];
 
-            self.isTransforming = EventTimerTransformingStartDateStop;
+            self.isTransforming = EventTimerStartDateTransformingStop;
 
             // Resume the passing of time
             if (![self.updateTimer isValid] && [self.event isActive]) {
@@ -474,7 +474,7 @@
                                                                    repeats:YES];
             }            
 		} else if (self.deltaLayer == self.nowLayer) {
-            self.isTransforming = EventTimerTransformingStopDateStop;
+            self.isTransforming = EventTimerStopDateTransformingStop;
         }
 
 		self.deltaLayer = nil;
