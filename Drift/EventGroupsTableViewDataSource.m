@@ -13,7 +13,7 @@
 
 @property (nonatomic) NSCalendar *calendar;
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
-@property (nonatomic) NSArray *shortStandaloneWeekdaySymbols;
+@property (nonatomic) NSArray *standaloneWeekdaySymbols;
 
 @end
 
@@ -23,7 +23,7 @@
 	if (self = [super init]) {
         self.calendar = [NSCalendar currentCalendar];
         self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
-        self.shortStandaloneWeekdaySymbols = [[NSDateFormatter new] shortStandaloneWeekdaySymbols];
+        self.standaloneWeekdaySymbols = [[NSDateFormatter new] standaloneWeekdaySymbols];
 	}
 
 	return self;
@@ -80,7 +80,7 @@
             cell.day.text      = [NSString stringWithFormat:@"%02d", components.day];
             cell.year.text     = [NSString stringWithFormat:@"%04d", components.year];
             cell.month.text    = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
-            cell.weekDay.text  = [[self.shortStandaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString];
+            cell.weekDay.text  = [[self.standaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString];
         }
     }
 }
@@ -99,7 +99,7 @@
 	cell.day.text      = [NSString stringWithFormat:@"%02d", components.day];
 	cell.year.text     = [NSString stringWithFormat:@"%04d", components.year];
 	cell.month.text    = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
-    cell.weekDay.text  = [[self.shortStandaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString];
+    cell.weekDay.text  = [[self.standaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString];
 }
 
 @end

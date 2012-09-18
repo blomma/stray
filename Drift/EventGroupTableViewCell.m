@@ -17,8 +17,4 @@
 #pragma mark -
 #pragma mark Lifecycle
 
-- (void)awakeFromNib {
-    self.weekDay.transform = CGAffineTransformMakeRotation (-3.14/2);
-}
-
 @end
