@@ -107,7 +107,7 @@
         }
     }
 
-    [self.eventGroups sortUsingSelector:@selector(reverseCompare:)];
+    [self.eventGroups sortUsingSelector:@selector(compare:)];
 
 	[self updateExistsActiveEventGroup];
 }

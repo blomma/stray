@@ -14,6 +14,10 @@
 }
 
 - (NSComparisonResult)compare:(id)element {
+    if ([element stopDate] == nil) {
+        return NSOrderedDescending;
+    }
+
 	return [[element startDate] compare:[self startDate]];
 }
 

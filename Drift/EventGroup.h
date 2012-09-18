@@ -32,6 +32,5 @@
 - (NSUInteger)count;
 
 - (NSComparisonResult)compare:(id)element;
-- (NSComparisonResult)reverseCompare:(id)element;
 
 @end

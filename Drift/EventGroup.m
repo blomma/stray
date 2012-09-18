@@ -83,14 +83,15 @@
 }
 
 - (void)addEvent:(Event *)event {
-	[self.events addObject:event];
+    NSUInteger index = [self insertionIndexForEvent:event];
+	[self.events insertObject:event atIndex:index];
 
 	self.isActive = [self containsActiveEvent];
 
 	self.timeActiveComponentsCacheInvalid = YES;
 
     EventChange *change = [EventChange new];
-    change.index = [self.events indexOfObject:event];
+    change.index = index;
     change.type = EventChangeInsert;
 
     self.changes = @[ change ];
@@ -137,12 +138,8 @@
 	return [self.events count];
 }
 
-- (NSComparisonResult)reverseCompare:(id)element {
-	return [[element groupDate] compare:[self groupDate]];
-}
-
 - (NSComparisonResult)compare:(id)element {
-	return [[self groupDate] compare:[element groupDate]];
+	return [[element groupDate] compare:[self groupDate]];
 }
 
 #pragma mark -
@@ -207,6 +204,18 @@
                                                        options:0];
 
 	self.timeActiveComponentsCacheInvalid = NO;
+}
+
+- (NSUInteger)insertionIndexForEvent:(Event *)event {
+    NSUInteger index = [self.events indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
+        return [(Event *)obj compare:event] == NSOrderedDescending;
+    }];
+
+    if (index == NSNotFound) {
+        index = self.events.count;
+    }
+
+    return index;
 }
 
 @end

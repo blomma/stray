@@ -31,9 +31,7 @@
     [self reset];
 
     NSArray *events = [Event all];
-    if (events) {
-        self.currentEvent = [[events sortedArrayUsingSelector:@selector(compare:)] objectAtIndex:0];
-    }
+    self.currentEvent = [events sortedArrayUsingSelector:@selector(compare:)].first;
 
     self.startDateFormatter = [[NSDateFormatter alloc] init];
     [self.startDateFormatter setDateFormat:@"HH:mm '@' d LLL, y"];
