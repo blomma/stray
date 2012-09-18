@@ -70,6 +70,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
     if ([self.currentEvent isActive]) {
         [self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
     } else {

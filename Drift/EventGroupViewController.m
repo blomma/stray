@@ -40,6 +40,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
     NSIndexPath *path = [NSIndexPath indexPathForRow:0
                                             inSection:0];
 
