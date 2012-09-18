@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIPageViewController (UIPageViewController_UIPageControl)
+@interface UIPageViewController (UIPageControl)
+
+@property (nonatomic, readonly) UIPageControl *pageControl;
 
 @end

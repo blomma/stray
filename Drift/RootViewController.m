@@ -7,6 +7,7 @@
 //
 
 #import "RootViewController.h"
+#import "UIPageViewController+UIPageControl.h"
 
 @interface RootViewController ()
 
@@ -19,8 +20,7 @@
 #pragma mark -
 #pragma mark Lifecycle
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -46,8 +46,14 @@
                   completion:nil];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
+    // Try and set the background of the pagecontroller if one is present
+    self.pageControl.backgroundColor = [UIColor colorWithWhite:0.075 alpha:1.000];
+}
+
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
