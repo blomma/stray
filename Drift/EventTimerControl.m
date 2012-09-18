@@ -246,11 +246,11 @@
     // position
 	self.nowLayer.bounds      = CGRectMake(0.0, 0.0, 30, 30);
 	self.nowLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-	self.nowLayer.anchorPoint = CGPointMake(0.5, 5);
+	self.nowLayer.anchorPoint = CGPointMake(0.5, 5.2);
 
     // drawing
 	self.nowLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
-	self.nowLayer.fillColor   = [[UIColor colorWithRed:0.510 green:0.725 blue:0.431 alpha:1] CGColor];
+	self.nowLayer.fillColor   = [[UIColor colorWithRed:0.510 green:0.784 blue:0.431 alpha:1] CGColor];
 	self.nowLayer.lineWidth   = 1.0;
 	self.nowLayer.path        = nowHandPath.CGPath;
 
@@ -276,7 +276,7 @@
 
     // drawing
 	self.startLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
-	self.startLayer.fillColor   = [[UIColor colorWithRed:0.914 green:0.643 blue:0.267 alpha:1] CGColor];
+	self.startLayer.fillColor   = [[UIColor colorWithRed:0.941 green:0.686 blue:0.314 alpha:1] CGColor];
 	self.startLayer.lineWidth   = 1.0;
 	self.startLayer.path        = startHandPath.CGPath;
 
