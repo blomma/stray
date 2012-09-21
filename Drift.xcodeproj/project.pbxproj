@@ -512,7 +512,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd Drift\n/usr/local/bin/mogenerator --template-var arc=true -m \"Drift.xcdatamodeld/Drift 2.xcdatamodel/\"";
+			shellScript = "cd Drift\n/usr/local/bin/mogenerator --template-var arc=true -m \"Drift.xcdatamodeld/\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -33,7 +33,9 @@ extern const struct EventFetchedProperties {
 
 
 
+
 @property (nonatomic, strong) NSDate* startDate;
+
 
 
 //- (BOOL)validateStartDate:(id*)value_ error:(NSError**)error_;
@@ -41,7 +43,9 @@ extern const struct EventFetchedProperties {
 
 
 
+
 @property (nonatomic, strong) NSDate* stopDate;
+
 
 
 //- (BOOL)validateStopDate:(id*)value_ error:(NSError**)error_;
@@ -50,7 +54,7 @@ extern const struct EventFetchedProperties {
 
 
 
-@property (nonatomic, strong) Tag* inTag;
+@property (nonatomic, strong) Tag *inTag;
 
 //- (BOOL)validateInTag:(id*)value_ error:(NSError**)error_;
 
