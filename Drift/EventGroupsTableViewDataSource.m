@@ -20,13 +20,13 @@
 @implementation EventGroupsTableViewDataSource
 
 - (id)init {
-	if (self = [super init]) {
+    self = [super init];
+    if (self) {
         self.calendar = [NSCalendar currentCalendar];
         self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
         self.standaloneWeekdaySymbols = [[NSDateFormatter new] standaloneWeekdaySymbols];
-	}
-
-	return self;
+    }
+    return self;
 }
 
 #pragma mark -

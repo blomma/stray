@@ -31,8 +31,16 @@
 #pragma mark -
 #pragma mark Lifecycle
 
+- (id)init {
+    return [self initWithDate:nil];
+}
+
+// ==========================
+// = Designated initializer =
+// ==========================
 - (id)initWithDate:(NSDate *)date {
-	if ((self = [super init])) {
+    self = [super init];
+	if (self) {
         self.calendar  = [NSCalendar currentCalendar];
 
 		self.groupDate = [date beginningOfDayWithCalendar:self.calendar];

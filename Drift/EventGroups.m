@@ -32,7 +32,8 @@
 // = Designated initializer =
 // ==========================
 - (id)initWithEvents:(NSArray *)events {
-	if ((self = [super init])) {
+    self = [super init];
+	if (self) {
 		self.eventGroups = [NSMutableArray array];
         self.calendar    = [NSCalendar currentCalendar];
 

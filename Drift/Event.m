@@ -7,10 +7,10 @@
 @implementation Event
 
 - (id)init {
-	if ((self = [super init])) {
-	}
-
-	return self;
+    self = [super init];
+    if (self) {
+    }
+    return self;
 }
 
 - (NSComparisonResult)compare:(id)element {
