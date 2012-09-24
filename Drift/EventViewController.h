@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *startDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *runningTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *stopDateLabel;
+@property (weak, nonatomic) IBOutlet UIButton *tag;
 
 - (IBAction)toggleEvent:(id)sender;
 

@@ -10,6 +10,8 @@
 #import "EventViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "NSManagedObject+ActiveRecord.h"
+#import "TagViewController.h"
+#import "Tag.h"
 
 @interface EventViewController ()
 
@@ -42,11 +44,15 @@
     self.startDateLabel.layer.transform = CATransform3DMakeScale(0.6f, 0.6f, 1);
     self.stopDateLabel.layer.transform = CATransform3DMakeScale(0.6f, 0.6f, 1);
 
-	// Get notified of new things happening
 	[[NSNotificationCenter defaultCenter] addObserver:self
-	                                         selector:@selector(handleDataModelChange:)
+	                                         selector:@selector(dataModelDidSave:)
 	                                             name:NSManagedObjectContextDidSaveNotification
 	                                           object:[[CoreDataManager instance] managedObjectContext]];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(tagDidChange:)
+                                                 name:TagDidChangeNotification
+                                               object:nil];
 
 	[self.eventTimerControl addObserver:self
 	                         forKeyPath:@"startDate"
@@ -79,10 +85,24 @@
     }
 
 	if (self.currentEvent) {
+        [self.currentEvent addObserver:self
+                            forKeyPath:@"inTag"
+                               options:NSKeyValueObservingOptionNew
+                               context:NULL];
+
         [self.eventTimerControl startWithEvent:self.currentEvent];
+
+        if (self.currentEvent.inTag) {
+            [self.tag setTitle:self.currentEvent.inTag.name forState:UIControlStateNormal];
+        }
 	} else {
         [self reset];
     }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    TagViewController *tagViewController = [segue destinationViewController];
+    tagViewController.event = self.currentEvent;
 }
 
 #pragma mark -
@@ -124,7 +144,15 @@
 - (void)reset {
     [self.eventTimerControl reset];
 
+	if (self.currentEvent) {
+        [self.currentEvent removeObserver:self
+                               forKeyPath:@"inTag"
+                                  context:NULL];
+    }
+
     self.currentEvent = nil;
+
+    [self.tag setTitle:@"" forState:UIControlStateNormal];
 
     self.startDateLabel.text   = @"";
     self.runningTimeLabel.text = @"00:00:00";
@@ -297,7 +325,7 @@
     }
 }
 
-- (void)handleDataModelChange:(NSNotification *)note {
+- (void)dataModelDidSave:(NSNotification *)note {
 	NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
     if (deletedObjects) {
         NSArray *deletedEvents = [deletedObjects allObjects];
@@ -308,6 +336,13 @@
             [self reset];
         }
     }
+}
+
+- (void)tagDidChange:(NSNotification *)note {
+    Tag *tag = [[note userInfo] objectForKey:@"tag"];
+
+    self.currentEvent.inTag = tag;
+    [[CoreDataManager instance] saveContext];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
