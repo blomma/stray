@@ -34,7 +34,7 @@
 
 	// Get notified of new things happening
 	[[NSNotificationCenter defaultCenter] addObserver:self
-	                                         selector:@selector(handleDataModelChange:)
+	                                         selector:@selector(dataModelDidSave:)
 	                                             name:NSManagedObjectContextDidSaveNotification
 	                                           object:[[CoreDataManager instance] managedObjectContext]];
 }
@@ -127,11 +127,16 @@
 #pragma mark -
 #pragma mark Private methods
 
-- (void)handleDataModelChange:(NSNotification *)note {
-	NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
-    if (deletedObjects) {
-        NSArray *deletedEvents = [deletedObjects allObjects];
+- (void)dataModelDidSave:(NSNotification *)note {
+    NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
+    NSArray *deletedEvents = [[deletedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        return [obj isKindOfClass:[Event class]];
+    }] allObjects];
 
+    DLog(@"deletedObjects %@", deletedObjects);
+    DLog(@"deletedEvents %@", deletedEvents);
+
+    if (deletedEvents.count > 0) {
         NSUInteger index = [deletedEvents indexOfObject:self.selectedEvent];
 
         if (index != NSNotFound) {
@@ -186,8 +191,13 @@
 
         [self.eventGroupTableView beginUpdates];
 
-        [self.eventGroupTableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationRight];
-        [self.eventGroupTableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationFade];
+        if (insertIndexPaths.count > 0) {
+            [self.eventGroupTableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationRight];
+        }
+
+        if (deleteIndexPaths.count > 0) {
+            [self.eventGroupTableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationFade];
+        }
 
         [self.eventGroupTableView endUpdates];
     }

@@ -15,10 +15,12 @@
 @property (nonatomic, readwrite) NSMutableArray *events;
 @property (nonatomic, readwrite) NSDate *groupDate;
 @property (nonatomic, readwrite) NSString *GUID;
-@property (nonatomic, readwrite) BOOL isActive;
 
-@property (nonatomic) NSDateComponents *timeActiveComponentsCache;
-@property (nonatomic) BOOL timeActiveComponentsCacheInvalid;
+@property (nonatomic, readwrite) NSDateComponents *timeActiveComponents;
+@property (nonatomic) BOOL timeActiveComponentsIsInvalid;
+
+@property (nonatomic, readwrite) Event *activeEvent;
+@property (nonatomic) BOOL activeEventIsInvalid;
 
 @property (nonatomic) NSCalendar *calendar;
 
@@ -47,10 +49,10 @@
 		self.events    = [NSMutableArray array];
 		self.GUID      = [[NSProcessInfo processInfo] globallyUniqueString];
 
-		self.timeActiveComponentsCache = [[NSDateComponents alloc] init];
-		self.timeActiveComponentsCache.hour   = 0;
-		self.timeActiveComponentsCache.minute = 0;
-		self.timeActiveComponentsCache.second = 0;
+		self.timeActiveComponents = [[NSDateComponents alloc] init];
+		self.timeActiveComponents.hour   = 0;
+		self.timeActiveComponents.minute = 0;
+		self.timeActiveComponents.second = 0;
 	}
 
 	return self;
@@ -60,19 +62,27 @@
 #pragma mark Public properties
 
 - (NSDateComponents *)timeActiveComponents {
-	if (self.isActive || self.timeActiveComponentsCacheInvalid) {
-		[self calculateTotalTimeRunning];
+	if (self.activeEvent || self.timeActiveComponentsIsInvalid) {
+		[self updateTimeActiveComponents];
 	}
 
-	return self.timeActiveComponentsCache;
+	return _timeActiveComponents;
+}
+
+- (Event *)activeEvent {
+    if (self.activeEventIsInvalid) {
+        [self updateActiveEvent];
+    }
+
+    return _activeEvent;
+}
+
+- (NSUInteger)count {
+	return [self.events count];
 }
 
 #pragma mark -
 #pragma mark Public methods
-
-- (BOOL)canContainDate:(NSDate *)date {
-	return [date isEqualToDateIgnoringTime:self.groupDate withCalendar:self.calendar];
-}
 
 - (BOOL)isValidForEvent:(Event *)event {
 	NSDate *stopDate = event.stopDate;
@@ -91,12 +101,15 @@
 }
 
 - (void)addEvent:(Event *)event {
+    if ([self.events containsObject:event]) {
+        return;
+    }
+
     NSUInteger index = [self insertionIndexForEvent:event];
 	[self.events insertObject:event atIndex:index];
 
-	self.isActive = [self containsActiveEvent];
-
-	self.timeActiveComponentsCacheInvalid = YES;
+    self.activeEventIsInvalid = YES;
+	self.timeActiveComponentsIsInvalid = YES;
 
     EventChange *change = [EventChange new];
     change.index = index;
@@ -107,11 +120,14 @@
 
 - (void)removeEvent:(Event *)event {
     NSUInteger index = [self.events indexOfObject:event];
+    if (index == NSNotFound) {
+        return;
+    }
+
     [self.events removeObjectAtIndex:index];
 
-	self.isActive = [self containsActiveEvent];
-
-	self.timeActiveComponentsCacheInvalid = YES;
+    self.activeEventIsInvalid = YES;
+	self.timeActiveComponentsIsInvalid = YES;
 
     EventChange *change = [EventChange new];
     change.index = index;
@@ -121,29 +137,18 @@
 }
 
 - (void)updateEvent:(Event *)event {
-	self.isActive = [self containsActiveEvent];
+    if (![self.events containsObject:event]) {
+        return;
+    }
 
-	self.timeActiveComponentsCacheInvalid = YES;
+    self.activeEventIsInvalid = YES;
+	self.timeActiveComponentsIsInvalid = YES;
 
     EventChange *change = [EventChange new];
     change.index = [self.events indexOfObject:event];
     change.type = EventChangeUpdate;
 
     self.changes = @[ change ];
-}
-
-- (Event *)activeEvent {
-	for (Event *event in self.events) {
-		if ([event isActive]) {
-			return event;
-		}
-	}
-
-	return nil;
-}
-
-- (NSUInteger)count {
-	return [self.events count];
 }
 
 - (NSComparisonResult)compare:(id)element {
@@ -153,34 +158,18 @@
 #pragma mark -
 #pragma mark Private methods
 
-- (BOOL)containsActiveEvent {
-	NSDate *stopDate = self.groupDate;
-	NSDate *toDay = [NSDate date];
+- (void)updateActiveEvent {
+    self.activeEvent = nil;
 
-	BOOL isActive = NO;
-
-	for (Event *event in self.events){
+	for (Event *event in self.events) {
 		if ([event isActive]) {
-			isActive = YES;
-			stopDate = [stopDate laterDate:toDay];
-		} else {
-			stopDate = [stopDate laterDate:event.stopDate];
+            self.activeEvent = event;
+            return;
 		}
-	}
-
-	// If endOfDay is later than calculated stopDate
-	// and groupDate is today
-	// and we found an event that is active
-	if ([[self.groupDate endOfDayWithCalendar:self.calendar] laterDate:stopDate] &&
-        [self.groupDate isEqualToDateIgnoringTime:toDay withCalendar:self.calendar] &&
-        isActive) {
-		return YES;
-	} else {
-		return NO;
 	}
 }
 
-- (void)calculateTotalTimeRunning {
+- (void)updateTimeActiveComponents {
 	static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
 
 	NSDate *endOfDay = [self.groupDate endOfDayWithCalendar:self.calendar];
@@ -206,12 +195,12 @@
                                                  options:0];
 	}
 
-	self.timeActiveComponentsCache	= [self.calendar components:unitFlags
-                                                      fromDate:deltaStart
-                                                        toDate:deltaEnd
-                                                       options:0];
+	self.timeActiveComponents = [self.calendar components:unitFlags
+                                                 fromDate:deltaStart
+                                                   toDate:deltaEnd
+                                                  options:0];
 
-	self.timeActiveComponentsCacheInvalid = NO;
+	self.timeActiveComponentsIsInvalid = NO;
 }
 
 - (NSUInteger)insertionIndexForEvent:(Event *)event {

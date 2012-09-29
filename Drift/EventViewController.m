@@ -35,6 +35,13 @@
     NSArray *events = [Event all];
     self.currentEvent = [events sortedArrayUsingSelector:@selector(compare:)].first;
 
+    if (self.currentEvent) {
+        [self.currentEvent addObserver:self
+                            forKeyPath:@"inTag"
+                               options:NSKeyValueObservingOptionNew
+                               context:NULL];
+    }
+
     self.startDateFormatter = [[NSDateFormatter alloc] init];
     [self.startDateFormatter setDateFormat:@"HH:mm '@' d LLL, y"];
 
@@ -48,11 +55,6 @@
 	                                         selector:@selector(dataModelDidSave:)
 	                                             name:NSManagedObjectContextDidSaveNotification
 	                                           object:[[CoreDataManager instance] managedObjectContext]];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(tagDidChange:)
-                                                 name:TagDidChangeNotification
-                                               object:nil];
 
 	[self.eventTimerControl addObserver:self
 	                         forKeyPath:@"startDate"
@@ -85,16 +87,10 @@
     }
 
 	if (self.currentEvent) {
-        [self.currentEvent addObserver:self
-                            forKeyPath:@"inTag"
-                               options:NSKeyValueObservingOptionNew
-                               context:NULL];
-
         [self.eventTimerControl startWithEvent:self.currentEvent];
 
-        if (self.currentEvent.inTag) {
-            [self.tag setTitle:self.currentEvent.inTag.name forState:UIControlStateNormal];
-        }
+        NSString *tagName = self.currentEvent.inTag ? self.currentEvent.inTag.name : @"";
+        [self.tag setTitle:tagName forState:UIControlStateNormal];
 	} else {
         [self reset];
     }
@@ -327,22 +323,20 @@
 
 - (void)dataModelDidSave:(NSNotification *)note {
 	NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
-    if (deletedObjects) {
-        NSArray *deletedEvents = [deletedObjects allObjects];
+    NSArray *deletedEvents = [[deletedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        return [obj isKindOfClass:[Event class]];
+    }] allObjects];
 
+    DLog(@"deletedObjects %@", deletedObjects);
+    DLog(@"deletedEvents %@", deletedEvents);
+
+    if (deletedEvents.count > 0) {
         NSUInteger index = [deletedEvents indexOfObject:self.currentEvent];
 
         if (index != NSNotFound) {
             [self reset];
         }
     }
-}
-
-- (void)tagDidChange:(NSNotification *)note {
-    Tag *tag = [[note userInfo] objectForKey:@"tag"];
-
-    self.currentEvent.inTag = tag;
-    [[CoreDataManager instance] saveContext];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {

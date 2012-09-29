@@ -14,8 +14,11 @@
 @property (nonatomic, readonly) NSDate *groupDate;
 @property (nonatomic, readonly) NSDateComponents *timeActiveComponents;
 @property (nonatomic, readonly) NSString *GUID;
-@property (nonatomic, readonly) BOOL isActive;
 @property (nonatomic, readonly) NSArray *changes;
+
+@property (nonatomic, readonly) Event *activeEvent;
+
+@property (nonatomic, readonly) NSUInteger count;
 
 - (id)initWithDate:(NSDate *)groupDate;
 - (BOOL)containsEvent:(Event *)event;
@@ -24,12 +27,7 @@
 - (void)removeEvent:(Event *)event;
 - (void)updateEvent:(Event *)event;
 
-- (BOOL)canContainDate:(NSDate *)date;
 - (BOOL)isValidForEvent:(Event *)event;
-
-- (Event *)activeEvent;
-
-- (NSUInteger)count;
 
 - (NSComparisonResult)compare:(id)element;
 

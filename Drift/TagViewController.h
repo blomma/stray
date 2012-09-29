@@ -9,12 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "Event.h"
 
-FOUNDATION_EXPORT NSString *const TagDidChangeNotification;
-
 @interface TagViewController : UICollectionViewController
 
 - (IBAction)createTag:(id)sender;
 - (IBAction)dismissView:(id)sender;
+- (IBAction)editTags:(id)sender;
+- (IBAction)deleteCell:(id)sender forEvent:(UIEvent *)event;
 
 @property (nonatomic) Event *event;
 

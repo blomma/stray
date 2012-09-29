@@ -14,6 +14,7 @@
 #import "EventGroupsTableViewDataSource.h"
 #import "EventGroupViewController.h"
 #import "NSManagedObject+ActiveRecord.h"
+#import "Tag.h"
 
 @interface EventGroupsTableViewController ()
 
@@ -31,17 +32,21 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-    self.dataSource = [[EventGroupsTableViewDataSource alloc] init];
-    self.tableView.dataSource = self.dataSource;
+    EventGroupsTableViewDataSource *dataSource = [EventGroupsTableViewDataSource new];
+
+    self.dataSource = dataSource;
+    self.tableView.dataSource = dataSource;
 
     self.eventGroupViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"EventGroupViewController"];
 
 	// Get starting list
+    Tag *tag = [Tag where:@{ @"name" : @"Work" }].first;
+
 	NSArray *events = [Event all];
-	self.dataSource.eventGroups = [[EventGroups alloc] initWithEvents:events];
+	self.dataSource.eventGroups = [[EventGroups alloc] initWithEvents:events filter:tag];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
-	                                         selector:@selector(handleDataModelChange:)
+	                                         selector:@selector(dataModelDidSave:)
 	                                             name:NSManagedObjectContextDidSaveNotification
 	                                           object:[[CoreDataManager instance] managedObjectContext]];
 
@@ -51,7 +56,7 @@
                                      context:NULL];
 
 	// Do an inital check to see if there is an active event group
-	if (self.dataSource.eventGroups.existsActiveEventGroup) {
+	if (self.dataSource.eventGroups.activeEventGroup) {
 		self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:60
 															target:self
 														  selector:@selector(timerUpdate)
@@ -82,42 +87,51 @@
 #pragma mark -
 #pragma mark Private methods
 
-- (void)handleDataModelChange:(NSNotification *)note {
+- (void)dataModelDidSave:(NSNotification *)note {
     EventGroups *eventGroups = self.dataSource.eventGroups;
     NSMutableArray *changes = [NSMutableArray array];
 
     // Inserted Events
     NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
-    if (insertedObjects) {
-        NSArray *insertedEvents = [insertedObjects allObjects];
+    NSArray *insertedEvents = [[insertedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        return [obj isKindOfClass:[Event class]];
+    }] allObjects];
 
-        for (Event *event in insertedEvents) {
-            NSArray *addChanges = [eventGroups addEvent:event];
-            [changes addObjectsFromArray:addChanges];
-        }
+    DLog(@"insertedObjects %@", insertedObjects);
+    DLog(@"insertedEvents %@", insertedEvents);
+
+    for (Event *event in insertedEvents) {
+        NSArray *addChanges = [eventGroups addEvent:event];
+        [changes addObjectsFromArray:addChanges];
     }
 
     // Deleted Events
     NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
-    if (deletedObjects) {
-        NSArray *deletedEvents = [deletedObjects allObjects];
+    NSArray *deletedEvents = [[deletedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        return [obj isKindOfClass:[Event class]];
+    }] allObjects];
 
-        for (Event *event in deletedEvents) {
-            NSArray *deleteChanges = [eventGroups removeEvent:event withConditionIsInvalid:NO];
-            [changes addObjectsFromArray:deleteChanges];
-        }
+    DLog(@"deletedObjects %@", deletedObjects);
+    DLog(@"deletedEvents %@", deletedEvents);
+
+    for (Event *event in deletedEvents) {
+        NSArray *deleteChanges = [eventGroups removeEvent:event];
+        [changes addObjectsFromArray:deleteChanges];
     }
 
     // Updated Events
     // this can generate update, insert and delete changes
     NSSet *updatedObjects = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
-    if (updatedObjects) {
-        NSArray *updatedEvents = [updatedObjects allObjects];
+    NSArray *updatedEvents = [[updatedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        return [obj isKindOfClass:[Event class]];
+    }] allObjects];
 
-        for (Event *event in updatedEvents) {
-            NSArray *updateChanges = [eventGroups updateEvent:event withConditionIsActive:NO];
-            [changes addObjectsFromArray:updateChanges];
-        }
+    DLog(@"updatedObjects %@", updatedObjects);
+    DLog(@"updatedEvents %@", updatedEvents);
+
+    for (Event *event in updatedEvents) {
+        NSArray *updateChanges = [eventGroups updateEvent:event];
+        [changes addObjectsFromArray:updateChanges];
     }
 
     [self updateTableViewWithChanges:changes];
@@ -142,12 +156,22 @@
 
         [self.tableView beginUpdates];
 
-        [self.tableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationRight];
-        [self.tableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationFade];
+        if (insertIndexPaths.count > 0) {
+            DLog(@"insertIndexPaths %@", insertIndexPaths);
+            [self.tableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationRight];
+        }
+
+        if (deleteIndexPaths.count > 0) {
+            DLog(@"deleteIndexPaths %@", deleteIndexPaths);
+            [self.tableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationFade];
+        }
 
         [self.tableView endUpdates];
 
-        [self.dataSource tableView:self.tableView refreshRowsAtIndexPaths:updateIndexPaths];
+        if (updateIndexPaths.count > 0) {
+            DLog(@"updateIndexPaths %@", updateIndexPaths);
+            [self.dataSource tableView:self.tableView refreshRowsAtIndexPaths:updateIndexPaths];
+        }
     }
 }
 
@@ -173,16 +197,14 @@
 }
 
 - (void)updateActiveEventGroup {
-    EventGroups *eventGroups = self.dataSource.eventGroups;
-
-    NSUInteger index = [eventGroups indexForActiveEventGroup];
-    if (index == NSNotFound) {
+    EventGroup *activeEventGroup = self.dataSource.eventGroups.activeEventGroup;
+    if (!activeEventGroup) {
         return;
     }
 
-    Event *event = [[eventGroups eventGroupAtIndex:index] activeEvent];
+    Event *event = [activeEventGroup activeEvent];
 
-	NSArray *changes = [eventGroups updateEvent:event withConditionIsActive:YES];
+	NSArray *changes = [self.dataSource.eventGroups updateEvent:event];
 
     [self updateTableViewWithChanges:changes];
 }

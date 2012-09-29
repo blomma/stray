@@ -1,4 +1,4 @@
-//
+	//
 //  TagViewController.m
 //  Drift
 //
@@ -13,12 +13,12 @@
 #import "UIViewController+KNSemiModal.h"
 #import "CreateTagViewController.h"
 
-NSString *const TagDidChangeNotification = @"TagDidChangeNotification";
-
 @interface TagViewController ()
 
-@property (nonatomic) NSArray *tags;
+@property (nonatomic) NSMutableArray *tags;
 @property (nonatomic) CreateTagViewController *createTagPopup;
+
+@property (nonatomic) BOOL editingTags;
 
 @end
 
@@ -27,25 +27,21 @@ NSString *const TagDidChangeNotification = @"TagDidChangeNotification";
 #pragma mark -
 #pragma mark Lifecycle
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.tags = [Tag all];
+    self.tags = [[NSMutableArray alloc] initWithArray:[Tag all]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    NSUInteger index = [self.tags indexOfObject:self.event.inTag];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+	                                         selector:@selector(dataModelDidSave:)
+	                                             name:NSManagedObjectContextDidSaveNotification
+	                                           object:[[CoreDataManager instance] managedObjectContext]];
 
+    NSUInteger index = [self.tags indexOfObject:self.event.inTag];
     if (index == NSNotFound) {
         return;
     }
@@ -54,6 +50,14 @@ NSString *const TagDidChangeNotification = @"TagDidChangeNotification";
                                            inSection:0];
 
     [self.collectionView selectItemAtIndexPath:path animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:NSManagedObjectContextDidSaveNotification
+                                                  object:[[CoreDataManager instance] managedObjectContext]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -68,6 +72,7 @@ NSString *const TagDidChangeNotification = @"TagDidChangeNotification";
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    DLog(@"self.tags.count %u", self.tags.count);
     return (NSInteger)self.tags.count;
 }
 
@@ -77,7 +82,15 @@ NSString *const TagDidChangeNotification = @"TagDidChangeNotification";
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
     TagCollectionViewCell *cell = (TagCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:tagCellIdentifier
                                                                                                      forIndexPath:indexPath];
+
     cell.tagName.text = tag.name;
+    cell.deleteTag.hidden = !self.editingTags;
+
+    if (self.editingTags) {
+        cell.tagName.alpha = 0.5;
+    } else {
+        cell.tagName.alpha = 1;
+    }
 
     return cell;
 }
@@ -93,16 +106,16 @@ NSString *const TagDidChangeNotification = @"TagDidChangeNotification";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:TagDidChangeNotification
-                                                        object:self
-                                                      userInfo:@{@"tag" : tag}];
+    if (![self.event.inTag isEqual:tag]) {
+        self.event.inTag = tag;
+        [[CoreDataManager instance] saveContext];
 
-
-    [self dismissViewControllerAnimated:YES completion:NULL];
+        [self dismissViewControllerAnimated:YES completion:NULL];
+    }
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-}
+#pragma mark -
+#pragma mark Private methods
 
 - (IBAction)createTag:(id)sender {
     self.createTagPopup = [self.storyboard instantiateViewControllerWithIdentifier:@"CreateTagPopup"];
@@ -111,6 +124,95 @@ NSString *const TagDidChangeNotification = @"TagDidChangeNotification";
 
 - (IBAction)dismissView:(id)sender {
     [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (IBAction)editTags:(id)sender {
+    self.editingTags = !self.editingTags;
+
+    // Invalidate all the cells so they refresh
+    [self.collectionView reloadData];
+
+    NSUInteger index = [self.tags indexOfObject:self.event.inTag];
+
+    if (index != NSNotFound) {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:(NSInteger)index
+                                               inSection:0];
+
+        [self.collectionView selectItemAtIndexPath:path animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+    }
+
+}
+
+- (IBAction)deleteCell:(id)sender forEvent:(UIEvent *)event {
+    UITouch *touch = [[event allTouches] anyObject];
+    CGPoint location = [touch locationInView:self.collectionView];
+    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:location];
+
+    Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
+    [tag delete];
+}
+
+- (void)dataModelDidSave:(NSNotification *)note {
+    // Inserted Tags
+    NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
+    NSArray *insertedTags = [[insertedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        return [obj isKindOfClass:[Tag class]];
+    }] allObjects];
+
+    DLog(@"insertedObjects %@", insertedObjects);
+    DLog(@"insertedTags %@", insertedTags);
+
+    [self.tags addObjectsFromArray:insertedTags];
+
+    NSMutableArray *insertIndexPaths = [NSMutableArray array];
+
+    for (Tag *tag in insertedTags) {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:(NSInteger)[self.tags indexOfObject:tag] inSection:0];
+        [insertIndexPaths addObject:path];
+    }
+
+    DLog(@"insertIndexPaths %@", insertIndexPaths);
+
+    // Deleted tags
+    NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
+    NSArray *deletedTags = [[deletedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        return [obj isKindOfClass:[Tag class]];
+    }] allObjects];
+
+    DLog(@"deletedObjects %@", deletedObjects);
+    DLog(@"deletedTags %@", deletedTags);
+
+    NSMutableArray *deletedIndexPaths = [NSMutableArray array];
+    NSMutableIndexSet *indexesToRemove = [NSMutableIndexSet new];
+
+    for (Tag *tag in deletedTags) {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:(NSInteger)[self.tags indexOfObject:tag] inSection:0];
+        [deletedIndexPaths addObject:path];
+        
+        [indexesToRemove addIndex:(NSUInteger)path.row];
+    }
+
+    DLog(@"deletedIndexPaths %@", deletedIndexPaths);
+    DLog(@"indexesToRemove %@", indexesToRemove);
+
+    [self.tags removeObjectsAtIndexes:indexesToRemove];
+
+    // If this was the last and we are in edit mode then exit it
+    if (self.tags.count == 0) {
+        self.editingTags = !self.editingTags;
+    }
+
+    [self.collectionView performBatchUpdates:^{
+        if (insertIndexPaths.count > 0) {
+            DLog(@"insertIndexPaths %@", insertIndexPaths);
+            [self.collectionView insertItemsAtIndexPaths:insertIndexPaths];
+        }
+
+        if (deletedIndexPaths.count > 0) {
+            DLog(@"deletedIndexPaths %@", deletedIndexPaths);
+            [self.collectionView deleteItemsAtIndexPaths:deletedIndexPaths];
+        }
+    } completion:nil];
 }
 
 @end

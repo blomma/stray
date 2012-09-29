@@ -11,21 +11,18 @@
 
 @interface EventGroups : NSObject
 
-@property (nonatomic) BOOL existsActiveEventGroup;
+@property (nonatomic) Tag *filter;
+@property (nonatomic, readonly) NSUInteger count;
+@property (nonatomic, readonly) EventGroup *activeEventGroup;
 
 - (id)init;
 - (id)initWithEvents:(NSArray *)events;
+- (id)initWithEvents:(NSArray *)events filter:(Tag *)tag;
 
 - (NSArray *)addEvent:(Event *)event;
-- (void)addEvents:(NSArray *)events;
+- (NSArray *)removeEvent:(Event *)event;
+- (NSArray *)updateEvent:(Event *)event;
 
-- (NSArray *)removeEvent:(Event *)event withConditionIsInvalid:(BOOL)condition;
-- (NSArray *)updateEvent:(Event *)event withConditionIsActive:(BOOL)condition;
-
-- (NSUInteger)count;
-
-- (NSUInteger)indexForGroupDate:(NSDate *)date;
 - (EventGroup *)eventGroupAtIndex:(NSUInteger)index;
-- (NSUInteger)indexForActiveEventGroup;
 
 @end
