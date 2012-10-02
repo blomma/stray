@@ -8,8 +8,8 @@
 
 #import "CoreDataManager.h"
 
-static NSString *CUSTOM_MODEL_NAME = nil;
-static NSString *CUSTOM_DATABASE_NAME = nil;
+static NSString *CUSTOM_MODEL_NAME = @"CoreDataModel";
+static NSString *CUSTOM_DATABASE_NAME = @"CoreDataModel";
 
 @interface CoreDataManager ()
 
@@ -27,6 +27,7 @@ static NSString *CUSTOM_DATABASE_NAME = nil;
 	dispatch_once(&onceToken, ^{
 		sharedCoreDataManager = [[self alloc] init];
 	});
+
 	return sharedCoreDataManager;
 }
 
@@ -37,12 +38,16 @@ static NSString *CUSTOM_DATABASE_NAME = nil;
 }
 
 - (NSString *)databaseName {
-    if (CUSTOM_DATABASE_NAME) return CUSTOM_DATABASE_NAME;
+    if (CUSTOM_DATABASE_NAME)
+        return CUSTOM_DATABASE_NAME;
+
     return [[self appName] stringByAppendingString:@".sqlite"];
 }
 
 - (NSString *)modelName {
-    if (CUSTOM_MODEL_NAME) return CUSTOM_MODEL_NAME;
+    if (CUSTOM_MODEL_NAME)
+        return CUSTOM_MODEL_NAME;
+
     return [self appName];
 }
 
@@ -61,7 +66,8 @@ static NSString *CUSTOM_DATABASE_NAME = nil;
 
 - (NSManagedObjectModel *)managedObjectModel {
     if (!_managedObjectModel) {
-        NSURL *modelURL = [[NSBundle mainBundle] URLForResource:[self modelName] withExtension:@"momd"];
+        NSURL *modelURL = [[NSBundle mainBundle] URLForResource:[self modelName]
+                                                  withExtension:@"momd"];
         _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     }
 
@@ -96,8 +102,11 @@ static NSString *CUSTOM_DATABASE_NAME = nil;
 
 
 - (BOOL)saveContext {
-    if (self.managedObjectContext == nil) return NO;
-    if (![self.managedObjectContext hasChanges])return NO;
+    if (self.managedObjectContext == nil)
+        return NO;
+
+    if (![self.managedObjectContext hasChanges])
+        return NO;
     
     NSError *error = nil;
     

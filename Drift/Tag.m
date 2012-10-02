@@ -1,7 +1,9 @@
 #import "Tag.h"
 
-@implementation Tag
+@interface Tag ()
 
-// Custom logic goes here.
+@end
+
+@implementation Tag
 
 @end

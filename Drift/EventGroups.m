@@ -6,11 +6,11 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventGroup.h"
-#import "EventGroupChange.h"
 #import "EventGroups.h"
 #import "NSDate+Utilities.h"
 #import "Tag.h"
+#import "Change.h"
+#import "DataManager.h"
 
 @interface EventGroups ()
 
@@ -70,15 +70,16 @@
 #pragma mark -
 #pragma mark Public methods
 
-- (NSArray *)addEvent:(Event *)event {
-	NSMutableArray *changes = [NSMutableArray array];
+- (NSSet *)addEvent:(Event *)event {
+    NSMutableArray *changes = [NSMutableArray array];
+    NSMutableSet *eventChanges = [NSMutableSet set];
 
     if (![self.events containsObject:event]) {
         [self.events addObject:event];
     }
 
     if (self.filter && ![event.inTag isEqual:self.filter]) {
-        return changes;
+        return [NSSet setWithArray:changes];
     }
 
 	NSDate *startDate = event.startDate;
@@ -116,26 +117,23 @@
         }
 
 		// Check if this eventGroup already has this event
-		if (index == NSNotFound || ![eventGroup containsEvent:event]) {
-			EventGroupChange *eventGroupChange = [EventGroupChange new];
+		if (![eventGroup containsEvent:event]) {
+			Change *change = [Change new];
 
 			if (index == NSNotFound) {
-                eventGroupChange.type = EventGroupChangeInsert;
+                change.type = ChangeInsert;
 
                 index = [self insertionIndexForGroupDate:eventGroup.groupDate];
                 [self.eventGroups insertObject:eventGroup atIndex:index];
 			} else {
-                eventGroupChange.type = EventGroupChangeUpdate;
-                eventGroupChange.index = index;
+                change.type = ChangeUpdate;
+                change.index = index;
 			}
 
-			// Add the event
-			[eventGroup addEvent:event];
+            change.object = eventGroup;
 
-            eventGroupChange.GUID = eventGroup.GUID;
-
-			// Add the change
-			[changes addObject:eventGroupChange];
+            [eventChanges unionSet:[eventGroup addEvent:event]];
+			[changes addObject:change];
 		}
 
 		// We want to add the delta between the startDate day and end of startDate day
@@ -152,80 +150,76 @@
 		eventSecondsComponent.second -= deltaSecondsComponent.second;
 	}
 
-    for (EventGroupChange *eventGroupChange in changes) {
-        if ([eventGroupChange.type isEqualToString:EventGroupChangeInsert]) {
+    for (Change *change in changes) {
+        if ([change.type isEqualToString:ChangeInsert]) {
             NSUInteger i = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
-                return [[(EventGroup *) obj GUID] isEqualToString:eventGroupChange.GUID];
+                return [obj isEqual:change.object];
             }];
-            eventGroupChange.index = i;
+            change.index = i;
         }
     }
 
     self.activeEventGroupIsInvalid = YES;
 
-	return [changes copy];
+    [eventChanges unionSet:[NSSet setWithArray:changes]];
+	return eventChanges;
 }
 
-- (NSArray *)removeEvent:(Event *)event {
+- (NSSet *)removeEvent:(Event *)event {
     [self.events removeObject:event];
 
     return [self removeFromGroupsEvent:event];
 }
 
-- (NSArray *)updateEvent:(Event *)event {
-	NSMutableArray *changes = [NSMutableArray array];
-
+- (NSSet *)updateEvent:(Event *)event {
     // If this event doesnt even fullfill the tag filter then we just need to remove it and be done
     if (self.filter && ![event.inTag isEqual:self.filter]) {
-        [changes addObjectsFromArray:[self removeFromGroupsEvent:event]];
-
-        return changes;
+        return [self removeFromGroupsEvent:event];
     }
 
-    // Otherwise, we start with updating the events that needs updating
-    // but only the evetgroups that are valid for this event
+    NSMutableSet *changes = [NSMutableSet set];
+
     for (NSUInteger i = 0; i < self.eventGroups.count; i++) {
         EventGroup *eventGroup = [self.eventGroups objectAtIndex:i];
 
 		if ([eventGroup containsEvent:event] && [eventGroup isValidForEvent:event]) {
-			EventGroupChange *eventGroupChange = [EventGroupChange new];
-			eventGroupChange.GUID  = eventGroup.GUID;
-			eventGroupChange.type  = EventGroupChangeUpdate;
-            eventGroupChange.index = i;
+			Change *change = [Change new];
+			change.object  = eventGroup;
+			change.type  = ChangeUpdate;
+            change.index = i;
 
-			[changes addObject:eventGroupChange];
-
-			[eventGroup updateEvent:event];
+            [changes unionSet:[eventGroup updateEvent:event]];
+			[changes addObject:change];
 		}
 	}
 
-    // Next we remove the event from invalid eventGroups
-    [changes addObjectsFromArray:[self removeFromInvalidGroupsEvent:event]];
-
 	// Insert event into any groups that can contain it, possibly creating new groups for this
-	[changes addObjectsFromArray:[self addEvent:event]];
+    [changes unionSet:[self addEvent:event]];
+
+    // Next we remove the event from invalid eventGroups
+    [changes unionSet:[self removeFromInvalidGroupsEvent:event]];
 
     self.activeEventGroupIsInvalid = YES;
 
-	return [changes copy];
+	return changes;
 }
 
-- (NSArray *)filterOnTag:(Tag *)tag {
-    NSMutableArray *changes = [NSMutableArray array];
+- (NSSet *)filterOnTag:(Tag *)tag {
+    NSMutableSet *changes = [NSMutableSet set];
 
     for (Event *event in self.events) {
         if (tag && ![event.inTag isEqual:tag]) {
             // Remove if tag is not nill and the event is not a match
-            [changes addObjectsFromArray:[self removeFromGroupsEvent:event]];
+            [changes unionSet:[self removeFromGroupsEvent:event]];
         } else {
             // Readd the event, the underlying code will handle if the event already exists
-            [changes addObjectsFromArray:[self addEvent:event]];
+            [changes unionSet:[self addEvent:event]];
         }
     }
 
     self.filter = tag;
 
-    return [changes copy];
+    return changes;
 }
 
 - (EventGroup *)eventGroupAtIndex:(NSUInteger)index {
@@ -235,23 +229,27 @@
 #pragma mark -
 #pragma mark Private methods
 
-- (NSArray *)removeFromGroupsEvent:(Event *)event {
-	NSMutableArray *changes = [NSMutableArray array];
-
+- (NSSet *)removeFromGroupsEvent:(Event *)event {
+    NSMutableSet *changes = [NSMutableSet set];
+    
     NSMutableIndexSet *indexesToRemove = [NSMutableIndexSet new];
 
     for (NSUInteger i = 0; i < self.eventGroups.count; i++) {
         EventGroup *eventGroup = [self.eventGroups objectAtIndex:i];
 
 		if ([eventGroup containsEvent:event]) {
-			EventGroupChange *eventGroupChange = [self removeEvent:event fromGroup:eventGroup];
-            eventGroupChange.index = i;
+            [changes unionSet:[eventGroup removeEvent:event]];
 
-            if ([eventGroupChange.type isEqualToString:EventGroupChangeDelete]) {
+            Change *change = [Change new];
+            change.object  = eventGroup;
+            change.type  = eventGroup.count > 0 ? ChangeUpdate : ChangeDelete;
+            change.index = i;
+
+            if ([change.type isEqualToString:ChangeDelete]) {
                 [indexesToRemove addIndex:i];
             }
 
-			[changes addObject:eventGroupChange];
+			[changes addObject:change];
 		}
 	}
 
@@ -260,26 +258,29 @@
 
     self.activeEventGroupIsInvalid = YES;
 
-	return [changes copy];
+	return changes;
 }
 
-- (NSArray *)removeFromInvalidGroupsEvent:(Event *)event {
-	NSMutableArray *changes = [NSMutableArray array];
-
+- (NSSet *)removeFromInvalidGroupsEvent:(Event *)event {
+    NSMutableSet *changes = [NSMutableSet set];
     NSMutableIndexSet *indexesToRemove = [NSMutableIndexSet new];
 
     for (NSUInteger i = 0; i < self.eventGroups.count; i++) {
         EventGroup *eventGroup = [self.eventGroups objectAtIndex:i];
 
 		if ([eventGroup containsEvent:event] && ![eventGroup isValidForEvent:event]) {
-			EventGroupChange *eventGroupChange = [self removeEvent:event fromGroup:eventGroup];
-            eventGroupChange.index = i;
+            [changes unionSet:[eventGroup removeEvent:event]];
 
-            if ([eventGroupChange.type isEqualToString:EventGroupChangeDelete]) {
+            Change *change = [Change new];
+            change.object  = eventGroup;
+            change.type  = eventGroup.count > 0 ? ChangeUpdate : ChangeDelete;
+            change.index = i;
+
+            if ([change.type isEqualToString:ChangeDelete]) {
                 [indexesToRemove addIndex:i];
             }
 
-			[changes addObject:eventGroupChange];
+			[changes addObject:change];
 		}
 	}
 
@@ -288,17 +289,7 @@
 
     self.activeEventGroupIsInvalid = YES;
 
-	return [changes copy];
-}
-
-- (EventGroupChange *)removeEvent:(Event *)event fromGroup:(EventGroup *)eventGroup {
-    [eventGroup removeEvent:event];
-
-    EventGroupChange *eventGroupChange = [EventGroupChange new];
-    eventGroupChange.GUID  = eventGroup.GUID;
-    eventGroupChange.type  = eventGroup.count > 0 ? EventGroupChangeUpdate : EventGroupChangeDelete;
-
-    return eventGroupChange;
+	return changes;
 }
 
 - (NSUInteger)indexForGroupDate:(NSDate *)date {

@@ -9,12 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "EventGroup.h"
 #import "EventTableViewCell.h"
+#import "Event.h"
 
 @interface EventGroupTableViewDataSource : NSObject <UITableViewDataSource>
 
 @property (nonatomic) EventGroup *eventGroup;
 
-- (void)tableView:(UITableView *)tableView refreshCell:(EventTableViewCell *)cell;
+- (void)tableView:(UITableView *)tableView refreshCellForEvent:(Event *)event;
+
 - (Event *)eventAtIndex:(NSUInteger)index;
 
 @end

@@ -9,6 +9,7 @@ const struct EventAttributes EventAttributes = {
 };
 
 const struct EventRelationships EventRelationships = {
+	.heldByState = @"heldByState",
 	.inTag = @"inTag",
 };
 
@@ -61,6 +62,10 @@ const struct EventFetchedProperties EventFetchedProperties = {
 
 
 
+
+@dynamic heldByState;
+
+	
 
 @dynamic inTag;
 

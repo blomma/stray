@@ -8,6 +8,7 @@
 
 #import "Event.h"
 #import "EventGroup.h"
+#import "Tag.h"
 
 @interface EventGroups : NSObject
 
@@ -19,9 +20,9 @@
 - (id)initWithEvents:(NSArray *)events;
 - (id)initWithEvents:(NSArray *)events filter:(Tag *)tag;
 
-- (NSArray *)addEvent:(Event *)event;
-- (NSArray *)removeEvent:(Event *)event;
-- (NSArray *)updateEvent:(Event *)event;
+- (NSSet *)addEvent:(Event *)event;
+- (NSSet *)removeEvent:(Event *)event;
+- (NSSet *)updateEvent:(Event *)event;
 
 - (EventGroup *)eventGroupAtIndex:(NSUInteger)index;
 

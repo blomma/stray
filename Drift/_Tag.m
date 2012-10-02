@@ -8,7 +8,7 @@ const struct TagAttributes TagAttributes = {
 };
 
 const struct TagRelationships TagRelationships = {
-	.heldBy = @"heldBy",
+	.heldByEvents = @"heldByEvents",
 };
 
 const struct TagFetchedProperties TagFetchedProperties = {
@@ -54,15 +54,15 @@ const struct TagFetchedProperties TagFetchedProperties = {
 
 
 
-@dynamic heldBy;
+@dynamic heldByEvents;
 
 	
-- (NSMutableSet*)heldBySet {
-	[self willAccessValueForKey:@"heldBy"];
+- (NSMutableSet*)heldByEventsSet {
+	[self willAccessValueForKey:@"heldByEvents"];
   
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"heldBy"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"heldByEvents"];
   
-	[self didAccessValueForKey:@"heldBy"];
+	[self didAccessValueForKey:@"heldByEvents"];
 	return result;
 }
 	

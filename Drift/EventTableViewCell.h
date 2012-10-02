@@ -11,8 +11,6 @@
 
 @interface EventTableViewCell : UITableViewCell
 
-@property (nonatomic) Event *event;
-
 @property (nonatomic, weak) IBOutlet UILabel *eventStart;
 @property (nonatomic, weak) IBOutlet UILabel *eventStop;
 @property (nonatomic, weak) IBOutlet UILabel *eventTime;

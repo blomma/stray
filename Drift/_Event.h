@@ -10,12 +10,14 @@ extern const struct EventAttributes {
 } EventAttributes;
 
 extern const struct EventRelationships {
+	__unsafe_unretained NSString *heldByState;
 	__unsafe_unretained NSString *inTag;
 } EventRelationships;
 
 extern const struct EventFetchedProperties {
 } EventFetchedProperties;
 
+@class State;
 @class Tag;
 
 
@@ -54,6 +56,13 @@ extern const struct EventFetchedProperties {
 
 
 
+@property (nonatomic, strong) State *heldByState;
+
+//- (BOOL)validateHeldByState:(id*)value_ error:(NSError**)error_;
+
+
+
+
 @property (nonatomic, strong) Tag *inTag;
 
 //- (BOOL)validateInTag:(id*)value_ error:(NSError**)error_;
@@ -81,6 +90,11 @@ extern const struct EventFetchedProperties {
 - (void)setPrimitiveStopDate:(NSDate*)value;
 
 
+
+
+
+- (State*)primitiveHeldByState;
+- (void)setPrimitiveHeldByState:(State*)value;
 
 
 

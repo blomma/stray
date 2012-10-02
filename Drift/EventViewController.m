@@ -12,13 +12,14 @@
 #import "NSManagedObject+ActiveRecord.h"
 #import "TagViewController.h"
 #import "Tag.h"
+#import "DataManager.h"
+#import "Change.h"
 
 @interface EventViewController ()
 
 @property (nonatomic) NSDateFormatter *startDateFormatter;
 @property (nonatomic) NSCalendar *calendar;
 @property (nonatomic) NSDateComponents *previousNowComponents;
-@property (nonatomic) Event *currentEvent;
 
 @end
 
@@ -32,16 +33,6 @@
 
     [self reset];
 
-    NSArray *events = [Event all];
-    self.currentEvent = [events sortedArrayUsingSelector:@selector(compare:)].first;
-
-    if (self.currentEvent) {
-        [self.currentEvent addObserver:self
-                            forKeyPath:@"inTag"
-                               options:NSKeyValueObservingOptionNew
-                               context:NULL];
-    }
-
     self.startDateFormatter = [[NSDateFormatter alloc] init];
     [self.startDateFormatter setDateFormat:@"HH:mm '@' d LLL, y"];
 
@@ -53,8 +44,8 @@
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
 	                                         selector:@selector(dataModelDidSave:)
-	                                             name:NSManagedObjectContextDidSaveNotification
-	                                           object:[[CoreDataManager instance] managedObjectContext]];
+	                                             name:kDataManagerDidSaveNotification
+	                                           object:[DataManager instance]];
 
 	[self.eventTimerControl addObserver:self
 	                         forKeyPath:@"startDate"
@@ -80,16 +71,18 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    if ([self.currentEvent isActive]) {
+    Event *event = [DataManager instance].state.inEvent;
+    
+    if ([event isActive]) {
         [self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
     } else {
         [self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
     }
 
-	if (self.currentEvent) {
-        [self.eventTimerControl startWithEvent:self.currentEvent];
+	if (event) {
+        [self.eventTimerControl startWithEvent:event];
 
-        NSString *tagName = self.currentEvent.inTag ? self.currentEvent.inTag.name : @"";
+        NSString *tagName = event.inTag ? event.inTag.name : @"";
         [self.tag setTitle:tagName forState:UIControlStateNormal];
 	} else {
         [self reset];
@@ -97,8 +90,10 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    Event *event = [[DataManager instance] state].inEvent;
+
     TagViewController *tagViewController = [segue destinationViewController];
-    tagViewController.event = self.currentEvent;
+    tagViewController.event = event;
 }
 
 #pragma mark -
@@ -107,10 +102,12 @@
 - (IBAction)toggleEvent:(id)sender {
 	NSDate *now = [NSDate date];
 
-	if ([self.currentEvent isActive]) {
+    Event *event = [DataManager instance].state.inEvent;
+
+	if ([event isActive]) {
 		[TestFlight passCheckpoint:@"STOP EVENT"];
 
-		self.currentEvent.stopDate = now;
+		event.stopDate = now;
 
         [self.eventTimerControl stop];
 
@@ -121,11 +118,12 @@
 
         [self reset];
 
-		// No, lets create a new one
-        self.currentEvent = [Event create];
-		self.currentEvent.startDate = now;
+        event = [Event create];
+		event.startDate = now;
 
-		[self.eventTimerControl startWithEvent:self.currentEvent];
+        [DataManager instance].state.inEvent = event;
+
+        [self.eventTimerControl startWithEvent:event];
 
 		// Toggle button to stop state
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
@@ -139,14 +137,6 @@
 
 - (void)reset {
     [self.eventTimerControl reset];
-
-	if (self.currentEvent) {
-        [self.currentEvent removeObserver:self
-                               forKeyPath:@"inTag"
-                                  context:NULL];
-    }
-
-    self.currentEvent = nil;
 
     [self.tag setTitle:@"" forState:UIControlStateNormal];
 
@@ -162,10 +152,12 @@
 }
 
 - (void)updateNowLabelWithDate:(NSDate *)date {
-    if (date) {
+    Event *event = [DataManager instance].state.inEvent;
+
+    if (date && event) {
         static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
 
-        NSDateComponents *components = [self.calendar components:unitFlags fromDate:self.currentEvent.startDate toDate:date options:0];
+        NSDateComponents *components = [self.calendar components:unitFlags fromDate:event.startDate toDate:date options:0];
 
         if (components.hour != self.previousNowComponents.hour
             || components.minute != self.previousNowComponents.minute
@@ -322,27 +314,30 @@
 }
 
 - (void)dataModelDidSave:(NSNotification *)note {
-	NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
-    NSArray *deletedEvents = [[deletedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [obj isKindOfClass:[Event class]];
+    Event *event = [DataManager instance].state.inEvent;
+
+	NSSet *eventChangeObjects = [[note userInfo] objectForKey:kEventChangesKey];
+    NSArray *deletedEvents = [[eventChangeObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        Change *change = (Change *)obj;
+        return [change.type isEqualToString:ChangeDelete] && [change.object isEqual:event];
     }] allObjects];
 
-    DLog(@"deletedObjects %@", deletedObjects);
+    DLog(@"eventChangeObjects %@", eventChangeObjects);
     DLog(@"deletedEvents %@", deletedEvents);
 
     if (deletedEvents.count > 0) {
-        NSUInteger index = [deletedEvents indexOfObject:self.currentEvent];
+        [DataManager instance].state.inEvent = nil;
 
-        if (index != NSNotFound) {
-            [self reset];
-        }
+        [self reset];
     }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    Event *event = [DataManager instance].state.inEvent;
+
 	if ([keyPath isEqualToString:@"startDate"]) {
 		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
-        self.currentEvent.startDate = date;
+        event.startDate = date;
 
 		[self updateStartLabelWithDate:date];
 	} else if ([keyPath isEqualToString:@"nowDate"]) {
@@ -351,7 +346,7 @@
 		[self updateNowLabelWithDate:date];
 	} else if ([keyPath isEqualToString:@"stopDate"]) {
 		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
-        self.currentEvent.stopDate = date;
+        event.stopDate = date;
 
 		[self updateStopLabelWithDate:date];
 	} else if ([keyPath isEqualToString:@"isTransforming"]) {

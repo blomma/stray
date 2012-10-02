@@ -8,13 +8,12 @@
 
 #import "EventGroup.h"
 #import "NSDate+Utilities.h"
-#import "EventChange.h"
+#import "Change.h"
 
 @interface EventGroup ()
 
 @property (nonatomic, readwrite) NSMutableArray *events;
 @property (nonatomic, readwrite) NSDate *groupDate;
-@property (nonatomic, readwrite) NSString *GUID;
 
 @property (nonatomic, readwrite) NSDateComponents *timeActiveComponents;
 @property (nonatomic) BOOL timeActiveComponentsIsInvalid;
@@ -23,8 +22,6 @@
 @property (nonatomic) BOOL activeEventIsInvalid;
 
 @property (nonatomic) NSCalendar *calendar;
-
-@property (nonatomic, readwrite) NSArray *changes;
 
 @end
 
@@ -47,7 +44,6 @@
 
 		self.groupDate = [date beginningOfDayWithCalendar:self.calendar];
 		self.events    = [NSMutableArray array];
-		self.GUID      = [[NSProcessInfo processInfo] globallyUniqueString];
 
 		self.timeActiveComponents = [[NSDateComponents alloc] init];
 		self.timeActiveComponents.hour   = 0;
@@ -100,9 +96,11 @@
 	return [self.events containsObject:event];
 }
 
-- (void)addEvent:(Event *)event {
+- (NSSet *)addEvent:(Event *)event {
+    NSMutableSet *changes = [NSMutableSet setWithCapacity:1];
+
     if ([self.events containsObject:event]) {
-        return;
+        return changes;
     }
 
     NSUInteger index = [self insertionIndexForEvent:event];
@@ -111,17 +109,24 @@
     self.activeEventIsInvalid = YES;
 	self.timeActiveComponentsIsInvalid = YES;
 
-    EventChange *change = [EventChange new];
+    Change *change = [Change new];
     change.index = index;
-    change.type = EventChangeInsert;
+    change.type = ChangeInsert;
+    change.object = event;
+    change.parentObject = self;
 
-    self.changes = @[ change ];
+    [changes addObject:change];
+
+    return changes;
 }
 
-- (void)removeEvent:(Event *)event {
+- (NSSet *)removeEvent:(Event *)event {
+    NSMutableSet *changes = [NSMutableSet setWithCapacity:1];
+
     NSUInteger index = [self.events indexOfObject:event];
+
     if (index == NSNotFound) {
-        return;
+        return changes;
     }
 
     [self.events removeObjectAtIndex:index];
@@ -129,26 +134,36 @@
     self.activeEventIsInvalid = YES;
 	self.timeActiveComponentsIsInvalid = YES;
 
-    EventChange *change = [EventChange new];
+    Change *change = [Change new];
     change.index = index;
-    change.type = EventChangeDelete;
+    change.type = ChangeDelete;
+    change.object = event;
+    change.parentObject = self;
 
-    self.changes = @[ change ];
+    [changes addObject:change];
+
+    return changes;
 }
 
-- (void)updateEvent:(Event *)event {
+- (NSSet *)updateEvent:(Event *)event {
+    NSMutableSet *changes = [NSMutableSet setWithCapacity:1];
+
     if (![self.events containsObject:event]) {
-        return;
+        return changes;
     }
 
     self.activeEventIsInvalid = YES;
 	self.timeActiveComponentsIsInvalid = YES;
 
-    EventChange *change = [EventChange new];
+    Change *change = [Change new];
     change.index = [self.events indexOfObject:event];
-    change.type = EventChangeUpdate;
+    change.type = ChangeUpdate;
+    change.object = event;
+    change.parentObject = self;
 
-    self.changes = @[ change ];
+    [changes addObject:change];
+
+    return changes;
 }
 
 - (NSComparisonResult)compare:(id)element {

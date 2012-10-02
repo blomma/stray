@@ -9,7 +9,7 @@ extern const struct TagAttributes {
 } TagAttributes;
 
 extern const struct TagRelationships {
-	__unsafe_unretained NSString *heldBy;
+	__unsafe_unretained NSString *heldByEvents;
 } TagRelationships;
 
 extern const struct TagFetchedProperties {
@@ -42,9 +42,9 @@ extern const struct TagFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSSet *heldBy;
+@property (nonatomic, strong) NSSet *heldByEvents;
 
-- (NSMutableSet*)heldBySet;
+- (NSMutableSet*)heldByEventsSet;
 
 
 
@@ -54,10 +54,10 @@ extern const struct TagFetchedProperties {
 
 @interface _Tag (CoreDataGeneratedAccessors)
 
-- (void)addHeldBy:(NSSet*)value_;
-- (void)removeHeldBy:(NSSet*)value_;
-- (void)addHeldByObject:(Event*)value_;
-- (void)removeHeldByObject:(Event*)value_;
+- (void)addHeldByEvents:(NSSet*)value_;
+- (void)removeHeldByEvents:(NSSet*)value_;
+- (void)addHeldByEventsObject:(Event*)value_;
+- (void)removeHeldByEventsObject:(Event*)value_;
 
 @end
 
@@ -71,8 +71,8 @@ extern const struct TagFetchedProperties {
 
 
 
-- (NSMutableSet*)primitiveHeldBy;
-- (void)setPrimitiveHeldBy:(NSMutableSet*)value;
+- (NSMutableSet*)primitiveHeldByEvents;
+- (void)setPrimitiveHeldByEvents:(NSMutableSet*)value;
 
 
 @end

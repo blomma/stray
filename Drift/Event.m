@@ -1,17 +1,9 @@
 #import "Event.h"
 
 @interface Event ()
-
 @end
 
 @implementation Event
-
-- (id)init {
-    self = [super init];
-    if (self) {
-    }
-    return self;
-}
 
 - (NSComparisonResult)compare:(id)element {
     if ([element stopDate] == nil) {

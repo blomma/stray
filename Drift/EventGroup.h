@@ -13,8 +13,6 @@
 @property (nonatomic, readonly) NSMutableArray *events;
 @property (nonatomic, readonly) NSDate *groupDate;
 @property (nonatomic, readonly) NSDateComponents *timeActiveComponents;
-@property (nonatomic, readonly) NSString *GUID;
-@property (nonatomic, readonly) NSArray *changes;
 
 @property (nonatomic, readonly) Event *activeEvent;
 
@@ -23,9 +21,9 @@
 - (id)initWithDate:(NSDate *)groupDate;
 - (BOOL)containsEvent:(Event *)event;
 
-- (void)addEvent:(Event *)event;
-- (void)removeEvent:(Event *)event;
-- (void)updateEvent:(Event *)event;
+- (NSSet *)addEvent:(Event *)event;
+- (NSSet *)removeEvent:(Event *)event;
+- (NSSet *)updateEvent:(Event *)event;
 
 - (BOOL)isValidForEvent:(Event *)event;
 
