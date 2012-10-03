@@ -15,8 +15,6 @@ NSString *const ChangeUpdate = @"ChangeUpdate";
 @implementation Change
 
 - (BOOL)isEqual:(id)object {
-    DLog(@"isEqual");
-
     if (object == self) {
         return YES;
     }
@@ -29,7 +27,6 @@ NSString *const ChangeUpdate = @"ChangeUpdate";
 }
 
 - (BOOL)isEqualToChange:(Change *)change {
-    DLog(@"%@\n%@", self, change);
     return self.index == change.index
     && [self.type isEqualToString:change.type]
     && [self.object isEqual:change.object];

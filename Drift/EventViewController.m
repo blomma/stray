@@ -17,8 +17,9 @@
 
 @interface EventViewController ()
 
-@property (nonatomic) NSDateFormatter *startDateFormatter;
+@property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) NSCalendar *calendar;
+
 @property (nonatomic) NSDateComponents *previousNowComponents;
 
 @end
@@ -33,14 +34,9 @@
 
     [self reset];
 
-    self.startDateFormatter = [[NSDateFormatter alloc] init];
-    [self.startDateFormatter setDateFormat:@"HH:mm '@' d LLL, y"];
+    self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
 
     self.calendar = [NSCalendar currentCalendar];
-
-    // Scale down the startDate and stopDate
-    self.startDateLabel.layer.transform = CATransform3DMakeScale(0.6f, 0.6f, 1);
-    self.stopDateLabel.layer.transform = CATransform3DMakeScale(0.6f, 0.6f, 1);
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
 	                                         selector:@selector(dataModelDidSave:)
@@ -84,6 +80,10 @@
 
         NSString *tagName = event.inTag ? event.inTag.name : @"";
         [self.tag setTitle:tagName forState:UIControlStateNormal];
+
+        if (![event isActive]) {
+            [self animateStopEvent];
+        }
 	} else {
         [self reset];
     }
@@ -113,6 +113,8 @@
 
 		// Toggle button to start state
 		[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
+
+        [self animateStopEvent];
 	} else {
 		[TestFlight passCheckpoint:@"START EVENT"];
 
@@ -127,6 +129,8 @@
 
 		// Toggle button to stop state
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
+
+        [self animateStartEvent];
 	}
 
     [[CoreDataManager instance] saveContext];
@@ -140,177 +144,129 @@
 
     [self.tag setTitle:@"" forState:UIControlStateNormal];
 
-    self.startDateLabel.text   = @"";
-    self.runningTimeLabel.text = @"00:00:00";
-    self.stopDateLabel.text    = @"";
+    self.eventStartTime.text  = @"";
+    self.eventStartDay.text   = @"";
+    self.eventStartYear.text  = @"";
+    self.eventStartMonth.text = @"";
+
+    self.eventStopTime.text  = @"";
+    self.eventStopDay.text   = @"";
+    self.eventStopYear.text  = @"";
+    self.eventStopMonth.text = @"";
 }
 
 - (void)updateStartLabelWithDate:(NSDate *)date {
     if (date) {
-        self.startDateLabel.text = [self.startDateFormatter stringFromDate:date];
+        static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
+        NSDateComponents *components = [self.calendar components:unitFlags fromDate:date];
+
+        self.eventStartTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
+        self.eventStartDay.text   = [NSString stringWithFormat:@"%02d", components.day];
+        self.eventStartYear.text  = [NSString stringWithFormat:@"%04d", components.year];
+        self.eventStartMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
     }
 }
 
-- (void)updateNowLabelWithDate:(NSDate *)date {
+- (void)updateEventTimeWithDate:(NSDate *)date {
     Event *event = [DataManager instance].state.inEvent;
 
     if (date && event) {
-        static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+        static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit;
 
         NSDateComponents *components = [self.calendar components:unitFlags fromDate:event.startDate toDate:date options:0];
 
         if (components.hour != self.previousNowComponents.hour
-            || components.minute != self.previousNowComponents.minute
-            || components.second != self.previousNowComponents.second) {
-            self.runningTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", components.hour, components.minute, components.second];
+            || components.minute != self.previousNowComponents.minute) {
+            self.eventTimeHours.text   = [NSString stringWithFormat:@"%02d", components.hour];
+            self.eventTimeMinutes.text = [NSString stringWithFormat:@"%02d", components.minute];
             self.previousNowComponents = components;
         }
     }
 }
 
 - (void)updateStopLabelWithDate:(NSDate *)date {
-	self.stopDateLabel.text = [self.startDateFormatter stringFromDate:date];
-}
+    if (date) {
+        static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
+        NSDateComponents *components = [self.calendar components:unitFlags fromDate:date];
 
-- (void)animateTimeRunningIsTransforming:(BOOL)isTransforming {
-    if (isTransforming) {
-        // Create the keyframe animation object
-        CAKeyframeAnimation *scaleAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-
-        // Create the transform; we'll scale x and y by 1.5, leaving z alone
-        // since this is a 2D animation.
-        CATransform3D transform = CATransform3DMakeScale(.3f, .3f, 1); // Scale in x and y
-
-        // Add the keyframes.  Note we have to start and end with CATransformIdentity,
-        // so that the label starts from and returns to its non-transformed state.
-        [scaleAnimation setValues:@[
-         [NSValue valueWithCATransform3D:CATransform3DIdentity],
-         [NSValue valueWithCATransform3D:transform]
-         ]];
-
-        // set the duration of the animation
-        [scaleAnimation setDuration: .3];
-
-        scaleAnimation.fillMode = kCAFillModeForwards;
-        scaleAnimation.removedOnCompletion = NO;
-
-        // animate your label layer = rock and roll!
-        [[self.runningTimeLabel layer] addAnimation:scaleAnimation forKey:@"scaleText"];
-    } else {
-        // Create the keyframe animation object
-        CAKeyframeAnimation *scaleAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-
-        // Create the transform; we'll scale x and y by 1.5, leaving z alone
-        // since this is a 2D animation.
-        CATransform3D transform = CATransform3DMakeScale(.3f, .3f, 1); // Scale in x and y
-
-        // Add the keyframes.  Note we have to start and end with CATransformIdentity,
-        // so that the label starts from and returns to its non-transformed state.
-        [scaleAnimation setValues:@[
-         [NSValue valueWithCATransform3D:transform],
-         [NSValue valueWithCATransform3D:CATransform3DIdentity]
-         ]];
-
-        // set the duration of the animation
-        [scaleAnimation setDuration: .3];
-
-        // animate your label layer = rock and roll!
-        [[self.runningTimeLabel layer] addAnimation:scaleAnimation forKey:@"scaleText"];
+        self.eventStopTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
+        self.eventStopDay.text   = [NSString stringWithFormat:@"%02d", components.day];
+        self.eventStopYear.text  = [NSString stringWithFormat:@"%04d", components.year];
+        self.eventStopMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
     }
 }
 
-- (void)animateStartDateIsTransforming:(BOOL)isTransforming {
-    if (isTransforming) {
-        // Create the keyframe animation object
-        CAKeyframeAnimation *scaleAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+- (void)animateStartEvent {
+    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.eventStartDay.alpha = 1;
+        self.eventStartMonth.alpha = 1;
+        self.eventStartTime.alpha = 1;
+        self.eventStartYear.alpha = 1;
 
-        // Create the transform; we'll scale x and y by 1.5, leaving z alone
-        // since this is a 2D animation.
-        CATransform3D transform = CATransform3DMakeScale(1, 1, 1); // Scale in x and y
-
-        // Add the keyframes.  Note we have to start and end with CATransformIdentity,
-        // so that the label starts from and returns to its non-transformed state.
-        [scaleAnimation setValues:@[
-         [NSValue valueWithCATransform3D:self.startDateLabel.layer.transform],
-         [NSValue valueWithCATransform3D:transform]
-         ]];
-
-        // set the duration of the animation
-        [scaleAnimation setDuration: .3];
-
-        scaleAnimation.fillMode = kCAFillModeForwards;
-        scaleAnimation.removedOnCompletion = NO;
-
-        // animate your label layer = rock and roll!
-        [[self.startDateLabel layer] addAnimation:scaleAnimation forKey:@"scaleText"];
-    } else {
-        // Create the keyframe animation object
-        CAKeyframeAnimation *scaleAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-
-        // Create the transform; we'll scale x and y by 1.5, leaving z alone
-        // since this is a 2D animation.
-        CATransform3D transform = CATransform3DMakeScale(0.6f, 0.6f, 1); // Scale in x and y
-
-        // Add the keyframes.  Note we have to start and end with CATransformIdentity,
-        // so that the label starts from and returns to its non-transformed state.
-        [scaleAnimation setValues:@[
-         [NSValue valueWithCATransform3D:CATransform3DIdentity],
-         [NSValue valueWithCATransform3D:transform],
-         ]];
-
-        // set the duration of the animation
-        [scaleAnimation setDuration: .3];
-
-        // animate your label layer = rock and roll!
-        [[self.startDateLabel layer] addAnimation:scaleAnimation forKey:@"scaleText"];
-    }
+        self.eventStopDay.alpha = 0.2;
+        self.eventStopMonth.alpha = 0.2;
+        self.eventStopTime.alpha = 0.2;
+        self.eventStopYear.alpha = 0.2;
+    } completion:nil];
 }
 
-- (void)animateStopDateIsTransforming:(BOOL)isTransforming {
-    if (isTransforming) {
-        // Create the keyframe animation object
-        CAKeyframeAnimation *scaleAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+- (void)animateStopEvent {
+    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.eventStartDay.alpha = 0.2;
+        self.eventStartMonth.alpha = 0.2;
+        self.eventStartTime.alpha = 0.2;
+        self.eventStartYear.alpha = 0.2;
 
-        // Create the transform; we'll scale x and y by 1.5, leaving z alone
-        // since this is a 2D animation.
-        CATransform3D transform = CATransform3DMakeScale(1, 1, 1); // Scale in x and y
+        self.eventStopDay.alpha = 1;
+        self.eventStopMonth.alpha = 1;
+        self.eventStopTime.alpha = 1;
+        self.eventStopYear.alpha = 1;
+    } completion:nil];
+}
 
-        // Add the keyframes.  Note we have to start and end with CATransformIdentity,
-        // so that the label starts from and returns to its non-transformed state.
-        [scaleAnimation setValues:@[
-         [NSValue valueWithCATransform3D:self.stopDateLabel.layer.transform],
-         [NSValue valueWithCATransform3D:transform]
-         ]];
+- (void)animateEventTransforming:(EventTimerTransformingEnum)eventTimerTransformingEnum {
+    Event *event = [DataManager instance].state.inEvent;
 
-        // set the duration of the animation
-        [scaleAnimation setDuration: .3];
+    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        CGFloat eventStartAlpha, eventStopAlpha, eventTimeAlpha;
+        switch (eventTimerTransformingEnum) {
+            case EventTimerStartDateTransformingStart:
+                eventStartAlpha = 1;
+                eventStopAlpha = 0.2f;
+                eventTimeAlpha = 0.2f;
+                break;
+            case EventTimerStartDateTransformingStop:
+                eventStartAlpha = event.isActive ? 1 : 0.2f;
+                eventStopAlpha = event.isActive ? 0.2f : 1;
+                eventTimeAlpha = 1;
+                break;
+            case EventTimerStopDateTransformingStart:
+                eventStartAlpha = 0.2f;
+                eventStopAlpha = 1;
+                eventTimeAlpha = 0.2f;
+                break;
+            case EventTimerStopDateTransformingStop:
+                eventStartAlpha = event.isActive ? 1 : 0.2f;
+                eventStopAlpha = event.isActive ? 0.2f : 1;
+                eventTimeAlpha = 1;
+                break;
+            default:
+                break;
+        }
 
-        scaleAnimation.fillMode = kCAFillModeForwards;
-        scaleAnimation.removedOnCompletion = NO;
+        self.eventStartDay.alpha = eventStartAlpha;
+        self.eventStartMonth.alpha = eventStartAlpha;
+        self.eventStartTime.alpha = eventStartAlpha;
+        self.eventStartYear.alpha = eventStartAlpha;
 
-        // animate your label layer = rock and roll!
-        [[self.stopDateLabel layer] addAnimation:scaleAnimation forKey:@"scaleText"];
-    } else {
-        // Create the keyframe animation object
-        CAKeyframeAnimation *scaleAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+        self.eventStopDay.alpha = eventStopAlpha;
+        self.eventStopMonth.alpha = eventStopAlpha;
+        self.eventStopTime.alpha = eventStopAlpha;
+        self.eventStopYear.alpha = eventStopAlpha;
 
-        // Create the transform; we'll scale x and y by 1.5, leaving z alone
-        // since this is a 2D animation.
-        CATransform3D transform = CATransform3DMakeScale(0.6f, 0.6f, 1); // Scale in x and y
-
-        // Add the keyframes.  Note we have to start and end with CATransformIdentity,
-        // so that the label starts from and returns to its non-transformed state.
-        [scaleAnimation setValues:@[
-         [NSValue valueWithCATransform3D:CATransform3DIdentity],
-         [NSValue valueWithCATransform3D:transform],
-         ]];
-
-        // set the duration of the animation
-        [scaleAnimation setDuration: .3];
-
-        // animate your label layer = rock and roll!
-        [[self.stopDateLabel layer] addAnimation:scaleAnimation forKey:@"scaleText"];
-    }
+        self.eventTimeHours.alpha = eventTimeAlpha;
+        self.eventTimeMinutes.alpha = eventTimeAlpha;
+    } completion:nil];
 }
 
 - (void)dataModelDidSave:(NSNotification *)note {
@@ -343,29 +299,17 @@
 	} else if ([keyPath isEqualToString:@"nowDate"]) {
 		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
 
-		[self updateNowLabelWithDate:date];
+		[self updateEventTimeWithDate:date];
 	} else if ([keyPath isEqualToString:@"stopDate"]) {
 		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
         event.stopDate = date;
 
 		[self updateStopLabelWithDate:date];
 	} else if ([keyPath isEqualToString:@"isTransforming"]) {
-        EventTimerTransformingEnum isTransforming = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
-        if (isTransforming == EventTimerStartDateTransformingStart) {
-            [self animateStartDateIsTransforming:YES];
-            [self animateTimeRunningIsTransforming:YES];
-        } else if (isTransforming == EventTimerStopDateTransformingStart) {
-            [self animateStopDateIsTransforming:YES];
-            [self animateTimeRunningIsTransforming:YES];
-        } else if (isTransforming == EventTimerStartDateTransformingStop) {
-            [self animateStartDateIsTransforming:NO];
-            [self animateTimeRunningIsTransforming:NO];
+        EventTimerTransformingEnum eventTimerTransformingEnum = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+        [self animateEventTransforming:eventTimerTransformingEnum];
 
-            [[CoreDataManager instance] saveContext];
-        } else if (isTransforming == EventTimerStopDateTransformingStop) {
-            [self animateStopDateIsTransforming:NO];
-            [self animateTimeRunningIsTransforming:NO];
-
+        if (eventTimerTransformingEnum == EventTimerStartDateTransformingStop || eventTimerTransformingEnum == EventTimerStopDateTransformingStop) {
             [[CoreDataManager instance] saveContext];
         }
     }

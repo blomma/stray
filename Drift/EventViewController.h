@@ -12,9 +12,20 @@
 
 @property (weak, nonatomic) IBOutlet EventTimerControl *eventTimerControl;
 @property (weak, nonatomic) IBOutlet UIButton *toggleStartStopButton;
-@property (weak, nonatomic) IBOutlet UILabel *startDateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *runningTimeLabel;
-@property (weak, nonatomic) IBOutlet UILabel *stopDateLabel;
+
+@property (weak, nonatomic) IBOutlet UILabel *eventStartTime;
+@property (weak, nonatomic) IBOutlet UILabel *eventStartDay;
+@property (weak, nonatomic) IBOutlet UILabel *eventStartMonth;
+@property (weak, nonatomic) IBOutlet UILabel *eventStartYear;
+
+@property (weak, nonatomic) IBOutlet UILabel *eventTimeHours;
+@property (weak, nonatomic) IBOutlet UILabel *eventTimeMinutes;
+
+@property (weak, nonatomic) IBOutlet UILabel *eventStopTime;
+@property (weak, nonatomic) IBOutlet UILabel *eventStopDay;
+@property (weak, nonatomic) IBOutlet UILabel *eventStopMonth;
+@property (weak, nonatomic) IBOutlet UILabel *eventStopYear;
+
 @property (weak, nonatomic) IBOutlet UIButton *tag;
 
 - (IBAction)toggleEvent:(id)sender;
