@@ -39,7 +39,10 @@
     self.tableView.dataSource = dataSource;
 
     self.eventGroupViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"EventGroupViewController"];
-
+    [self.refreshControl addTarget:self
+                            action:@selector(refreshView:)
+                  forControlEvents:UIControlEventValueChanged];
+    
 	// Get starting list
 //    Tag *tag = [Tag where:@{ @"name" : @"Work" }].first;
 
@@ -77,6 +80,12 @@
     DLog(@"changes %@", changes);
 
     [self.tableView updateWithChanges:[changes allObjects]];
+}
+
+- (void)refreshView:(UIRefreshControl *)refreshControll {
+    [self refreshVisibleRows];
+
+    [refreshControll endRefreshing];
 }
 
 - (void)refreshVisibleRows {
