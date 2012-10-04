@@ -20,7 +20,6 @@
 
 @interface EventGroupsTableViewController ()
 
-//@property (nonatomic) NSTimer *updateTimer;
 @property (nonatomic) EventGroupViewController *eventGroupViewController;
 @property (nonatomic) EventGroupsTableViewDataSource *dataSource;
 
@@ -34,7 +33,6 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-    DLog(@"viewDidLoad");
     EventGroupsTableViewDataSource *dataSource = [EventGroupsTableViewDataSource new];
 
     self.dataSource = dataSource;
@@ -54,21 +52,12 @@
                                            forKeyPath:@"existsActiveEventGroup"
                                               options:NSKeyValueObservingOptionNew
                                               context:NULL];
-
-	// Do an inital check to see if there is an active event group
-//	if ([[DataManager instance] eventGroups].activeEventGroup) {
-//		self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:60
-//															target:self
-//														  selector:@selector(timerUpdate)
-//														  userInfo:nil
-//														   repeats:YES];
-//	}
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    DLog(@"viewWillAppear");
-//    [self updateActiveEventGroup];
+
+    [self refreshVisibleRows];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -90,37 +79,19 @@
     [self.tableView updateWithChanges:[changes allObjects]];
 }
 
-//- (void)timerUpdate {
-//	[self updateActiveEventGroup];
-//}
+- (void)refreshVisibleRows {
+    NSArray *visibleRows = [self.tableView indexPathsForVisibleRows];
 
-//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-//	if ([keyPath isEqualToString:@"existsActiveEventGroup"]) {
-//		BOOL existsActiveEventGroup = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
-//		if (existsActiveEventGroup) {
-//			if (!self.updateTimer.isValid) {
-//				self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:60
-//																	target:self
-//																  selector:@selector(timerUpdate)
-//																  userInfo:nil
-//																   repeats:YES];
-//			}
-//		} else {
-//			[self.updateTimer invalidate];
-//		}
-//	}
-//}
+    NSMutableArray *changes = [NSMutableArray array];
+    for (NSIndexPath *path in visibleRows) {
+        Change *change = [Change new];
+        change.type = ChangeUpdate;
+        change.index = path.row;
 
-//- (void)updateActiveEventGroup {
-//    EventGroup *activeEventGroup = [[DataManager instance] eventGroups].activeEventGroup;
-//    if (!activeEventGroup) {
-//        return;
-//    }
-//
-//    Event *event = [activeEventGroup activeEvent];
-//	NSArray *changes = [[[DataManager instance] eventGroups] updateEvent:event];
-//
-//    [self.tableView updateWithChanges:changes];
-//}
+        [changes addObject:change];
+    }
+
+    [self.tableView updateWithChanges:changes];
+}
 
 @end
