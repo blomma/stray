@@ -10,10 +10,10 @@
 #import "EventViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "NSManagedObject+ActiveRecord.h"
-#import "TagViewController.h"
 #import "Tag.h"
 #import "DataManager.h"
 #import "Change.h"
+#import "TagsTableViewController.h"
 
 @interface EventViewController ()
 
@@ -92,8 +92,8 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     Event *event = [[DataManager instance] state].inEvent;
 
-    TagViewController *tagViewController = [segue destinationViewController];
-    tagViewController.event = event;
+    TagsTableViewController *tagsTableViewController = [segue destinationViewController];
+    tagsTableViewController.event = event;
 }
 
 #pragma mark -

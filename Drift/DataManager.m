@@ -22,7 +22,6 @@ NSString *const kTagChangesKey = @"kTagChangesKey";
 @interface DataManager ()
 
 @property (nonatomic) EventGroups *eventGroups;
-@property (nonatomic) Tags *tags;
 @property (nonatomic) State *state;
 
 @end
@@ -36,8 +35,12 @@ NSString *const kTagChangesKey = @"kTagChangesKey";
     self = [super init];
     if (self) {
         self.eventGroups = [[EventGroups alloc] initWithEvents:[Event all] filter:nil];
-        self.tags = [[Tags alloc] initWithTags:[Tag all]];
+
         self.state = [State where:@{ @"name" : @"default" }].first;
+        if (!self.state) {
+            self.state = [State create];
+            self.state.name = @"default";
+        }
 
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(dataModelDidSave:)
@@ -51,15 +54,8 @@ NSString *const kTagChangesKey = @"kTagChangesKey";
 #pragma mark -
 #pragma mark Public properties
 
-- (State *)state {
-    if (!_state) {
-        _state = [State create];
-        _state.name = @"default";
-
-        [[CoreDataManager instance] saveContext];
-    }
-
-    return _state;
+- (NSArray *)tags {
+    return [Tag all];
 }
 
 #pragma mark -
@@ -73,6 +69,14 @@ NSString *const kTagChangesKey = @"kTagChangesKey";
 	});
 
 	return sharedDataManager;
+}
+
+- (Tag *)createTag {
+    return [Tag create];
+}
+
+- (void)deleteTag:(Tag *)tag {
+    [tag delete];
 }
 
 #pragma mark -
@@ -125,42 +129,6 @@ NSString *const kTagChangesKey = @"kTagChangesKey";
     for (Event *event in deletedEvents) {
         [changes unionSet:[self.eventGroups removeEvent:event]];
     }
-
-    // ========
-    // = Tags =
-    // ========
-
-    // Inserted Tags
-    NSArray *insertedTags = [[insertedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [obj isKindOfClass:[Tag class]];
-    }] allObjects];
-
-    DLog(@"insertedTags %@", insertedTags);
-    [changes unionSet:[self.tags addTags:insertedTags]];
-
-    // Deleted tags
-    NSArray *deletedTags = [[deletedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [obj isKindOfClass:[Tag class]];
-    }] allObjects];
-
-    DLog(@"deletedTags %@", deletedTags);
-    [changes unionSet:[self.tags removeTags:deletedTags]];
-
-    NSDictionary *userInfo = @{
-    kEventChangesKey : [changes objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [(Change *)[obj object] isKindOfClass:[Event class]];
-    }],
-    kEventGroupChangesKey : [changes objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [(Change *)[obj object] isKindOfClass:[EventGroup class]];
-    }],
-    kTagChangesKey : [changes objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [(Change *)[obj object] isKindOfClass:[Tag class]];
-    }]
-    };
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:kDataManagerDidSaveNotification
-                                                        object:self
-                                                      userInfo:userInfo];
 }
 
 @end

@@ -46,66 +46,83 @@
 #pragma mark -
 #pragma mark Public methods
 
-- (NSSet *)addTag:(Tag *)tag {
-    return [self addTags:@[tag]];
-}
-
-- (NSSet *)addTags:(NSArray *)tags {
-    NSMutableArray *changes = [NSMutableArray array];
-
-    for (Tag *tag in tags) {
-        if (![self.tags containsObject:tag]) {
-            [self.tags addObject:tag];
-
-            Change *change = [Change new];
-            change.type = ChangeInsert;
-            change.object = tag;
-
-            [changes addObject:change];
-        }
-    }
-
-    for (Change *change in changes) {
-        NSUInteger i = [self.tags indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
-            return [obj isEqual:change.object];
-        }];
-        change.index = i;
-    }
-
-    return [NSSet setWithArray:changes];
-}
-
-- (NSSet *)removeTag:(Tag *)tag {
-    return [self removeTags:@[tag]];
-}
-
-- (NSSet *)removeTags:(NSArray *)tags {
+- (NSSet *)insertObject:(id)object atIndex:(NSUInteger)index {
     NSMutableSet *changes = [NSMutableSet set];
 
-    // First find the indexes of the tags to be removed
-    for (Tag *tag in tags) {
-        NSUInteger index = [self.tags indexOfObject:tag];
-        if (index != NSNotFound) {
-            Change *change = [Change new];
-            change.type = ChangeDelete;
-            change.index = index;
-            change.object = tag;
+    if (![self.tags containsObject:object]) {
+        Change *change = [Change new];
+        change.type = ChangeInsert;
+        change.object = object;
+        change.index = index;
 
-            [changes addObject:change];
-        }
+        [changes addObject:change];
+
+        [self.tags insertObject:object atIndex:index];
     }
-
-    [self.tags removeObjectsInArray:tags];
 
     return changes;
 }
 
-- (Tag *)tagAtIndex:(NSUInteger)index {
-    return [self.tags objectAtIndex:index];
+- (NSSet *)removeObjectAtIndex:(NSUInteger)index {
+    NSMutableSet *changes = [NSMutableSet set];
+
+    id object = [self.tags objectAtIndex:index];
+
+    Change *change = [Change new];
+    change.type = ChangeDelete;
+    change.object = object;
+    change.index = index;
+
+    [changes addObject:change];
+
+    [self.tags removeObjectAtIndex:index];
+
+    return changes;
 }
 
-- (NSUInteger)indexOfTag:(Tag *)tag {
-    return [self.tags indexOfObject:tag];
+- (NSSet *)replaceObjectAtIndex:(NSUInteger)index withObject:(id)object {
+    NSMutableSet *changes = [NSMutableSet set];
+
+    Change *change = [Change new];
+    change.type = ChangeUpdate;
+    change.object = object;
+    change.index = index;
+
+    [changes addObject:change];
+
+    [self.tags replaceObjectAtIndex:index withObject:object];
+
+    return changes;
+}
+
+- (NSSet *)moveObjectAtIndex:(NSUInteger)atIndex toIndex:(NSUInteger)toIndex {
+    NSMutableSet *changes = [NSMutableSet set];
+
+    id object = [self.tags objectAtIndex:atIndex];
+
+    // This is a remove/insert operation
+    Change *change = [Change new];
+    change.type = ChangeDelete;
+    change.object = object;
+    change.index = atIndex;
+
+    [changes addObject:change];
+    [self.tags removeObjectAtIndex:atIndex];
+
+    
+    change = [Change new];
+    change.type = ChangeInsert;
+    change.object = object;
+    change.index = toIndex;
+
+    [changes addObject:change];
+    [self.tags insertObject:object atIndex:toIndex];
+
+    return changes;
+}
+
+- (id)objectAtIndex:(NSUInteger)index {
+    return [self.tags objectAtIndex:index];
 }
 
 @end

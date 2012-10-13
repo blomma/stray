@@ -118,11 +118,11 @@
         return;
     }
 
-	NSSet *eventChangeObjects = [[note userInfo] objectForKey:kEventChangesKey];
-    NSArray *changes = [[eventChangeObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+	NSSet *eventChanges = [[note userInfo] objectForKey:kEventChangesKey];
+    NSSet *changes = [eventChanges objectsPassingTest:^BOOL(id obj, BOOL *stop) {
         Change *change = (Change *)obj;
         return [change.parentObject isEqual:self.eventGroup];
-    }] allObjects];
+    }];
 
     [self.eventGroupTableView updateWithChanges:changes];
 

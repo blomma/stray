@@ -6,4 +6,6 @@
 
 @implementation Tag
 
+@synthesize index;
+
 @end

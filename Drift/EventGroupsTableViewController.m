@@ -79,7 +79,7 @@
     NSSet *changes = [[note userInfo] objectForKey:kEventGroupChangesKey];
     DLog(@"changes %@", changes);
 
-    [self.tableView updateWithChanges:[changes allObjects]];
+    [self.tableView updateWithChanges:changes];
 }
 
 - (void)refreshView:(UIRefreshControl *)refreshControll {
@@ -91,7 +91,7 @@
 - (void)refreshVisibleRows {
     NSArray *visibleRows = [self.tableView indexPathsForVisibleRows];
 
-    NSMutableArray *changes = [NSMutableArray array];
+    NSMutableSet *changes = [NSMutableArray array];
     for (NSIndexPath *path in visibleRows) {
         Change *change = [Change new];
         change.type = ChangeUpdate;

@@ -11,7 +11,7 @@
 
 @implementation UITableView (Change)
 
-- (void)updateWithChanges:(NSArray *)changes {
+- (void)updateWithChanges:(NSSet *)changes {
     if (changes.count > 0) {
         NSMutableArray *insertIndexPaths = [NSMutableArray array];
         NSMutableArray *deleteIndexPaths = [NSMutableArray array];
@@ -37,7 +37,7 @@
         [self deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationFade];
 
         DLog(@"updateIndexPaths %@", updateIndexPaths);
-        [self reloadRowsAtIndexPaths:updateIndexPaths withRowAnimation:UITableViewRowAnimationFade];
+        [self reloadRowsAtIndexPaths:updateIndexPaths withRowAnimation:UITableViewRowAnimationNone];
 
         [self endUpdates];
     }

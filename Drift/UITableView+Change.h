@@ -10,6 +10,6 @@
 
 @interface UITableView (Change)
 
-- (void)updateWithChanges:(NSArray *)changes;
+- (void)updateWithChanges:(NSSet *)changes;
 
 @end

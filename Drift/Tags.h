@@ -16,13 +16,11 @@
 - (id)init;
 - (id)initWithTags:(NSArray *)tags;
 
-- (NSSet *)addTag:(Tag *)tag;
-- (NSSet *)addTags:(NSArray *)tags;
+- (NSSet *)insertObject:(id)object atIndex:(NSUInteger)index;
+- (NSSet *)removeObjectAtIndex:(NSUInteger)index;
+- (NSSet *)replaceObjectAtIndex:(NSUInteger)index withObject:(id)object;
+- (NSSet *)moveObjectAtIndex:(NSUInteger)atIndex toIndex:(NSUInteger)toIndex;
 
-- (NSSet *)removeTag:(Tag *)tag;
-- (NSSet *)removeTags:(NSArray *)tags;
-
-- (Tag *)tagAtIndex:(NSUInteger)index;
-- (NSUInteger)indexOfTag:(Tag *)tag;
+- (id)objectAtIndex:(NSUInteger)index;
 
 @end
