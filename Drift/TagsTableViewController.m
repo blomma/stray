@@ -38,7 +38,9 @@
 @implementation TagsTableViewController
 
 #define COMMITING_CREATE_CELL_HEIGHT 60
-#define NORMAL_CELL_FINISHING_HEIGHT 44
+#define COMMITING_EDIT_CELL_LENGTH 60
+
+#define NORMAL_CELL_FINISHING_HEIGHT 74
 
 #define EDIT_STATE_LEFT_OFFSET -80
 #define EDIT_STATE_RIGHT_OFFSET 260
@@ -302,7 +304,7 @@
 }
 
 - (CGFloat)gestureRecognizer:(TableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 120;
+    return COMMITING_EDIT_CELL_LENGTH;
 }
 
 #pragma mark TableViewGestureMoveRowDelegate
