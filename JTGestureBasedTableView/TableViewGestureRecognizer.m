@@ -428,12 +428,4 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
     return recognizer;
 }
 
-#pragma mark Helper methods
-
-//- (void)reloadVisibleRowsExceptIndexPath:(NSIndexPath *)indexPath {
-//    NSMutableArray *visibleRows = [[self indexPathsForVisibleRows] mutableCopy];
-//    [visibleRows removeObject:indexPath];
-//    [self reloadRowsAtIndexPaths:visibleRows withRowAnimation:UITableViewRowAnimationNone];
-//}
-
 @end
