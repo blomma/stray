@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-@interface EventGroupsTableViewController : UITableViewController
+@interface EventGroupsTableViewController : UIViewController <UITableViewDelegate>
+
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
+@property (nonatomic, weak) IBOutlet UIScrollView *tagView;
 
 @end

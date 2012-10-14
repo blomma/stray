@@ -31,6 +31,7 @@
 		9E14D4261626DAEB008D9E43 /* background@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9E14D4241626DAEB008D9E43 /* background@2x.jpg */; };
 		9E14D42D1626FB1C008D9E43 /* low_contrast_linen.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E14D42B1626FB1C008D9E43 /* low_contrast_linen.png */; };
 		9E14D42E1626FB1C008D9E43 /* low_contrast_linen@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E14D42C1626FB1C008D9E43 /* low_contrast_linen@2X.png */; };
+		9E14D452162B3D3F008D9E43 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E14D451162B3D3F008D9E43 /* TagButton.m */; };
 		9E15897D16183F7100DB19EB /* Tags.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E15897C16183F7100DB19EB /* Tags.m */; };
 		9E158983161A3B2D00DB19EB /* _State.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E158980161A3B2C00DB19EB /* _State.m */; };
 		9E158984161A3B2D00DB19EB /* State.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E158982161A3B2D00DB19EB /* State.m */; };
@@ -109,6 +110,8 @@
 		9E14D4241626DAEB008D9E43 /* background@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background@2x.jpg"; sourceTree = "<group>"; };
 		9E14D42B1626FB1C008D9E43 /* low_contrast_linen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = low_contrast_linen.png; sourceTree = "<group>"; };
 		9E14D42C1626FB1C008D9E43 /* low_contrast_linen@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "low_contrast_linen@2X.png"; sourceTree = "<group>"; };
+		9E14D450162B3D3F008D9E43 /* TagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagButton.h; sourceTree = "<group>"; };
+		9E14D451162B3D3F008D9E43 /* TagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagButton.m; sourceTree = "<group>"; };
 		9E15897B16183F7100DB19EB /* Tags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tags.h; sourceTree = "<group>"; };
 		9E15897C16183F7100DB19EB /* Tags.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tags.m; sourceTree = "<group>"; };
 		9E15897F161A3B2C00DB19EB /* _State.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _State.h; sourceTree = "<group>"; };
@@ -410,6 +413,8 @@
 				9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */,
 				9E561DD915FA08FB008D3895 /* EventTableViewCell.h */,
 				9E561DDA15FA08FB008D3895 /* EventTableViewCell.m */,
+				9E14D450162B3D3F008D9E43 /* TagButton.h */,
+				9E14D451162B3D3F008D9E43 /* TagButton.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -632,6 +637,7 @@
 				9E2CFDE216218FAE004D9D8D /* TableViewGestureRecognizer.m in Sources */,
 				9E2CFDE416218FAE004D9D8D /* TransformableTableViewCell.m in Sources */,
 				9E2CFDE9162190E8004D9D8D /* TagsTableViewController.m in Sources */,
+				9E14D452162B3D3F008D9E43 /* TagButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
