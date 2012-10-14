@@ -83,7 +83,8 @@
         return [[(Change *)obj object] isKindOfClass:[EventGroup class]];
     }];
 
-    [self.tableView updateWithChanges:eventGroupChanges];
+    [self.tableView reloadData];
+//    [self.tableView updateWithChanges:eventGroupChanges];
 }
 
 - (void)addTagsToSlider:(UIScrollView*)slider {
