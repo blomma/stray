@@ -37,9 +37,9 @@
 
 @implementation TagsTableViewController
 
-#define COMMITING_CREATE_CELL_HEIGHT 60
 #define COMMITING_EDIT_CELL_LENGTH 60
 
+#define COMMITING_CREATE_CELL_HEIGHT 74
 #define NORMAL_CELL_FINISHING_HEIGHT 74
 
 #define EDIT_STATE_LEFT_OFFSET -80
@@ -50,6 +50,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tags = [[Tags alloc] initWithTags:[[DataManager instance] tags]];
+
+    NSLog(@"%@", [UIFont fontNamesForFamilyName:@"Futura"]);
 
     // Setup your tableView.delegate and tableView.datasource,
     // then enable gesture recognition in one line.
@@ -77,7 +79,7 @@
     tag.name = tagName;
 
     TransformableTableViewCell *cell = (TransformableTableViewCell *)[self.tableView cellForRowAtIndexPath:self.indexPathInEditState];
-    cell.name.text = tagName;
+    cell.name.text = [tagName uppercaseString];
 
     [UIView animateWithDuration:0.55
                           delay:0
@@ -113,21 +115,31 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
         cell.textLabel.textAlignment = NSTextAlignmentCenter;
-        cell.textLabel.font = [UIFont fontWithName:@"Futura-CondensedExtraBold" size:30];
+        cell.textLabel.font = [UIFont fontWithName:@"Futura-Medium" size:25];
         cell.textLabel.backgroundColor = [UIColor clearColor];
 
         if (cell.frame.size.height > COMMITING_CREATE_CELL_HEIGHT * 2) {
-            cell.textLabel.textColor = [UIColor redColor];
             cell.textLabel.text = @"Close";
-//            cell.contentView.backgroundColor = [UIColor redColor];
-        } else if (cell.frame.size.height > COMMITING_CREATE_CELL_HEIGHT) {
-            cell.textLabel.textColor = [UIColor greenColor];
+            cell.contentView.backgroundColor = [UIColor clearColor];
+            cell.contentView.backgroundColor = [UIColor colorWithRed:0.843f
+                                                               green:0.306f
+                                                                blue:0.314f
+                                                               alpha:1];
+        } else if (cell.frame.size.height >= COMMITING_CREATE_CELL_HEIGHT) {
+            cell.contentView.transform = CGAffineTransformMakeScale(1.0f, 1.0f);
             cell.textLabel.text = @"Release to create cell...";
-//            cell.contentView.backgroundColor = [UIColor greenColor];
+            cell.contentView.backgroundColor = [UIColor colorWithRed:0.510f
+                                                               green:0.784f
+                                                                blue:0.431f
+                                                               alpha:1];
         } else {
+            cell.contentView.transform = CGAffineTransformMakeScale(1.0f, 1.0f);
             cell.textLabel.textColor = [UIColor whiteColor];
             cell.textLabel.text = @"Continue Pulling...";
-//            cell.contentView.backgroundColor = [UIColor clearColor];
+            cell.contentView.backgroundColor = [UIColor colorWithRed:0.510f
+                                                               green:0.784f
+                                                                blue:0.431f
+                                                               alpha:(cell.frame.size.height / COMMITING_CREATE_CELL_HEIGHT)];
         }
 
         return cell;
@@ -146,14 +158,22 @@
 	
         cell.frontView.frame = cell.frontView.bounds;
 
-        UIColor *backgroundColor = [UIColor colorWithWhite:0.333f alpha:1.000];
+        UIColor *backgroundColor = [UIColor colorWithWhite:0.075f alpha:1];
+        
         if ([self.event.inTag isEqual:object]) {
-            [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-            backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
+            [self.tableView selectRowAtIndexPath:indexPath
+                                        animated:NO
+                                  scrollPosition:UITableViewScrollPositionNone];
+            backgroundColor = [UIColor colorWithRed:0.427f
+                                              green:0.784f
+                                               blue:0.992f
+                                              alpha:1];
         }
         
         cell.frontView.backgroundColor = backgroundColor;
-        cell.name.text = [(Tag *)object name];
+
+        NSString *tagName = [(Tag *)object name] ? [(Tag *)object name] : @"Fill me in";
+        cell.name.text = [tagName uppercaseString];
 
         cell.delegate = self;
 
@@ -203,7 +223,8 @@
 }
 
 - (void)gestureRecognizer:(TableViewGestureRecognizer *)gestureRecognizer needsAddRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.tags insertObject:[PlaceHolderAdding new] atIndex:(NSUInteger)indexPath.row];
+    NSSet *changes = [self.tags insertObject:[PlaceHolderAdding new] atIndex:(NSUInteger)indexPath.row];
+    [self.tableView updateWithChanges:changes];
 }
 
 - (void)gestureRecognizer:(TableViewGestureRecognizer *)gestureRecognizer needsCommitRowAtIndexPath:(NSIndexPath *)indexPath {

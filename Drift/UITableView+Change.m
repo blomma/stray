@@ -31,7 +31,7 @@
         [self beginUpdates];
 
         DLog(@"insertIndexPaths %@", insertIndexPaths);
-        [self insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationRight];
+        [self insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationFade];
 
         DLog(@"deleteIndexPaths %@", deleteIndexPaths);
         [self deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationFade];

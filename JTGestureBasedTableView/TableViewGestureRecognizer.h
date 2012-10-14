@@ -71,6 +71,6 @@ extern CGFloat const TableViewRowAnimationDuration;
 
 - (TableViewGestureRecognizer *)enableGestureTableViewWithDelegate:(id)delegate;
 
-- (void)reloadVisibleRowsExceptIndexPath:(NSIndexPath *)indexPath;
+//- (void)reloadVisibleRowsExceptIndexPath:(NSIndexPath *)indexPath;
 
 @end

@@ -40,7 +40,6 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
 @implementation TableViewGestureRecognizer
 
 - (void)scrollTable {
-    //DLog(@"scrollTable");
     // Scroll tableview while touch point is on top or bottom part
     CGPoint location = [self.longPressRecognizer locationInView:self.tableView];
 
@@ -61,8 +60,6 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
         UIImageView *cellSnapshotView = (id)[self.tableView viewWithTag:CELL_SNAPSHOT_TAG];
         cellSnapshotView.center = CGPointMake(self.tableView.center.x, location.y);
     }
-
-    //[self updateAddingIndexPathForCurrentLocation];
 }
 
 - (void)updateAddingIndexPathForCurrentLocation {
@@ -89,8 +86,6 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
                                  heightForCommitAddingRowAtIndexPath:self.addingIndexPath];
         }
 
-        DLog(@"commitingCellHeight %f", commitingCellHeight);
-
         if (cell.frame.size.height > commitingCellHeight * 2 || cell.frame.size.height < commitingCellHeight) {
             [self.delegate gestureRecognizer:self needsDiscardRowAtIndexPath:self.addingIndexPath];
         } else {
@@ -98,14 +93,6 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
         }
 
         self.addingIndexPath = nil;
-
-        // Restore contentInset while touch ends
-        [UIView animateWithDuration:0.5
-                              delay:0
-                            options:UIViewAnimationOptionBeginFromCurrentState
-                         animations:^{
-            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-        } completion:nil];
     }
 
     self.state = TableViewGestureRecognizerStateNone;
@@ -196,6 +183,7 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
         UIImageView *snapShotView = (UIImageView *)[self.tableView viewWithTag:CELL_SNAPSHOT_TAG];
         if (!snapShotView) {
             UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+
             UIGraphicsBeginImageContextWithOptions(cell.bounds.size, NO, 0);
             [cell.layer renderInContext:UIGraphicsGetCurrentContext()];
             UIImage *cellImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -203,7 +191,9 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
 
             snapShotView = [[UIImageView alloc] initWithImage:cellImage];
             snapShotView.tag = CELL_SNAPSHOT_TAG;
+
             [self.tableView addSubview:snapShotView];
+
             CGRect rect = [self.tableView rectForRowAtIndexPath:indexPath];
             snapShotView.frame = CGRectOffset(snapShotView.bounds, rect.origin.x, rect.origin.y);
         }
@@ -317,12 +307,10 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
 #pragma mark UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    DLog(@"heightForRowAtIndexPath");
     if ([indexPath isEqual:self.addingIndexPath]
         && self.state == TableViewGestureRecognizerStateDragging) {
         // While state is in pinching or dragging mode, we intercept the row height
         // For Moving state, we leave our real delegate to determine the actual height
-        DLog(@"addingRowHeight %f", self.addingRowHeight);
         return MAX(1, self.addingRowHeight);
     }
 
@@ -330,17 +318,18 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
     if ([self.tableViewDelegate respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)]) {
         normalCellHeight = [self.tableViewDelegate tableView:aTableView heightForRowAtIndexPath:indexPath];
     }
-    DLog(@"normalCellHeight %f", normalCellHeight);
+
     return normalCellHeight;
 }
 
 #pragma mark UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if ( ! [self.delegate conformsToProtocol:@protocol(TableViewGestureAddingRowDelegate)]) {
+    if (![self.delegate conformsToProtocol:@protocol(TableViewGestureAddingRowDelegate)]) {
         if ([self.tableViewDelegate respondsToSelector:@selector(scrollViewDidScroll:)]) {
             [self.tableViewDelegate scrollViewDidScroll:scrollView];
         }
+
         return;
     }
 
@@ -355,22 +344,8 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
 
             self.addingIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
 
-            if (self.addingIndexPath) {
-                [self.tableView beginUpdates];
-
-                [self.delegate gestureRecognizer:self needsAddRowAtIndexPath:self.addingIndexPath];
-                [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:self.addingIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-                self.addingRowHeight = fabsf(scrollView.contentOffset.y);
-
-                [self.tableView endUpdates];
-
-                // At this point we have a cell, lets git it
-                UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:self.addingIndexPath];
-                CATransform3D transform = CATransform3DIdentity;
-                transform.m34 = -1/500.f;
-
-                [cell.contentView.layer setSublayerTransform:transform];
-            }
+            [self.delegate gestureRecognizer:self needsAddRowAtIndexPath:self.addingIndexPath];
+            self.addingRowHeight = fabsf(scrollView.contentOffset.y);
         }
     }
 
@@ -378,29 +353,6 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
     // alter the contentOffset of our scrollView
     if (self.addingIndexPath && self.state == TableViewGestureRecognizerStateDragging) {
         self.addingRowHeight += scrollView.contentOffset.y * -1;
-
-        // Transform the cell
-        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:self.addingIndexPath];
-
-        CGFloat normalCellHeight = self.tableView.rowHeight;
-        if ([self.tableViewDelegate respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)]) {
-            normalCellHeight = [self.tableViewDelegate tableView:self.tableView heightForRowAtIndexPath:self.addingIndexPath];
-        }
-
-        CGFloat fraction = (cell.frame.size.height / normalCellHeight);
-        fraction = MAX(MIN(1, fraction), 0);
-
-        CGFloat angle = (M_PI / 2) - asinf(fraction);
-        CATransform3D transform = CATransform3DMakeRotation(angle, 1, 0, 0);
-        [cell.contentView.layer setTransform:transform];
-
-        CGSize contentViewSize = cell.contentView.frame.size;
-        CGFloat labelHeight = normalCellHeight;
-
-        // OPTI: Always accomodate 1 px to the top label to ensure two labels
-        // won't display one px gap in between sometimes for certain angles
-        cell.textLabel.frame = CGRectMake(0, contentViewSize.height - labelHeight,
-                                          contentViewSize.width, labelHeight);
 
         [self.tableView reloadData];
         [scrollView setContentOffset:CGPointZero];

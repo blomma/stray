@@ -190,8 +190,9 @@
 - (void)drawClockFace {
 	CGFloat angle;
 
-    self.layer.contentsScale = [UIScreen mainScreen].scale;
-
+    if ([self.layer respondsToSelector:@selector(setContentsScale:)])
+        [self.layer setContentsScale:[[UIScreen mainScreen] scale]];
+    
     // =====================
     // = Ticks initializer =
     // =====================
@@ -200,7 +201,8 @@
 
 	for (NSInteger i = 1; i <= 60; ++i) {
 		NoHitCAShapeLayer *tick = [NoHitCAShapeLayer layer];
-        tick.contentsScale = [UIScreen mainScreen].scale;
+        if ([tick respondsToSelector:@selector(setContentsScale:)])
+            [tick setContentsScale:[[UIScreen mainScreen] scale]];
 
 		angle = (CGFloat)((M_PI * 2) / 60.0 * i);
 
@@ -235,7 +237,8 @@
     // = Now initializer =
     // ==========================
 	self.nowLayer = [CAShapeLayer layer];
-    self.nowLayer.contentsScale = [UIScreen mainScreen].scale;
+    if ([self.nowLayer respondsToSelector:@selector(setContentsScale:)])
+        [self.nowLayer setContentsScale:[[UIScreen mainScreen] scale]];
 
     // We make the bounds larger for the hit test, otherwise the target is
     // to damn small for human hands, martians not included
@@ -261,7 +264,8 @@
     // = Start initializer =
     // =========================
 	self.startLayer = [CAShapeLayer layer];
-    self.startLayer.contentsScale = [UIScreen mainScreen].scale;
+    if ([self.startLayer respondsToSelector:@selector(setContentsScale:)])
+        [self.startLayer setContentsScale:[[UIScreen mainScreen] scale]];
 
     // We make the bounds larger for the hit test, otherwise the target is
     // to damn small for human hands, martians not included
@@ -287,7 +291,8 @@
     // = Second initializer =
     // ==========================
 	self.secondLayer = [NoHitCAShapeLayer layer];
-    self.secondLayer.contentsScale = [UIScreen mainScreen].scale;
+    if ([self.secondLayer respondsToSelector:@selector(setContentsScale:)])
+        [self.secondLayer setContentsScale:[[UIScreen mainScreen] scale]];
 
     UIBezierPath *secondHandPath = [UIBezierPath bezierPath];
     [secondHandPath moveToPoint:CGPointMake(3.5, 0)];  // Start at the top
@@ -311,7 +316,8 @@
     // = Second progress ticks initializer =
     // =========================================
 	self.secondProgressTicksLayer             = [NoHitCAShapeLayer layer];
-    self.secondProgressTicksLayer.contentsScale = [UIScreen mainScreen].scale;
+    if ([self.secondProgressTicksLayer respondsToSelector:@selector(setContentsScale:)])
+        [self.secondProgressTicksLayer setContentsScale:[[UIScreen mainScreen] scale]];
 
     // position
 	self.secondProgressTicksLayer.bounds      = CGRectMake(0.0, 0.0, self.bounds.size.width - 100, self.bounds.size.width - 100);
@@ -325,7 +331,8 @@
 		angle = (CGFloat)((M_PI * 2) / 60.0 * i);
 
 		NoHitCAShapeLayer *tick = [NoHitCAShapeLayer layer];
-        tick.contentsScale = [UIScreen mainScreen].scale;
+        if ([tick respondsToSelector:@selector(setContentsScale:)])
+            [tick setContentsScale:[[UIScreen mainScreen] scale]];
 
         // position
 		tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.secondProgressTicksLayer.bounds.size.width / 2);
