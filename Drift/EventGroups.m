@@ -207,6 +207,8 @@
 - (NSSet *)filterOnTag:(Tag *)tag {
     NSMutableSet *changes = [NSMutableSet set];
 
+    self.filter = tag;
+
     for (Event *event in self.events) {
         if (tag && ![event.inTag isEqual:tag]) {
             // Remove if tag is not nill and the event is not a match
@@ -217,7 +219,20 @@
         }
     }
 
-    self.filter = tag;
+    NSSet *minusChanges = [changes objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        Change *change = (Change *)obj;
+        if ([change.type isEqualToString:ChangeUpdate]) {
+            for (Change *c in changes) {
+                if ([c.type isEqualToString:ChangeDelete] && [c.object isEqual:change.object] && c.index == change.index) {
+                    return YES;
+                }
+            }
+        }
+
+        return NO;
+    }];
+
+    [changes minusSet:minusChanges];
 
     return changes;
 }

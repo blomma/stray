@@ -26,4 +26,6 @@
 
 - (EventGroup *)eventGroupAtIndex:(NSUInteger)index;
 
+- (NSSet *)filterOnTag:(Tag *)tag;
+
 @end
