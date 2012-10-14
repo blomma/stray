@@ -37,8 +37,8 @@ NSString *const ChangeUpdate = @"ChangeUpdate";
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"\nindex: %d\ntype: %@\nobject: %@\n",
-            self.index, self.type, self.object];
+    return [NSString stringWithFormat:@"\nindex: %d\ntype: %@\nobject: %@\nparentObject: %@\n",
+            self.index, self.type, self.object, self.parentObject];
 }
 
 @end
