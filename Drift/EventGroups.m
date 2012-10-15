@@ -71,15 +71,14 @@
 #pragma mark Public methods
 
 - (NSSet *)addEvent:(Event *)event {
-    NSMutableArray *changes = [NSMutableArray array];
-    NSMutableSet *eventChanges = [NSMutableSet set];
+    NSMutableSet *changes = [NSMutableSet set];
 
     if (![self.events containsObject:event]) {
         [self.events addObject:event];
     }
 
     if (self.filter && ![event.inTag isEqual:self.filter]) {
-        return [NSSet setWithArray:changes];
+        return changes;
     }
 
 	NSDate *startDate = event.startDate;
@@ -132,7 +131,7 @@
 
             change.object = eventGroup;
 
-            [eventChanges unionSet:[eventGroup addEvent:event]];
+            [changes unionSet:[eventGroup addEvent:event]];
 			[changes addObject:change];
 		}
 
@@ -150,8 +149,9 @@
 		eventSecondsComponent.second -= deltaSecondsComponent.second;
 	}
 
+    // Update insert index for EventGroups
     for (Change *change in changes) {
-        if ([change.type isEqualToString:ChangeInsert]) {
+        if ([change.type isEqualToString:ChangeInsert] && [change.object isKindOfClass:[EventGroup class]]) {
             NSUInteger i = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
                 return [obj isEqual:change.object];
             }];
@@ -161,8 +161,7 @@
 
     self.activeEventGroupIsInvalid = YES;
 
-    [eventChanges unionSet:[NSSet setWithArray:changes]];
-	return eventChanges;
+	return changes;
 }
 
 - (NSSet *)removeEvent:(Event *)event {
