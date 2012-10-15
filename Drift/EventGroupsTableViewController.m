@@ -42,7 +42,7 @@
     self.tableView.dataSource = dataSource;
 
     self.tagViewSubViews = [NSMutableArray new];
-    self.tagView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.7];
+    self.tagView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.8];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
 	                                         selector:@selector(dataModelDidSave:)
@@ -111,6 +111,7 @@
 
         subview.titleLabel.textColor = [UIColor whiteColor];
         subview.titleLabel.textAlignment = NSTextAlignmentCenter;
+        subview.titleLabel.font = [UIFont fontWithName:@"Futura-Medium" size:15];
         subview.titleLabel.backgroundColor = [UIColor clearColor];
 
         [subview setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
