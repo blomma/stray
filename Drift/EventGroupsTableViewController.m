@@ -78,13 +78,11 @@
         }];
     }
 
-    NSSet *changes = [groups filterOnTag:self.selectedTagButton.tagObject];
-    NSSet *eventGroupChanges = [changes objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [[(Change *)obj object] isKindOfClass:[EventGroup class]];
-    }];
+    // TODO: At the moment we ignore the changes since they dont work for
+    // this scenario, instead we do a full reload
+    [groups filterOnTag:self.selectedTagButton.tagObject];
 
     [self.tableView reloadData];
-//    [self.tableView updateWithChanges:eventGroupChanges];
 }
 
 - (void)addTagsToSlider:(UIScrollView*)slider {

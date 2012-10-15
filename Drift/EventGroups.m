@@ -204,6 +204,8 @@
 }
 
 - (NSSet *)filterOnTag:(Tag *)tag {
+    // TODO: Need to rethink how Changes are handled, at the moment
+    // it failts spectacualry when adding several events
     NSMutableSet *changes = [NSMutableSet set];
 
     self.filter = tag;
