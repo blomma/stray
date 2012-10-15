@@ -43,7 +43,7 @@
     self.tableView.dataSource = dataSource;
 
     self.tagViewSubViews = [NSMutableArray new];
-    self.tagView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.8];
+    self.tagView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.65];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
 	                                         selector:@selector(dataModelDidSave:)
