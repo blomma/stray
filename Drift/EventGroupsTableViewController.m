@@ -25,6 +25,7 @@
 @property (nonatomic) EventGroupsTableViewDataSource *dataSource;
 @property (nonatomic) NSMutableArray *tagViewSubViews;
 @property (nonatomic) TagButton *selectedTagButton;
+@property (nonatomic) Tag *selectedTag;
 
 @end
 
@@ -71,6 +72,7 @@
     }];
 
     self.selectedTagButton = [self.selectedTagButton isEqual:sender] ? nil : sender;
+    self.selectedTag = self.selectedTagButton.tagObject;
 
     if (self.selectedTagButton) {
         [UIView animateWithDuration:0.2 animations:^{
@@ -94,6 +96,7 @@
     }
 
     [self.tagViewSubViews removeAllObjects];
+    self.selectedTagButton = nil;
 
     // define number and size of elements
     NSUInteger numElements = tags.count;
@@ -111,6 +114,14 @@
         subview.titleLabel.textAlignment = NSTextAlignmentCenter;
         subview.titleLabel.font = [UIFont fontWithName:@"Futura-Medium" size:15];
         subview.titleLabel.backgroundColor = [UIColor clearColor];
+
+        UIColor *backgroundColor = [UIColor clearColor];
+        if ([tag isEqual:self.selectedTag]) {
+            self.selectedTagButton = subview;
+            backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
+        }
+
+        subview.backgroundColor = backgroundColor;
 
         [subview setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
         // select a differing red value so that we can distinguish our added subviews
