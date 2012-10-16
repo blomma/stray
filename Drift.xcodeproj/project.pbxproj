@@ -40,8 +40,6 @@
 		9E21F926156EA9510075EAAC /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */; };
 		9E21F929156EAA2F0075EAAC /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F928156EAA2F0075EAAC /* Event.m */; };
 		9E2200E016088C0E008623F3 /* UIPageViewController+UIPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E2200DF16088C0E008623F3 /* UIPageViewController+UIPageControl.m */; };
-		9E2CFDE216218FAE004D9D8D /* TableViewGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E2CFDDC16218FAE004D9D8D /* TableViewGestureRecognizer.m */; };
-		9E2CFDE416218FAE004D9D8D /* TransformableTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E2CFDDF16218FAE004D9D8D /* TransformableTableViewCell.m */; };
 		9E2CFDE9162190E8004D9D8D /* TagsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E2CFDE8162190E8004D9D8D /* TagsTableViewController.m */; };
 		9E2F076E161745B400F1C24D /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E2F076D161745B400F1C24D /* DataManager.m */; };
 		9E2F077416175D7000F1C24D /* UICollectionView+Change.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E2F077316175D7000F1C24D /* UICollectionView+Change.m */; };
@@ -71,6 +69,8 @@
 		9E895EC0161767F20083037B /* UITableView+Change.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E895EBF161767F20083037B /* UITableView+Change.m */; };
 		9E895EC416176DBD0083037B /* Change.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E895EC316176DBD0083037B /* Change.m */; };
 		9E89816F15A0BC2900E22EA7 /* EventGroupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */; };
+		9E9239DB162D4F9B00E265E6 /* TableViewGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239D8162D4F9B00E265E6 /* TableViewGestureRecognizer.m */; };
+		9E9239DC162D4F9B00E265E6 /* TransformableTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239DA162D4F9B00E265E6 /* TransformableTableViewCell.m */; };
 		9E92637115EF350D00393946 /* _Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E92637015EF350D00393946 /* _Tag.m */; };
 		9E9C237815F3617200572FB7 /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C237715F3617100572FB7 /* EventsViewController.m */; };
 		9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB520E15C9553C008952FB /* NSDate+Utilities.m */; };
@@ -125,10 +125,6 @@
 		9E21F928156EAA2F0075EAAC /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		9E2200DE16088C0E008623F3 /* UIPageViewController+UIPageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIPageViewController+UIPageControl.h"; sourceTree = "<group>"; };
 		9E2200DF16088C0E008623F3 /* UIPageViewController+UIPageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIPageViewController+UIPageControl.m"; sourceTree = "<group>"; };
-		9E2CFDDB16218FAE004D9D8D /* TableViewGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TableViewGestureRecognizer.h; path = ../JTGestureBasedTableView/TableViewGestureRecognizer.h; sourceTree = "<group>"; };
-		9E2CFDDC16218FAE004D9D8D /* TableViewGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TableViewGestureRecognizer.m; path = ../JTGestureBasedTableView/TableViewGestureRecognizer.m; sourceTree = "<group>"; };
-		9E2CFDDE16218FAE004D9D8D /* TransformableTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TransformableTableViewCell.h; path = ../JTGestureBasedTableView/TransformableTableViewCell.h; sourceTree = "<group>"; };
-		9E2CFDDF16218FAE004D9D8D /* TransformableTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TransformableTableViewCell.m; path = ../JTGestureBasedTableView/TransformableTableViewCell.m; sourceTree = "<group>"; };
 		9E2CFDE7162190E8004D9D8D /* TagsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagsTableViewController.h; sourceTree = "<group>"; };
 		9E2CFDE8162190E8004D9D8D /* TagsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagsTableViewController.m; sourceTree = "<group>"; };
 		9E2F076C161745B400F1C24D /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
@@ -175,6 +171,10 @@
 		9E895EC316176DBD0083037B /* Change.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Change.m; sourceTree = "<group>"; };
 		9E89816D15A0BC2900E22EA7 /* EventGroupTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroupTableViewCell.h; sourceTree = "<group>"; };
 		9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroupTableViewCell.m; sourceTree = "<group>"; };
+		9E9239D7162D4F9B00E265E6 /* TableViewGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewGestureRecognizer.h; sourceTree = "<group>"; };
+		9E9239D8162D4F9B00E265E6 /* TableViewGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewGestureRecognizer.m; sourceTree = "<group>"; };
+		9E9239D9162D4F9B00E265E6 /* TransformableTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransformableTableViewCell.h; sourceTree = "<group>"; };
+		9E9239DA162D4F9B00E265E6 /* TransformableTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransformableTableViewCell.m; sourceTree = "<group>"; };
 		9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-2.xcdatamodel"; sourceTree = "<group>"; };
 		9E92636F15EF350D00393946 /* _Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Tag.h; sourceTree = "<group>"; };
 		9E92637015EF350D00393946 /* _Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Tag.m; sourceTree = "<group>"; };
@@ -398,10 +398,10 @@
 		9E9C232F15F2895000572FB7 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				9E2CFDDB16218FAE004D9D8D /* TableViewGestureRecognizer.h */,
-				9E2CFDDC16218FAE004D9D8D /* TableViewGestureRecognizer.m */,
-				9E2CFDDE16218FAE004D9D8D /* TransformableTableViewCell.h */,
-				9E2CFDDF16218FAE004D9D8D /* TransformableTableViewCell.m */,
+				9E9239D7162D4F9B00E265E6 /* TableViewGestureRecognizer.h */,
+				9E9239D8162D4F9B00E265E6 /* TableViewGestureRecognizer.m */,
+				9E9239D9162D4F9B00E265E6 /* TransformableTableViewCell.h */,
+				9E9239DA162D4F9B00E265E6 /* TransformableTableViewCell.m */,
 				9E63E1D515EA3338009C0A2D /* NoHitCAShapeLayer.h */,
 				9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */,
 				9E89816D15A0BC2900E22EA7 /* EventGroupTableViewCell.h */,
@@ -628,10 +628,10 @@
 				9E15897D16183F7100DB19EB /* Tags.m in Sources */,
 				9E158983161A3B2D00DB19EB /* _State.m in Sources */,
 				9E158984161A3B2D00DB19EB /* State.m in Sources */,
-				9E2CFDE216218FAE004D9D8D /* TableViewGestureRecognizer.m in Sources */,
-				9E2CFDE416218FAE004D9D8D /* TransformableTableViewCell.m in Sources */,
 				9E2CFDE9162190E8004D9D8D /* TagsTableViewController.m in Sources */,
 				9E14D452162B3D3F008D9E43 /* TagButton.m in Sources */,
+				9E9239DB162D4F9B00E265E6 /* TableViewGestureRecognizer.m in Sources */,
+				9E9239DC162D4F9B00E265E6 /* TransformableTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
