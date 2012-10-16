@@ -36,7 +36,6 @@
 		9E158983161A3B2D00DB19EB /* _State.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E158980161A3B2C00DB19EB /* _State.m */; };
 		9E158984161A3B2D00DB19EB /* State.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E158982161A3B2D00DB19EB /* State.m */; };
 		9E15DE0116024161007146CE /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E15DE0016024161007146CE /* libz.dylib */; };
-		9E1D218215DEB12E00FB7C28 /* EventGroupsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E1D218115DEB12E00FB7C28 /* EventGroupsTest.m */; };
 		9E21F926156EA9510075EAAC /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */; };
 		9E21F929156EAA2F0075EAAC /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F928156EAA2F0075EAAC /* Event.m */; };
 		9E2200E016088C0E008623F3 /* UIPageViewController+UIPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E2200DF16088C0E008623F3 /* UIPageViewController+UIPageControl.m */; };
@@ -49,10 +48,6 @@
 		9E42F1FB15570FD60087F602 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F1FA15570FD60087F602 /* main.m */; };
 		9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */; };
 		9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F20015570FD60087F602 /* MainStoryboard.storyboard */; };
-		9E42F20D15570FD70087F602 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F20C15570FD70087F602 /* SenTestingKit.framework */; };
-		9E42F20E15570FD70087F602 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1EE15570FD60087F602 /* UIKit.framework */; };
-		9E42F20F15570FD70087F602 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F015570FD60087F602 /* Foundation.framework */; };
-		9E42F21715570FD70087F602 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F21515570FD70087F602 /* InfoPlist.strings */; };
 		9E42F22915571E9C0087F602 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F22815571E9C0087F602 /* RootViewController.m */; };
 		9E4B3DD7160463F000CBC99E /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E4B3DD3160463F000CBC99E /* libTestFlight.a */; };
 		9E4B3DD8160463F000CBC99E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9E4B3DD4160463F000CBC99E /* README.md */; };
@@ -86,16 +81,6 @@
 		9EE939C416172D090035DD5F /* NSManagedObject+ActiveRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE939C116172D090035DD5F /* NSManagedObject+ActiveRecord.m */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		9E42F21015570FD70087F602 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9E42F1E115570FD60087F602 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9E42F1E915570FD60087F602;
-			remoteInfo = Drift;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		9E00A75D157734AE002FC707 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EventViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9E00A75E157734AE002FC707 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -118,8 +103,6 @@
 		9E158981161A3B2C00DB19EB /* State.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = State.h; sourceTree = "<group>"; };
 		9E158982161A3B2D00DB19EB /* State.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = State.m; sourceTree = "<group>"; };
 		9E15DE0016024161007146CE /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		9E1D218015DEB12E00FB7C28 /* EventGroupsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroupsTest.h; sourceTree = "<group>"; };
-		9E1D218115DEB12E00FB7C28 /* EventGroupsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroupsTest.m; sourceTree = "<group>"; };
 		9E21F925156EA9510075EAAC /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
 		9E21F927156EAA2F0075EAAC /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		9E21F928156EAA2F0075EAAC /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
@@ -131,7 +114,7 @@
 		9E2F076D161745B400F1C24D /* DataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
 		9E2F077216175D7000F1C24D /* UICollectionView+Change.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionView+Change.h"; sourceTree = "<group>"; };
 		9E2F077316175D7000F1C24D /* UICollectionView+Change.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+Change.m"; sourceTree = "<group>"; };
-		9E42F1EA15570FD60087F602 /* Drift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Drift.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E42F1EA15570FD60087F602 /* Stray.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stray.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E42F1EE15570FD60087F602 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		9E42F1F015570FD60087F602 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9E42F1F215570FD60087F602 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -142,10 +125,7 @@
 		9E42F1FD15570FD60087F602 /* DriftAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DriftAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DriftAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9E42F20115570FD60087F602 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		9E42F20B15570FD70087F602 /* DriftTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DriftTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E42F20C15570FD70087F602 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		9E42F21415570FD70087F602 /* DriftTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DriftTests-Info.plist"; sourceTree = "<group>"; };
-		9E42F21615570FD70087F602 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9E42F22715571E9C0087F602 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = RootViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9E42F22815571E9C0087F602 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RootViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9E4B3DD3160463F000CBC99E /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
@@ -215,16 +195,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9E42F20715570FD70087F602 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9E42F20D15570FD70087F602 /* SenTestingKit.framework in Frameworks */,
-				9E42F20E15570FD70087F602 /* UIKit.framework in Frameworks */,
-				9E42F20F15570FD70087F602 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -251,7 +221,6 @@
 			children = (
 				9E15DDA116023FE4007146CE /* Vendor */,
 				9E42F1F415570FD60087F602 /* Drift */,
-				9E42F21215570FD70087F602 /* DriftTests */,
 				9E42F1ED15570FD60087F602 /* Frameworks */,
 				9E42F1EB15570FD60087F602 /* Products */,
 			);
@@ -260,8 +229,7 @@
 		9E42F1EB15570FD60087F602 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9E42F1EA15570FD60087F602 /* Drift.app */,
-				9E42F20B15570FD70087F602 /* DriftTests.octest */,
+				9E42F1EA15570FD60087F602 /* Stray.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -303,25 +271,6 @@
 				9E42F1F615570FD60087F602 /* Drift-Info.plist */,
 				9E42F1F715570FD60087F602 /* InfoPlist.strings */,
 				9E42F1FC15570FD60087F602 /* Drift-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		9E42F21215570FD70087F602 /* DriftTests */ = {
-			isa = PBXGroup;
-			children = (
-				9E1D218015DEB12E00FB7C28 /* EventGroupsTest.h */,
-				9E1D218115DEB12E00FB7C28 /* EventGroupsTest.m */,
-				9E42F21315570FD70087F602 /* Supporting Files */,
-			);
-			path = DriftTests;
-			sourceTree = "<group>";
-		};
-		9E42F21315570FD70087F602 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				9E42F21415570FD70087F602 /* DriftTests-Info.plist */,
-				9E42F21515570FD70087F602 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -479,27 +428,8 @@
 			);
 			name = Drift;
 			productName = Drift;
-			productReference = 9E42F1EA15570FD60087F602 /* Drift.app */;
+			productReference = 9E42F1EA15570FD60087F602 /* Stray.app */;
 			productType = "com.apple.product-type.application";
-		};
-		9E42F20A15570FD70087F602 /* DriftTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9E42F22015570FD70087F602 /* Build configuration list for PBXNativeTarget "DriftTests" */;
-			buildPhases = (
-				9E42F20615570FD70087F602 /* Sources */,
-				9E42F20715570FD70087F602 /* Frameworks */,
-				9E42F20815570FD70087F602 /* Resources */,
-				9E42F20915570FD70087F602 /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				9E42F21115570FD70087F602 /* PBXTargetDependency */,
-			);
-			name = DriftTests;
-			productName = DriftTests;
-			productReference = 9E42F20B15570FD70087F602 /* DriftTests.octest */;
-			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
 
@@ -523,7 +453,6 @@
 			projectRoot = "";
 			targets = (
 				9E42F1E915570FD60087F602 /* Drift */,
-				9E42F20A15570FD70087F602 /* DriftTests */,
 				9E7CEDEC157B755000718FA6 /* Mogenerator */,
 			);
 		};
@@ -554,30 +483,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9E42F20815570FD70087F602 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9E42F21715570FD70087F602 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		9E42F20915570FD70087F602 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
 		9E7CEDF1157B756600718FA6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -635,23 +543,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9E42F20615570FD70087F602 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9E1D218215DEB12E00FB7C28 /* EventGroupsTest.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		9E42F21115570FD70087F602 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9E42F1E915570FD60087F602 /* Drift */;
-			targetProxy = 9E42F21015570FD70087F602 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		9E42F1F715570FD60087F602 /* InfoPlist.strings */ = {
@@ -668,14 +560,6 @@
 				9E42F20115570FD60087F602 /* en */,
 			);
 			name = MainStoryboard.storyboard;
-			sourceTree = "<group>";
-		};
-		9E42F21515570FD70087F602 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9E42F21615570FD70087F602 /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -771,7 +655,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlightSDK1.1\"",
 				);
-				PRODUCT_NAME = Drift;
+				PRODUCT_NAME = Stray;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
@@ -791,44 +675,10 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlightSDK1.1\"",
 				);
-				PRODUCT_NAME = Drift;
+				PRODUCT_NAME = Stray;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		9E42F22115570FD70087F602 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Drift.app/Drift";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
-				INFOPLIST_FILE = "DriftTests/DriftTests-Info.plist";
-				PRODUCT_NAME = DriftTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Debug;
-		};
-		9E42F22215570FD70087F602 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Drift.app/Drift";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
-				INFOPLIST_FILE = "DriftTests/DriftTests-Info.plist";
-				PRODUCT_NAME = DriftTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};
@@ -897,27 +747,10 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlightSDK1.1\"",
 				);
-				PRODUCT_NAME = Drift;
+				PRODUCT_NAME = Stray;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
-			};
-			name = "Ad Hoc";
-		};
-		9E8B8AE41594DA5100C8413E /* Ad Hoc */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Drift.app/Drift";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
-				INFOPLIST_FILE = "DriftTests/DriftTests-Info.plist";
-				PRODUCT_NAME = DriftTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = "Ad Hoc";
 		};
@@ -947,16 +780,6 @@
 				9E42F21E15570FD70087F602 /* Debug */,
 				9E42F21F15570FD70087F602 /* Release */,
 				9E8B8AE31594DA5100C8413E /* Ad Hoc */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9E42F22015570FD70087F602 /* Build configuration list for PBXNativeTarget "DriftTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9E42F22115570FD70087F602 /* Debug */,
-				9E42F22215570FD70087F602 /* Release */,
-				9E8B8AE41594DA5100C8413E /* Ad Hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
