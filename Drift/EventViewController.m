@@ -8,7 +8,6 @@
 
 #import "Event.h"
 #import "EventViewController.h"
-#import <QuartzCore/QuartzCore.h>
 #import "NSManagedObject+ActiveRecord.h"
 #import "Tag.h"
 #import "DataManager.h"
@@ -92,8 +91,10 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     Event *event = [[DataManager instance] state].inEvent;
 
-    TagsTableViewController *tagsTableViewController = [segue destinationViewController];
-    tagsTableViewController.event = event;
+    if ([[segue destinationViewController] isKindOfClass:[TagsTableViewController class]]) {
+        TagsTableViewController *tagsTableViewController = [segue destinationViewController];
+        tagsTableViewController.event = event;
+    }
 }
 
 #pragma mark -

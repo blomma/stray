@@ -22,6 +22,7 @@ FOUNDATION_EXPORT NSString *const kEventGroupChangesKey;
 @property (nonatomic, readonly) EventGroups *eventGroups;
 @property (nonatomic, readonly) NSArray *tags;
 @property (nonatomic, readonly) State *state;
+@property (nonatomic, readonly) NSArray *events;
 
 + (DataManager *)instance;
 

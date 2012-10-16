@@ -11,7 +11,7 @@
 #import "EventGroups.h"
 #import "EventGroupsTableViewController.h"
 #import "EventGroupsTableViewDataSource.h"
-#import "EventGroupViewController.h"
+#import "EventsViewController.h"
 #import "NSManagedObject+ActiveRecord.h"
 #import "Tag.h"
 #import "UITableView+Change.h"
@@ -21,7 +21,7 @@
 
 @interface EventGroupsTableViewController ()
 
-@property (nonatomic) EventGroupViewController *eventGroupViewController;
+@property (nonatomic) EventsViewController *eventGroupViewController;
 @property (nonatomic) EventGroupsTableViewDataSource *dataSource;
 @property (nonatomic) NSMutableArray *tagViewSubViews;
 @property (nonatomic) TagButton *selectedTagButton;
@@ -142,15 +142,6 @@
     slider.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
 
     DLog(@"%u", self.tagView.subviews.count);
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    [sender setSelected:NO animated:YES];
-
-    EventGroupViewController *eventGroupViewController = [segue destinationViewController];
-    EventGroup *eventGroup = [[[DataManager instance] eventGroups] eventGroupAtIndex:(NSUInteger)[self.tableView indexPathForSelectedRow].row];
-
-    eventGroupViewController.eventGroup = eventGroup;
 }
 
 #pragma mark -

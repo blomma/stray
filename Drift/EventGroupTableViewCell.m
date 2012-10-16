@@ -9,12 +9,7 @@
 #import "EventGroupTableViewCell.h"
 
 @interface EventGroupTableViewCell ()
-
 @end
 
 @implementation EventGroupTableViewCell
-
-#pragma mark -
-#pragma mark Lifecycle
-
 @end

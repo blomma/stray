@@ -72,8 +72,7 @@
 		9E895EC416176DBD0083037B /* Change.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E895EC316176DBD0083037B /* Change.m */; };
 		9E89816F15A0BC2900E22EA7 /* EventGroupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */; };
 		9E92637115EF350D00393946 /* _Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E92637015EF350D00393946 /* _Tag.m */; };
-		9E9C237815F3617200572FB7 /* EventGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C237715F3617100572FB7 /* EventGroupViewController.m */; };
-		9E9C239815F92EF500572FB7 /* EventGroupTableViewDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C239715F92EF500572FB7 /* EventGroupTableViewDataSource.m */; };
+		9E9C237815F3617200572FB7 /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C237715F3617100572FB7 /* EventsViewController.m */; };
 		9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB520E15C9553C008952FB /* NSDate+Utilities.m */; };
 		9EAE7DEE1603C1C5007F32EC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DED1603C1C5007F32EC /* Default-568h@2x.png */; };
 		9EAE7DF91603D006007F32EC /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DF81603D006007F32EC /* Default@2x.png */; };
@@ -179,10 +178,8 @@
 		9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-2.xcdatamodel"; sourceTree = "<group>"; };
 		9E92636F15EF350D00393946 /* _Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Tag.h; sourceTree = "<group>"; };
 		9E92637015EF350D00393946 /* _Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Tag.m; sourceTree = "<group>"; };
-		9E9C237615F3617100572FB7 /* EventGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroupViewController.h; sourceTree = "<group>"; };
-		9E9C237715F3617100572FB7 /* EventGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventGroupViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		9E9C239615F92EF400572FB7 /* EventGroupTableViewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroupTableViewDataSource.h; sourceTree = "<group>"; };
-		9E9C239715F92EF500572FB7 /* EventGroupTableViewDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroupTableViewDataSource.m; sourceTree = "<group>"; };
+		9E9C237615F3617100572FB7 /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
+		9E9C237715F3617100572FB7 /* EventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9EAB520D15C9553C008952FB /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
 		9EAB520E15C9553C008952FB /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utilities.m"; sourceTree = "<group>"; };
 		9EAE7DED1603C1C5007F32EC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -386,10 +383,8 @@
 				9E42F22815571E9C0087F602 /* RootViewController.m */,
 				9E00A75D157734AE002FC707 /* EventViewController.h */,
 				9E00A75E157734AE002FC707 /* EventViewController.m */,
-				9E9C237615F3617100572FB7 /* EventGroupViewController.h */,
-				9E9C237715F3617100572FB7 /* EventGroupViewController.m */,
-				9E9C239615F92EF400572FB7 /* EventGroupTableViewDataSource.h */,
-				9E9C239715F92EF500572FB7 /* EventGroupTableViewDataSource.m */,
+				9E9C237615F3617100572FB7 /* EventsViewController.h */,
+				9E9C237715F3617100572FB7 /* EventsViewController.m */,
 				9E00A76115773859002FC707 /* EventGroupsTableViewController.h */,
 				9E00A76215773859002FC707 /* EventGroupsTableViewController.m */,
 				9E63E1C915E91742009C0A2D /* EventGroupsTableViewDataSource.h */,
@@ -619,8 +614,7 @@
 				9E63E1CB15E91743009C0A2D /* EventGroupsTableViewDataSource.m in Sources */,
 				9E63E1D715EA3339009C0A2D /* NoHitCAShapeLayer.m in Sources */,
 				9E92637115EF350D00393946 /* _Tag.m in Sources */,
-				9E9C237815F3617200572FB7 /* EventGroupViewController.m in Sources */,
-				9E9C239815F92EF500572FB7 /* EventGroupTableViewDataSource.m in Sources */,
+				9E9C237815F3617200572FB7 /* EventsViewController.m in Sources */,
 				9E561DDB15FA08FB008D3895 /* EventTableViewCell.m in Sources */,
 				9E2200E016088C0E008623F3 /* UIPageViewController+UIPageControl.m in Sources */,
 				9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */,

@@ -13,18 +13,6 @@
 #import "TransformableTableViewCell.h"
 #import "UITableView+Change.h"
 
-@interface PlaceHolderAdding : NSObject
-@end
-
-@implementation PlaceHolderAdding
-@end
-
-@interface PlaceHolderGrabbed : NSObject
-@end
-
-@implementation PlaceHolderGrabbed
-@end
-
 @interface TagsTableViewController ()<TableViewGestureEditingRowDelegate, TableViewGestureAddingRowDelegate, TableViewGestureMoveRowDelegate, TableViewCellEditingRowDelegate>
 
 @property (nonatomic) TableViewGestureRecognizer *tableViewRecognizer;
@@ -36,6 +24,9 @@
 @end
 
 @implementation TagsTableViewController
+
+static NSString *grabbedTableViewCellIdentifier  = @"grabbedTableViewCellIdentifier";
+static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
 
 #define COMMITING_EDIT_CELL_LENGTH 60
 
@@ -49,16 +40,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     self.tags = [[Tags alloc] initWithTags:[[DataManager instance] tags]];
 
-    NSLog(@"%@", [UIFont fontNamesForFamilyName:@"Futura"]);
-
-    // Setup your tableView.delegate and tableView.datasource,
-    // then enable gesture recognition in one line.
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"grabbedDownTableViewCellIdentifier"];
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"pullDownTableViewCellIdentifier"];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:grabbedTableViewCellIdentifier];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:pullDownTableViewCellIdentifier];
 }
 
 #pragma mark UITextFieldDelegate
@@ -103,14 +91,11 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *grabbedDownTableViewCellIdentifier  = @"grabbedDownTableViewCellIdentifier";
-	static NSString *pullDownTableViewCellIdentifier  = @"pullDownTableViewCellIdentifier";
 	static NSString *tagsTableViewCellIdentifier      = @"TagsTableViewCell";
 
     id object = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
 
-    if ([object isKindOfClass:[PlaceHolderAdding class]] && indexPath.row == 0) {
-        DLog(@"pulldown");
+    if ([object isKindOfClass:[NSString class]] && [object isEqualToString:pullDownTableViewCellIdentifier] && indexPath.row == 0) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:pullDownTableViewCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -120,20 +105,17 @@
 
         if (cell.frame.size.height > COMMITING_CREATE_CELL_HEIGHT * 2) {
             cell.textLabel.text = @"Close";
-            cell.contentView.backgroundColor = [UIColor clearColor];
             cell.contentView.backgroundColor = [UIColor colorWithRed:0.843f
                                                                green:0.306f
                                                                 blue:0.314f
                                                                alpha:1];
         } else if (cell.frame.size.height >= COMMITING_CREATE_CELL_HEIGHT) {
-            cell.contentView.transform = CGAffineTransformMakeScale(1.0f, 1.0f);
             cell.textLabel.text = @"Release to create cell...";
             cell.contentView.backgroundColor = [UIColor colorWithRed:0.510f
                                                                green:0.784f
                                                                 blue:0.431f
                                                                alpha:1];
         } else {
-            cell.contentView.transform = CGAffineTransformMakeScale(1.0f, 1.0f);
             cell.textLabel.textColor = [UIColor whiteColor];
             cell.textLabel.text = @"Continue Pulling...";
             cell.contentView.backgroundColor = [UIColor colorWithRed:0.510f
@@ -143,14 +125,12 @@
         }
 
         return cell;
-    } else if ([object isKindOfClass:[PlaceHolderGrabbed class]]) {
-        DLog(@"grabber");
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:grabbedDownTableViewCellIdentifier];
+    } else if ([object isKindOfClass:[NSString class]] && [object isEqualToString:grabbedTableViewCellIdentifier]) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:grabbedTableViewCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
         return cell;
     } else {
-        DLog(@"normal");
         TransformableTableViewCell *cell = (TransformableTableViewCell *)[tableView dequeueReusableCellWithIdentifier:tagsTableViewCellIdentifier];
 
         UIImage* background = [UIImage imageNamed:@"low_contrast_linen"];
@@ -223,7 +203,7 @@
 }
 
 - (void)gestureRecognizer:(TableViewGestureRecognizer *)gestureRecognizer needsAddRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSSet *changes = [self.tags insertObject:[PlaceHolderAdding new] atIndex:(NSUInteger)indexPath.row];
+    NSSet *changes = [self.tags insertObject:pullDownTableViewCellIdentifier atIndex:(NSUInteger)indexPath.row];
     [self.tableView updateWithChanges:changes];
 }
 
@@ -337,7 +317,7 @@
 - (void)gestureRecognizer:(TableViewGestureRecognizer *)gestureRecognizer needsCreatePlaceholderForRowAtIndexPath:(NSIndexPath *)indexPath {
     self.grabbedObject = [self.tags objectAtIndex:indexPath.row];
 
-    NSSet *changes = [self.tags replaceObjectAtIndex:(NSUInteger)indexPath.row withObject:[PlaceHolderGrabbed new]];
+    NSSet *changes = [self.tags replaceObjectAtIndex:(NSUInteger)indexPath.row withObject:grabbedTableViewCellIdentifier];
     [self.tableView updateWithChanges:changes];
 }
 

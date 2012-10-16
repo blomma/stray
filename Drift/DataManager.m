@@ -58,6 +58,10 @@ NSString *const kTagChangesKey = @"kTagChangesKey";
     return [Tag all];
 }
 
+- (NSArray *)events {
+    return [Event all];
+}
+
 #pragma mark -
 #pragma mark Class methods
 

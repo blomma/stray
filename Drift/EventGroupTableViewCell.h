@@ -10,8 +10,6 @@
 
 @interface EventGroupTableViewCell : UITableViewCell
 
-@property (nonatomic) EventGroup *eventGroup;
-
 @property (nonatomic, weak) IBOutlet UILabel *hours;
 @property (nonatomic, weak) IBOutlet UILabel *minutes;
 @property (nonatomic, weak) IBOutlet UILabel *day;

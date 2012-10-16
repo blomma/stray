@@ -7,11 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EventGroups.h"
-#import "EventGroupTableViewCell.h"
 
 @interface EventGroupsTableViewDataSource : NSObject <UITableViewDataSource>
-
-- (void)tableView:(UITableView *)tableView refreshCell:(EventGroupTableViewCell *)cell;
-
 @end

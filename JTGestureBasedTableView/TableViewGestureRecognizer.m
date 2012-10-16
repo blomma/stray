@@ -420,10 +420,6 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
 @implementation UITableView (TableViewGestureDelegate)
 
 - (TableViewGestureRecognizer *)enableGestureTableViewWithDelegate:(id)delegate {
-    if ( ! [delegate conformsToProtocol:@protocol(TableViewGestureAddingRowDelegate)]
-        && ! [delegate conformsToProtocol:@protocol(TableViewGestureEditingRowDelegate)]
-        && ! [delegate conformsToProtocol:@protocol(TableViewGestureMoveRowDelegate)]) {
-    }
     TableViewGestureRecognizer *recognizer = [TableViewGestureRecognizer gestureRecognizerWithTableView:self delegate:delegate];
     return recognizer;
 }

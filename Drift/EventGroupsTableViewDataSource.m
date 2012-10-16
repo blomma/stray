@@ -48,21 +48,6 @@
 	EventGroup *eventGroup = [[[DataManager instance] eventGroups] eventGroupAtIndex:(NSUInteger)indexPath.row];
 
 	EventGroupTableViewCell *cell = (EventGroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    cell.eventGroup = eventGroup;
-
-    [self tableView:tableView refreshCell:cell];
-
-	return cell;
-}
-
-#pragma mark -
-#pragma mark Private methods
-
-#pragma mark -
-#pragma mark Public methods
-
-- (void)tableView:(UITableView *)tableView refreshCell:(EventGroupTableViewCell *)cell {
-	EventGroup *eventGroup = cell.eventGroup;
 
 	NSDateComponents *components = eventGroup.timeActiveComponents;
 
@@ -76,6 +61,8 @@
 	cell.year.text     = [NSString stringWithFormat:@"%04d", components.year];
 	cell.month.text    = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
     cell.weekDay.text  = [[self.standaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString];
+
+	return cell;
 }
 
 @end
