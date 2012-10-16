@@ -15,7 +15,6 @@
 #import "TableViewGestureRecognizer.h"
 
 #define COMMITING_CREATE_CELL_HEIGHT 44
-#define NORMAL_CELL_FINISHING_HEIGHT 44
 
 static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
 
@@ -106,10 +105,12 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
         if (cell.frame.size.height > COMMITING_CREATE_CELL_HEIGHT * 2) {
             cell.textLabel.textColor = [UIColor whiteColor];
             cell.textLabel.text = @"Close";
+            CGFloat alpha = 1 - (COMMITING_CREATE_CELL_HEIGHT * 2 / cell.frame.size.height);
+            
             cell.contentView.backgroundColor = [UIColor colorWithRed:0.843f
                                                                green:0.306f
                                                                 blue:0.314f
-                                                               alpha:1];
+                                                               alpha:alpha];
         } else {
             cell.textLabel.text = @"";
             cell.contentView.backgroundColor = [UIColor clearColor];
