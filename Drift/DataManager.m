@@ -35,6 +35,35 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
             self.state.name = @"default";
         }
 
+//        if ([Event all].count == 0) {
+//            NSDate *nowDate = [NSDate dateWithTimeIntervalSinceReferenceDate:0];
+//            NSTimeInterval interval = 60 * 60 * 5;
+//
+//            Tag *tag = [Tag create];
+//            tag.name = @"Test1";
+//            
+//            for (int i = 0; i < 1000; i++) {
+//                Event *event = [Event create];
+//                event.startDate = nowDate;
+//                nowDate = [nowDate dateByAddingTimeInterval:interval];
+//                event.stopDate = nowDate;
+//                event.inTag = tag;
+//            }
+//
+//            Tag *tag2 = [Tag create];
+//            tag2.name = @"Test2";
+//
+//            for (int i = 0; i < 1000; i++) {
+//                Event *event = [Event create];
+//                event.startDate = nowDate;
+//                nowDate = [nowDate dateByAddingTimeInterval:interval];
+//                event.stopDate = nowDate;
+//                event.inTag = tag2;
+//            }
+//        }
+//#ifdef ADHOC
+//#endif
+
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(objectsDidChange:)
                                                      name:NSManagedObjectContextObjectsDidChangeNotification
@@ -67,6 +96,9 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 
 	return sharedDataManager;
 }
+
+#pragma mark -
+#pragma mark Public methods
 
 - (Tag *)createTag {
     return [Tag create];

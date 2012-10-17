@@ -14,6 +14,7 @@
 #import "Change.h"
 #import "TagButton.h"
 #import "EventGroupTableViewCell.h"
+#import "Global.h"
 
 @interface EventGroupsTableViewController ()
 
@@ -46,7 +47,8 @@
 
     self.eventGroups = [[EventGroups alloc] initWithEvents:[DataManager instance].events filter:self.selectedTag];
 
-    self.calendar = [NSCalendar currentCalendar];
+    self.calendar = [Global instance].calendar;
+
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
     self.standaloneWeekdaySymbols = [[NSDateFormatter new] standaloneWeekdaySymbols];
 
@@ -85,9 +87,7 @@
 
     self.state.activeTagFilter = self.selectedTag;
 
-    // TODO: At the moment we ignore the changes since they dont work for
-    // this scenario, instead we do a full reload
-    [self.eventGroups filterOnTag:self.selectedTag];
+    self.eventGroups.filter = self.selectedTag;
 
     [self.tableView reloadData];
 }
@@ -164,14 +164,14 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    DLog(@"eventGroups count %u", self.eventGroups.count);
-	return (NSInteger)self.eventGroups.count;
+    DLog(@"eventGroups count %u", self.eventGroups.eventGroups.count);
+    return (NSInteger)self.eventGroups.eventGroups.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *CellIdentifier = @"EventGroupTableViewCell";
 
-	EventGroup *eventGroup = [self.eventGroups eventGroupAtIndex:(NSUInteger)indexPath.row];
+    EventGroup *eventGroup = [self.eventGroups.eventGroups objectAtIndex:(NSUInteger)indexPath.row];
 
 	EventGroupTableViewCell *cell = (EventGroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 

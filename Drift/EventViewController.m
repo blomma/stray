@@ -13,6 +13,7 @@
 #import "DataManager.h"
 #import "Change.h"
 #import "TagsTableViewController.h"
+#import "Global.h"
 
 @interface EventViewController ()
 
@@ -40,7 +41,7 @@
     [self reset];
 
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
-    self.calendar = [NSCalendar currentCalendar];
+    self.calendar = [Global instance].calendar;
 
 	[self.eventTimerControl addObserver:self
 	                         forKeyPath:@"startDate"

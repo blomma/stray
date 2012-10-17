@@ -9,6 +9,7 @@
 #import "EventGroup.h"
 #import "NSDate+Utilities.h"
 #import "Change.h"
+#import "Global.h"
 
 @interface EventGroup ()
 
@@ -40,7 +41,7 @@
 - (id)initWithDate:(NSDate *)date {
     self = [super init];
 	if (self) {
-        self.calendar  = [NSCalendar currentCalendar];
+        self.calendar = [Global instance].calendar;
 
 		self.groupDate = [date beginningOfDayWithCalendar:self.calendar];
 		self.events    = [NSMutableArray array];
@@ -75,6 +76,24 @@
 
 - (NSUInteger)count {
 	return [self.events count];
+}
+
+- (void)setFilter:(Tag *)filter {
+    if ([filter isEqual:_filter]) {
+        return;
+    }
+
+    _filter = filter;
+	self.timeActiveComponentsIsInvalid = YES;
+}
+
+- (NSArray *)filteredEvents {
+    if (!self.filter) {
+        return self.events;
+    }
+
+    return [self.events filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"inTag == %@",
+                                                     self.filter]];
 }
 
 #pragma mark -

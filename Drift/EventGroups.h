@@ -13,19 +13,12 @@
 @interface EventGroups : NSObject
 
 @property (nonatomic) Tag *filter;
-@property (nonatomic, readonly) NSUInteger count;
-@property (nonatomic, readonly) EventGroup *activeEventGroup;
+@property (nonatomic, readonly) NSArray *eventGroups;
 
-- (id)init;
-- (id)initWithEvents:(NSArray *)events;
 - (id)initWithEvents:(NSArray *)events filter:(Tag *)tag;
 
 - (NSSet *)addEvent:(Event *)event;
 - (NSSet *)removeEvent:(Event *)event;
 - (NSSet *)updateEvent:(Event *)event;
-
-- (EventGroup *)eventGroupAtIndex:(NSUInteger)index;
-
-- (NSSet *)filterOnTag:(Tag *)tag;
 
 @end

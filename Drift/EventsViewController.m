@@ -13,6 +13,7 @@
 #import "UITableView+Change.h"
 #import "DataManager.h"
 #import "TableViewGestureRecognizer.h"
+#import "Global.h"
 
 #define COMMITING_CREATE_CELL_HEIGHT 44
 
@@ -38,7 +39,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.calendar = [NSCalendar currentCalendar];
+    self.calendar = [Global instance].calendar;
 
     self.startDateFormatter = [[NSDateFormatter alloc] init];
     [self.startDateFormatter setDateFormat:@"HH:mm '@' d LLL, y"];

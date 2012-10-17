@@ -7,16 +7,17 @@
 //
 
 #import "Event.h"
+#import "Tag.h"
 
 @interface EventGroup : NSObject
 
-@property (nonatomic, readonly) NSMutableArray *events;
 @property (nonatomic, readonly) NSDate *groupDate;
 @property (nonatomic, readonly) NSDateComponents *timeActiveComponents;
 
-@property (nonatomic, readonly) Event *activeEvent;
-
 @property (nonatomic, readonly) NSUInteger count;
+
+@property (nonatomic) Tag *filter;
+@property (nonatomic, readonly) NSArray *filteredEvents;
 
 - (id)initWithDate:(NSDate *)groupDate;
 - (BOOL)containsEvent:(Event *)event;
