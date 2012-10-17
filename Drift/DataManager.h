@@ -9,19 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "EventGroups.h"
 #import "Tags.h"
-#import "State.h"
+#import "UIState.h"
 
-FOUNDATION_EXPORT NSString *const kDataManagerDidSaveNotification;
-
-FOUNDATION_EXPORT NSString *const kTagChangesKey;
-FOUNDATION_EXPORT NSString *const kEventChangesKey;
-FOUNDATION_EXPORT NSString *const kEventGroupChangesKey;
+FOUNDATION_EXPORT NSString *const kDataManagerObjectsDidChangeNotification;
 
 @interface DataManager : NSObject
 
-@property (nonatomic, readonly) EventGroups *eventGroups;
 @property (nonatomic, readonly) NSArray *tags;
-@property (nonatomic, readonly) State *state;
+@property (nonatomic, readonly) UIState *state;
 @property (nonatomic, readonly) NSArray *events;
 
 + (DataManager *)instance;

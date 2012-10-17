@@ -5,9 +5,11 @@
 
 const struct TagAttributes TagAttributes = {
 	.name = @"name",
+	.sortIndex = @"sortIndex",
 };
 
 const struct TagRelationships TagRelationships = {
+	.heldByActiveTagFilter = @"heldByActiveTagFilter",
 	.heldByEvents = @"heldByEvents",
 };
 
@@ -40,6 +42,11 @@ const struct TagFetchedProperties TagFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"sortIndexValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"sortIndex"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 
 	return keyPaths;
 }
@@ -53,6 +60,36 @@ const struct TagFetchedProperties TagFetchedProperties = {
 
 
 
+
+@dynamic sortIndex;
+
+
+
+- (int64_t)sortIndexValue {
+	NSNumber *result = [self sortIndex];
+	return [result longLongValue];
+}
+
+- (void)setSortIndexValue:(int64_t)value_ {
+	[self setSortIndex:[NSNumber numberWithLongLong:value_]];
+}
+
+- (int64_t)primitiveSortIndexValue {
+	NSNumber *result = [self primitiveSortIndex];
+	return [result longLongValue];
+}
+
+- (void)setPrimitiveSortIndexValue:(int64_t)value_ {
+	[self setPrimitiveSortIndex:[NSNumber numberWithLongLong:value_]];
+}
+
+
+
+
+
+@dynamic heldByActiveTagFilter;
+
+	
 
 @dynamic heldByEvents;
 

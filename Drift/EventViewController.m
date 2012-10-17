@@ -21,6 +21,8 @@
 
 @property (nonatomic) NSDateComponents *previousNowComponents;
 
+@property (nonatomic) UIState *state;
+
 @end
 
 @implementation EventViewController
@@ -31,16 +33,14 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
+    DLog(NSStringFromSelector(_cmd));
+
+    self.state = [DataManager instance].state;
+
     [self reset];
 
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
-
     self.calendar = [NSCalendar currentCalendar];
-
-	[[NSNotificationCenter defaultCenter] addObserver:self
-	                                         selector:@selector(dataModelDidSave:)
-	                                             name:kDataManagerDidSaveNotification
-	                                           object:[DataManager instance]];
 
 	[self.eventTimerControl addObserver:self
 	                         forKeyPath:@"startDate"
@@ -66,30 +66,30 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    Event *event = [DataManager instance].state.inEvent;
-    
-    if ([event isActive]) {
-        [self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
-    } else {
-        [self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
-    }
+    DLog(NSStringFromSelector(_cmd));
 
-	if (event) {
+    Event *event = self.state.activeEvent;
+
+    if (event) {
         [self.eventTimerControl startWithEvent:event];
-
         NSString *tagName = event.inTag ? event.inTag.name : @"";
         [self.tag setTitle:[tagName uppercaseString] forState:UIControlStateNormal];
 
-        if (![event isActive]) {
+        if ([event isActive]) {
+            [self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
+            [self animateStartEvent];
+        } else {
+            [self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
             [self animateStopEvent];
         }
 	} else {
+        [self.eventTimerControl reset];
         [self reset];
     }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    Event *event = [[DataManager instance] state].inEvent;
+    Event *event = [[DataManager instance] state].activeEvent;
 
     if ([[segue destinationViewController] isKindOfClass:[TagsTableViewController class]]) {
         TagsTableViewController *tagsTableViewController = [segue destinationViewController];
@@ -103,7 +103,7 @@
 - (IBAction)toggleEvent:(id)sender {
 	NSDate *now = [NSDate date];
 
-    Event *event = [DataManager instance].state.inEvent;
+    Event *event = self.state.activeEvent;
 
 	if ([event isActive]) {
 		[TestFlight passCheckpoint:@"STOP EVENT"];
@@ -112,9 +112,7 @@
 
         [self.eventTimerControl stop];
 
-		// Toggle button to start state
 		[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
-
         [self animateStopEvent];
 	} else {
 		[TestFlight passCheckpoint:@"START EVENT"];
@@ -124,25 +122,19 @@
         event = [Event create];
 		event.startDate = now;
 
-        [DataManager instance].state.inEvent = event;
+        [DataManager instance].state.activeEvent = event;
 
         [self.eventTimerControl startWithEvent:event];
 
-		// Toggle button to stop state
 		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
-
         [self animateStartEvent];
 	}
-
-    [[CoreDataManager instance] saveContext];
 }
 
 #pragma mark -
 #pragma mark Private methods
 
 - (void)reset {
-    [self.eventTimerControl reset];
-
     [self.tag setTitle:@"" forState:UIControlStateNormal];
 
     self.eventStartTime.text  = @"";
@@ -172,7 +164,7 @@
 }
 
 - (void)updateEventTimeWithDate:(NSDate *)date {
-    Event *event = [DataManager instance].state.inEvent;
+    Event *event = self.state.activeEvent;
 
     if (date && event) {
         static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit;
@@ -229,7 +221,7 @@
 }
 
 - (void)animateEventTransforming:(EventTimerTransformingEnum)eventTimerTransformingEnum {
-    Event *event = [DataManager instance].state.inEvent;
+    Event *event = [DataManager instance].state.activeEvent;
 
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         CGFloat eventStartAlpha, eventStopAlpha, eventTimeAlpha;
@@ -273,27 +265,8 @@
     } completion:nil];
 }
 
-- (void)dataModelDidSave:(NSNotification *)note {
-    Event *event = [DataManager instance].state.inEvent;
-
-	NSSet *eventChangeObjects = [[note userInfo] objectForKey:kEventChangesKey];
-    NSArray *deletedEvents = [[eventChangeObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        Change *change = (Change *)obj;
-        return [change.type isEqualToString:ChangeDelete] && [change.object isEqual:event];
-    }] allObjects];
-
-    DLog(@"eventChangeObjects %@", eventChangeObjects);
-    DLog(@"deletedEvents %@", deletedEvents);
-
-    if (deletedEvents.count > 0) {
-        [DataManager instance].state.inEvent = nil;
-
-        [self reset];
-    }
-}
-
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    Event *event = [DataManager instance].state.inEvent;
+    Event *event = [DataManager instance].state.activeEvent;
 
 	if ([keyPath isEqualToString:@"startDate"]) {
 		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
@@ -312,10 +285,6 @@
 	} else if ([keyPath isEqualToString:@"isTransforming"]) {
         EventTimerTransformingEnum eventTimerTransformingEnum = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
         [self animateEventTransforming:eventTimerTransformingEnum];
-
-        if (eventTimerTransformingEnum == EventTimerStartDateTransformingStop || eventTimerTransformingEnum == EventTimerStopDateTransformingStop) {
-            [[CoreDataManager instance] saveContext];
-        }
     }
 }
 

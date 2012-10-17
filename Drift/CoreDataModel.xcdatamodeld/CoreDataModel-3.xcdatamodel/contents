@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1811" systemVersion="12C60" minimumToolsVersion="Xcode 4.5" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Event" representedClassName="Event" syncable="YES">
+        <attribute name="startDate" attributeType="Date" indexed="YES" versionHashModifier="changed" syncable="YES"/>
+        <attribute name="stopDate" optional="YES" attributeType="Date" indexed="YES" versionHashModifier="changed" syncable="YES"/>
+        <relationship name="heldByActiveEvent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="UIState" inverseName="activeEvent" inverseEntity="UIState" syncable="YES"/>
+        <relationship name="inTag" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tag" inverseName="heldByEvents" inverseEntity="Tag" syncable="YES"/>
+    </entity>
+    <entity name="Tag" representedClassName="Tag" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sortIndex" optional="YES" attributeType="Integer 64" defaultValueString="0" indexed="YES" versionHashModifier="changed" syncable="YES"/>
+        <relationship name="heldByActiveTagFilter" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="UIState" inverseName="activeTagFilter" inverseEntity="UIState" syncable="YES"/>
+        <relationship name="heldByEvents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="inTag" inverseEntity="Event" syncable="YES"/>
+    </entity>
+    <entity name="UIState" representedClassName="UIState" elementID="State" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="activeEvent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="heldByActiveEvent" inverseEntity="Event" elementID="inEvent" syncable="YES"/>
+        <relationship name="activeTagFilter" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tag" inverseName="heldByActiveTagFilter" inverseEntity="Tag" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Event" positionX="-4808" positionY="1175" width="173" height="103"/>
+        <element name="UIState" positionX="-4734" positionY="929" width="128" height="88"/>
+        <element name="Tag" positionX="-5130" positionY="1116" width="189" height="103"/>
+    </elements>
+</model>

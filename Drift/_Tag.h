@@ -6,16 +6,20 @@
 
 extern const struct TagAttributes {
 	__unsafe_unretained NSString *name;
+	__unsafe_unretained NSString *sortIndex;
 } TagAttributes;
 
 extern const struct TagRelationships {
+	__unsafe_unretained NSString *heldByActiveTagFilter;
 	__unsafe_unretained NSString *heldByEvents;
 } TagRelationships;
 
 extern const struct TagFetchedProperties {
 } TagFetchedProperties;
 
+@class UIState;
 @class Event;
+
 
 
 
@@ -38,6 +42,27 @@ extern const struct TagFetchedProperties {
 
 //- (BOOL)validateName:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
+@property (nonatomic, strong) NSNumber* sortIndex;
+
+
+
+@property int64_t sortIndexValue;
+- (int64_t)sortIndexValue;
+- (void)setSortIndexValue:(int64_t)value_;
+
+//- (BOOL)validateSortIndex:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) UIState *heldByActiveTagFilter;
+
+//- (BOOL)validateHeldByActiveTagFilter:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -68,6 +93,20 @@ extern const struct TagFetchedProperties {
 - (void)setPrimitiveName:(NSString*)value;
 
 
+
+
+- (NSNumber*)primitiveSortIndex;
+- (void)setPrimitiveSortIndex:(NSNumber*)value;
+
+- (int64_t)primitiveSortIndexValue;
+- (void)setPrimitiveSortIndexValue:(int64_t)value_;
+
+
+
+
+
+- (UIState*)primitiveHeldByActiveTagFilter;
+- (void)setPrimitiveHeldByActiveTagFilter:(UIState*)value;
 
 
 

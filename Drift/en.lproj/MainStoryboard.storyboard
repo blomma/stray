@@ -336,6 +336,7 @@
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
+                                    <outlet property="dataSource" destination="ONY-RJ-IiQ" id="n1h-4V-rmU"/>
                                     <outlet property="delegate" destination="ONY-RJ-IiQ" id="L0j-y7-YST"/>
                                 </connections>
                             </tableView>

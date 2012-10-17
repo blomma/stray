@@ -1,14 +1,14 @@
-#import "State.h"
+#import "UIState.h"
 
 
-@interface State ()
+@interface UIState ()
 
 // Private interface goes here.
 
 @end
 
 
-@implementation State
+@implementation UIState
 
 // Custom logic goes here.
 

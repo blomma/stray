@@ -30,8 +30,23 @@
 - (id)initWithTags:(NSArray *)tags {
     self = [super init];
 	if (self) {
-        self.tags = [[NSMutableArray alloc] initWithArray:tags];
+        self.tags = [[NSMutableArray alloc] initWithArray:[tags
+                                                           sortedArrayWithOptions:NSSortConcurrent
+                                                           usingComparator:^NSComparisonResult(id obj1, id obj2) {
+                                                               if ([obj1 sortIndex].integerValue < [obj2 sortIndex].integerValue) {
+                                                                   return NSOrderedAscending;
+                                                               } else if ([obj1 sortIndex].integerValue > [obj2 sortIndex].integerValue) {
+                                                                   return NSOrderedDescending;
+                                                               } else {
+                                                                   return NSOrderedSame;
+                                                               }
+                                                           }]];
 	}
+
+    // Walk over the tags and add sortIndex where it is sorley missed
+    [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
+    }];
 
 	return self;
 }
@@ -58,6 +73,12 @@
         [changes addObject:change];
 
         [self.tags insertObject:object atIndex:index];
+
+        [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if ([obj isKindOfClass:[Tag class]]) {
+                [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
+            }
+        }];
     }
 
     return changes;
@@ -77,6 +98,12 @@
 
     [self.tags removeObjectAtIndex:index];
 
+    [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[Tag class]]) {
+            [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
+        }
+    }];
+
     return changes;
 }
 
@@ -91,6 +118,12 @@
     [changes addObject:change];
 
     [self.tags replaceObjectAtIndex:index withObject:object];
+
+    [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[Tag class]]) {
+            [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
+        }
+    }];
 
     return changes;
 }
@@ -117,6 +150,12 @@
 
     [changes addObject:change];
     [self.tags insertObject:object atIndex:toIndex];
+
+    [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[Tag class]]) {
+            [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
+        }
+    }];
 
     return changes;
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1810" systemVersion="12C54" minimumToolsVersion="Xcode 4.5" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1811" systemVersion="12C60" minimumToolsVersion="Xcode 4.5" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Event" representedClassName="Event" syncable="YES">
         <attribute name="startDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="stopDate" optional="YES" attributeType="Date" syncable="YES"/>
@@ -16,7 +16,7 @@
     </entity>
     <elements>
         <element name="Event" positionX="-4574" positionY="1107" width="128" height="103"/>
-        <element name="Tag" positionX="-4374" positionY="1143" width="128" height="73"/>
         <element name="State" positionX="-4763" positionY="1026" width="128" height="73"/>
+        <element name="Tag" positionX="-4374" positionY="1143" width="128" height="73"/>
     </elements>
 </model>

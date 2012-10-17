@@ -33,8 +33,6 @@
 		9E14D42E1626FB1C008D9E43 /* low_contrast_linen@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E14D42C1626FB1C008D9E43 /* low_contrast_linen@2X.png */; };
 		9E14D452162B3D3F008D9E43 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E14D451162B3D3F008D9E43 /* TagButton.m */; };
 		9E15897D16183F7100DB19EB /* Tags.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E15897C16183F7100DB19EB /* Tags.m */; };
-		9E158983161A3B2D00DB19EB /* _State.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E158980161A3B2C00DB19EB /* _State.m */; };
-		9E158984161A3B2D00DB19EB /* State.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E158982161A3B2D00DB19EB /* State.m */; };
 		9E15DE0116024161007146CE /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E15DE0016024161007146CE /* libz.dylib */; };
 		9E21F926156EA9510075EAAC /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */; };
 		9E21F929156EAA2F0075EAAC /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F928156EAA2F0075EAAC /* Event.m */; };
@@ -56,7 +54,6 @@
 		9E51511715C7CEF100901655 /* EventGroups.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511515C7CEF100901655 /* EventGroups.m */; };
 		9E561DDB15FA08FB008D3895 /* EventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E561DDA15FA08FB008D3895 /* EventTableViewCell.m */; };
 		9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E63BBF3156EAA710006FEFC /* CoreData.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		9E63E1CB15E91743009C0A2D /* EventGroupsTableViewDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E63E1CA15E91742009C0A2D /* EventGroupsTableViewDataSource.m */; };
 		9E63E1D715EA3339009C0A2D /* NoHitCAShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */; };
 		9E7CEDF4157B778300718FA6 /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEDF3157B778300718FA6 /* _Event.m */; };
 		9E7EB52C15E8F89C00604B79 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */; };
@@ -66,6 +63,8 @@
 		9E89816F15A0BC2900E22EA7 /* EventGroupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */; };
 		9E9239DB162D4F9B00E265E6 /* TableViewGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239D8162D4F9B00E265E6 /* TableViewGestureRecognizer.m */; };
 		9E9239DC162D4F9B00E265E6 /* TransformableTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239DA162D4F9B00E265E6 /* TransformableTableViewCell.m */; };
+		9E9239E7162DAF6300E265E6 /* _UIState.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239E4162DAF6300E265E6 /* _UIState.m */; };
+		9E9239E8162DAF6300E265E6 /* UIState.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239E6162DAF6300E265E6 /* UIState.m */; };
 		9E92637115EF350D00393946 /* _Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E92637015EF350D00393946 /* _Tag.m */; };
 		9E9C237815F3617200572FB7 /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C237715F3617100572FB7 /* EventsViewController.m */; };
 		9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB520E15C9553C008952FB /* NSDate+Utilities.m */; };
@@ -98,10 +97,6 @@
 		9E14D451162B3D3F008D9E43 /* TagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagButton.m; sourceTree = "<group>"; };
 		9E15897B16183F7100DB19EB /* Tags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tags.h; sourceTree = "<group>"; };
 		9E15897C16183F7100DB19EB /* Tags.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tags.m; sourceTree = "<group>"; };
-		9E15897F161A3B2C00DB19EB /* _State.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _State.h; sourceTree = "<group>"; };
-		9E158980161A3B2C00DB19EB /* _State.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _State.m; sourceTree = "<group>"; };
-		9E158981161A3B2C00DB19EB /* State.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = State.h; sourceTree = "<group>"; };
-		9E158982161A3B2D00DB19EB /* State.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = State.m; sourceTree = "<group>"; };
 		9E15DE0016024161007146CE /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		9E21F925156EA9510075EAAC /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
 		9E21F927156EAA2F0075EAAC /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
@@ -139,8 +134,6 @@
 		9E561DD915FA08FB008D3895 /* EventTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableViewCell.h; sourceTree = "<group>"; };
 		9E561DDA15FA08FB008D3895 /* EventTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableViewCell.m; sourceTree = "<group>"; };
 		9E63BBF3156EAA710006FEFC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		9E63E1C915E91742009C0A2D /* EventGroupsTableViewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroupsTableViewDataSource.h; sourceTree = "<group>"; };
-		9E63E1CA15E91742009C0A2D /* EventGroupsTableViewDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroupsTableViewDataSource.m; sourceTree = "<group>"; };
 		9E63E1D515EA3338009C0A2D /* NoHitCAShapeLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoHitCAShapeLayer.h; sourceTree = "<group>"; };
 		9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoHitCAShapeLayer.m; sourceTree = "<group>"; };
 		9E7CEDF2157B778300718FA6 /* _Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Event.h; sourceTree = "<group>"; };
@@ -155,6 +148,11 @@
 		9E9239D8162D4F9B00E265E6 /* TableViewGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewGestureRecognizer.m; sourceTree = "<group>"; };
 		9E9239D9162D4F9B00E265E6 /* TransformableTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransformableTableViewCell.h; sourceTree = "<group>"; };
 		9E9239DA162D4F9B00E265E6 /* TransformableTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransformableTableViewCell.m; sourceTree = "<group>"; };
+		9E9239E2162DA56900E265E6 /* CoreDataModel-3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CoreDataModel-3.xcdatamodel"; sourceTree = "<group>"; };
+		9E9239E3162DAF6300E265E6 /* _UIState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _UIState.h; sourceTree = "<group>"; };
+		9E9239E4162DAF6300E265E6 /* _UIState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _UIState.m; sourceTree = "<group>"; };
+		9E9239E5162DAF6300E265E6 /* UIState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIState.h; sourceTree = "<group>"; };
+		9E9239E6162DAF6300E265E6 /* UIState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIState.m; sourceTree = "<group>"; };
 		9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-2.xcdatamodel"; sourceTree = "<group>"; };
 		9E92636F15EF350D00393946 /* _Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Tag.h; sourceTree = "<group>"; };
 		9E92637015EF350D00393946 /* _Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Tag.m; sourceTree = "<group>"; };
@@ -298,10 +296,10 @@
 		9E63BBF6156EAAA80006FEFC /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9E15897F161A3B2C00DB19EB /* _State.h */,
-				9E158980161A3B2C00DB19EB /* _State.m */,
-				9E158981161A3B2C00DB19EB /* State.h */,
-				9E158982161A3B2D00DB19EB /* State.m */,
+				9E9239E3162DAF6300E265E6 /* _UIState.h */,
+				9E9239E4162DAF6300E265E6 /* _UIState.m */,
+				9E9239E5162DAF6300E265E6 /* UIState.h */,
+				9E9239E6162DAF6300E265E6 /* UIState.m */,
 				9EDCC5C9160DBFA1003CB2BB /* Tag.h */,
 				9EDCC5CA160DBFA1003CB2BB /* Tag.m */,
 				9E92636F15EF350D00393946 /* _Tag.h */,
@@ -336,8 +334,6 @@
 				9E9C237715F3617100572FB7 /* EventsViewController.m */,
 				9E00A76115773859002FC707 /* EventGroupsTableViewController.h */,
 				9E00A76215773859002FC707 /* EventGroupsTableViewController.m */,
-				9E63E1C915E91742009C0A2D /* EventGroupsTableViewDataSource.h */,
-				9E63E1CA15E91742009C0A2D /* EventGroupsTableViewDataSource.m */,
 				9E2CFDE7162190E8004D9D8D /* TagsTableViewController.h */,
 				9E2CFDE8162190E8004D9D8D /* TagsTableViewController.m */,
 			);
@@ -519,7 +515,6 @@
 				9E51511615C7CEF100901655 /* EventGroup.m in Sources */,
 				9E51511715C7CEF100901655 /* EventGroups.m in Sources */,
 				9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */,
-				9E63E1CB15E91743009C0A2D /* EventGroupsTableViewDataSource.m in Sources */,
 				9E63E1D715EA3339009C0A2D /* NoHitCAShapeLayer.m in Sources */,
 				9E92637115EF350D00393946 /* _Tag.m in Sources */,
 				9E9C237815F3617200572FB7 /* EventsViewController.m in Sources */,
@@ -534,12 +529,12 @@
 				9E895EC0161767F20083037B /* UITableView+Change.m in Sources */,
 				9E895EC416176DBD0083037B /* Change.m in Sources */,
 				9E15897D16183F7100DB19EB /* Tags.m in Sources */,
-				9E158983161A3B2D00DB19EB /* _State.m in Sources */,
-				9E158984161A3B2D00DB19EB /* State.m in Sources */,
 				9E2CFDE9162190E8004D9D8D /* TagsTableViewController.m in Sources */,
 				9E14D452162B3D3F008D9E43 /* TagButton.m in Sources */,
 				9E9239DB162D4F9B00E265E6 /* TableViewGestureRecognizer.m in Sources */,
 				9E9239DC162D4F9B00E265E6 /* TransformableTableViewCell.m in Sources */,
+				9E9239E7162DAF6300E265E6 /* _UIState.m in Sources */,
+				9E9239E8162DAF6300E265E6 /* UIState.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -800,10 +795,11 @@
 		9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				9E9239E2162DA56900E265E6 /* CoreDataModel-3.xcdatamodel */,
 				9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */,
 				9E21F925156EA9510075EAAC /* CoreDataModel.xcdatamodel */,
 			);
-			currentVersion = 9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */;
+			currentVersion = 9E9239E2162DA56900E265E6 /* CoreDataModel-3.xcdatamodel */;
 			path = CoreDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
