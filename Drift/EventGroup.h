@@ -22,9 +22,9 @@
 - (id)initWithDate:(NSDate *)groupDate;
 - (BOOL)containsEvent:(Event *)event;
 
-- (NSSet *)addEvent:(Event *)event;
-- (NSSet *)removeEvent:(Event *)event;
-- (NSSet *)updateEvent:(Event *)event;
+- (void)addEvent:(Event *)event;
+- (void)removeEvent:(Event *)event;
+- (void)updateEvent:(Event *)event;
 
 - (BOOL)isValidForEvent:(Event *)event;
 

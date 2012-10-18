@@ -8,7 +8,6 @@
 
 #import "EventGroup.h"
 #import "NSDate+Utilities.h"
-#import "Change.h"
 #import "Global.h"
 
 @interface EventGroup ()
@@ -115,11 +114,9 @@
 	return [self.events containsObject:event];
 }
 
-- (NSSet *)addEvent:(Event *)event {
-    NSMutableSet *changes = [NSMutableSet setWithCapacity:1];
-
+- (void)addEvent:(Event *)event {
     if ([self.events containsObject:event]) {
-        return changes;
+        return;
     }
 
     NSUInteger index = [self insertionIndexForEvent:event];
@@ -127,62 +124,28 @@
 
     self.activeEventIsInvalid = YES;
 	self.timeActiveComponentsIsInvalid = YES;
-
-    Change *change = [Change new];
-    change.index = index;
-    change.type = ChangeInsert;
-    change.object = event;
-    change.parentObject = self;
-
-    [changes addObject:change];
-
-    return changes;
 }
 
-- (NSSet *)removeEvent:(Event *)event {
-    NSMutableSet *changes = [NSMutableSet setWithCapacity:1];
-
+- (void)removeEvent:(Event *)event {
     NSUInteger index = [self.events indexOfObject:event];
 
     if (index == NSNotFound) {
-        return changes;
+        return;
     }
 
     [self.events removeObjectAtIndex:index];
 
     self.activeEventIsInvalid = YES;
 	self.timeActiveComponentsIsInvalid = YES;
-
-    Change *change = [Change new];
-    change.index = index;
-    change.type = ChangeDelete;
-    change.object = event;
-    change.parentObject = self;
-
-    [changes addObject:change];
-
-    return changes;
 }
 
-- (NSSet *)updateEvent:(Event *)event {
-    NSMutableSet *changes = [NSMutableSet setWithCapacity:1];
-
+- (void)updateEvent:(Event *)event {
     if (![self.events containsObject:event]) {
-        return changes;
+        return;
     }
 
     self.activeEventIsInvalid = YES;
 	self.timeActiveComponentsIsInvalid = YES;
-
-    Change *change = [Change new];
-    change.index = [self.events indexOfObject:event];
-    change.type = ChangeUpdate;
-    change.object = event;
-    change.parentObject = self;
-
-    [changes addObject:change];
-
-    return changes;
 }
 
 - (NSComparisonResult)compare:(id)element {

@@ -43,15 +43,12 @@
 #pragma mark Private Properties
 
 -(void)setSelectedTag:(Tag *)selectedTag {
-    DLog(NSStringFromSelector(_cmd));
     if ([selectedTag isEqual:_selectedTag]) {
         return;
     }
 
     _selectedTag = selectedTag;
-
-    self.state.activeTagFilter = self.selectedTag;
-    self.eventGroups.filter = selectedTag;
+    self.state.activeTagFilter = selectedTag;
 }
 
 #pragma mark -
@@ -62,21 +59,18 @@
 
     DLog(NSStringFromSelector(_cmd));
 
+    self.calendar = [Global instance].calendar;
+    self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
+    self.standaloneWeekdaySymbols = [[NSDateFormatter new] standaloneWeekdaySymbols];
+
     self.tagViewSubViews = [NSMutableArray array];
     self.tags = [NSMutableArray array];
-    [self updateTagsView];
+    self.doesTagsRequireUpdate = YES;
 
     self.state = [DataManager instance].state;
     self.eventGroups = [[EventGroups alloc] initWithEvents:[DataManager instance].events filter:self.state.activeTagFilter];
 
-
     self.selectedTag = self.state.activeTagFilter;
-
-    self.calendar = [Global instance].calendar;
-
-    self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
-    self.standaloneWeekdaySymbols = [[NSDateFormatter new] standaloneWeekdaySymbols];
-
 
     self.tagView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.65];
 
@@ -96,7 +90,7 @@
     }
 
     if (self.doesEventGroupsRequireUpdate) {
-        [self.tableView reloadData];
+        [self updateEventGroups];
     } else {
         [self refreshVisibleRows];
     }
@@ -147,12 +141,15 @@
 #pragma mark -
 #pragma mark Private methods
 
+- (void)updateEventGroups {
+    self.eventGroups.filter = self.selectedTag;
+    [self.tableView reloadData];
+}
+
 - (void)updateTagsView {
     DLog(NSStringFromSelector(_cmd));
 
-    DLog(@"tags before remove %u", self.tags.count);
     [self.tags removeAllObjects];
-    DLog(@"tags after remove %u", self.tags.count);
     [self.tags addObjectsFromArray:[[[DataManager instance] tags]
                                     sortedArrayWithOptions:NSSortConcurrent
                                     usingComparator:^NSComparisonResult(id obj1, id obj2) {
@@ -165,45 +162,17 @@
                                         }
                                     }]];
 
-    DLog(@"tags after add %u", self.tags.count);
-    [self addTagsToSlider:self.tagView];
-    self.doesTagsRequireUpdate = NO;
-}
-
-- (void)tagTouchUp:(TagButton *)sender forEvent:(UIEvent *)event {
-    DLog(NSStringFromSelector(_cmd));
-    [UIView animateWithDuration:0.2 animations:^{
-        self.selectedTagButton.backgroundColor = [UIColor clearColor];
-    }];
-
-    self.selectedTagButton = [self.selectedTagButton isEqual:sender] ? nil : sender;
-    self.selectedTag = self.selectedTagButton.tagObject;
-
-    if (self.selectedTagButton) {
-        [UIView animateWithDuration:0.2 animations:^{
-            self.selectedTagButton.backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
-        }];
-    }
-
-    [self.tableView reloadData];
-}
-
-- (void)addTagsToSlider:(UIScrollView*)slider {
-    DLog(NSStringFromSelector(_cmd));
     // Remove all the old subviews and recreate them, lazy option
-    DLog(@"tagViewSubViews %@", self.tagViewSubViews);
-    DLog(@"subviews before remove %u", self.tagViewSubViews.count);
     for (id subView in self.tagViewSubViews) {
         [subView removeFromSuperview];
     }
 
     [self.tagViewSubViews removeAllObjects];
-    DLog(@"subviews after remove %u", self.tagViewSubViews.count);
     self.selectedTagButton = nil;
 
     // define number and size of elements
     NSUInteger numElements = self.tags.count;
-    CGSize elementSize = CGSizeMake(120, slider.frame.size.height);
+    CGSize elementSize = CGSizeMake(120, self.tagView.frame.size.height);
 
     // add elements
     for (NSUInteger i = 0; i < numElements; i++) {
@@ -235,18 +204,40 @@
         CGFloat elementX = elementSize.width * i;
         subview.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
 
-        DLog(@"subviews before in loop add %u", self.tagViewSubViews.count);
         [self.tagViewSubViews addObject:subview];
-        DLog(@"subviews after in loop add %u", self.tagViewSubViews.count);
 
         // add the subview
-        [slider addSubview:subview];
+        [self.tagView addSubview:subview];
+    }
+
+    if (self.tags.count == 0) {
+        self.tagView.hidden = YES;
+    } else {
+        self.tagView.hidden = NO;
     }
 
     // set the size of the scrollview's content
-    slider.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
-    
-    DLog(@"subviews after add %u", self.tagViewSubViews.count);
+    self.tagView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
+
+    self.doesTagsRequireUpdate = NO;
+}
+
+- (void)tagTouchUp:(TagButton *)sender forEvent:(UIEvent *)event {
+    DLog(NSStringFromSelector(_cmd));
+    [UIView animateWithDuration:0.2 animations:^{
+        self.selectedTagButton.backgroundColor = [UIColor clearColor];
+    }];
+
+    self.selectedTagButton = [self.selectedTagButton isEqual:sender] ? nil : sender;
+    self.selectedTag = self.selectedTagButton.tagObject;
+
+    if (self.selectedTagButton) {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.selectedTagButton.backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
+        }];
+    }
+
+    [self updateEventGroups];
 }
 
 - (void)objectsDidChange:(NSNotification *)note {
@@ -287,7 +278,6 @@
 
     if (updatedEvents.count > 0 || insertedEvents.count > 0 || deletedEvents.count > 0) {
         self.doesEventGroupsRequireUpdate = YES;
-        DLog(@"self.doesEventGroupsRequireUpdate YES");
     }
 
     // ==========
@@ -307,11 +297,11 @@
 
     if (updatedTags.count > 0 || insertedTags.count > 0 || deletedTags.count > 0) {
         self.doesTagsRequireUpdate = YES;
-        DLog(@"self.doesTagsRequireUpdate YES");
     }
 
     if ([deletedObjects containsObject:self.selectedTag]) {
         self.selectedTag = nil;
+        self.doesEventGroupsRequireUpdate = YES;
     }
 }
 

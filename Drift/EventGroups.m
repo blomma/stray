@@ -9,7 +9,6 @@
 #import "EventGroups.h"
 #import "NSDate+Utilities.h"
 #import "Tag.h"
-#import "Change.h"
 #import "DataManager.h"
 #import "Global.h"
 
@@ -36,11 +35,11 @@
 - (id)initWithEvents:(NSArray *)events filter:(Tag *)tag {
     self = [super init];
 	if (self) {
-        self.events      = [[NSMutableArray alloc] initWithArray:events];
-        self.allEventGroups = [NSMutableArray new];
-        self.filteredEventGroups = [NSMutableArray new];
-
         self.calendar = [Global instance].calendar;
+
+        self.events              = [[NSMutableArray alloc] initWithArray:events];
+        self.allEventGroups      = [NSMutableArray new];
+        self.filteredEventGroups = [NSMutableArray new];
 
         for (Event *event in events) {
             [self addEvent:event];
@@ -75,9 +74,7 @@
 #pragma mark -
 #pragma mark Public methods
 
-- (NSSet *)addEvent:(Event *)event {
-    NSMutableSet *changes = [NSMutableSet set];
-
+- (void)addEvent:(Event *)event {
     if (![self.events containsObject:event]) {
         [self.events addObject:event];
     }
@@ -118,22 +115,12 @@
 
 		// Check if this eventGroup already has this event
 		if (![eventGroup containsEvent:event]) {
-			Change *change = [Change new];
-
 			if (index == NSNotFound) {
-                change.type = ChangeInsert;
-
                 index = [self insertionIndexForGroupDate:eventGroup.groupDate];
                 [self.allEventGroups insertObject:eventGroup atIndex:index];
-			} else {
-                change.type = ChangeUpdate;
-                change.index = index;
 			}
 
-            change.object = eventGroup;
-
-            [changes unionSet:[eventGroup addEvent:event]];
-			[changes addObject:change];
+            [eventGroup addEvent:event];
 		}
 
 		// We want to add the delta between the startDate day and end of startDate day
@@ -150,26 +137,12 @@
 		eventSecondsComponent.second -= deltaSecondsComponent.second;
 	}
 
-    // Update insert index for EventGroups
-    for (Change *change in changes) {
-        if ([change.type isEqualToString:ChangeInsert] && [change.object isKindOfClass:[EventGroup class]]) {
-            NSUInteger i = [self.allEventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
-                return [obj isEqual:change.object];
-            }];
-            change.index = i;
-        }
-    }
-
     if (!self.filter || [event.inTag isEqual:self.filter]) {
         self.filteredEventGroupsIsInvalid = YES;
     }
-
-	return changes;
 }
 
-- (NSSet *)removeEvent:(Event *)event {
-    NSMutableSet *changes = [NSMutableSet set];
-
+- (void)removeEvent:(Event *)event {
     [self.events removeObject:event];
 
     NSMutableIndexSet *indexesToRemove = [NSMutableIndexSet new];
@@ -178,18 +151,12 @@
         EventGroup *eventGroup = [self.allEventGroups objectAtIndex:i];
 
 		if ([eventGroup containsEvent:event]) {
-            [changes unionSet:[eventGroup removeEvent:event]];
+            [eventGroup removeEvent:event];
 
-            Change *change = [Change new];
-            change.object  = eventGroup;
-            change.type  = eventGroup.count > 0 ? ChangeUpdate : ChangeDelete;
-            change.index = i;
-
-            if ([change.type isEqualToString:ChangeDelete]) {
+            if (eventGroup.count == 0) {
                 [indexesToRemove addIndex:i];
             }
 
-			[changes addObject:change];
 		}
 	}
 
@@ -199,38 +166,30 @@
     if (!self.filter || [event.inTag isEqual:self.filter]) {
         self.filteredEventGroupsIsInvalid = YES;
     }
-
-    return changes;
 }
 
-- (NSSet *)updateEvent:(Event *)event {
-    NSMutableSet *changes = [NSMutableSet set];
-
+- (void)updateEvent:(Event *)event {
     for (NSUInteger i = 0; i < self.allEventGroups.count; i++) {
         EventGroup *eventGroup = [self.allEventGroups objectAtIndex:i];
 
-		if ([eventGroup containsEvent:event] && [eventGroup isValidForEvent:event]) {
-			Change *change = [Change new];
-			change.object  = eventGroup;
-			change.type  = ChangeUpdate;
-            change.index = i;
+        if ([[eventGroup groupDate] earlierDate:event.startDate]) {
+            break;
+        }
 
-            [changes unionSet:[eventGroup updateEvent:event]];
-			[changes addObject:change];
+		if ([eventGroup containsEvent:event] && [eventGroup isValidForEvent:event]) {
+            [eventGroup updateEvent:event];
 		}
 	}
 
 	// Insert event into any groups that can contain it, possibly creating new groups for this
-    [changes unionSet:[self addEvent:event]];
+    [self addEvent:event];
 
     // Next we remove the event from invalid eventGroups
-    [changes unionSet:[self removeFromInvalidGroupsEvent:event]];
+    [self removeFromInvalidGroupsEvent:event];
 
     if (!self.filter || [event.inTag isEqual:self.filter]) {
         self.filteredEventGroupsIsInvalid = YES;
     }
-
-	return changes;
 }
 
 - (id)objectAtIndex:(NSUInteger)index {
@@ -256,33 +215,23 @@
     self.filteredEventGroupsIsInvalid = NO;
 }
 
-- (NSSet *)removeFromInvalidGroupsEvent:(Event *)event {
-    NSMutableSet *changes = [NSMutableSet set];
+- (void)removeFromInvalidGroupsEvent:(Event *)event {
     NSMutableIndexSet *indexesToRemove = [NSMutableIndexSet new];
 
     for (NSUInteger i = 0; i < self.allEventGroups.count; i++) {
         EventGroup *eventGroup = [self.allEventGroups objectAtIndex:i];
 
 		if ([eventGroup containsEvent:event] && ![eventGroup isValidForEvent:event]) {
-            [changes unionSet:[eventGroup removeEvent:event]];
+            [eventGroup removeEvent:event];
 
-            Change *change = [Change new];
-            change.object  = eventGroup;
-            change.type  = eventGroup.count > 0 ? ChangeUpdate : ChangeDelete;
-            change.index = i;
-
-            if ([change.type isEqualToString:ChangeDelete]) {
+            if (eventGroup.count == 0) {
                 [indexesToRemove addIndex:i];
             }
-
-			[changes addObject:change];
 		}
 	}
 
     // Remove empty groups
     [self.allEventGroups removeObjectsAtIndexes:indexesToRemove];
-
-	return changes;
 }
 
 - (NSUInteger)indexForGroupDate:(NSDate *)date {

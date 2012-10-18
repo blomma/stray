@@ -15,13 +15,11 @@
 @property (nonatomic) Tag *filter;
 @property (nonatomic) NSUInteger count;
 
-//@property (nonatomic, readonly) NSArray *eventGroups;
-
 - (id)initWithEvents:(NSArray *)events filter:(Tag *)tag;
 
-- (NSSet *)addEvent:(Event *)event;
-- (NSSet *)removeEvent:(Event *)event;
-- (NSSet *)updateEvent:(Event *)event;
+- (void)addEvent:(Event *)event;
+- (void)removeEvent:(Event *)event;
+- (void)updateEvent:(Event *)event;
 
 - (id)objectAtIndex:(NSUInteger)index;
 

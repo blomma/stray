@@ -9,7 +9,6 @@
 #import "EventsViewController.h"
 #import "Event.h"
 #import "EventTableViewCell.h"
-#import "Change.h"
 #import "UITableView+Change.h"
 #import "DataManager.h"
 #import "TableViewGestureRecognizer.h"
