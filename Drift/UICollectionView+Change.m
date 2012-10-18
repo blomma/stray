@@ -31,18 +31,9 @@
         }
     }
 
-    DLog(@"insertIndexPaths %@", insertIndexPaths);
-    DLog(@"deleteIndexPaths %@", deleteIndexPaths);
-    DLog(@"updateIndexPaths %@", updateIndexPaths);
-
     [self performBatchUpdates:^{
-        DLog(@"insertIndexPaths %@", insertIndexPaths);
         [self insertItemsAtIndexPaths:insertIndexPaths];
-
-        DLog(@"deletedIndexPaths %@", deleteIndexPaths);
         [self deleteItemsAtIndexPaths:deleteIndexPaths];
-
-        DLog(@"updateIndexPaths %@", updateIndexPaths);
         [self reloadItemsAtIndexPaths:deleteIndexPaths];
     } completion:nil];
 }
