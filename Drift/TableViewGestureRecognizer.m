@@ -231,6 +231,7 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
                              CGRect rect = [weakSelf.tableView rectForRowAtIndexPath:indexPath];
                              snapShotView.transform = CGAffineTransformIdentity;    // restore the transformed value
                              snapShotView.frame = CGRectOffset(snapShotView.bounds, rect.origin.x, rect.origin.y);
+                             snapShotView.alpha = 1;
                          } completion:^(BOOL finished) {
                              [snapShotView removeFromSuperview];
 
