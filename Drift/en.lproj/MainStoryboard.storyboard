@@ -206,10 +206,10 @@
                                                         <action selector="tappedDeleteButton:forEvent:" destination="7lp-Vw-Iv0" eventType="touchUpInside" id="4Ct-GO-kNa"/>
                                                     </connections>
                                                 </button>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" clearsOnBeginEditing="YES" minimumFontSize="17" id="oLT-tc-FcA" userLabel="TagNameEdit">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" adjustsFontSizeToFit="NO" minimumFontSize="17" id="oLT-tc-FcA" userLabel="TagNameEdit">
                                                     <rect key="frame" x="20" y="24" width="214" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="24"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="rGB-yR-mDw" id="52c-pZ-zwP"/>
@@ -239,6 +239,7 @@
                                     <outlet property="deleteButton" destination="RYh-i0-qYA" id="aWg-Js-ihZ"/>
                                     <outlet property="frontView" destination="YqV-FT-yHV" id="ww5-tS-KUj"/>
                                     <outlet property="name" destination="kbd-ZN-Ygm" id="kg1-mR-e6R"/>
+                                    <outlet property="textFieldName" destination="oLT-tc-FcA" id="1mt-Qs-I6v"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -502,6 +503,7 @@
                 <relationship kind="outlet" name="deleteButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="frontView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="name" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="textFieldName" candidateClass="UITextField"/>
             </relationships>
         </class>
     </classes>

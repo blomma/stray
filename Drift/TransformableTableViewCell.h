@@ -19,6 +19,7 @@
 @property (nonatomic) TableViewCellEditingState state;
 
 @property (nonatomic, weak) IBOutlet UILabel *name;
+@property (nonatomic, weak) IBOutlet UITextField *textFieldName;
 
 @property (nonatomic, weak) IBOutlet UIView *backView;
 @property (nonatomic, weak) IBOutlet UIView *frontView;

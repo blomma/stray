@@ -135,7 +135,8 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 
         UIImage* background = [UIImage imageNamed:@"low_contrast_linen"];
         cell.backView.backgroundColor = [UIColor colorWithPatternImage:background];
-	
+        cell.textFieldName.text = [object name];
+
         cell.frontView.frame = cell.frontView.bounds;
 
         UIColor *backgroundColor = [UIColor colorWithWhite:0.075f alpha:1];
@@ -152,10 +153,10 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
         
         cell.frontView.backgroundColor = backgroundColor;
 
-        NSString *tagName = [(Tag *)object name] ? [(Tag *)object name] : @"Fill me in";
+        NSString *tagName = [object name] ? [object name] : @"Fill me in";
         cell.name.text = [tagName uppercaseString];
-
         cell.delegate = self;
+
 
         return cell;
     }
