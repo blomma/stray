@@ -25,7 +25,7 @@
 }
 
 + (NSArray *)allInContext:(NSManagedObjectContext *)context {
-    return [self fetchWithPredicate:nil inContext:context];
+    return [self fetchWithPredicate:nil inContext:context withSortDescriptors:nil];
 }
 
 
@@ -35,10 +35,16 @@
 }
 
 + (NSArray *)where:(id)condition inContext:(NSManagedObjectContext *)context {
-    return [self fetchWithPredicate:[self predicateFromStringOrDict:condition]
-                          inContext:context];
+    return [self where:condition
+             inContext:context
+   withSortDescriptors:nil];
 }
 
++ (NSArray *)where:(id)condition inContext:(NSManagedObjectContext *)context withSortDescriptors:(NSArray *)sortDescriptors{
+    return [self fetchWithPredicate:[self predicateFromStringOrDict:condition]
+                          inContext:context
+                 withSortDescriptors:sortDescriptors];
+}
 
 #pragma mark - Creation / Deletion
 
@@ -69,7 +75,6 @@
 
 - (void)delete {
     [self.managedObjectContext deleteObject:self];
-    [self saveTheContext];
 }
 
 + (void)deleteAll {
@@ -115,10 +120,13 @@
 }
 
 + (NSArray *)fetchWithPredicate:(NSPredicate *)predicate
-                      inContext:(NSManagedObjectContext *)context {
+                      inContext:(NSManagedObjectContext *)context
+             withSortDescriptors:(NSArray *)sortDescriptors
+{
     NSFetchRequest *request = [self createFetchRequestInContext:context];
     [request setPredicate:predicate];
-    
+    [request setSortDescriptors:sortDescriptors];
+
     NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
     if (fetchedObjects.count > 0) return fetchedObjects;
     return nil;

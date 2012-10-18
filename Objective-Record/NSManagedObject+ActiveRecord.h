@@ -40,6 +40,7 @@
 + (void)deleteAllInContext:(NSManagedObjectContext *)context;
 
 + (NSArray *)allInContext:(NSManagedObjectContext *)context;
-+ (NSArray *)where:(id)condition inContext:(NSManagedObjectContext *)context;    
++ (NSArray *)where:(id)condition inContext:(NSManagedObjectContext *)context;
++ (NSArray *)where:(id)condition inContext:(NSManagedObjectContext *)context withSortDescriptors:(NSArray *)sortDescriptors;
 
 @end
