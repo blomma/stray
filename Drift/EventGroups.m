@@ -65,12 +65,11 @@
     self.filteredEventGroupsIsInvalid = YES;
 }
 
-- (NSArray *)eventGroups {
+- (NSUInteger)count {
     if (self.filteredEventGroupsIsInvalid) {
         [self updateFilteredEventGroups];
     }
-
-    return self.filteredEventGroups;
+    return self.filteredEventGroups.count;
 }
 
 #pragma mark -
@@ -232,6 +231,13 @@
     }
 
 	return changes;
+}
+
+- (id)objectAtIndex:(NSUInteger)index {
+    if (self.filteredEventGroupsIsInvalid) {
+        [self updateFilteredEventGroups];
+    }
+    return [self.filteredEventGroups objectAtIndex:index];
 }
 
 #pragma mark -

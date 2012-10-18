@@ -15,6 +15,7 @@
 #import "TagButton.h"
 #import "EventGroupTableViewCell.h"
 #import "Global.h"
+#import "Tags.h"
 
 @interface EventGroupsTableViewController ()
 
@@ -23,6 +24,10 @@
 @property (nonatomic) Tag *selectedTag;
 
 @property (nonatomic) EventGroups *eventGroups;
+@property (nonatomic) BOOL doesEventGroupsRequireUpdate;
+
+@property (nonatomic) NSMutableArray *tags;
+@property (nonatomic) BOOL doesTagsRequireUpdate;
 
 @property (nonatomic) NSCalendar *calendar;
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
@@ -35,6 +40,21 @@
 @implementation EventGroupsTableViewController
 
 #pragma mark -
+#pragma mark Private Properties
+
+-(void)setSelectedTag:(Tag *)selectedTag {
+    DLog(NSStringFromSelector(_cmd));
+    if ([selectedTag isEqual:_selectedTag]) {
+        return;
+    }
+
+    _selectedTag = selectedTag;
+
+    self.state.activeTagFilter = self.selectedTag;
+    self.eventGroups.filter = selectedTag;
+}
+
+#pragma mark -
 #pragma mark Lifecycle
 
 - (void)viewDidLoad {
@@ -42,17 +62,22 @@
 
     DLog(NSStringFromSelector(_cmd));
 
-    self.state = [DataManager instance].state;
-    self.selectedTag = self.state.activeTagFilter;
+    self.tagViewSubViews = [NSMutableArray array];
+    self.tags = [NSMutableArray array];
+    [self updateTagsView];
 
-    self.eventGroups = [[EventGroups alloc] initWithEvents:[DataManager instance].events filter:self.selectedTag];
+    self.state = [DataManager instance].state;
+    self.eventGroups = [[EventGroups alloc] initWithEvents:[DataManager instance].events filter:self.state.activeTagFilter];
+
+
+    self.selectedTag = self.state.activeTagFilter;
 
     self.calendar = [Global instance].calendar;
 
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
     self.standaloneWeekdaySymbols = [[NSDateFormatter new] standaloneWeekdaySymbols];
 
-    self.tagViewSubViews = [NSMutableArray new];
+
     self.tagView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.65];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
@@ -66,94 +91,22 @@
 
     DLog(NSStringFromSelector(_cmd));
 
-    [self addTagsToSlider:self.tagView];
-    [self refreshVisibleRows];
-}
-
-- (void)tagTouchUp:(TagButton *)sender forEvent:(UIEvent *)event {
-    // Deslect the previous one
-    [UIView animateWithDuration:0.2 animations:^{
-        self.selectedTagButton.backgroundColor = [UIColor clearColor];
-    }];
-
-    self.selectedTagButton = [self.selectedTagButton isEqual:sender] ? nil : sender;
-    self.selectedTag = self.selectedTagButton.tagObject;
-
-    if (self.selectedTagButton) {
-        [UIView animateWithDuration:0.2 animations:^{
-            self.selectedTagButton.backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
-        }];
+    if (self.doesTagsRequireUpdate) {
+        [self updateTagsView];
     }
 
-    self.state.activeTagFilter = self.selectedTag;
-
-    self.eventGroups.filter = self.selectedTag;
-
-    [self.tableView reloadData];
-}
-
-- (void)addTagsToSlider:(UIScrollView*)slider {
-    NSArray *tags = [DataManager instance].tags;
-
-    // Remove all the old subviews and recreate them, lazy option
-    for (id subView in self.tagViewSubViews) {
-        [subView removeFromSuperview];
+    if (self.doesEventGroupsRequireUpdate) {
+        [self.tableView reloadData];
+    } else {
+        [self refreshVisibleRows];
     }
-
-    [self.tagViewSubViews removeAllObjects];
-    self.selectedTagButton = nil;
-
-    // define number and size of elements
-    NSUInteger numElements = tags.count;
-    CGSize elementSize = CGSizeMake(120, slider.frame.size.height);
-
-    // add elements
-    for (NSUInteger i = 0; i < numElements; i++) {
-        Tag *tag = [tags objectAtIndex:i];
-
-        TagButton* subview = [TagButton buttonWithType:UIButtonTypeCustom];
-        subview.tagObject = tag;
-        [subview addTarget:self action:@selector(tagTouchUp:forEvent:) forControlEvents:UIControlEventTouchUpInside];
-
-        subview.titleLabel.textColor = [UIColor whiteColor];
-        subview.titleLabel.textAlignment = NSTextAlignmentCenter;
-        subview.titleLabel.font = [UIFont fontWithName:@"Futura-Medium" size:15];
-        subview.titleLabel.backgroundColor = [UIColor clearColor];
-
-        UIColor *backgroundColor = [UIColor clearColor];
-        if ([tag isEqual:self.selectedTag]) {
-            self.selectedTagButton = subview;
-            backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
-        }
-
-        subview.backgroundColor = backgroundColor;
-
-        [subview setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
-        // select a differing red value so that we can distinguish our added subviews
-//        float redValue = (1.0f / numElements) * i;
-//        subview.backgroundColor = [UIColor colorWithRed:redValue green:0 blue:0  alpha:1.0];
-
-        // setup frames to appear besides each other in the slider
-        CGFloat elementX = elementSize.width * i;
-        subview.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
-
-        [self.tagViewSubViews addObject:subview];
-
-        // add the subview
-        [slider addSubview:subview];
-    }
-
-    // set the size of the scrollview's content
-    slider.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
-
-    DLog(@"%u", self.tagView.subviews.count);
 }
 
 #pragma mark -
 #pragma mark UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return indexPath.row == 0 ? 144 : 100;
+    return indexPath.row == 0 && self.tags.count > 0 ? 144 : 100;
 }
 
 #pragma mark -
@@ -164,14 +117,14 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    DLog(@"eventGroups count %u", self.eventGroups.eventGroups.count);
-    return (NSInteger)self.eventGroups.eventGroups.count;
+    DLog(@"eventGroups count %u", self.eventGroups.count);
+    return (NSInteger)self.eventGroups.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *CellIdentifier = @"EventGroupTableViewCell";
 
-    EventGroup *eventGroup = [self.eventGroups.eventGroups objectAtIndex:(NSUInteger)indexPath.row];
+    EventGroup *eventGroup = [self.eventGroups objectAtIndex:(NSUInteger)indexPath.row];
 
 	EventGroupTableViewCell *cell = (EventGroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 
@@ -194,19 +147,117 @@
 #pragma mark -
 #pragma mark Private methods
 
-- (void)objectsDidChange:(NSNotification *)note {
-    NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
-    NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
-    NSSet *updatedObjects = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
+- (void)updateTagsView {
+    DLog(NSStringFromSelector(_cmd));
 
-    DLog(@"insertedObjects %@", insertedObjects);
-    DLog(@"deletedObjects %@", deletedObjects);
-    DLog(@"updatedObjects %@", updatedObjects);
+    DLog(@"tags before remove %u", self.tags.count);
+    [self.tags removeAllObjects];
+    DLog(@"tags after remove %u", self.tags.count);
+    [self.tags addObjectsFromArray:[[[DataManager instance] tags]
+                                    sortedArrayWithOptions:NSSortConcurrent
+                                    usingComparator:^NSComparisonResult(id obj1, id obj2) {
+                                        if ([obj1 sortIndex].integerValue < [obj2 sortIndex].integerValue) {
+                                            return NSOrderedAscending;
+                                        } else if ([obj1 sortIndex].integerValue > [obj2 sortIndex].integerValue) {
+                                            return NSOrderedDescending;
+                                        } else {
+                                            return NSOrderedSame;
+                                        }
+                                    }]];
+
+    DLog(@"tags after add %u", self.tags.count);
+    [self addTagsToSlider:self.tagView];
+    self.doesTagsRequireUpdate = NO;
+}
+
+- (void)tagTouchUp:(TagButton *)sender forEvent:(UIEvent *)event {
+    DLog(NSStringFromSelector(_cmd));
+    [UIView animateWithDuration:0.2 animations:^{
+        self.selectedTagButton.backgroundColor = [UIColor clearColor];
+    }];
+
+    self.selectedTagButton = [self.selectedTagButton isEqual:sender] ? nil : sender;
+    self.selectedTag = self.selectedTagButton.tagObject;
+
+    if (self.selectedTagButton) {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.selectedTagButton.backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
+        }];
+    }
+
+    [self.tableView reloadData];
+}
+
+- (void)addTagsToSlider:(UIScrollView*)slider {
+    DLog(NSStringFromSelector(_cmd));
+    // Remove all the old subviews and recreate them, lazy option
+    DLog(@"tagViewSubViews %@", self.tagViewSubViews);
+    DLog(@"subviews before remove %u", self.tagViewSubViews.count);
+    for (id subView in self.tagViewSubViews) {
+        [subView removeFromSuperview];
+    }
+
+    [self.tagViewSubViews removeAllObjects];
+    DLog(@"subviews after remove %u", self.tagViewSubViews.count);
+    self.selectedTagButton = nil;
+
+    // define number and size of elements
+    NSUInteger numElements = self.tags.count;
+    CGSize elementSize = CGSizeMake(120, slider.frame.size.height);
+
+    // add elements
+    for (NSUInteger i = 0; i < numElements; i++) {
+        Tag *tag = [self.tags objectAtIndex:i];
+
+        TagButton* subview = [TagButton buttonWithType:UIButtonTypeCustom];
+        subview.tagObject = tag;
+        [subview addTarget:self action:@selector(tagTouchUp:forEvent:) forControlEvents:UIControlEventTouchUpInside];
+
+        subview.titleLabel.textColor = [UIColor whiteColor];
+        subview.titleLabel.textAlignment = NSTextAlignmentCenter;
+        subview.titleLabel.font = [UIFont fontWithName:@"Futura-Medium" size:15];
+        subview.titleLabel.backgroundColor = [UIColor clearColor];
+
+        UIColor *backgroundColor = [UIColor clearColor];
+        if ([tag isEqual:self.selectedTag]) {
+            self.selectedTagButton = subview;
+            backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
+        }
+
+        subview.backgroundColor = backgroundColor;
+
+        [subview setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
+        // select a differing red value so that we can distinguish our added subviews
+        //        float redValue = (1.0f / numElements) * i;
+        //        subview.backgroundColor = [UIColor colorWithRed:redValue green:0 blue:0  alpha:1.0];
+
+        // setup frames to appear besides each other in the slider
+        CGFloat elementX = elementSize.width * i;
+        subview.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
+
+        DLog(@"subviews before in loop add %u", self.tagViewSubViews.count);
+        [self.tagViewSubViews addObject:subview];
+        DLog(@"subviews after in loop add %u", self.tagViewSubViews.count);
+
+        // add the subview
+        [slider addSubview:subview];
+    }
+
+    // set the size of the scrollview's content
+    slider.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
+    
+    DLog(@"subviews after add %u", self.tagViewSubViews.count);
+}
+
+- (void)objectsDidChange:(NSNotification *)note {
+    DLog(NSStringFromSelector(_cmd));
+    NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
+    NSSet *deletedObjects  = [[note userInfo] objectForKey:NSDeletedObjectsKey];
+    NSSet *updatedObjects  = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
 
     // ==========
     // = Events =
     // ==========
-    NSMutableSet *changes = [NSMutableSet set];
 
     // Updated Events
     // this can generate update, insert and delete changes
@@ -214,40 +265,54 @@
         return [obj isKindOfClass:[Event class]];
     }];
 
-    DLog(@"updatedEvents %@", updatedEvents);
-
-    for (Event *event in updatedEvents) {
-        [changes unionSet:[self.eventGroups updateEvent:event]];
-    }
-
-    // Inserted Events
     NSSet *insertedEvents = [insertedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
         return [obj isKindOfClass:[Event class]];
     }];
 
-    DLog(@"insertedEvents %@", insertedEvents);
-
-    for (Event *event in insertedEvents) {
-        [changes unionSet:[self.eventGroups addEvent:event]];
-    }
-
-    // Deleted Events
     NSSet *deletedEvents = [deletedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
         return [obj isKindOfClass:[Event class]];
     }];
 
-    DLog(@"deletedEvents %@", deletedEvents);
-
-    for (Event *event in deletedEvents) {
-        [changes unionSet:[self.eventGroups removeEvent:event]];
+    for (Event *event in updatedEvents) {
+        [self.eventGroups updateEvent:event];
     }
 
-    // We are only interested in the changes affecting eventGroups
-    NSSet *eventGroupChanges = [changes objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [[(Change *)obj object] isKindOfClass:[EventGroup class]];
+    for (Event *event in insertedEvents) {
+        [self.eventGroups addEvent:event];
+    }
+
+    for (Event *event in deletedEvents) {
+        [self.eventGroups removeEvent:event];
+    }
+
+    if (updatedEvents.count > 0 || insertedEvents.count > 0 || deletedEvents.count > 0) {
+        self.doesEventGroupsRequireUpdate = YES;
+        DLog(@"self.doesEventGroupsRequireUpdate YES");
+    }
+
+    // ==========
+    // = Tags =
+    // ==========
+    NSSet *updatedTags = [updatedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        return [obj isKindOfClass:[Tag class]];
     }];
 
-    [self.tableView updateWithChanges:eventGroupChanges];
+    NSSet *insertedTags = [insertedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        return [obj isKindOfClass:[Tag class]];
+    }];
+
+    NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        return [obj isKindOfClass:[Tag class]];
+    }];
+
+    if (updatedTags.count > 0 || insertedTags.count > 0 || deletedTags.count > 0) {
+        self.doesTagsRequireUpdate = YES;
+        DLog(@"self.doesTagsRequireUpdate YES");
+    }
+
+    if ([deletedObjects containsObject:self.selectedTag]) {
+        self.selectedTag = nil;
+    }
 }
 
 - (void)refreshVisibleRows {
