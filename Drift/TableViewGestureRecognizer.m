@@ -202,6 +202,7 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
         [UIView animateWithDuration:0.3 animations:^{
             snapShotView.transform = CGAffineTransformMakeScale(1.1, 1.1);
             snapShotView.center = CGPointMake(self.tableView.center.x, location.y);
+            snapShotView.alpha = 0.65;
         }];
 
         [self.delegate gestureRecognizer:self needsCreatePlaceholderForRowAtIndexPath:indexPath];
