@@ -12,11 +12,14 @@
 
 @interface EventGroup ()
 
-@property (nonatomic, readwrite) NSMutableArray *events;
+@property (nonatomic, readwrite) NSMutableSet *events;
+
+@property (nonatomic) NSMutableSet *filteredEvents;
+@property (nonatomic) BOOL filteredEventsIsInvalid;
+
 @property (nonatomic, readwrite) NSDate *groupDate;
 
-@property (nonatomic, readwrite) NSDateComponents *timeActiveComponents;
-@property (nonatomic) BOOL timeActiveComponentsIsInvalid;
+@property (nonatomic, readwrite) NSDateComponents *filteredEventsDateComponents;
 
 @property (nonatomic, readwrite) Event *activeEvent;
 @property (nonatomic) BOOL activeEventIsInvalid;
@@ -43,12 +46,14 @@
         self.calendar = [Global instance].calendar;
 
 		self.groupDate = [date beginningOfDayWithCalendar:self.calendar];
-		self.events    = [NSMutableArray array];
 
-		self.timeActiveComponents = [[NSDateComponents alloc] init];
-		self.timeActiveComponents.hour   = 0;
-		self.timeActiveComponents.minute = 0;
-		self.timeActiveComponents.second = 0;
+		self.events    = [NSMutableSet set];
+		self.filteredEvents    = [NSMutableSet set];
+
+		self.filteredEventsDateComponents = [[NSDateComponents alloc] init];
+		self.filteredEventsDateComponents.hour   = 0;
+		self.filteredEventsDateComponents.minute = 0;
+		self.filteredEventsDateComponents.second = 0;
 	}
 
 	return self;
@@ -57,12 +62,16 @@
 #pragma mark -
 #pragma mark Public properties
 
-- (NSDateComponents *)timeActiveComponents {
-	if (self.activeEvent || self.timeActiveComponentsIsInvalid) {
+- (NSUInteger)count {
+    return self.events.count;
+}
+
+- (NSDateComponents *)filteredEventsDateComponents {
+	if (self.activeEvent || self.filteredEventsIsInvalid) {
 		[self updateTimeActiveComponents];
 	}
 
-	return _timeActiveComponents;
+	return _filteredEventsDateComponents;
 }
 
 - (Event *)activeEvent {
@@ -73,26 +82,29 @@
     return _activeEvent;
 }
 
-- (NSUInteger)count {
-	return [self.events count];
-}
-
 - (void)setFilter:(Tag *)filter {
     if ([filter isEqual:_filter]) {
         return;
     }
 
     _filter = filter;
-	self.timeActiveComponentsIsInvalid = YES;
+	self.filteredEventsIsInvalid = YES;
 }
 
-- (NSArray *)filteredEvents {
-    if (!self.filter) {
-        return self.events;
+- (NSMutableSet *)filteredEvents {
+    if (self.filteredEventsIsInvalid) {
+        if (self.filter) {
+            [_filteredEvents removeAllObjects];
+            [_filteredEvents unionSet:[self.events filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"inTag == %@",
+                                                                                           self.filter]]];
+        } else {
+            [_filteredEvents unionSet:self.events];
+        }
+
+        self.filteredEventsIsInvalid = NO;
     }
 
-    return [self.events filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"inTag == %@",
-                                                     self.filter]];
+    return _filteredEvents;
 }
 
 #pragma mark -
@@ -115,37 +127,28 @@
 }
 
 - (void)addEvent:(Event *)event {
-    if ([self.events containsObject:event]) {
-        return;
-    }
-
-    NSUInteger index = [self insertionIndexForEvent:event];
-	[self.events insertObject:event atIndex:index];
+	[self.events addObject:event];
 
     self.activeEventIsInvalid = YES;
-	self.timeActiveComponentsIsInvalid = YES;
+    if (!self.filter || [event.inTag isEqual:self.filter]) {
+        self.filteredEventsIsInvalid = YES;
+    }
 }
 
 - (void)removeEvent:(Event *)event {
-    NSUInteger index = [self.events indexOfObject:event];
-
-    if (index == NSNotFound) {
-        return;
-    }
-
-    [self.events removeObjectAtIndex:index];
+    [self.events removeObject:event];
 
     self.activeEventIsInvalid = YES;
-	self.timeActiveComponentsIsInvalid = YES;
+    if (!self.filter || [event.inTag isEqual:self.filter]) {
+        self.filteredEventsIsInvalid = YES;
+    }
 }
 
 - (void)updateEvent:(Event *)event {
-    if (![self.events containsObject:event]) {
-        return;
-    }
-
     self.activeEventIsInvalid = YES;
-	self.timeActiveComponentsIsInvalid = YES;
+    if (!self.filter || [event.inTag isEqual:self.filter]) {
+        self.filteredEventsIsInvalid = YES;
+    }
 }
 
 - (NSComparisonResult)compare:(id)element {
@@ -174,7 +177,7 @@
 	NSDate *deltaStart = [self.groupDate copy];
 	NSDate *deltaEnd   = [self.groupDate copy];
 
-	for (Event *event in self.events) {
+	for (Event *event in self.filteredEvents) {
 		NSDate *startDate = [event.startDate laterDate:self.groupDate];
 		NSDate *stopDate = event.stopDate;
 		if ([event isActive]) {
@@ -192,24 +195,10 @@
                                                  options:0];
 	}
 
-	self.timeActiveComponents = [self.calendar components:unitFlags
-                                                 fromDate:deltaStart
-                                                   toDate:deltaEnd
-                                                  options:0];
-
-	self.timeActiveComponentsIsInvalid = NO;
-}
-
-- (NSUInteger)insertionIndexForEvent:(Event *)event {
-    NSUInteger index = [self.events indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
-        return [(Event *)obj compare:event] == NSOrderedDescending;
-    }];
-
-    if (index == NSNotFound) {
-        index = self.events.count;
-    }
-
-    return index;
+	self.filteredEventsDateComponents = [self.calendar components:unitFlags
+                                                         fromDate:deltaStart
+                                                           toDate:deltaEnd
+                                                          options:0];
 }
 
 @end

@@ -12,12 +12,12 @@
 @interface EventGroup : NSObject
 
 @property (nonatomic, readonly) NSDate *groupDate;
-@property (nonatomic, readonly) NSDateComponents *timeActiveComponents;
-
-@property (nonatomic, readonly) NSUInteger count;
+@property (nonatomic, readonly) NSDateComponents *filteredEventsDateComponents;
+@property (nonatomic, readonly) NSMutableSet *filteredEvents;
 
 @property (nonatomic) Tag *filter;
-@property (nonatomic, readonly) NSArray *filteredEvents;
+
+@property (nonatomic, readonly) NSUInteger count;
 
 - (id)initWithDate:(NSDate *)groupDate;
 - (BOOL)containsEvent:(Event *)event;

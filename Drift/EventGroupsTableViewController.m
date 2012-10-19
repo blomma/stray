@@ -122,7 +122,7 @@
 
 	EventGroupTableViewCell *cell = (EventGroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 
-	NSDateComponents *components = eventGroup.timeActiveComponents;
+	NSDateComponents *components = eventGroup.filteredEventsDateComponents;
 
 	cell.hours.text   = [NSString stringWithFormat:@"%02d", components.hour];
 	cell.minutes.text = [NSString stringWithFormat:@"%02d", components.minute];
