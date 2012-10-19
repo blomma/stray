@@ -19,6 +19,7 @@
 @property (nonatomic, readwrite) NSDate *groupDate;
 
 @property (nonatomic, readwrite) NSDateComponents *filteredEventsDateComponents;
+@property (nonatomic) BOOL filteredEventsDateComponentsIsInvalid;
 
 @property (nonatomic, readwrite) Event *activeEvent;
 @property (nonatomic) BOOL activeEventIsInvalid;
@@ -48,11 +49,10 @@
 
 		self.events    = [NSMutableSet set];
 		self.filteredEvents    = [NSMutableSet set];
+        self.filteredEventsIsInvalid = YES;
 
 		self.filteredEventsDateComponents = [[NSDateComponents alloc] init];
-		self.filteredEventsDateComponents.hour   = 0;
-		self.filteredEventsDateComponents.minute = 0;
-		self.filteredEventsDateComponents.second = 0;
+        self.filteredEventsDateComponentsIsInvalid = YES;
 	}
 
 	return self;
@@ -66,8 +66,8 @@
 }
 
 - (NSDateComponents *)filteredEventsDateComponents {
-	if (self.activeEvent || self.filteredEventsIsInvalid) {
-		[self updateTimeActiveComponents];
+	if (self.activeEvent || self.filteredEventsDateComponentsIsInvalid) {
+		[self updateFilteredEventsDateComponents];
 	}
 
 	return _filteredEventsDateComponents;
@@ -97,6 +97,7 @@
         }
 
         self.filteredEventsIsInvalid = NO;
+        self.filteredEventsDateComponentsIsInvalid = YES;
     }
 
     return _filteredEvents;
@@ -160,7 +161,7 @@
 	}
 }
 
-- (void)updateTimeActiveComponents {
+- (void)updateFilteredEventsDateComponents {
 	static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
 
 	NSDate *endOfDay = [self.groupDate endOfDayWithCalendar:self.calendar];
@@ -170,16 +171,13 @@
 
 	for (Event *event in self.filteredEvents) {
 		NSDate *startDate = [event.startDate laterDate:self.groupDate];
-		NSDate *stopDate = event.stopDate;
-		if ([event isActive]) {
-			stopDate = [NSDate date];
-		}
+		NSDate *stopDate = [event isActive] ? [NSDate date] : event.stopDate;
 		stopDate = [stopDate earlierDate:endOfDay];
 
 		NSDateComponents *components = [self.calendar components:unitFlags
                                                         fromDate:startDate
                                                           toDate:stopDate
-                                                         options:0];
+                                                         options:NSWrapCalendarComponents];
 
 		deltaEnd = [self.calendar dateByAddingComponents:components
                                                   toDate:deltaEnd
@@ -190,6 +188,7 @@
                                                          fromDate:deltaStart
                                                            toDate:deltaEnd
                                                           options:0];
+    self.filteredEventsDateComponentsIsInvalid = NO;
 }
 
 @end
