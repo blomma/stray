@@ -157,6 +157,9 @@
 }
 
 - (void)updateEvent:(Event *)event {
+	NSDate *startDate = [event.startDate beginningOfDayWithCalendar:self.calendar];
+	NSDate *stopDate = [event isActive] ? [NSDate date] : event.stopDate;
+
     for (NSUInteger i = 0; i < self.eventGroups.count; i++) {
         EventGroup *eventGroup = [self.eventGroups objectAtIndex:i];
 
@@ -164,7 +167,7 @@
             break;
         }
 
-		if ([eventGroup containsEvent:event] && [eventGroup isValidForEvent:event]) {
+		if ([eventGroup containsEvent:event] && [eventGroup.groupDate isBetweenDate:startDate andDate:stopDate]) {
             [eventGroup updateEvent:event];
 		}
 	}
@@ -206,10 +209,13 @@
 - (void)removeFromInvalidGroupsEvent:(Event *)event {
     NSMutableIndexSet *indexesToRemove = [NSMutableIndexSet new];
 
+	NSDate *startDate = [event.startDate beginningOfDayWithCalendar:self.calendar];
+	NSDate *stopDate = [event isActive] ? [NSDate date] : event.stopDate;
+
     for (NSUInteger i = 0; i < self.eventGroups.count; i++) {
         EventGroup *eventGroup = [self.eventGroups objectAtIndex:i];
 
-		if ([eventGroup containsEvent:event] && ![eventGroup isValidForEvent:event]) {
+		if ([eventGroup containsEvent:event] && ![eventGroup.groupDate isBetweenDate:startDate andDate:stopDate]) {
             [eventGroup removeEvent:event];
 
             if (eventGroup.count == 0) {

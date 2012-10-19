@@ -27,6 +27,4 @@
 - (void)removeEvent:(Event *)event;
 - (void)updateEvent:(Event *)event;
 
-- (BOOL)isValidForEvent:(Event *)event;
-
 @end

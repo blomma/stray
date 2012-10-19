@@ -106,18 +106,6 @@
 #pragma mark -
 #pragma mark Public methods
 
-- (BOOL)isValidForEvent:(Event *)event {
-	NSDate *stopDate = event.stopDate;
-
-	if ([event isActive]) {
-		stopDate = [NSDate date];
-	}
-
-	NSDate *startDate = [event.startDate beginningOfDayWithCalendar:self.calendar];
-
-	return [self.groupDate isBetweenDate:startDate andDate:stopDate];
-}
-
 - (BOOL)containsEvent:(Event *)event {
 	return [self.events containsObject:event];
 }
