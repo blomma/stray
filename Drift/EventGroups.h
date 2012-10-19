@@ -12,10 +12,10 @@
 
 @interface EventGroups : NSObject
 
-@property (nonatomic) Tag *filter;
+@property (nonatomic) NSSet *filters;
 @property (nonatomic) NSUInteger count;
 
-- (id)initWithEvents:(NSArray *)events filter:(Tag *)tag;
+- (id)initWithEvents:(NSArray *)events withFilters:(NSSet *)filters;
 
 - (void)addEvent:(Event *)event;
 - (void)removeEvent:(Event *)event;

@@ -10,7 +10,7 @@ extern const struct UIStateAttributes {
 
 extern const struct UIStateRelationships {
 	__unsafe_unretained NSString *activeEvent;
-	__unsafe_unretained NSString *activeTagFilter;
+	__unsafe_unretained NSString *eventGroupsFilter;
 } UIStateRelationships;
 
 extern const struct UIStateFetchedProperties {
@@ -51,9 +51,9 @@ extern const struct UIStateFetchedProperties {
 
 
 
-@property (nonatomic, strong) Tag *activeTagFilter;
+@property (nonatomic, strong) NSSet *eventGroupsFilter;
 
-//- (BOOL)validateActiveTagFilter:(id*)value_ error:(NSError**)error_;
+- (NSMutableSet*)eventGroupsFilterSet;
 
 
 
@@ -62,6 +62,11 @@ extern const struct UIStateFetchedProperties {
 @end
 
 @interface _UIState (CoreDataGeneratedAccessors)
+
+- (void)addEventGroupsFilter:(NSSet*)value_;
+- (void)removeEventGroupsFilter:(NSSet*)value_;
+- (void)addEventGroupsFilterObject:(Tag*)value_;
+- (void)removeEventGroupsFilterObject:(Tag*)value_;
 
 @end
 
@@ -80,8 +85,8 @@ extern const struct UIStateFetchedProperties {
 
 
 
-- (Tag*)primitiveActiveTagFilter;
-- (void)setPrimitiveActiveTagFilter:(Tag*)value;
+- (NSMutableSet*)primitiveEventGroupsFilter;
+- (void)setPrimitiveEventGroupsFilter:(NSMutableSet*)value;
 
 
 @end

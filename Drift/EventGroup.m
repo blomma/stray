@@ -13,7 +13,6 @@
 @interface EventGroup ()
 
 @property (nonatomic, readwrite) NSMutableSet *events;
-
 @property (nonatomic) NSMutableSet *filteredEvents;
 @property (nonatomic) BOOL filteredEventsIsInvalid;
 
@@ -34,18 +33,18 @@
 #pragma mark Lifecycle
 
 - (id)init {
-    return [self initWithDate:nil];
+    return [self initWithGroupDate:nil];
 }
 
 // ==========================
 // = Designated initializer =
 // ==========================
-- (id)initWithDate:(NSDate *)date {
+- (id)initWithGroupDate:(NSDate *)groupDate {
     self = [super init];
 	if (self) {
         self.calendar = [Global instance].calendar;
 
-		self.groupDate = [date beginningOfDayWithCalendar:self.calendar];
+		self.groupDate = groupDate;
 
 		self.events    = [NSMutableSet set];
 		self.filteredEvents    = [NSMutableSet set];
@@ -82,23 +81,19 @@
     return _activeEvent;
 }
 
-- (void)setFilter:(Tag *)filter {
-    if ([filter isEqual:_filter]) {
-        return;
-    }
-
-    _filter = filter;
+- (void)setFilters:(NSSet *)filters {
+    _filters = filters;
 	self.filteredEventsIsInvalid = YES;
 }
 
 - (NSMutableSet *)filteredEvents {
     if (self.filteredEventsIsInvalid) {
-        if (self.filter) {
-            [_filteredEvents removeAllObjects];
-            [_filteredEvents unionSet:[self.events filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"inTag == %@",
-                                                                                           self.filter]]];
-        } else {
+        if (self.filters.count == 0) {
             [_filteredEvents unionSet:self.events];
+        } else {
+            [_filteredEvents removeAllObjects];
+            [_filteredEvents unionSet:[self.events filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"inTag in %@",
+                                                                              self.filters]]];
         }
 
         self.filteredEventsIsInvalid = NO;
@@ -130,7 +125,7 @@
 	[self.events addObject:event];
 
     self.activeEventIsInvalid = YES;
-    if (!self.filter || [event.inTag isEqual:self.filter]) {
+    if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
         self.filteredEventsIsInvalid = YES;
     }
 }
@@ -139,20 +134,16 @@
     [self.events removeObject:event];
 
     self.activeEventIsInvalid = YES;
-    if (!self.filter || [event.inTag isEqual:self.filter]) {
+    if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
         self.filteredEventsIsInvalid = YES;
     }
 }
 
 - (void)updateEvent:(Event *)event {
     self.activeEventIsInvalid = YES;
-    if (!self.filter || [event.inTag isEqual:self.filter]) {
+    if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
         self.filteredEventsIsInvalid = YES;
     }
-}
-
-- (NSComparisonResult)compare:(id)element {
-	return [[element groupDate] compare:[self groupDate]];
 }
 
 #pragma mark -

@@ -15,11 +15,12 @@
 @property (nonatomic, readonly) NSDateComponents *filteredEventsDateComponents;
 @property (nonatomic, readonly) NSMutableSet *filteredEvents;
 
-@property (nonatomic) Tag *filter;
+@property (nonatomic) NSSet *filters;
 
 @property (nonatomic, readonly) NSUInteger count;
 
-- (id)initWithDate:(NSDate *)groupDate;
+- (id)initWithGroupDate:(NSDate *)groupDate;
+
 - (BOOL)containsEvent:(Event *)event;
 
 - (void)addEvent:(Event *)event;
@@ -27,7 +28,5 @@
 - (void)updateEvent:(Event *)event;
 
 - (BOOL)isValidForEvent:(Event *)event;
-
-- (NSComparisonResult)compare:(id)element;
 
 @end

@@ -9,7 +9,7 @@ const struct UIStateAttributes UIStateAttributes = {
 
 const struct UIStateRelationships UIStateRelationships = {
 	.activeEvent = @"activeEvent",
-	.activeTagFilter = @"activeTagFilter",
+	.eventGroupsFilter = @"eventGroupsFilter",
 };
 
 const struct UIStateFetchedProperties UIStateFetchedProperties = {
@@ -59,8 +59,17 @@ const struct UIStateFetchedProperties UIStateFetchedProperties = {
 
 	
 
-@dynamic activeTagFilter;
+@dynamic eventGroupsFilter;
 
+	
+- (NSMutableSet*)eventGroupsFilterSet {
+	[self willAccessValueForKey:@"eventGroupsFilter"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"eventGroupsFilter"];
+  
+	[self didAccessValueForKey:@"eventGroupsFilter"];
+	return result;
+}
 	
 
 

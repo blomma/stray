@@ -20,8 +20,6 @@
 @interface EventGroupsTableViewController ()
 
 @property (nonatomic) NSMutableArray *tagViewSubViews;
-@property (nonatomic) TagButton *selectedTagButton;
-@property (nonatomic) Tag *selectedTag;
 
 @property (nonatomic) EventGroups *eventGroups;
 @property (nonatomic) BOOL doesEventGroupsRequireUpdate;
@@ -42,22 +40,11 @@
 #pragma mark -
 #pragma mark Private Properties
 
--(void)setSelectedTag:(Tag *)selectedTag {
-    if ([selectedTag isEqual:_selectedTag]) {
-        return;
-    }
-
-    _selectedTag = selectedTag;
-    self.state.activeTagFilter = selectedTag;
-}
-
 #pragma mark -
 #pragma mark Lifecycle
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-
-    DLog(NSStringFromSelector(_cmd));
 
     self.calendar = [Global instance].calendar;
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
@@ -68,9 +55,9 @@
     self.doesTagsRequireUpdate = YES;
 
     self.state = [DataManager instance].state;
-    self.eventGroups = [[EventGroups alloc] initWithEvents:[DataManager instance].events filter:self.state.activeTagFilter];
-
-    self.selectedTag = self.state.activeTagFilter;
+    self.eventGroups = [[EventGroups alloc] initWithEvents:[DataManager instance].events
+                                                    withFilters:self.state.eventGroupsFilter];
+    self.doesEventGroupsRequireUpdate = YES;
 
     self.tagView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.65];
 
@@ -142,7 +129,7 @@
 #pragma mark Private methods
 
 - (void)updateEventGroups {
-    self.eventGroups.filter = self.selectedTag;
+    self.eventGroups.filters = self.state.eventGroupsFilter;
     [self.tableView reloadData];
 }
 
@@ -168,7 +155,6 @@
     }
 
     [self.tagViewSubViews removeAllObjects];
-    self.selectedTagButton = nil;
 
     // define number and size of elements
     NSUInteger numElements = self.tags.count;
@@ -188,8 +174,7 @@
         subview.titleLabel.backgroundColor = [UIColor clearColor];
 
         UIColor *backgroundColor = [UIColor clearColor];
-        if ([tag isEqual:self.selectedTag]) {
-            self.selectedTagButton = subview;
+        if ([self.state.eventGroupsFilter containsObject:tag]) {
             backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
         }
 
@@ -224,16 +209,17 @@
 
 - (void)tagTouchUp:(TagButton *)sender forEvent:(UIEvent *)event {
     DLog(NSStringFromSelector(_cmd));
-    [UIView animateWithDuration:0.2 animations:^{
-        self.selectedTagButton.backgroundColor = [UIColor clearColor];
-    }];
+    if ([self.state.eventGroupsFilter containsObject:sender.tagObject]) {
+        [self.state removeEventGroupsFilterObject:sender.tagObject];
 
-    self.selectedTagButton = [self.selectedTagButton isEqual:sender] ? nil : sender;
-    self.selectedTag = self.selectedTagButton.tagObject;
-
-    if (self.selectedTagButton) {
         [UIView animateWithDuration:0.2 animations:^{
-            self.selectedTagButton.backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
+            sender.backgroundColor = [UIColor clearColor];
+        }];
+    } else {
+        [self.state addEventGroupsFilterObject:sender.tagObject];
+
+        [UIView animateWithDuration:0.2 animations:^{
+            sender.backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
         }];
     }
 
@@ -299,8 +285,7 @@
         self.doesTagsRequireUpdate = YES;
     }
 
-    if ([deletedObjects containsObject:self.selectedTag]) {
-        self.selectedTag = nil;
+    if ([deletedObjects intersectsSet:self.state.eventGroupsFilter]) {
         self.doesEventGroupsRequireUpdate = YES;
     }
 }

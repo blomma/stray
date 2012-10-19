@@ -14,13 +14,11 @@
 
 @interface EventGroups ()
 
-@property (nonatomic) NSMutableArray *events;
+@property (nonatomic) NSCalendar *calendar;
 
-@property (nonatomic) NSMutableArray *allEventGroups;
+@property (nonatomic) NSMutableArray *eventGroups;
 @property (nonatomic) NSMutableArray *filteredEventGroups;
 @property (nonatomic) BOOL filteredEventGroupsIsInvalid;
-
-@property (nonatomic) NSCalendar *calendar;
 
 @end
 
@@ -32,20 +30,19 @@
 // ==========================
 // = Designated initializer =
 // ==========================
-- (id)initWithEvents:(NSArray *)events filter:(Tag *)tag {
+- (id)initWithEvents:(NSArray *)events withFilters:(NSSet *)filters {
     self = [super init];
 	if (self) {
         self.calendar = [Global instance].calendar;
 
-        self.events              = [[NSMutableArray alloc] initWithArray:events];
-        self.allEventGroups      = [NSMutableArray new];
+        self.eventGroups         = [NSMutableArray new];
         self.filteredEventGroups = [NSMutableArray new];
 
         for (Event *event in events) {
             [self addEvent:event];
         }
 
-        self.filter = tag;
+        self.filters = filters;
 	}
 
 	return self;
@@ -54,13 +51,8 @@
 #pragma mark -
 #pragma mark Public properties
 
-- (void)setFilter:(Tag *)filter {
-    if ([filter isEqual:_filter]) {
-        return;
-    }
-
-    _filter = filter;
-
+- (void)setFilters:(NSSet *)filters {
+    _filters = filters;
     self.filteredEventGroupsIsInvalid = YES;
 }
 
@@ -68,6 +60,7 @@
     if (self.filteredEventGroupsIsInvalid) {
         [self updateFilteredEventGroups];
     }
+
     return self.filteredEventGroups.count;
 }
 
@@ -75,10 +68,6 @@
 #pragma mark Public methods
 
 - (void)addEvent:(Event *)event {
-    if (![self.events containsObject:event]) {
-        [self.events addObject:event];
-    }
-
 	NSDate *startDate = event.startDate;
 	NSDate *stopDate  = event.stopDate;
 
@@ -104,20 +93,21 @@
                                                   options:0];
 
 		// Find a EventGroup for this startDate
-		EventGroup *eventGroup;
-        NSUInteger index = [self indexForGroupDate:startDate];
+        NSDate *groupDate = [startDate beginningOfDayWithCalendar:self.calendar];
+        NSUInteger index = [self indexForGroupDate:groupDate];
 
+		EventGroup *eventGroup = nil;
         if (index == NSNotFound) {
-            eventGroup = [[EventGroup alloc] initWithDate:startDate];
+            eventGroup = [[EventGroup alloc] initWithGroupDate:groupDate];
         } else {
-            eventGroup = [self.allEventGroups objectAtIndex:index];
+            eventGroup = [self.eventGroups objectAtIndex:index];
         }
 
 		// Check if this eventGroup already has this event
 		if (![eventGroup containsEvent:event]) {
 			if (index == NSNotFound) {
-                index = [self insertionIndexForGroupDate:eventGroup.groupDate];
-                [self.allEventGroups insertObject:eventGroup atIndex:index];
+                index = [self insertionIndexForGroupDate:groupDate];
+                [self.eventGroups insertObject:eventGroup atIndex:index];
 			}
 
             [eventGroup addEvent:event];
@@ -137,18 +127,16 @@
 		eventSecondsComponent.second -= deltaSecondsComponent.second;
 	}
 
-    if (!self.filter || [event.inTag isEqual:self.filter]) {
+    if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
         self.filteredEventGroupsIsInvalid = YES;
     }
 }
 
 - (void)removeEvent:(Event *)event {
-    [self.events removeObject:event];
-
     NSMutableIndexSet *indexesToRemove = [NSMutableIndexSet new];
 
-    for (NSUInteger i = 0; i < self.allEventGroups.count; i++) {
-        EventGroup *eventGroup = [self.allEventGroups objectAtIndex:i];
+    for (NSUInteger i = 0; i < self.eventGroups.count; i++) {
+        EventGroup *eventGroup = [self.eventGroups objectAtIndex:i];
 
 		if ([eventGroup containsEvent:event]) {
             [eventGroup removeEvent:event];
@@ -161,16 +149,16 @@
 	}
 
     // Remove empty groups
-    [self.allEventGroups removeObjectsAtIndexes:indexesToRemove];
+    [self.eventGroups removeObjectsAtIndexes:indexesToRemove];
     
-    if (!self.filter || [event.inTag isEqual:self.filter]) {
+    if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
         self.filteredEventGroupsIsInvalid = YES;
     }
 }
 
 - (void)updateEvent:(Event *)event {
-    for (NSUInteger i = 0; i < self.allEventGroups.count; i++) {
-        EventGroup *eventGroup = [self.allEventGroups objectAtIndex:i];
+    for (NSUInteger i = 0; i < self.eventGroups.count; i++) {
+        EventGroup *eventGroup = [self.eventGroups objectAtIndex:i];
 
         if ([[eventGroup groupDate] earlierDate:event.startDate]) {
             break;
@@ -187,7 +175,7 @@
     // Next we remove the event from invalid eventGroups
     [self removeFromInvalidGroupsEvent:event];
 
-    if (!self.filter || [event.inTag isEqual:self.filter]) {
+    if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
         self.filteredEventGroupsIsInvalid = YES;
     }
 }
@@ -205,8 +193,8 @@
 - (void)updateFilteredEventGroups {
     [self.filteredEventGroups removeAllObjects];
 
-    for (EventGroup *eventGroup in self.allEventGroups) {
-        eventGroup.filter = self.filter;
+    for (EventGroup *eventGroup in self.eventGroups) {
+        eventGroup.filters = self.filters;
         if (eventGroup.filteredEvents.count > 0) {
             [self.filteredEventGroups addObject:eventGroup];
         }
@@ -218,8 +206,8 @@
 - (void)removeFromInvalidGroupsEvent:(Event *)event {
     NSMutableIndexSet *indexesToRemove = [NSMutableIndexSet new];
 
-    for (NSUInteger i = 0; i < self.allEventGroups.count; i++) {
-        EventGroup *eventGroup = [self.allEventGroups objectAtIndex:i];
+    for (NSUInteger i = 0; i < self.eventGroups.count; i++) {
+        EventGroup *eventGroup = [self.eventGroups objectAtIndex:i];
 
 		if ([eventGroup containsEvent:event] && ![eventGroup isValidForEvent:event]) {
             [eventGroup removeEvent:event];
@@ -231,13 +219,11 @@
 	}
 
     // Remove empty groups
-    [self.allEventGroups removeObjectsAtIndexes:indexesToRemove];
+    [self.eventGroups removeObjectsAtIndexes:indexesToRemove];
 }
 
-- (NSUInteger)indexForGroupDate:(NSDate *)date {
-    NSDate *groupDate = [date beginningOfDayWithCalendar:self.calendar];
-
-    NSUInteger index = [self.allEventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
+- (NSUInteger)indexForGroupDate:(NSDate *)groupDate {
+    NSUInteger index = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
         if ([[obj groupDate] isEqualToDate:groupDate]) {
             *stop = YES;
             return YES;
@@ -249,7 +235,7 @@
 }
 
 - (NSUInteger)insertionIndexForGroupDate:(NSDate *)date {
-    NSUInteger index = [self.allEventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
+    NSUInteger index = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL * stop) {
         if ([[obj groupDate] compare:date] == NSOrderedAscending) {
             *stop = YES;
             return YES;
@@ -258,7 +244,7 @@
     }];
 
     if (index == NSNotFound) {
-        index = self.allEventGroups.count;
+        index = self.eventGroups.count;
     }
     
     return index;
