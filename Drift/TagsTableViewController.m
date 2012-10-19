@@ -173,26 +173,17 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 
     UIColor *backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
     if ([self.event.inTag isEqual:tag]) {
-        backgroundColor = [UIColor colorWithWhite:0.333f alpha:1.000];
+        backgroundColor = [UIColor colorWithWhite:0.075f alpha:1];
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 
-    TransformableTableViewCell *cell = (TransformableTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    [UIView animateWithDuration:0.2 animations:^{
-        cell.frontView.backgroundColor = backgroundColor;
-    }];
-
     self.event.inTag = [self.event.inTag isEqual:tag] ? nil : tag;
 
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    UIColor *backgroundColor = [UIColor colorWithWhite:0.333f alpha:1.000];
-
     TransformableTableViewCell *cell = (TransformableTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    [UIView animateWithDuration:0.2 animations:^{
+    [UIView animateWithDuration:0.1 animations:^{
         cell.frontView.backgroundColor = backgroundColor;
+    } completion:^(BOOL finished) {
+        [self dismissViewControllerAnimated:YES completion:nil];
     }];
 }
 
