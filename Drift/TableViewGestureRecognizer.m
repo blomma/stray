@@ -76,7 +76,6 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
 #pragma mark Logic
 
 - (void)commitOrDiscardCell {
-    DLog(@"commitOrDiscardCell");
     if (self.addingIndexPath) {
         UITableViewCell *cell = (UITableViewCell *)[self.tableView cellForRowAtIndexPath:self.addingIndexPath];
 
@@ -101,7 +100,6 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
 #pragma mark Action
 
 - (void)panGestureRecognizer:(UIPanGestureRecognizer *)recognizer {
-    DLog(@"panGestureRecognizer");
     if (recognizer.state == UIGestureRecognizerStateBegan && [recognizer numberOfTouches] > 0) {
         CGPoint translation = [recognizer translationInView:self.tableView];
         self.translationInTableView = translation;
@@ -172,7 +170,6 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
 }
 
 - (void)longPressGestureRecognizer:(UILongPressGestureRecognizer *)recognizer {
-    DLog(@"longPressGestureRecognizer");
     CGPoint location = [recognizer locationInView:self.tableView];
 
     if (recognizer.state == UIGestureRecognizerStateBegan) {
@@ -268,7 +265,6 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
 #pragma mark UIGestureRecognizer
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    DLog(@"gestureRecognizerShouldBegin %@", gestureRecognizer);
     if (gestureRecognizer == self.panRecognizer) {
         if (![self.delegate conformsToProtocol:@protocol(TableViewGestureEditingRowDelegate)]) {
             return NO;
@@ -362,7 +358,6 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    DLog(@"scrollViewDidEndDragging");
     if ( ! [self.delegate conformsToProtocol:@protocol(TableViewGestureAddingRowDelegate)]) {
         if ([self.tableViewDelegate respondsToSelector:@selector(scrollViewDidEndDragging:willDecelerate:)]) {
             [self.tableViewDelegate scrollViewDidEndDragging:scrollView willDecelerate:decelerate];

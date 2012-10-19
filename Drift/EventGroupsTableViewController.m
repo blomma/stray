@@ -70,8 +70,6 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    DLog(NSStringFromSelector(_cmd));
-
     if (self.doesTagsRequireUpdate) {
         [self updateTagsView];
     }
@@ -98,7 +96,6 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    DLog(@"eventGroups count %u", self.eventGroups.count);
     return (NSInteger)self.eventGroups.count;
 }
 
@@ -134,8 +131,6 @@
 }
 
 - (void)updateTagsView {
-    DLog(NSStringFromSelector(_cmd));
-
     [self.tags removeAllObjects];
     [self.tags addObjectsFromArray:[[[DataManager instance] tags]
                                     sortedArrayWithOptions:NSSortConcurrent
@@ -208,7 +203,6 @@
 }
 
 - (void)tagTouchUp:(TagButton *)sender forEvent:(UIEvent *)event {
-    DLog(NSStringFromSelector(_cmd));
     if ([self.state.eventGroupsFilter containsObject:sender.tagObject]) {
         [self.state removeEventGroupsFilterObject:sender.tagObject];
 
@@ -227,7 +221,6 @@
 }
 
 - (void)objectsDidChange:(NSNotification *)note {
-    DLog(NSStringFromSelector(_cmd));
     NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
     NSSet *deletedObjects  = [[note userInfo] objectForKey:NSDeletedObjectsKey];
     NSSet *updatedObjects  = [[note userInfo] objectForKey:NSUpdatedObjectsKey];

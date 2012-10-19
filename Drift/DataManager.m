@@ -61,8 +61,6 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 //                event.inTag = tag2;
 //            }
 //        }
-//#ifdef ADHOC
-//#endif
 
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(objectsDidChange:)

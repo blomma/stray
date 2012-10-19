@@ -34,8 +34,6 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-    DLog(NSStringFromSelector(_cmd));
-
     self.state = [DataManager instance].state;
 
     [self reset];
@@ -66,8 +64,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-    DLog(NSStringFromSelector(_cmd));
 
     Event *event = self.state.activeEvent;
 
