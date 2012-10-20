@@ -18,8 +18,6 @@
 				<string>iPhone@2x.png</string>
 				<string>iPhone.png</string>
 			</array>
-			<key>UIPrerenderedIcon</key>
-			<true/>
 		</dict>
 		<key>UINewsstandIcon</key>
 		<dict>
