@@ -145,7 +145,7 @@
 		9E895EC316176DBD0083037B /* Change.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Change.m; sourceTree = "<group>"; };
 		9E89816D15A0BC2900E22EA7 /* EventGroupTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroupTableViewCell.h; sourceTree = "<group>"; };
 		9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroupTableViewCell.m; sourceTree = "<group>"; };
-		9E916E14163197A40058C777 /* CoreDataModel-4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CoreDataModel-4.xcdatamodel"; sourceTree = "<group>"; };
+		9E916E14163197A40058C777 /* CoreDataModel-4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-4.xcdatamodel"; sourceTree = "<group>"; };
 		9E9239D7162D4F9B00E265E6 /* TableViewGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewGestureRecognizer.h; sourceTree = "<group>"; };
 		9E9239D8162D4F9B00E265E6 /* TableViewGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewGestureRecognizer.m; sourceTree = "<group>"; };
 		9E9239D9162D4F9B00E265E6 /* TransformableTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransformableTableViewCell.h; sourceTree = "<group>"; };
@@ -653,6 +653,7 @@
 				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlightSDK1.1\"",
@@ -660,6 +661,7 @@
 				PRODUCT_NAME = Stray;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -673,6 +675,7 @@
 				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlightSDK1.1\"",
@@ -680,6 +683,7 @@
 				PRODUCT_NAME = Stray;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -745,6 +749,7 @@
 				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlightSDK1.1\"",
@@ -752,6 +757,7 @@
 				PRODUCT_NAME = Stray;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Ad Hoc";
