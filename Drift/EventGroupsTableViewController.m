@@ -59,7 +59,7 @@
                                                     withFilters:self.state.eventGroupsFilter];
     self.doesEventGroupsRequireUpdate = YES;
 
-    self.tagView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.65];
+    self.tagView.backgroundColor = [UIColor colorWithRed:0.255 green:0.306 blue:0.353 alpha:0.45];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
 	                                         selector:@selector(objectsDidChange:)
@@ -81,11 +81,20 @@
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    CGFloat y = self.tags.count == 0 ? -30 : 0;
+    CGRect frame = CGRectMake(0, y, self.view.bounds.size.width, 30);
+
+    [UIView animateWithDuration:0.3 animations:^{
+        self.tagView.frame = frame;
+    }];
+}
+
 #pragma mark -
 #pragma mark UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return indexPath.row == 0 && self.tags.count > 0 ? 144 : 100;
+    return indexPath.row == 0 && self.tags.count > 0 ? 130 : 100;
 }
 
 #pragma mark -
@@ -188,12 +197,6 @@
 
         // add the subview
         [self.tagView addSubview:subview];
-    }
-
-    if (self.tags.count == 0) {
-        self.tagView.hidden = YES;
-    } else {
-        self.tagView.hidden = NO;
     }
 
     // set the size of the scrollview's content
