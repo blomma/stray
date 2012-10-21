@@ -59,7 +59,8 @@
                                                     withFilters:self.state.eventGroupsFilter];
     self.doesEventGroupsRequireUpdate = YES;
 
-    self.tagView.backgroundColor = [UIColor colorWithRed:0.255 green:0.306 blue:0.353 alpha:0.45];
+    self.tagView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.45];
+//    self.tagView.backgroundColor = [UIColor colorWithRed:0.427 green:0.784 blue:0.992 alpha:0.45];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
 	                                         selector:@selector(objectsDidChange:)
@@ -168,35 +169,34 @@
     for (NSUInteger i = 0; i < numElements; i++) {
         Tag *tag = [self.tags objectAtIndex:i];
 
-        TagButton* subview = [TagButton buttonWithType:UIButtonTypeCustom];
-        subview.tagObject = tag;
-        [subview addTarget:self action:@selector(tagTouchUp:forEvent:) forControlEvents:UIControlEventTouchUpInside];
+        TagButton* tagButton = [TagButton buttonWithType:UIButtonTypeCustom];
+        tagButton.tagObject = tag;
+        [tagButton addTarget:self action:@selector(tagTouchUp:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 
-        subview.titleLabel.textColor = [UIColor whiteColor];
-        subview.titleLabel.textAlignment = NSTextAlignmentCenter;
-        subview.titleLabel.font = [UIFont fontWithName:@"Futura-Medium" size:15];
-        subview.titleLabel.backgroundColor = [UIColor clearColor];
+        tagButton.titleLabel.textColor = [UIColor whiteColor];
+        tagButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+        tagButton.titleLabel.font = [UIFont fontWithName:@"Futura-Medium" size:15];
+        tagButton.titleLabel.backgroundColor = [UIColor clearColor];
 
-        UIColor *backgroundColor = [UIColor clearColor];
-        if ([self.state.eventGroupsFilter containsObject:tag]) {
-            backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
-        }
+        tagButton.backgroundColor = [UIColor clearColor];
 
-        subview.backgroundColor = backgroundColor;
-
-        [subview setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
+        [tagButton setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
         // select a differing red value so that we can distinguish our added subviews
         //        float redValue = (1.0f / numElements) * i;
         //        subview.backgroundColor = [UIColor colorWithRed:redValue green:0 blue:0  alpha:1.0];
 
         // setup frames to appear besides each other in the slider
         CGFloat elementX = elementSize.width * i;
-        subview.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
+        tagButton.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
 
-        [self.tagViewSubViews addObject:subview];
+        if ([self.state.eventGroupsFilter containsObject:tag]) {
+            tagButton.selected = YES;
+        }
+
+        [self.tagViewSubViews addObject:tagButton];
 
         // add the subview
-        [self.tagView addSubview:subview];
+        [self.tagView addSubview:tagButton];
     }
 
     // set the size of the scrollview's content
@@ -209,15 +209,11 @@
     if ([self.state.eventGroupsFilter containsObject:sender.tagObject]) {
         [self.state removeEventGroupsFilterObject:sender.tagObject];
 
-        [UIView animateWithDuration:0.2 animations:^{
-            sender.backgroundColor = [UIColor clearColor];
-        }];
+        sender.selected = NO;
     } else {
         [self.state addEventGroupsFilterObject:sender.tagObject];
 
-        [UIView animateWithDuration:0.2 animations:^{
-            sender.backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
-        }];
+        sender.selected = YES;
     }
 
     [self updateEventGroups];
