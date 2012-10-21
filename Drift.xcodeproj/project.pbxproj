@@ -50,6 +50,8 @@
 		9E4B3DD7160463F000CBC99E /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E4B3DD3160463F000CBC99E /* libTestFlight.a */; };
 		9E4B3DD8160463F000CBC99E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9E4B3DD4160463F000CBC99E /* README.md */; };
 		9E4B3DD9160463F000CBC99E /* release_notes.md in Resources */ = {isa = PBXBuildFile; fileRef = 9E4B3DD5160463F000CBC99E /* release_notes.md */; };
+		9E513DFB163430E90080313A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E513DFA163430E90080313A /* Icon@2x.png */; };
+		9E513DFE163433C70080313A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E513DFD163433C70080313A /* Icon.png */; };
 		9E51511615C7CEF100901655 /* EventGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511315C7CEF100901655 /* EventGroup.m */; };
 		9E51511715C7CEF100901655 /* EventGroups.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511515C7CEF100901655 /* EventGroups.m */; };
 		9E561DDB15FA08FB008D3895 /* EventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E561DDA15FA08FB008D3895 /* EventTableViewCell.m */; };
@@ -72,8 +74,6 @@
 		9EAE7DEE1603C1C5007F32EC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DED1603C1C5007F32EC /* Default-568h@2x.png */; };
 		9EAE7DF91603D006007F32EC /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DF81603D006007F32EC /* Default@2x.png */; };
 		9EAE7DFB1603D038007F32EC /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DFA1603D038007F32EC /* Default.png */; };
-		9EAE7DFD1603D201007F32EC /* iPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DFC1603D201007F32EC /* iPhone@2x.png */; };
-		9EAE7DFF1603D207007F32EC /* iPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DFE1603D207007F32EC /* iPhone.png */; };
 		9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCC5CA160DBFA1003CB2BB /* Tag.m */; };
 		9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */; };
 		9EE939C216172D090035DD5F /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE939BD16172D090035DD5F /* CoreDataManager.m */; };
@@ -128,6 +128,8 @@
 		9E4B3DD4160463F000CBC99E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		9E4B3DD5160463F000CBC99E /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.md; sourceTree = "<group>"; };
 		9E4B3DD6160463F000CBC99E /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		9E513DFA163430E90080313A /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
+		9E513DFD163433C70080313A /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../Icon.png; sourceTree = "<group>"; };
 		9E51511215C7CEF100901655 /* EventGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroup.h; sourceTree = "<group>"; };
 		9E51511315C7CEF100901655 /* EventGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroup.m; sourceTree = "<group>"; };
 		9E51511415C7CEF100901655 /* EventGroups.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroups.h; sourceTree = "<group>"; };
@@ -167,8 +169,6 @@
 		9EAE7DED1603C1C5007F32EC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		9EAE7DF81603D006007F32EC /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
 		9EAE7DFA1603D038007F32EC /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
-		9EAE7DFC1603D201007F32EC /* iPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "iPhone@2x.png"; path = "../iPhone@2x.png"; sourceTree = "<group>"; };
-		9EAE7DFE1603D207007F32EC /* iPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iPhone.png; path = ../iPhone.png; sourceTree = "<group>"; };
 		9EDCC5C9160DBFA1003CB2BB /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tag.h; sourceTree = "<group>"; };
 		9EDCC5CA160DBFA1003CB2BB /* Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tag.m; sourceTree = "<group>"; };
 		9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EventTimerControl.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -368,6 +368,8 @@
 		9E9FFF9215925CAE00BA5200 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9E513DFD163433C70080313A /* Icon.png */,
+				9E513DFA163430E90080313A /* Icon@2x.png */,
 				9E14D42B1626FB1C008D9E43 /* low_contrast_linen.png */,
 				9E14D42C1626FB1C008D9E43 /* low_contrast_linen@2X.png */,
 				9E14D4231626DAEB008D9E43 /* background.jpg */,
@@ -376,8 +378,6 @@
 				9E14D41C1626D72A008D9E43 /* delete@2x.png */,
 				9E14D41D1626D72A008D9E43 /* edit.png */,
 				9E14D41E1626D72A008D9E43 /* edit@2x.png */,
-				9EAE7DFE1603D207007F32EC /* iPhone.png */,
-				9EAE7DFC1603D201007F32EC /* iPhone@2x.png */,
 				9EAE7DFA1603D038007F32EC /* Default.png */,
 				9EAE7DF81603D006007F32EC /* Default@2x.png */,
 				9EAE7DED1603C1C5007F32EC /* Default-568h@2x.png */,
@@ -470,8 +470,6 @@
 				9EAE7DEE1603C1C5007F32EC /* Default-568h@2x.png in Resources */,
 				9EAE7DF91603D006007F32EC /* Default@2x.png in Resources */,
 				9EAE7DFB1603D038007F32EC /* Default.png in Resources */,
-				9EAE7DFD1603D201007F32EC /* iPhone@2x.png in Resources */,
-				9EAE7DFF1603D207007F32EC /* iPhone.png in Resources */,
 				9E4B3DD8160463F000CBC99E /* README.md in Resources */,
 				9E4B3DD9160463F000CBC99E /* release_notes.md in Resources */,
 				9E14D41F1626D72A008D9E43 /* delete.png in Resources */,
@@ -482,6 +480,8 @@
 				9E14D4261626DAEB008D9E43 /* background@2x.jpg in Resources */,
 				9E14D42D1626FB1C008D9E43 /* low_contrast_linen.png in Resources */,
 				9E14D42E1626FB1C008D9E43 /* low_contrast_linen@2X.png in Resources */,
+				9E513DFB163430E90080313A /* Icon@2x.png in Resources */,
+				9E513DFE163433C70080313A /* Icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
