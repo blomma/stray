@@ -12,6 +12,16 @@
 #import "DataManager.h"
 #import "TransformableTableViewCell.h"
 #import "UITableView+Change.h"
+#import <QuartzCore/QuartzCore.h>
+
+static NSString *grabbedTableViewCellIdentifier  = @"grabbedTableViewCellIdentifier";
+static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
+
+static NSInteger kEditStateRightOffset = 260;
+static NSInteger kEditCommitLength = 60;
+
+static NSInteger kAddingCommitHeight = 74;
+static NSInteger kAddingFinishHeight = 74;
 
 @interface TagsTableViewController ()<TableViewGestureEditingRowDelegate, TableViewGestureAddingRowDelegate, TableViewGestureMoveRowDelegate, TableViewCellEditingRowDelegate>
 
@@ -24,17 +34,6 @@
 @end
 
 @implementation TagsTableViewController
-
-static NSString *grabbedTableViewCellIdentifier  = @"grabbedTableViewCellIdentifier";
-static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
-
-#define COMMITING_EDIT_CELL_LENGTH 60
-
-#define COMMITING_CREATE_CELL_HEIGHT 74
-#define NORMAL_CELL_FINISHING_HEIGHT 74
-
-#define EDIT_STATE_LEFT_OFFSET -80
-#define EDIT_STATE_RIGHT_OFFSET 260
 
 #pragma mark - View lifecycle
 
@@ -103,13 +102,13 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
         cell.textLabel.font = [UIFont fontWithName:@"Futura-Medium" size:25];
         cell.textLabel.backgroundColor = [UIColor clearColor];
 
-        if (cell.frame.size.height > COMMITING_CREATE_CELL_HEIGHT * 2) {
+        if (cell.frame.size.height > kAddingCommitHeight * 2) {
             cell.textLabel.text = @"Close";
             cell.contentView.backgroundColor = [UIColor colorWithRed:0.843f
                                                                green:0.306f
                                                                 blue:0.314f
                                                                alpha:1];
-        } else if (cell.frame.size.height >= COMMITING_CREATE_CELL_HEIGHT) {
+        } else if (cell.frame.size.height >= kAddingCommitHeight) {
             cell.textLabel.text = @"Release to create cell...";
             cell.contentView.backgroundColor = [UIColor colorWithRed:0.510f
                                                                green:0.784f
@@ -121,7 +120,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
             cell.contentView.backgroundColor = [UIColor colorWithRed:0.510f
                                                                green:0.784f
                                                                 blue:0.431f
-                                                               alpha:(cell.frame.size.height / COMMITING_CREATE_CELL_HEIGHT)];
+                                                               alpha:(cell.frame.size.height / kAddingCommitHeight)];
         }
 
         return cell;
@@ -133,8 +132,21 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     } else {
         TransformableTableViewCell *cell = (TransformableTableViewCell *)[tableView dequeueReusableCellWithIdentifier:tagsTableViewCellIdentifier];
 
-        UIImage* background = [UIImage imageNamed:@"low_contrast_linen"];
+        UIImage* background = [UIImage imageNamed:@"navy_blue"];
         cell.backView.backgroundColor = [UIColor colorWithPatternImage:background];
+
+        cell.frontView.layer.masksToBounds = NO;
+        cell.frontView.layer.shadowOffset = CGSizeMake(-1, -5);
+        cell.frontView.layer.shadowRadius = 4;
+        cell.frontView.layer.shadowOpacity = 0.5;
+        cell.frontView.layer.shadowPath = [UIBezierPath bezierPathWithRect:cell.frontView.bounds].CGPath;
+
+        cell.textFieldName.backgroundColor = [UIColor colorWithRed:1.000 green:1.000 blue:0.923 alpha:1.000];
+
+        CGRect frame = cell.textFieldName.frame;
+        frame.size.height = 40;
+        cell.textFieldName.frame = frame;
+        
         cell.textFieldName.text = [object name];
 
         cell.frontView.frame = cell.frontView.bounds;
@@ -165,7 +177,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 #pragma mark UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return NORMAL_CELL_FINISHING_HEIGHT;
+    return kAddingFinishHeight;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -191,7 +203,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 #pragma mark TableViewGestureAddingRowDelegate
 
 - (CGFloat)gestureRecognizer:(TableViewGestureRecognizer *)gestureRecognizer heightForCommitAddingRowAtIndexPath:(NSIndexPath *)indexPath {
-    return COMMITING_CREATE_CELL_HEIGHT;
+    return kAddingCommitHeight;
 }
 
 - (void)gestureRecognizer:(TableViewGestureRecognizer *)gestureRecognizer needsAddRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -213,7 +225,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     NSSet * changes = [self.tags removeObjectAtIndex:(NSUInteger)indexPath.row];
     [self.tableView updateWithChanges:changes];
 
-    if (cell.frame.size.height > COMMITING_CREATE_CELL_HEIGHT * 2) {
+    if (cell.frame.size.height > kAddingCommitHeight * 2) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
@@ -222,12 +234,12 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 #pragma mark TableViewCellEditingRowDelegate
 
 - (void)cell:(TransformableTableViewCell *)cell tappedDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event {
-    NSUInteger index = (NSUInteger)self.indexPathInEditState.row;
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
-    Tag *tag = [self.tags objectAtIndex:index];
+    Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
     [[DataManager instance] deleteTag:tag];
 
-    NSSet *changes = [self.tags removeObjectAtIndex:index];
+    NSSet *changes = [self.tags removeObjectAtIndex:(NSUInteger)indexPath.row];
     [self.tableView updateWithChanges:changes];
 }
 
@@ -249,13 +261,11 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 - (void)gestureRecognizer:(TableViewGestureRecognizer *)gestureRecognizer didChangeEditingState:(TableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
     TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
-    NSInteger xOffset = 0;
-    if (cell.state == TableViewCellEditingStateLeft) {
-        xOffset = EDIT_STATE_LEFT_OFFSET;
-    } else if (cell.state == TableViewCellEditingStateRight) {
-        xOffset = EDIT_STATE_RIGHT_OFFSET;
+    if (state == TableViewCellEditingStateLeft && cell.state == TableViewCellEditingStateNone) {
+        return;
     }
 
+    NSInteger xOffset = cell.state == TableViewCellEditingStateRight ? kEditStateRightOffset : 0;
     cell.frontView.frame = CGRectOffset(cell.frontView.bounds, gestureRecognizer.translationInTableView.x + xOffset, 0);
 }
 
@@ -263,20 +273,17 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
     CGRect frame;
-    if (cell.state == TableViewCellEditingStateLeft || cell.state == TableViewCellEditingStateRight) {
+    if (cell.state == TableViewCellEditingStateLeft || cell.state == TableViewCellEditingStateRight || state == TableViewCellEditingStateLeft) {
         frame = cell.frontView.bounds;
         cell.state = TableViewCellEditingStateNone;
-    } else if (state == TableViewCellEditingStateLeft) {
-        frame = CGRectOffset(cell.frontView.bounds, EDIT_STATE_LEFT_OFFSET, 0);
-        cell.state = TableViewCellEditingStateLeft;
     } else if (state == TableViewCellEditingStateRight) {
-        frame = CGRectOffset(cell.frontView.bounds, EDIT_STATE_RIGHT_OFFSET, 0);
+        frame = CGRectOffset(cell.frontView.bounds, kEditStateRightOffset, 0);
         cell.state = TableViewCellEditingStateRight;
     }
 
     [UIView animateWithDuration:0.35
                           delay:0
-                        options:UIViewAnimationOptionCurveEaseOut
+                        options:UIViewAnimationOptionCurveEaseIn
                      animations:^{
                          cell.frontView.frame = frame;
                      } completion:nil];
@@ -297,7 +304,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 }
 
 - (CGFloat)gestureRecognizer:(TableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-    return COMMITING_EDIT_CELL_LENGTH;
+    return kEditCommitLength;
 }
 
 #pragma mark TableViewGestureMoveRowDelegate

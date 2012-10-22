@@ -127,15 +127,7 @@ CGFloat const TableViewRowAnimationDuration          = 0.25;       // Rough gues
             commitEditingLength = [self.delegate gestureRecognizer:self lengthForCommitEditingRowAtIndexPath:indexPath];
         }
 
-        if (fabsf(translation.x) >= commitEditingLength) {
-            if (self.addingCellState == TableViewCellEditingStateMiddle) {
-                self.addingCellState = translation.x > 0 ? TableViewCellEditingStateRight : TableViewCellEditingStateLeft;
-            }
-        } else {
-            if (self.addingCellState != TableViewCellEditingStateMiddle) {
-                self.addingCellState = TableViewCellEditingStateMiddle;
-            }
-        }
+        self.addingCellState = translation.x > 0 ? TableViewCellEditingStateRight : TableViewCellEditingStateLeft;
 
         if ([self.delegate respondsToSelector:@selector(gestureRecognizer:didChangeEditingState:forRowAtIndexPath:)]) {
             [self.delegate gestureRecognizer:self didChangeEditingState:self.addingCellState forRowAtIndexPath:indexPath];

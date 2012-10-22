@@ -66,6 +66,8 @@
 		9E9239E8162DAF6300E265E6 /* UIState.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239E6162DAF6300E265E6 /* UIState.m */; };
 		9E9239EB162F3A5000E265E6 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239EA162F3A5000E265E6 /* Global.m */; };
 		9E92637115EF350D00393946 /* _Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E92637015EF350D00393946 /* _Tag.m */; };
+		9E96FC3A1635532900AB5B0A /* navy_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E96FC381635532900AB5B0A /* navy_blue.png */; };
+		9E96FC3B1635532900AB5B0A /* navy_blue@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E96FC391635532900AB5B0A /* navy_blue@2X.png */; };
 		9E9C237815F3617200572FB7 /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C237715F3617100572FB7 /* EventsViewController.m */; };
 		9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB520E15C9553C008952FB /* NSDate+Utilities.m */; };
 		9EAE7DEE1603C1C5007F32EC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DED1603C1C5007F32EC /* Default-568h@2x.png */; };
@@ -158,6 +160,8 @@
 		9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-2.xcdatamodel"; sourceTree = "<group>"; };
 		9E92636F15EF350D00393946 /* _Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Tag.h; sourceTree = "<group>"; };
 		9E92637015EF350D00393946 /* _Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Tag.m; sourceTree = "<group>"; };
+		9E96FC381635532900AB5B0A /* navy_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navy_blue.png; sourceTree = "<group>"; };
+		9E96FC391635532900AB5B0A /* navy_blue@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navy_blue@2X.png"; sourceTree = "<group>"; };
 		9E9C237615F3617100572FB7 /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
 		9E9C237715F3617100572FB7 /* EventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9EAB520D15C9553C008952FB /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
@@ -316,6 +320,17 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
+		9E96FCE016359F8600AB5B0A /* TransformableTableView */ = {
+			isa = PBXGroup;
+			children = (
+				9E9239D7162D4F9B00E265E6 /* TableViewGestureRecognizer.h */,
+				9E9239D8162D4F9B00E265E6 /* TableViewGestureRecognizer.m */,
+				9E9239D9162D4F9B00E265E6 /* TransformableTableViewCell.h */,
+				9E9239DA162D4F9B00E265E6 /* TransformableTableViewCell.m */,
+			);
+			name = TransformableTableView;
+			sourceTree = "<group>";
+		};
 		9E9C232D15F288D400572FB7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -336,10 +351,7 @@
 		9E9C232F15F2895000572FB7 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				9E9239D7162D4F9B00E265E6 /* TableViewGestureRecognizer.h */,
-				9E9239D8162D4F9B00E265E6 /* TableViewGestureRecognizer.m */,
-				9E9239D9162D4F9B00E265E6 /* TransformableTableViewCell.h */,
-				9E9239DA162D4F9B00E265E6 /* TransformableTableViewCell.m */,
+				9E96FCE016359F8600AB5B0A /* TransformableTableView */,
 				9E63E1D515EA3338009C0A2D /* NoHitCAShapeLayer.h */,
 				9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */,
 				9E89816D15A0BC2900E22EA7 /* EventGroupTableViewCell.h */,
@@ -357,6 +369,8 @@
 		9E9FFF9215925CAE00BA5200 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9E96FC381635532900AB5B0A /* navy_blue.png */,
+				9E96FC391635532900AB5B0A /* navy_blue@2X.png */,
 				9E513DFD163433C70080313A /* Icon.png */,
 				9E513DFA163430E90080313A /* Icon@2x.png */,
 				9E14D42B1626FB1C008D9E43 /* low_contrast_linen.png */,
@@ -482,6 +496,8 @@
 				9E513DFE163433C70080313A /* Icon.png in Resources */,
 				9EBE4F691634497D005A3B54 /* README.md in Resources */,
 				9EBE4F6A1634497D005A3B54 /* release_notes.md in Resources */,
+				9E96FC3A1635532900AB5B0A /* navy_blue.png in Resources */,
+				9E96FC3B1635532900AB5B0A /* navy_blue@2X.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
