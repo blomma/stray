@@ -50,6 +50,7 @@
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
     self.standaloneWeekdaySymbols = [[NSDateFormatter new] standaloneWeekdaySymbols];
 
+    self.tagView.showsHorizontalScrollIndicator = NO;
     self.tagViewSubViews = [NSMutableArray array];
     self.tags = [NSMutableArray array];
     self.doesTagsRequireUpdate = YES;
