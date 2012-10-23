@@ -105,7 +105,7 @@ static NSInteger kCellSnapShotTag = 100000;
             self.transformIndexPath = indexPath;
         }
 
-        self.editingCellState = TransformableTableViewCellEditingStateNone;
+        self.editingCellState = translation.x > 0 ? TransformableTableViewCellEditingStateRight : TransformableTableViewCellEditingStateLeft;
         self.state = TableViewGestureRecognizerStatePanning;
 
         if ([self.delegate respondsToSelector:@selector(gestureRecognizer:didEnterEditingState:forRowAtIndexPath:)]) {

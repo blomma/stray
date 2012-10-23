@@ -16,7 +16,6 @@
 @property (nonatomic) id<TableViewCellEditingRowDelegate> delegate;
 
 @property (nonatomic, assign) CGFloat finishedHeight;
-@property (nonatomic) TransformableTableViewCellEditingState state;
 
 @property (nonatomic, weak) IBOutlet UILabel *name;
 @property (nonatomic, weak) IBOutlet UITextField *textFieldName;
