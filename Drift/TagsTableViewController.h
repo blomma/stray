@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Event.h"
 
-@interface TagsTableViewController : UITableViewController <UITextFieldDelegate>
+@interface TagsTableViewController : UITableViewController
 
 @property (nonatomic) Event *event;
 

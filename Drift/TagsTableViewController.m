@@ -51,36 +51,6 @@ static NSInteger kAddingFinishHeight = 74;
 }
 
 #pragma mark -
-#pragma mark UITextFieldDelegate
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-    return YES;
-}
-
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    return YES;
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    NSString *tagName = textField.text;
-
-    Tag *tag = [self.tags objectAtIndex:(NSUInteger)self.indexPathInEditState.row];
-    tag.name = tagName;
-
-    TransformableTableViewCell *cell = (TransformableTableViewCell *)[self.tableView cellForRowAtIndexPath:self.indexPathInEditState];
-    cell.name.text = [tagName uppercaseString];
-
-    CGPoint fromValue = cell.frontView.layer.position;
-    CGPoint toValue = CGPointMake(fromValue.x - cell.frontView.frame.origin.x, fromValue.y);
-
-    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:2];
-
-    cell.state = TransformableTableViewCellEditingStateNone;
-    self.indexPathInEditState = nil;
-}
-
-#pragma mark -
 #pragma mark UITableViewDatasource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -246,6 +216,23 @@ static NSInteger kAddingFinishHeight = 74;
 
     NSSet *changes = [self.tags removeObjectAtIndex:(NSUInteger)indexPath.row];
     [self.tableView updateWithChanges:changes];
+}
+
+- (void)cell:(TransformableTableViewCell *)cell didChangeTagName:(NSString *)name {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+
+    Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
+    tag.name = name;
+
+    cell.name.text = [name uppercaseString];
+
+    CGPoint fromValue = cell.frontView.layer.position;
+    CGPoint toValue = CGPointMake(fromValue.x - cell.frontView.frame.origin.x, fromValue.y);
+
+    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:2];
+
+    cell.state = TransformableTableViewCellEditingStateNone;
+    self.indexPathInEditState = nil;
 }
 
 #pragma mark -

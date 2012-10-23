@@ -16,4 +16,24 @@
     }
 }
 
+#pragma mark -
+#pragma mark UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
+}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    NSString *tagName = textField.text;
+
+    if ([self.delegate respondsToSelector:@selector(cell:didChangeTagName:)]) {
+        [self.delegate cell:self didChangeTagName:tagName];
+    }
+}
+
 @end

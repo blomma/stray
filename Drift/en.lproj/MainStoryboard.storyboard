@@ -213,7 +213,7 @@
                                                     <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="24"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                                     <connections>
-                                                        <outlet property="delegate" destination="rGB-yR-mDw" id="52c-pZ-zwP"/>
+                                                        <outlet property="delegate" destination="7lp-Vw-Iv0" id="dFC-gL-o6U"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>

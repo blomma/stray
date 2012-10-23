@@ -5,6 +5,7 @@
 @protocol TableViewCellEditingRowDelegate <NSObject>
 
 - (void)cell:(TransformableTableViewCell *)cell tappedDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event;
+- (void)cell:(TransformableTableViewCell *)cell didChangeTagName:(NSString *)name;
 
 @end
 
