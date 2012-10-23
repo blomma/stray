@@ -73,6 +73,7 @@
 		9EAE7DEE1603C1C5007F32EC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DED1603C1C5007F32EC /* Default-568h@2x.png */; };
 		9EAE7DF91603D006007F32EC /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DF81603D006007F32EC /* Default@2x.png */; };
 		9EAE7DFB1603D038007F32EC /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DFA1603D038007F32EC /* Default.png */; };
+		9EAF701616367B4600FA079C /* SKBounceAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAF701516367B4600FA079C /* SKBounceAnimation.m */; };
 		9EBE4F681634497D005A3B54 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EBE4F641634497D005A3B54 /* libTestFlight.a */; };
 		9EBE4F691634497D005A3B54 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9EBE4F651634497D005A3B54 /* README.md */; };
 		9EBE4F6A1634497D005A3B54 /* release_notes.md in Resources */ = {isa = PBXBuildFile; fileRef = 9EBE4F661634497D005A3B54 /* release_notes.md */; };
@@ -169,6 +170,8 @@
 		9EAE7DED1603C1C5007F32EC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		9EAE7DF81603D006007F32EC /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
 		9EAE7DFA1603D038007F32EC /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
+		9EAF701416367B4600FA079C /* SKBounceAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKBounceAnimation.h; sourceTree = "<group>"; };
+		9EAF701516367B4600FA079C /* SKBounceAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKBounceAnimation.m; sourceTree = "<group>"; };
 		9EBE4F641634497D005A3B54 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
 		9EBE4F651634497D005A3B54 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		9EBE4F661634497D005A3B54 /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.md; sourceTree = "<group>"; };
@@ -215,6 +218,7 @@
 		9E15DDA116023FE4007146CE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				9EAF701316367B4600FA079C /* SKBounceAnimation */,
 				9EBE4F631634497D005A3B54 /* TestFlightSDK1.2beta2 */,
 				9EE939BB16172D090035DD5F /* Objective-Record */,
 				9E15DE0016024161007146CE /* libz.dylib */,
@@ -403,6 +407,15 @@
 			name = Categories;
 			sourceTree = "<group>";
 		};
+		9EAF701316367B4600FA079C /* SKBounceAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				9EAF701416367B4600FA079C /* SKBounceAnimation.h */,
+				9EAF701516367B4600FA079C /* SKBounceAnimation.m */,
+			);
+			path = SKBounceAnimation;
+			sourceTree = "<group>";
+		};
 		9EBE4F631634497D005A3B54 /* TestFlightSDK1.2beta2 */ = {
 			isa = PBXGroup;
 			children = (
@@ -558,6 +571,7 @@
 				9E9239E7162DAF6300E265E6 /* _UIState.m in Sources */,
 				9E9239E8162DAF6300E265E6 /* UIState.m in Sources */,
 				9E9239EB162F3A5000E265E6 /* Global.m in Sources */,
+				9EAF701616367B4600FA079C /* SKBounceAnimation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

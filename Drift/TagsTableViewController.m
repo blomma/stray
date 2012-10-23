@@ -13,6 +13,7 @@
 #import "TransformableTableViewCell.h"
 #import "UITableView+Change.h"
 #import <QuartzCore/QuartzCore.h>
+#import "SKBounceAnimation.h"
 
 static NSString *grabbedTableViewCellIdentifier  = @"grabbedTableViewCellIdentifier";
 static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
@@ -35,6 +36,7 @@ static NSInteger kAddingFinishHeight = 74;
 
 @implementation TagsTableViewController
 
+#pragma mark -
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
@@ -48,6 +50,7 @@ static NSInteger kAddingFinishHeight = 74;
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:pullDownTableViewCellIdentifier];
 }
 
+#pragma mark -
 #pragma mark UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -68,22 +71,16 @@ static NSInteger kAddingFinishHeight = 74;
     TransformableTableViewCell *cell = (TransformableTableViewCell *)[self.tableView cellForRowAtIndexPath:self.indexPathInEditState];
     cell.name.text = [tagName uppercaseString];
 
-    CGRect frame = cell.frontView.bounds;
-    CGRect bounceFrame = cell.frontView.bounds;
-    bounceFrame.origin.x -= 40;
-    [UIView animateWithDuration:0.4 delay:0 options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         cell.frontView.frame = bounceFrame;
-                     } completion:^(BOOL finished) {
-                         [UIView animateWithDuration:0.15 animations:^{
-                             cell.frontView.frame = frame;
-                         }];
-                     }];
+    CGPoint fromValue = cell.frontView.layer.position;
+    CGPoint toValue = CGPointMake(fromValue.x - cell.frontView.frame.origin.x, fromValue.y);
+
+    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:2];
 
     cell.state = TransformableTableViewCellEditingStateNone;
     self.indexPathInEditState = nil;
 }
 
+#pragma mark -
 #pragma mark UITableViewDatasource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -153,7 +150,7 @@ static NSInteger kAddingFinishHeight = 74;
         CGRect frame = cell.textFieldName.frame;
         frame.size.height = 40;
         cell.textFieldName.frame = frame;
-        
+
         cell.textFieldName.text = [object name];
 
         cell.frontView.frame = cell.frontView.bounds;
@@ -181,6 +178,7 @@ static NSInteger kAddingFinishHeight = 74;
     }
 }
 
+#pragma mark -
 #pragma mark UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -258,6 +256,11 @@ static NSInteger kAddingFinishHeight = 74;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didEnterEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
+    TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    if (state == TransformableTableViewCellEditingStateLeft && cell.state == TransformableTableViewCellEditingStateNone) {
+        return;
+    }
+
     if (self.indexPathInEditState.row != indexPath.row || self.indexPathInEditState.section != indexPath.section) {
         [self gestureRecognizer:gestureRecognizer cancelEditingState:state forRowAtIndexPath:self.indexPathInEditState];
     }
@@ -267,7 +270,6 @@ static NSInteger kAddingFinishHeight = 74;
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didChangeEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
     TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
-
     if (state == TransformableTableViewCellEditingStateLeft && cell.state == TransformableTableViewCellEditingStateNone) {
         return;
     }
@@ -278,48 +280,35 @@ static NSInteger kAddingFinishHeight = 74;
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer commitEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
     TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    if (state == TransformableTableViewCellEditingStateLeft && cell.state == TransformableTableViewCellEditingStateNone) {
+        return;
+    }
 
-    CGRect frame, bounceFrame;
     if (cell.state == TransformableTableViewCellEditingStateLeft || cell.state == TransformableTableViewCellEditingStateRight || state == TransformableTableViewCellEditingStateLeft) {
-        frame = cell.frontView.bounds;
+        CGPoint fromValue = cell.frontView.layer.position;
+        CGPoint toValue = CGPointMake(fromValue.x - cell.frontView.frame.origin.x, fromValue.y);
 
-        bounceFrame = frame;
-        bounceFrame.origin.x -= 40;
+        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:2];
 
         cell.state = TransformableTableViewCellEditingStateNone;
+        self.indexPathInEditState = nil;
     } else if (state == TransformableTableViewCellEditingStateRight) {
-        frame = CGRectOffset(cell.frontView.bounds, kEditStateRightOffset, 0);
+        CGPoint fromValue = cell.frontView.layer.position;
+        CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + kEditStateRightOffset, fromValue.y);
 
-        bounceFrame = frame;
-        bounceFrame.origin.x += 40;
+        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:2];
 
         cell.state = TransformableTableViewCellEditingStateRight;
     }
-
-    [UIView animateWithDuration:0.4 delay:0 options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         cell.frontView.frame = bounceFrame;
-                     } completion:^(BOOL finished) {
-                         [UIView animateWithDuration:0.15 animations:^{
-                             cell.frontView.frame = frame;
-                         }];
-                     }];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
     TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
-    CGRect frame = cell.frontView.bounds;
-    CGRect bounceFrame = cell.frontView.bounds;
-    bounceFrame.origin.x -= 40;
-    [UIView animateWithDuration:0.4 delay:0 options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         cell.frontView.frame = bounceFrame;
-                     } completion:^(BOOL finished) {
-                         [UIView animateWithDuration:0.15 animations:^{
-                             cell.frontView.frame = frame;
-                         }];
-                     }];
+    CGPoint fromValue = cell.frontView.layer.position;
+    CGPoint toValue = CGPointMake(fromValue.x - cell.frontView.frame.origin.x, fromValue.y);
+
+    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:2];
 
     cell.state = TransformableTableViewCellEditingStateNone;
     self.indexPathInEditState = nil;
@@ -329,6 +318,7 @@ static NSInteger kAddingFinishHeight = 74;
     return kEditCommitLength;
 }
 
+#pragma mark -
 #pragma mark TableViewGestureMoveRowDelegate
 
 - (BOOL)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -355,6 +345,20 @@ static NSInteger kAddingFinishHeight = 74;
     [self.tableView updateWithChanges:changes];
 
     self.grabbedObject = nil;
+}
+
+#pragma mark -
+#pragma mark Private methods
+
+- (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration{
+	SKBounceAnimation *positionAnimation = [SKBounceAnimation animationWithKeyPath:@"position"];
+	positionAnimation.fromValue = [NSValue valueWithCGPoint:from];
+	positionAnimation.toValue = [NSValue valueWithCGPoint:to];
+	positionAnimation.duration = duration;
+	positionAnimation.numberOfBounces = 4;
+
+	[layer addAnimation:positionAnimation forKey:@"someKey2"];
+	[layer setValue:[NSValue valueWithCGPoint:to] forKeyPath:@"position"];
 }
 
 @end
