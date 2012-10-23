@@ -11,16 +11,15 @@
 #import "EventTableViewCell.h"
 #import "UITableView+Change.h"
 #import "DataManager.h"
-#import "TableViewGestureRecognizer.h"
 #import "Global.h"
-
+#import "TransformableTableViewGestureRecognizer.h"
 #define COMMITING_CREATE_CELL_HEIGHT 44
 
 static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
 
-@interface EventsViewController ()<TableViewGestureAddingRowDelegate>
+@interface EventsViewController ()<TransformableTableViewGestureAddingRowDelegate>
 
-@property (nonatomic) TableViewGestureRecognizer *tableViewRecognizer;
+@property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
 @property (nonatomic) NSIndexPath *indexPathInEditState;
 
 @property (nonatomic) NSCalendar *calendar;
@@ -53,22 +52,22 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 #pragma mark -
 #pragma mark TableViewGestureAddingRowDelegate
 
-- (CGFloat)gestureRecognizer:(TableViewGestureRecognizer *)gestureRecognizer heightForCommitAddingRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer heightForCommitAddingRowAtIndexPath:(NSIndexPath *)indexPath {
     return COMMITING_CREATE_CELL_HEIGHT;
 }
 
-- (void)gestureRecognizer:(TableViewGestureRecognizer *)gestureRecognizer needsAddRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsAddRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.events insertObject:pullDownTableViewCellIdentifier atIndex:(NSUInteger)indexPath.row];
 
     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
-- (void)gestureRecognizer:(TableViewGestureRecognizer *)gestureRecognizer needsCommitRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsCommitRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.events removeObjectAtIndex:(NSUInteger)indexPath.row];
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
-- (void)gestureRecognizer:(TableViewGestureRecognizer *)gestureRecognizer needsDiscardRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsDiscardRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
     [self.events removeObjectAtIndex:(NSUInteger)indexPath.row];

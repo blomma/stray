@@ -1,6 +1,5 @@
 #import <UIKit/UIKit.h>
-#import "TableViewGestureRecognizer.h"
-
+#import "TransformableTableViewGestureRecognizer.h"
 @class TransformableTableViewCell;
 
 @protocol TableViewCellEditingRowDelegate <NSObject>
@@ -16,7 +15,7 @@
 @property (nonatomic) id<TableViewCellEditingRowDelegate> delegate;
 
 @property (nonatomic, assign) CGFloat finishedHeight;
-@property (nonatomic) TableViewCellEditingState state;
+@property (nonatomic) TransformableTableViewCellEditingState state;
 
 @property (nonatomic, weak) IBOutlet UILabel *name;
 @property (nonatomic, weak) IBOutlet UITextField *textFieldName;
