@@ -255,6 +255,7 @@ static NSInteger kAddingFinishHeight = 74;
     if (self.tagInEditState && indexOfTagInEditState != (NSUInteger)indexPath.row) {
         NSIndexPath *indexPathInEditState = [NSIndexPath indexPathForRow:(NSInteger)indexOfTagInEditState inSection:0];
         [self gestureRecognizer:gestureRecognizer cancelEditingState:state forRowAtIndexPath:indexPathInEditState];
+        self.tagInEditState = nil;
     }
 }
 
@@ -299,11 +300,9 @@ static NSInteger kAddingFinishHeight = 74;
     TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
     CGPoint fromValue = cell.frontView.layer.position;
-    CGPoint toValue = CGPointMake(fromValue.x - cell.frontView.frame.origin.x, fromValue.y);
+    CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
 
     [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f];
-
-    self.tagInEditState = nil;
 }
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
