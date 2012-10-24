@@ -14,6 +14,7 @@
 #import "UITableView+Change.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SKBounceAnimation.h"
+#import "NoHitCAShapeLayer.h"
 
 static NSString *grabbedTableViewCellIdentifier  = @"grabbedTableViewCellIdentifier";
 static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
@@ -107,7 +108,9 @@ static NSInteger kAddingFinishHeight = 74;
 
         UIImage* background = [UIImage imageNamed:@"navy_blue"];
         cell.backView.backgroundColor = [UIColor colorWithPatternImage:background];
+        cell.backView.shadowRadius = 2;
 
+        // Left/Right edge shadow
         cell.frontView.layer.masksToBounds = NO;
         cell.frontView.layer.shadowOffset = CGSizeMake(-1.0f, 0.0f);
         cell.frontView.layer.shadowRadius = 4;
@@ -241,6 +244,13 @@ static NSInteger kAddingFinishHeight = 74;
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didEnterEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
     TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     [cell.frontView.layer removeAllAnimations];
+
+    // If we have a cell in editstate and it is not this cell then cancel it
+    NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
+    if (self.tagInEditState && indexOfTagInEditState != (NSUInteger)indexPath.row) {
+        NSIndexPath *indexPathInEditState = [NSIndexPath indexPathForRow:(NSInteger)indexOfTagInEditState inSection:0];
+        [self gestureRecognizer:gestureRecognizer cancelEditingState:state forRowAtIndexPath:indexPathInEditState];
+    }
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didChangeEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -259,12 +269,6 @@ static NSInteger kAddingFinishHeight = 74;
     NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
     if (state == TransformableTableViewCellEditingStateLeft && indexOfTagInEditState != (NSUInteger)indexPath.row) {
         return;
-    }
-
-    // If we have a cell in editstate and it is not this cell then cancel it
-    if (self.tagInEditState && indexOfTagInEditState != (NSUInteger)indexPath.row) {
-        NSIndexPath *indexPathInEditState = [NSIndexPath indexPathForRow:(NSInteger)indexOfTagInEditState inSection:0];
-        [self gestureRecognizer:gestureRecognizer cancelEditingState:state forRowAtIndexPath:indexPathInEditState];
     }
 
     TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
