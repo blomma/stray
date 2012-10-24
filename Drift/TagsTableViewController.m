@@ -243,11 +243,15 @@ static NSInteger kAddingFinishHeight = 74;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didEnterEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
+    if (state == TransformableTableViewCellEditingStateLeft && indexOfTagInEditState != (NSUInteger)indexPath.row) {
+        return;
+    }
+
     TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     [cell.frontView.layer removeAllAnimations];
 
     // If we have a cell in editstate and it is not this cell then cancel it
-    NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
     if (self.tagInEditState && indexOfTagInEditState != (NSUInteger)indexPath.row) {
         NSIndexPath *indexPathInEditState = [NSIndexPath indexPathForRow:(NSInteger)indexOfTagInEditState inSection:0];
         [self gestureRecognizer:gestureRecognizer cancelEditingState:state forRowAtIndexPath:indexPathInEditState];
