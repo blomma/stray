@@ -13,9 +13,7 @@
 
 - (IBAction)tappedDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event;
 
-@property (nonatomic) id<TableViewCellEditingRowDelegate> delegate;
-
-@property (nonatomic, assign) CGFloat finishedHeight;
+@property (nonatomic, weak) id<TableViewCellEditingRowDelegate> delegate;
 
 @property (nonatomic, weak) IBOutlet UILabel *name;
 @property (nonatomic, weak) IBOutlet UITextField *textFieldName;
