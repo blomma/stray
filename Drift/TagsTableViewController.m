@@ -29,7 +29,7 @@ static NSInteger kAddingFinishHeight = 74;
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
 @property (nonatomic) id grabbedObject;
 
-@property (nonatomic) TransformableTableViewCell *cellInEditState;
+@property (nonatomic) Tag *tagInEditState;
 
 @property (nonatomic) Tags *tags;
 
@@ -206,6 +206,8 @@ static NSInteger kAddingFinishHeight = 74;
 
     NSSet *changes = [self.tags removeObjectAtIndex:(NSUInteger)indexPath.row];
     [self.tableView updateWithChanges:changes];
+
+    self.tagInEditState = nil;
 }
 
 - (void)cell:(TransformableTableViewCell *)cell didChangeTagName:(NSString *)name {
@@ -219,9 +221,9 @@ static NSInteger kAddingFinishHeight = 74;
     CGPoint fromValue = cell.frontView.layer.position;
     CGPoint toValue = CGPointMake(fromValue.x - cell.frontView.frame.origin.x, fromValue.y);
 
-    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:2];
+    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f];
 
-    self.cellInEditState = nil;
+    self.tagInEditState = nil;
 }
 
 #pragma mark -
@@ -233,60 +235,61 @@ static NSInteger kAddingFinishHeight = 74;
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didEnterEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
     TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
-    if (state == TransformableTableViewCellEditingStateLeft && self.cellInEditState != cell) {
-        return;
-    }
-
-    // If we have a cell in editstate and it is not this cell then cancel it
-    if (self.cellInEditState && self.cellInEditState != cell) {
-        NSIndexPath *indexPathInEditState = [self.tableView indexPathForCell:self.cellInEditState];
-        [self gestureRecognizer:gestureRecognizer cancelEditingState:state forRowAtIndexPath:indexPathInEditState];
-    }
+    [cell.frontView.layer removeAllAnimations];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didChangeEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-    TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
-    if (state == TransformableTableViewCellEditingStateLeft && self.cellInEditState != cell) {
+    NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
+    if (state == TransformableTableViewCellEditingStateLeft && indexOfTagInEditState != (NSUInteger)indexPath.row) {
         return;
     }
 
-    NSInteger xOffset = state == TransformableTableViewCellEditingStateRight && !self.cellInEditState ? 0 : kEditStateRightOffset;
+    TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+
+    NSInteger xOffset = indexOfTagInEditState == (NSUInteger)indexPath.row ? kEditStateRightOffset : 0;
     cell.frontView.frame = CGRectOffset(cell.frontView.bounds, gestureRecognizer.translationInTableView.x + xOffset, 0);
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer commitEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-    TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
-    if (state == TransformableTableViewCellEditingStateLeft && self.cellInEditState != cell) {
+    NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
+    if (state == TransformableTableViewCellEditingStateLeft && indexOfTagInEditState != (NSUInteger)indexPath.row) {
         return;
     }
 
-    if (state == TransformableTableViewCellEditingStateRight && !self.cellInEditState) {
+    // If we have a cell in editstate and it is not this cell then cancel it
+    if (self.tagInEditState && indexOfTagInEditState != (NSUInteger)indexPath.row) {
+        NSIndexPath *indexPathInEditState = [NSIndexPath indexPathForRow:(NSInteger)indexOfTagInEditState inSection:0];
+        [self gestureRecognizer:gestureRecognizer cancelEditingState:state forRowAtIndexPath:indexPathInEditState];
+    }
+
+    TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+
+    if (state == TransformableTableViewCellEditingStateRight && !self.tagInEditState) {
         CGPoint fromValue = cell.frontView.layer.position;
         CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + kEditStateRightOffset, fromValue.y);
 
-        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:2];
+        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f];
 
-        self.cellInEditState = cell;
+        self.tagInEditState = [self.tags objectAtIndex:indexPath.row];
     } else {
         CGPoint fromValue = cell.frontView.layer.position;
         CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
 
-        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:2];
+        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f];
 
-        self.cellInEditState = nil;
+        self.tagInEditState = nil;
     }
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
     TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
-    DLog(@"cancelEditingState");
     CGPoint fromValue = cell.frontView.layer.position;
     CGPoint toValue = CGPointMake(fromValue.x - cell.frontView.frame.origin.x, fromValue.y);
 
-    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:2];
+    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f];
 
-    self.cellInEditState = nil;
+    self.tagInEditState = nil;
 }
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {

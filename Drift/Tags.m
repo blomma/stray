@@ -164,4 +164,8 @@
     return [self.tags objectAtIndex:index];
 }
 
+- (NSUInteger)indexOfObject:(id)object {
+    return [self.tags indexOfObject:object];
+}
+
 @end

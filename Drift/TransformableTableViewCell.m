@@ -10,6 +10,11 @@
     return self;
 }
 
+- (void)prepareForReuse {
+    self.frontView.frame = self.backView.frame;
+    self.selected = NO;
+}
+
 - (IBAction)tappedDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event {
     if ([self.delegate respondsToSelector:@selector(cell:tappedDeleteButton:forEvent:)]) {
         [self.delegate cell:self tappedDeleteButton:sender forEvent:event];
@@ -29,10 +34,8 @@
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    NSString *tagName = textField.text;
-
     if ([self.delegate respondsToSelector:@selector(cell:didChangeTagName:)]) {
-        [self.delegate cell:self didChangeTagName:tagName];
+        [self.delegate cell:self didChangeTagName:[textField.text copy]];
     }
 }
 
