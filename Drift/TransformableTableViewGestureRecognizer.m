@@ -22,20 +22,20 @@ static CGFloat kAddingAnimationDuration       = 0.25;
 @property (nonatomic, weak) id <UITableViewDelegate> tableViewDelegate;
 
 // Adding
-@property (nonatomic, assign) CGFloat addingRowHeight;
+@property (nonatomic) CGFloat addingRowHeight;
 
 // Editing
-@property (nonatomic, strong) UIPanGestureRecognizer *panRecognizer;
-@property (nonatomic, assign) TransformableTableViewCellEditingState editingCellState;
+@property (nonatomic) UIPanGestureRecognizer *panRecognizer;
+@property (nonatomic) TransformableTableViewCellEditingState editingCellState;
 
 // Moving
-@property (nonatomic, strong) UILongPressGestureRecognizer  *longPressRecognizer;
-@property (nonatomic, strong) NSTimer *movingTimer;
+@property (nonatomic) UILongPressGestureRecognizer  *longPressRecognizer;
+@property (nonatomic) NSTimer *movingTimer;
 
-@property (nonatomic, assign) TableViewGestureRecognizerState state;
+@property (nonatomic) TableViewGestureRecognizerState state;
 
-@property (nonatomic, assign) CGFloat scrollingRate;
-@property (nonatomic, strong) NSIndexPath *transformIndexPath;
+@property (nonatomic) CGFloat scrollingRate;
+@property (nonatomic) NSIndexPath *transformIndexPath;
 
 @end
 
