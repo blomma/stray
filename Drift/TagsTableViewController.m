@@ -112,38 +112,27 @@ static NSInteger kAddingFinishHeight = 74;
         cell.frontView.layer.shadowOffset = CGSizeMake(-1.0f, 0.0f);
         cell.frontView.layer.shadowRadius = 4;
         cell.frontView.layer.shadowOpacity = 0.7;
-        
         CGRect shadowFrame = CGRectInset(cell.frontView.bounds, -1.0f, 7.0f);
         cell.frontView.layer.shadowPath = [UIBezierPath bezierPathWithRect:shadowFrame].CGPath;
-
-        cell.textFieldName.backgroundColor = [UIColor colorWithRed:1.000 green:1.000 blue:0.923 alpha:1.000];
 
         CGRect frame = cell.textFieldName.frame;
         frame.size.height = 40;
         cell.textFieldName.frame = frame;
-
+        cell.textFieldName.backgroundColor = [UIColor colorWithRed:1.000 green:1.000 blue:0.923 alpha:1.000];
         cell.textFieldName.text = [object name];
 
-        cell.frontView.frame = cell.frontView.bounds;
-
         UIColor *backgroundColor = [UIColor colorWithWhite:0.075f alpha:1];
-        
         if ([self.event.inTag isEqual:object]) {
-            [self.tableView selectRowAtIndexPath:indexPath
-                                        animated:NO
-                                  scrollPosition:UITableViewScrollPositionNone];
-            backgroundColor = [UIColor colorWithRed:0.427f
-                                              green:0.784f
-                                               blue:0.992f
-                                              alpha:1];
+            [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+            backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1];
         }
         
         cell.frontView.backgroundColor = backgroundColor;
 
         NSString *tagName = [object name] ? [object name] : @"Fill me in";
         cell.name.text = [tagName uppercaseString];
-        cell.delegate = self;
 
+        cell.delegate = self;
 
         return cell;
     }
