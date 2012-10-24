@@ -150,20 +150,50 @@ static NSInteger kAddingFinishHeight = 74;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
+    // Now we check if we have any cells in editstate,
+    // if so we animate them back to normal state
+    if (self.tagInEditState) {
+        NSUInteger editStateIndex = [self.tags indexOfObject:self.tagInEditState];
+        NSIndexPath *editStateIndexPath = [NSIndexPath indexPathForRow:(NSInteger)editStateIndex inSection:0];
 
-    UIColor *backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
-    if ([self.event.inTag isEqual:tag]) {
-        backgroundColor = [UIColor colorWithWhite:0.075f alpha:1];
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        TransformableTableViewCell *cell = (TransformableTableViewCell *)[self.tableView cellForRowAtIndexPath:editStateIndexPath];
+        CGPoint fromValue = cell.frontView.layer.position;
+        CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
+
+        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f];
+    }
+    
+
+    // If something is selected then something should always be deslected
+    // since selection works as a toogle
+    TransformableTableViewCell *previousSelectedCell = nil;
+    if (self.event.inTag) {
+        NSUInteger previousSelectedIndex = [self.tags indexOfObject:self.event.inTag];
+        NSIndexPath *previousSelectedIndexPath = [NSIndexPath indexPathForRow:(NSInteger)previousSelectedIndex inSection:0];
+
+        previousSelectedCell = (TransformableTableViewCell *)[self.tableView cellForRowAtIndexPath:previousSelectedIndexPath];
     }
 
-    self.event.inTag = [self.event.inTag isEqual:tag] ? nil : tag;
+    Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
 
-    TransformableTableViewCell *cell = (TransformableTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    [UIView animateWithDuration:0.1 animations:^{
-        cell.frontView.backgroundColor = backgroundColor;
+    // Now to see if something should also be selected
+    // that only happens if the current tag is different than the
+    // tag being selected
+    TransformableTableViewCell *selectedCell = nil;
+    if (![self.event.inTag isEqual:tag]) {
+        selectedCell = (TransformableTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    }
+
+    [UIView animateWithDuration:0.2 animations:^{
+        if (previousSelectedCell) {
+            previousSelectedCell.frontView.backgroundColor = [UIColor colorWithWhite:0.075f alpha:1];
+        }
+
+        if (selectedCell) {
+            selectedCell.frontView.backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.000];
+        }
     } completion:^(BOOL finished) {
+        self.event.inTag = [self.event.inTag isEqual:tag] ? nil : tag;
         [self dismissViewControllerAnimated:YES completion:nil];
     }];
 }
@@ -209,7 +239,7 @@ static NSInteger kAddingFinishHeight = 74;
     [[DataManager instance] deleteTag:tag];
 
     CGPoint fromValue = cell.frontView.layer.position;
-    CGPoint toValue = CGPointMake(fromValue.x - cell.frontView.frame.origin.x, fromValue.y);
+    CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
 
     [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f];
 
@@ -228,7 +258,7 @@ static NSInteger kAddingFinishHeight = 74;
     cell.name.text = [name uppercaseString];
 
     CGPoint fromValue = cell.frontView.layer.position;
-    CGPoint toValue = CGPointMake(fromValue.x - cell.frontView.frame.origin.x, fromValue.y);
+    CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
 
     [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f];
 
