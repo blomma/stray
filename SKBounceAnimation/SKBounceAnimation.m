@@ -180,9 +180,10 @@
 			} else if ([valueType rangeOfString:@"CGPoint"].location == 1) {
 				CGPoint fromPoint = [self.fromValue CGPointValue];
 				CGPoint toPoint = [self.toValue CGPointValue];
-				self.path = [self createPathFromXValues:[self valueArrayForStartValue:fromPoint.x endValue:toPoint.x]
+                CGPathRef path = [self createPathFromXValues:[self valueArrayForStartValue:fromPoint.x endValue:toPoint.x]
 										  yValues:[self valueArrayForStartValue:fromPoint.y endValue:toPoint.y]];
-				
+				self.path = path;
+                CGPathRelease(path);
 			} else if ([valueType rangeOfString:@"CATransform3D"].location == 1) {
 				CATransform3D fromTransform = [self.fromValue CATransform3DValue];
 				CATransform3D toTransform = [self.toValue CATransform3DValue];
@@ -227,8 +228,10 @@
 			} else if ([valueType rangeOfString:@"CGSize"].location == 1) {
 				CGSize fromSize = [self.fromValue CGSizeValue];
 				CGSize toSize = [self.toValue CGSizeValue];
-				self.path = [self createPathFromXValues:[self valueArrayForStartValue:fromSize.width endValue:toSize.width]
+                CGPathRef path = [self createPathFromXValues:[self valueArrayForStartValue:fromSize.width endValue:toSize.width]
 										  yValues:[self valueArrayForStartValue:fromSize.height endValue:toSize.height]];
+				self.path = path;
+                CGPathRelease(path);
 			}
 			
 		}
