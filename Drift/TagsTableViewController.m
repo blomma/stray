@@ -306,7 +306,9 @@ static NSInteger kAddingFinishHeight = 74;
 }
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-    return kEditCommitLength;
+    NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
+    // if this indexPath is in a edit state then return 0 else return normal
+    return indexPath.row == (NSInteger)indexOfTagInEditState ? 0 : kEditCommitLength;
 }
 
 #pragma mark -
