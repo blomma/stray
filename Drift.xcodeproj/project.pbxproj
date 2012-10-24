@@ -68,6 +68,8 @@
 		9E92637115EF350D00393946 /* _Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E92637015EF350D00393946 /* _Tag.m */; };
 		9E96FC3A1635532900AB5B0A /* navy_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E96FC381635532900AB5B0A /* navy_blue.png */; };
 		9E96FC3B1635532900AB5B0A /* navy_blue@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E96FC391635532900AB5B0A /* navy_blue@2X.png */; };
+		9E98C3F01637C8C5007D2CF2 /* MSVCLeakHunter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E98C3EE1637C8C5007D2CF2 /* MSVCLeakHunter.m */; };
+		9E98C3F11637C8C5007D2CF2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9E98C3EF1637C8C5007D2CF2 /* README.md */; };
 		9E9C237815F3617200572FB7 /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C237715F3617100572FB7 /* EventsViewController.m */; };
 		9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB520E15C9553C008952FB /* NSDate+Utilities.m */; };
 		9EAE7DEE1603C1C5007F32EC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DED1603C1C5007F32EC /* Default-568h@2x.png */; };
@@ -163,6 +165,9 @@
 		9E92637015EF350D00393946 /* _Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Tag.m; sourceTree = "<group>"; };
 		9E96FC381635532900AB5B0A /* navy_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navy_blue.png; sourceTree = "<group>"; };
 		9E96FC391635532900AB5B0A /* navy_blue@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navy_blue@2X.png"; sourceTree = "<group>"; };
+		9E98C3ED1637C8C5007D2CF2 /* MSVCLeakHunter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSVCLeakHunter.h; sourceTree = "<group>"; };
+		9E98C3EE1637C8C5007D2CF2 /* MSVCLeakHunter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSVCLeakHunter.m; sourceTree = "<group>"; };
+		9E98C3EF1637C8C5007D2CF2 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		9E9C237615F3617100572FB7 /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
 		9E9C237715F3617100572FB7 /* EventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9EAB520D15C9553C008952FB /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
@@ -218,6 +223,7 @@
 		9E15DDA116023FE4007146CE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				9E98C3EC1637C8C5007D2CF2 /* MSVCLeakHunter */,
 				9EAF701316367B4600FA079C /* SKBounceAnimation */,
 				9EBE4F631634497D005A3B54 /* TestFlightSDK1.2beta2 */,
 				9EE939BB16172D090035DD5F /* Objective-Record */,
@@ -333,6 +339,16 @@
 				9E9239DA162D4F9B00E265E6 /* TransformableTableViewCell.m */,
 			);
 			name = TransformableTableView;
+			sourceTree = "<group>";
+		};
+		9E98C3EC1637C8C5007D2CF2 /* MSVCLeakHunter */ = {
+			isa = PBXGroup;
+			children = (
+				9E98C3ED1637C8C5007D2CF2 /* MSVCLeakHunter.h */,
+				9E98C3EE1637C8C5007D2CF2 /* MSVCLeakHunter.m */,
+				9E98C3EF1637C8C5007D2CF2 /* README.md */,
+			);
+			path = MSVCLeakHunter;
 			sourceTree = "<group>";
 		};
 		9E9C232D15F288D400572FB7 /* Controllers */ = {
@@ -511,6 +527,7 @@
 				9EBE4F6A1634497D005A3B54 /* release_notes.md in Resources */,
 				9E96FC3A1635532900AB5B0A /* navy_blue.png in Resources */,
 				9E96FC3B1635532900AB5B0A /* navy_blue@2X.png in Resources */,
+				9E98C3F11637C8C5007D2CF2 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -572,6 +589,7 @@
 				9E9239E8162DAF6300E265E6 /* UIState.m in Sources */,
 				9E9239EB162F3A5000E265E6 /* Global.m in Sources */,
 				9EAF701616367B4600FA079C /* SKBounceAnimation.m in Sources */,
+				9E98C3F01637C8C5007D2CF2 /* MSVCLeakHunter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
