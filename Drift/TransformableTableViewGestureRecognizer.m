@@ -58,9 +58,9 @@ static NSInteger kCellSnapShotTag = 100000;
     } else {
     }
 
-    [self.tableView setContentOffset:newOffset];
+    if (currentOffset.y != newOffset.y) {
+        [self.tableView setContentOffset:newOffset];
 
-    if (location.y >= 0) {
         UIImageView *cellSnapshotView = (id)[self.tableView viewWithTag:kCellSnapShotTag];
         cellSnapshotView.center = CGPointMake(self.tableView.center.x, location.y);
     }
