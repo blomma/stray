@@ -204,10 +204,15 @@ static NSInteger kAddingFinishHeight = 74;
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
     [[DataManager instance] deleteTag:tag];
 
-    NSSet *changes = [self.tags removeObjectAtIndex:(NSUInteger)indexPath.row];
-    [self.tableView updateWithChanges:changes];
+    CGPoint fromValue = cell.frontView.layer.position;
+    CGPoint toValue = CGPointMake(fromValue.x - cell.frontView.frame.origin.x, fromValue.y);
+
+    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f];
 
     self.tagInEditState = nil;
+
+    NSSet *changes = [self.tags removeObjectAtIndex:(NSUInteger)indexPath.row];
+    [self.tableView updateWithChanges:changes];
 }
 
 - (void)cell:(TransformableTableViewCell *)cell didChangeTagName:(NSString *)name {
