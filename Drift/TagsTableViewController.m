@@ -14,7 +14,6 @@
 #import "UITableView+Change.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SKBounceAnimation.h"
-#import "NoHitCAShapeLayer.h"
 
 static NSString *grabbedTableViewCellIdentifier  = @"grabbedTableViewCellIdentifier";
 static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
@@ -109,13 +108,15 @@ static NSInteger kAddingFinishHeight = 74;
         UIImage* background = [UIImage imageNamed:@"navy_blue"];
         cell.backView.backgroundColor = [UIColor colorWithPatternImage:background];
         cell.backView.shadowRadius = 2;
+        cell.backView.shadowOpacity = 0.7f;
 
         // Left/Right edge shadow
+        cell.frontView.layer.shadowColor = [[UIColor colorWithWhite:0 alpha:1] CGColor];
         cell.frontView.layer.masksToBounds = NO;
-        cell.frontView.layer.shadowOffset = CGSizeMake(-1.0f, 0.0f);
-        cell.frontView.layer.shadowRadius = 4;
-        cell.frontView.layer.shadowOpacity = 0.7;
-        CGRect shadowFrame = CGRectInset(cell.frontView.bounds, -1.0f, 7.0f);
+        cell.frontView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
+        cell.frontView.layer.shadowRadius = 2;
+        cell.frontView.layer.shadowOpacity = 0.7f;
+        CGRect shadowFrame = CGRectInset(cell.frontView.bounds, 0.0f, 7.0f);
         cell.frontView.layer.shadowPath = [UIBezierPath bezierPathWithRect:shadowFrame].CGPath;
 
         CGRect frame = cell.textFieldName.frame;

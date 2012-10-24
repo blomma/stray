@@ -187,7 +187,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="73"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view opaque="NO" contentMode="scaleToFill" id="GBL-8y-p6I" userLabel="backView">
+                                        <view opaque="NO" contentMode="scaleToFill" id="GBL-8y-p6I" userLabel="backView" customClass="InnerShadowView">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="74"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
@@ -236,7 +236,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <connections>
-                                    <outlet property="backView" destination="GBL-8y-p6I" id="cSR-qd-Jpw"/>
+                                    <outlet property="backView" destination="GBL-8y-p6I" id="Ttn-rl-pRJ"/>
                                     <outlet property="deleteButton" destination="RYh-i0-qYA" id="aWg-Js-ihZ"/>
                                     <outlet property="frontView" destination="YqV-FT-yHV" id="ww5-tS-KUj"/>
                                     <outlet property="name" destination="kbd-ZN-Ygm" id="kg1-mR-e6R"/>
@@ -490,6 +490,9 @@
                 <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
             </relationships>
         </class>
+        <class className="InnerShadowView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/InnerShadowView.h"/>
+        </class>
         <class className="RootViewController" superclassName="UIPageViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RootViewController.h"/>
         </class>
@@ -500,7 +503,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TransformableTableViewCell.h"/>
             <relationships>
                 <relationship kind="action" name="tappedDeleteButton:forEvent:" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="backView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="backView" candidateClass="InnerShadowView"/>
                 <relationship kind="outlet" name="deleteButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="frontView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="name" candidateClass="UILabel"/>
