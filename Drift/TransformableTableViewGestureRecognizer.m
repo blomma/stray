@@ -296,11 +296,10 @@ static NSInteger kCellSnapShotTag = 100000;
 #pragma mark UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath isEqual:self.transformIndexPath]
-        && self.state == TableViewGestureRecognizerStateDragging) {
+    if ([indexPath isEqual:self.transformIndexPath] && self.state == TableViewGestureRecognizerStateDragging) {
         // While state is in pinching or dragging mode, we intercept the row height
         // For Moving state, we leave our real delegate to determine the actual height
-        return MAX(1, self.addingRowHeight);
+        return MAX(0, self.addingRowHeight);
     }
 
     CGFloat normalCellHeight = aTableView.rowHeight;
