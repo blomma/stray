@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
-
 @interface SKBounceAnimation : CAKeyframeAnimation
 
 @property (nonatomic, retain) id fromValue;

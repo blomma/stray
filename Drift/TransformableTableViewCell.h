@@ -1,6 +1,7 @@
 #import <UIKit/UIKit.h>
 #import "TransformableTableViewGestureRecognizer.h"
-#import "InnerShadowView.h"
+#import "InnerShadowLayer.h"
+#import "ShadowLayer.h"
 
 @class TransformableTableViewCell;
 
@@ -20,7 +21,9 @@
 @property (nonatomic, weak) IBOutlet UILabel *name;
 @property (nonatomic, weak) IBOutlet UITextField *textFieldName;
 
-@property (nonatomic, weak) IBOutlet InnerShadowView *backView;
+@property (nonatomic, weak) IBOutlet UIView *backView;
+@property (nonatomic) InnerShadowLayer *backViewInnerShadowLayer;
+
 @property (nonatomic, weak) IBOutlet UIView *frontView;
 
 @property (nonatomic, weak) IBOutlet UIButton *deleteButton;

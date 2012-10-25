@@ -2,6 +2,9 @@
 
 @implementation TransformableTableViewCell
 
+#pragma mark -
+#pragma mark Lifecycle
+
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
@@ -11,8 +14,12 @@
 }
 
 - (void)prepareForReuse {
-    self.frontView.frame = self.backView.frame;
-    self.selected = NO;
+    if (!CGRectEqualToRect(self.frontView.frame, self.backView.frame)) {
+        self.frontView.frame = self.backView.frame;
+    }
+
+    [self.backViewInnerShadowLayer removeFromSuperlayer];
+    self.backViewInnerShadowLayer = nil;
 }
 
 - (IBAction)tappedDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event {

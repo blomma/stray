@@ -14,6 +14,8 @@
 #import "UITableView+Change.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SKBounceAnimation.h"
+#import "InnerShadowLayer.h"
+#import "CAAnimation+Blocks.h"
 
 static NSString *grabbedTableViewCellIdentifier  = @"grabbedTableViewCellIdentifier";
 static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
@@ -33,6 +35,8 @@ static NSInteger kAddingFinishHeight = 74;
 
 @property (nonatomic) Tags *tags;
 
+@property (nonatomic) UIColor *cellBackgroundColor;
+
 @end
 
 @implementation TagsTableViewController
@@ -49,6 +53,18 @@ static NSInteger kAddingFinishHeight = 74;
 
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:grabbedTableViewCellIdentifier];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:pullDownTableViewCellIdentifier];
+}
+
+#pragma mark -
+#pragma mark Public properties
+
+- (UIColor *)cellBackgroundColor {
+    if (!_cellBackgroundColor) {
+        UIImage* background = [UIImage imageNamed:@"navy_blue"];
+        _cellBackgroundColor = [UIColor colorWithPatternImage:background];
+    }
+
+    return _cellBackgroundColor;
 }
 
 #pragma mark -
@@ -105,29 +121,13 @@ static NSInteger kAddingFinishHeight = 74;
     } else {
         TransformableTableViewCell *cell = (TransformableTableViewCell *)[tableView dequeueReusableCellWithIdentifier:tagsTableViewCellIdentifier];
 
-        UIImage* background = [UIImage imageNamed:@"navy_blue"];
-        cell.backView.backgroundColor = [UIColor colorWithPatternImage:background];
-        cell.backView.shadowRadius = 2;
-        cell.backView.shadowOpacity = 0.7f;
-
-        // Left/Right edge shadow
-        cell.frontView.layer.shadowColor = [[UIColor colorWithWhite:0 alpha:1] CGColor];
-        cell.frontView.layer.masksToBounds = NO;
-        cell.frontView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
-        cell.frontView.layer.shadowRadius = 2;
-        cell.frontView.layer.shadowOpacity = 0.7f;
-        CGRect shadowFrame = CGRectInset(cell.frontView.bounds, 0.0f, 7.0f);
-        cell.frontView.layer.shadowPath = [UIBezierPath bezierPathWithRect:shadowFrame].CGPath;
-
         CGRect frame = cell.textFieldName.frame;
         frame.size.height = 40;
         cell.textFieldName.frame = frame;
-        cell.textFieldName.backgroundColor = [UIColor colorWithRed:1.000 green:1.000 blue:0.923 alpha:1.000];
         cell.textFieldName.text = [object name];
 
         UIColor *backgroundColor = [UIColor colorWithWhite:0.075f alpha:1];
         if ([self.event.inTag isEqual:object]) {
-            [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
             backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1];
         }
         
@@ -160,7 +160,12 @@ static NSInteger kAddingFinishHeight = 74;
         CGPoint fromValue = cell.frontView.layer.position;
         CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
 
-        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f];
+        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:^(BOOL finished) {
+            [cell.backViewInnerShadowLayer removeFromSuperlayer];
+            cell.backViewInnerShadowLayer = nil;
+
+            [self removeFrontViewShadowFromCell:cell];
+        }];
     }
     
 
@@ -241,7 +246,12 @@ static NSInteger kAddingFinishHeight = 74;
     CGPoint fromValue = cell.frontView.layer.position;
     CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
 
-    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f];
+    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:^(BOOL finished) {
+        [cell.backViewInnerShadowLayer removeFromSuperlayer];
+        cell.backViewInnerShadowLayer = nil;
+
+        [self removeFrontViewShadowFromCell:cell];
+    }];
 
     self.tagInEditState = nil;
 
@@ -260,7 +270,12 @@ static NSInteger kAddingFinishHeight = 74;
     CGPoint fromValue = cell.frontView.layer.position;
     CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
 
-    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f];
+    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:^(BOOL finished) {
+        [cell.backViewInnerShadowLayer removeFromSuperlayer];
+        cell.backViewInnerShadowLayer = nil;
+
+        [self removeFrontViewShadowFromCell:cell];
+    }];
 
     self.tagInEditState = nil;
 }
@@ -280,6 +295,17 @@ static NSInteger kAddingFinishHeight = 74;
 
     TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     [cell.frontView.layer removeAllAnimations];
+
+    cell.backView.backgroundColor = self.cellBackgroundColor;
+    if (!cell.backViewInnerShadowLayer) {
+        InnerShadowLayer *innerShadowLayer = [self innerShadowLayerForCell:cell];
+        cell.backViewInnerShadowLayer = innerShadowLayer;
+        [cell.backView.layer addSublayer:innerShadowLayer];
+    }
+
+    if (!cell.layer.shadowPath) {
+        [self addFrontViewShadowToCell:cell];
+    }
 
     // If we have a cell in editstate and it is not this cell then cancel it
     if (self.tagInEditState && indexOfTagInEditState != (NSUInteger)indexPath.row) {
@@ -313,14 +339,19 @@ static NSInteger kAddingFinishHeight = 74;
         CGPoint fromValue = cell.frontView.layer.position;
         CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + kEditStateRightOffset, fromValue.y);
 
-        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f];
+        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
 
         self.tagInEditState = [self.tags objectAtIndex:indexPath.row];
     } else {
         CGPoint fromValue = cell.frontView.layer.position;
         CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
 
-        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f];
+        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:^(BOOL finished) {
+            [cell.backViewInnerShadowLayer removeFromSuperlayer];
+            cell.backViewInnerShadowLayer = nil;
+
+            [self removeFrontViewShadowFromCell:cell];
+        }];
 
         self.tagInEditState = nil;
     }
@@ -332,7 +363,12 @@ static NSInteger kAddingFinishHeight = 74;
     CGPoint fromValue = cell.frontView.layer.position;
     CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
 
-    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f];
+    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:^(BOOL finished) {
+        [cell.backViewInnerShadowLayer removeFromSuperlayer];
+        cell.backViewInnerShadowLayer = nil;
+
+        [self removeFrontViewShadowFromCell:cell];
+    }];
 }
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -373,15 +409,46 @@ static NSInteger kAddingFinishHeight = 74;
 #pragma mark -
 #pragma mark Private methods
 
-- (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration{
-	SKBounceAnimation *positionAnimation = [SKBounceAnimation animationWithKeyPath:@"position"];
+- (InnerShadowLayer *)innerShadowLayerForCell:(TransformableTableViewCell *)cell {
+    InnerShadowLayer *innerShadowLayer = [InnerShadowLayer layer];
+    innerShadowLayer = [InnerShadowLayer layer];
+    innerShadowLayer.frame = cell.backView.bounds;
+    innerShadowLayer.shadowRadius = 2;
+    innerShadowLayer.shadowOpacity = 0.7f;
+
+    return innerShadowLayer;
+}
+
+- (void)addFrontViewShadowToCell:(TransformableTableViewCell *)cell {
+    cell.frontView.layer.shadowColor = [[UIColor colorWithWhite:0 alpha:1] CGColor];
+    cell.frontView.layer.masksToBounds = NO;
+    cell.frontView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
+    cell.frontView.layer.shadowRadius = 2;
+    cell.frontView.layer.shadowOpacity = 0.7f;
+    CGRect shadowFrame = CGRectInset(cell.frontView.bounds, 0.0f, 7.0f);
+    cell.frontView.layer.shadowPath = [UIBezierPath bezierPathWithRect:shadowFrame].CGPath;
+}
+
+- (void)removeFrontViewShadowFromCell:(TransformableTableViewCell *)cell {
+    cell.frontView.layer.shadowColor = nil;
+    cell.frontView.layer.masksToBounds = YES;
+    cell.frontView.layer.shadowRadius = 0;
+    cell.frontView.layer.shadowOpacity = 0;
+    cell.frontView.layer.shadowPath = nil;
+}
+
+- (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration completion:(void (^)(BOOL finished))completion{
+    static NSString *keyPath = @"position";
+
+	SKBounceAnimation *positionAnimation = [SKBounceAnimation animationWithKeyPath:keyPath];
 	positionAnimation.fromValue = [NSValue valueWithCGPoint:from];
 	positionAnimation.toValue = [NSValue valueWithCGPoint:to];
 	positionAnimation.duration = duration;
 	positionAnimation.numberOfBounces = 4;
+    positionAnimation.completion = completion;
 
 	[layer addAnimation:positionAnimation forKey:@"someKey2"];
-	[layer setValue:[NSValue valueWithCGPoint:to] forKeyPath:@"position"];
+	[layer setValue:[NSValue valueWithCGPoint:to] forKeyPath:keyPath];
 }
 
 @end

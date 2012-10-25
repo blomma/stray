@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
+#import "NoHitCAShapeLayer.h"
 
 typedef enum {
     InnerShadowMaskNone       = 0,
@@ -24,7 +24,7 @@ typedef enum {
 // Ideas from Matt Wilding:
 // http://stackoverflow.com/questions/4431292/inner-shadow-effect-on-uiview-layer
 //
-@interface InnerShadowLayer : CAShapeLayer
+@interface InnerShadowLayer : NoHitCAShapeLayer
 
 @property (nonatomic) InnerShadowMask shadowMask;
 
