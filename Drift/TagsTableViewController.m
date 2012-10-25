@@ -136,6 +136,22 @@ static NSInteger kAddingFinishHeight = 74;
         NSString *tagName = [object name] ? [object name] : @"Fill me in";
         cell.name.text = [tagName uppercaseString];
 
+        if ([self.tagInEditState isEqual:object]) {
+            CGPoint fromValue = cell.frontView.layer.position;
+            CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + kEditStateRightOffset, fromValue.y);
+            cell.frontView.layer.position = toValue;
+            
+            if (!cell.backViewInnerShadowLayer) {
+                InnerShadowLayer *innerShadowLayer = [self innerShadowLayerForCell:cell];
+                cell.backViewInnerShadowLayer = innerShadowLayer;
+                [cell.backView.layer addSublayer:innerShadowLayer];
+            }
+
+            if (!cell.layer.shadowPath) {
+                [self addFrontViewShadowToCell:cell];
+            }
+        }
+
         cell.delegate = self;
 
         return cell;
@@ -212,7 +228,6 @@ static NSInteger kAddingFinishHeight = 74;
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsAddRowAtIndexPath:(NSIndexPath *)indexPath {
     NSSet *changes = [self.tags insertObject:pullDownTableViewCellIdentifier atIndex:(NSUInteger)indexPath.row];
-    [self.tableView updateWithChanges:changes];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsCommitRowAtIndexPath:(NSIndexPath *)indexPath {
