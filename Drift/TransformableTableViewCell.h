@@ -1,7 +1,6 @@
 #import <UIKit/UIKit.h>
 #import "TransformableTableViewGestureRecognizer.h"
 #import "InnerShadowLayer.h"
-#import "ShadowLayer.h"
 
 @class TransformableTableViewCell;
 
