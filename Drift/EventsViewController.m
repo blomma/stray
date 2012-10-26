@@ -13,6 +13,7 @@
 #import "DataManager.h"
 #import "Global.h"
 #import "TransformableTableViewGestureRecognizer.h"
+
 #define COMMITING_CREATE_CELL_HEIGHT 44
 
 static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
@@ -22,8 +23,8 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
 @property (nonatomic) NSIndexPath *indexPathInEditState;
 
+@property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) NSCalendar *calendar;
-@property (nonatomic) NSDateFormatter *startDateFormatter;
 
 @property (nonatomic) NSMutableArray *events;
 
@@ -39,8 +40,8 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 
     self.calendar = [Global instance].calendar;
 
-    self.startDateFormatter = [[NSDateFormatter alloc] init];
-    [self.startDateFormatter setDateFormat:@"HH:mm '@' d LLL, y"];
+    self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
+    self.calendar = [Global instance].calendar;
 
     self.events = [[NSMutableArray alloc] initWithArray:[DataManager instance].events];
 
@@ -120,27 +121,39 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
         Event *event = (Event *)object;
         EventTableViewCell *cell = (EventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 
-        cell.eventStart.text = [self.startDateFormatter stringFromDate:event.startDate];
+        // StartTime
+        static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
+        NSDateComponents *components = [self.calendar components:unitFlagsEventStart fromDate:event.startDate];
 
-        if ([event isActive]) {
-            cell.eventStop.text = @"";
+        cell.eventStartTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
+        cell.eventStartDay.text   = [NSString stringWithFormat:@"%02d", components.day];
+        cell.eventStartYear.text  = [NSString stringWithFormat:@"%04d", components.year];
+        cell.eventStartMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
+
+        // EventTime
+        NSDate *stopDate = event.stopDate ? event.stopDate : [NSDate date];
+        static NSUInteger unitFlagsEventTime = NSHourCalendarUnit | NSMinuteCalendarUnit;
+        components = [self.calendar components:unitFlagsEventTime fromDate:event.startDate toDate:stopDate options:0];
+
+        cell.eventTimeHours.text   = [NSString stringWithFormat:@"%02d", components.hour];
+        cell.eventTimeMinutes.text = [NSString stringWithFormat:@"%02d", components.minute];
+
+        // StopTime
+        if (event.stopDate) {
+            static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
+            components = [self.calendar components:unitFlags fromDate:event.stopDate];
+
+            cell.eventStopTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
+            cell.eventStopDay.text   = [NSString stringWithFormat:@"%02d", components.day];
+            cell.eventStopYear.text  = [NSString stringWithFormat:@"%04d", components.year];
+            cell.eventStopMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
         } else {
-            cell.eventStop.text = [self.startDateFormatter stringFromDate:event.stopDate];
+            cell.eventStopTime.text  = @"";
+            cell.eventStopDay.text   = @"";
+            cell.eventStopYear.text  = @"";
+            cell.eventStopMonth.text = @"";
         }
 
-        NSDate *stopDate = event.stopDate;
-        if ([event isActive]) {
-            stopDate = [NSDate date];
-        }
-
-        static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit;
-        NSDateComponents *components = [self.calendar components:unitFlags
-                                                        fromDate:event.startDate
-                                                          toDate:stopDate
-                                                         options:0];
-
-        cell.eventTime.text = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
-        
         return cell;
     }
 }

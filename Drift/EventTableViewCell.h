@@ -11,8 +11,19 @@
 
 @interface EventTableViewCell : UITableViewCell
 
-@property (nonatomic, weak) IBOutlet UILabel *eventStart;
-@property (nonatomic, weak) IBOutlet UILabel *eventStop;
-@property (nonatomic, weak) IBOutlet UILabel *eventTime;
+@property (weak, nonatomic) IBOutlet UILabel *eventStartTime;
+@property (weak, nonatomic) IBOutlet UILabel *eventStartDay;
+@property (weak, nonatomic) IBOutlet UILabel *eventStartMonth;
+@property (weak, nonatomic) IBOutlet UILabel *eventStartYear;
+
+@property (weak, nonatomic) IBOutlet UILabel *eventTimeHours;
+@property (weak, nonatomic) IBOutlet UILabel *eventTimeMinutes;
+
+@property (weak, nonatomic) IBOutlet UILabel *eventStopTime;
+@property (weak, nonatomic) IBOutlet UILabel *eventStopDay;
+@property (weak, nonatomic) IBOutlet UILabel *eventStopMonth;
+@property (weak, nonatomic) IBOutlet UILabel *eventStopYear;
+
+@property (weak, nonatomic) IBOutlet UILabel *tag;
 
 @end
