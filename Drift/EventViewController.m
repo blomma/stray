@@ -86,11 +86,12 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    Event *event = [[DataManager instance] state].activeEvent;
+    if ([segue.identifier isEqualToString:@"segueToTagsFromEvent"]) {
+        Event *event = [[DataManager instance] state].activeEvent;
 
-    if ([[segue destinationViewController] isKindOfClass:[TagsTableViewController class]]) {
-        TagsTableViewController *tagsTableViewController = [segue destinationViewController];
-        tagsTableViewController.event = event;
+        if ([[segue destinationViewController] respondsToSelector:@selector(event)]) {
+            [[segue destinationViewController] setEvent:event];
+        }
     }
 }
 

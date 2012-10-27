@@ -52,7 +52,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"segueToTags"]) {
+    if ([segue.identifier isEqualToString:@"segueToTagsFromEvents"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         Event *event = [self.events objectAtIndex:(NSUInteger)indexPath.row];
 
