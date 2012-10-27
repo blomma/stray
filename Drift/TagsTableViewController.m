@@ -10,7 +10,7 @@
 #import "Tags.h"
 #import "DataManager.h"
 #import "TransformableTableViewGestureRecognizer.h"
-#import "TransformableTableViewCell.h"
+#import "TagTableViewCell.h"
 #import "UITableView+Change.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SKBounceAnimation.h"
@@ -26,7 +26,7 @@ static NSInteger kEditCommitLength = 60;
 static NSInteger kAddingCommitHeight = 74;
 static NSInteger kAddingFinishHeight = 74;
 
-@interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureAddingRowDelegate, TransformableTableViewGestureMoveRowDelegate, TableViewCellEditingRowDelegate>
+@interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureAddingRowDelegate, TransformableTableViewGestureMoveRowDelegate, TagTableViewCellDelegate>
 
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
 @property (nonatomic) id grabbedObject;
@@ -119,7 +119,7 @@ static NSInteger kAddingFinishHeight = 74;
 
         return cell;
     } else {
-        TransformableTableViewCell *cell = (TransformableTableViewCell *)[tableView dequeueReusableCellWithIdentifier:tagsTableViewCellIdentifier];
+        TagTableViewCell *cell = (TagTableViewCell *)[tableView dequeueReusableCellWithIdentifier:tagsTableViewCellIdentifier];
 
         CGRect frame = cell.textFieldName.frame;
         frame.size.height = 40;
@@ -172,7 +172,7 @@ static NSInteger kAddingFinishHeight = 74;
         NSUInteger editStateIndex = [self.tags indexOfObject:self.tagInEditState];
         NSIndexPath *editStateIndexPath = [NSIndexPath indexPathForRow:(NSInteger)editStateIndex inSection:0];
 
-        TransformableTableViewCell *cell = (TransformableTableViewCell *)[self.tableView cellForRowAtIndexPath:editStateIndexPath];
+        TagTableViewCell *cell = (TagTableViewCell *)[self.tableView cellForRowAtIndexPath:editStateIndexPath];
         CGPoint fromValue = cell.frontView.layer.position;
         CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
 
@@ -187,12 +187,12 @@ static NSInteger kAddingFinishHeight = 74;
 
     // If something is selected then something should always be deslected
     // since selection works as a toogle
-    TransformableTableViewCell *previousSelectedCell = nil;
+    TagTableViewCell *previousSelectedCell = nil;
     if (self.event.inTag) {
         NSUInteger previousSelectedIndex = [self.tags indexOfObject:self.event.inTag];
         NSIndexPath *previousSelectedIndexPath = [NSIndexPath indexPathForRow:(NSInteger)previousSelectedIndex inSection:0];
 
-        previousSelectedCell = (TransformableTableViewCell *)[self.tableView cellForRowAtIndexPath:previousSelectedIndexPath];
+        previousSelectedCell = (TagTableViewCell *)[self.tableView cellForRowAtIndexPath:previousSelectedIndexPath];
     }
 
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
@@ -200,9 +200,9 @@ static NSInteger kAddingFinishHeight = 74;
     // Now to see if something should also be selected
     // that only happens if the current tag is different than the
     // tag being selected
-    TransformableTableViewCell *selectedCell = nil;
+    TagTableViewCell *selectedCell = nil;
     if (![self.event.inTag isEqual:tag]) {
-        selectedCell = (TransformableTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+        selectedCell = (TagTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
     }
 
     [UIView animateWithDuration:0.2 animations:^{
@@ -252,7 +252,7 @@ static NSInteger kAddingFinishHeight = 74;
 #pragma mark -
 #pragma mark TableViewCellEditingRowDelegate
 
-- (void)cell:(TransformableTableViewCell *)cell tappedDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event {
+- (void)cell:(TagTableViewCell *)cell tappedDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
@@ -274,7 +274,7 @@ static NSInteger kAddingFinishHeight = 74;
     [self.tableView updateWithChanges:changes];
 }
 
-- (void)cell:(TransformableTableViewCell *)cell didChangeTagName:(NSString *)name {
+- (void)cell:(TagTableViewCell *)cell didChangeTagName:(NSString *)name {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
@@ -308,7 +308,7 @@ static NSInteger kAddingFinishHeight = 74;
         return;
     }
 
-    TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     [cell.frontView.layer removeAllAnimations];
 
     cell.backView.backgroundColor = self.cellBackgroundColor;
@@ -336,7 +336,7 @@ static NSInteger kAddingFinishHeight = 74;
         return;
     }
 
-    TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
     NSInteger xOffset = indexOfTagInEditState == (NSUInteger)indexPath.row ? kEditStateRightOffset : 0;
     cell.frontView.frame = CGRectOffset(cell.frontView.bounds, gestureRecognizer.translationInTableView.x + xOffset, 0);
@@ -348,7 +348,7 @@ static NSInteger kAddingFinishHeight = 74;
         return;
     }
 
-    TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
     if (state == TransformableTableViewCellEditingStateRight && !self.tagInEditState) {
         CGPoint fromValue = cell.frontView.layer.position;
@@ -373,7 +373,7 @@ static NSInteger kAddingFinishHeight = 74;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-    TransformableTableViewCell *cell = (TransformableTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
     CGPoint fromValue = cell.frontView.layer.position;
     CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
@@ -424,7 +424,7 @@ static NSInteger kAddingFinishHeight = 74;
 #pragma mark -
 #pragma mark Private methods
 
-- (InnerShadowLayer *)innerShadowLayerForCell:(TransformableTableViewCell *)cell {
+- (InnerShadowLayer *)innerShadowLayerForCell:(TagTableViewCell *)cell {
     InnerShadowLayer *innerShadowLayer = [InnerShadowLayer layer];
     innerShadowLayer = [InnerShadowLayer layer];
     innerShadowLayer.frame = cell.backView.bounds;
@@ -434,7 +434,7 @@ static NSInteger kAddingFinishHeight = 74;
     return innerShadowLayer;
 }
 
-- (void)addFrontViewShadowToCell:(TransformableTableViewCell *)cell {
+- (void)addFrontViewShadowToCell:(TagTableViewCell *)cell {
     cell.frontView.layer.shadowColor = [[UIColor colorWithWhite:0 alpha:1] CGColor];
     cell.frontView.layer.masksToBounds = NO;
     cell.frontView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
@@ -444,7 +444,7 @@ static NSInteger kAddingFinishHeight = 74;
     cell.frontView.layer.shadowPath = [UIBezierPath bezierPathWithRect:shadowFrame].CGPath;
 }
 
-- (void)removeFrontViewShadowFromCell:(TransformableTableViewCell *)cell {
+- (void)removeFrontViewShadowFromCell:(TagTableViewCell *)cell {
     cell.frontView.layer.shadowColor = nil;
     cell.frontView.layer.masksToBounds = YES;
     cell.frontView.layer.shadowRadius = 0;

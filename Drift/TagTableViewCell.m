@@ -1,6 +1,6 @@
-#import "TransformableTableViewCell.h"
+#import "TagTableViewCell.h"
 
-@implementation TransformableTableViewCell
+@implementation TagTableViewCell
 
 #pragma mark -
 #pragma mark Lifecycle
@@ -22,7 +22,7 @@
     self.backViewInnerShadowLayer = nil;
 }
 
-- (IBAction)tappedDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event {
+- (IBAction)touchUpInsideDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event {
     if ([self.delegate respondsToSelector:@selector(cell:tappedDeleteButton:forEvent:)]) {
         [self.delegate cell:self tappedDeleteButton:sender forEvent:event];
     }

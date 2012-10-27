@@ -181,7 +181,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.074509806930000005" green="0.074509806930000005" blue="0.074509806930000005" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TagsTableViewCell" id="7lp-Vw-Iv0" userLabel="TagsTableViewCell" customClass="TransformableTableViewCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TagsTableViewCell" id="7lp-Vw-Iv0" userLabel="TagsTableViewCell" customClass="TagTableViewCell">
                                 <rect key="frame" x="0.0" y="22" width="320" height="74"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -204,7 +204,7 @@
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="tappedDeleteButton:forEvent:" destination="7lp-Vw-Iv0" eventType="touchUpInside" id="4Ct-GO-kNa"/>
+                                                        <action selector="touchUpInsideDeleteButton:forEvent:" destination="7lp-Vw-Iv0" eventType="touchUpInside" id="W4W-S3-ApY"/>
                                                     </connections>
                                                 </button>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" adjustsFontSizeToFit="NO" minimumFontSize="17" id="oLT-tc-FcA" userLabel="TagNameEdit">
@@ -571,11 +571,8 @@
         <class className="RootViewController" superclassName="UIPageViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RootViewController.h"/>
         </class>
-        <class className="TagsTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TagsTableViewController.h"/>
-        </class>
-        <class className="TransformableTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TransformableTableViewCell.h"/>
+        <class className="TagTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TagTableViewCell.h"/>
             <relationships>
                 <relationship kind="action" name="tappedDeleteButton:forEvent:" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="backView" candidateClass="UIView"/>
@@ -584,6 +581,9 @@
                 <relationship kind="outlet" name="name" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="textFieldName" candidateClass="UITextField"/>
             </relationships>
+        </class>
+        <class className="TagsTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TagsTableViewController.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
