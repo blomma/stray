@@ -134,7 +134,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     CGFloat alpha = 1 - (gestureRecognizer.translationInTableView.x / kEditCommitLength);
     cell.contentView.alpha = alpha;
 
-    CGPoint point = CGPointMake(CGRectGetMidX(cell.layer.bounds) + gestureRecognizer.translationInTableView.x , cell.layer.position.y);
+    CGPoint point = CGPointMake(CGRectGetMidX(cell.layer.bounds) + gestureRecognizer.translationInTableView.x, cell.layer.position.y);
     cell.layer.position = point;
 }
 
