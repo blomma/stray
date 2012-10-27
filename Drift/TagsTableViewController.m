@@ -91,13 +91,13 @@ static NSInteger kAddingFinishHeight = 74;
         cell.textLabel.font = [UIFont fontWithName:@"Futura-Medium" size:25];
         cell.textLabel.backgroundColor = [UIColor clearColor];
 
-        if (cell.frame.size.height > kAddingCommitHeight * 2) {
+        if (cell.bounds.size.height > kAddingCommitHeight * 2) {
             cell.textLabel.text = @"Close";
             cell.contentView.backgroundColor = [UIColor colorWithRed:0.843f
                                                                green:0.306f
                                                                 blue:0.314f
                                                                alpha:1];
-        } else if (cell.frame.size.height >= kAddingCommitHeight) {
+        } else if (cell.bounds.size.height >= kAddingCommitHeight) {
             cell.textLabel.text = @"Release to create cell...";
             cell.contentView.backgroundColor = [UIColor colorWithRed:0.510f
                                                                green:0.784f
@@ -109,7 +109,7 @@ static NSInteger kAddingFinishHeight = 74;
             cell.contentView.backgroundColor = [UIColor colorWithRed:0.510f
                                                                green:0.784f
                                                                 blue:0.431f
-                                                               alpha:(cell.frame.size.height / kAddingCommitHeight)];
+                                                               alpha:(cell.bounds.size.height / kAddingCommitHeight)];
         }
 
         return cell;
@@ -227,7 +227,7 @@ static NSInteger kAddingFinishHeight = 74;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsAddRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSSet *changes = [self.tags insertObject:pullDownTableViewCellIdentifier atIndex:(NSUInteger)indexPath.row];
+    [self.tags insertObject:pullDownTableViewCellIdentifier atIndex:(NSUInteger)indexPath.row];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsCommitRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -244,7 +244,7 @@ static NSInteger kAddingFinishHeight = 74;
     NSSet * changes = [self.tags removeObjectAtIndex:(NSUInteger)indexPath.row];
     [self.tableView updateWithChanges:changes];
 
-    if (cell.frame.size.height > kAddingCommitHeight * 2) {
+    if (cell.bounds.size.height > kAddingCommitHeight * 2) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
@@ -339,7 +339,9 @@ static NSInteger kAddingFinishHeight = 74;
     TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
     NSInteger xOffset = indexOfTagInEditState == (NSUInteger)indexPath.row ? kEditStateRightOffset : 0;
-    cell.frontView.frame = CGRectOffset(cell.frontView.bounds, gestureRecognizer.translationInTableView.x + xOffset, 0);
+
+    CGPoint point = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + gestureRecognizer.translationInTableView.x + xOffset, cell.frontView.layer.position.y);
+    cell.frontView.layer.position = point;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer commitEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -427,7 +429,7 @@ static NSInteger kAddingFinishHeight = 74;
 - (InnerShadowLayer *)innerShadowLayerForCell:(TagTableViewCell *)cell {
     InnerShadowLayer *innerShadowLayer = [InnerShadowLayer layer];
     innerShadowLayer = [InnerShadowLayer layer];
-    innerShadowLayer.frame = cell.backView.bounds;
+    innerShadowLayer.frame = cell.backView.frame;
     innerShadowLayer.shadowRadius = 2;
     innerShadowLayer.shadowOpacity = 0.7f;
 
