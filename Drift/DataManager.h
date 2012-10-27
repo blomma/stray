@@ -23,5 +23,6 @@ FOUNDATION_EXPORT NSString *const kDataManagerObjectsDidChangeNotification;
 
 - (Tag *)createTag;
 - (void)deleteTag:(Tag *)tag;
+- (void)deleteEvent:(Event *)event;
 
 @end

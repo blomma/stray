@@ -110,6 +110,10 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
     [tag delete];
 }
 
+- (void)deleteEvent:(Event *)event {
+    [event delete];
+}
+
 #pragma mark -
 #pragma mark Private methods
 

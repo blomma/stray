@@ -9,19 +9,22 @@
 #import "EventsViewController.h"
 #import "Event.h"
 #import "EventTableViewCell.h"
-#import "UITableView+Change.h"
 #import "DataManager.h"
 #import "Global.h"
 #import "TransformableTableViewGestureRecognizer.h"
+#import "EventTableViewCell.h"
+#import "SKBounceAnimation.h"
+#import "CAAnimation+Blocks.h"
+#import "TagsTableViewController.h"
 
-#define COMMITING_CREATE_CELL_HEIGHT 44
+static NSInteger kEditCommitLength = 120;
+static NSInteger kAddingCommitHeight = 74;
 
 static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
 
-@interface EventsViewController ()<TransformableTableViewGestureAddingRowDelegate>
+@interface EventsViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureAddingRowDelegate, EventTableViewCellDelegate>
 
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
-@property (nonatomic) NSIndexPath *indexPathInEditState;
 
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) NSCalendar *calendar;
@@ -38,8 +41,6 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.calendar = [Global instance].calendar;
-
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
     self.calendar = [Global instance].calendar;
 
@@ -50,17 +51,39 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"segueToTags"]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+        Event *event = [self.events objectAtIndex:(NSUInteger)indexPath.row];
+
+        if ([[segue destinationViewController] respondsToSelector:@selector(event)]) {
+            [[segue destinationViewController] setEvent:event];
+        }
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    [self.tableView reloadData];
+}
+
+#pragma mark -
+#pragma mark EventTableViewCellDelegate
+
+- (void)cell:(UITableViewCell *)cell tappedTagButton:(UIButton *)sender forEvent:(UIEvent *)event {
+   [self performSegueWithIdentifier:@"segueToTags" sender:cell];
+}
+
 #pragma mark -
 #pragma mark TableViewGestureAddingRowDelegate
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer heightForCommitAddingRowAtIndexPath:(NSIndexPath *)indexPath {
-    return COMMITING_CREATE_CELL_HEIGHT;
+    return kAddingCommitHeight;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsAddRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.events insertObject:pullDownTableViewCellIdentifier atIndex:(NSUInteger)indexPath.row];
-
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsCommitRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -74,9 +97,72 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     [self.events removeObjectAtIndex:(NSUInteger)indexPath.row];
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 
-    if (cell.frame.size.height > COMMITING_CREATE_CELL_HEIGHT * 2) {
+    if (cell.frame.size.height > kAddingCommitHeight * 2) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
+}
+
+#pragma mark -
+#pragma mark TableViewGestureEditingRowDelegate
+
+- (BOOL)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didEnterEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (state == TransformableTableViewCellEditingStateLeft) {
+        return;
+    }
+
+    EventTableViewCell *cell = (EventTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    [cell.layer removeAllAnimations];
+
+    UIView *backgroundView = [[UIView alloc] initWithFrame:cell.contentView.frame];
+    cell.backgroundView = backgroundView;
+    cell.backgroundView.backgroundColor = [UIColor colorWithRed:0.843f
+                                                          green:0.306f
+                                                           blue:0.314f
+                                                          alpha:1];
+}
+
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didChangeEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (state == TransformableTableViewCellEditingStateLeft) {
+        return;
+    }
+
+    EventTableViewCell *cell = (EventTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    CGFloat alpha = 1 - (gestureRecognizer.translationInTableView.x / kEditCommitLength);
+    cell.contentView.alpha = alpha;
+
+    CGPoint point = CGPointMake(CGRectGetMidX(cell.layer.bounds) + gestureRecognizer.translationInTableView.x , cell.layer.position.y);
+    cell.layer.position = point;
+}
+
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer commitEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (state == TransformableTableViewCellEditingStateLeft) {
+        return;
+    }
+
+    EventTableViewCell *cell = (EventTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    cell.contentView.alpha = 1;
+
+    Event *event = [self.events objectAtIndex:(NSUInteger)indexPath.row];
+    [[DataManager instance] deleteEvent:event];
+    [self.events removeObject:event];
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
+}
+
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
+    EventTableViewCell *cell = (EventTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    CGPoint fromValue = cell.layer.position;
+    CGPoint toValue = CGPointMake(CGRectGetMidX(cell.layer.bounds), fromValue.y);
+
+    cell.contentView.alpha = 1;
+    [self animateBounceOnLayer:cell.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
+}
+
+- (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
+    return kEditCommitLength;
 }
 
 #pragma mark -
@@ -102,11 +188,11 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
         cell.textLabel.font = [UIFont fontWithName:@"Futura-Medium" size:25];
         cell.textLabel.backgroundColor = [UIColor clearColor];
 
-        if (cell.frame.size.height > COMMITING_CREATE_CELL_HEIGHT * 2) {
+        if (cell.frame.size.height > kAddingCommitHeight * 2) {
             cell.textLabel.textColor = [UIColor whiteColor];
             cell.textLabel.text = @"Close";
-            CGFloat alpha = 1 - (COMMITING_CREATE_CELL_HEIGHT * 2 / cell.frame.size.height);
-            
+            CGFloat alpha = 1 - (kAddingCommitHeight * 2 / cell.frame.size.height);
+
             cell.contentView.backgroundColor = [UIColor colorWithRed:0.843f
                                                                green:0.306f
                                                                 blue:0.314f
@@ -120,6 +206,11 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     } else {
         Event *event = (Event *)object;
         EventTableViewCell *cell = (EventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        cell.contentView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:1.000];
+
+        // Tag
+        NSString *tagName = event.inTag ? event.inTag.name : @"";
+        [cell.tagName setTitle:[tagName uppercaseString] forState:UIControlStateNormal];
 
         // StartTime
         static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
@@ -154,8 +245,27 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
             cell.eventStopMonth.text = @"";
         }
 
+        cell.delegate = self;
+
         return cell;
     }
+}
+
+#pragma mark -
+#pragma mark Private methods
+
+- (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration completion:(void (^)(BOOL finished))completion{
+    static NSString *keyPath = @"position";
+
+	SKBounceAnimation *positionAnimation = [SKBounceAnimation animationWithKeyPath:keyPath];
+	positionAnimation.fromValue = [NSValue valueWithCGPoint:from];
+	positionAnimation.toValue = [NSValue valueWithCGPoint:to];
+	positionAnimation.duration = duration;
+	positionAnimation.numberOfBounces = 4;
+    positionAnimation.completion = completion;
+
+	[layer addAnimation:positionAnimation forKey:@"someKey2"];
+	[layer setValue:[NSValue valueWithCGPoint:to] forKeyPath:keyPath];
 }
 
 @end

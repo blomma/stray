@@ -9,7 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "Event.h"
 
+@protocol EventTableViewCellDelegate <NSObject>
+
+- (void)cell:(UITableViewCell *)cell tappedTagButton:(UIButton *)sender forEvent:(UIEvent *)event;
+
+@end
+
 @interface EventTableViewCell : UITableViewCell
+
+@property (nonatomic, weak) id<EventTableViewCellDelegate> delegate;
 
 @property (weak, nonatomic) IBOutlet UILabel *eventStartTime;
 @property (weak, nonatomic) IBOutlet UILabel *eventStartDay;
@@ -24,6 +32,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *eventStopMonth;
 @property (weak, nonatomic) IBOutlet UILabel *eventStopYear;
 
-@property (weak, nonatomic) IBOutlet UILabel *tag;
+@property (weak, nonatomic) IBOutlet UIButton *tagName;
+
+- (IBAction)touchUpInsideTagButton:(UIButton *)sender forEvent:(UIEvent *)event;
 
 @end
