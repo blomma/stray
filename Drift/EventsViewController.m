@@ -72,7 +72,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 #pragma mark EventTableViewCellDelegate
 
 - (void)cell:(UITableViewCell *)cell tappedTagButton:(UIButton *)sender forEvent:(UIEvent *)event {
-   [self performSegueWithIdentifier:@"segueToTags" sender:cell];
+   [self performSegueWithIdentifier:@"segueToTagsFromEvents" sender:cell];
 }
 
 #pragma mark -
