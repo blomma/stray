@@ -162,7 +162,7 @@
 	// Update the tick marks for the seconds
 	CGFloat secondTick = (CGFloat)floor(fmod(elapsedSecondsIntoHour, 60));
 
-    if (secondTick != self.previousSecondTick) {
+    if (fabs(secondTick) != fabs(self.previousSecondTick)) {
         for (NSUInteger i = 0; i < self.secondProgressTicksLayer.sublayers.count; i++) {
             NoHitCAShapeLayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
 
@@ -178,7 +178,7 @@
 
 	// And for the minutes we want a more tick/tock behavior
 	a = (CGFloat)((M_PI * 2) * floor(elapsedSecondsIntoHour / 60) / 60);
-    if (a != self.previousNow) {
+    if (fabs(a) != fabs(self.previousNow)) {
         self.nowLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
         self.previousNow = a;
     }

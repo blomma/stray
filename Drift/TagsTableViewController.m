@@ -116,26 +116,26 @@ static NSInteger kAddingFinishHeight = 74;
         return cell;
     } else {
         NSUInteger index = self.transformingPullingIndexPath ? (NSUInteger)indexPath.row - 1 : (NSUInteger)indexPath.row;
-        id object = [self.tags objectAtIndex:index];
+        Tag *tag = [self.tags objectAtIndex:index];
         
         TagTableViewCell *cell = (TagTableViewCell *)[tableView dequeueReusableCellWithIdentifier:tagsTableViewCellIdentifier];
 
         CGRect frame = cell.textFieldName.frame;
         frame.size.height = 40;
         cell.textFieldName.frame = frame;
-        cell.textFieldName.text = [object name];
+        cell.textFieldName.text = tag.name;
 
         UIColor *backgroundColor = [UIColor colorWithWhite:0.075f alpha:1];
-        if ([self.event.inTag isEqual:object]) {
+        if ([self.event.inTag isEqual:tag]) {
             backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1];
         }
         
         cell.frontView.backgroundColor = backgroundColor;
 
-        NSString *tagName = [object name] ? [object name] : @"Fill me in";
+        NSString *tagName = tag.name ? tag.name : @"Fill me in";
         cell.name.text = [tagName uppercaseString];
 
-        if ([self.tagInEditState isEqual:object]) {
+        if ([self.tagInEditState isEqual:tag]) {
             CGPoint fromValue = cell.frontView.layer.position;
             CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + kEditStateRightOffset, fromValue.y);
             cell.frontView.layer.position = toValue;
@@ -432,7 +432,6 @@ static NSInteger kAddingFinishHeight = 74;
 
 - (InnerShadowLayer *)innerShadowLayerForCell:(TagTableViewCell *)cell {
     InnerShadowLayer *innerShadowLayer = [InnerShadowLayer layer];
-    innerShadowLayer = [InnerShadowLayer layer];
     innerShadowLayer.frame = cell.backView.frame;
     innerShadowLayer.shadowRadius = 2;
     innerShadowLayer.shadowOpacity = 0.7f;

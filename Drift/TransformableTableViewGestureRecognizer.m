@@ -58,7 +58,7 @@ static NSInteger kCellSnapShotTag = 100000;
     } else {
     }
 
-    if (currentOffset.y != newOffset.y) {
+    if (fabs(currentOffset.y) != fabs(newOffset.y)) {
         [self.tableView setContentOffset:newOffset];
 
         UIImageView *cellSnapshotView = (id)[self.tableView viewWithTag:kCellSnapShotTag];
