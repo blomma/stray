@@ -11,7 +11,8 @@
 
 @interface Tags ()
 
-@property (nonatomic) NSMutableArray *tags;
+@property (nonatomic) NSMutableOrderedSet *tags;
+@property (nonatomic) BOOL tagsIsInvalid;
 
 @end
 
@@ -30,23 +31,18 @@
 - (id)initWithTags:(NSArray *)tags {
     self = [super init];
 	if (self) {
-        self.tags = [[NSMutableArray alloc] initWithArray:[tags
-                                                           sortedArrayWithOptions:NSSortConcurrent
-                                                           usingComparator:^NSComparisonResult(id obj1, id obj2) {
-                                                               if ([obj1 sortIndex].integerValue < [obj2 sortIndex].integerValue) {
-                                                                   return NSOrderedAscending;
-                                                               } else if ([obj1 sortIndex].integerValue > [obj2 sortIndex].integerValue) {
-                                                                   return NSOrderedDescending;
-                                                               } else {
-                                                                   return NSOrderedSame;
-                                                               }
-                                                           }]];
+        self.tags = [[NSMutableOrderedSet alloc] initWithArray:[tags
+                                                                sortedArrayWithOptions:NSSortConcurrent
+                                                                usingComparator:^NSComparisonResult(id obj1, id obj2) {
+                                                                    if ([obj1 sortIndex].integerValue < [obj2 sortIndex].integerValue) {
+                                                                        return NSOrderedAscending;
+                                                                    } else if ([obj1 sortIndex].integerValue > [obj2 sortIndex].integerValue) {
+                                                                        return NSOrderedDescending;
+                                                                    } else {
+                                                                        return NSOrderedSame;
+                                                                    }
+                                                                }]];
 	}
-
-    // Walk over the tags and add sortIndex where it is sorley missed
-    [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
-    }];
 
 	return self;
 }
@@ -60,6 +56,34 @@
 
 #pragma mark -
 #pragma mark Public methods
+
+- (void)addObjectsFromArray:(NSArray *)objects {
+    if (objects.count == 0) {
+        return;
+    }
+
+    [self.tags addObjectsFromArray:objects];
+
+    [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[Tag class]]) {
+            [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
+        }
+    }];
+}
+
+- (void)removeObjectsInArray:(NSArray *)objects {
+    if (objects.count == 0) {
+        return;
+    }
+
+    [self.tags removeObjectsInArray:objects];
+
+    [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[Tag class]]) {
+            [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
+        }
+    }];
+}
 
 - (NSSet *)insertObject:(id)object atIndex:(NSUInteger)index {
     NSMutableSet *changes = [NSMutableSet set];

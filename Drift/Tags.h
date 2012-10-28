@@ -16,6 +16,9 @@
 - (id)init;
 - (id)initWithTags:(NSArray *)tags;
 
+- (void)addObjectsFromArray:(NSArray *)objects;
+- (void)removeObjectsInArray:(NSArray *)objects;
+
 - (NSSet *)insertObject:(id)object atIndex:(NSUInteger)index;
 - (NSSet *)removeObjectAtIndex:(NSUInteger)index;
 - (NSSet *)replaceObjectAtIndex:(NSUInteger)index withObject:(id)object;

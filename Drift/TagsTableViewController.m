@@ -26,14 +26,16 @@ static NSInteger kEditCommitLength = 60;
 static NSInteger kAddingCommitHeight = 74;
 static NSInteger kAddingFinishHeight = 74;
 
-@interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureAddingRowDelegate, TransformableTableViewGestureMoveRowDelegate, TagTableViewCellDelegate>
+@interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGesturePullingRowDelegate, TransformableTableViewGestureMovingRowDelegate, TagTableViewCellDelegate>
 
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
-@property (nonatomic) id grabbedObject;
 
 @property (nonatomic) Tag *tagInEditState;
 
 @property (nonatomic) Tags *tags;
+
+@property (nonatomic) NSIndexPath *transformingPullingIndexPath;
+@property (nonatomic) NSIndexPath *transformingMovingIndexPath;
 
 @property (nonatomic) UIColor *cellBackgroundColor;
 
@@ -71,7 +73,7 @@ static NSInteger kAddingFinishHeight = 74;
 #pragma mark UITableViewDatasource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (NSInteger)[self.tags count];
+	return self.transformingPullingIndexPath ? (NSInteger)self.tags.count + 1 : (NSInteger)self.tags.count;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -79,11 +81,9 @@ static NSInteger kAddingFinishHeight = 74;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *tagsTableViewCellIdentifier      = @"TagsTableViewCell";
+	static NSString *tagsTableViewCellIdentifier = @"TagsTableViewCell";
 
-    id object = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
-
-    if ([object isKindOfClass:[NSString class]] && [object isEqualToString:pullDownTableViewCellIdentifier] && indexPath.row == 0) {
+    if (self.transformingPullingIndexPath && self.transformingPullingIndexPath.row == indexPath.row) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:pullDownTableViewCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -113,12 +113,15 @@ static NSInteger kAddingFinishHeight = 74;
         }
 
         return cell;
-    } else if ([object isKindOfClass:[NSString class]] && [object isEqualToString:grabbedTableViewCellIdentifier]) {
+    } else if (self.transformingMovingIndexPath && self.transformingMovingIndexPath.row == indexPath.row) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:grabbedTableViewCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
         return cell;
     } else {
+        NSUInteger index = self.transformingPullingIndexPath ? (NSUInteger)indexPath.row - 1 : (NSUInteger)indexPath.row;
+        id object = [self.tags objectAtIndex:index];
+        
         TagTableViewCell *cell = (TagTableViewCell *)[tableView dequeueReusableCellWithIdentifier:tagsTableViewCellIdentifier];
 
         CGRect frame = cell.textFieldName.frame;
@@ -220,37 +223,39 @@ static NSInteger kAddingFinishHeight = 74;
 }
 
 #pragma mark -
-#pragma mark TableViewGestureAddingRowDelegate
+#pragma mark TransformableTableViewGesturePullingRowDelegate
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer heightForCommitAddingRowAtIndexPath:(NSIndexPath *)indexPath {
     return kAddingCommitHeight;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsAddRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.tags insertObject:pullDownTableViewCellIdentifier atIndex:(NSUInteger)indexPath.row];
+    self.transformingPullingIndexPath = indexPath;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsCommitRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.transformingPullingIndexPath = nil;
     Tag *tag = [[DataManager instance] createTag];
 
-    NSSet *changes = [self.tags replaceObjectAtIndex:(NSUInteger)indexPath.row withObject:tag];
+    [self.tags insertObject:tag atIndex:(NSUInteger)indexPath.row];
 
-    [self.tableView updateWithChanges:changes];
+    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsDiscardRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.transformingPullingIndexPath = nil;
+
     UITableViewCell *cell = [gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
-    NSSet * changes = [self.tags removeObjectAtIndex:(NSUInteger)indexPath.row];
-    [self.tableView updateWithChanges:changes];
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 
-    if (cell.bounds.size.height > kAddingCommitHeight * 2) {
+    if (cell.frame.size.height > kAddingCommitHeight * 2) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
 #pragma mark -
-#pragma mark TableViewCellEditingRowDelegate
+#pragma mark TagTableViewCellDelegate
 
 - (void)cell:(TagTableViewCell *)cell tappedDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
@@ -296,7 +301,7 @@ static NSInteger kAddingFinishHeight = 74;
 }
 
 #pragma mark -
-#pragma mark TableViewGestureEditingRowDelegate
+#pragma mark TransformableTableViewGestureEditingRowDelegate
 
 - (BOOL)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
@@ -395,32 +400,41 @@ static NSInteger kAddingFinishHeight = 74;
 }
 
 #pragma mark -
-#pragma mark TableViewGestureMoveRowDelegate
+#pragma mark TransformableTableViewGestureMovingRowDelegate
 
 - (BOOL)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsCreatePlaceholderForRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.grabbedObject = [self.tags objectAtIndex:indexPath.row];
+    self.transformingMovingIndexPath = indexPath;
 
-    NSSet *changes = [self.tags replaceObjectAtIndex:(NSUInteger)indexPath.row withObject:grabbedTableViewCellIdentifier];
-    [self.tableView updateWithChanges:changes];
+    [self.tableView beginUpdates];
+
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+
+    [self.tableView endUpdates];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsMoveRowAtIndexPath:(NSIndexPath *)atIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-    NSUInteger atIndex = (NSUInteger)atIndexPath.row;
-    NSUInteger toIndex = (NSUInteger)toIndexPath.row;
+    self.transformingMovingIndexPath = toIndexPath;
 
-    NSSet *changes = [self.tags moveObjectAtIndex:atIndex toIndex:toIndex];
-    [self.tableView updateWithChanges:changes];
+    [self.tableView beginUpdates];
+
+    [self.tableView deleteRowsAtIndexPaths:@[atIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView insertRowsAtIndexPaths:@[toIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+
+    [self.tableView endUpdates];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsReplacePlaceholderForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSSet *changes = [self.tags replaceObjectAtIndex:(NSUInteger)indexPath.row withObject:self.grabbedObject];
-    [self.tableView updateWithChanges:changes];
+    self.transformingMovingIndexPath = nil;
 
-    self.grabbedObject = nil;
+    [self.tableView beginUpdates];
+
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+
+    [self.tableView endUpdates];
 }
 
 #pragma mark -

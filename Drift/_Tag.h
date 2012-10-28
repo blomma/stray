@@ -11,6 +11,7 @@ extern const struct TagAttributes {
 
 extern const struct TagRelationships {
 	__unsafe_unretained NSString *heldByEvents;
+	__unsafe_unretained NSString *heldByEventsFilter;
 	__unsafe_unretained NSString *heldByEventsGroupFilter;
 } TagRelationships;
 
@@ -18,6 +19,7 @@ extern const struct TagFetchedProperties {
 } TagFetchedProperties;
 
 @class Event;
+@class UIState;
 @class UIState;
 
 
@@ -67,6 +69,13 @@ extern const struct TagFetchedProperties {
 
 
 
+@property (nonatomic, strong) UIState *heldByEventsFilter;
+
+//- (BOOL)validateHeldByEventsFilter:(id*)value_ error:(NSError**)error_;
+
+
+
+
 @property (nonatomic, strong) UIState *heldByEventsGroupFilter;
 
 //- (BOOL)validateHeldByEventsGroupFilter:(id*)value_ error:(NSError**)error_;
@@ -107,6 +116,11 @@ extern const struct TagFetchedProperties {
 
 - (NSMutableSet*)primitiveHeldByEvents;
 - (void)setPrimitiveHeldByEvents:(NSMutableSet*)value;
+
+
+
+- (UIState*)primitiveHeldByEventsFilter;
+- (void)setPrimitiveHeldByEventsFilter:(UIState*)value;
 
 
 

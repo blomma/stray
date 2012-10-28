@@ -33,6 +33,7 @@
 		9E14D42E1626FB1C008D9E43 /* low_contrast_linen@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E14D42C1626FB1C008D9E43 /* low_contrast_linen@2X.png */; };
 		9E14D452162B3D3F008D9E43 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E14D451162B3D3F008D9E43 /* TagButton.m */; };
 		9E15897D16183F7100DB19EB /* Tags.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E15897C16183F7100DB19EB /* Tags.m */; };
+		9E15AB79163C7A19006D16B3 /* Events.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E15AB78163C7A19006D16B3 /* Events.m */; };
 		9E15DE0116024161007146CE /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E15DE0016024161007146CE /* libz.dylib */; };
 		9E21F926156EA9510075EAAC /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */; };
 		9E21F929156EAA2F0075EAAC /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F928156EAA2F0075EAAC /* Event.m */; };
@@ -104,6 +105,9 @@
 		9E14D451162B3D3F008D9E43 /* TagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagButton.m; sourceTree = "<group>"; };
 		9E15897B16183F7100DB19EB /* Tags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tags.h; sourceTree = "<group>"; };
 		9E15897C16183F7100DB19EB /* Tags.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tags.m; sourceTree = "<group>"; };
+		9E15AB77163C7A19006D16B3 /* Events.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Events.h; sourceTree = "<group>"; };
+		9E15AB78163C7A19006D16B3 /* Events.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Events.m; sourceTree = "<group>"; };
+		9E15AB7A163D0C45006D16B3 /* CoreDataModel-5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CoreDataModel-5.xcdatamodel"; sourceTree = "<group>"; };
 		9E15DE0016024161007146CE /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		9E21F925156EA9510075EAAC /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
 		9E21F927156EAA2F0075EAAC /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
@@ -343,6 +347,8 @@
 				9E895EC316176DBD0083037B /* Change.m */,
 				9E15897B16183F7100DB19EB /* Tags.h */,
 				9E15897C16183F7100DB19EB /* Tags.m */,
+				9E15AB77163C7A19006D16B3 /* Events.h */,
+				9E15AB78163C7A19006D16B3 /* Events.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -614,6 +620,7 @@
 				9E9239EB162F3A5000E265E6 /* Global.m in Sources */,
 				9EAF701616367B4600FA079C /* SKBounceAnimation.m in Sources */,
 				9E98C3F01637C8C5007D2CF2 /* MSVCLeakHunter.m in Sources */,
+				9E15AB79163C7A19006D16B3 /* Events.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -880,12 +887,13 @@
 		9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				9E15AB7A163D0C45006D16B3 /* CoreDataModel-5.xcdatamodel */,
 				9E916E14163197A40058C777 /* CoreDataModel-4.xcdatamodel */,
 				9E9239E2162DA56900E265E6 /* CoreDataModel-3.xcdatamodel */,
 				9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */,
 				9E21F925156EA9510075EAAC /* CoreDataModel.xcdatamodel */,
 			);
-			currentVersion = 9E916E14163197A40058C777 /* CoreDataModel-4.xcdatamodel */;
+			currentVersion = 9E15AB7A163D0C45006D16B3 /* CoreDataModel-5.xcdatamodel */;
 			path = CoreDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

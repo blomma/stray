@@ -16,20 +16,31 @@
 #import "SKBounceAnimation.h"
 #import "CAAnimation+Blocks.h"
 #import "TagsTableViewController.h"
+#import "Events.h"
+#import "TagButton.h"
+#import "Tags.h"
 
 static NSInteger kEditCommitLength = 120;
-static NSInteger kAddingCommitHeight = 74;
+static NSInteger kAddingCommitHeight = 60;
 
 static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
 
-@interface EventsViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureAddingRowDelegate, EventTableViewCellDelegate>
+@interface EventsViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGesturePullingRowDelegate, EventTableViewCellDelegate>
 
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
 
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) NSCalendar *calendar;
 
-@property (nonatomic) NSMutableArray *events;
+@property (nonatomic) NSMutableArray *tagViewSubViews;
+@property (nonatomic) BOOL doesTagsRequireUpdate;
+
+@property (nonatomic) UIState *state;
+@property (nonatomic) Events *events;
+
+@property (nonatomic) NSIndexPath *transformingAddingIndexPath;
+
+@property (nonatomic) Tags *tags;
 
 @end
 
@@ -44,17 +55,31 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
     self.calendar = [Global instance].calendar;
 
-    self.events = [[NSMutableArray alloc] initWithArray:[DataManager instance].events];
+    self.tags = [[Tags alloc] initWithTags:[[DataManager instance] tags]];
+
+    self.tagView.showsHorizontalScrollIndicator = NO;
+    self.tagView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.45];
+    self.tagViewSubViews = [NSMutableArray array];
+    self.doesTagsRequireUpdate = YES;
+
+    self.state = [DataManager instance].state;
+
+    self.events = [[Events alloc] initWithEvents:[DataManager instance].events];
 
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:pullDownTableViewCellIdentifier];
 
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
+
+	[[NSNotificationCenter defaultCenter] addObserver:self
+	                                         selector:@selector(objectsDidChange:)
+	                                             name:kDataManagerObjectsDidChangeNotification
+	                                           object:[DataManager instance]];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToTagsFromEvents"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        Event *event = [self.events objectAtIndex:(NSUInteger)indexPath.row];
+        Event *event = [self.events.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
 
         if ([[segue destinationViewController] respondsToSelector:@selector(event)]) {
             [[segue destinationViewController] setEvent:event];
@@ -64,6 +89,10 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+    if (self.doesTagsRequireUpdate) {
+        [self updateTagsView];
+    }
 
     [self.tableView reloadData];
 }
@@ -76,25 +105,25 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 }
 
 #pragma mark -
-#pragma mark TableViewGestureAddingRowDelegate
+#pragma mark TransformableTableViewGesturePullingRowDelegate
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer heightForCommitAddingRowAtIndexPath:(NSIndexPath *)indexPath {
     return kAddingCommitHeight;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsAddRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.events insertObject:pullDownTableViewCellIdentifier atIndex:(NSUInteger)indexPath.row];
+    self.transformingAddingIndexPath = indexPath;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsCommitRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.events removeObjectAtIndex:(NSUInteger)indexPath.row];
+    self.transformingAddingIndexPath = nil;
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsDiscardRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
-    [self.events removeObjectAtIndex:(NSUInteger)indexPath.row];
+    self.transformingAddingIndexPath = nil;
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 
     if (cell.frame.size.height > kAddingCommitHeight * 2) {
@@ -103,7 +132,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 }
 
 #pragma mark -
-#pragma mark TableViewGestureEditingRowDelegate
+#pragma mark TransformableTableViewGestureEditingRowDelegate
 
 - (BOOL)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
@@ -146,9 +175,10 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     EventTableViewCell *cell = (EventTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     cell.contentView.alpha = 1;
 
-    Event *event = [self.events objectAtIndex:(NSUInteger)indexPath.row];
+    Event *event = [self.events.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
     [[DataManager instance] deleteEvent:event];
     [self.events removeObject:event];
+
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
 }
 
@@ -166,6 +196,16 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 }
 
 #pragma mark -
+#pragma mark UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    Event *event = [self.events.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
+    self.state.activeEvent = event;
+
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark -
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -173,14 +213,13 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return (NSInteger)self.events.count;
+	return self.transformingAddingIndexPath ? (NSInteger)self.events.filteredEvents.count + 1 : (NSInteger)self.events.filteredEvents.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *CellIdentifier = @"EventTableViewCell";
 
-    id object = [self.events objectAtIndex:(NSUInteger)indexPath.row];
-    if ([object isKindOfClass:[NSString class]] && [object isEqualToString:pullDownTableViewCellIdentifier] && indexPath.row == 0) {
+    if (self.transformingAddingIndexPath && self.transformingAddingIndexPath.row == indexPath.row) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:pullDownTableViewCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -204,7 +243,9 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 
         return cell;
     } else {
-        Event *event = (Event *)object;
+        NSUInteger index = self.transformingAddingIndexPath ? (NSUInteger)indexPath.row - 1 : (NSUInteger)indexPath.row;
+        Event *event = (Event *)[self.events.filteredEvents objectAtIndex:index];
+
         EventTableViewCell *cell = (EventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         cell.contentView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:1.000];
 
@@ -253,6 +294,106 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 
 #pragma mark -
 #pragma mark Private methods
+
+- (void)objectsDidChange:(NSNotification *)note {
+    NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
+    NSSet *deletedObjects  = [[note userInfo] objectForKey:NSDeletedObjectsKey];
+    NSSet *updatedObjects  = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
+
+    // ========
+    // = Tags =
+    // ========
+    NSSet *updatedTags = [updatedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        return [obj isKindOfClass:[Tag class]];
+    }];
+
+    NSSet *insertedTags = [insertedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        return [obj isKindOfClass:[Tag class]];
+    }];
+
+    [self.tags addObjectsFromArray:[insertedTags allObjects]];
+
+    NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        return [obj isKindOfClass:[Tag class]];
+    }];
+
+    [self.tags removeObjectsInArray:[deletedTags allObjects]];
+
+    if (updatedTags.count > 0 || insertedTags.count > 0 || deletedTags.count > 0) {
+        self.doesTagsRequireUpdate = YES;
+    }
+}
+
+- (void)updateEvents {
+    self.events.filters = self.state.eventsFilter;
+    [self.tableView reloadData];
+}
+
+- (void)touchUpInsideTagFilterButton:(TagButton *)sender forEvent:(UIEvent *)event {
+    if ([self.state.eventsFilter containsObject:sender.tagObject]) {
+        [self.state removeEventsFilterObject:sender.tagObject];
+
+        sender.selected = NO;
+    } else {
+        [self.state addEventsFilterObject:sender.tagObject];
+
+        sender.selected = YES;
+    }
+
+    [self updateEvents];
+}
+
+- (void)updateTagsView {
+    // Remove all the old subviews and recreate them, lazy option
+    for (id subView in self.tagViewSubViews) {
+        [subView removeFromSuperview];
+    }
+
+    [self.tagViewSubViews removeAllObjects];
+
+    // define number and size of elements
+    NSUInteger numElements = self.tags.count;
+    CGSize elementSize = CGSizeMake(120, self.tagView.frame.size.height);
+
+    // add elements
+    for (NSUInteger i = 0; i < numElements; i++) {
+        Tag *tag = [self.tags objectAtIndex:i];
+
+        TagButton* tagButton = [TagButton buttonWithType:UIButtonTypeCustom];
+        tagButton.tagObject = tag;
+        [tagButton addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
+
+        tagButton.titleLabel.textColor = [UIColor whiteColor];
+        tagButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+        tagButton.titleLabel.font = [UIFont fontWithName:@"Futura-Medium" size:15];
+        tagButton.titleLabel.backgroundColor = [UIColor clearColor];
+
+        tagButton.backgroundColor = [UIColor clearColor];
+
+        [tagButton setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
+        // select a differing red value so that we can distinguish our added subviews
+        //        float redValue = (1.0f / numElements) * i;
+        //        subview.backgroundColor = [UIColor colorWithRed:redValue green:0 blue:0  alpha:1.0];
+
+        // setup frames to appear besides each other in the slider
+        CGFloat elementX = elementSize.width * i;
+        tagButton.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
+
+        if ([self.state.eventsFilter containsObject:tag]) {
+            tagButton.selected = YES;
+        }
+
+        [self.tagViewSubViews addObject:tagButton];
+
+        // add the subview
+        [self.tagView addSubview:tagButton];
+    }
+
+    // set the size of the scrollview's content
+    self.tagView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
+    
+    self.doesTagsRequireUpdate = NO;
+}
 
 - (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration completion:(void (^)(BOOL finished))completion{
     static NSString *keyPath = @"position";

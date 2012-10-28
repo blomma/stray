@@ -6,9 +6,9 @@ typedef NS_ENUM(uint16_t, TransformableTableViewCellEditingState) {
     TransformableTableViewCellEditingStateRight
 };
 
-@protocol TransformableTableViewGestureAddingRowDelegate;
+@protocol TransformableTableViewGesturePullingRowDelegate;
 @protocol TransformableTableViewGestureEditingRowDelegate;
-@protocol TransformableTableViewGestureMoveRowDelegate;
+@protocol TransformableTableViewGestureMovingRowDelegate;
 
 @interface TransformableTableViewGestureRecognizer : NSObject <UITableViewDelegate>
 
@@ -21,7 +21,7 @@ typedef NS_ENUM(uint16_t, TransformableTableViewCellEditingState) {
 
 #pragma mark -
 
-@protocol TransformableTableViewGestureAddingRowDelegate <NSObject>
+@protocol TransformableTableViewGesturePullingRowDelegate <NSObject>
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsAddRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsCommitRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -50,7 +50,7 @@ typedef NS_ENUM(uint16_t, TransformableTableViewCellEditingState) {
 @end
 
 
-@protocol TransformableTableViewGestureMoveRowDelegate <NSObject>
+@protocol TransformableTableViewGestureMovingRowDelegate <NSObject>
 
 - (BOOL)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer canMoveRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsCreatePlaceholderForRowAtIndexPath:(NSIndexPath *)indexPath;

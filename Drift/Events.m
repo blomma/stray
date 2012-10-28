@@ -1,0 +1,90 @@
+//
+//  Events.m
+//  Drift
+//
+//  Created by Mikael Hultgren on 2012-10-27.
+//  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
+//
+
+#import "Events.h"
+
+@interface Events ()
+
+@property (nonatomic) NSMutableSet *events;
+
+@property (nonatomic) NSMutableOrderedSet *filteredEvents;
+@property (nonatomic) BOOL filteredEventsIsInvalid;
+
+@end
+
+@implementation Events
+
+#pragma mark -
+#pragma mark Lifecycle
+
+- (id)init {
+	return [self initWithEvents:[NSArray array]];
+}
+
+// ==========================
+// = Designated initializer =
+// ==========================
+- (id)initWithEvents:(NSArray *)events {
+    self = [super init];
+	if (self) {
+        self.events = [[NSMutableSet alloc] initWithArray:events];
+
+		self.filteredEvents = [NSMutableOrderedSet orderedSet];
+        self.filteredEventsIsInvalid = YES;
+	}
+
+	return self;
+}
+
+#pragma mark -
+#pragma mark Public properties
+
+- (NSUInteger)count {
+    return self.events.count;
+}
+
+- (void)setFilters:(NSSet *)filters {
+    _filters = filters;
+	self.filteredEventsIsInvalid = YES;
+}
+
+- (NSMutableOrderedSet *)filteredEvents {
+    if (self.filteredEventsIsInvalid) {
+        if (self.filters.count == 0) {
+            [_filteredEvents unionSet:self.events];
+        } else {
+            [_filteredEvents removeAllObjects];
+            [_filteredEvents unionSet:[self.events filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"inTag in %@",
+                                                                              self.filters]]];
+        }
+
+        [_filteredEvents sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [[obj2 startDate] compare:[obj1 startDate]];
+        }];
+
+        self.filteredEventsIsInvalid = NO;
+    }
+
+    return _filteredEvents;
+}
+
+#pragma mark -
+#pragma mark Public methods
+
+- (void)removeObject:(id)object {
+    [self.events removeObject:object];
+
+    if (self.filters.count == 0 || [self.filters containsObject:[object inTag]]) {
+        self.filteredEventsIsInvalid = YES;
+    }
+}
+
+#pragma mark -
+#pragma mark Private methods
+
+@end

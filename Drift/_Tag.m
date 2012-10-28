@@ -10,6 +10,7 @@ const struct TagAttributes TagAttributes = {
 
 const struct TagRelationships TagRelationships = {
 	.heldByEvents = @"heldByEvents",
+	.heldByEventsFilter = @"heldByEventsFilter",
 	.heldByEventsGroupFilter = @"heldByEventsGroupFilter",
 };
 
@@ -98,6 +99,10 @@ const struct TagFetchedProperties TagFetchedProperties = {
 	[self didAccessValueForKey:@"heldByEvents"];
 	return result;
 }
+	
+
+@dynamic heldByEventsFilter;
+
 	
 
 @dynamic heldByEventsGroupFilter;

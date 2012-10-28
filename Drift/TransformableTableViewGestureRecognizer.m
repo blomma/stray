@@ -18,7 +18,7 @@ static CGFloat kAddingAnimationDuration       = 0.25;
 @property (nonatomic) CGPoint translationInTableView;
 
 // private properties
-@property (nonatomic, weak) id <TransformableTableViewGestureAddingRowDelegate, TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureMoveRowDelegate> delegate;
+@property (nonatomic, weak) id <TransformableTableViewGesturePullingRowDelegate, TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureMovingRowDelegate> delegate;
 @property (nonatomic, weak) id <UITableViewDelegate> tableViewDelegate;
 
 // Adding
@@ -282,7 +282,7 @@ static NSInteger kCellSnapShotTag = 100000;
         CGPoint location = [gestureRecognizer locationInView:self.tableView];
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:location];
 
-        if (indexPath && [self.delegate conformsToProtocol:@protocol(TransformableTableViewGestureMoveRowDelegate)]) {
+        if (indexPath && [self.delegate conformsToProtocol:@protocol(TransformableTableViewGestureMovingRowDelegate)]) {
             BOOL canMoveRow = [self.delegate gestureRecognizer:self canMoveRowAtIndexPath:indexPath];
             return canMoveRow;
         }
@@ -313,7 +313,7 @@ static NSInteger kCellSnapShotTag = 100000;
 #pragma mark UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (![self.delegate conformsToProtocol:@protocol(TransformableTableViewGestureAddingRowDelegate)]) {
+    if (![self.delegate conformsToProtocol:@protocol(TransformableTableViewGesturePullingRowDelegate)]) {
         if ([self.tableViewDelegate respondsToSelector:@selector(scrollViewDidScroll:)]) {
             [self.tableViewDelegate scrollViewDidScroll:scrollView];
         }
@@ -348,7 +348,7 @@ static NSInteger kCellSnapShotTag = 100000;
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if ( ! [self.delegate conformsToProtocol:@protocol(TransformableTableViewGestureAddingRowDelegate)]) {
+    if ( ! [self.delegate conformsToProtocol:@protocol(TransformableTableViewGesturePullingRowDelegate)]) {
         if ([self.tableViewDelegate respondsToSelector:@selector(scrollViewDidEndDragging:willDecelerate:)]) {
             [self.tableViewDelegate scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
         }

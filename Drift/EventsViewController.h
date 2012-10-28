@@ -13,5 +13,6 @@
 @interface EventsViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, weak) IBOutlet UIScrollView *tagView;
 
 @end

@@ -11,12 +11,14 @@ extern const struct UIStateAttributes {
 extern const struct UIStateRelationships {
 	__unsafe_unretained NSString *activeEvent;
 	__unsafe_unretained NSString *eventGroupsFilter;
+	__unsafe_unretained NSString *eventsFilter;
 } UIStateRelationships;
 
 extern const struct UIStateFetchedProperties {
 } UIStateFetchedProperties;
 
 @class Event;
+@class Tag;
 @class Tag;
 
 
@@ -58,6 +60,13 @@ extern const struct UIStateFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *eventsFilter;
+
+- (NSMutableSet*)eventsFilterSet;
+
+
+
+
 
 @end
 
@@ -67,6 +76,11 @@ extern const struct UIStateFetchedProperties {
 - (void)removeEventGroupsFilter:(NSSet*)value_;
 - (void)addEventGroupsFilterObject:(Tag*)value_;
 - (void)removeEventGroupsFilterObject:(Tag*)value_;
+
+- (void)addEventsFilter:(NSSet*)value_;
+- (void)removeEventsFilter:(NSSet*)value_;
+- (void)addEventsFilterObject:(Tag*)value_;
+- (void)removeEventsFilterObject:(Tag*)value_;
 
 @end
 
@@ -87,6 +101,11 @@ extern const struct UIStateFetchedProperties {
 
 - (NSMutableSet*)primitiveEventGroupsFilter;
 - (void)setPrimitiveEventGroupsFilter:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveEventsFilter;
+- (void)setPrimitiveEventsFilter:(NSMutableSet*)value;
 
 
 @end

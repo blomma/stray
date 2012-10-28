@@ -368,91 +368,91 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="139" sectionHeaderHeight="22" sectionFooterHeight="22" id="eEg-yt-w1f" userLabel="EventGroupTableView">
+                            <tableView clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="120" sectionHeaderHeight="22" sectionFooterHeight="22" id="eEg-yt-w1f" userLabel="EventsTableView">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.074509803920000006" green="0.074509803920000006" blue="0.074509803920000006" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="EventTableViewCell" id="qyp-c4-X1Y" customClass="EventTableViewCell">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="139"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="EventTableViewCell" id="qyp-c4-X1Y" userLabel="EventTableViewCell" customClass="EventTableViewCell">
+                                        <rect key="frame" x="0.0" y="22" width="320" height="120"/>
+                                        <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="138"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="119"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="99" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="2sw-uc-t0E" userLabel="EventTimeHours">
                                                     <rect key="frame" x="2" y="12" width="109" height="79"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="90"/>
                                                     <color key="textColor" red="1" green="1" blue="0.92329545449999995" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yLT-ZP-jt0" userLabel="EventTimeMinutes">
                                                     <rect key="frame" x="110" y="10" width="38" height="35"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="31"/>
                                                     <color key="textColor" red="1" green="1" blue="0.92329545449999995" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="18" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="LrJ-KT-APQ" userLabel="EventStartDay">
                                                     <rect key="frame" x="208" y="10" width="40" height="33"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="32"/>
                                                     <color key="textColor" red="0.94117647059999998" green="0.68627450980000004" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Sep" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="lSh-k0-4cn" userLabel="EventStartMonth">
                                                     <rect key="frame" x="249" y="5" width="41" height="27"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="14"/>
                                                     <color key="textColor" red="0.94117647059999998" green="0.68627450980000004" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="2012" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="Gf7-W6-hyy" userLabel="EventStartYear">
                                                     <rect key="frame" x="248" y="23" width="42" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="14"/>
                                                     <color key="textColor" red="0.94117647059999998" green="0.68627450980000004" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="20:13" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" id="H3q-1g-HI6" userLabel="EventStartTime">
                                                     <rect key="frame" x="232" y="41" width="74" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="20"/>
                                                     <color key="textColor" red="0.42745098040000001" green="0.7843137255" blue="0.99215686270000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="18" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="1KP-eo-p0z" userLabel="EventStopDay">
                                                     <rect key="frame" x="147" y="43" width="40" height="33"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="32"/>
                                                     <color key="textColor" red="0.50980392159999999" green="0.7843137255" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Sep" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="ccN-Xa-AZ0" userLabel="EventStopMonth">
                                                     <rect key="frame" x="188" y="38" width="41" height="27"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="14"/>
                                                     <color key="textColor" red="0.50980392159999999" green="0.7843137255" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="2012" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="xeG-ER-WKP" userLabel="EventStopYear">
                                                     <rect key="frame" x="187" y="56" width="42" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="14"/>
                                                     <color key="textColor" red="0.50980392159999999" green="0.7843137255" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="20:13" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" id="n3N-2H-7UX" userLabel="EventStopTime">
                                                     <rect key="frame" x="171" y="74" width="75" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="20"/>
                                                     <color key="textColor" red="0.42745098040000001" green="0.7843137255" blue="0.99215686270000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="1LA-G9-qpd" userLabel="TagName">
                                                     <rect key="frame" x="247" y="67" width="73" height="32"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <color key="backgroundColor" red="0.42745098040000001" green="0.7843137255" blue="0.99215686270000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="15"/>
                                                     <state key="normal" title="Button">
@@ -466,7 +466,6 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
-                                        <color key="backgroundColor" red="0.074509803920000006" green="0.074509803920000006" blue="0.074509803920000006" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <outlet property="eventStartDay" destination="LrJ-KT-APQ" id="QYW-o4-wxh"/>
                                             <outlet property="eventStartMonth" destination="lSh-k0-4cn" id="EkT-l5-kQ1"/>
@@ -487,12 +486,17 @@
                                     <outlet property="delegate" destination="MkX-Cq-2XK" id="5dk-YX-ct5"/>
                                 </connections>
                             </tableView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" id="OEb-AI-qv9" userLabel="TagView">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" red="0.074509803920000006" green="0.074509803920000006" blue="0.074509803920000006" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="tableView" destination="eEg-yt-w1f" id="yXd-dQ-fPa"/>
+                        <outlet property="tagView" destination="OEb-AI-qv9" id="a94-pF-03O"/>
                         <segue destination="rGB-yR-mDw" kind="modal" identifier="segueToTagsFromEvents" id="tQF-pe-67W"/>
                     </connections>
                 </viewController>
@@ -510,6 +514,6 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Hhm-7Y-Sw3"/>
+        <segue reference="tQF-pe-67W"/>
     </inferredMetricsTieBreakers>
 </document>
