@@ -34,6 +34,7 @@
 		9E14D452162B3D3F008D9E43 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E14D451162B3D3F008D9E43 /* TagButton.m */; };
 		9E15897D16183F7100DB19EB /* Tags.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E15897C16183F7100DB19EB /* Tags.m */; };
 		9E15AB79163C7A19006D16B3 /* Events.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E15AB78163C7A19006D16B3 /* Events.m */; };
+		9E15AB97163DE210006D16B3 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E15AB96163DE210006D16B3 /* Crashlytics.framework */; };
 		9E15DE0116024161007146CE /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E15DE0016024161007146CE /* libz.dylib */; };
 		9E21F926156EA9510075EAAC /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */; };
 		9E21F929156EAA2F0075EAAC /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F928156EAA2F0075EAAC /* Event.m */; };
@@ -105,6 +106,7 @@
 		9E15AB77163C7A19006D16B3 /* Events.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Events.h; sourceTree = "<group>"; };
 		9E15AB78163C7A19006D16B3 /* Events.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Events.m; sourceTree = "<group>"; };
 		9E15AB7A163D0C45006D16B3 /* CoreDataModel-5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-5.xcdatamodel"; sourceTree = "<group>"; };
+		9E15AB96163DE210006D16B3 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		9E15DE0016024161007146CE /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		9E21F925156EA9510075EAAC /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
 		9E21F927156EAA2F0075EAAC /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				9E42F1EF15570FD60087F602 /* UIKit.framework in Frameworks */,
 				9E42F1F115570FD60087F602 /* Foundation.framework in Frameworks */,
 				9EBE4F681634497D005A3B54 /* libTestFlight.a in Frameworks */,
+				9E15AB97163DE210006D16B3 /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +268,7 @@
 		9E42F1ED15570FD60087F602 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9E15AB96163DE210006D16B3 /* Crashlytics.framework */,
 				9E63BBF3156EAA710006FEFC /* CoreData.framework */,
 				9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */,
 				9E42F1EE15570FD60087F602 /* UIKit.framework */,
@@ -477,6 +481,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9E42F21D15570FD70087F602 /* Build configuration list for PBXNativeTarget "Drift" */;
 			buildPhases = (
+				9E15AB94163DE1B4006D16B3 /* ShellScript */,
 				9E42F1E615570FD60087F602 /* Sources */,
 				9E42F1E715570FD60087F602 /* Frameworks */,
 				9E42F1E815570FD60087F602 /* Resources */,
@@ -547,6 +552,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		9E15AB94163DE1B4006D16B3 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Crashlytics.framework/run a7595f63555bece3a877e50607ecce88bc77984f";
+		};
 		9E7CEDF1157B756600718FA6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -726,6 +744,10 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -748,6 +770,10 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -830,6 +856,10 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
