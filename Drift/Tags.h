@@ -19,10 +19,10 @@
 - (void)addObjectsFromArray:(NSArray *)objects;
 - (void)removeObjectsInArray:(NSArray *)objects;
 
-- (NSSet *)insertObject:(id)object atIndex:(NSUInteger)index;
-- (NSSet *)removeObjectAtIndex:(NSUInteger)index;
-- (NSSet *)replaceObjectAtIndex:(NSUInteger)index withObject:(id)object;
-- (NSSet *)moveObjectAtIndex:(NSUInteger)atIndex toIndex:(NSUInteger)toIndex;
+- (void)insertObject:(id)object atIndex:(NSUInteger)index;
+- (void)removeObjectAtIndex:(NSUInteger)index;
+- (void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)object;
+- (void)moveObjectAtIndex:(NSUInteger)atIndex toIndex:(NSUInteger)toIndex;
 
 - (id)objectAtIndex:(NSUInteger)index;
 - (NSUInteger)indexOfObject:(id)object;

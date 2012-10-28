@@ -7,7 +7,6 @@
 //
 
 #import "Tags.h"
-#import "Change.h"
 
 @interface Tags ()
 
@@ -82,17 +81,8 @@
     }];
 }
 
-- (NSSet *)insertObject:(id)object atIndex:(NSUInteger)index {
-    NSMutableSet *changes = [NSMutableSet set];
-
+- (void)insertObject:(id)object atIndex:(NSUInteger)index {
     if (![self.tags containsObject:object]) {
-        Change *change = [Change new];
-        change.type = ChangeInsert;
-        change.object = object;
-        change.index = index;
-
-        [changes addObject:change];
-
         [self.tags insertObject:object atIndex:index];
 
         [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -101,22 +91,9 @@
             }
         }];
     }
-
-    return changes;
 }
 
-- (NSSet *)removeObjectAtIndex:(NSUInteger)index {
-    NSMutableSet *changes = [NSMutableSet set];
-
-    id object = [self.tags objectAtIndex:index];
-
-    Change *change = [Change new];
-    change.type = ChangeDelete;
-    change.object = object;
-    change.index = index;
-
-    [changes addObject:change];
-
+- (void)removeObjectAtIndex:(NSUInteger)index {
     [self.tags removeObjectAtIndex:index];
 
     [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -124,20 +101,9 @@
             [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
         }
     }];
-
-    return changes;
 }
 
-- (NSSet *)replaceObjectAtIndex:(NSUInteger)index withObject:(id)object {
-    NSMutableSet *changes = [NSMutableSet set];
-
-    Change *change = [Change new];
-    change.type = ChangeUpdate;
-    change.object = object;
-    change.index = index;
-
-    [changes addObject:change];
-
+- (void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)object {
     [self.tags replaceObjectAtIndex:index withObject:object];
 
     [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -145,31 +111,12 @@
             [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
         }
     }];
-
-    return changes;
 }
 
-- (NSSet *)moveObjectAtIndex:(NSUInteger)atIndex toIndex:(NSUInteger)toIndex {
-    NSMutableSet *changes = [NSMutableSet set];
-
+- (void)moveObjectAtIndex:(NSUInteger)atIndex toIndex:(NSUInteger)toIndex {
     id object = [self.tags objectAtIndex:atIndex];
 
-    // This is a remove/insert operation
-    Change *change = [Change new];
-    change.type = ChangeDelete;
-    change.object = object;
-    change.index = atIndex;
-
-    [changes addObject:change];
     [self.tags removeObjectAtIndex:atIndex];
-
-    
-    change = [Change new];
-    change.type = ChangeInsert;
-    change.object = object;
-    change.index = toIndex;
-
-    [changes addObject:change];
     [self.tags insertObject:object atIndex:toIndex];
 
     [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -177,8 +124,6 @@
             [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
         }
     }];
-
-    return changes;
 }
 
 - (id)objectAtIndex:(NSUInteger)index {

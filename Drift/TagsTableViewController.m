@@ -272,8 +272,8 @@ static NSInteger kAddingFinishHeight = 74;
 
     self.tagInEditState = nil;
 
-    NSSet *changes = [self.tags removeObjectAtIndex:(NSUInteger)indexPath.row];
-    [self.tableView updateWithChanges:changes];
+    [self.tags removeObjectAtIndex:(NSUInteger)indexPath.row];
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
 }
 
 - (void)cell:(TagTableViewCell *)cell didChangeTagName:(NSString *)name {
@@ -406,15 +406,13 @@ static NSInteger kAddingFinishHeight = 74;
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsCreatePlaceholderForRowAtIndexPath:(NSIndexPath *)indexPath {
     self.transformingMovingIndexPath = indexPath;
 
-    [self.tableView beginUpdates];
-
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-
-    [self.tableView endUpdates];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsMoveRowAtIndexPath:(NSIndexPath *)atIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
     self.transformingMovingIndexPath = toIndexPath;
+
+    [self.tags moveObjectAtIndex:(NSUInteger)atIndexPath.row toIndex:(NSUInteger)toIndexPath.row];
 
     [self.tableView beginUpdates];
 
@@ -427,11 +425,7 @@ static NSInteger kAddingFinishHeight = 74;
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsReplacePlaceholderForRowAtIndexPath:(NSIndexPath *)indexPath {
     self.transformingMovingIndexPath = nil;
 
-    [self.tableView beginUpdates];
-
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-
-    [self.tableView endUpdates];
 }
 
 #pragma mark -
