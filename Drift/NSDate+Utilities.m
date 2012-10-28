@@ -11,18 +11,25 @@
 @implementation NSDate (Utilities)
 
 - (NSDate *)beginningOfDayWithCalendar:(NSCalendar *)calendar {
+    static NSUInteger units = (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit);
     // Get the weekday component of the current date
-	NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
-																   fromDate:self];
+
+	NSDateComponents *components = [calendar components:units
+                                               fromDate:self];
+
+    components.hour   = 0;
+    components.minute = 0;
+    components.second = 0;
+
 	return [calendar dateFromComponents:components];
 }
 
 - (NSDate *)endOfDayWithCalendar:(NSCalendar *)calendar {
-	NSDateComponents *componentsToAdd = [[NSDateComponents alloc] init];
+	NSDateComponents *components = [[NSDateComponents alloc] init];
 	// to get the end of day for a particular date, add 1 day
-	[componentsToAdd setDay:1];
+    components.day = 1;
 
-	NSDate *endOfDay = [calendar dateByAddingComponents:componentsToAdd
+	NSDate *endOfDay = [calendar dateByAddingComponents:components
                                                  toDate:[self beginningOfDayWithCalendar:calendar]
                                                 options:0];
 

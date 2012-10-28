@@ -13,7 +13,7 @@
 - (id)init {
     self = [super init];
     if (self) {
-        self.calendar  = [NSCalendar currentCalendar];
+        self.calendar  = [NSCalendar autoupdatingCurrentCalendar];
     }
 
     return self;
