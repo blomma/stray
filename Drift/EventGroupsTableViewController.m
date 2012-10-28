@@ -22,10 +22,10 @@
 @property (nonatomic) NSMutableArray *tagViewSubViews;
 
 @property (nonatomic) EventGroups *eventGroups;
-@property (nonatomic) BOOL doesEventGroupsRequireUpdate;
+@property (nonatomic) BOOL isEventGroupsInvalid;
 
-@property (nonatomic) NSMutableArray *tags;
-@property (nonatomic) BOOL doesTagsRequireUpdate;
+@property (nonatomic) Tags *tags;
+@property (nonatomic) BOOL isTagsInvalid;
 
 @property (nonatomic) NSCalendar *calendar;
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
@@ -44,18 +44,19 @@
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
     self.standaloneWeekdaySymbols = [[NSDateFormatter new] standaloneWeekdaySymbols];
 
-    self.tagView.showsHorizontalScrollIndicator = NO;
-    self.tagViewSubViews = [NSMutableArray array];
-    self.tags = [NSMutableArray array];
-    self.doesTagsRequireUpdate = YES;
-
     self.state = [DataManager instance].state;
-    self.eventGroups = [[EventGroups alloc] initWithEvents:[DataManager instance].events
-                                                    withFilters:self.state.eventGroupsFilter];
-    self.doesEventGroupsRequireUpdate = YES;
 
+    self.tags = [[Tags alloc] initWithTags:[[DataManager instance] tags]];
+    self.isTagsInvalid = YES;
+
+    self.tagView.showsHorizontalScrollIndicator = NO;
     self.tagView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.45];
-//    self.tagView.backgroundColor = [UIColor colorWithRed:0.427 green:0.784 blue:0.992 alpha:0.45];
+    self.tagViewSubViews = [NSMutableArray array];
+
+
+    self.eventGroups = [[EventGroups alloc] initWithEvents:[DataManager instance].events
+                                               withFilters:self.state.eventGroupsFilter];
+    self.isEventGroupsInvalid = YES;
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
 	                                         selector:@selector(objectsDidChange:)
@@ -66,15 +67,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    if (self.doesTagsRequireUpdate) {
+    if (self.isTagsInvalid) {
         [self updateTagsView];
     }
 
-    if (self.doesEventGroupsRequireUpdate) {
-        [self updateEventGroups];
-    } else {
-        [self refreshVisibleRows];
-    }
+    [self.tableView reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -84,6 +81,18 @@
     [UIView animateWithDuration:0.3 animations:^{
         self.tagView.frame = frame;
     }];
+}
+
+#pragma mark -
+#pragma mark Public properties
+
+- (EventGroups *)eventGroups {
+    if (self.isEventGroupsInvalid) {
+        _eventGroups.filters = self.state.eventGroupsFilter;
+        self.isEventGroupsInvalid = NO;
+    }
+
+    return _eventGroups;
 }
 
 #pragma mark -
@@ -101,13 +110,13 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (NSInteger)self.eventGroups.count;
+    return (NSInteger)self.eventGroups.filteredEventGroups.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *CellIdentifier = @"EventGroupTableViewCell";
 
-    EventGroup *eventGroup = [self.eventGroups objectAtIndex:(NSUInteger)indexPath.row];
+    EventGroup *eventGroup = [self.eventGroups.filteredEventGroups objectAtIndex:(NSUInteger)indexPath.row];
 
 	EventGroupTableViewCell *cell = (EventGroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 
@@ -130,25 +139,7 @@
 #pragma mark -
 #pragma mark Private methods
 
-- (void)updateEventGroups {
-    self.eventGroups.filters = self.state.eventGroupsFilter;
-    [self.tableView reloadData];
-}
-
 - (void)updateTagsView {
-    [self.tags removeAllObjects];
-    [self.tags addObjectsFromArray:[[[DataManager instance] tags]
-                                    sortedArrayWithOptions:NSSortConcurrent
-                                    usingComparator:^NSComparisonResult(id obj1, id obj2) {
-                                        if ([obj1 sortIndex].integerValue < [obj2 sortIndex].integerValue) {
-                                            return NSOrderedAscending;
-                                        } else if ([obj1 sortIndex].integerValue > [obj2 sortIndex].integerValue) {
-                                            return NSOrderedDescending;
-                                        } else {
-                                            return NSOrderedSame;
-                                        }
-                                    }]];
-
     // Remove all the old subviews and recreate them, lazy option
     for (id subView in self.tagViewSubViews) {
         [subView removeFromSuperview];
@@ -166,7 +157,7 @@
 
         TagButton* tagButton = [TagButton buttonWithType:UIButtonTypeCustom];
         tagButton.tagObject = tag;
-        [tagButton addTarget:self action:@selector(tagTouchUp:forEvent:) forControlEvents:UIControlEventTouchUpInside];
+        [tagButton addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 
         tagButton.titleLabel.textColor = [UIColor whiteColor];
         tagButton.titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -197,10 +188,10 @@
     // set the size of the scrollview's content
     self.tagView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
 
-    self.doesTagsRequireUpdate = NO;
+    self.isTagsInvalid = NO;
 }
 
-- (void)tagTouchUp:(TagButton *)sender forEvent:(UIEvent *)event {
+- (void)touchUpInsideTagFilterButton:(TagButton *)sender forEvent:(UIEvent *)event {
     if ([self.state.eventGroupsFilter containsObject:sender.tagObject]) {
         [self.state removeEventGroupsFilterObject:sender.tagObject];
 
@@ -211,7 +202,9 @@
         sender.selected = YES;
     }
 
-    [self updateEventGroups];
+    self.isEventGroupsInvalid = YES;
+
+    [self.tableView reloadData];
 }
 
 - (void)objectsDidChange:(NSNotification *)note {
@@ -250,12 +243,12 @@
     }
 
     if (updatedEvents.count > 0 || insertedEvents.count > 0 || deletedEvents.count > 0) {
-        self.doesEventGroupsRequireUpdate = YES;
+        self.isEventGroupsInvalid = YES;
     }
 
-    // ==========
+    // ========
     // = Tags =
-    // ==========
+    // ========
     NSSet *updatedTags = [updatedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
         return [obj isKindOfClass:[Tag class]];
     }];
@@ -264,37 +257,21 @@
         return [obj isKindOfClass:[Tag class]];
     }];
 
+    [self.tags addObjectsFromArray:[insertedTags allObjects]];
+
     NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
         return [obj isKindOfClass:[Tag class]];
     }];
 
+    [self.tags removeObjectsInArray:[deletedTags allObjects]];
+
     if (updatedTags.count > 0 || insertedTags.count > 0 || deletedTags.count > 0) {
-        self.doesTagsRequireUpdate = YES;
+        self.isTagsInvalid = YES;
     }
 
-    if ([deletedObjects intersectsSet:self.state.eventGroupsFilter]) {
-        self.doesEventGroupsRequireUpdate = YES;
+    if ([deletedTags intersectsSet:self.state.eventGroupsFilter]) {
+        self.isEventGroupsInvalid = YES;
     }
-}
-
-- (void)refreshVisibleRows {
-    NSArray *visibleRows = [self.tableView indexPathsForVisibleRows];
-
-    if (visibleRows.count == 0) {
-        [self.tableView reloadData];
-        return;
-    }
-
-    NSMutableSet *changes = [NSMutableArray array];
-    for (NSIndexPath *path in visibleRows) {
-        Change *change = [Change new];
-        change.type = ChangeUpdate;
-        change.index = path.row;
-
-        [changes addObject:change];
-    }
-
-    [self.tableView updateWithChanges:changes];
 }
 
 @end

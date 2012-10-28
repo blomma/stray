@@ -17,8 +17,9 @@
 @property (nonatomic) NSCalendar *calendar;
 
 @property (nonatomic) NSMutableArray *eventGroups;
+
 @property (nonatomic) NSMutableArray *filteredEventGroups;
-@property (nonatomic) BOOL filteredEventGroupsIsInvalid;
+@property (nonatomic) BOOL isFilteredEventGroupsInvalid;
 
 @end
 
@@ -50,15 +51,24 @@
 
 - (void)setFilters:(NSSet *)filters {
     _filters = filters;
-    self.filteredEventGroupsIsInvalid = YES;
+    self.isFilteredEventGroupsInvalid = YES;
 }
 
-- (NSUInteger)count {
-    if (self.filteredEventGroupsIsInvalid) {
-        [self updateFilteredEventGroups];
+- (NSMutableArray *)filteredEventGroups {
+    if (self.isFilteredEventGroupsInvalid) {
+        [_filteredEventGroups removeAllObjects];
+
+        for (EventGroup *eventGroup in self.eventGroups) {
+            eventGroup.filters = self.filters;
+            if (eventGroup.filteredEvents.count > 0) {
+                [_filteredEventGroups addObject:eventGroup];
+            }
+        }
+
+        self.isFilteredEventGroupsInvalid = NO;
     }
 
-    return self.filteredEventGroups.count;
+    return _filteredEventGroups;
 }
 
 #pragma mark -
@@ -125,7 +135,7 @@
 	}
 
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
-        self.filteredEventGroupsIsInvalid = YES;
+        self.isFilteredEventGroupsInvalid = YES;
     }
 }
 
@@ -149,7 +159,7 @@
     [self.eventGroups removeObjectsAtIndexes:indexesToRemove];
     
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
-        self.filteredEventGroupsIsInvalid = YES;
+        self.isFilteredEventGroupsInvalid = YES;
     }
 }
 
@@ -176,32 +186,12 @@
     [self removeFromInvalidGroupsEvent:event];
 
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
-        self.filteredEventGroupsIsInvalid = YES;
+        self.isFilteredEventGroupsInvalid = YES;
     }
-}
-
-- (id)objectAtIndex:(NSUInteger)index {
-    if (self.filteredEventGroupsIsInvalid) {
-        [self updateFilteredEventGroups];
-    }
-    return [self.filteredEventGroups objectAtIndex:index];
 }
 
 #pragma mark -
 #pragma mark Private methods
-
-- (void)updateFilteredEventGroups {
-    [self.filteredEventGroups removeAllObjects];
-
-    for (EventGroup *eventGroup in self.eventGroups) {
-        eventGroup.filters = self.filters;
-        if (eventGroup.filteredEvents.count > 0) {
-            [self.filteredEventGroups addObject:eventGroup];
-        }
-    }
-
-    self.filteredEventGroupsIsInvalid = NO;
-}
 
 - (void)removeFromInvalidGroupsEvent:(Event *)event {
     NSMutableIndexSet *indexesToRemove = [NSMutableIndexSet new];

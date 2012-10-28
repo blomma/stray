@@ -13,14 +13,13 @@
 @interface EventGroups : NSObject
 
 @property (nonatomic) NSSet *filters;
-@property (nonatomic) NSUInteger count;
+
+@property (nonatomic, readonly) NSMutableArray *filteredEventGroups;
 
 - (id)initWithEvents:(NSArray *)events withFilters:(NSSet *)filters;
 
 - (void)addEvent:(Event *)event;
 - (void)removeEvent:(Event *)event;
 - (void)updateEvent:(Event *)event;
-
-- (id)objectAtIndex:(NSUInteger)index;
 
 @end

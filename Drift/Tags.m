@@ -11,7 +11,7 @@
 @interface Tags ()
 
 @property (nonatomic) NSMutableOrderedSet *tags;
-@property (nonatomic) BOOL tagsIsInvalid;
+@property (nonatomic) BOOL isTagsInvalid;
 
 @end
 

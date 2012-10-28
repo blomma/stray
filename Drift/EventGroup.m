@@ -14,15 +14,15 @@
 
 @property (nonatomic, readwrite) NSMutableSet *events;
 @property (nonatomic) NSMutableSet *filteredEvents;
-@property (nonatomic) BOOL filteredEventsIsInvalid;
+@property (nonatomic) BOOL isFilteredEventsInvalid;
 
 @property (nonatomic, readwrite) NSDate *groupDate;
 
 @property (nonatomic, readwrite) NSDateComponents *filteredEventsDateComponents;
-@property (nonatomic) BOOL filteredEventsDateComponentsIsInvalid;
+@property (nonatomic) BOOL isFilteredEventsDateComponentsInvalid;
 
 @property (nonatomic, readwrite) Event *activeEvent;
-@property (nonatomic) BOOL activeEventIsInvalid;
+@property (nonatomic) BOOL isActiveEventInvalid;
 
 @property (nonatomic) NSCalendar *calendar;
 
@@ -46,10 +46,10 @@
 
 		self.events    = [NSMutableSet set];
 		self.filteredEvents    = [NSMutableSet set];
-        self.filteredEventsIsInvalid = YES;
+        self.isFilteredEventsInvalid = YES;
 
 		self.filteredEventsDateComponents = [[NSDateComponents alloc] init];
-        self.filteredEventsDateComponentsIsInvalid = YES;
+        self.isFilteredEventsDateComponentsInvalid = YES;
 	}
 
 	return self;
@@ -63,7 +63,7 @@
 }
 
 - (NSDateComponents *)filteredEventsDateComponents {
-	if (self.activeEvent || self.filteredEventsDateComponentsIsInvalid) {
+	if (self.activeEvent || self.isFilteredEventsDateComponentsInvalid) {
 		[self updateFilteredEventsDateComponents];
 	}
 
@@ -71,7 +71,7 @@
 }
 
 - (Event *)activeEvent {
-    if (self.activeEventIsInvalid) {
+    if (self.isActiveEventInvalid) {
         [self updateActiveEvent];
     }
 
@@ -80,11 +80,11 @@
 
 - (void)setFilters:(NSSet *)filters {
     _filters = filters;
-	self.filteredEventsIsInvalid = YES;
+	self.isFilteredEventsInvalid = YES;
 }
 
 - (NSMutableSet *)filteredEvents {
-    if (self.filteredEventsIsInvalid) {
+    if (self.isFilteredEventsInvalid) {
         if (self.filters.count == 0) {
             [_filteredEvents unionSet:self.events];
         } else {
@@ -93,8 +93,8 @@
                                                                               self.filters]]];
         }
 
-        self.filteredEventsIsInvalid = NO;
-        self.filteredEventsDateComponentsIsInvalid = YES;
+        self.isFilteredEventsInvalid = NO;
+        self.isFilteredEventsDateComponentsInvalid = YES;
     }
 
     return _filteredEvents;
@@ -110,25 +110,25 @@
 - (void)addEvent:(Event *)event {
 	[self.events addObject:event];
 
-    self.activeEventIsInvalid = YES;
+    self.isActiveEventInvalid = YES;
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
-        self.filteredEventsIsInvalid = YES;
+        self.isFilteredEventsInvalid = YES;
     }
 }
 
 - (void)removeEvent:(Event *)event {
     [self.events removeObject:event];
 
-    self.activeEventIsInvalid = YES;
+    self.isActiveEventInvalid = YES;
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
-        self.filteredEventsIsInvalid = YES;
+        self.isFilteredEventsInvalid = YES;
     }
 }
 
 - (void)updateEvent:(Event *)event {
-    self.activeEventIsInvalid = YES;
+    self.isActiveEventInvalid = YES;
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
-        self.filteredEventsIsInvalid = YES;
+        self.isFilteredEventsInvalid = YES;
     }
 }
 
@@ -173,7 +173,7 @@
                                                          fromDate:deltaStart
                                                            toDate:deltaEnd
                                                           options:0];
-    self.filteredEventsDateComponentsIsInvalid = NO;
+    self.isFilteredEventsDateComponentsInvalid = NO;
 }
 
 @end

@@ -13,7 +13,7 @@
 @property (nonatomic) NSMutableSet *events;
 
 @property (nonatomic) NSMutableOrderedSet *filteredEvents;
-@property (nonatomic) BOOL filteredEventsIsInvalid;
+@property (nonatomic) BOOL isFilteredEventsInvalid;
 
 @end
 
@@ -32,7 +32,7 @@
         self.events = [[NSMutableSet alloc] initWithArray:events];
 
 		self.filteredEvents = [NSMutableOrderedSet orderedSet];
-        self.filteredEventsIsInvalid = YES;
+        self.isFilteredEventsInvalid = YES;
 	}
 
 	return self;
@@ -47,11 +47,11 @@
 
 - (void)setFilters:(NSSet *)filters {
     _filters = filters;
-	self.filteredEventsIsInvalid = YES;
+	self.isFilteredEventsInvalid = YES;
 }
 
 - (NSMutableOrderedSet *)filteredEvents {
-    if (self.filteredEventsIsInvalid) {
+    if (self.isFilteredEventsInvalid) {
         if (self.filters.count == 0) {
             [_filteredEvents unionSet:self.events];
         } else {
@@ -64,7 +64,7 @@
             return [[obj2 startDate] compare:[obj1 startDate]];
         }];
 
-        self.filteredEventsIsInvalid = NO;
+        self.isFilteredEventsInvalid = NO;
     }
 
     return _filteredEvents;
@@ -77,7 +77,7 @@
     [self.events removeObject:object];
 
     if (self.filters.count == 0 || [self.filters containsObject:[object inTag]]) {
-        self.filteredEventsIsInvalid = YES;
+        self.isFilteredEventsInvalid = YES;
     }
 }
 

@@ -33,14 +33,17 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 @property (nonatomic) NSCalendar *calendar;
 
 @property (nonatomic) NSMutableArray *tagViewSubViews;
-@property (nonatomic) BOOL doesTagsRequireUpdate;
-
-@property (nonatomic) UIState *state;
-@property (nonatomic) Events *events;
-
-@property (nonatomic) NSIndexPath *transformingAddingIndexPath;
 
 @property (nonatomic) Tags *tags;
+@property (nonatomic) BOOL isTagsInvalid;
+
+@property (nonatomic) UIState *state;
+
+@property (nonatomic) Events *events;
+@property (nonatomic) BOOL isEventsInvalid;
+
+@property (nonatomic) NSIndexPath *transformingPullingIndexPath;
+
 
 @end
 
@@ -49,19 +52,20 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
     self.calendar = [Global instance].calendar;
+    self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
+
+    self.state = [DataManager instance].state;
 
     self.tags = [[Tags alloc] initWithTags:[[DataManager instance] tags]];
+    self.isTagsInvalid = YES;
 
     self.tagView.showsHorizontalScrollIndicator = NO;
     self.tagView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.45];
     self.tagViewSubViews = [NSMutableArray array];
-    self.doesTagsRequireUpdate = YES;
-
-    self.state = [DataManager instance].state;
 
     self.events = [[Events alloc] initWithEvents:[DataManager instance].events];
+    self.isEventsInvalid = YES;
 
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:pullDownTableViewCellIdentifier];
 
@@ -87,11 +91,20 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    if (self.doesTagsRequireUpdate) {
+    if (self.isTagsInvalid) {
         [self updateTagsView];
     }
 
     [self.tableView reloadData];
+}
+
+- (Events *)events {
+    if (self.isEventsInvalid) {
+        _events.filters = self.state.eventsFilter;
+        self.isEventsInvalid = NO;
+    }
+
+    return _events;
 }
 
 #pragma mark -
@@ -109,18 +122,18 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsAddRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.transformingAddingIndexPath = indexPath;
+    self.transformingPullingIndexPath = indexPath;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsCommitRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.transformingAddingIndexPath = nil;
+    self.transformingPullingIndexPath = nil;
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsDiscardRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
-    self.transformingAddingIndexPath = nil;
+    self.transformingPullingIndexPath = nil;
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 
     if (cell.frame.size.height > kAddingCommitHeight * 2) {
@@ -210,13 +223,13 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return self.transformingAddingIndexPath ? (NSInteger)self.events.filteredEvents.count + 1 : (NSInteger)self.events.filteredEvents.count;
+	return self.transformingPullingIndexPath ? (NSInteger)self.events.filteredEvents.count + 1 : (NSInteger)self.events.filteredEvents.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *CellIdentifier = @"EventTableViewCell";
 
-    if (self.transformingAddingIndexPath && self.transformingAddingIndexPath.row == indexPath.row) {
+    if (self.transformingPullingIndexPath && self.transformingPullingIndexPath.row == indexPath.row) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:pullDownTableViewCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -240,7 +253,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 
         return cell;
     } else {
-        NSUInteger index = self.transformingAddingIndexPath ? (NSUInteger)indexPath.row - 1 : (NSUInteger)indexPath.row;
+        NSUInteger index = self.transformingPullingIndexPath ? (NSUInteger)indexPath.row - 1 : (NSUInteger)indexPath.row;
         Event *event = (Event *)[self.events.filteredEvents objectAtIndex:index];
 
         EventTableViewCell *cell = (EventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -317,13 +330,12 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     [self.tags removeObjectsInArray:[deletedTags allObjects]];
 
     if (updatedTags.count > 0 || insertedTags.count > 0 || deletedTags.count > 0) {
-        self.doesTagsRequireUpdate = YES;
+        self.isTagsInvalid = YES;
     }
-}
 
-- (void)updateEvents {
-    self.events.filters = self.state.eventsFilter;
-    [self.tableView reloadData];
+    if ([deletedTags intersectsSet:self.state.eventsFilter]) {
+        self.isEventsInvalid = YES;
+    }
 }
 
 - (void)touchUpInsideTagFilterButton:(TagButton *)sender forEvent:(UIEvent *)event {
@@ -337,7 +349,9 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
         sender.selected = YES;
     }
 
-    [self updateEvents];
+    self.isEventsInvalid = YES;
+
+    [self.tableView reloadData];
 }
 
 - (void)updateTagsView {
@@ -389,7 +403,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     // set the size of the scrollview's content
     self.tagView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
     
-    self.doesTagsRequireUpdate = NO;
+    self.isTagsInvalid = NO;
 }
 
 - (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration completion:(void (^)(BOOL finished))completion{
