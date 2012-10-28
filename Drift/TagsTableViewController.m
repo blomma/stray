@@ -11,7 +11,6 @@
 #import "DataManager.h"
 #import "TransformableTableViewGestureRecognizer.h"
 #import "TagTableViewCell.h"
-#import "UITableView+Change.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SKBounceAnimation.h"
 #import "InnerShadowLayer.h"

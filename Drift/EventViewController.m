@@ -11,7 +11,6 @@
 #import "NSManagedObject+ActiveRecord.h"
 #import "Tag.h"
 #import "DataManager.h"
-#import "Change.h"
 #import "TagsTableViewController.h"
 #import "Global.h"
 
