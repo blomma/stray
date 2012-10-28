@@ -21,9 +21,6 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 
 @implementation DataManager
 
-#pragma mark -
-#pragma mark Lifecycle
-
 - (id)init {
     self = [super init];
     if (self) {

@@ -18,9 +18,6 @@
 
 @implementation Tags
 
-#pragma mark -
-#pragma mark Lifecycle
-
 - (id)init {
 	return [self initWithTags:[NSArray array]];
 }

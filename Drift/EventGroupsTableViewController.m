@@ -37,12 +37,6 @@
 
 @implementation EventGroupsTableViewController
 
-#pragma mark -
-#pragma mark Private Properties
-
-#pragma mark -
-#pragma mark Lifecycle
-
 - (void)viewDidLoad {
 	[super viewDidLoad];
 

@@ -46,9 +46,6 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 
 @implementation EventsViewController
 
-#pragma mark -
-#pragma mark Lifecycle
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 

@@ -43,9 +43,6 @@ static NSInteger kAddingFinishHeight = 74;
 
 @implementation TagsTableViewController
 
-#pragma mark -
-#pragma mark - View lifecycle
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 

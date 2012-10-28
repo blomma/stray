@@ -24,9 +24,6 @@
 
 @implementation EventGroups
 
-#pragma mark -
-#pragma mark Lifecycle
-
 // ==========================
 // = Designated initializer =
 // ==========================

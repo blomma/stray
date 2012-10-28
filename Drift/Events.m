@@ -19,9 +19,6 @@
 
 @implementation Events
 
-#pragma mark -
-#pragma mark Lifecycle
-
 - (id)init {
 	return [self initWithEvents:[NSArray array]];
 }

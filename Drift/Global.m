@@ -10,9 +10,6 @@
 
 @implementation Global
 
-#pragma mark -
-#pragma mark Lifecycle
-
 - (id)init {
     self = [super init];
     if (self) {

@@ -10,9 +10,6 @@
 
 @implementation InnerShadowLayer
 
-#pragma mark -
-#pragma mark Lifecycle
-
 - (id)init {
     self = [super init];
     if (self) {

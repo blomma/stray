@@ -30,9 +30,6 @@
 
 @implementation EventGroup
 
-#pragma mark -
-#pragma mark Lifecycle
-
 - (id)init {
     return [self initWithGroupDate:nil];
 }

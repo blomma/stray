@@ -28,9 +28,6 @@
 
 @implementation EventViewController
 
-#pragma mark -
-#pragma mark Lifecycle
-
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
