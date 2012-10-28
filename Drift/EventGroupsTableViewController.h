@@ -9,6 +9,6 @@
 @interface EventGroupsTableViewController : UIViewController <UITableViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
-@property (nonatomic, weak) IBOutlet UIScrollView *tagView;
+@property (nonatomic, weak) IBOutlet UIScrollView *filterView;
 
 @end

@@ -32,7 +32,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) NSCalendar *calendar;
 
-@property (nonatomic) NSMutableArray *tagViewSubViews;
+@property (nonatomic) NSMutableArray *filterViewButtons;
 
 @property (nonatomic) Tags *tags;
 @property (nonatomic) BOOL isTagsInvalid;
@@ -43,7 +43,6 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 @property (nonatomic) BOOL isEventsInvalid;
 
 @property (nonatomic) NSIndexPath *transformingPullingIndexPath;
-
 
 @end
 
@@ -60,9 +59,9 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     self.tags = [[Tags alloc] initWithTags:[[DataManager instance] tags]];
     self.isTagsInvalid = YES;
 
-    self.tagView.showsHorizontalScrollIndicator = NO;
-    self.tagView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.45];
-    self.tagViewSubViews = [NSMutableArray array];
+    self.filterView.showsHorizontalScrollIndicator = NO;
+    self.filterView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.45];
+    self.filterViewButtons = [NSMutableArray array];
 
     self.events = [[Events alloc] initWithEvents:[DataManager instance].events];
     self.isEventsInvalid = YES;
@@ -356,15 +355,15 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 
 - (void)updateTagsView {
     // Remove all the old subviews and recreate them, lazy option
-    for (id subView in self.tagViewSubViews) {
+    for (id subView in self.filterViewButtons) {
         [subView removeFromSuperview];
     }
 
-    [self.tagViewSubViews removeAllObjects];
+    [self.filterViewButtons removeAllObjects];
 
     // define number and size of elements
     NSUInteger numElements = self.tags.count;
-    CGSize elementSize = CGSizeMake(120, self.tagView.frame.size.height);
+    CGSize elementSize = CGSizeMake(120, self.filterView.frame.size.height);
 
     // add elements
     for (NSUInteger i = 0; i < numElements; i++) {
@@ -394,14 +393,14 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
             tagButton.selected = YES;
         }
 
-        [self.tagViewSubViews addObject:tagButton];
+        [self.filterViewButtons addObject:tagButton];
 
         // add the subview
-        [self.tagView addSubview:tagButton];
+        [self.filterView addSubview:tagButton];
     }
 
     // set the size of the scrollview's content
-    self.tagView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
+    self.filterView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
     
     self.isTagsInvalid = NO;
 }

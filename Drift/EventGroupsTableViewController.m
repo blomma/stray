@@ -17,7 +17,7 @@
 
 @interface EventGroupsTableViewController ()
 
-@property (nonatomic) NSMutableArray *tagViewSubViews;
+@property (nonatomic) NSMutableArray *filterViewButtons;
 
 @property (nonatomic) EventGroups *eventGroups;
 @property (nonatomic) BOOL isEventGroupsInvalid;
@@ -47,9 +47,9 @@
     self.tags = [[Tags alloc] initWithTags:[[DataManager instance] tags]];
     self.isTagsInvalid = YES;
 
-    self.tagView.showsHorizontalScrollIndicator = NO;
-    self.tagView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.45];
-    self.tagViewSubViews = [NSMutableArray array];
+    self.filterView.showsHorizontalScrollIndicator = NO;
+    self.filterView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.45];
+    self.filterViewButtons = [NSMutableArray array];
 
 
     self.eventGroups = [[EventGroups alloc] initWithEvents:[DataManager instance].events
@@ -77,7 +77,7 @@
     CGRect frame = CGRectMake(0, y, self.view.bounds.size.width, 30);
 
     [UIView animateWithDuration:0.3 animations:^{
-        self.tagView.frame = frame;
+        self.filterView.frame = frame;
     }];
 }
 
@@ -139,15 +139,15 @@
 
 - (void)updateTagsView {
     // Remove all the old subviews and recreate them, lazy option
-    for (id subView in self.tagViewSubViews) {
+    for (id subView in self.filterViewButtons) {
         [subView removeFromSuperview];
     }
 
-    [self.tagViewSubViews removeAllObjects];
+    [self.filterViewButtons removeAllObjects];
 
     // define number and size of elements
     NSUInteger numElements = self.tags.count;
-    CGSize elementSize = CGSizeMake(120, self.tagView.frame.size.height);
+    CGSize elementSize = CGSizeMake(120, self.filterView.frame.size.height);
 
     // add elements
     for (NSUInteger i = 0; i < numElements; i++) {
@@ -177,14 +177,14 @@
             tagButton.selected = YES;
         }
 
-        [self.tagViewSubViews addObject:tagButton];
+        [self.filterViewButtons addObject:tagButton];
 
         // add the subview
-        [self.tagView addSubview:tagButton];
+        [self.filterView addSubview:tagButton];
     }
 
     // set the size of the scrollview's content
-    self.tagView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
+    self.filterView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
 
     self.isTagsInvalid = NO;
 }

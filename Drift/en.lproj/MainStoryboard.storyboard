@@ -352,8 +352,8 @@
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="filterView" destination="nQy-aQ-EHb" id="Btj-nL-koh"/>
                         <outlet property="tableView" destination="Bla-gS-XRc" id="Pdu-8Z-Ze9"/>
-                        <outlet property="tagView" destination="nQy-aQ-EHb" id="vin-Y0-5T3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W9f-Gb-0ky" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -495,8 +495,8 @@
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="filterView" destination="OEb-AI-qv9" id="B5f-v9-xt1"/>
                         <outlet property="tableView" destination="eEg-yt-w1f" id="yXd-dQ-fPa"/>
-                        <outlet property="tagView" destination="OEb-AI-qv9" id="a94-pF-03O"/>
                         <segue destination="rGB-yR-mDw" kind="modal" identifier="segueToTagsFromEvents" id="tQF-pe-67W"/>
                     </connections>
                 </viewController>
