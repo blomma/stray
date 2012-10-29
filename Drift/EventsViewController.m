@@ -20,7 +20,7 @@
 #import "TagButton.h"
 #import "Tags.h"
 
-static NSInteger kEditCommitLength = 120;
+static NSInteger kEditingCommitLength = 120;
 
 static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
 
@@ -189,7 +189,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     }
 
     EventTableViewCell *cell = (EventTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
-    CGFloat alpha = 1 - (gestureRecognizer.translationInTableView.x / kEditCommitLength);
+    CGFloat alpha = 1 - (gestureRecognizer.translationInTableView.x / kEditingCommitLength);
     cell.contentView.alpha = alpha;
 
     CGPoint point = CGPointMake(CGRectGetMidX(cell.layer.bounds) + gestureRecognizer.translationInTableView.x, cell.layer.position.y);
@@ -221,7 +221,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 }
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-    return kEditCommitLength;
+    return kEditingCommitLength;
 }
 
 #pragma mark -
