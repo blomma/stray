@@ -21,7 +21,6 @@
 #import "Tags.h"
 
 static NSInteger kEditCommitLength = 120;
-static NSInteger kAddingCommitHeight = 60;
 
 static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
 
@@ -43,6 +42,8 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 @property (nonatomic) BOOL isEventsInvalid;
 
 @property (nonatomic) NSIndexPath *transformingPullingIndexPath;
+
+@property (nonatomic, readonly) NSInteger pullingCommitHeight;
 
 @end
 
@@ -97,6 +98,25 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     [self.tableView reloadData];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    CGFloat y = self.tags.count == 0 ? -30 : 0;
+    CGRect frame = CGRectMake(0, y, self.view.bounds.size.width, 30);
+
+    [UIView animateWithDuration:0.3 animations:^{
+        self.filterView.frame = frame;
+    }];
+}
+
+#pragma mark -
+#pragma mark Private properties
+
+- (NSInteger)pullingCommitHeight {
+    return self.tags.count > 0 ? 30 : 60;
+}
+
+#pragma mark -
+#pragma mark Public properties
+
 - (Events *)events {
     if (self.isEventsInvalid) {
         _events.filters = self.state.eventsFilter;
@@ -117,7 +137,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 #pragma mark TransformableTableViewGesturePullingRowDelegate
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer heightForCommitAddingRowAtIndexPath:(NSIndexPath *)indexPath {
-    return kAddingCommitHeight;
+    return self.pullingCommitHeight;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsAddRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -135,7 +155,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     self.transformingPullingIndexPath = nil;
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 
-    if (cell.frame.size.height > kAddingCommitHeight * 2) {
+    if (cell.frame.size.height > self.pullingCommitHeight * 2) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
@@ -207,6 +227,11 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 #pragma mark -
 #pragma mark UITableViewDelegate
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSInteger index = self.transformingPullingIndexPath ? indexPath.row - 1 : indexPath.row;
+    return index == 0 && self.tags.count > 0 ? 150 : 120;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Event *event = [self.events.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
     self.state.activeEvent = event;
@@ -236,10 +261,10 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
         cell.textLabel.font = [UIFont fontWithName:@"Futura-Medium" size:25];
         cell.textLabel.backgroundColor = [UIColor clearColor];
 
-        if (cell.frame.size.height > kAddingCommitHeight * 2) {
+        if (cell.frame.size.height > self.pullingCommitHeight * 2) {
             cell.textLabel.textColor = [UIColor whiteColor];
             cell.textLabel.text = @"Close";
-            CGFloat alpha = 1 - (kAddingCommitHeight * 2 / cell.frame.size.height);
+            CGFloat alpha = 1 - (self.pullingCommitHeight * 2 / cell.frame.size.height);
 
             cell.contentView.backgroundColor = [UIColor colorWithRed:0.843f
                                                                green:0.306f
@@ -256,7 +281,12 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
         Event *event = (Event *)[self.events.filteredEvents objectAtIndex:index];
 
         EventTableViewCell *cell = (EventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        cell.contentView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:1.000];
+        UIColor *backgroundColor = [UIColor colorWithWhite:0.075f alpha:1];
+        if ([self.state.activeEvent isEqual:event]) {
+            backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1];
+        }
+
+        cell.contentView.backgroundColor = backgroundColor;
 
         // Tag
         NSString *tagName = event.inTag ? event.inTag.name : @"";
