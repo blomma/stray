@@ -19,11 +19,11 @@
 static NSString *grabbedTableViewCellIdentifier  = @"grabbedTableViewCellIdentifier";
 static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
 
-static NSInteger kEditStateRightOffset = 260;
-static NSInteger kEditCommitLength = 60;
+static NSInteger kEditingStateRightOffset = 260;
+static NSInteger kEditingCommitLength = 60;
 
-static NSInteger kAddingCommitHeight = 74;
-static NSInteger kAddingFinishHeight = 74;
+static NSInteger kPullingCommitHeight = 74;
+static NSInteger kPullingFinishHeight = 74;
 
 @interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGesturePullingRowDelegate, TransformableTableViewGestureMovingRowDelegate, TagTableViewCellDelegate>
 
@@ -87,13 +87,13 @@ static NSInteger kAddingFinishHeight = 74;
         cell.textLabel.font = [UIFont fontWithName:@"Futura-Medium" size:25];
         cell.textLabel.backgroundColor = [UIColor clearColor];
 
-        if (cell.bounds.size.height > kAddingCommitHeight * 2) {
+        if (cell.bounds.size.height > kPullingCommitHeight * 2) {
             cell.textLabel.text = @"Close";
             cell.contentView.backgroundColor = [UIColor colorWithRed:0.843f
                                                                green:0.306f
                                                                 blue:0.314f
                                                                alpha:1];
-        } else if (cell.bounds.size.height >= kAddingCommitHeight) {
+        } else if (cell.bounds.size.height >= kPullingCommitHeight) {
             cell.textLabel.text = @"Release to create cell...";
             cell.contentView.backgroundColor = [UIColor colorWithRed:0.510f
                                                                green:0.784f
@@ -105,7 +105,7 @@ static NSInteger kAddingFinishHeight = 74;
             cell.contentView.backgroundColor = [UIColor colorWithRed:0.510f
                                                                green:0.784f
                                                                 blue:0.431f
-                                                               alpha:(cell.bounds.size.height / kAddingCommitHeight)];
+                                                               alpha:(cell.bounds.size.height / kPullingCommitHeight)];
         }
 
         return cell;
@@ -137,7 +137,7 @@ static NSInteger kAddingFinishHeight = 74;
 
         if ([self.tagInEditState isEqual:tag]) {
             CGPoint fromValue = cell.frontView.layer.position;
-            CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + kEditStateRightOffset, fromValue.y);
+            CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + kEditingStateRightOffset, fromValue.y);
             cell.frontView.layer.position = toValue;
             
             if (!cell.backViewInnerShadowLayer) {
@@ -161,7 +161,7 @@ static NSInteger kAddingFinishHeight = 74;
 #pragma mark UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return kAddingFinishHeight;
+    return kPullingFinishHeight;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -222,7 +222,7 @@ static NSInteger kAddingFinishHeight = 74;
 #pragma mark TransformableTableViewGesturePullingRowDelegate
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer heightForCommitAddingRowAtIndexPath:(NSIndexPath *)indexPath {
-    return kAddingCommitHeight;
+    return kPullingCommitHeight;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsAddRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -245,7 +245,7 @@ static NSInteger kAddingFinishHeight = 74;
 
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 
-    if (cell.frame.size.height > kAddingCommitHeight * 2) {
+    if (cell.frame.size.height > kPullingCommitHeight * 2) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
@@ -339,7 +339,7 @@ static NSInteger kAddingFinishHeight = 74;
 
     TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
-    NSInteger xOffset = indexOfTagInEditState == (NSUInteger)indexPath.row ? kEditStateRightOffset : 0;
+    NSInteger xOffset = indexOfTagInEditState == (NSUInteger)indexPath.row ? kEditingStateRightOffset : 0;
 
     CGPoint point = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + gestureRecognizer.translationInTableView.x + xOffset, cell.frontView.layer.position.y);
     cell.frontView.layer.position = point;
@@ -355,7 +355,7 @@ static NSInteger kAddingFinishHeight = 74;
 
     if (state == TransformableTableViewCellEditingStateRight && !self.tagInEditState) {
         CGPoint fromValue = cell.frontView.layer.position;
-        CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + kEditStateRightOffset, fromValue.y);
+        CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + kEditingStateRightOffset, fromValue.y);
 
         [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
 
@@ -392,7 +392,7 @@ static NSInteger kAddingFinishHeight = 74;
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
     NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
     // if this indexPath is in a edit state then return 0 else return normal
-    return indexPath.row == (NSInteger)indexOfTagInEditState ? 0 : kEditCommitLength;
+    return indexPath.row == (NSInteger)indexOfTagInEditState ? 0 : kEditingCommitLength;
 }
 
 #pragma mark -

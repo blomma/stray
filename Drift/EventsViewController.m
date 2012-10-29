@@ -21,7 +21,6 @@
 #import "Tags.h"
 
 static NSInteger kEditingCommitLength = 120;
-
 static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
 
 @interface EventsViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGesturePullingRowDelegate, EventTableViewCellDelegate>
@@ -99,6 +98,8 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
     CGFloat y = self.tags.count == 0 ? -30 : 0;
     CGRect frame = CGRectMake(0, y, self.view.bounds.size.width, 30);
 
@@ -124,6 +125,29 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     }
 
     return _events;
+}
+
+#pragma mark -
+#pragma mark UIScrollViewDelegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if (self.tags.count > 0) {
+        CGRect frame = CGRectMake(0, -30, self.view.bounds.size.width, 30);
+
+        [UIView animateWithDuration:0.3 animations:^{
+            self.filterView.frame = frame;
+        }];
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if (self.tags.count > 0) {
+        CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, 30);
+
+        [UIView animateWithDuration:0.3 animations:^{
+            self.filterView.frame = frame;
+        }];
+    }
 }
 
 #pragma mark -

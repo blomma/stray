@@ -73,6 +73,8 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
     CGFloat y = self.tags.count == 0 ? -30 : 0;
     CGRect frame = CGRectMake(0, y, self.view.bounds.size.width, 30);
 
@@ -91,6 +93,29 @@
     }
 
     return _eventGroups;
+}
+
+#pragma mark -
+#pragma mark UIScrollViewDelegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if (self.tags.count > 0) {
+        CGRect frame = CGRectMake(0, -30, self.view.bounds.size.width, 30);
+
+        [UIView animateWithDuration:0.3 animations:^{
+            self.filterView.frame = frame;
+        }];
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if (self.tags.count > 0) {
+        CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, 30);
+
+        [UIView animateWithDuration:0.3 animations:^{
+            self.filterView.frame = frame;
+        }];
+    }
 }
 
 #pragma mark -
