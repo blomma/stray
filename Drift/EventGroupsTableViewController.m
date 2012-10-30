@@ -108,6 +108,18 @@
     }
 }
 
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if (!decelerate) {
+        if (self.tags.count > 0) {
+            CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, 30);
+
+            [UIView animateWithDuration:0.3 animations:^{
+                self.filterView.frame = frame;
+            }];
+        }
+    }
+}
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if (self.tags.count > 0) {
         CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, 30);

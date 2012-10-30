@@ -140,6 +140,19 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     }
 }
 
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    DLog(NSStringFromSelector(_cmd));
+    if (!decelerate) {
+        if (self.tags.count > 0) {
+            CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, 30);
+
+            [UIView animateWithDuration:0.3 animations:^{
+                self.filterView.frame = frame;
+            }];
+        }
+    }
+}
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if (self.tags.count > 0) {
         CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, 30);
@@ -180,6 +193,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 
     if (cell.frame.size.height > self.pullingCommitHeight * 2) {
+        [self.filterView removeFromSuperview];
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
