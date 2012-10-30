@@ -257,10 +257,6 @@ static NSInteger kCellSnapShotTag = 100000;
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     if (gestureRecognizer == self.panRecognizer) {
-        if (![self.delegate conformsToProtocol:@protocol(TransformableTableViewGestureEditingRowDelegate)]) {
-            return NO;
-        }
-
         UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
 
         CGPoint point = [pan translationInView:self.tableView];
@@ -282,7 +278,7 @@ static NSInteger kCellSnapShotTag = 100000;
         CGPoint location = [gestureRecognizer locationInView:self.tableView];
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:location];
 
-        if (indexPath && [self.delegate conformsToProtocol:@protocol(TransformableTableViewGestureMovingRowDelegate)]) {
+        if (indexPath) {
             BOOL canMoveRow = [self.delegate gestureRecognizer:self canMoveRowAtIndexPath:indexPath];
             return canMoveRow;
         }
@@ -313,14 +309,6 @@ static NSInteger kCellSnapShotTag = 100000;
 #pragma mark UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (![self.delegate conformsToProtocol:@protocol(TransformableTableViewGesturePullingRowDelegate)]) {
-        if ([self.tableViewDelegate respondsToSelector:@selector(scrollViewDidScroll:)]) {
-            [self.tableViewDelegate scrollViewDidScroll:scrollView];
-        }
-
-        return;
-    }
-
     // We try to create a new cell when the user tries to drag the content to and offset of negative value
     if (scrollView.contentOffset.y < 0) {
         // Here we make sure we're not conflicting with the pinch event,
@@ -337,6 +325,11 @@ static NSInteger kCellSnapShotTag = 100000;
         }
     }
 
+    // Call the original selector if it exists
+    if ([self.tableViewDelegate respondsToSelector:@selector(scrollViewDidScroll:)]) {
+        [self.tableViewDelegate scrollViewDidScroll:scrollView];
+    }
+
     // Check if addingIndexPath not exists, we don't want to
     // alter the contentOffset of our scrollView
     if (self.transformIndexPath && self.state == TableViewGestureRecognizerStateDragging) {
@@ -348,16 +341,13 @@ static NSInteger kCellSnapShotTag = 100000;
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if ( ! [self.delegate conformsToProtocol:@protocol(TransformableTableViewGesturePullingRowDelegate)]) {
-        if ([self.tableViewDelegate respondsToSelector:@selector(scrollViewDidEndDragging:willDecelerate:)]) {
-            [self.tableViewDelegate scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
-        }
-        return;
-    }
-
     if (self.state == TableViewGestureRecognizerStateDragging) {
         self.state = TableViewGestureRecognizerStateNone;
         [self commitOrDiscardCell];
+    }
+
+    if ([self.tableViewDelegate respondsToSelector:@selector(scrollViewDidEndDragging:willDecelerate:)]) {
+        [self.tableViewDelegate scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
     }
 }
 
@@ -372,10 +362,10 @@ static NSInteger kCellSnapShotTag = 100000;
 }
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
-    NSAssert(self.tableViewDelegate != nil, @"self.tableViewDelegate should not be nil, assign your tableView.delegate before enabling gestureRecognizer", nil);
     if ([self.tableViewDelegate respondsToSelector:aSelector]) {
         return YES;
     }
+
     return [[self class] instancesRespondToSelector:aSelector];
 }
 
@@ -383,20 +373,26 @@ static NSInteger kCellSnapShotTag = 100000;
 
 + (TransformableTableViewGestureRecognizer *)gestureRecognizerWithTableView:(UITableView *)tableView delegate:(id)delegate {
     TransformableTableViewGestureRecognizer *recognizer = [[TransformableTableViewGestureRecognizer alloc] init];
-    recognizer.delegate          = (id)delegate;
-    recognizer.tableView         = tableView;
-    recognizer.tableViewDelegate = tableView.delegate;     // Assign the delegate before chaning the tableView's delegate
-    tableView.delegate           = recognizer;
+    if ([delegate conformsToProtocol:@protocol(TransformableTableViewGesturePullingRowDelegate)]) {
+        recognizer.delegate          = (id)delegate;
+        recognizer.tableView         = tableView;
+        recognizer.tableViewDelegate = tableView.delegate;     // Assign the delegate before chaning the tableView's delegate
+        tableView.delegate           = recognizer;
+    }
 
-    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:recognizer action:@selector(panGestureRecognizer:)];
-    [tableView addGestureRecognizer:pan];
-    pan.delegate             = recognizer;
-    recognizer.panRecognizer = pan;
+    if ([delegate conformsToProtocol:@protocol(TransformableTableViewGestureEditingRowDelegate)]) {
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:recognizer action:@selector(panGestureRecognizer:)];
+        [tableView addGestureRecognizer:pan];
+        pan.delegate             = recognizer;
+        recognizer.panRecognizer = pan;
+    }
 
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:recognizer action:@selector(longPressGestureRecognizer:)];
-    [tableView addGestureRecognizer:longPress];
-    longPress.delegate             = recognizer;
-    recognizer.longPressRecognizer = longPress;
+    if ([delegate conformsToProtocol:@protocol(TransformableTableViewGestureMovingRowDelegate)]) {
+        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:recognizer action:@selector(longPressGestureRecognizer:)];
+        [tableView addGestureRecognizer:longPress];
+        longPress.delegate             = recognizer;
+        recognizer.longPressRecognizer = longPress;
+    }
 
     return recognizer;
 }
