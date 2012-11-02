@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Event.h"
+#import <QuartzCore/QuartzCore.h>
 
 @protocol EventTableViewCellDelegate <NSObject>
 

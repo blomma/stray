@@ -52,10 +52,10 @@
 
 - (NSMutableOrderedSet *)filteredEvents {
     if (self.isFilteredEventsInvalid) {
+        [_filteredEvents removeAllObjects];
         if (self.filters.count == 0) {
             [_filteredEvents unionSet:self.events];
         } else {
-            [_filteredEvents removeAllObjects];
             [_filteredEvents unionSet:[self.events filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"inTag in %@",
                                                                               self.filters]]];
         }

@@ -7,33 +7,34 @@
 //
 
 #import "EventsViewController.h"
+
+#import "CAAnimation+Blocks.h"
+#import "DataManager.h"
 #import "Event.h"
 #import "EventTableViewCell.h"
-#import "DataManager.h"
-#import "Global.h"
-#import "TransformableTableViewGestureRecognizer.h"
-#import "EventTableViewCell.h"
-#import "SKBounceAnimation.h"
-#import "CAAnimation+Blocks.h"
-#import "TagsTableViewController.h"
 #import "Events.h"
+#import "Global.h"
+#import "SKBounceAnimation.h"
 #import "TagButton.h"
 #import "Tags.h"
+#import "TagsTableViewController.h"
+#import "TransformableTableViewGestureRecognizer.h"
 
-static NSInteger kEditingCommitLength = 120;
-static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
+static NSString *pullingTableViewCellIdentifier = @"pullingTableViewCellIdentifier";
+static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
 @interface EventsViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGesturePullingRowDelegate, EventTableViewCellDelegate>
 
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
 
-@property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) NSCalendar *calendar;
+@property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 
 @property (nonatomic) NSMutableArray *filterViewButtons;
 
 @property (nonatomic) Tags *tags;
 @property (nonatomic) BOOL isTagsInvalid;
+@property (nonatomic, readonly) BOOL isFilterViewVisible;
 
 @property (nonatomic) UIState *state;
 
@@ -43,6 +44,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 @property (nonatomic) NSIndexPath *transformingPullingIndexPath;
 
 @property (nonatomic, readonly) NSInteger pullingCommitHeight;
+@property (nonatomic, readonly) NSInteger editingCommitLength;
 
 @end
 
@@ -59,14 +61,12 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     self.tags = [[Tags alloc] initWithTags:[[DataManager instance] tags]];
     self.isTagsInvalid = YES;
 
-    self.filterView.showsHorizontalScrollIndicator = NO;
-    self.filterView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.45];
-    self.filterViewButtons = [NSMutableArray array];
+    [self initFilterView];
 
     self.events = [[Events alloc] initWithEvents:[DataManager instance].events];
     self.isEventsInvalid = YES;
 
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:pullDownTableViewCellIdentifier];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:pullingTableViewCellIdentifier];
 
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
@@ -79,7 +79,8 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToTagsFromEvents"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        Event *event = [self.events.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
+        NSUInteger adjustedIndex = [self adjustedIndexForIndexPath:indexPath];
+        Event *event = [self.events.filteredEvents objectAtIndex:adjustedIndex];
 
         if ([[segue destinationViewController] respondsToSelector:@selector(event)]) {
             [[segue destinationViewController] setEvent:event];
@@ -91,16 +92,22 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     [super viewWillAppear:animated];
 
     if (self.isTagsInvalid) {
-        [self updateTagsView];
+        [self setupFilterView];
     }
 
     [self.tableView reloadData];
+
+    NSUInteger index = [self.events.filteredEvents indexOfObject:self.state.activeEvent];
+    if (index != NSNotFound) {
+        NSIndexPath *indexPath = [self adjustedIndexPathForIndex:index];
+        [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    CGFloat y = self.tags.count == 0 ? -30 : 0;
+    CGFloat y = self.isFilterViewVisible ? 0 : -30;
     CGRect frame = CGRectMake(0, y, self.view.bounds.size.width, 30);
 
     [UIView animateWithDuration:0.3 animations:^{
@@ -111,8 +118,16 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 #pragma mark -
 #pragma mark Private properties
 
+- (BOOL)isFilterViewVisible {
+    return self.tags.count > 0;
+}
+
 - (NSInteger)pullingCommitHeight {
-    return self.tags.count > 0 ? 30 : 60;
+    return self.isFilterViewVisible ? 30 : 60;
+}
+
+- (NSInteger)editingCommitLength {
+    return 120;
 }
 
 #pragma mark -
@@ -131,7 +146,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 #pragma mark UIScrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if (self.tags.count > 0) {
+    if (self.isFilterViewVisible) {
         CGRect frame = CGRectMake(0, -30, self.view.bounds.size.width, 30);
 
         [UIView animateWithDuration:0.3 animations:^{
@@ -141,9 +156,8 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    DLog(NSStringFromSelector(_cmd));
     if (!decelerate) {
-        if (self.tags.count > 0) {
+        if (self.isFilterViewVisible) {
             CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, 30);
 
             [UIView animateWithDuration:0.3 animations:^{
@@ -154,7 +168,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    if (self.tags.count > 0) {
+    if (self.isFilterViewVisible) {
         CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, 30);
 
         [UIView animateWithDuration:0.3 animations:^{
@@ -213,12 +227,13 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     EventTableViewCell *cell = (EventTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     [cell.layer removeAllAnimations];
 
-    UIView *backgroundView = [[UIView alloc] initWithFrame:cell.contentView.frame];
-    cell.backgroundView = backgroundView;
-    cell.backgroundView.backgroundColor = [UIColor colorWithRed:0.843f
-                                                          green:0.306f
-                                                           blue:0.314f
-                                                          alpha:1];
+    if (!cell.backgroundView) {
+        cell.backgroundView = [[UIView alloc] initWithFrame:cell.contentView.frame];
+        cell.backgroundView.backgroundColor = [UIColor colorWithRed:0.843f
+                                                              green:0.306f
+                                                               blue:0.314f
+                                                              alpha:1];
+    }
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didChangeEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -227,7 +242,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     }
 
     EventTableViewCell *cell = (EventTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
-    CGFloat alpha = 1 - (gestureRecognizer.translationInTableView.x / kEditingCommitLength);
+    CGFloat alpha = 1 - (gestureRecognizer.translationInTableView.x / self.editingCommitLength);
     cell.contentView.alpha = alpha;
 
     CGPoint point = CGPointMake(CGRectGetMidX(cell.layer.bounds) + gestureRecognizer.translationInTableView.x, cell.layer.position.y);
@@ -245,6 +260,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     Event *event = [self.events.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
     [[DataManager instance] deleteEvent:event];
     [self.events removeObject:event];
+    self.isEventsInvalid = YES;
 
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
 }
@@ -255,23 +271,20 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     CGPoint toValue = CGPointMake(CGRectGetMidX(cell.layer.bounds), fromValue.y);
 
     cell.contentView.alpha = 1;
+
     [self animateBounceOnLayer:cell.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
 }
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-    return kEditingCommitLength;
+    return self.editingCommitLength;
 }
 
 #pragma mark -
 #pragma mark UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSInteger index = self.transformingPullingIndexPath ? indexPath.row - 1 : indexPath.row;
-    return index == 0 && self.tags.count > 0 ? 150 : 120;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    Event *event = [self.events.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
+    NSUInteger adjustedIndex = [self adjustedIndexForIndexPath:indexPath];
+    Event *event = [self.events.filteredEvents objectAtIndex:adjustedIndex];
     self.state.activeEvent = event;
 
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -285,14 +298,12 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return self.transformingPullingIndexPath ? (NSInteger)self.events.filteredEvents.count + 1 : (NSInteger)self.events.filteredEvents.count;
+    return (NSInteger)[self adjustedRowCountForCount:self.events.filteredEvents.count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *CellIdentifier = @"EventTableViewCell";
-
     if (self.transformingPullingIndexPath && self.transformingPullingIndexPath.row == indexPath.row) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:pullDownTableViewCellIdentifier];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:pullingTableViewCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
         cell.textLabel.textAlignment = NSTextAlignmentCenter;
@@ -304,30 +315,31 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
             cell.textLabel.text = @"Close";
             CGFloat alpha = 1 - (self.pullingCommitHeight * 2 / cell.frame.size.height);
 
-            cell.contentView.backgroundColor = [UIColor colorWithRed:0.843f
-                                                               green:0.306f
-                                                                blue:0.314f
-                                                               alpha:alpha];
+            UIColor *backgroundColor = [UIColor colorWithRed:0.843f
+                                                       green:0.306f
+                                                        blue:0.314f
+                                                       alpha:alpha];
+            
+            cell.contentView.backgroundColor = backgroundColor;
+            self.tableView.tableHeaderView.backgroundColor = backgroundColor;
         } else {
             cell.textLabel.text = @"";
-            cell.contentView.backgroundColor = [UIColor clearColor];
+
+            UIColor *backgroundColor = [UIColor clearColor];
+            cell.contentView.backgroundColor = backgroundColor;
+            self.tableView.tableHeaderView.backgroundColor = backgroundColor;
         }
 
         return cell;
     } else {
-        NSUInteger index = self.transformingPullingIndexPath ? (NSUInteger)indexPath.row - 1 : (NSUInteger)indexPath.row;
+        NSUInteger index = [self adjustedIndexForIndexPath:indexPath];
         Event *event = (Event *)[self.events.filteredEvents objectAtIndex:index];
 
-        EventTableViewCell *cell = (EventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        UIColor *backgroundColor = [UIColor colorWithWhite:0.075f alpha:1];
-        if ([self.state.activeEvent isEqual:event]) {
-            backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1];
-        }
-
-        cell.contentView.backgroundColor = backgroundColor;
+        EventTableViewCell *cell = (EventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:eventTableViewCellIdentifier];
+        cell.contentView.backgroundColor = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
 
         // Tag
-        NSString *tagName = event.inTag ? event.inTag.name : @"";
+        NSString *tagName = event.inTag ? event.inTag.name : @"-- --";
         [cell.tagName setTitle:[tagName uppercaseString] forState:UIControlStateNormal];
 
         // StartTime
@@ -371,6 +383,24 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 
 #pragma mark -
 #pragma mark Private methods
+
+- (NSUInteger)adjustedIndexForIndexPath:(NSIndexPath *)indexPath {
+    NSUInteger pullingRow = self.transformingPullingIndexPath ? 1 : 0;
+
+    return (NSUInteger)indexPath.row - pullingRow;
+}
+
+- (NSUInteger)adjustedRowCountForCount:(NSUInteger)count {
+    NSUInteger pullingRow = self.transformingPullingIndexPath ? 1 : 0;
+
+    return count + pullingRow;
+}
+
+- (NSIndexPath *)adjustedIndexPathForIndex:(NSUInteger)index {
+    NSUInteger pullingRow = self.transformingPullingIndexPath ? 1 : 0;
+
+    return [NSIndexPath indexPathForRow:(NSInteger)(index + pullingRow) inSection:0];
+}
 
 - (void)objectsDidChange:(NSNotification *)note {
     NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
@@ -419,9 +449,54 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
     self.isEventsInvalid = YES;
 
     [self.tableView reloadData];
+
+    NSUInteger index = [self.events.filteredEvents indexOfObject:self.state.activeEvent];
+    if (index != NSNotFound) {
+        NSIndexPath *indexPath = [self adjustedIndexPathForIndex:index];
+        [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+    }
 }
 
-- (void)updateTagsView {
+- (void)initFilterView {
+    self.filterViewButtons = [NSMutableArray array];
+
+    self.filterView.showsHorizontalScrollIndicator = NO;
+    self.filterView.backgroundColor = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:0.90];
+
+    UIColor *colorOne = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:0.3f];
+    UIColor *colorTwo = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:1];
+
+    NSArray *colors = @[(id)colorOne.CGColor, (id)colorTwo.CGColor, (id)colorTwo.CGColor, (id)colorOne.CGColor];
+
+    NSArray *locations = @[@0.0, @0.4, @0.6, @1.0];
+
+    CAGradientLayer *tick = [CAGradientLayer layer];
+    tick.colors = colors;
+    tick.locations = locations;
+    tick.startPoint = CGPointMake(0, 0.5);
+    tick.endPoint = CGPointMake(1.0, 0.5);
+
+    tick.bounds      = CGRectMake(0, 0, self.filterView.layer.bounds.size.width, 1);
+    CGPoint position = self.filterView.layer.position;
+    position.y += 15;
+    tick.position    = position;
+    tick.anchorPoint = self.filterView.layer.anchorPoint;
+
+    [self.filterView.layer addSublayer:tick];
+}
+
+- (void)setupFilterView {
+    // Our bumper for the added height
+    if (self.isFilterViewVisible) {
+        if (!self.tableView.tableHeaderView) {
+            UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
+            tableHeaderView.backgroundColor = [UIColor clearColor];
+            [self.tableView setTableHeaderView:tableHeaderView];
+        }
+    } else {
+        self.tableView.tableHeaderView = nil;
+    }
+
     // Remove all the old subviews and recreate them, lazy option
     for (id subView in self.filterViewButtons) {
         [subView removeFromSuperview];
@@ -441,17 +516,14 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
         tagButton.tagObject = tag;
         [tagButton addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 
-        tagButton.titleLabel.textColor = [UIColor whiteColor];
-        tagButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+        //tagButton.titleLabel.textAlignment = NSTextAlignmentCenter;
         tagButton.titleLabel.font = [UIFont fontWithName:@"Futura-Medium" size:15];
         tagButton.titleLabel.backgroundColor = [UIColor clearColor];
 
         tagButton.backgroundColor = [UIColor clearColor];
 
+        [tagButton setTitleColor:[UIColor colorWithRed:0.333f green:0.333f blue:0.333f alpha:1] forState:UIControlStateNormal];
         [tagButton setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
-        // select a differing red value so that we can distinguish our added subviews
-        //        float redValue = (1.0f / numElements) * i;
-        //        subview.backgroundColor = [UIColor colorWithRed:redValue green:0 blue:0  alpha:1.0];
 
         // setup frames to appear besides each other in the slider
         CGFloat elementX = elementSize.width * i;
@@ -483,7 +555,7 @@ static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdenti
 	positionAnimation.numberOfBounces = 4;
     positionAnimation.completion = completion;
 
-	[layer addAnimation:positionAnimation forKey:@"someKey2"];
+	[layer addAnimation:positionAnimation forKey:keyPath];
 	[layer setValue:[NSValue valueWithCGPoint:to] forKeyPath:keyPath];
 }
 

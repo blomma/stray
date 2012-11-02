@@ -376,7 +376,7 @@ static NSInteger kCellSnapShotTag = 100000;
     if ([delegate conformsToProtocol:@protocol(TransformableTableViewGesturePullingRowDelegate)]) {
         recognizer.delegate          = (id)delegate;
         recognizer.tableView         = tableView;
-        recognizer.tableViewDelegate = tableView.delegate;     // Assign the delegate before chaning the tableView's delegate
+        recognizer.tableViewDelegate = tableView.delegate;
         tableView.delegate           = recognizer;
     }
 
