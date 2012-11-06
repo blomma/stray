@@ -7,8 +7,10 @@
 //
 
 #import "EventTimerControl.h"
+#import "TagsTableViewController.h"
+#import "EventsViewController.h"
 
-@interface EventViewController : UIViewController
+@interface EventViewController : UIViewController <TagsTableViewControllerDelegate, EventsViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet EventTimerControl *eventTimerControl;
 @property (weak, nonatomic) IBOutlet UIButton *toggleStartStopButton;

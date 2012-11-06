@@ -10,7 +10,7 @@
 #import "EventViewController.h"
 #import "NSManagedObject+ActiveRecord.h"
 #import "Tag.h"
-#import "DataManager.h"
+#import "DataRepository.h"
 #import "TagsTableViewController.h"
 #import "Global.h"
 
@@ -30,7 +30,7 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-    self.state = [DataManager instance].state;
+    self.state = [DataRepository instance].state;
 
     [self reset];
 
@@ -83,12 +83,26 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToTagsFromEvent"]) {
-        Event *event = [[DataManager instance] state].activeEvent;
+        [[segue destinationViewController] setDelegate:self];
+        Event *event = [[DataRepository instance] state].activeEvent;
 
         if ([[segue destinationViewController] respondsToSelector:@selector(event)]) {
             [[segue destinationViewController] setEvent:event];
         }
+    } else if ([segue.identifier isEqualToString:@"segueToEventsFromEvent"]) {
+        [[segue destinationViewController] setDelegate:self];
     }
+}
+
+#pragma mark -
+#pragma mark TagsTableViewControllerDelegate
+
+- (void)tagsTableViewControllerDidDimiss:(TagsTableViewController *)tagsTableViewController {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)eventsViewControllerDidDimiss:(EventsViewController *)eventsViewController {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -
@@ -116,7 +130,7 @@
         event = [Event create];
 		event.startDate = now;
 
-        [DataManager instance].state.activeEvent = event;
+        [DataRepository instance].state.activeEvent = event;
 
         [self.eventTimerControl startWithEvent:event];
 
@@ -215,7 +229,7 @@
 }
 
 - (void)animateEventTransforming:(EventTimerTransformingEnum)eventTimerTransformingEnum {
-    Event *event = [DataManager instance].state.activeEvent;
+    Event *event = [DataRepository instance].state.activeEvent;
 
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         CGFloat eventStartAlpha, eventStopAlpha, eventTimeAlpha;
@@ -260,7 +274,7 @@
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    Event *event = [DataManager instance].state.activeEvent;
+    Event *event = [DataRepository instance].state.activeEvent;
 
 	if ([keyPath isEqualToString:@"startDate"]) {
 		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];

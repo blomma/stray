@@ -6,20 +6,21 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "DataManager.h"
+#import "DataRepository.h"
 #import "NSManagedObject+ActiveRecord.h"
 #import "Event.h"
 #import "Tag.h"
 
 NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjectsDidChangeNotification";
 
-@interface DataManager ()
+@interface DataRepository ()
 
 @property (nonatomic) UIState *state;
+@property (nonatomic) Tags *tags;
 
 @end
 
-@implementation DataManager
+@implementation DataRepository
 
 - (id)init {
     self = [super init];
@@ -71,8 +72,12 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 #pragma mark -
 #pragma mark Public properties
 
-- (NSArray *)tags {
-    return [Tag all];
+- (Tags *)tags {
+    if (!_tags) {
+        _tags = [[Tags alloc] initWithTags:[Tag all]];
+    }
+
+    return _tags;
 }
 
 - (NSArray *)events {
@@ -86,8 +91,8 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 #pragma mark -
 #pragma mark Class methods
 
-+ (DataManager *)instance {
-	static DataManager *sharedDataManager = nil;
++ (DataRepository *)instance {
+	static DataRepository *sharedDataManager = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		sharedDataManager = [[self alloc] init];

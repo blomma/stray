@@ -27,6 +27,7 @@
 @property (nonatomic, weak) IBOutlet UIButton *deleteButton;
 
 @property (nonatomic) BOOL marked;
+
 - (void)marked:(BOOL)marked withAnimation:(BOOL)animation;
 
 @end

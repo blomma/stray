@@ -13,13 +13,13 @@
 
 FOUNDATION_EXPORT NSString *const kDataManagerObjectsDidChangeNotification;
 
-@interface DataManager : NSObject
+@interface DataRepository : NSObject
 
-@property (nonatomic, readonly) NSArray *tags;
+@property (nonatomic, readonly) Tags *tags;
 @property (nonatomic, readonly) UIState *state;
 @property (nonatomic, readonly) NSArray *events;
 
-+ (DataManager *)instance;
++ (DataRepository *)instance;
 
 - (Tag *)createTag;
 - (void)deleteTag:(Tag *)tag;

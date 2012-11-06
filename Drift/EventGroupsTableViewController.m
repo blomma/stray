@@ -9,7 +9,7 @@
 #import "Event.h"
 #import "EventGroups.h"
 #import "EventGroupsTableViewController.h"
-#import "DataManager.h"
+#import "DataRepository.h"
 #import "TagButton.h"
 #import "EventGroupTableViewCell.h"
 #import "Global.h"
@@ -24,6 +24,7 @@
 
 @property (nonatomic) Tags *tags;
 @property (nonatomic) BOOL isTagsInvalid;
+@property (nonatomic, readonly) BOOL isFilterViewVisible;
 
 @property (nonatomic) NSCalendar *calendar;
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
@@ -42,9 +43,9 @@
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
     self.standaloneWeekdaySymbols = [[NSDateFormatter new] standaloneWeekdaySymbols];
 
-    self.state = [DataManager instance].state;
+    self.state = [DataRepository instance].state;
 
-    self.tags = [[Tags alloc] initWithTags:[[DataManager instance] tags]];
+    self.tags = [DataRepository instance].tags;
     self.isTagsInvalid = YES;
 
     self.filterView.showsHorizontalScrollIndicator = NO;
@@ -52,14 +53,14 @@
     self.filterViewButtons = [NSMutableArray array];
 
 
-    self.eventGroups = [[EventGroups alloc] initWithEvents:[DataManager instance].events
+    self.eventGroups = [[EventGroups alloc] initWithEvents:[DataRepository instance].events
                                                withFilters:self.state.eventGroupsFilter];
     self.isEventGroupsInvalid = YES;
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
 	                                         selector:@selector(objectsDidChange:)
 	                                             name:kDataManagerObjectsDidChangeNotification
-	                                           object:[DataManager instance]];
+	                                           object:[DataRepository instance]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -75,13 +76,21 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    CGFloat y = self.tags.count == 0 ? -30 : 0;
+    CGFloat y = self.isFilterViewVisible ? 0 : -30;
     CGRect frame = CGRectMake(0, y, self.view.bounds.size.width, 30);
 
     [UIView animateWithDuration:0.3 animations:^{
         self.filterView.frame = frame;
     }];
 }
+
+#pragma mark -
+#pragma mark Private properties
+
+- (BOOL)isFilterViewVisible {
+    return self.tags.count > 0;
+}
+
 
 #pragma mark -
 #pragma mark Public properties
@@ -99,7 +108,7 @@
 #pragma mark UIScrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if (self.tags.count > 0) {
+    if (self.isFilterViewVisible) {
         CGRect frame = CGRectMake(0, -30, self.view.bounds.size.width, 30);
 
         [UIView animateWithDuration:0.3 animations:^{
@@ -110,7 +119,7 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if (!decelerate) {
-        if (self.tags.count > 0) {
+        if (self.isFilterViewVisible) {
             CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, 30);
 
             [UIView animateWithDuration:0.3 animations:^{
@@ -121,20 +130,13 @@
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    if (self.tags.count > 0) {
+    if (self.isFilterViewVisible) {
         CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, 30);
 
         [UIView animateWithDuration:0.3 animations:^{
             self.filterView.frame = frame;
         }];
     }
-}
-
-#pragma mark -
-#pragma mark UITableViewDelegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return indexPath.row == 0 && self.tags.count > 0 ? 130 : 100;
 }
 
 #pragma mark -
@@ -175,6 +177,15 @@
 #pragma mark Private methods
 
 - (void)updateTagsView {
+    if (self.isFilterViewVisible) {
+        UIEdgeInsets contentInset = self.tableView.contentInset;
+        contentInset.top = 30;
+
+        self.tableView.contentInset = contentInset;
+    } else {
+        self.tableView.contentInset = UIEdgeInsetsZero;
+    }
+
     // Remove all the old subviews and recreate them, lazy option
     for (id subView in self.filterViewButtons) {
         [subView removeFromSuperview];

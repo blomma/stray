@@ -8,35 +8,26 @@
 
 #import "TagsTableViewController.h"
 #import "Tags.h"
-#import "DataManager.h"
+#import "DataRepository.h"
 #import "TransformableTableViewGestureRecognizer.h"
 #import "TagTableViewCell.h"
-#import <QuartzCore/QuartzCore.h>
 #import "SKBounceAnimation.h"
 #import "InnerShadowLayer.h"
 #import "CAAnimation+Blocks.h"
+#import "UIScrollView+SVPulling.h"
 
-static NSString *grabbedTableViewCellIdentifier  = @"grabbedTableViewCellIdentifier";
-static NSString *pullDownTableViewCellIdentifier = @"pullDownTableViewCellIdentifier";
-
-static NSInteger kEditingStateRightOffset = 260;
-static NSInteger kEditingCommitLength = 60;
-
-static NSInteger kPullingCommitHeight = 74;
-static NSInteger kPullingFinishHeight = 74;
-
-@interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGesturePullingRowDelegate, TransformableTableViewGestureMovingRowDelegate, TagTableViewCellDelegate>
+@interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureMovingRowDelegate, TagTableViewCellDelegate>
 
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
 
 @property (nonatomic) Tag *tagInEditState;
+@property (nonatomic, weak) Tags *tags;
 
-@property (nonatomic) Tags *tags;
-
-@property (nonatomic) NSIndexPath *transformingPullingIndexPath;
 @property (nonatomic) NSIndexPath *transformingMovingIndexPath;
-
 @property (nonatomic) UIColor *cellBackgroundColor;
+
+@property (nonatomic) NSInteger editingStateRightOffset;
+@property (nonatomic) NSInteger editingCommitLength;
 
 @end
 
@@ -45,12 +36,47 @@ static NSInteger kPullingFinishHeight = 74;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.tags = [[Tags alloc] initWithTags:[[DataManager instance] tags]];
+    self.editingStateRightOffset = 260;
+    self.editingCommitLength = 60;
+    
+    self.tags = [DataRepository instance].tags;
 
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:grabbedTableViewCellIdentifier];
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:pullDownTableViewCellIdentifier];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"grabbedTableViewCellIdentifier"];
+
+    __block __weak TagsTableViewController *weakSelf = self;
+    __block __weak Tags *weakTags = self.tags;
+
+    [self.tableView addPullingWithActionHandler:^(SVPullingState state, CGFloat height) {
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            if (state == SVPullingStateTriggeredAdd) {
+                [weakSelf.tableView beginUpdates];
+
+                Tag *tag = [[DataRepository instance] createTag];
+                [weakTags insertObject:tag atIndex:0];
+
+                [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+                
+                [weakSelf.tableView endUpdates];
+            } else if (state == SVPullingStateTriggeredClose) {
+                DLog(NSStringFromSelector(_cmd));
+                if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
+                    [weakSelf.delegate tagsTableViewControllerDidDimiss:weakSelf];
+                }
+            }
+        });
+    }];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    self.tags = nil;
+
+    [self.tableView disablePulling];
+
+    [self.tableView disableGestureTableViewWithRecognizer:self.tableViewRecognizer];
+    self.tableViewRecognizer = nil;
 }
 
 #pragma mark -
@@ -81,7 +107,7 @@ static NSInteger kPullingFinishHeight = 74;
 #pragma mark UITableViewDatasource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return self.transformingPullingIndexPath ? (NSInteger)self.tags.count + 1 : (NSInteger)self.tags.count;
+	return (NSInteger)self.tags.count;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -89,53 +115,20 @@ static NSInteger kPullingFinishHeight = 74;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *tagsTableViewCellIdentifier = @"TagsTableViewCell";
-
-    if (self.transformingPullingIndexPath && self.transformingPullingIndexPath.row == indexPath.row) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:pullDownTableViewCellIdentifier];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-        cell.textLabel.textAlignment = NSTextAlignmentCenter;
-        cell.textLabel.font = [UIFont fontWithName:@"Futura-Medium" size:25];
-        cell.textLabel.backgroundColor = [UIColor clearColor];
-
-        if (cell.bounds.size.height > kPullingCommitHeight * 2) {
-            cell.textLabel.text = @"Close";
-            cell.contentView.backgroundColor = [UIColor colorWithRed:0.843f
-                                                               green:0.306f
-                                                                blue:0.314f
-                                                               alpha:1];
-        } else if (cell.bounds.size.height >= kPullingCommitHeight) {
-            cell.textLabel.text = @"Release to create cell...";
-            cell.contentView.backgroundColor = [UIColor colorWithRed:0.510f
-                                                               green:0.784f
-                                                                blue:0.431f
-                                                               alpha:1];
-        } else {
-            cell.textLabel.textColor = [UIColor whiteColor];
-            cell.textLabel.text = @"Continue Pulling...";
-            cell.contentView.backgroundColor = [UIColor colorWithRed:0.510f
-                                                               green:0.784f
-                                                                blue:0.431f
-                                                               alpha:(cell.bounds.size.height / kPullingCommitHeight)];
-        }
-
-        return cell;
-    } else if (self.transformingMovingIndexPath && self.transformingMovingIndexPath.row == indexPath.row) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:grabbedTableViewCellIdentifier];
+    if (self.transformingMovingIndexPath && self.transformingMovingIndexPath.row == indexPath.row) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"grabbedTableViewCellIdentifier"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
         return cell;
     } else {
-        NSUInteger index = self.transformingPullingIndexPath ? (NSUInteger)indexPath.row - 1 : (NSUInteger)indexPath.row;
+        NSUInteger index = (NSUInteger)indexPath.row;
         Tag *tag = [self.tags objectAtIndex:index];
-        
-        TagTableViewCell *cell = (TagTableViewCell *)[tableView dequeueReusableCellWithIdentifier:tagsTableViewCellIdentifier];
 
-        cell.nameTextField.text = tag.name;
+        TagTableViewCell *cell = (TagTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"TagsTableViewCellIdentifier"];
 
-        NSString *tagName = tag.name ? tag.name : @"-- --";
-        cell.name.text = [tagName uppercaseString];
+        NSString *tagName = [tag.name copy];
+        cell.nameTextField.text = tagName;
+        cell.name.text = tagName ? [tagName uppercaseString] : @"-- --";
 
         cell.delegate = self;
 
@@ -147,10 +140,6 @@ static NSInteger kPullingFinishHeight = 74;
 
 #pragma mark -
 #pragma mark UITableViewDelegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return kPullingFinishHeight;
-}
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     TagTableViewCell *cell = (TagTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
@@ -178,38 +167,9 @@ static NSInteger kPullingFinishHeight = 74;
 
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
     self.event.inTag = [self.event.inTag isEqual:tag] ? nil : tag;
-//
-//    [self dismissViewControllerAnimated:YES completion:nil];
-}
 
-#pragma mark -
-#pragma mark TransformableTableViewGesturePullingRowDelegate
-
-- (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer heightForCommitAddingRowAtIndexPath:(NSIndexPath *)indexPath {
-    return kPullingCommitHeight;
-}
-
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsAddRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.transformingPullingIndexPath = indexPath;
-}
-
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsCommitRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.transformingPullingIndexPath = nil;
-
-    Tag *tag = [[DataManager instance] createTag];
-    [self.tags insertObject:tag atIndex:(NSUInteger)indexPath.row];
-
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-}
-
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsDiscardRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.transformingPullingIndexPath = nil;
-
-    UITableViewCell *cell = [gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
-    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-
-    if (cell.frame.size.height > kPullingCommitHeight * 2) {
-        [self dismissViewControllerAnimated:YES completion:nil];
+    if ([self.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
+        [self.delegate tagsTableViewControllerDidDimiss:self];
     }
 }
 
@@ -220,7 +180,7 @@ static NSInteger kPullingFinishHeight = 74;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
-    [[DataManager instance] deleteTag:tag];
+    [[DataRepository instance] deleteTag:tag];
 
     CGPoint fromValue = cell.frontView.layer.position;
     CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
@@ -289,7 +249,7 @@ static NSInteger kPullingFinishHeight = 74;
 
     TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
-    NSInteger xOffset = indexOfTagInEditState == (NSUInteger)indexPath.row ? kEditingStateRightOffset : 0;
+    NSInteger xOffset = indexOfTagInEditState == (NSUInteger)indexPath.row ? self.editingStateRightOffset : 0;
 
     CGPoint point = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + gestureRecognizer.translationInTableView.x + xOffset, cell.frontView.layer.position.y);
     cell.frontView.layer.position = point;
@@ -305,7 +265,7 @@ static NSInteger kPullingFinishHeight = 74;
 
     if (state == TransformableTableViewCellEditingStateRight && !self.tagInEditState) {
         CGPoint fromValue = cell.frontView.layer.position;
-        CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + kEditingStateRightOffset, fromValue.y);
+        CGPoint toValue = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + self.editingStateRightOffset, fromValue.y);
 
         [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
 
@@ -336,7 +296,7 @@ static NSInteger kPullingFinishHeight = 74;
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
     NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
     // if this indexPath is in a edit state then return 0 else return normal
-    return indexPath.row == (NSInteger)indexOfTagInEditState ? 0 : kEditingCommitLength;
+    return indexPath.row == (NSInteger)indexOfTagInEditState ? 0 : self.editingCommitLength;
 }
 
 #pragma mark -

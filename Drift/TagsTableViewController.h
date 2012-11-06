@@ -9,8 +9,17 @@
 #import <UIKit/UIKit.h>
 #import "Event.h"
 
+@class TagsTableViewController;
+
+@protocol TagsTableViewControllerDelegate <NSObject>
+
+- (void)tagsTableViewControllerDidDimiss:(TagsTableViewController *)tagsTableViewController;
+
+@end
+
 @interface TagsTableViewController : UITableViewController
 
-@property (nonatomic) Event *event;
+@property (nonatomic, weak) Event *event;
+@property (nonatomic, weak) id<TagsTableViewControllerDelegate> delegate;
 
 @end

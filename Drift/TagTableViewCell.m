@@ -47,7 +47,6 @@
         return;
     }
 
-    DLog(@"marked %@", NSStringFromBOOL(marked));
     self.marked = marked;
 
     if (!self.selectLayer) {

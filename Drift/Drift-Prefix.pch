@@ -12,7 +12,6 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import "TestFlight.h"
-#import <Crashlytics/Crashlytics.h>
 #import "CoreDataManager.h"
 #endif
 

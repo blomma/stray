@@ -53,6 +53,10 @@
 #pragma mark -
 #pragma mark Public methods
 
+- (void)removeAllObjects {
+    [self.tags removeAllObjects];
+}
+
 - (void)addObjectsFromArray:(NSArray *)objects {
     if (objects.count == 0) {
         return;
