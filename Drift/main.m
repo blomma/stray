@@ -9,7 +9,8 @@
 #import "DriftAppDelegate.h"
 
 int main(int argc, char *argv[]){
-	@autoreleasepool {
-		return UIApplicationMain(argc, argv, nil, NSStringFromClass([DriftAppDelegate class]));
-	}
+    @autoreleasepool {
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([DriftAppDelegate class]));
+    }
 }
+

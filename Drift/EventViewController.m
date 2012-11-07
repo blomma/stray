@@ -29,34 +29,34 @@
 @implementation EventViewController
 
 - (void)viewDidLoad {
-	[super viewDidLoad];
+    [super viewDidLoad];
 
     self.state = [DataRepository instance].state;
 
     [self reset];
 
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
-    self.calendar = [Global instance].calendar;
+    self.calendar                    = [Global instance].calendar;
 
-	[self.eventTimerControl addObserver:self
-	                         forKeyPath:@"startDate"
-	                            options:NSKeyValueObservingOptionNew
-	                            context:NULL];
+    [self.eventTimerControl addObserver:self
+                             forKeyPath:@"startDate"
+                                options:NSKeyValueObservingOptionNew
+                                context:NULL];
 
-	[self.eventTimerControl addObserver:self
-	                         forKeyPath:@"nowDate"
-	                            options:NSKeyValueObservingOptionNew
-	                            context:NULL];
+    [self.eventTimerControl addObserver:self
+                             forKeyPath:@"nowDate"
+                                options:NSKeyValueObservingOptionNew
+                                context:NULL];
 
-	[self.eventTimerControl addObserver:self
-	                         forKeyPath:@"stopDate"
-	                            options:NSKeyValueObservingOptionNew
-	                            context:NULL];
+    [self.eventTimerControl addObserver:self
+                             forKeyPath:@"stopDate"
+                                options:NSKeyValueObservingOptionNew
+                                context:NULL];
 
-	[self.eventTimerControl addObserver:self
-	                         forKeyPath:@"isTransforming"
-	                            options:NSKeyValueObservingOptionNew
-	                            context:NULL];
+    [self.eventTimerControl addObserver:self
+                             forKeyPath:@"isTransforming"
+                                options:NSKeyValueObservingOptionNew
+                                context:NULL];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -76,7 +76,7 @@
             [self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
             [self animateStopEvent];
         }
-	} else {
+    } else {
         [self.eventTimerControl reset];
         [self reset];
     }
@@ -110,30 +110,30 @@
 #pragma mark Public methods
 
 - (IBAction)toggleEvent:(id)sender {
-	NSDate *now = [NSDate date];
+    NSDate *now = [NSDate date];
 
     Event *event = self.state.activeEvent;
 
-	if ([event isActive]) {
-		event.stopDate = now;
+    if ([event isActive]) {
+        event.stopDate = now;
 
         [self.eventTimerControl stop];
 
-		[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
+        [self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
         [self animateStopEvent];
-	} else {
+    } else {
         [self reset];
 
-        event = [Event create];
-		event.startDate = now;
+        event           = [Event create];
+        event.startDate = now;
 
         [DataRepository instance].state.activeEvent = event;
 
         [self.eventTimerControl startWithEvent:event];
 
-		[self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
+        [self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
         [self animateStartEvent];
-	}
+    }
 }
 
 #pragma mark -
@@ -147,7 +147,7 @@
     self.eventStartYear.text  = @"";
     self.eventStartMonth.text = @"";
 
-    self.eventTimeHours.text = @"00";
+    self.eventTimeHours.text   = @"00";
     self.eventTimeMinutes.text = @"00";
 
     self.eventStopTime.text  = @"";
@@ -158,7 +158,7 @@
 
 - (void)updateStartLabelWithDate:(NSDate *)date {
     if (date) {
-        static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
+        static NSUInteger unitFlags  = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
         NSDateComponents *components = [self.calendar components:unitFlags fromDate:date];
 
         self.eventStartTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
@@ -187,7 +187,7 @@
 
 - (void)updateStopLabelWithDate:(NSDate *)date {
     if (date) {
-        static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
+        static NSUInteger unitFlags  = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
         NSDateComponents *components = [self.calendar components:unitFlags fromDate:date];
 
         self.eventStopTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
@@ -231,28 +231,28 @@
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         CGFloat eventStartAlpha, eventStopAlpha, eventTimeAlpha;
         switch (eventTimerTransformingEnum) {
-            case EventTimerStartDateTransformingStart:
-                eventStartAlpha = 1;
-                eventStopAlpha = 0.2f;
-                eventTimeAlpha = 0.2f;
-                break;
-            case EventTimerStartDateTransformingStop:
-                eventStartAlpha = event.isActive ? 1 : 0.2f;
-                eventStopAlpha = event.isActive ? 0.2f : 1;
-                eventTimeAlpha = 1;
-                break;
-            case EventTimerStopDateTransformingStart:
-                eventStartAlpha = 0.2f;
-                eventStopAlpha = 1;
-                eventTimeAlpha = 0.2f;
-                break;
-            case EventTimerStopDateTransformingStop:
-                eventStartAlpha = event.isActive ? 1 : 0.2f;
-                eventStopAlpha = event.isActive ? 0.2f : 1;
-                eventTimeAlpha = 1;
-                break;
+        case EventTimerStartDateTransformingStart:
+            eventStartAlpha = 1;
+            eventStopAlpha = 0.2f;
+            eventTimeAlpha = 0.2f;
+            break;
+        case EventTimerStartDateTransformingStop:
+            eventStartAlpha = event.isActive ? 1:0.2f;
+            eventStopAlpha = event.isActive ? 0.2f:1;
+            eventTimeAlpha = 1;
+            break;
+        case EventTimerStopDateTransformingStart:
+            eventStartAlpha = 0.2f;
+            eventStopAlpha = 1;
+            eventTimeAlpha = 0.2f;
+            break;
+        case EventTimerStopDateTransformingStop:
+            eventStartAlpha = event.isActive ? 1:0.2f;
+            eventStopAlpha = event.isActive ? 0.2f:1;
+            eventTimeAlpha = 1;
+            break;
             default:
-                break;
+            break;
         }
 
         self.eventStartDay.alpha = eventStartAlpha;
@@ -273,21 +273,21 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     Event *event = [DataRepository instance].state.activeEvent;
 
-	if ([keyPath isEqualToString:@"startDate"]) {
-		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
+    if ([keyPath isEqualToString:@"startDate"]) {
+        NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
         event.startDate = date;
 
-		[self updateStartLabelWithDate:date];
-	} else if ([keyPath isEqualToString:@"nowDate"]) {
-		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
+        [self updateStartLabelWithDate:date];
+    } else if ([keyPath isEqualToString:@"nowDate"]) {
+        NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
 
-		[self updateEventTimeWithDate:date];
-	} else if ([keyPath isEqualToString:@"stopDate"]) {
-		NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
+        [self updateEventTimeWithDate:date];
+    } else if ([keyPath isEqualToString:@"stopDate"]) {
+        NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
         event.stopDate = date;
 
-		[self updateStopLabelWithDate:date];
-	} else if ([keyPath isEqualToString:@"isTransforming"]) {
+        [self updateStopLabelWithDate:date];
+    } else if ([keyPath isEqualToString:@"isTransforming"]) {
         EventTimerTransformingEnum eventTimerTransformingEnum = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
         [self animateEventTransforming:eventTimerTransformingEnum];
     }

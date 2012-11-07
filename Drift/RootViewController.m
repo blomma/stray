@@ -26,16 +26,16 @@
 }
 
 - (void)viewDidLoad {
-	// Do any additional setup after loading the view, typically from a nib.
-	[super viewDidLoad];
+    // Do any additional setup after loading the view, typically from a nib.
+    [super viewDidLoad];
 
     self.dataModel = @[
-    [self.storyboard instantiateViewControllerWithIdentifier:@"EventViewController"],
-    [self.storyboard instantiateViewControllerWithIdentifier:@"EventGroupsTableViewController"]
-    ];
+        [self.storyboard instantiateViewControllerWithIdentifier:@"EventViewController"],
+        [self.storyboard instantiateViewControllerWithIdentifier:@"EventGroupsTableViewController"]
+        ];
 
     self.dataSource = self;
-    self.delegate = self;
+    self.delegate   = self;
 
     [self setViewControllers:@[[self.dataModel objectAtIndex:0]]
                    direction:UIPageViewControllerNavigationDirectionForward
@@ -47,8 +47,8 @@
     [super viewDidAppear:animated];
 
     // Try and set the background of the pagecontroller if one is present
-    self.pageControl.backgroundColor = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
-    self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:0.267 alpha:0.2];
+    self.pageControl.backgroundColor               = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
+    self.pageControl.pageIndicatorTintColor        = [UIColor colorWithWhite:0.267 alpha:0.2];
     self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithWhite:0.267 alpha:0.8];
 }
 

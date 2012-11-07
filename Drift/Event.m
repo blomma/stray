@@ -10,7 +10,7 @@
         return NSOrderedDescending;
     }
 
-	return [[element startDate] compare:[self startDate]];
+    return [[element startDate] compare:[self startDate]];
 }
 
 - (BOOL)isActive {

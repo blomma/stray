@@ -8,7 +8,6 @@
 
 #import "CAAnimation+Blocks.h"
 
-
 @interface CAAnimationDelegate : NSObject
 
 @property (nonatomic, copy) void (^completion)(BOOL);
@@ -21,14 +20,11 @@
 
 @implementation CAAnimationDelegate
 
-//@synthesize completion=_completion;
-//@synthesize start=_start;
-
 - (id)init {
     self = [super init];
     if (self) {
         self.completion = nil;
-        self.start = nil;
+        self.start      = nil;
     }
 
     return self;
@@ -36,7 +32,7 @@
 
 - (void)dealloc {
     self.completion = nil;
-    self.start = nil;
+    self.start      = nil;
 }
 
 - (void)animationDidStart:(CAAnimation *)anim {
@@ -53,18 +49,16 @@
 
 @end
 
-
 @implementation CAAnimation (BlocksAddition)
 
-- (void)setCompletion:(void(^)(BOOL))completion {
-        if ([self.delegate isKindOfClass:[CAAnimationDelegate class]]) {
-            ((CAAnimationDelegate *)self.delegate).completion = completion;
-        }
-        else {
-            CAAnimationDelegate *delegate = [[CAAnimationDelegate alloc] init];
-            delegate.completion = completion;
-            self.delegate = delegate;
-        }
+- (void)setCompletion:(void (^)(BOOL))completion {
+    if ([self.delegate isKindOfClass:[CAAnimationDelegate class]]) {
+        ((CAAnimationDelegate *)self.delegate).completion = completion;
+    } else {
+        CAAnimationDelegate *delegate = [[CAAnimationDelegate alloc] init];
+        delegate.completion = completion;
+        self.delegate       = delegate;
+    }
 }
 
 - (void (^)(BOOL))completion {
@@ -72,14 +66,13 @@
 }
 
 - (void)setStart:(void (^)(void))start {
-        if ([self.delegate isKindOfClass:[CAAnimationDelegate class]]) {
-            ((CAAnimationDelegate *)self.delegate).start = start;
-        }
-        else {
-            CAAnimationDelegate *delegate = [[CAAnimationDelegate alloc] init];
-            delegate.start = start;
-            self.delegate = delegate;
-        }
+    if ([self.delegate isKindOfClass:[CAAnimationDelegate class]]) {
+        ((CAAnimationDelegate *)self.delegate).start = start;
+    } else {
+        CAAnimationDelegate *delegate = [[CAAnimationDelegate alloc] init];
+        delegate.start = start;
+        self.delegate  = delegate;
+    }
 }
 
 - (void (^)(void))start {

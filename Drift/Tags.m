@@ -18,7 +18,7 @@
 @implementation Tags
 
 - (id)init {
-	return [self initWithTags:[NSArray array]];
+    return [self initWithTags:[NSArray array]];
 }
 
 // ==========================
@@ -26,28 +26,28 @@
 // ==========================
 - (id)initWithTags:(NSArray *)tags {
     self = [super init];
-	if (self) {
+    if (self) {
         self.tags = [[NSMutableOrderedSet alloc] initWithArray:[tags
-                                                                sortedArrayWithOptions:NSSortConcurrent
-                                                                usingComparator:^NSComparisonResult(id obj1, id obj2) {
-                                                                    if ([obj1 sortIndex].integerValue < [obj2 sortIndex].integerValue) {
-                                                                        return NSOrderedAscending;
-                                                                    } else if ([obj1 sortIndex].integerValue > [obj2 sortIndex].integerValue) {
-                                                                        return NSOrderedDescending;
-                                                                    } else {
-                                                                        return NSOrderedSame;
-                                                                    }
-                                                                }]];
-	}
+            sortedArrayWithOptions:NSSortConcurrent
+                   usingComparator:^NSComparisonResult (id obj1, id obj2) {
+                if ([obj1 sortIndex].integerValue < [obj2 sortIndex].integerValue) {
+                    return NSOrderedAscending;
+                } else if ([obj1 sortIndex].integerValue > [obj2 sortIndex].integerValue) {
+                    return NSOrderedDescending;
+                } else {
+                    return NSOrderedSame;
+                }
+            }]];
+    }
 
-	return self;
+    return self;
 }
 
 #pragma mark -
 #pragma mark Public properties
 
 - (NSUInteger)count {
-	return self.tags.count;
+    return self.tags.count;
 }
 
 #pragma mark -

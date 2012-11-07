@@ -9,14 +9,14 @@
 #import "NoHitCAShapeLayer.h"
 
 typedef enum {
-    InnerShadowMaskNone       = 0,
-    InnerShadowMaskTop        = 1 << 1,
-    InnerShadowMaskBottom     = 1 << 2,
-    InnerShadowMaskLeft       = 1 << 3,
-    InnerShadowMaskRight      = 1 << 4,
-    InnerShadowMaskVertical   = InnerShadowMaskTop | InnerShadowMaskBottom,
-    InnerShadowMaskHorizontal = InnerShadowMaskLeft | InnerShadowMaskRight,
-    InnerShadowMaskAll        = InnerShadowMaskVertical | InnerShadowMaskHorizontal
+    InnerShadowMaskNone           = 0,
+    InnerShadowMaskTop            = 1 << 1,
+        InnerShadowMaskBottom     = 1 << 2,
+        InnerShadowMaskLeft       = 1 << 3,
+        InnerShadowMaskRight      = 1 << 4,
+        InnerShadowMaskVertical   = InnerShadowMaskTop | InnerShadowMaskBottom,
+        InnerShadowMaskHorizontal = InnerShadowMaskLeft | InnerShadowMaskRight,
+        InnerShadowMaskAll        = InnerShadowMaskVertical | InnerShadowMaskHorizontal
 } InnerShadowMask;
 
 //

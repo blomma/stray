@@ -22,7 +22,7 @@
 @implementation Events
 
 - (id)init {
-	return [self initWithEvents:[NSArray array]];
+    return [self initWithEvents:[NSArray array]];
 }
 
 // ==========================
@@ -30,14 +30,14 @@
 // ==========================
 - (id)initWithEvents:(NSArray *)events {
     self = [super init];
-	if (self) {
+    if (self) {
         self.events = [[NSMutableSet alloc] initWithArray:events];
 
-		self.filteredEvents = [NSMutableOrderedSet orderedSet];
+        self.filteredEvents          = [NSMutableOrderedSet orderedSet];
         self.isFilteredEventsInvalid = YES;
-	}
+    }
 
-	return self;
+    return self;
 }
 
 #pragma mark -
@@ -48,8 +48,8 @@
 }
 
 - (void)setFilters:(NSSet *)filters {
-    _filters = filters;
-	self.isFilteredEventsInvalid = YES;
+    _filters                     = filters;
+    self.isFilteredEventsInvalid = YES;
 }
 
 - (NSMutableOrderedSet *)filteredEvents {
@@ -59,10 +59,10 @@
             [_filteredEvents unionSet:self.events];
         } else {
             [_filteredEvents unionSet:[self.events filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"inTag in %@",
-                                                                              self.filters]]];
+            self.filters]]];
         }
 
-        [_filteredEvents sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        [_filteredEvents sortUsingComparator:^NSComparisonResult (id obj1, id obj2) {
             return [[obj2 startDate] compare:[obj1 startDate]];
         }];
 

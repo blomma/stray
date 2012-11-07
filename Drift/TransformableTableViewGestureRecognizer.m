@@ -44,7 +44,7 @@ static NSInteger kCellSnapShotTag = 100000;
     CGPoint location = [self.longPressRecognizer locationInView:self.tableView];
 
     CGPoint currentOffset = self.tableView.contentOffset;
-    CGPoint newOffset = CGPointMake(currentOffset.x, currentOffset.y + self.scrollingRate);
+    CGPoint newOffset     = CGPointMake(currentOffset.x, currentOffset.y + self.scrollingRate);
     if (newOffset.y < 0) {
         newOffset.y = 0;
     } else if (self.tableView.contentSize.height < self.tableView.frame.size.height) {
@@ -57,7 +57,7 @@ static NSInteger kCellSnapShotTag = 100000;
     if (fabs(currentOffset.y) != fabs(newOffset.y)) {
         [self.tableView setContentOffset:newOffset];
 
-        UIImageView *cellSnapshotView = (id)[self.tableView viewWithTag:kCellSnapShotTag];
+        UIImageView *cellSnapshotView = (id)[self.tableView viewWithTag : kCellSnapShotTag];
         cellSnapshotView.center = CGPointMake(self.tableView.center.x, location.y);
     }
 }
@@ -73,19 +73,19 @@ static NSInteger kCellSnapShotTag = 100000;
         if (!indexPath) {
             CGPoint location = [recognizer locationOfTouch:0 inView:self.tableView];
 
-            indexPath = [self.tableView indexPathForRowAtPoint:location];
+            indexPath               = [self.tableView indexPathForRowAtPoint:location];
             self.transformIndexPath = indexPath;
         }
 
         self.editingCellState = translation.x >= 0 ? TransformableTableViewCellEditingStateRight : TransformableTableViewCellEditingStateLeft;
-        self.state = TableViewGestureRecognizerStatePanning;
+        self.state            = TableViewGestureRecognizerStatePanning;
 
         if ([self.delegate respondsToSelector:@selector(gestureRecognizer:didEnterEditingState:forRowAtIndexPath:)]) {
             [self.delegate gestureRecognizer:self didEnterEditingState:self.editingCellState forRowAtIndexPath:indexPath];
         }
     } else if (recognizer.state == UIGestureRecognizerStateChanged) {
         NSIndexPath *indexPath = self.transformIndexPath;
-        CGPoint translation = [recognizer translationInView:self.tableView];
+        CGPoint translation    = [recognizer translationInView:self.tableView];
         self.translationInTableView = translation;
 
         CGFloat commitEditingLength = kCommitEditingRowDefaultLength;
@@ -123,7 +123,7 @@ static NSInteger kCellSnapShotTag = 100000;
         }
 
         self.editingCellState = TransformableTableViewCellEditingStateNone;
-        self.state = TableViewGestureRecognizerStateNone;
+        self.state            = TableViewGestureRecognizerStateNone;
     }
 }
 
@@ -144,7 +144,7 @@ static NSInteger kCellSnapShotTag = 100000;
             UIImage *cellImage = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
 
-            snapShotView = [[UIImageView alloc] initWithImage:cellImage];
+            snapShotView     = [[UIImageView alloc] initWithImage:cellImage];
             snapShotView.tag = kCellSnapShotTag;
 
             [self.tableView addSubview:snapShotView];
@@ -164,12 +164,12 @@ static NSInteger kCellSnapShotTag = 100000;
         self.transformIndexPath = indexPath;
 
         // Start timer to prep	are for auto scrolling
-        self.movingTimer = [NSTimer timerWithTimeInterval:1/8 target:self selector:@selector(scrollTable) userInfo:nil repeats:YES];
+        self.movingTimer = [NSTimer timerWithTimeInterval:1 / 8 target:self selector:@selector(scrollTable) userInfo:nil repeats:YES];
         [[NSRunLoop mainRunLoop] addTimer:self.movingTimer forMode:NSDefaultRunLoopMode];
     } else if (recognizer.state == UIGestureRecognizerStateEnded) {
         // While long press ends, we remove the snapshot imageView
 
-        __block __weak UIImageView *snapShotView = (UIImageView *)[self.tableView viewWithTag:kCellSnapShotTag];
+        __block __weak UIImageView *snapShotView                         = (UIImageView *)[self.tableView viewWithTag:kCellSnapShotTag];
         __block __weak TransformableTableViewGestureRecognizer *weakSelf = self;
 
         // We use self.addingIndexPath directly to make sure we dropped on a valid indexPath
@@ -178,26 +178,26 @@ static NSInteger kCellSnapShotTag = 100000;
 
         // Stop timer
         [self.movingTimer invalidate];
-        self.movingTimer = nil;
+        self.movingTimer   = nil;
         self.scrollingRate = 0;
 
         [UIView animateWithDuration:kAddingAnimationDuration
                          animations:^{
-                             CGRect rect = [weakSelf.tableView rectForRowAtIndexPath:weakAddingIndexPath];
-                             snapShotView.transform = CGAffineTransformIdentity;    // restore the transformed value
-                             snapShotView.frame = CGRectOffset(snapShotView.bounds, rect.origin.x, rect.origin.y);
-                             snapShotView.alpha = 1;
-                         } completion:^(BOOL finished) {
-                             [snapShotView removeFromSuperview];
+            CGRect rect = [weakSelf.tableView rectForRowAtIndexPath:weakAddingIndexPath];
+            snapShotView.transform = CGAffineTransformIdentity;                     // restore the transformed value
+            snapShotView.frame = CGRectOffset(snapShotView.bounds, rect.origin.x, rect.origin.y);
+            snapShotView.alpha = 1;
+        } completion:^(BOOL finished) {
+            [snapShotView removeFromSuperview];
 
-                             [weakSelf.delegate gestureRecognizer:weakSelf needsReplacePlaceholderForRowAtIndexPath:weakAddingIndexPath];
+            [weakSelf.delegate gestureRecognizer:weakSelf needsReplacePlaceholderForRowAtIndexPath:weakAddingIndexPath];
 
-                             // Update state and clear instance variables
-                             weakSelf.transformIndexPath = nil;
-                             weakSelf.state = TableViewGestureRecognizerStateNone;
-                         }];
+            // Update state and clear instance variables
+            weakSelf.transformIndexPath = nil;
+            weakSelf.state = TableViewGestureRecognizerStateNone;
+        }];
     } else if (recognizer.state == UIGestureRecognizerStateChanged) {
-        NSIndexPath *indexPath  = [self.tableView indexPathForRowAtPoint:location];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:location];
 
         // While our finger moves, we also moves the snapshot imageView
         UIImageView *snapShotView = (UIImageView *)[self.tableView viewWithTag:kCellSnapShotTag];
@@ -214,7 +214,7 @@ static NSInteger kCellSnapShotTag = 100000;
 
         CGFloat bottomDropZoneHeight = self.tableView.bounds.size.height / 6;
         CGFloat topDropZoneHeight    = bottomDropZoneHeight;
-        CGFloat bottomDiff = location.y - (rect.size.height - bottomDropZoneHeight);
+        CGFloat bottomDiff           = location.y - (rect.size.height - bottomDropZoneHeight);
         if (bottomDiff > 0) {
             self.scrollingRate = bottomDiff / (bottomDropZoneHeight / 1);
         } else if (location.y <= topDropZoneHeight) {
@@ -231,8 +231,8 @@ static NSInteger kCellSnapShotTag = 100000;
     if (gestureRecognizer == self.panRecognizer) {
         UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
 
-        CGPoint point = [pan translationInView:self.tableView];
-        CGPoint location = [pan locationInView:self.tableView];
+        CGPoint point          = [pan translationInView:self.tableView];
+        CGPoint location       = [pan locationInView:self.tableView];
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:location];
 
         // The pan gesture recognizer will fail the original scrollView scroll
@@ -247,7 +247,7 @@ static NSInteger kCellSnapShotTag = 100000;
             return canEditRow;
         }
     } else if (gestureRecognizer == self.longPressRecognizer) {
-        CGPoint location = [gestureRecognizer locationInView:self.tableView];
+        CGPoint location       = [gestureRecognizer locationInView:self.tableView];
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:location];
 
         if (indexPath) {
@@ -265,8 +265,8 @@ static NSInteger kCellSnapShotTag = 100000;
 
 + (TransformableTableViewGestureRecognizer *)gestureRecognizerWithTableView:(UITableView *)tableView delegate:(id)delegate {
     TransformableTableViewGestureRecognizer *recognizer = [[TransformableTableViewGestureRecognizer alloc] init];
-    recognizer.delegate          = delegate;
-    recognizer.tableView         = tableView;
+    recognizer.delegate  = delegate;
+    recognizer.tableView = tableView;
 
     if ([delegate conformsToProtocol:@protocol(TransformableTableViewGestureEditingRowDelegate)]) {
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:recognizer action:@selector(panGestureRecognizer:)];
@@ -286,7 +286,6 @@ static NSInteger kCellSnapShotTag = 100000;
 }
 
 @end
-
 
 @implementation UITableView (TableViewGestureDelegate)
 
@@ -308,7 +307,7 @@ static NSInteger kCellSnapShotTag = 100000;
         recognizer.longPressRecognizer = nil;
     }
 
-    recognizer.delegate = nil;
+    recognizer.delegate  = nil;
     recognizer.tableView = nil;
 }
 

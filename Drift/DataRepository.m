@@ -25,10 +25,10 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
     self = [super init];
     if (self) {
 
-        self.state = [UIState where:@{ @"name" : @"default" }].first;
+        self.state = [UIState where:@{ @"name":@"default" }].first;
 
         if (!self.state) {
-            self.state = [UIState create];
+            self.state      = [UIState create];
             self.state.name = @"default";
         }
 
@@ -38,7 +38,7 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 //
 //            Tag *tag = [Tag create];
 //            tag.name = @"Test1";
-//            
+//
 //            for (int i = 0; i < 1000; i++) {
 //                Event *event = [Event create];
 //                event.startDate = nowDate;
@@ -80,8 +80,7 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 }
 
 - (NSArray *)events {
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
-                                        initWithKey:@"startDate" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
     return [Event where:nil
               inContext:[NSManagedObjectContext defaultContext]
     withSortDescriptors:@[sortDescriptor]];
@@ -91,13 +90,13 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 #pragma mark Class methods
 
 + (DataRepository *)instance {
-	static DataRepository *sharedDataManager = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		sharedDataManager = [[self alloc] init];
-	});
+    static DataRepository *sharedDataManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+            sharedDataManager = [[self alloc] init];
+        });
 
-	return sharedDataManager;
+    return sharedDataManager;
 }
 
 #pragma mark -

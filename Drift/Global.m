@@ -13,7 +13,7 @@
 - (id)init {
     self = [super init];
     if (self) {
-        self.calendar  = [NSCalendar autoupdatingCurrentCalendar];
+        self.calendar = [NSCalendar autoupdatingCurrentCalendar];
     }
 
     return self;
@@ -23,13 +23,13 @@
 #pragma mark Class methods
 
 + (Global *)instance {
-	static Global *sharedGlobal = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		sharedGlobal = [[self alloc] init];
-	});
+    static Global *sharedGlobal = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+            sharedGlobal = [[self alloc] init];
+        });
 
-	return sharedGlobal;
+    return sharedGlobal;
 }
 
 @end

@@ -13,16 +13,16 @@
 - (id)init {
     self = [super init];
     if (self) {
-        self.masksToBounds = YES;
+        self.masksToBounds              = YES;
         self.needsDisplayOnBoundsChange = YES;
-        
+
         [self setShadowColor:[[UIColor colorWithWhite:0 alpha:1] CGColor]];
         [self setShadowOffset:CGSizeMake(0.0f, 0.0f)];
         [self setShadowOpacity:1.0f];
         [self setShadowRadius:5];
 
         [self setFillRule:kCAFillRuleEvenOdd];
-        
+
         self.shadowMask = InnerShadowMaskAll;
     }
 
@@ -31,17 +31,17 @@
 
 - (void)layoutSublayers {
     [super layoutSublayers];
-    
-    CGFloat top = (self.shadowMask & InnerShadowMaskTop ? self.shadowRadius : 0);
+
+    CGFloat top    = (self.shadowMask & InnerShadowMaskTop ? self.shadowRadius : 0);
     CGFloat bottom = (self.shadowMask & InnerShadowMaskBottom ? self.shadowRadius : 0);
-    CGFloat left = (self.shadowMask & InnerShadowMaskLeft ? self.shadowRadius : 0);
-    CGFloat right = (self.shadowMask & InnerShadowMaskRight ? self.shadowRadius : 0);
-    
+    CGFloat left   = (self.shadowMask & InnerShadowMaskLeft ? self.shadowRadius : 0);
+    CGFloat right  = (self.shadowMask & InnerShadowMaskRight ? self.shadowRadius : 0);
+
     CGRect largerRect = CGRectMake(self.bounds.origin.x - left,
-                                   self.bounds.origin.y - top,
-                                   self.bounds.size.width + left + right,
-                                   self.bounds.size.height + top + bottom);
-    
+            self.bounds.origin.y - top,
+            self.bounds.size.width + left + right,
+            self.bounds.size.height + top + bottom);
+
     // Create the larger rectangle path.
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddRect(path, NULL, largerRect);
@@ -49,7 +49,7 @@
     // Add the inner path so it's subtracted from the outer path.
     CGPathAddPath(path, NULL, [UIBezierPath bezierPathWithRect:self.bounds].CGPath);
     CGPathCloseSubpath(path);
-    
+
     [self setPath:path];
     CGPathRelease(path);
 }

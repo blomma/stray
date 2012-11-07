@@ -10,7 +10,7 @@
 
 @class SVPullingView;
 
-typedef NS_ENUM(NSUInteger, SVPullingState) {
+typedef NS_ENUM (NSUInteger, SVPullingState) {
     SVPullingStateStopped = 0,
     SVPullingStateTriggeredAdd,
     SVPullingStateTriggeredClose,
@@ -20,7 +20,7 @@ typedef NS_ENUM(NSUInteger, SVPullingState) {
 
 @interface UIScrollView (SVPulling)
 
-- (void)addPullingWithActionHandler:(void (^)(SVPullingState state, CGFloat height))actionHandler;
+- (void)addPullingWithActionHandler:(void (^) (SVPullingState state, CGFloat height))actionHandler;
 - (void)disablePulling;
 
 @property (nonatomic, readonly) SVPullingView *pullingView;

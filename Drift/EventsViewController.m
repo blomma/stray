@@ -50,17 +50,17 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.calendar = [Global instance].calendar;
+    self.calendar                    = [Global instance].calendar;
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
 
     self.state = [DataRepository instance].state;
 
-    self.tags = [DataRepository instance].tags;
+    self.tags          = [DataRepository instance].tags;
     self.isTagsInvalid = YES;
 
     [self initFilterView];
 
-    self.events = [[Events alloc] initWithEvents:[DataRepository instance].events];
+    self.events          = [[Events alloc] initWithEvents:[DataRepository instance].events];
     self.isEventsInvalid = YES;
 
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
@@ -69,7 +69,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
     [self.tableView addPullingWithActionHandler:^(SVPullingState state, CGFloat height) {
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 200000000);
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
             if (state == SVPullingStateTriggeredClose) {
                 if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
                     [weakSelf.delegate eventsViewControllerDidDimiss:weakSelf];
@@ -78,13 +78,13 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
         });
     }];
 
-    self.tableView.pullingView.addingHeight = 0;
+    self.tableView.pullingView.addingHeight  = 0;
     self.tableView.pullingView.closingHeight = 60;
 
-	[[NSNotificationCenter defaultCenter] addObserver:self
-	                                         selector:@selector(objectsDidChange:)
-	                                             name:kDataManagerObjectsDidChangeNotification
-	                                           object:[DataRepository instance]];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(objectsDidChange:)
+                                                 name:kDataManagerObjectsDidChangeNotification
+                                               object:[DataRepository instance]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -106,7 +106,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    CGFloat y = self.isFilterViewVisible ? 0 : -30;
+    CGFloat y    = self.isFilterViewVisible ? 0 : -30;
     CGRect frame = CGRectMake(0, y, self.view.bounds.size.width, 30);
 
     [UIView animateWithDuration:0.3 animations:^{
@@ -137,7 +137,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
         [[segue destinationViewController] setDelegate:self];
 
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        Event *event = [self.events.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
+        Event *event           = [self.events.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
 
         if ([[segue destinationViewController] respondsToSelector:@selector(event)]) {
             [[segue destinationViewController] setEvent:event];
@@ -161,7 +161,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
 - (Events *)events {
     if (self.isEventsInvalid) {
-        _events.filters = self.state.eventsFilter;
+        _events.filters      = self.state.eventsFilter;
         self.isEventsInvalid = NO;
     }
 
@@ -214,7 +214,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 #pragma mark EventTableViewCellDelegate
 
 - (void)cell:(UITableViewCell *)cell tappedTagButton:(UIButton *)sender forEvent:(UIEvent *)event {
-   [self performSegueWithIdentifier:@"segueToTagsFromEvents" sender:cell];
+    [self performSegueWithIdentifier:@"segueToTagsFromEvents" sender:cell];
 }
 
 #pragma mark -
@@ -233,7 +233,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     [cell.layer removeAllAnimations];
 
     if (!cell.backgroundView) {
-        cell.backgroundView = [[UIView alloc] initWithFrame:cell.contentView.frame];
+        cell.backgroundView                 = [[UIView alloc] initWithFrame:cell.contentView.frame];
         cell.backgroundView.backgroundColor = [UIColor colorWithRed:0.843f
                                                               green:0.306f
                                                                blue:0.314f
@@ -247,7 +247,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     }
 
     EventTableViewCell *cell = (EventTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
-    CGFloat alpha = 1 - (gestureRecognizer.translationInTableView.x / self.editingCommitLength);
+    CGFloat alpha            = 1 - (gestureRecognizer.translationInTableView.x / self.editingCommitLength);
     cell.contentView.alpha = alpha;
 
     CGPoint point = CGPointMake(CGRectGetMidX(cell.layer.bounds) + gestureRecognizer.translationInTableView.x, cell.layer.position.y);
@@ -272,8 +272,8 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
     EventTableViewCell *cell = (EventTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
-    CGPoint fromValue = cell.layer.position;
-    CGPoint toValue = CGPointMake(CGRectGetMidX(cell.layer.bounds), fromValue.y);
+    CGPoint fromValue        = cell.layer.position;
+    CGPoint toValue          = CGPointMake(CGRectGetMidX(cell.layer.bounds), fromValue.y);
 
     cell.contentView.alpha = 1;
 
@@ -300,7 +300,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 1;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -319,7 +319,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
     // StartTime
     static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
-    NSDateComponents *components = [self.calendar components:unitFlagsEventStart fromDate:event.startDate];
+    NSDateComponents *components          = [self.calendar components:unitFlagsEventStart fromDate:event.startDate];
 
     cell.eventStartTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
     cell.eventStartDay.text   = [NSString stringWithFormat:@"%02d", components.day];
@@ -327,7 +327,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     cell.eventStartMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
 
     // EventTime
-    NSDate *stopDate = event.stopDate ? event.stopDate : [NSDate date];
+    NSDate *stopDate                     = event.stopDate ? event.stopDate : [NSDate date];
     static NSUInteger unitFlagsEventTime = NSHourCalendarUnit | NSMinuteCalendarUnit;
     components = [self.calendar components:unitFlagsEventTime fromDate:event.startDate toDate:stopDate options:0];
 
@@ -366,19 +366,19 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     // ========
     // = Tags =
     // ========
-    NSSet *updatedTags = [updatedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [obj isKindOfClass:[Tag class]];
-    }];
+    NSSet *updatedTags = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+            return [obj isKindOfClass:[Tag class]];
+        }];
 
-    NSSet *insertedTags = [insertedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [obj isKindOfClass:[Tag class]];
-    }];
+    NSSet *insertedTags = [insertedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+            return [obj isKindOfClass:[Tag class]];
+        }];
 
     [self.tags addObjectsFromArray:[insertedTags allObjects]];
 
-    NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [obj isKindOfClass:[Tag class]];
-    }];
+    NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+            return [obj isKindOfClass:[Tag class]];
+        }];
 
     [self.tags removeObjectsInArray:[deletedTags allObjects]];
 
@@ -417,7 +417,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     self.filterViewButtons = [NSMutableArray array];
 
     self.filterView.showsHorizontalScrollIndicator = NO;
-    self.filterView.backgroundColor = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:0.90];
+    self.filterView.backgroundColor                = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:0.90];
 
     UIColor *colorOne = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:0.3f];
     UIColor *colorTwo = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:1];
@@ -426,19 +426,19 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
     NSArray *locations = @[@0.0, @0.4, @0.6, @1.0];
 
-    CAGradientLayer *tick = [CAGradientLayer layer];
-    tick.colors = colors;
-    tick.locations = locations;
-    tick.startPoint = CGPointMake(0, 0.5);
-    tick.endPoint = CGPointMake(1.0, 0.5);
+    CAGradientLayer *barrier = [CAGradientLayer layer];
+    barrier.colors     = colors;
+    barrier.locations  = locations;
+    barrier.startPoint = CGPointMake(0, 0.5);
+    barrier.endPoint   = CGPointMake(1.0, 0.5);
 
-    tick.bounds      = CGRectMake(0, 0, self.filterView.layer.bounds.size.width, 1);
+    barrier.bounds = CGRectMake(0, 0, self.filterView.layer.bounds.size.width, 1);
     CGPoint position = self.filterView.layer.position;
-    position.y += 15;
-    tick.position    = position;
-    tick.anchorPoint = self.filterView.layer.anchorPoint;
+    position.y         += 15;
+    barrier.position    = position;
+    barrier.anchorPoint = self.filterView.layer.anchorPoint;
 
-    [self.filterView.layer addSublayer:tick];
+    [self.filterView.layer addSublayer:barrier];
 }
 
 - (void)setupFilterView {
@@ -460,18 +460,18 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
     // define number and size of elements
     NSUInteger numElements = self.tags.count;
-    CGSize elementSize = CGSizeMake(120, self.filterView.frame.size.height);
+    CGSize elementSize     = CGSizeMake(120, self.filterView.frame.size.height);
 
     // add elements
     for (NSUInteger i = 0; i < numElements; i++) {
         Tag *tag = [self.tags objectAtIndex:i];
 
-        TagButton* tagButton = [TagButton buttonWithType:UIButtonTypeCustom];
+        TagButton *tagButton = [TagButton buttonWithType:UIButtonTypeCustom];
         tagButton.tagObject = tag;
         [tagButton addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 
         //tagButton.titleLabel.textAlignment = NSTextAlignmentCenter;
-        tagButton.titleLabel.font = [UIFont fontWithName:@"Futura-Medium" size:15];
+        tagButton.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:15];
         tagButton.titleLabel.backgroundColor = [UIColor clearColor];
 
         tagButton.backgroundColor = [UIColor clearColor];
@@ -495,23 +495,23 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
     // set the size of the scrollview's content
     self.filterView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
-    
-    self.isTagsInvalid = NO;
+
+    self.isTagsInvalid   = NO;
     self.isEventsInvalid = YES;
 }
 
-- (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration completion:(void (^)(BOOL finished))completion{
+- (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration completion:(void (^)(BOOL finished))completion {
     static NSString *keyPath = @"position";
 
-	SKBounceAnimation *positionAnimation = [SKBounceAnimation animationWithKeyPath:keyPath];
-	positionAnimation.fromValue = [NSValue valueWithCGPoint:from];
-	positionAnimation.toValue = [NSValue valueWithCGPoint:to];
-	positionAnimation.duration = duration;
-	positionAnimation.numberOfBounces = 4;
-    positionAnimation.completion = completion;
+    SKBounceAnimation *positionAnimation = [SKBounceAnimation animationWithKeyPath:keyPath];
+    positionAnimation.fromValue       = [NSValue valueWithCGPoint:from];
+    positionAnimation.toValue         = [NSValue valueWithCGPoint:to];
+    positionAnimation.duration        = duration;
+    positionAnimation.numberOfBounces = 4;
+    positionAnimation.completion      = completion;
 
-	[layer addAnimation:positionAnimation forKey:keyPath];
-	[layer setValue:[NSValue valueWithCGPoint:to] forKeyPath:keyPath];
+    [layer addAnimation:positionAnimation forKey:keyPath];
+    [layer setValue:[NSValue valueWithCGPoint:to] forKeyPath:keyPath];
 }
 
 @end

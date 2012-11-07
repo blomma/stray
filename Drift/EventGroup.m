@@ -40,20 +40,20 @@
 // ==========================
 - (id)initWithGroupDate:(NSDate *)groupDate {
     self = [super init];
-	if (self) {
+    if (self) {
         self.calendar = [Global instance].calendar;
 
-		self.groupDate = groupDate;
+        self.groupDate = groupDate;
 
-		self.events    = [NSMutableSet set];
-		self.filteredEvents    = [NSMutableSet set];
+        self.events                  = [NSMutableSet set];
+        self.filteredEvents          = [NSMutableSet set];
         self.isFilteredEventsInvalid = YES;
 
-		self.filteredEventsDateComponents = [[NSDateComponents alloc] init];
+        self.filteredEventsDateComponents          = [[NSDateComponents alloc] init];
         self.isFilteredEventsDateComponentsInvalid = YES;
-	}
+    }
 
-	return self;
+    return self;
 }
 
 #pragma mark -
@@ -64,11 +64,11 @@
 }
 
 - (NSDateComponents *)filteredEventsDateComponents {
-	if (self.activeEvent || self.isFilteredEventsDateComponentsInvalid) {
-		[self updateFilteredEventsDateComponents];
-	}
+    if (self.activeEvent || self.isFilteredEventsDateComponentsInvalid) {
+        [self updateFilteredEventsDateComponents];
+    }
 
-	return _filteredEventsDateComponents;
+    return _filteredEventsDateComponents;
 }
 
 - (Event *)activeEvent {
@@ -80,8 +80,8 @@
 }
 
 - (void)setFilters:(NSSet *)filters {
-    _filters = filters;
-	self.isFilteredEventsInvalid = YES;
+    _filters                     = filters;
+    self.isFilteredEventsInvalid = YES;
 }
 
 - (NSMutableSet *)filteredEvents {
@@ -91,10 +91,10 @@
             [_filteredEvents unionSet:self.events];
         } else {
             [_filteredEvents unionSet:[self.events filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"inTag in %@",
-                                                                              self.filters]]];
+            self.filters]]];
         }
 
-        self.isFilteredEventsInvalid = NO;
+        self.isFilteredEventsInvalid               = NO;
         self.isFilteredEventsDateComponentsInvalid = YES;
     }
 
@@ -105,11 +105,11 @@
 #pragma mark Public methods
 
 - (BOOL)containsEvent:(Event *)event {
-	return [self.events containsObject:event];
+    return [self.events containsObject:event];
 }
 
 - (void)addEvent:(Event *)event {
-	[self.events addObject:event];
+    [self.events addObject:event];
 
     self.isActiveEventInvalid = YES;
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
@@ -139,38 +139,38 @@
 - (void)updateActiveEvent {
     self.activeEvent = nil;
 
-	for (Event *event in self.events) {
-		if ([event isActive]) {
+    for (Event *event in self.events) {
+        if ([event isActive]) {
             self.activeEvent = event;
             return;
-		}
-	}
+        }
+    }
 }
 
 - (void)updateFilteredEventsDateComponents {
-	static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+    static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
 
-	NSDate *endOfDay = [self.groupDate endOfDayWithCalendar:self.calendar];
+    NSDate *endOfDay = [self.groupDate endOfDayWithCalendar:self.calendar];
 
-	NSDate *deltaStart = [self.groupDate copy];
-	NSDate *deltaEnd   = [self.groupDate copy];
+    NSDate *deltaStart = [self.groupDate copy];
+    NSDate *deltaEnd   = [self.groupDate copy];
 
-	for (Event *event in self.filteredEvents) {
-		NSDate *startDate = [event.startDate laterDate:self.groupDate];
-		NSDate *stopDate = [event isActive] ? [NSDate date] : event.stopDate;
-		stopDate = [stopDate earlierDate:endOfDay];
+    for (Event *event in self.filteredEvents) {
+        NSDate *startDate = [event.startDate laterDate:self.groupDate];
+        NSDate *stopDate  = [event isActive] ? [NSDate date] : event.stopDate;
+        stopDate = [stopDate earlierDate:endOfDay];
 
-		NSDateComponents *components = [self.calendar components:unitFlags
+        NSDateComponents *components = [self.calendar components:unitFlags
                                                         fromDate:startDate
                                                           toDate:stopDate
                                                          options:NSWrapCalendarComponents];
 
-		deltaEnd = [self.calendar dateByAddingComponents:components
+        deltaEnd = [self.calendar dateByAddingComponents:components
                                                   toDate:deltaEnd
                                                  options:0];
-	}
+    }
 
-	self.filteredEventsDateComponents = [self.calendar components:unitFlags
+    self.filteredEventsDateComponents = [self.calendar components:unitFlags
                                                          fromDate:deltaStart
                                                            toDate:deltaEnd
                                                           options:0];

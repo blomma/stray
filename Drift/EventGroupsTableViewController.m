@@ -40,15 +40,15 @@
 @implementation EventGroupsTableViewController
 
 - (void)viewDidLoad {
-	[super viewDidLoad];
+    [super viewDidLoad];
 
-    self.calendar = [Global instance].calendar;
+    self.calendar                    = [Global instance].calendar;
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
-    self.standaloneWeekdaySymbols = [[NSDateFormatter new] standaloneWeekdaySymbols];
+    self.standaloneWeekdaySymbols    = [[NSDateFormatter new] standaloneWeekdaySymbols];
 
     self.state = [DataRepository instance].state;
 
-    self.tags = [DataRepository instance].tags;
+    self.tags          = [DataRepository instance].tags;
     self.isTagsInvalid = YES;
 
     [self initFilterView];
@@ -57,10 +57,10 @@
                                                withFilters:self.state.eventGroupsFilter];
     self.isEventGroupsInvalid = YES;
 
-	[[NSNotificationCenter defaultCenter] addObserver:self
-	                                         selector:@selector(objectsDidChange:)
-	                                             name:kDataManagerObjectsDidChangeNotification
-	                                           object:[DataRepository instance]];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(objectsDidChange:)
+                                                 name:kDataManagerObjectsDidChangeNotification
+                                               object:[DataRepository instance]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -76,7 +76,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    CGFloat y = self.isFilterViewVisible ? 0 : -30;
+    CGFloat y    = self.isFilterViewVisible ? 0 : -30;
     CGRect frame = CGRectMake(0, y, self.view.bounds.size.width, 30);
 
     [UIView animateWithDuration:0.3 animations:^{
@@ -91,13 +91,12 @@
     return self.tags.count > 0;
 }
 
-
 #pragma mark -
 #pragma mark Public properties
 
 - (EventGroups *)eventGroups {
     if (self.isEventGroupsInvalid) {
-        _eventGroups.filters = self.state.eventGroupsFilter;
+        _eventGroups.filters      = self.state.eventGroupsFilter;
         self.isEventGroupsInvalid = NO;
     }
 
@@ -143,7 +142,7 @@
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 1;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -151,26 +150,26 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *CellIdentifier = @"EventGroupTableViewCell";
+    static NSString *CellIdentifier = @"EventGroupTableViewCell";
 
     EventGroup *eventGroup = [self.eventGroups.filteredEventGroups objectAtIndex:(NSUInteger)indexPath.row];
 
-	EventGroupTableViewCell *cell = (EventGroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    EventGroupTableViewCell *cell = (EventGroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 
-	NSDateComponents *components = eventGroup.filteredEventsDateComponents;
+    NSDateComponents *components = eventGroup.filteredEventsDateComponents;
 
-	cell.hours.text   = [NSString stringWithFormat:@"%02d", components.hour];
-	cell.minutes.text = [NSString stringWithFormat:@"%02d", components.minute];
+    cell.hours.text   = [NSString stringWithFormat:@"%02d", components.hour];
+    cell.minutes.text = [NSString stringWithFormat:@"%02d", components.minute];
 
-	static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
-	components = [self.calendar components:unitFlags fromDate:eventGroup.groupDate];
+    static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
+    components = [self.calendar components:unitFlags fromDate:eventGroup.groupDate];
 
-	cell.day.text      = [NSString stringWithFormat:@"%02d", components.day];
-	cell.year.text     = [NSString stringWithFormat:@"%04d", components.year];
-	cell.month.text    = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
-    cell.weekDay.text  = [[self.standaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString];
-    
-	return cell;
+    cell.day.text     = [NSString stringWithFormat:@"%02d", components.day];
+    cell.year.text    = [NSString stringWithFormat:@"%04d", components.year];
+    cell.month.text   = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
+    cell.weekDay.text = [[self.standaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString];
+
+    return cell;
 }
 
 #pragma mark -
@@ -180,7 +179,7 @@
     self.filterViewButtons = [NSMutableArray array];
 
     self.filterView.showsHorizontalScrollIndicator = NO;
-    self.filterView.backgroundColor = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:0.90];
+    self.filterView.backgroundColor                = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:0.90];
 
     UIColor *colorOne = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:0.3f];
     UIColor *colorTwo = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:1];
@@ -190,14 +189,14 @@
     NSArray *locations = @[@0.0, @0.4, @0.6, @1.0];
 
     CAGradientLayer *barrier = [CAGradientLayer layer];
-    barrier.colors = colors;
-    barrier.locations = locations;
+    barrier.colors     = colors;
+    barrier.locations  = locations;
     barrier.startPoint = CGPointMake(0, 0.5);
-    barrier.endPoint = CGPointMake(1.0, 0.5);
+    barrier.endPoint   = CGPointMake(1.0, 0.5);
 
-    barrier.bounds      = CGRectMake(0, 0, self.filterView.layer.bounds.size.width, 1);
+    barrier.bounds = CGRectMake(0, 0, self.filterView.layer.bounds.size.width, 1);
     CGPoint position = self.filterView.layer.position;
-    position.y += 15;
+    position.y         += 15;
     barrier.position    = position;
     barrier.anchorPoint = self.filterView.layer.anchorPoint;
 
@@ -223,18 +222,18 @@
 
     // define number and size of elements
     NSUInteger numElements = self.tags.count;
-    CGSize elementSize = CGSizeMake(120, self.filterView.frame.size.height);
+    CGSize elementSize     = CGSizeMake(120, self.filterView.frame.size.height);
 
     // add elements
     for (NSUInteger i = 0; i < numElements; i++) {
         Tag *tag = [self.tags objectAtIndex:i];
 
-        TagButton* tagButton = [TagButton buttonWithType:UIButtonTypeCustom];
+        TagButton *tagButton = [TagButton buttonWithType:UIButtonTypeCustom];
         tagButton.tagObject = tag;
         [tagButton addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 
         //tagButton.titleLabel.textAlignment = NSTextAlignmentCenter;
-        tagButton.titleLabel.font = [UIFont fontWithName:@"Futura-Medium" size:15];
+        tagButton.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:15];
         tagButton.titleLabel.backgroundColor = [UIColor clearColor];
 
         tagButton.backgroundColor = [UIColor clearColor];
@@ -258,8 +257,8 @@
 
     // set the size of the scrollview's content
     self.filterView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
-    
-    self.isTagsInvalid = NO;
+
+    self.isTagsInvalid        = NO;
     self.isEventGroupsInvalid = YES;
 }
 
@@ -290,17 +289,17 @@
 
     // Updated Events
     // this can generate update, insert and delete changes
-    NSSet *updatedEvents = [updatedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [obj isKindOfClass:[Event class]];
-    }];
+    NSSet *updatedEvents = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+            return [obj isKindOfClass:[Event class]];
+        }];
 
-    NSSet *insertedEvents = [insertedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [obj isKindOfClass:[Event class]];
-    }];
+    NSSet *insertedEvents = [insertedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+            return [obj isKindOfClass:[Event class]];
+        }];
 
-    NSSet *deletedEvents = [deletedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [obj isKindOfClass:[Event class]];
-    }];
+    NSSet *deletedEvents = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+            return [obj isKindOfClass:[Event class]];
+        }];
 
     for (Event *event in updatedEvents) {
         [self.eventGroups updateEvent:event];
@@ -321,17 +320,17 @@
     // ========
     // = Tags =
     // ========
-    NSSet *updatedTags = [updatedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [obj isKindOfClass:[Tag class]];
-    }];
+    NSSet *updatedTags = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+            return [obj isKindOfClass:[Tag class]];
+        }];
 
-    NSSet *insertedTags = [insertedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [obj isKindOfClass:[Tag class]];
-    }];
+    NSSet *insertedTags = [insertedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+            return [obj isKindOfClass:[Tag class]];
+        }];
 
-    NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
-        return [obj isKindOfClass:[Tag class]];
-    }];
+    NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+            return [obj isKindOfClass:[Tag class]];
+        }];
 
     if (updatedTags.count > 0 || insertedTags.count > 0 || deletedTags.count > 0) {
         self.isTagsInvalid = YES;
