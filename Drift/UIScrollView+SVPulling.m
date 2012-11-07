@@ -46,23 +46,34 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
 
-    self.frame = CGRectMake(0, self.scrollView.contentOffset.y, self.superview.bounds.size.width, fabsf(self.scrollView.contentOffset.y) - self.scrollView.contentInset.top);
-
     if (self.state == SVPullingStateTriggeredClose) {
         self.backgroundColor = self.backgroundColorForCloseState;
         self.titleLabel.text = @"Release to Close...";
+        self.frame           = CGRectMake(0, self.scrollView.contentOffset.y, self.superview.bounds.size.width, fabsf(self.scrollView.contentOffset.y) - self.scrollView.contentInset.top);
+
     } else if (self.state == SVPullingStateTriggeredAdd) {
         self.backgroundColor = self.backgroundColorForAddState;
         self.titleLabel.text = @"Release to Add...";
+        self.frame           = CGRectMake(0, self.scrollView.contentOffset.y, self.superview.bounds.size.width, fabsf(self.scrollView.contentOffset.y) - self.scrollView.contentInset.top);
+
     } else if (self.state == SVPullingStateStopped) {
         CGFloat alphaHeight = self.addingHeight == 0 ? self.closingHeight : self.addingHeight;
         alphaHeight += self.scrollView.contentInset.top;
 
         CGFloat alpha = (fabsf(self.scrollView.contentOffset.y) / alphaHeight);
+
         self.backgroundColor = self.addingHeight == 0 ? [self.backgroundColorForCloseState colorWithAlphaComponent:alpha] : [self.backgroundColorForAddState colorWithAlphaComponent:alpha];
         self.titleLabel.text = self.addingHeight == 0 ? @"Pull to Close..." : @"Pull to Add...";
+        self.frame           = CGRectMake(0, self.scrollView.contentOffset.y, self.superview.bounds.size.width, fabsf(self.scrollView.contentOffset.y) - self.scrollView.contentInset.top);
+
     } else if (self.state == SVPullingStateTrigger) {
         self.titleLabel.text = @"";
+        self.frame           = CGRectMake(0, self.scrollView.contentOffset.y, self.superview.bounds.size.width, fabsf(self.scrollView.contentOffset.y) - self.scrollView.contentInset.top);
+
+    } else if (self.state == SVPullingStateInitial) {
+        self.backgroundColor = [UIColor clearColor];
+        self.titleLabel.text = @"";
+        self.frame           = CGRectMake(0, 0, self.superview.bounds.size.width, 0);
     }
 }
 
@@ -76,7 +87,7 @@
 
 - (void)scrollViewDidScroll:(CGPoint)contentOffset {
     if (self.scrollView.decelerating) {
-        if (self.state == SVPullingStateTrigger) {
+        if (self.state == SVPullingStateTrigger && self.state != SVPullingStateInitial && fabsf(contentOffset.y) <= fabsf(self.scrollView.contentInset.top)) {
             self.state = SVPullingStateInitial;
         } else if (self.state != SVPullingStateInitial) {
             self.state = SVPullingStateTrigger;
@@ -86,6 +97,10 @@
     }
 
     if (contentOffset.y >= -self.scrollView.contentInset.top) {
+        if (self.state != SVPullingStateInitial) {
+            self.state = SVPullingStateInitial;
+        }
+
         return;
     }
 
@@ -125,23 +140,9 @@
     _state = state;
 
     [self setNeedsLayout];
-    switch (state) {
-    case SVPullingStateInitial:
-        break;
 
-    case SVPullingStateStopped:
-        break;
-
-    case SVPullingStateTriggeredAdd:
-        break;
-
-    case SVPullingStateTriggeredClose:
-        break;
-
-    case SVPullingStateTrigger:
-        if (pullingActionHandler && (previousState == SVPullingStateTriggeredAdd || previousState == SVPullingStateTriggeredClose)) {
-            pullingActionHandler(previousState, self.scrollView.contentOffset.y);
-        }
+    if (state == SVPullingStateTrigger && pullingActionHandler && (previousState == SVPullingStateTriggeredAdd || previousState == SVPullingStateTriggeredClose)) {
+        pullingActionHandler(previousState, self.scrollView.contentOffset.y);
     }
 }
 
