@@ -473,6 +473,7 @@
 				9E42F1E615570FD60087F602 /* Sources */,
 				9E42F1E715570FD60087F602 /* Frameworks */,
 				9E42F1E815570FD60087F602 /* Resources */,
+				9ECD3011164AD4BB00103F5C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -548,6 +549,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd Drift\n/usr/local/bin/mogenerator --template-var arc=true -m \"CoreDataModel.xcdatamodeld/\"";
+		};
+		9ECD3011164AD4BB00103F5C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "sh CodeFormatter/scripts/formatOpenedSources.sh";
 		};
 /* End PBXShellScriptBuildPhase section */
 
