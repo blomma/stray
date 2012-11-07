@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #define D_MINUTE	60
 #define D_HOUR		3600
 #define D_DAY		86400

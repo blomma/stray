@@ -8,6 +8,8 @@
 
 #import "EventTableViewCell.h"
 
+#import <QuartzCore/QuartzCore.h>
+
 @interface EventTableViewCell ()
 
 @property (nonatomic) CALayer *separatorLayer;

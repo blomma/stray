@@ -8,6 +8,8 @@
 
 #import "Events.h"
 
+#import "Event.h"
+
 @interface Events ()
 
 @property (nonatomic) NSMutableSet *events;

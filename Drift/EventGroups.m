@@ -7,10 +7,10 @@
 //
 
 #import "EventGroups.h"
+
 #import "NSDate+Utilities.h"
-#import "Tag.h"
-#import "DataRepository.h"
 #import "Global.h"
+#import "EventGroup.h"
 
 @interface EventGroups ()
 

@@ -47,7 +47,9 @@
     [super viewDidAppear:animated];
 
     // Try and set the background of the pagecontroller if one is present
-    self.pageControl.backgroundColor = [UIColor colorWithWhite:0.075 alpha:1.000];
+    self.pageControl.backgroundColor = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
+    self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:0.267 alpha:0.2];
+    self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithWhite:0.267 alpha:0.8];
 }
 
 - (void)didReceiveMemoryWarning {

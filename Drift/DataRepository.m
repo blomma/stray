@@ -7,9 +7,8 @@
 //
 
 #import "DataRepository.h"
+
 #import "NSManagedObject+ActiveRecord.h"
-#import "Event.h"
-#import "Tag.h"
 
 NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjectsDidChangeNotification";
 

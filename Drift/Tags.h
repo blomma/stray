@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "Tag.h"
 
 @interface Tags : NSObject

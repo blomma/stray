@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "Tag.h"
 
 @interface TagButton : UIButton

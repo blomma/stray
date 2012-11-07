@@ -7,7 +7,6 @@
 //
 
 #import "TagButton.h"
-#import "NoHitCAShapeLayer.h"
 
 @interface TagButton ()
 

@@ -6,10 +6,10 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EventGroups.h"
+#import "Tag.h"
 #import "Tags.h"
 #import "UIState.h"
+#import "Event.h"
 
 FOUNDATION_EXPORT NSString *const kDataManagerObjectsDidChangeNotification;
 

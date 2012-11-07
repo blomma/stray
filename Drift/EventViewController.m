@@ -6,8 +6,9 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "Event.h"
 #import "EventViewController.h"
+
+#import "Event.h"
 #import "NSManagedObject+ActiveRecord.h"
 #import "Tag.h"
 #import "DataRepository.h"
@@ -114,8 +115,6 @@
     Event *event = self.state.activeEvent;
 
 	if ([event isActive]) {
-		[TestFlight passCheckpoint:@"STOP EVENT"];
-
 		event.stopDate = now;
 
         [self.eventTimerControl stop];
@@ -123,8 +122,6 @@
 		[self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
         [self animateStopEvent];
 	} else {
-		[TestFlight passCheckpoint:@"START EVENT"];
-
         [self reset];
 
         event = [Event create];

@@ -6,9 +6,7 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "EventGroup.h"
-#import "EventTimerControl.h"
 #import "TagsTableViewController.h"
 
 @class EventsViewController;

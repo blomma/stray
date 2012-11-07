@@ -1,4 +1,5 @@
 #import "TransformableTableViewGestureRecognizer.h"
+
 #import <QuartzCore/QuartzCore.h>
 
 typedef NS_ENUM(uint16_t, TableViewGestureRecognizerState) {

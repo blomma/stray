@@ -7,8 +7,6 @@
 //
 
 #import "Event.h"
-#import "EventGroup.h"
-#import "Tag.h"
 
 @interface EventGroups : NSObject
 

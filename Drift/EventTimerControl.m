@@ -6,9 +6,11 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "Event.h"
 #import "EventTimerControl.h"
+
 #import <QuartzCore/QuartzCore.h>
+
+#import "Event.h"
 #import "NoHitCAShapeLayer.h"
 
 @interface EventTimerControl ()
@@ -211,7 +213,7 @@
 
             // drawing
 			tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
-			tick.fillColor   = [[UIColor whiteColor] CGColor];
+			tick.fillColor   = [[UIColor colorWithWhite:0.167 alpha:1.000] CGColor];
 			tick.lineWidth   = 1;
 			tick.path        = largeTickPath.CGPath;
 		} else {
@@ -222,7 +224,7 @@
 
             // drawing
 			tick.transform   = CATransform3DMakeRotation(angle, 0, 0, 1);
-			tick.fillColor   = [[UIColor colorWithWhite:0.551 alpha:1.000] CGColor];
+			tick.fillColor   = [[UIColor colorWithWhite:0.292 alpha:1.000] CGColor];
 			tick.lineWidth   = 1;
 			tick.path        = smallTickPath.CGPath;
 		}

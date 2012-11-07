@@ -6,9 +6,6 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "Event.h"
-#import "Tag.h"
-
 @interface Events : NSObject
 
 @property (nonatomic, readonly) NSMutableOrderedSet *filteredEvents;

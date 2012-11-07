@@ -7,6 +7,7 @@
 //
 
 #import "EventGroup.h"
+
 #import "NSDate+Utilities.h"
 #import "Global.h"
 

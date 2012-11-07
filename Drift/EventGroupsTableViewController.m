@@ -6,9 +6,12 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
+#import "EventGroupsTableViewController.h"
+
+#import <QuartzCore/QuartzCore.h>
+
 #import "Event.h"
 #import "EventGroups.h"
-#import "EventGroupsTableViewController.h"
 #import "DataRepository.h"
 #import "TagButton.h"
 #import "EventGroupTableViewCell.h"
@@ -48,10 +51,7 @@
     self.tags = [DataRepository instance].tags;
     self.isTagsInvalid = YES;
 
-    self.filterView.showsHorizontalScrollIndicator = NO;
-    self.filterView.backgroundColor = [UIColor colorWithWhite:0.075 alpha:0.45];
-    self.filterViewButtons = [NSMutableArray array];
-
+    [self initFilterView];
 
     self.eventGroups = [[EventGroups alloc] initWithEvents:[DataRepository instance].events
                                                withFilters:self.state.eventGroupsFilter];
@@ -67,7 +67,7 @@
     [super viewWillAppear:animated];
 
     if (self.isTagsInvalid) {
-        [self updateTagsView];
+        [self updateFilterView];
     }
 
     [self.tableView reloadData];
@@ -176,7 +176,35 @@
 #pragma mark -
 #pragma mark Private methods
 
-- (void)updateTagsView {
+- (void)initFilterView {
+    self.filterViewButtons = [NSMutableArray array];
+
+    self.filterView.showsHorizontalScrollIndicator = NO;
+    self.filterView.backgroundColor = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:0.90];
+
+    UIColor *colorOne = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:0.3f];
+    UIColor *colorTwo = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:1];
+
+    NSArray *colors = @[(id)colorOne.CGColor, (id)colorTwo.CGColor, (id)colorTwo.CGColor, (id)colorOne.CGColor];
+
+    NSArray *locations = @[@0.0, @0.4, @0.6, @1.0];
+
+    CAGradientLayer *barrier = [CAGradientLayer layer];
+    barrier.colors = colors;
+    barrier.locations = locations;
+    barrier.startPoint = CGPointMake(0, 0.5);
+    barrier.endPoint = CGPointMake(1.0, 0.5);
+
+    barrier.bounds      = CGRectMake(0, 0, self.filterView.layer.bounds.size.width, 1);
+    CGPoint position = self.filterView.layer.position;
+    position.y += 15;
+    barrier.position    = position;
+    barrier.anchorPoint = self.filterView.layer.anchorPoint;
+
+    [self.filterView.layer addSublayer:barrier];
+}
+
+- (void)updateFilterView {
     if (self.isFilterViewVisible) {
         UIEdgeInsets contentInset = self.tableView.contentInset;
         contentInset.top = 30;
@@ -205,23 +233,20 @@
         tagButton.tagObject = tag;
         [tagButton addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 
-        tagButton.titleLabel.textColor = [UIColor whiteColor];
-        tagButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+        //tagButton.titleLabel.textAlignment = NSTextAlignmentCenter;
         tagButton.titleLabel.font = [UIFont fontWithName:@"Futura-Medium" size:15];
         tagButton.titleLabel.backgroundColor = [UIColor clearColor];
 
         tagButton.backgroundColor = [UIColor clearColor];
 
+        [tagButton setTitleColor:[UIColor colorWithRed:0.333f green:0.333f blue:0.333f alpha:1] forState:UIControlStateNormal];
         [tagButton setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
-        // select a differing red value so that we can distinguish our added subviews
-        //        float redValue = (1.0f / numElements) * i;
-        //        subview.backgroundColor = [UIColor colorWithRed:redValue green:0 blue:0  alpha:1.0];
 
         // setup frames to appear besides each other in the slider
         CGFloat elementX = elementSize.width * i;
         tagButton.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
 
-        if ([self.state.eventGroupsFilter containsObject:tag]) {
+        if ([self.state.eventsFilter containsObject:tag]) {
             tagButton.selected = YES;
         }
 
@@ -233,8 +258,9 @@
 
     // set the size of the scrollview's content
     self.filterView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
-
+    
     self.isTagsInvalid = NO;
+    self.isEventGroupsInvalid = YES;
 }
 
 - (void)touchUpInsideTagFilterButton:(TagButton *)sender forEvent:(UIEvent *)event {
@@ -303,13 +329,9 @@
         return [obj isKindOfClass:[Tag class]];
     }];
 
-    [self.tags addObjectsFromArray:[insertedTags allObjects]];
-
     NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL(id obj, BOOL *stop) {
         return [obj isKindOfClass:[Tag class]];
     }];
-
-    [self.tags removeObjectsInArray:[deletedTags allObjects]];
 
     if (updatedTags.count > 0 || insertedTags.count > 0 || deletedTags.count > 0) {
         self.isTagsInvalid = YES;

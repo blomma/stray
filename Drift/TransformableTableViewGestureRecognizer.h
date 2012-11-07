@@ -1,5 +1,3 @@
-#import <UIKit/UIKit.h>
-
 typedef NS_ENUM(uint16_t, TransformableTableViewCellEditingState) {
     TransformableTableViewCellEditingStateNone,
     TransformableTableViewCellEditingStateLeft,
