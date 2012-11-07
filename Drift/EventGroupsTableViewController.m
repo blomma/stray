@@ -246,7 +246,7 @@
         CGFloat elementX = elementSize.width * i;
         tagButton.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
 
-        if ([self.state.eventsFilter containsObject:tag]) {
+        if ([self.state.eventGroupsFilter containsObject:tag]) {
             tagButton.selected = YES;
         }
 
