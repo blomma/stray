@@ -14,7 +14,8 @@ typedef NS_ENUM(NSUInteger, SVPullingState) {
     SVPullingStateStopped = 0,
     SVPullingStateTriggeredAdd,
     SVPullingStateTriggeredClose,
-    SVPullingStateTrigger
+    SVPullingStateTrigger,
+    SVPullingStateInitial
 };
 
 @interface UIScrollView (SVPulling)
