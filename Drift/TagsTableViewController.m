@@ -69,6 +69,9 @@
             }
         });
     }];
+
+    self.tableView.pullingView.addingHeight  = 60;
+    self.tableView.pullingView.closingHeight = 90;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
