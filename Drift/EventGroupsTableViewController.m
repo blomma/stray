@@ -146,13 +146,13 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (NSInteger)self.eventGroups.filteredEventGroups.count;
+    return (NSInteger)[self.eventGroups filteredCount];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"EventGroupTableViewCell";
 
-    EventGroup *eventGroup = [self.eventGroups.filteredEventGroups objectAtIndex:(NSUInteger)indexPath.row];
+    EventGroup *eventGroup = [self.eventGroups filteredObjectAtIndex:(NSUInteger)indexPath.row];
 
     EventGroupTableViewCell *cell = (EventGroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 

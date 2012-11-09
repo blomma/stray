@@ -21,6 +21,7 @@
 @property (nonatomic) NSMutableArray *filteredEventGroups;
 @property (nonatomic) BOOL isFilteredEventGroupsInvalid;
 
+@property (nonatomic) NSMapTable *eventToEventGroupsMap;
 @end
 
 @implementation EventGroups
@@ -36,6 +37,8 @@
         self.eventGroups         = [NSMutableArray new];
         self.filteredEventGroups = [NSMutableArray new];
 
+        self.eventToEventGroupsMap = [NSMapTable weakToStrongObjectsMapTable];
+
         for (Event *event in events) {
             [self addEvent:event];
         }
@@ -50,7 +53,8 @@
 #pragma mark Public properties
 
 - (void)setFilters:(NSSet *)filters {
-    _filters                          = filters;
+    _filters = filters;
+
     self.isFilteredEventGroupsInvalid = YES;
 }
 
@@ -117,6 +121,13 @@
                 [self.eventGroups insertObject:eventGroup atIndex:index];
             }
 
+            NSMutableSet *eventSet = [self.eventToEventGroupsMap objectForKey:event];
+            if (!eventSet) {
+                eventSet = [NSMutableSet set];
+                [self.eventToEventGroupsMap setObject:eventSet forKey:event];
+            }
+            [eventSet addObject:eventGroup];
+
             [eventGroup addEvent:event];
         }
 
@@ -140,23 +151,19 @@
 }
 
 - (void)removeEvent:(Event *)event {
-    NSMutableIndexSet *indexesToRemove = [NSMutableIndexSet new];
+    NSMutableSet *eventSet = [self.eventToEventGroupsMap objectForKey:event];
+    if (!eventSet) {
+        return;
+    }
 
-    for (NSUInteger i = 0; i < self.eventGroups.count; i++) {
-        EventGroup *eventGroup = [self.eventGroups objectAtIndex:i];
-
-        if ([eventGroup containsEvent:event]) {
-            [eventGroup removeEvent:event];
-
-            if (eventGroup.count == 0) {
-                [indexesToRemove addIndex:i];
-            }
-
+    for (EventGroup *eventGroup in eventSet) {
+        [eventGroup removeEvent:event];
+        if (eventGroup.count == 0) {
+            [self.eventGroups removeObject:eventGroup];
         }
     }
 
-    // Remove empty groups
-    [self.eventGroups removeObjectsAtIndexes:indexesToRemove];
+    [self.eventToEventGroupsMap removeObjectForKey:event];
 
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
         self.isFilteredEventGroupsInvalid = YES;
@@ -164,26 +171,31 @@
 }
 
 - (void)updateEvent:(Event *)event {
+    NSMutableSet *eventSet = [self.eventToEventGroupsMap objectForKey:event];
+    if (!eventSet) {
+        return;
+    }
+
     NSDate *startDate = [event.startDate beginningOfDayWithCalendar:self.calendar];
     NSDate *stopDate  = [event isActive] ? [NSDate date] : event.stopDate;
 
-    for (NSUInteger i = 0; i < self.eventGroups.count; i++) {
-        EventGroup *eventGroup = [self.eventGroups objectAtIndex:i];
-
-        if ([[eventGroup groupDate] earlierDate:event.startDate]) {
-            break;
-        }
-
-        if ([eventGroup containsEvent:event] && [eventGroup.groupDate isBetweenDate:startDate andDate:stopDate]) {
+    NSMutableSet *eventGroupsToRemove = [NSMutableSet set];
+    for (EventGroup *eventGroup in eventSet) {
+        if ([eventGroup.groupDate isBetweenDate:startDate andDate:stopDate]) {
             [eventGroup updateEvent:event];
+        } else {
+            [eventGroup removeEvent:event];
+            [eventGroupsToRemove addObject:eventGroup];
+
+            if (eventGroup.count == 0) {
+                [self.eventGroups removeObject:eventGroup];
+            }
         }
     }
 
-    // Insert event into any groups that can contain it, possibly creating new groups for this
-    [self addEvent:event];
+    [eventSet minusSet:eventGroupsToRemove];
 
-    // Next we remove the event from invalid eventGroups
-    [self removeFromInvalidGroupsEvent:event];
+    [self addEvent:event];
 
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
         self.isFilteredEventGroupsInvalid = YES;
@@ -191,29 +203,18 @@
 }
 
 #pragma mark -
-#pragma mark Private methods
+#pragma mark Filtered methods
 
-- (void)removeFromInvalidGroupsEvent:(Event *)event {
-    NSMutableIndexSet *indexesToRemove = [NSMutableIndexSet new];
-
-    NSDate *startDate = [event.startDate beginningOfDayWithCalendar:self.calendar];
-    NSDate *stopDate  = [event isActive] ? [NSDate date] : event.stopDate;
-
-    for (NSUInteger i = 0; i < self.eventGroups.count; i++) {
-        EventGroup *eventGroup = [self.eventGroups objectAtIndex:i];
-
-        if ([eventGroup containsEvent:event] && ![eventGroup.groupDate isBetweenDate:startDate andDate:stopDate]) {
-            [eventGroup removeEvent:event];
-
-            if (eventGroup.count == 0) {
-                [indexesToRemove addIndex:i];
-            }
-        }
-    }
-
-    // Remove empty groups
-    [self.eventGroups removeObjectsAtIndexes:indexesToRemove];
+- (id)filteredObjectAtIndex:(NSUInteger)index {
+    return [self.filteredEventGroups objectAtIndex:index];
 }
+
+- (NSUInteger)filteredCount {
+    return self.filteredEventGroups.count;
+}
+
+#pragma mark -
+#pragma mark Private methods
 
 - (NSUInteger)indexForGroupDate:(NSDate *)groupDate {
     NSUInteger index = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
