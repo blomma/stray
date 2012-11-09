@@ -276,7 +276,7 @@
 				9E42F1F515570FD60087F602 /* Supporting Files */,
 				9EAB520B15C95523008952FB /* Categories */,
 				9E9FFF9215925CAE00BA5200 /* Resources */,
-				9E63BBF6156EAAA80006FEFC /* Model */,
+				9E63BBF6156EAAA80006FEFC /* Repository */,
 				9E01309215E39D20005C8765 /* Storyboard */,
 				9E9C232D15F288D400572FB7 /* Controllers */,
 				9E561DE415FBB04D008D3895 /* Controls */,
@@ -307,7 +307,7 @@
 			name = Controls;
 			sourceTree = "<group>";
 		};
-		9E63BBF6156EAAA80006FEFC /* Model */ = {
+		9E63BBF6156EAAA80006FEFC /* Repository */ = {
 			isa = PBXGroup;
 			children = (
 				9E9239E3162DAF6300E265E6 /* _UIState.h */,
@@ -323,18 +323,10 @@
 				9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */,
 				9E21F927156EAA2F0075EAAC /* Event.h */,
 				9E21F928156EAA2F0075EAAC /* Event.m */,
-				9E51511215C7CEF100901655 /* EventGroup.h */,
-				9E51511315C7CEF100901655 /* EventGroup.m */,
-				9E51511415C7CEF100901655 /* EventGroups.h */,
-				9E51511515C7CEF100901655 /* EventGroups.m */,
 				9E2F076C161745B400F1C24D /* DataRepository.h */,
 				9E2F076D161745B400F1C24D /* DataRepository.m */,
-				9E15897B16183F7100DB19EB /* Tags.h */,
-				9E15897C16183F7100DB19EB /* Tags.m */,
-				9E15AB77163C7A19006D16B3 /* Events.h */,
-				9E15AB78163C7A19006D16B3 /* Events.m */,
 			);
-			name = Model;
+			name = Repository;
 			sourceTree = "<group>";
 		};
 		9E96FCE016359F8600AB5B0A /* TransformableTableView */ = {
@@ -367,6 +359,7 @@
 		9E9C232D15F288D400572FB7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				9EF99092164BDCC000AF6EC4 /* Models */,
 				9E42F22715571E9C0087F602 /* RootViewController.h */,
 				9E42F22815571E9C0087F602 /* RootViewController.m */,
 				9E00A75D157734AE002FC707 /* EventViewController.h */,
@@ -461,6 +454,21 @@
 				9EE939C116172D090035DD5F /* NSManagedObject+ActiveRecord.m */,
 			);
 			path = "Objective-Record";
+			sourceTree = "<group>";
+		};
+		9EF99092164BDCC000AF6EC4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9E51511215C7CEF100901655 /* EventGroup.h */,
+				9E51511315C7CEF100901655 /* EventGroup.m */,
+				9E51511415C7CEF100901655 /* EventGroups.h */,
+				9E51511515C7CEF100901655 /* EventGroups.m */,
+				9E15897B16183F7100DB19EB /* Tags.h */,
+				9E15897C16183F7100DB19EB /* Tags.m */,
+				9E15AB77163C7A19006D16B3 /* Events.h */,
+				9E15AB78163C7A19006D16B3 /* Events.m */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
