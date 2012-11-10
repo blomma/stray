@@ -26,7 +26,10 @@
 }
 
 - (void)prepareForReuse {
+    self.contentView.alpha = 1;
+
     [self.layer removeAllAnimations];
+
     if (self.selectLayer) {
         self.selectLayer.backgroundColor = [UIColor clearColor].CGColor;
     }
