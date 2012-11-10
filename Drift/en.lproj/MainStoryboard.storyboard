@@ -27,7 +27,7 @@
                                 <rect key="frame" x="0.0" y="160" width="320" height="320"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="dP9-OE-O85" userLabel="Start/Stop">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="dP9-OE-O85" userLabel="Start/Stop">
                                         <rect key="frame" x="86" y="136" width="148" height="48"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
@@ -509,95 +509,12 @@
     <resources>
         <image name="delete.png" width="20" height="28"/>
     </resources>
-    <classes>
-        <class className="EventGroupTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventGroupTableViewCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="day" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="hours" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="minutes" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="month" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="weekDay" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="year" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="EventGroupsTableViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventGroupsTableViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="filterView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="EventTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventTableViewCell.h"/>
-            <relationships>
-                <relationship kind="action" name="touchUpInsideTagButton:forEvent:" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="eventStartDay" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStartMonth" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStartTime" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStartYear" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopDay" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopMonth" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopTime" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopYear" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventTimeHours" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventTimeMinutes" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="tagName" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="EventTimerControl" superclassName="UIControl">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventTimerControl.h"/>
-        </class>
-        <class className="EventViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="toggleEvent:"/>
-                <relationship kind="outlet" name="eventStartDay" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStartMonth" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStartTime" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStartYear" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopDay" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopMonth" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopTime" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopYear" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventTimeHours" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventTimeMinutes" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventTimerControl" candidateClass="EventTimerControl"/>
-                <relationship kind="outlet" name="tag" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="toggleStartStopButton" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="EventsViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventsViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="filterView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="RootViewController" superclassName="UIPageViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RootViewController.h"/>
-        </class>
-        <class className="TagTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TagTableViewCell.h"/>
-            <relationships>
-                <relationship kind="action" name="touchUpInsideDeleteButton:forEvent:" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="backView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="deleteButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="frontView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="name" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="nameTextField" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="TagsTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TagsTableViewController.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="tQF-pe-67W"/>
+        <segue reference="Hhm-7Y-Sw3"/>
     </inferredMetricsTieBreakers>
 </document>

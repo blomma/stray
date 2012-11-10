@@ -12,7 +12,6 @@
 #import "DataRepository.h"
 #import "Event.h"
 #import "EventTableViewCell.h"
-#import "Events.h"
 #import "Global.h"
 #import "SKBounceAnimation.h"
 #import "TagButton.h"
@@ -20,6 +19,7 @@
 #import "TagsTableViewController.h"
 #import "TransformableTableViewGestureRecognizer.h"
 #import "UIScrollView+SVPulling.h"
+#import "EventsGroupedByStartDate.h"
 
 static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
@@ -38,8 +38,8 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
 @property (nonatomic) UIState *state;
 
-@property (nonatomic) Events *events;
-@property (nonatomic) BOOL isEventsInvalid;
+@property (nonatomic) EventsGroupedByStartDate *eventGroups;
+@property (nonatomic) BOOL isEventGroupsInvalid;
 
 @property (nonatomic, readonly) NSInteger editingCommitLength;
 
@@ -51,7 +51,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     [super viewDidLoad];
 
     self.calendar                    = [Global instance].calendar;
-    self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
+    self.shortStandaloneMonthSymbols = [[NSDateFormatter new] standaloneMonthSymbols];
 
     self.state = [DataRepository instance].state;
 
@@ -60,8 +60,9 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
     [self initFilterView];
 
-    self.events          = [[Events alloc] initWithEvents:[DataRepository instance].events];
-    self.isEventsInvalid = YES;
+    self.eventGroups = [[EventsGroupedByStartDate alloc] initWithEvents:[DataRepository instance].events
+                                                            withFilters:self.state.eventsFilter];
+    self.isEventGroupsInvalid = YES;
 
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
@@ -96,9 +97,9 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
     [self.tableView reloadData];
 
-    NSUInteger index = [self.events.filteredEvents indexOfObject:self.state.activeEvent];
-    if (index != NSNotFound) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(NSInteger)index inSection:0];
+    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:self.state.activeEvent];
+
+    if (indexPath) {
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
     }
 }
@@ -137,7 +138,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
         [[segue destinationViewController] setDelegate:self];
 
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        Event *event           = [self.events.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
+        Event *event           = [self.eventGroups filteredEventAtIndexPath:indexPath];
 
         if ([[segue destinationViewController] respondsToSelector:@selector(event)]) {
             [[segue destinationViewController] setEvent:event];
@@ -159,13 +160,13 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 #pragma mark -
 #pragma mark Public properties
 
-- (Events *)events {
-    if (self.isEventsInvalid) {
-        _events.filters      = self.state.eventsFilter;
-        self.isEventsInvalid = NO;
+- (EventsGroupedByStartDate *)eventGroups {
+    if (self.isEventGroupsInvalid) {
+        _eventGroups.filters      = self.state.eventsFilter;
+        self.isEventGroupsInvalid = NO;
     }
 
-    return _events;
+    return _eventGroups;
 }
 
 #pragma mark -
@@ -262,12 +263,20 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     EventTableViewCell *cell = (EventTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     cell.contentView.alpha = 1;
 
-    Event *event = [self.events.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
-    [[DataRepository instance] deleteEvent:event];
-    [self.events removeObject:event];
-    self.isEventsInvalid = YES;
+    EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)indexPath.section];
+    Event *event           = [eventGroup.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
 
-    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
+    [[DataRepository instance] deleteEvent:event];
+    [self.eventGroups removeEvent:event];
+
+    [self.tableView beginUpdates];
+
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    if (eventGroup.filteredEvents.count == 0) {
+        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:(NSUInteger)indexPath.section] withRowAnimation:UITableViewRowAnimationRight];
+    }
+
+    [self.tableView endUpdates];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -287,8 +296,33 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 #pragma mark -
 #pragma mark UITableViewDelegate
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)section];
+
+    CGRect frame = CGRectMake(0, 0.0, tableView.bounds.size.width, 36.0);
+
+    UILabel *headerLabel = [[UILabel alloc] initWithFrame:frame];
+    headerLabel.backgroundColor = [UIColor colorWithRed:0.745 green:0.106 blue:0.169 alpha:0.8];
+    headerLabel.opaque          = YES;
+    headerLabel.textColor       = [UIColor whiteColor];
+    headerLabel.font            = [UIFont fontWithName:@"Futura-CondensedMedium" size:16];
+    headerLabel.textAlignment   = NSTextAlignmentCenter;
+
+    static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit;
+    NSDateComponents *components          = [self.calendar components:unitFlagsEventStart fromDate:eventGroup.groupDate];
+
+    headerLabel.text = [NSString stringWithFormat:@"%02d %@ %04d", components.day, [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString], components.year];
+
+    return headerLabel;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 45;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    Event *event = [self.events.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
+    Event *event = [self.eventGroups filteredEventAtIndexPath:indexPath];
+
     self.state.activeEvent = event;
 
     if ([self.delegate respondsToSelector:@selector(eventsViewControllerDidDimiss:)]) {
@@ -300,15 +334,17 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    DLog(@"sections %u",self.eventGroups.filteredEventGroupCount);
+    return (NSInteger)self.eventGroups.filteredEventGroupCount;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (NSInteger)self.events.filteredEvents.count;
+    EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)section];
+    return (NSInteger)eventGroup.filteredEvents.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    Event *event = (Event *)[self.events.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
+    Event *event = [self.eventGroups filteredEventAtIndexPath:indexPath];
 
     EventTableViewCell *cell = (EventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:eventTableViewCellIdentifier];
     cell.contentView.backgroundColor = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
@@ -387,7 +423,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     }
 
     if ([deletedTags intersectsSet:self.state.eventsFilter]) {
-        self.isEventsInvalid = YES;
+        self.isEventGroupsInvalid = YES;
     }
 }
 
@@ -402,13 +438,12 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
         sender.selected = YES;
     }
 
-    self.isEventsInvalid = YES;
+    self.isEventGroupsInvalid = YES;
 
     [self.tableView reloadData];
 
-    NSUInteger index = [self.events.filteredEvents indexOfObject:self.state.activeEvent];
-    if (index != NSNotFound) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(NSInteger)index inSection:0];
+    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:self.state.activeEvent];
+    if (indexPath) {
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
 }
@@ -496,8 +531,8 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     // set the size of the scrollview's content
     self.filterView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
 
-    self.isTagsInvalid   = NO;
-    self.isEventsInvalid = YES;
+    self.isTagsInvalid        = NO;
+    self.isEventGroupsInvalid = YES;
 }
 
 - (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration completion:(void (^)(BOOL finished))completion {

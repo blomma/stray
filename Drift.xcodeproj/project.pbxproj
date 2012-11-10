@@ -27,7 +27,6 @@
 		9E14D4201626D72A008D9E43 /* delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E14D41C1626D72A008D9E43 /* delete@2x.png */; };
 		9E14D452162B3D3F008D9E43 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E14D451162B3D3F008D9E43 /* TagButton.m */; };
 		9E15897D16183F7100DB19EB /* Tags.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E15897C16183F7100DB19EB /* Tags.m */; };
-		9E15AB79163C7A19006D16B3 /* Events.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E15AB78163C7A19006D16B3 /* Events.m */; };
 		9E15DE0116024161007146CE /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E15DE0016024161007146CE /* libz.dylib */; };
 		9E21F926156EA9510075EAAC /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */; };
 		9E21F929156EAA2F0075EAAC /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F928156EAA2F0075EAAC /* Event.m */; };
@@ -80,6 +79,7 @@
 		9EE939C216172D090035DD5F /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE939BD16172D090035DD5F /* CoreDataManager.m */; };
 		9EE939C316172D090035DD5F /* NSArray+Accessors.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE939BF16172D090035DD5F /* NSArray+Accessors.m */; };
 		9EE939C416172D090035DD5F /* NSManagedObject+ActiveRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE939C116172D090035DD5F /* NSManagedObject+ActiveRecord.m */; };
+		9EF9909A164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EF99099164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,8 +93,6 @@
 		9E14D451162B3D3F008D9E43 /* TagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagButton.m; sourceTree = "<group>"; };
 		9E15897B16183F7100DB19EB /* Tags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tags.h; sourceTree = "<group>"; };
 		9E15897C16183F7100DB19EB /* Tags.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tags.m; sourceTree = "<group>"; };
-		9E15AB77163C7A19006D16B3 /* Events.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Events.h; sourceTree = "<group>"; };
-		9E15AB78163C7A19006D16B3 /* Events.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Events.m; sourceTree = "<group>"; };
 		9E15AB7A163D0C45006D16B3 /* CoreDataModel-5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-5.xcdatamodel"; sourceTree = "<group>"; };
 		9E15DE0016024161007146CE /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		9E21F925156EA9510075EAAC /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
@@ -186,6 +184,8 @@
 		9EE939BF16172D090035DD5F /* NSArray+Accessors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Accessors.m"; sourceTree = "<group>"; };
 		9EE939C016172D090035DD5F /* NSManagedObject+ActiveRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+ActiveRecord.h"; sourceTree = "<group>"; };
 		9EE939C116172D090035DD5F /* NSManagedObject+ActiveRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+ActiveRecord.m"; sourceTree = "<group>"; };
+		9EF99098164CEA8F00AF6EC4 /* EventsGroupedByStartDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsGroupedByStartDate.h; sourceTree = "<group>"; };
+		9EF99099164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsGroupedByStartDate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -459,14 +459,14 @@
 		9EF99092164BDCC000AF6EC4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				9EF99098164CEA8F00AF6EC4 /* EventsGroupedByStartDate.h */,
+				9EF99099164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m */,
 				9E51511215C7CEF100901655 /* EventGroup.h */,
 				9E51511315C7CEF100901655 /* EventGroup.m */,
 				9E51511415C7CEF100901655 /* EventGroups.h */,
 				9E51511515C7CEF100901655 /* EventGroups.m */,
 				9E15897B16183F7100DB19EB /* Tags.h */,
 				9E15897C16183F7100DB19EB /* Tags.m */,
-				9E15AB77163C7A19006D16B3 /* Events.h */,
-				9E15AB78163C7A19006D16B3 /* Events.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -599,8 +599,8 @@
 				9E9239EB162F3A5000E265E6 /* Global.m in Sources */,
 				9EAF701616367B4600FA079C /* SKBounceAnimation.m in Sources */,
 				9E98C3F01637C8C5007D2CF2 /* MSVCLeakHunter.m in Sources */,
-				9E15AB79163C7A19006D16B3 /* Events.m in Sources */,
 				9E954D84164419F50022D5BE /* UIScrollView+SVPulling.m in Sources */,
+				9EF9909A164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
