@@ -66,7 +66,7 @@
 
     if (event) {
         [self.eventTimerControl startWithEvent:event];
-        NSString *tagName = event.inTag ? event.inTag.name : @"";
+        NSString *tagName = event.inTag ? event.inTag.name : @"-- --";
         [self.tag setTitle:[tagName uppercaseString] forState:UIControlStateNormal];
 
         if ([event isActive]) {
