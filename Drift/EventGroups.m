@@ -121,12 +121,12 @@
                 [self.eventGroups insertObject:eventGroup atIndex:index];
             }
 
-            NSMutableSet *eventSet = [self.eventToEventGroupsMap objectForKey:event];
-            if (!eventSet) {
-                eventSet = [NSMutableSet set];
-                [self.eventToEventGroupsMap setObject:eventSet forKey:event];
+            NSMutableSet *eventGroups = [self.eventToEventGroupsMap objectForKey:event];
+            if (!eventGroups) {
+                eventGroups = [NSMutableSet set];
+                [self.eventToEventGroupsMap setObject:eventGroups forKey:event];
             }
-            [eventSet addObject:eventGroup];
+            [eventGroups addObject:eventGroup];
 
             [eventGroup addEvent:event];
         }
@@ -151,13 +151,14 @@
 }
 
 - (void)removeEvent:(Event *)event {
-    NSMutableSet *eventSet = [self.eventToEventGroupsMap objectForKey:event];
-    if (!eventSet) {
+    NSMutableSet *eventGroups = [self.eventToEventGroupsMap objectForKey:event];
+    if (!eventGroups) {
         return;
     }
 
-    for (EventGroup *eventGroup in eventSet) {
+    for (EventGroup *eventGroup in eventGroups) {
         [eventGroup removeEvent:event];
+
         if (eventGroup.count == 0) {
             [self.eventGroups removeObject:eventGroup];
         }
@@ -171,8 +172,8 @@
 }
 
 - (void)updateEvent:(Event *)event {
-    NSMutableSet *eventSet = [self.eventToEventGroupsMap objectForKey:event];
-    if (!eventSet) {
+    NSMutableSet *eventGroups = [self.eventToEventGroupsMap objectForKey:event];
+    if (!eventGroups) {
         return;
     }
 
@@ -180,7 +181,7 @@
     NSDate *stopDate  = [event isActive] ? [NSDate date] : event.stopDate;
 
     NSMutableSet *eventGroupsToRemove = [NSMutableSet set];
-    for (EventGroup *eventGroup in eventSet) {
+    for (EventGroup *eventGroup in eventGroups) {
         if ([eventGroup.groupDate isBetweenDate:startDate andDate:stopDate]) {
             [eventGroup updateEvent:event];
         } else {
@@ -193,7 +194,7 @@
         }
     }
 
-    [eventSet minusSet:eventGroupsToRemove];
+    [eventGroups minusSet:eventGroupsToRemove];
 
     [self addEvent:event];
 
