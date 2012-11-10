@@ -12,7 +12,7 @@
 
 @property (nonatomic, readonly) NSDate *groupDate;
 @property (nonatomic, readonly) NSDateComponents *filteredEventsDateComponents;
-@property (nonatomic, readonly) NSMutableSet *filteredEvents;
+@property (nonatomic, readonly) NSMutableOrderedSet *filteredEvents;
 
 @property (nonatomic) NSSet *filters;
 

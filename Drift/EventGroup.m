@@ -14,7 +14,7 @@
 @interface EventGroup ()
 
 @property (nonatomic, readwrite) NSMutableSet *events;
-@property (nonatomic) NSMutableSet *filteredEvents;
+@property (nonatomic) NSMutableOrderedSet *filteredEvents;
 @property (nonatomic) BOOL isFilteredEventsInvalid;
 
 @property (nonatomic, readwrite) NSDate *groupDate;
@@ -46,7 +46,7 @@
         self.groupDate = groupDate;
 
         self.events                  = [NSMutableSet set];
-        self.filteredEvents          = [NSMutableSet set];
+        self.filteredEvents          = [NSMutableOrderedSet orderedSet];
         self.isFilteredEventsInvalid = YES;
 
         self.filteredEventsDateComponents          = [[NSDateComponents alloc] init];
@@ -84,15 +84,20 @@
     self.isFilteredEventsInvalid = YES;
 }
 
-- (NSMutableSet *)filteredEvents {
+- (NSMutableOrderedSet *)filteredEvents {
     if (self.isFilteredEventsInvalid) {
         [_filteredEvents removeAllObjects];
+
         if (self.filters.count == 0) {
             [_filteredEvents unionSet:self.events];
         } else {
             [_filteredEvents unionSet:[self.events filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"inTag in %@",
             self.filters]]];
         }
+
+        [_filteredEvents sortUsingComparator:^NSComparisonResult (id obj1, id obj2) {
+            return [[obj2 startDate] compare:[obj1 startDate]];
+        }];
 
         self.isFilteredEventsInvalid               = NO;
         self.isFilteredEventsDateComponentsInvalid = YES;
@@ -112,6 +117,7 @@
     [self.events addObject:event];
 
     self.isActiveEventInvalid = YES;
+
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
         self.isFilteredEventsInvalid = YES;
     }
@@ -121,6 +127,7 @@
     [self.events removeObject:event];
 
     self.isActiveEventInvalid = YES;
+
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
         self.isFilteredEventsInvalid = YES;
     }
@@ -128,6 +135,7 @@
 
 - (void)updateEvent:(Event *)event {
     self.isActiveEventInvalid = YES;
+
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
         self.isFilteredEventsInvalid = YES;
     }
