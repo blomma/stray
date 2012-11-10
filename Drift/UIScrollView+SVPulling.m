@@ -37,7 +37,7 @@
 
         // Default colors
         self.backgroundColorForAddState   = [UIColor colorWithRed:0.510f green:0.784f blue:0.431f alpha:1];
-        self.backgroundColorForCloseState = [UIColor colorWithRed:0.843f green:0.306f blue:0.314f alpha:1];
+        self.backgroundColorForCloseState = [UIColor colorWithRed:0.745 green:0.106 blue:0.169 alpha:1.000];
     }
 
     return self;
@@ -112,7 +112,7 @@
         self.state = SVPullingStateStopped;
     } else if (fabsf(contentOffset.y) > heightForCloseState) {
         self.state = SVPullingStateTriggeredClose;
-    } else if (fabsf(contentOffset.y) >= heightForAddState) {
+    } else if (fabsf(contentOffset.y) >= heightForAddState && self.addingHeight != 0) {
         self.state = SVPullingStateTriggeredAdd;
     }
 }
