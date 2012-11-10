@@ -362,7 +362,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     cell.eventStartTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
     cell.eventStartDay.text   = [NSString stringWithFormat:@"%02d", components.day];
     cell.eventStartYear.text  = [NSString stringWithFormat:@"%04d", components.year];
-    cell.eventStartMonth.text = [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString];
+    cell.eventStartMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
 
     // EventTime
     NSDate *stopDate                     = event.stopDate ? event.stopDate : [NSDate date];
@@ -380,7 +380,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
         cell.eventStopTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
         cell.eventStopDay.text   = [NSString stringWithFormat:@"%02d", components.day];
         cell.eventStopYear.text  = [NSString stringWithFormat:@"%04d", components.year];
-        cell.eventStopMonth.text = [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString];
+        cell.eventStopMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
     } else {
         cell.eventStopTime.text  = @"";
         cell.eventStopDay.text   = @"";
