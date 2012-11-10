@@ -141,6 +141,7 @@
 
 - (void)reset {
     [self.tag setTitle:@"" forState:UIControlStateNormal];
+    [self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
 
     self.eventStartTime.text  = @"";
     self.eventStartDay.text   = @"";
