@@ -59,12 +59,12 @@
 
     if (!self.selectLayer) {
         self.selectLayer                 = [CALayer layer];
-        self.selectLayer.frame           = CGRectMake(self.layer.bounds.size.width - 10, 0, 10, self.layer.bounds.size.height);
+        self.selectLayer.frame           = CGRectMake(self.layer.bounds.size.width - 10, 5, 10, self.layer.bounds.size.height - 10);
         self.selectLayer.backgroundColor = [UIColor clearColor].CGColor;
         [self.frontView.layer addSublayer:self.selectLayer];
     }
 
-    UIColor *backgroundColor = marked ? [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1] : [UIColor clearColor];
+    UIColor *backgroundColor = marked ? [UIColor colorWithWhite:0.251f alpha:1.000] : [UIColor clearColor];
 
     if (animation) {
         CABasicAnimation *backgroundAnimation = [CABasicAnimation animationWithKeyPath:@"backgroundColor"];

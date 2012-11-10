@@ -253,7 +253,7 @@
 
     // drawing
     self.nowLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
-    self.nowLayer.fillColor = [[UIColor colorWithRed:0.510 green:0.784 blue:0.431 alpha:1] CGColor];
+    self.nowLayer.fillColor = [[UIColor colorWithRed:0.427 green:0.784 blue:0.992 alpha:1] CGColor];
     self.nowLayer.lineWidth = 1.0;
     self.nowLayer.path      = nowHandPath.CGPath;
 
