@@ -29,6 +29,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
 @property (nonatomic) NSCalendar *calendar;
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
+@property (nonatomic) NSArray *shortStandaloneWeekdaySymbols;
 
 @property (nonatomic) NSMutableArray *filterViewButtons;
 
@@ -51,7 +52,8 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     [super viewDidLoad];
 
     self.calendar                    = [Global instance].calendar;
-    self.shortStandaloneMonthSymbols = [[NSDateFormatter new] standaloneMonthSymbols];
+    self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
+    self.shortStandaloneWeekdaySymbols    = [[NSDateFormatter new] shortStandaloneWeekdaySymbols];
 
     self.state = [DataRepository instance].state;
 
@@ -308,16 +310,16 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     headerLabel.font            = [UIFont fontWithName:@"Futura-CondensedMedium" size:16];
     headerLabel.textAlignment   = NSTextAlignmentCenter;
 
-    static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit;
+    static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
     NSDateComponents *components          = [self.calendar components:unitFlagsEventStart fromDate:eventGroup.groupDate];
 
-    headerLabel.text = [NSString stringWithFormat:@"%02d %@ %04d", components.day, [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString], components.year];
+    headerLabel.text = [NSString stringWithFormat:@"%@  ·  %02d %@ %04d", [[self.shortStandaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString], components.day, [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString], components.year];
 
     return headerLabel;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 45;
+    return 36;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -360,7 +362,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     cell.eventStartTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
     cell.eventStartDay.text   = [NSString stringWithFormat:@"%02d", components.day];
     cell.eventStartYear.text  = [NSString stringWithFormat:@"%04d", components.year];
-    cell.eventStartMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
+    cell.eventStartMonth.text = [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString];
 
     // EventTime
     NSDate *stopDate                     = event.stopDate ? event.stopDate : [NSDate date];
@@ -378,7 +380,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
         cell.eventStopTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
         cell.eventStopDay.text   = [NSString stringWithFormat:@"%02d", components.day];
         cell.eventStopYear.text  = [NSString stringWithFormat:@"%04d", components.year];
-        cell.eventStopMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
+        cell.eventStopMonth.text = [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString];
     } else {
         cell.eventStopTime.text  = @"";
         cell.eventStopDay.text   = @"";
