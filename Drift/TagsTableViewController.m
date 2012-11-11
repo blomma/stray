@@ -61,7 +61,6 @@
 
                 [weakSelf.tableView endUpdates];
             } else if (state == SVPullingStateTriggeredClose) {
-                DLog(NSStringFromSelector(_cmd));
                 if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
                     [weakSelf.delegate tagsTableViewControllerDidDimiss:weakSelf];
                 }

@@ -51,9 +51,9 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.calendar                    = [Global instance].calendar;
-    self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
-    self.shortStandaloneWeekdaySymbols    = [[NSDateFormatter new] shortStandaloneWeekdaySymbols];
+    self.calendar                      = [Global instance].calendar;
+    self.shortStandaloneMonthSymbols   = [[NSDateFormatter new] shortStandaloneMonthSymbols];
+    self.shortStandaloneWeekdaySymbols = [[NSDateFormatter new] shortStandaloneWeekdaySymbols];
 
     self.state = [DataRepository instance].state;
 
@@ -336,7 +336,6 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    DLog(@"sections %u",self.eventGroups.filteredEventGroupCount);
     return (NSInteger)self.eventGroups.filteredEventGroupCount;
 }
 
