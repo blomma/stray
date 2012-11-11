@@ -219,7 +219,7 @@
     UIImage *background = [UIImage imageNamed:@"stressed_linen"];
     cell.backView.backgroundColor = [UIColor colorWithPatternImage:background];
 
-    UIImage *deleteButton = [UIImage imageNamed:@"Delete"];
+    UIImage *deleteButton = [UIImage imageNamed:@"delete"];
     [cell.deleteButton setImage:deleteButton forState:UIControlStateNormal];
     [cell.deleteButton setImage:deleteButton forState:UIControlStateHighlighted];
     [cell.deleteButton setImage:deleteButton forState:UIControlStateSelected];
