@@ -25,7 +25,6 @@
 @property (nonatomic, weak) Tags *tags;
 
 @property (nonatomic) NSIndexPath *transformingMovingIndexPath;
-@property (nonatomic) UIColor *cellBackgroundColor;
 
 @property (nonatomic) NSInteger editingStateRightOffset;
 @property (nonatomic) NSInteger editingCommitLength;
@@ -81,18 +80,6 @@
 
     [self.tableView disableGestureTableViewWithRecognizer:self.tableViewRecognizer];
     self.tableViewRecognizer = nil;
-}
-
-#pragma mark -
-#pragma mark Public properties
-
-- (UIColor *)cellBackgroundColor {
-    if (!_cellBackgroundColor) {
-        UIImage *background = [UIImage imageNamed:@"bedge_grunge"];
-        _cellBackgroundColor = [UIColor colorWithPatternImage:background];
-    }
-
-    return _cellBackgroundColor;
 }
 
 #pragma mark -
@@ -229,7 +216,14 @@
     TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     [cell.frontView.layer removeAllAnimations];
 
-    cell.backView.backgroundColor = self.cellBackgroundColor;
+    UIImage *background = [UIImage imageNamed:@"stressed_linen"];
+    cell.backView.backgroundColor = [UIColor colorWithPatternImage:background];
+
+    UIImage *deleteButton = [UIImage imageNamed:@"Delete"];
+    [cell.deleteButton setImage:deleteButton forState:UIControlStateNormal];
+    [cell.deleteButton setImage:deleteButton forState:UIControlStateHighlighted];
+    [cell.deleteButton setImage:deleteButton forState:UIControlStateSelected];
+
     if (!cell.backViewInnerShadowLayer) {
         InnerShadowLayer *innerShadowLayer = [self innerShadowLayerForCell:cell];
         cell.backViewInnerShadowLayer = innerShadowLayer;
@@ -340,9 +334,10 @@
 
 - (InnerShadowLayer *)innerShadowLayerForCell:(TagTableViewCell *)cell {
     InnerShadowLayer *innerShadowLayer = [InnerShadowLayer layer];
+    innerShadowLayer.shadowMask = InnerShadowMaskTop | InnerShadowMaskBottom;
     innerShadowLayer.frame         = cell.backView.frame;
-    innerShadowLayer.shadowRadius  = 4;
-    innerShadowLayer.shadowOpacity = 0.7f;
+    innerShadowLayer.shadowRadius  = 3;
+    innerShadowLayer.shadowOpacity = 0.8f;
 
     return innerShadowLayer;
 }
