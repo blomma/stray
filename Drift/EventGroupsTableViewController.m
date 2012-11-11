@@ -232,9 +232,9 @@
         tagButton.tagObject = tag;
         [tagButton addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 
-        //tagButton.titleLabel.textAlignment = NSTextAlignmentCenter;
         tagButton.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:15];
         tagButton.titleLabel.backgroundColor = [UIColor clearColor];
+        tagButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
 
         tagButton.backgroundColor = [UIColor clearColor];
 
