@@ -48,24 +48,27 @@
     __block __weak TagsTableViewController *weakSelf = self;
     __block __weak Tags *weakTags                    = self.tags;
 
-    [self.tableView addPullingWithActionHandler:^(SVPullingState state, CGFloat height) {
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-            if (state == SVPullingStateTriggeredAdd) {
+    [self.tableView addPullingWithActionHandler:^(SVPullingState state, SVPullingState previousState, CGFloat height){
+        if (state == SVPullingStateAction && previousState == SVPullingStatePullingAdd) {
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
                 [weakSelf.tableView beginUpdates];
 
                 Tag *tag = [[DataRepository instance] createTag];
                 [weakTags insertObject:tag atIndex:0];
-
+                
                 [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
 
                 [weakSelf.tableView endUpdates];
-            } else if (state == SVPullingStateTriggeredClose) {
-                if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
+            });
+        } else if (state == SVPullingStateAction && previousState == SVPullingStatePullingClose) {
+            if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
                     [weakSelf.delegate tagsTableViewControllerDidDimiss:weakSelf];
-                }
+                });
             }
-        });
+        }
     }];
 
     self.tableView.pullingView.addingHeight  = 60;
@@ -333,7 +336,7 @@
 
 - (InnerShadowLayer *)innerShadowLayerForCell:(TagTableViewCell *)cell {
     InnerShadowLayer *innerShadowLayer = [InnerShadowLayer layer];
-    innerShadowLayer.shadowMask = InnerShadowMaskTop | InnerShadowMaskBottom;
+    innerShadowLayer.shadowMask    = InnerShadowMaskTop | InnerShadowMaskBottom;
     innerShadowLayer.frame         = cell.backView.frame;
     innerShadowLayer.shadowRadius  = 3;
     innerShadowLayer.shadowOpacity = 0.8f;

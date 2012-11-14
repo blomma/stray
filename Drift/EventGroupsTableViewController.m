@@ -67,21 +67,10 @@
     [super viewWillAppear:animated];
 
     if (self.isTagsInvalid) {
-        [self updateFilterView];
+        [self setupFilterView];
     }
 
     [self.tableView reloadData];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-
-    CGFloat y    = self.isFilterViewVisible ? 0 : -30;
-    CGRect frame = CGRectMake(0, y, self.view.bounds.size.width, 30);
-
-    [UIView animateWithDuration:0.3 animations:^{
-        self.filterView.frame = frame;
-    }];
 }
 
 #pragma mark -
@@ -101,41 +90,6 @@
     }
 
     return _eventGroups;
-}
-
-#pragma mark -
-#pragma mark UIScrollViewDelegate
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if (self.isFilterViewVisible) {
-        CGRect frame = CGRectMake(0, -30, self.view.bounds.size.width, 30);
-
-        [UIView animateWithDuration:0.3 animations:^{
-            self.filterView.frame = frame;
-        }];
-    }
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (!decelerate) {
-        if (self.isFilterViewVisible) {
-            CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, 30);
-
-            [UIView animateWithDuration:0.3 animations:^{
-                self.filterView.frame = frame;
-            }];
-        }
-    }
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    if (self.isFilterViewVisible) {
-        CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, 30);
-
-        [UIView animateWithDuration:0.3 animations:^{
-            self.filterView.frame = frame;
-        }];
-    }
 }
 
 #pragma mark -
@@ -196,23 +150,14 @@
 
     barrier.bounds = CGRectMake(0, 0, self.filterView.layer.bounds.size.width, 1);
     CGPoint position = self.filterView.layer.position;
-    position.y         += 15;
+    position.y         += 14;
     barrier.position    = position;
     barrier.anchorPoint = self.filterView.layer.anchorPoint;
 
     [self.filterView.layer addSublayer:barrier];
 }
 
-- (void)updateFilterView {
-    if (self.isFilterViewVisible) {
-        UIEdgeInsets contentInset = self.tableView.contentInset;
-        contentInset.top = 30;
-
-        self.tableView.contentInset = contentInset;
-    } else {
-        self.tableView.contentInset = UIEdgeInsetsZero;
-    }
-
+- (void)setupFilterView {
     // Remove all the old subviews and recreate them, lazy option
     for (id subView in self.filterViewButtons) {
         [subView removeFromSuperview];

@@ -70,15 +70,20 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
     __block __weak EventsViewController *weakSelf = self;
 
-    [self.tableView addPullingWithActionHandler:^(SVPullingState state, CGFloat height) {
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 200000000);
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-            if (state == SVPullingStateTriggeredClose) {
-                if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
+    [self.tableView addPullingWithActionHandler:^(SVPullingState state, SVPullingState previousState, CGFloat height){
+        if (state == SVPullingStateAction && (previousState == SVPullingStatePullingAdd || previousState == SVPullingStatePullingClose)) {
+            if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 200000000);
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
                     [weakSelf.delegate eventsViewControllerDidDimiss:weakSelf];
-                }
+                });
             }
-        });
+        }
+
+        if (self.isFilterViewVisible) {
+            CGRect frame = CGRectMake(0, MIN(0, height), self.view.bounds.size.width, 30);
+            self.filterView.frame = frame;
+        }
     }];
 
     self.tableView.pullingView.addingHeight  = 0;
@@ -106,19 +111,8 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-
-    CGFloat y    = self.isFilterViewVisible ? 0 : -30;
-    CGRect frame = CGRectMake(0, y, self.view.bounds.size.width, 30);
-
-    [UIView animateWithDuration:0.3 animations:^{
-        self.filterView.frame = frame;
-    }];
-}
-
 - (void)viewDidDisappear:(BOOL)animated {
-    // Check if we disapeared because of presenting a tag controller
+    // Check if we disapeared because of presenting a controller
     if (!self.presentedViewController) {
         [self.tableView disablePulling];
 
@@ -129,7 +123,6 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
             [subView removeFromSuperview];
         }
         [self.filterViewButtons removeAllObjects];
-        self.isTagsInvalid = YES;
 
         [[NSNotificationCenter defaultCenter] removeObserver:self name:kDataManagerObjectsDidChangeNotification object:[DataRepository instance]];
     }
@@ -176,41 +169,6 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
 - (void)tagsTableViewControllerDidDimiss:(TagsTableViewController *)tagsTableViewController {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-#pragma mark -
-#pragma mark UIScrollViewDelegate
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if (self.isFilterViewVisible) {
-        CGRect frame = CGRectMake(0, -30, self.view.bounds.size.width, 30);
-
-        [UIView animateWithDuration:0.3 animations:^{
-            self.filterView.frame = frame;
-        }];
-    }
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (!decelerate) {
-        if (self.isFilterViewVisible) {
-            CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, 30);
-
-            [UIView animateWithDuration:0.3 animations:^{
-                self.filterView.frame = frame;
-            }];
-        }
-    }
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    if (self.isFilterViewVisible) {
-        CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, 30);
-
-        [UIView animateWithDuration:0.3 animations:^{
-            self.filterView.frame = frame;
-        }];
-    }
 }
 
 #pragma mark -
@@ -453,7 +411,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     self.filterViewButtons = [NSMutableArray array];
 
     self.filterView.showsHorizontalScrollIndicator = NO;
-    self.filterView.backgroundColor                = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:0.90];
+    self.filterView.backgroundColor                = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:0.9];
 
     UIColor *colorOne = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:0.3f];
     UIColor *colorTwo = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:1];
@@ -470,7 +428,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
     barrier.bounds = CGRectMake(0, 0, self.filterView.layer.bounds.size.width, 1);
     CGPoint position = self.filterView.layer.position;
-    position.y         += 15;
+    position.y         += 14;
     barrier.position    = position;
     barrier.anchorPoint = self.filterView.layer.anchorPoint;
 
@@ -478,15 +436,6 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 }
 
 - (void)setupFilterView {
-    if (self.isFilterViewVisible) {
-        UIEdgeInsets contentInset = self.tableView.contentInset;
-        contentInset.top = 30;
-
-        self.tableView.contentInset = contentInset;
-    } else {
-        self.tableView.contentInset = UIEdgeInsetsZero;
-    }
-
     // Remove all the old subviews and recreate them, lazy option
     for (id subView in self.filterViewButtons) {
         [subView removeFromSuperview];
@@ -508,7 +457,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
         tagButton.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:15];
         tagButton.titleLabel.backgroundColor = [UIColor clearColor];
-        tagButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        tagButton.titleLabel.lineBreakMode   = NSLineBreakByTruncatingTail;
 
         tagButton.backgroundColor = [UIColor clearColor];
 

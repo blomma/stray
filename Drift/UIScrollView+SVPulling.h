@@ -11,16 +11,16 @@
 @class SVPullingView;
 
 typedef NS_ENUM (NSUInteger, SVPullingState) {
-    SVPullingStateStopped = 0,
-    SVPullingStateTriggeredAdd,
-    SVPullingStateTriggeredClose,
-    SVPullingStateTrigger,
+    SVPullingStatePulling = 0,
+    SVPullingStatePullingAdd,
+    SVPullingStatePullingClose,
+    SVPullingStateAction,
     SVPullingStateInitial
 };
 
-@interface UIScrollView (SVPulling)
+@interface UITableView (SVPulling)
 
-- (void)addPullingWithActionHandler:(void (^) (SVPullingState state, CGFloat height))actionHandler;
+- (void)addPullingWithActionHandler:(void (^)(SVPullingState state, SVPullingState previousState, CGFloat height))actionHandler;
 - (void)disablePulling;
 
 @property (nonatomic, readonly) SVPullingView *pullingView;
