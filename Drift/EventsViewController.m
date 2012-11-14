@@ -446,22 +446,25 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     // define number and size of elements
     NSUInteger numElements = self.tags.count;
     CGSize elementSize     = CGSizeMake(120, self.filterView.frame.size.height);
+    UIEdgeInsets titleInset = UIEdgeInsetsMake(0, 5, 0, 5);
 
     // add elements
     for (NSUInteger i = 0; i < numElements; i++) {
         Tag *tag = [self.tags objectAtIndex:i];
 
-        TagButton *tagButton = [TagButton buttonWithType:UIButtonTypeCustom];
+        TagButton *tagButton = [[TagButton alloc] init];
         tagButton.tagObject = tag;
         [tagButton addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 
-        tagButton.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:15];
+        tagButton.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:13];
         tagButton.titleLabel.backgroundColor = [UIColor clearColor];
         tagButton.titleLabel.lineBreakMode   = NSLineBreakByTruncatingTail;
 
         tagButton.backgroundColor = [UIColor clearColor];
 
-        [tagButton setTitleColor:[UIColor colorWithRed:0.333f green:0.333f blue:0.333f alpha:1] forState:UIControlStateNormal];
+        tagButton.titleEdgeInsets = titleInset;
+
+        [tagButton setTitleColor:[UIColor colorWithWhite:0.392f alpha:1.000] forState:UIControlStateNormal];
         [tagButton setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
 
         // setup frames to appear besides each other in the slider

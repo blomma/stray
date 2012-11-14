@@ -27,8 +27,11 @@
         [self addSubview:self.selectView];
     }
 
+    UIColor *titleColor = selected ? [UIColor colorWithWhite:0.251f alpha:1.000] : [UIColor colorWithWhite:0.392f alpha:1.000];
+    UIColor *selectColor = selected ? [UIColor colorWithWhite:0.251f alpha:1.000] : [UIColor clearColor];
     [UIView animateWithDuration:0.2 animations:^{
-        self.selectView.backgroundColor = selected ? [UIColor colorWithWhite:0.251f alpha:1.000]:[UIColor clearColor];
+        [self setTitleColor:titleColor forState:UIControlStateNormal];
+        self.selectView.backgroundColor = selectColor;
     }];
 }
 
