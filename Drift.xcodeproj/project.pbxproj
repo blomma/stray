@@ -46,7 +46,7 @@
 		9E513DFE163433C70080313A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E513DFD163433C70080313A /* Icon.png */; };
 		9E51511615C7CEF100901655 /* EventGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511315C7CEF100901655 /* EventGroup.m */; };
 		9E51511715C7CEF100901655 /* EventGroups.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511515C7CEF100901655 /* EventGroups.m */; };
-		9E561DDB15FA08FB008D3895 /* EventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E561DDA15FA08FB008D3895 /* EventTableViewCell.m */; };
+		9E561DDB15FA08FB008D3895 /* EventsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E561DDA15FA08FB008D3895 /* EventsTableViewCell.m */; };
 		9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E63BBF3156EAA710006FEFC /* CoreData.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9E63E1D715EA3339009C0A2D /* NoHitCAShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */; };
 		9E7CEDF4157B778300718FA6 /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEDF3157B778300718FA6 /* _Event.m */; };
@@ -61,7 +61,6 @@
 		9E92637115EF350D00393946 /* _Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E92637015EF350D00393946 /* _Tag.m */; };
 		9E954D84164419F50022D5BE /* UIScrollView+SVPulling.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E954D83164419F50022D5BE /* UIScrollView+SVPulling.m */; };
 		9E96A907163981B600164D76 /* CAAnimation+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E96A90616397DB400164D76 /* CAAnimation+Blocks.m */; };
-		9E98C3F01637C8C5007D2CF2 /* MSVCLeakHunter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E98C3EE1637C8C5007D2CF2 /* MSVCLeakHunter.m */; };
 		9E98C3FC163845D2007D2CF2 /* InnerShadowLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E98C3F816384433007D2CF2 /* InnerShadowLayer.m */; };
 		9E9C237815F3617200572FB7 /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C237715F3617100572FB7 /* EventsViewController.m */; };
 		9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB520E15C9553C008952FB /* NSDate+Utilities.m */; };
@@ -122,8 +121,8 @@
 		9E51511315C7CEF100901655 /* EventGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroup.m; sourceTree = "<group>"; };
 		9E51511415C7CEF100901655 /* EventGroups.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroups.h; sourceTree = "<group>"; };
 		9E51511515C7CEF100901655 /* EventGroups.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroups.m; sourceTree = "<group>"; };
-		9E561DD915FA08FB008D3895 /* EventTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableViewCell.h; sourceTree = "<group>"; };
-		9E561DDA15FA08FB008D3895 /* EventTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableViewCell.m; sourceTree = "<group>"; };
+		9E561DD915FA08FB008D3895 /* EventsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsTableViewCell.h; sourceTree = "<group>"; };
+		9E561DDA15FA08FB008D3895 /* EventsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsTableViewCell.m; sourceTree = "<group>"; };
 		9E63BBF3156EAA710006FEFC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		9E63E1D515EA3338009C0A2D /* NoHitCAShapeLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoHitCAShapeLayer.h; sourceTree = "<group>"; };
 		9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoHitCAShapeLayer.m; sourceTree = "<group>"; };
@@ -150,8 +149,6 @@
 		9E954D83164419F50022D5BE /* UIScrollView+SVPulling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SVPulling.m"; sourceTree = "<group>"; };
 		9E96A90516397DB400164D76 /* CAAnimation+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CAAnimation+Blocks.h"; sourceTree = "<group>"; };
 		9E96A90616397DB400164D76 /* CAAnimation+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CAAnimation+Blocks.m"; sourceTree = "<group>"; };
-		9E98C3ED1637C8C5007D2CF2 /* MSVCLeakHunter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSVCLeakHunter.h; sourceTree = "<group>"; };
-		9E98C3EE1637C8C5007D2CF2 /* MSVCLeakHunter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSVCLeakHunter.m; sourceTree = "<group>"; };
 		9E98C3F716384433007D2CF2 /* InnerShadowLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InnerShadowLayer.h; sourceTree = "<group>"; };
 		9E98C3F816384433007D2CF2 /* InnerShadowLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InnerShadowLayer.m; sourceTree = "<group>"; };
 		9E9C237615F3617100572FB7 /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
@@ -211,8 +208,8 @@
 		9E15AB76163C6D1C006D16B3 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
-				9E561DD915FA08FB008D3895 /* EventTableViewCell.h */,
-				9E561DDA15FA08FB008D3895 /* EventTableViewCell.m */,
+				9E561DD915FA08FB008D3895 /* EventsTableViewCell.h */,
+				9E561DDA15FA08FB008D3895 /* EventsTableViewCell.m */,
 				9E89816D15A0BC2900E22EA7 /* EventGroupTableViewCell.h */,
 				9E89816E15A0BC2900E22EA7 /* EventGroupTableViewCell.m */,
 				9E9239D9162D4F9B00E265E6 /* TagTableViewCell.h */,
@@ -224,7 +221,6 @@
 		9E15DDA116023FE4007146CE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				9E98C3EC1637C8C5007D2CF2 /* MSVCLeakHunter */,
 				9EAF701316367B4600FA079C /* SKBounceAnimation */,
 				9EBE4F631634497D005A3B54 /* TestFlightSDK1.2beta2 */,
 				9EE939BB16172D090035DD5F /* Objective-Record */,
@@ -330,15 +326,6 @@
 				9E9239D8162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m */,
 			);
 			name = TransformableTableView;
-			sourceTree = "<group>";
-		};
-		9E98C3EC1637C8C5007D2CF2 /* MSVCLeakHunter */ = {
-			isa = PBXGroup;
-			children = (
-				9E98C3ED1637C8C5007D2CF2 /* MSVCLeakHunter.h */,
-				9E98C3EE1637C8C5007D2CF2 /* MSVCLeakHunter.m */,
-			);
-			path = MSVCLeakHunter;
 			sourceTree = "<group>";
 		};
 		9E98C3F616384426007D2CF2 /* ShadowLayer */ = {
@@ -570,7 +557,7 @@
 				9E63E1D715EA3339009C0A2D /* NoHitCAShapeLayer.m in Sources */,
 				9E92637115EF350D00393946 /* _Tag.m in Sources */,
 				9E9C237815F3617200572FB7 /* EventsViewController.m in Sources */,
-				9E561DDB15FA08FB008D3895 /* EventTableViewCell.m in Sources */,
+				9E561DDB15FA08FB008D3895 /* EventsTableViewCell.m in Sources */,
 				9E2200E016088C0E008623F3 /* UIPageViewController+UIPageControl.m in Sources */,
 				9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */,
 				9EE939C216172D090035DD5F /* CoreDataManager.m in Sources */,
@@ -586,7 +573,6 @@
 				9E9239E8162DAF6300E265E6 /* UIState.m in Sources */,
 				9E9239EB162F3A5000E265E6 /* Global.m in Sources */,
 				9EAF701616367B4600FA079C /* SKBounceAnimation.m in Sources */,
-				9E98C3F01637C8C5007D2CF2 /* MSVCLeakHunter.m in Sources */,
 				9E954D84164419F50022D5BE /* UIScrollView+SVPulling.m in Sources */,
 				9EF9909A164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m in Sources */,
 			);

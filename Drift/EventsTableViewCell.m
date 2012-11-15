@@ -6,18 +6,18 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventTableViewCell.h"
+#import "EventsTableViewCell.h"
 
 #import <QuartzCore/QuartzCore.h>
 
-@interface EventTableViewCell ()
+@interface EventsTableViewCell ()
 
 @property (nonatomic) CALayer *separatorLayer;
 @property (nonatomic) CALayer *selectLayer;
 
 @end
 
-@implementation EventTableViewCell
+@implementation EventsTableViewCell
 
 - (IBAction)touchUpInsideTagButton:(UIButton *)sender forEvent:(UIEvent *)event {
     if ([self.delegate respondsToSelector:@selector(cell:tappedTagButton:forEvent:)]) {

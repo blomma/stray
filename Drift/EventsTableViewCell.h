@@ -14,7 +14,7 @@
 
 @end
 
-@interface EventTableViewCell : UITableViewCell
+@interface EventsTableViewCell : UITableViewCell
 
 @property (nonatomic, weak) id<EventTableViewCellDelegate> delegate;
 

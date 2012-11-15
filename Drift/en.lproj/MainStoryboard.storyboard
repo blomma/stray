@@ -376,7 +376,7 @@
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <inset key="contentInset" minX="0.0" minY="30" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="eventTableViewCellIdentifier" id="qyp-c4-X1Y" userLabel="EventTableViewCell" customClass="EventTableViewCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="eventTableViewCellIdentifier" id="qyp-c4-X1Y" userLabel="EventTableViewCell" customClass="EventsTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="120"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -525,23 +525,6 @@
             <relationships>
                 <relationship kind="outlet" name="filterView" candidateClass="UIScrollView"/>
                 <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="EventTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventTableViewCell.h"/>
-            <relationships>
-                <relationship kind="action" name="touchUpInsideTagButton:forEvent:" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="eventStartDay" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStartMonth" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStartTime" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStartYear" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopDay" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopMonth" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopTime" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopYear" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventTimeHours" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventTimeMinutes" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="tagName" candidateClass="UIButton"/>
             </relationships>
         </class>
         <class className="EventTimerControl" superclassName="UIControl">

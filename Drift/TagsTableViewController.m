@@ -48,7 +48,7 @@
     __block __weak TagsTableViewController *weakSelf = self;
     __block __weak Tags *weakTags                    = self.tags;
 
-    [self.tableView addPullingWithActionHandler:^(SVPullingState state, SVPullingState previousState, CGFloat height){
+    [self.tableView addPullingWithActionHandler:^(SVPullingState state, SVPullingState previousState, CGFloat height) {
         if (state == SVPullingStateAction && previousState == SVPullingStatePullingAdd) {
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
@@ -56,7 +56,7 @@
 
                 Tag *tag = [[DataRepository instance] createTag];
                 [weakTags insertObject:tag atIndex:0];
-                
+
                 [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
 
                 [weakSelf.tableView endUpdates];
@@ -75,7 +75,7 @@
     self.tableView.pullingView.closingHeight = 90;
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
+- (void)viewWillDisappear:(BOOL)animated {
     self.tags = nil;
 
     [self.tableView disablePulling];
@@ -125,7 +125,8 @@
 
         cell.delegate = self;
 
-        [cell marked:[self.event.inTag isEqual:tag] ? YES:NO withAnimation:NO];
+        BOOL selected = [self.event.inTag isEqual:tag] ? YES : NO;
+        [cell marked:selected withAnimation:NO];
 
         return cell;
     }

@@ -11,7 +11,7 @@
 #import "CAAnimation+Blocks.h"
 #import "DataRepository.h"
 #import "Event.h"
-#import "EventTableViewCell.h"
+#import "EventsTableViewCell.h"
 #import "Global.h"
 #import "SKBounceAnimation.h"
 #import "TagButton.h"
@@ -70,7 +70,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
     __block __weak EventsViewController *weakSelf = self;
 
-    [self.tableView addPullingWithActionHandler:^(SVPullingState state, SVPullingState previousState, CGFloat height){
+    [self.tableView addPullingWithActionHandler:^(SVPullingState state, SVPullingState previousState, CGFloat height) {
         if (state == SVPullingStateAction && (previousState == SVPullingStatePullingAdd || previousState == SVPullingStatePullingClose)) {
             if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 200000000);
@@ -105,13 +105,12 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     [self.tableView reloadData];
 
     NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:self.state.activeEvent];
-
     if (indexPath) {
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
     }
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
+- (void)viewWillDisappear:(BOOL)animated {
     // Check if we disapeared because of presenting a controller
     if (!self.presentedViewController) {
         [self.tableView disablePulling];
@@ -124,7 +123,9 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
         }
         [self.filterViewButtons removeAllObjects];
 
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:kDataManagerObjectsDidChangeNotification object:[DataRepository instance]];
+        [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                        name:kDataManagerObjectsDidChangeNotification
+                                                      object:[DataRepository instance]];
     }
 }
 
@@ -190,7 +191,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
         return;
     }
 
-    EventTableViewCell *cell = (EventTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    EventsTableViewCell *cell = (EventsTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     [cell.layer removeAllAnimations];
 
     if (!cell.backgroundView) {
@@ -207,8 +208,8 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
         return;
     }
 
-    EventTableViewCell *cell = (EventTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
-    CGFloat alpha            = 1 - (gestureRecognizer.translationInTableView.x / self.editingCommitLength);
+    EventsTableViewCell *cell = (EventsTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    CGFloat alpha             = 1 - (gestureRecognizer.translationInTableView.x / self.editingCommitLength);
     cell.contentView.alpha = alpha;
 
     CGPoint point = CGPointMake(CGRectGetMidX(cell.layer.bounds) + gestureRecognizer.translationInTableView.x, cell.layer.position.y);
@@ -220,7 +221,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
         return;
     }
 
-    EventTableViewCell *cell = (EventTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    EventsTableViewCell *cell = (EventsTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     cell.contentView.alpha = 1;
 
     EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)indexPath.section];
@@ -240,9 +241,9 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-    EventTableViewCell *cell = (EventTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
-    CGPoint fromValue        = cell.layer.position;
-    CGPoint toValue          = CGPointMake(CGRectGetMidX(cell.layer.bounds), fromValue.y);
+    EventsTableViewCell *cell = (EventsTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    CGPoint fromValue         = cell.layer.position;
+    CGPoint toValue           = CGPointMake(CGRectGetMidX(cell.layer.bounds), fromValue.y);
 
     cell.contentView.alpha = 1;
 
@@ -305,7 +306,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     Event *event = [self.eventGroups filteredEventAtIndexPath:indexPath];
 
-    EventTableViewCell *cell = (EventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:eventTableViewCellIdentifier];
+    EventsTableViewCell *cell = (EventsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:eventTableViewCellIdentifier];
     cell.contentView.backgroundColor = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
 
     // Tag
@@ -444,8 +445,8 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     [self.filterViewButtons removeAllObjects];
 
     // define number and size of elements
-    NSUInteger numElements = self.tags.count;
-    CGSize elementSize     = CGSizeMake(120, self.filterView.frame.size.height);
+    NSUInteger numElements  = self.tags.count;
+    CGSize elementSize      = CGSizeMake(120, self.filterView.frame.size.height);
     UIEdgeInsets titleInset = UIEdgeInsetsMake(0, 5, 0, 5);
 
     // add elements
