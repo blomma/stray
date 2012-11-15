@@ -9,7 +9,6 @@
 #import "EventViewController.h"
 
 #import "Event.h"
-#import "NSManagedObject+ActiveRecord.h"
 #import "Tag.h"
 #import "DataRepository.h"
 #import "TagsTableViewController.h"
@@ -124,7 +123,7 @@
     } else {
         [self reset];
 
-        event           = [Event create];
+        event           = [[DataRepository instance] createEvent];
         event.startDate = now;
 
         [DataRepository instance].state.activeEvent = event;

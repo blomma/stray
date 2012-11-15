@@ -8,8 +8,6 @@
 
 #import "DataRepository.h"
 
-#import "NSManagedObject+ActiveRecord.h"
-
 NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjectsDidChangeNotification";
 
 @interface DataRepository ()
@@ -29,29 +27,29 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
     self = [super init];
     if (self) {
 
-        self.state = [UIState where:@{ @"name":@"default" }].first;
+        self.state = [UIState MR_findFirstByAttribute:@"name" withValue:@"default"];
 
         if (!self.state) {
-            self.state      = [UIState create];
+            self.state      = [UIState MR_createEntity];
             self.state.name = @"default";
         }
 
 
 //        NSMutableArray *tags = [NSMutableArray array];
 //
-//        Tag *tag = [Tag create];
+//        Tag *tag = [self createTag];
 //        tag.name = @"Work";
 //        [tags addObject:tag];
 //
-//        tag = [Tag create];
+//        tag = [self createTag];
 //        tag.name = @"Fun";
 //        [tags addObject:tag];
 //
-//        tag = [Tag create];
+//        tag = [self createTag];
 //        tag.name = @"Reading";
 //        [tags addObject:tag];
 //
-//        tag = [Tag create];
+//        tag = [self createTag];
 //        tag.name = @"Lunch";
 //        [tags addObject:tag];
 //
@@ -59,7 +57,7 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 //        for (int i = 0; i < 1000; i++) {
 //            NSTimeInterval interval = 60 * [self getRandomNumber:60 to:300];
 //
-//            Event *event = [Event create];
+//            Event *event = [self createEvent];
 //            event.startDate = nowDate;
 //            nowDate = [nowDate dateByAddingTimeInterval:interval];
 //            event.stopDate = nowDate;
@@ -69,7 +67,7 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(objectsDidChange:)
                                                      name:NSManagedObjectContextObjectsDidChangeNotification
-                                                   object:[[CoreDataManager instance] managedObjectContext]];
+                                                   object:[NSManagedObjectContext MR_defaultContext]];
     }
 
     return self;
@@ -80,17 +78,14 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 
 - (Tags *)tags {
     if (!_tags) {
-        _tags = [[Tags alloc] initWithTags:[Tag all]];
+        _tags = [[Tags alloc] initWithTags:[Tag MR_findAll]];
     }
 
     return _tags;
 }
 
 - (NSArray *)events {
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
-    return [Event where:nil
-              inContext:[NSManagedObjectContext defaultContext]
-    withSortDescriptors:@[sortDescriptor]];
+    return [Event MR_findAll];
 }
 
 #pragma mark -
@@ -110,15 +105,19 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 #pragma mark Public methods
 
 - (Tag *)createTag {
-    return [Tag create];
+    return [Tag MR_createEntity];
 }
 
 - (void)deleteTag:(Tag *)tag {
-    [tag delete];
+    [tag MR_deleteEntity];
+}
+
+- (Event *)createEvent {
+    return [Event MR_createEntity];
 }
 
 - (void)deleteEvent:(Event *)event {
-    [event delete];
+    [event MR_deleteEntity];
 }
 
 #pragma mark -
