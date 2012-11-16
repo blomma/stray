@@ -35,7 +35,6 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
 @property (nonatomic) Tags *tags;
 @property (nonatomic) BOOL isTagsInvalid;
-@property (nonatomic, readonly) BOOL isFilterViewVisible;
 
 @property (nonatomic) State *state;
 
@@ -80,10 +79,8 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
             }
         }
 
-        if (self.isFilterViewVisible) {
-            CGRect frame = CGRectMake(0, MIN(0, height), self.view.bounds.size.width, 30);
-            self.filterView.frame = frame;
-        }
+        CGRect frame = CGRectMake(0, MIN(0, height), self.view.bounds.size.width, 30);
+        self.filterView.frame = frame;
     }];
 
     self.tableView.pullingView.addingHeight  = 0;
@@ -144,10 +141,6 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
 #pragma mark -
 #pragma mark Private properties
-
-- (BOOL)isFilterViewVisible {
-    return self.tags.count > 0;
-}
 
 - (NSInteger)editingCommitLength {
     return 120;
