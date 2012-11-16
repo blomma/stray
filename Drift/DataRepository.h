@@ -8,7 +8,7 @@
 
 #import "Tag.h"
 #import "Tags.h"
-#import "UIState.h"
+#import "State.h"
 #import "Event.h"
 
 FOUNDATION_EXPORT NSString *const kDataManagerObjectsDidChangeNotification;
@@ -16,7 +16,7 @@ FOUNDATION_EXPORT NSString *const kDataManagerObjectsDidChangeNotification;
 @interface DataRepository : NSObject
 
 @property (nonatomic, readonly) Tags *tags;
-@property (nonatomic, readonly) UIState *state;
+@property (nonatomic, readonly) State *state;
 @property (nonatomic, readonly) NSArray *events;
 
 + (DataRepository *)instance;

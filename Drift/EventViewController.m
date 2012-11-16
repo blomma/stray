@@ -21,7 +21,7 @@
 
 @property (nonatomic) NSDateComponents *previousNowComponents;
 
-@property (nonatomic) UIState *state;
+@property (nonatomic) State *state;
 
 @end
 

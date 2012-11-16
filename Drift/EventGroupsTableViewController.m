@@ -33,7 +33,7 @@
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) NSArray *standaloneWeekdaySymbols;
 
-@property (nonatomic) UIState *state;
+@property (nonatomic) State *state;
 
 @end
 
@@ -212,11 +212,11 @@
 
 - (void)touchUpInsideTagFilterButton:(TagButton *)sender forEvent:(UIEvent *)event {
     if ([self.state.eventGroupsFilter containsObject:sender.tagObject]) {
-        [self.state removeEventGroupsFilterObject:sender.tagObject];
+        [self.state.eventGroupsFilter removeObject:sender.tagObject];
 
         sender.selected = NO;
     } else {
-        [self.state addEventGroupsFilterObject:sender.tagObject];
+        [self.state.eventGroupsFilter addObject:sender.tagObject];
 
         sender.selected = YES;
     }

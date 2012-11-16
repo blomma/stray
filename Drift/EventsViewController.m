@@ -37,7 +37,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 @property (nonatomic) BOOL isTagsInvalid;
 @property (nonatomic, readonly) BOOL isFilterViewVisible;
 
-@property (nonatomic) UIState *state;
+@property (nonatomic) State *state;
 
 @property (nonatomic) EventsGroupedByStartDate *eventGroups;
 @property (nonatomic) BOOL isEventGroupsInvalid;
@@ -389,11 +389,11 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
 - (void)touchUpInsideTagFilterButton:(TagButton *)sender forEvent:(UIEvent *)event {
     if ([self.state.eventsFilter containsObject:sender.tagObject]) {
-        [self.state removeEventsFilterObject:sender.tagObject];
+        [self.state.eventsFilter removeObject:sender.tagObject];
 
         sender.selected = NO;
     } else {
-        [self.state addEventsFilterObject:sender.tagObject];
+        [self.state.eventsFilter addObject:sender.tagObject];
 
         sender.selected = YES;
     }

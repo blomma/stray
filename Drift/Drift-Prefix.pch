@@ -11,14 +11,7 @@
 #ifdef __OBJC__
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-
-// Turn of small annoying warning in the framework
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-#pragma clang diagnostic ignored "-Wconversion"
-#import "CoreData+MagicalRecord.h"
-#pragma clang diagnostic pop
-
+#import "CoreDataManager.h"
 #endif
 
 #ifdef DEBUG

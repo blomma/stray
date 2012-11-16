@@ -8,11 +8,13 @@
 
 #import "DataRepository.h"
 
+#import "NSManagedObject+ActiveRecord.h"
+
 NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjectsDidChangeNotification";
 
 @interface DataRepository ()
 
-@property (nonatomic) UIState *state;
+@property (nonatomic) State *state;
 @property (nonatomic) Tags *tags;
 
 @end
@@ -27,13 +29,7 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
     self = [super init];
     if (self) {
 
-        self.state = [UIState MR_findFirstByAttribute:@"name" withValue:@"default"];
-
-        if (!self.state) {
-            self.state      = [UIState MR_createEntity];
-            self.state.name = @"default";
-        }
-
+        self.state = [[State alloc] init];
 
 //        NSMutableArray *tags = [NSMutableArray array];
 //
@@ -67,7 +63,7 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(objectsDidChange:)
                                                      name:NSManagedObjectContextObjectsDidChangeNotification
-                                                   object:[NSManagedObjectContext MR_defaultContext]];
+                                                   object:[[CoreDataManager instance] managedObjectContext]];
     }
 
     return self;
@@ -78,14 +74,14 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 
 - (Tags *)tags {
     if (!_tags) {
-        _tags = [[Tags alloc] initWithTags:[Tag MR_findAll]];
+        _tags = [[Tags alloc] initWithTags:[Tag all]];
     }
 
     return _tags;
 }
 
 - (NSArray *)events {
-    return [Event MR_findAll];
+    return [Event all];
 }
 
 #pragma mark -
@@ -105,19 +101,19 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 #pragma mark Public methods
 
 - (Tag *)createTag {
-    return [Tag MR_createEntity];
+    return [Tag create];
 }
 
 - (void)deleteTag:(Tag *)tag {
-    [tag MR_deleteEntity];
+    [tag delete];
 }
 
 - (Event *)createEvent {
-    return [Event MR_createEntity];
+    return [Event create];
 }
 
 - (void)deleteEvent:(Event *)event {
-    [event MR_deleteEntity];
+    [event delete];
 }
 
 #pragma mark -

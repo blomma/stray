@@ -11,7 +11,7 @@
         <relationship name="heldByEvents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="inTag" inverseEntity="Event" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Event" positionX="-4808" positionY="1175" width="173" height="88"/>
-        <element name="Tag" positionX="-5130" positionY="1116" width="189" height="88"/>
+        <element name="Event" positionX="-5429" positionY="972" width="173" height="88"/>
+        <element name="Tag" positionX="-5175" positionY="1061" width="189" height="88"/>
     </elements>
 </model>
