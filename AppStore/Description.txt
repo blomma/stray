@@ -1,6 +1,6 @@
 Want to keep track of how much time you spend working, eating, sleeping or maybe skydiving from a weather balloon(something we all should try). Then this app might be the thing for you. Start the timer, tag it and stop it when you are done, simple as that.
 
-But wait, that is not all, if you swipe left you can see the total time spent per day and if you swipe up you can see every event you have started. There is even a handy way for you to filter by tags on top of the views.
+But wait, that is not all, if you swipe left you can see the total time spent per day and if you swipe up you can see every event you have started. There is even a handy way for you to filter by tags what times you want to see.
 
 And that is all, for now…
 
@@ -14,7 +14,7 @@ Features:
 Clock view (screenshot ➀)
 • Swipe up to see all events
 • Holding down on either the orange(start time) or the blue(stop time) triangles puts the clock in edit mode and you can freely rotate them around to change time.
-• Click “— —“ to tag it, can be clicked again after choosing tag to change tag.
+• Click “— —“ to tag it, can be clicked again after choosing tag to change again.
 
 Day view (screenshot ➁)
 • Filter by clicking small stripe at top
