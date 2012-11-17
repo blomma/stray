@@ -70,7 +70,9 @@
 		9EAE7DF91603D006007F32EC /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DF81603D006007F32EC /* Default@2x.png */; };
 		9EAE7DFB1603D038007F32EC /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DFA1603D038007F32EC /* Default.png */; };
 		9EAF701616367B4600FA079C /* SKBounceAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAF701516367B4600FA079C /* SKBounceAnimation.m */; };
-		9EBE4F681634497D005A3B54 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EBE4F641634497D005A3B54 /* libTestFlight.a */; };
+		9ED61BC81657CFE3005FC553 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED61BC41657CFE3005FC553 /* libTestFlight.a */; };
+		9ED61BC91657CFE3005FC553 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9ED61BC51657CFE3005FC553 /* README.md */; };
+		9ED61BCA1657CFE3005FC553 /* release_notes.md in Resources */ = {isa = PBXBuildFile; fileRef = 9ED61BC61657CFE3005FC553 /* release_notes.md */; };
 		9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCC5CA160DBFA1003CB2BB /* Tag.m */; };
 		9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */; };
 		9EF9909A164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EF99099164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m */; };
@@ -164,10 +166,10 @@
 		9EAE7DFA1603D038007F32EC /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
 		9EAF701416367B4600FA079C /* SKBounceAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKBounceAnimation.h; sourceTree = "<group>"; };
 		9EAF701516367B4600FA079C /* SKBounceAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKBounceAnimation.m; sourceTree = "<group>"; };
-		9EBE4F641634497D005A3B54 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
-		9EBE4F651634497D005A3B54 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		9EBE4F661634497D005A3B54 /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.md; sourceTree = "<group>"; };
-		9EBE4F671634497D005A3B54 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		9ED61BC41657CFE3005FC553 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		9ED61BC51657CFE3005FC553 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		9ED61BC61657CFE3005FC553 /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.md; sourceTree = "<group>"; };
+		9ED61BC71657CFE3005FC553 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		9EDCC5C9160DBFA1003CB2BB /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tag.h; sourceTree = "<group>"; };
 		9EDCC5CA160DBFA1003CB2BB /* Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tag.m; sourceTree = "<group>"; };
 		9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EventTimerControl.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -188,7 +190,7 @@
 				9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */,
 				9E42F1EF15570FD60087F602 /* UIKit.framework in Frameworks */,
 				9E42F1F115570FD60087F602 /* Foundation.framework in Frameworks */,
-				9EBE4F681634497D005A3B54 /* libTestFlight.a in Frameworks */,
+				9ED61BC81657CFE3005FC553 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,9 +221,9 @@
 		9E15DDA116023FE4007146CE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				9ED61BC31657CFE3005FC553 /* TestFlightSDK1.1 */,
 				9E66D0E71655661600339E99 /* Objective-Record */,
 				9EAF701316367B4600FA079C /* SKBounceAnimation */,
-				9EBE4F631634497D005A3B54 /* TestFlightSDK1.2beta2 */,
 				9E15DE0016024161007146CE /* libz.dylib */,
 			);
 			name = Vendor;
@@ -420,15 +422,15 @@
 			path = SKBounceAnimation;
 			sourceTree = "<group>";
 		};
-		9EBE4F631634497D005A3B54 /* TestFlightSDK1.2beta2 */ = {
+		9ED61BC31657CFE3005FC553 /* TestFlightSDK1.1 */ = {
 			isa = PBXGroup;
 			children = (
-				9EBE4F641634497D005A3B54 /* libTestFlight.a */,
-				9EBE4F651634497D005A3B54 /* README.md */,
-				9EBE4F661634497D005A3B54 /* release_notes.md */,
-				9EBE4F671634497D005A3B54 /* TestFlight.h */,
+				9ED61BC41657CFE3005FC553 /* libTestFlight.a */,
+				9ED61BC51657CFE3005FC553 /* README.md */,
+				9ED61BC61657CFE3005FC553 /* release_notes.md */,
+				9ED61BC71657CFE3005FC553 /* TestFlight.h */,
 			);
-			path = TestFlightSDK1.2beta2;
+			path = TestFlightSDK1.1;
 			sourceTree = "<group>";
 		};
 		9EF99092164BDCC000AF6EC4 /* Models */ = {
@@ -509,6 +511,8 @@
 				9E1B0B7A164FF2A9009C1261 /* stressed_linen.png in Resources */,
 				9E1B0B8616500126009C1261 /* Delete.png in Resources */,
 				9E1B0B8716500126009C1261 /* Delete@2x.png in Resources */,
+				9ED61BC91657CFE3005FC553 /* README.md in Resources */,
+				9ED61BCA1657CFE3005FC553 /* release_notes.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -693,6 +697,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlightSDK1.2beta2\"",
+					"\"$(SRCROOT)/TestFlightSDK1.1\"",
 				);
 				PRODUCT_NAME = Stray;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -715,6 +720,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlightSDK1.2beta2\"",
+					"\"$(SRCROOT)/TestFlightSDK1.1\"",
 				);
 				PRODUCT_NAME = Stray;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -792,6 +798,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlightSDK1.2beta2\"",
+					"\"$(SRCROOT)/TestFlightSDK1.1\"",
 				);
 				PRODUCT_NAME = Stray;
 				TARGETED_DEVICE_FAMILY = 1;
