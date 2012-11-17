@@ -33,7 +33,7 @@
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) NSArray *standaloneWeekdaySymbols;
 
-@property (nonatomic) State *state;
+@property (nonatomic, weak) State *state;
 
 @end
 
