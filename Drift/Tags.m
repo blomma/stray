@@ -53,10 +53,6 @@
 #pragma mark -
 #pragma mark Public methods
 
-- (void)removeAllObjects {
-    [self.tags removeAllObjects];
-}
-
 - (void)addObjectsFromArray:(NSArray *)objects {
     if (objects.count == 0) {
         return;
@@ -99,16 +95,6 @@
 
 - (void)removeObjectAtIndex:(NSUInteger)index {
     [self.tags removeObjectAtIndex:index];
-
-    [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[Tag class]]) {
-            [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
-        }
-    }];
-}
-
-- (void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)object {
-    [self.tags replaceObjectAtIndex:index withObject:object];
 
     [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([obj isKindOfClass:[Tag class]]) {
