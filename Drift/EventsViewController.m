@@ -220,6 +220,11 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
     EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)indexPath.section];
     Event *event           = [eventGroup.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
 
+    // Are we about to remove the active event
+    if ([self.state.activeEvent isEqual:event]) {
+        self.state.activeEvent = nil;
+    }
+
     [[DataRepository instance] deleteEvent:event];
     [self.eventGroups removeEvent:event];
 

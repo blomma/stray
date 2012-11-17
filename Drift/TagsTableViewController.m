@@ -174,6 +174,12 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
+
+    // Delete this tag from all of the filter also, if present
+    State *state = [DataRepository instance].state;
+    [state.eventGroupsFilter removeObject:tag];
+    [state.eventsFilter removeObject:tag];
+
     [[DataRepository instance] deleteTag:tag];
 
     CGPoint fromValue = cell.frontView.layer.position;

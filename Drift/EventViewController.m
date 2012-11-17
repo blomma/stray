@@ -58,6 +58,12 @@
                                 context:NULL];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+
+    [self.eventTimerControl paus];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
@@ -65,6 +71,7 @@
 
     if (event) {
         [self.eventTimerControl startWithEvent:event];
+
         NSString *tagName = event.inTag ? event.inTag.name : @"-- --";
         [self.tag setTitle:[tagName uppercaseString] forState:UIControlStateNormal];
 
@@ -171,7 +178,7 @@
 - (void)updateEventTimeWithDate:(NSDate *)date {
     Event *event = self.state.activeEvent;
 
-    if (date && event) {
+    if (date && event.startDate) {
         static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit;
 
         NSDateComponents *components = [self.calendar components:unitFlags fromDate:event.startDate toDate:date options:0];

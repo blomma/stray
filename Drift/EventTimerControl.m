@@ -45,29 +45,29 @@
     return self;
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-    [self.updateTimer invalidate];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    if ([self.event isActive]) {
-        if (![self.updateTimer isValid]) {
-            self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
-                                                                target:self
-                                                              selector:@selector(timerUpdate)
-                                                              userInfo:nil
-                                                               repeats:YES];
-        }
-
-        [self.updateTimer fire];
-    }
-}
+//- (void)viewWillAppear:(BOOL)animated {
+//    DLog(NSStringFromSelector(_cmd));
+//    if ([self.event isActive]) {
+//        if (![self.updateTimer isValid]) {
+//            self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
+//                                                                target:self
+//                                                              selector:@selector(timerUpdate)
+//                                                              userInfo:nil
+//                                                               repeats:YES];
+//        }
+//
+//        [self.updateTimer fire];
+//    }
+//}
 
 #pragma mark -
 #pragma mark Public methods
 
 - (void)startWithEvent:(Event *)event {
-    [self prepareForReuse];
+    self.previousSecondTick = -1;
+    self.previousNow        = -1;
+
+    [self.updateTimer invalidate];
 
     self.event = event;
 
@@ -90,6 +90,10 @@
                                                           userInfo:nil
                                                            repeats:YES];
     }
+}
+
+- (void)paus {
+    [self.updateTimer invalidate];
 }
 
 - (void)stop {
@@ -117,13 +121,6 @@
 
 #pragma mark -
 #pragma mark Private methods
-
-- (void)prepareForReuse {
-    self.previousSecondTick = -1;
-    self.previousNow        = -1;
-
-    [self.updateTimer invalidate];
-}
 
 - (NSTimeInterval)angleToTimeInterval:(CGFloat)a {
     return ((a / (2 * M_PI)) * 3600);
