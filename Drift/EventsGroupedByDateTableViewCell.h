@@ -8,7 +8,7 @@
 
 #import "EventGroup.h"
 
-@interface EventGroupTableViewCell : UITableViewCell
+@interface EventsGroupedByDateTableViewCell : UITableViewCell
 
 @property (nonatomic, weak) IBOutlet UILabel *hours;
 @property (nonatomic, weak) IBOutlet UILabel *minutes;

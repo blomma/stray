@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventGroups.h"
+#import "EventsGroupedByDate.h"
 
 #import "NSDate+Utilities.h"
 #import "Global.h"
 #import "EventGroup.h"
 
-@interface EventGroups ()
+@interface EventsGroupedByDate ()
 
 @property (nonatomic) NSCalendar *calendar;
 
@@ -24,7 +24,7 @@
 @property (nonatomic) NSMapTable *eventToEventGroupsMap;
 @end
 
-@implementation EventGroups
+@implementation EventsGroupedByDate
 
 // ==========================
 // = Designated initializer =

@@ -261,21 +261,21 @@
             </objects>
             <point key="canvasLocation" x="522" y="-825"/>
         </scene>
-        <!--EventGroupsTableViewController-->
+        <!--EventsGroupedByDateViewController-->
         <scene sceneID="aWJ-lh-tEK">
             <objects>
-                <viewController storyboardIdentifier="EventGroupsTableViewController" id="ONY-RJ-IiQ" userLabel="EventGroupsTableViewController" customClass="EventGroupsTableViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventsGroupedByDateViewController" id="ONY-RJ-IiQ" userLabel="EventsGroupedByDateViewController" customClass="EventsGroupedByDateViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GX1-mM-rxe">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="100" sectionHeaderHeight="22" sectionFooterHeight="22" id="Bla-gS-XRc" userLabel="EventGroupsTableView">
+                            <tableView clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="100" sectionHeaderHeight="22" sectionFooterHeight="22" id="Bla-gS-XRc" userLabel="EventsGroupedByDateTableView">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <inset key="contentInset" minX="0.0" minY="30" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="EventGroupTableViewCell" rowHeight="100" id="UtO-Rb-o4n" userLabel="EventGroupTableViewCell" customClass="EventGroupTableViewCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="EventsGroupedByDateTableViewCell" rowHeight="100" id="UtO-Rb-o4n" userLabel="EventsGroupedByDateTableViewCell" customClass="EventsGroupedByDateTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -513,24 +513,6 @@
         </scene>
     </scenes>
     <classes>
-        <class className="EventGroupTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventGroupTableViewCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="day" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="hours" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="minutes" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="month" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="weekDay" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="year" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="EventGroupsTableViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventGroupsTableViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="filterView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
         <class className="EventTimerControl" superclassName="UIControl">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/EventTimerControl.h"/>
         </class>
@@ -551,6 +533,24 @@
                 <relationship kind="outlet" name="eventTimerControl" candidateClass="EventTimerControl"/>
                 <relationship kind="outlet" name="tag" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="toggleStartStopButton" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="EventsGroupedByDateTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventsGroupedByDateTableViewCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="day" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="hours" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="minutes" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="month" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="weekDay" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="year" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="EventsGroupedByDateViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventsGroupedByDateViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="filterView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
             </relationships>
         </class>
         <class className="EventsTableViewCell" superclassName="UITableViewCell">
@@ -601,6 +601,6 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="tQF-pe-67W"/>
+        <segue reference="B0f-12-RI0"/>
     </inferredMetricsTieBreakers>
 </document>

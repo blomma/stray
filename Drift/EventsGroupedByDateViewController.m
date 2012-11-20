@@ -1,28 +1,28 @@
 //
-//  EventGroupsTableViewController.m
+//  EventsGroupedByDateViewController.m
 //  Drift
 //
 //  Created by Mikael Hultgren on 5/31/12.
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventGroupsTableViewController.h"
+#import "EventsGroupedByDateViewController.h"
 
 #import <QuartzCore/QuartzCore.h>
 
 #import "Event.h"
-#import "EventGroups.h"
+#import "EventsGroupedByDate.h"
 #import "DataRepository.h"
 #import "TagButton.h"
-#import "EventGroupTableViewCell.h"
+#import "EventsGroupedByDateTableViewCell.h"
 #import "Global.h"
 #import "Tags.h"
 
-@interface EventGroupsTableViewController ()
+@interface EventsGroupedByDateViewController ()
 
 @property (nonatomic) NSMutableArray *filterViewButtons;
 
-@property (nonatomic) EventGroups *eventGroups;
+@property (nonatomic) EventsGroupedByDate *eventGroups;
 @property (nonatomic) BOOL isEventGroupsInvalid;
 
 @property (nonatomic) Tags *tags;
@@ -37,7 +37,7 @@
 
 @end
 
-@implementation EventGroupsTableViewController
+@implementation EventsGroupedByDateViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -53,7 +53,7 @@
 
     [self initFilterView];
 
-    self.eventGroups = [[EventGroups alloc] initWithEvents:[DataRepository instance].events
+    self.eventGroups = [[EventsGroupedByDate alloc] initWithEvents:[DataRepository instance].events
                                                withFilters:self.state.eventGroupsFilter];
     self.isEventGroupsInvalid = YES;
 
@@ -83,7 +83,7 @@
 #pragma mark -
 #pragma mark Public properties
 
-- (EventGroups *)eventGroups {
+- (EventsGroupedByDate *)eventGroups {
     if (self.isEventGroupsInvalid) {
         _eventGroups.filters      = self.state.eventGroupsFilter;
         self.isEventGroupsInvalid = NO;
@@ -104,11 +104,11 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"EventGroupTableViewCell";
+    static NSString *CellIdentifier = @"EventsGroupedByDateTableViewCell";
 
     EventGroup *eventGroup = [self.eventGroups filteredObjectAtIndex:(NSUInteger)indexPath.row];
 
-    EventGroupTableViewCell *cell = (EventGroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    EventsGroupedByDateTableViewCell *cell = (EventsGroupedByDateTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 
     NSDateComponents *components = eventGroup.filteredEventsDateComponents;
 

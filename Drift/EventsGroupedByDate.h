@@ -8,7 +8,7 @@
 
 #import "Event.h"
 
-@interface EventGroups : NSObject
+@interface EventsGroupedByDate : NSObject
 
 @property (nonatomic) NSSet *filters;
 

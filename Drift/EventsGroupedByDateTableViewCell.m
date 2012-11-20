@@ -6,10 +6,10 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventGroupTableViewCell.h"
+#import "EventsGroupedByDateTableViewCell.h"
 
-@interface EventGroupTableViewCell ()
+@interface EventsGroupedByDateTableViewCell ()
 @end
 
-@implementation EventGroupTableViewCell
+@implementation EventsGroupedByDateTableViewCell
 @end
