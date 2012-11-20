@@ -45,21 +45,6 @@
     return self;
 }
 
-//- (void)viewWillAppear:(BOOL)animated {
-//    DLog(NSStringFromSelector(_cmd));
-//    if ([self.event isActive]) {
-//        if (![self.updateTimer isValid]) {
-//            self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
-//                                                                target:self
-//                                                              selector:@selector(timerUpdate)
-//                                                              userInfo:nil
-//                                                               repeats:YES];
-//        }
-//
-//        [self.updateTimer fire];
-//    }
-//}
-
 #pragma mark -
 #pragma mark Public methods
 
