@@ -22,8 +22,8 @@
 @property (nonatomic, readwrite) NSDateComponents *filteredEventsDateComponents;
 @property (nonatomic) BOOL isFilteredEventsDateComponentsInvalid;
 
-@property (nonatomic, readwrite) Event *activeEvent;
-@property (nonatomic) BOOL isActiveEventInvalid;
+@property (nonatomic) BOOL filteredEventsContainsActiveEvent;
+@property (nonatomic) BOOL isFilteredEventsContainsActiveEventInvalid;
 
 @property (nonatomic) NSCalendar *calendar;
 
@@ -64,19 +64,19 @@
 }
 
 - (NSDateComponents *)filteredEventsDateComponents {
-    if (self.activeEvent || self.isFilteredEventsDateComponentsInvalid) {
+    if (self.filteredEventsContainsActiveEvent || self.isFilteredEventsDateComponentsInvalid) {
         [self updateFilteredEventsDateComponents];
     }
 
     return _filteredEventsDateComponents;
 }
 
-- (Event *)activeEvent {
-    if (self.isActiveEventInvalid) {
-        [self updateActiveEvent];
+- (BOOL)filteredEventsContainsActiveEvent {
+    if (self.isFilteredEventsContainsActiveEventInvalid) {
+        [self updateFilteredEventsContainsActiveEvent];
     }
 
-    return _activeEvent;
+    return _filteredEventsContainsActiveEvent;
 }
 
 - (void)setFilters:(NSSet *)filters {
@@ -116,40 +116,37 @@
 - (void)addEvent:(Event *)event {
     [self.events addObject:event];
 
-    self.isActiveEventInvalid = YES;
-
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
         self.isFilteredEventsInvalid = YES;
+        self.isFilteredEventsContainsActiveEventInvalid = YES;
     }
 }
 
 - (void)removeEvent:(Event *)event {
     [self.events removeObject:event];
 
-    self.isActiveEventInvalid = YES;
-
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
         self.isFilteredEventsInvalid = YES;
+        self.isFilteredEventsContainsActiveEventInvalid = YES;
     }
 }
 
 - (void)updateEvent:(Event *)event {
-    self.isActiveEventInvalid = YES;
-
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
         self.isFilteredEventsInvalid = YES;
+        self.isFilteredEventsContainsActiveEventInvalid = YES;
     }
 }
 
 #pragma mark -
 #pragma mark Private methods
 
-- (void)updateActiveEvent {
-    self.activeEvent = nil;
+- (void)updateFilteredEventsContainsActiveEvent {
+    self.filteredEventsContainsActiveEvent = NO;
 
-    for (Event *event in self.events) {
+    for (Event *event in self.filteredEvents) {
         if ([event isActive]) {
-            self.activeEvent = event;
+            self.filteredEventsContainsActiveEvent = YES;
             return;
         }
     }

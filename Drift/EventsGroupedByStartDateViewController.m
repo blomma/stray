@@ -93,6 +93,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(appWillEnterForegroundNotification:)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
+
     if (self.isTagsInvalid) {
         [self setupFilterView];
     }
@@ -106,6 +111,10 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationWillEnterForegroundNotification
+                                                  object:nil];
+
     // Check if we disapeared because of presenting a controller
     if (!self.presentedViewController) {
         [self.tableView disablePulling];
@@ -383,6 +392,10 @@
     if ([deletedTags intersectsSet:self.state.eventsFilter]) {
         self.isEventGroupsInvalid = YES;
     }
+}
+
+- (void)appWillEnterForegroundNotification:(NSNotification *)note {
+    [self.tableView reloadData];
 }
 
 - (void)touchUpInsideTagFilterButton:(TagButton *)sender forEvent:(UIEvent *)event {

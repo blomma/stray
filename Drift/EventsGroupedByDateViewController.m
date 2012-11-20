@@ -61,16 +61,28 @@
                                              selector:@selector(objectsDidChange:)
                                                  name:kDataManagerObjectsDidChangeNotification
                                                object:[DataRepository instance]];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(appWillEnterForegroundNotification:)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
 
     if (self.isTagsInvalid) {
         [self setupFilterView];
     }
 
     [self.tableView reloadData];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationWillEnterForegroundNotification
+                                                  object:nil];
 }
 
 #pragma mark -
@@ -287,6 +299,10 @@
     if ([deletedTags intersectsSet:self.state.eventGroupsFilter]) {
         self.isEventGroupsInvalid = YES;
     }
+}
+
+- (void)appWillEnterForegroundNotification:(NSNotification *)note {
+    [self.tableView reloadData];
 }
 
 @end
