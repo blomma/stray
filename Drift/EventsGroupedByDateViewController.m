@@ -104,11 +104,11 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"EventsGroupedByDateTableViewCell";
+    static NSString *cellIdentifier = @"EventsGroupedByDateTableViewCell";
 
     EventGroup *eventGroup = [self.eventGroups filteredObjectAtIndex:(NSUInteger)indexPath.row];
 
-    EventsGroupedByDateTableViewCell *cell = (EventsGroupedByDateTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    EventsGroupedByDateTableViewCell *cell = (EventsGroupedByDateTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 
     NSDateComponents *components = eventGroup.filteredEventsDateComponents;
 

@@ -6,18 +6,18 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventsTableViewCell.h"
+#import "EventsGroupedByStartDateTableViewCell.h"
 
 #import <QuartzCore/QuartzCore.h>
 
-@interface EventsTableViewCell ()
+@interface EventsGroupedByStartDateTableViewCell ()
 
 @property (nonatomic) CALayer *separatorLayer;
 @property (nonatomic) CALayer *selectLayer;
 
 @end
 
-@implementation EventsTableViewCell
+@implementation EventsGroupedByStartDateTableViewCell
 
 - (IBAction)touchUpInsideTagButton:(UIButton *)sender forEvent:(UIEvent *)event {
     if ([self.delegate respondsToSelector:@selector(cell:tappedTagButton:forEvent:)]) {

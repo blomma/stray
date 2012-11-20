@@ -6,12 +6,12 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventsViewController.h"
+#import "EventsGroupedByStartDateViewController.h"
 
 #import "CAAnimation+Blocks.h"
 #import "DataRepository.h"
 #import "Event.h"
-#import "EventsTableViewCell.h"
+#import "EventsGroupedByStartDateTableViewCell.h"
 #import "Global.h"
 #import "SKBounceAnimation.h"
 #import "TagButton.h"
@@ -21,9 +21,7 @@
 #import "UIScrollView+SVPulling.h"
 #import "EventsGroupedByStartDate.h"
 
-static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
-
-@interface EventsViewController ()<TransformableTableViewGestureEditingRowDelegate, EventTableViewCellDelegate>
+@interface EventsGroupedByStartDateViewController ()<TransformableTableViewGestureEditingRowDelegate, EventsGroupedByStartDateTableViewCellDelegate>
 
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
 
@@ -45,7 +43,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
 @end
 
-@implementation EventsViewController
+@implementation EventsGroupedByStartDateViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -67,14 +65,14 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
-    __block __weak EventsViewController *weakSelf = self;
+    __block __weak EventsGroupedByStartDateViewController *weakSelf = self;
 
     [self.tableView addPullingWithActionHandler:^(SVPullingState state, SVPullingState previousState, CGFloat height) {
         if (state == SVPullingStateAction && (previousState == SVPullingStatePullingAdd || previousState == SVPullingStatePullingClose)) {
             if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 200000000);
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                    [weakSelf.delegate eventsViewControllerDidDimiss:weakSelf];
+                    [weakSelf.delegate eventsGroupedByStartDateViewControllerDidDimiss:weakSelf];
                 });
             }
         }
@@ -184,7 +182,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
         return;
     }
 
-    EventsTableViewCell *cell = (EventsTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     [cell.layer removeAllAnimations];
 
     if (!cell.backgroundView) {
@@ -201,7 +199,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
         return;
     }
 
-    EventsTableViewCell *cell = (EventsTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     CGFloat alpha             = 1 - (gestureRecognizer.translationInTableView.x / self.editingCommitLength);
     cell.contentView.alpha = alpha;
 
@@ -214,7 +212,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
         return;
     }
 
-    EventsTableViewCell *cell = (EventsTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     cell.contentView.alpha = 1;
 
     EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)indexPath.section];
@@ -239,7 +237,7 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-    EventsTableViewCell *cell = (EventsTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     CGPoint fromValue         = cell.layer.position;
     CGPoint toValue           = CGPointMake(CGRectGetMidX(cell.layer.bounds), fromValue.y);
 
@@ -284,8 +282,8 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 
     self.state.activeEvent = event;
 
-    if ([self.delegate respondsToSelector:@selector(eventsViewControllerDidDimiss:)]) {
-        [self.delegate eventsViewControllerDidDimiss:self];
+    if ([self.delegate respondsToSelector:@selector(eventsGroupedByStartDateViewControllerDidDimiss:)]) {
+        [self.delegate eventsGroupedByStartDateViewControllerDidDimiss:self];
     }
 }
 
@@ -302,9 +300,11 @@ static NSString *eventTableViewCellIdentifier = @"eventTableViewCellIdentifier";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *cellIdentifier = @"EventsGroupedByStartDateTableViewCell";
+    
     Event *event = [self.eventGroups filteredEventAtIndexPath:indexPath];
 
-    EventsTableViewCell *cell = (EventsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:eventTableViewCellIdentifier];
+    EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     cell.contentView.backgroundColor = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
 
     // Tag

@@ -8,15 +8,15 @@
 
 #import "Event.h"
 
-@protocol EventTableViewCellDelegate <NSObject>
+@protocol EventsGroupedByStartDateTableViewCellDelegate <NSObject>
 
 - (void)cell:(UITableViewCell *)cell tappedTagButton:(UIButton *)sender forEvent:(UIEvent *)event;
 
 @end
 
-@interface EventsTableViewCell : UITableViewCell
+@interface EventsGroupedByStartDateTableViewCell : UITableViewCell
 
-@property (nonatomic, weak) id<EventTableViewCellDelegate> delegate;
+@property (nonatomic, weak) id<EventsGroupedByStartDateTableViewCellDelegate> delegate;
 
 @property (weak, nonatomic) IBOutlet UILabel *eventStartTime;
 @property (weak, nonatomic) IBOutlet UILabel *eventStartDay;
