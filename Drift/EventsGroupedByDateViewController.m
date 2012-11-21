@@ -13,7 +13,7 @@
 #import "Event.h"
 #import "EventsGroupedByDate.h"
 #import "DataRepository.h"
-#import "TagButton.h"
+#import "TagFilterButton.h"
 #import "EventsGroupedByDateTableViewCell.h"
 #import "Global.h"
 #import "Tags.h"
@@ -186,33 +186,33 @@
     for (NSUInteger i = 0; i < numElements; i++) {
         Tag *tag = [self.tags objectAtIndex:i];
 
-        TagButton *tagButton = [[TagButton alloc] init];
-        tagButton.tagObject = tag;
-        [tagButton addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
+        TagFilterButton *button = [[TagFilterButton alloc] init];
+        button.tagObject = tag;
+        [button addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 
-        tagButton.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:13];
-        tagButton.titleLabel.backgroundColor = [UIColor clearColor];
-        tagButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        button.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:13];
+        button.titleLabel.backgroundColor = [UIColor clearColor];
+        button.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
 
-        tagButton.backgroundColor = [UIColor clearColor];
+        button.backgroundColor = [UIColor clearColor];
 
-        tagButton.titleEdgeInsets = titleInset;
+        button.titleEdgeInsets = titleInset;
 
-        [tagButton setTitleColor:[UIColor colorWithWhite:0.392f alpha:1.000] forState:UIControlStateNormal];
-        [tagButton setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor colorWithWhite:0.392f alpha:1.000] forState:UIControlStateNormal];
+        [button setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
 
         // setup frames to appear besides each other in the slider
         CGFloat elementX = elementSize.width * i;
-        tagButton.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
+        button.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
 
         if ([self.state.eventGroupsFilter containsObject:tag]) {
-            tagButton.selected = YES;
+            button.selected = YES;
         }
 
-        [self.filterViewButtons addObject:tagButton];
+        [self.filterViewButtons addObject:button];
 
         // add the subview
-        [self.filterView addSubview:tagButton];
+        [self.filterView addSubview:button];
     }
 
     // set the size of the scrollview's content
@@ -222,7 +222,7 @@
     self.isEventGroupsInvalid = YES;
 }
 
-- (void)touchUpInsideTagFilterButton:(TagButton *)sender forEvent:(UIEvent *)event {
+- (void)touchUpInsideTagFilterButton:(TagFilterButton *)sender forEvent:(UIEvent *)event {
     if ([self.state.eventGroupsFilter containsObject:sender.tagObject]) {
         [self.state.eventGroupsFilter removeObject:sender.tagObject];
 
