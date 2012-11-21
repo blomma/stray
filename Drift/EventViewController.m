@@ -13,6 +13,7 @@
 #import "DataRepository.h"
 #import "TagsTableViewController.h"
 #import "Global.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface EventViewController ()
 
@@ -74,6 +75,19 @@
 
         NSString *tagName = event.inTag ? event.inTag.name : @"-- --";
         [self.tag setTitle:[tagName uppercaseString] forState:UIControlStateNormal];
+        CALayer *layer = [CALayer layer];
+        CGRect frame = self.tag.titleLabel.layer.frame;
+        frame.origin.x -= 6;
+        frame.size.width += 12;
+
+        frame.origin.y -= 3;
+        frame.size.height += 4;
+        layer.frame = frame;
+
+        layer.cornerRadius = 6;
+        layer.backgroundColor = [[UIColor colorWithWhite:0.267 alpha:1.000] CGColor];
+
+        [self.tag.layer insertSublayer:layer below:self.tag.titleLabel.layer];
 
         if ([event isActive]) {
             [self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
