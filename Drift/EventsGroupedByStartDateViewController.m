@@ -317,7 +317,7 @@
     cell.contentView.backgroundColor = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
 
     // Tag
-    NSString *tagName = event.inTag ? event.inTag.name : @"-- --";
+    NSString *tagName = event.inTag ? event.inTag.name : @"";
     [cell.tagName setTitle:[tagName uppercaseString] forState:UIControlStateNormal];
 
     // StartTime

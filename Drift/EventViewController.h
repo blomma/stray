@@ -7,8 +7,10 @@
 //
 
 #import "EventTimerControl.h"
+
 #import "TagsTableViewController.h"
 #import "EventsGroupedByStartDateViewController.h"
+#import "TagButton.h"
 
 @interface EventViewController : UIViewController <TagsTableViewControllerDelegate, EventsGroupedByStartDateViewControllerDelegate>
 
@@ -28,7 +30,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *eventStopMonth;
 @property (weak, nonatomic) IBOutlet UILabel *eventStopYear;
 
-@property (weak, nonatomic) IBOutlet UIButton *tag;
+@property (weak, nonatomic) IBOutlet TagButton *tag;
 
 - (IBAction)toggleEvent:(id)sender;
 

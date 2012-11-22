@@ -65,8 +65,8 @@
                                 <color key="textColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" id="gZy-kP-gXw" userLabel="Tag">
-                                <rect key="frame" x="238" y="74" width="82" height="38"/>
+                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" id="gZy-kP-gXw" userLabel="Tag" customClass="TagButton">
+                                <rect key="frame" x="233" y="74" width="82" height="38"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="13"/>
@@ -456,12 +456,12 @@
                                                     <color key="textColor" red="0.50980392156862742" green="0.50980392156862742" blue="0.50980392156862742" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" id="1LA-G9-qpd" userLabel="TagName">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" id="1LA-G9-qpd" userLabel="TagName" customClass="TagButton">
                                                     <rect key="frame" x="223" y="9" width="82" height="38"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="15"/>
+                                                    <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="13"/>
                                                     <state key="normal" title="Button">
-                                                        <color key="titleColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="titleColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
@@ -530,7 +530,7 @@
                 <relationship kind="outlet" name="eventTimeHours" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="eventTimeMinutes" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="eventTimerControl" candidateClass="EventTimerControl"/>
-                <relationship kind="outlet" name="tag" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="tag" candidateClass="TagButton"/>
                 <relationship kind="outlet" name="toggleStartStopButton" candidateClass="UIButton"/>
             </relationships>
         </class>
@@ -579,6 +579,9 @@
         <class className="RootViewController" superclassName="UIPageViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RootViewController.h"/>
         </class>
+        <class className="TagButton" superclassName="UIButton">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TagButton.h"/>
+        </class>
         <class className="TagTableViewCell" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TagTableViewCell.h"/>
             <relationships>
@@ -600,6 +603,6 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="B0f-12-RI0"/>
+        <segue reference="tQF-pe-67W"/>
     </inferredMetricsTieBreakers>
 </document>

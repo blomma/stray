@@ -8,6 +8,8 @@
 
 #import "Event.h"
 
+#import "TagButton.h"
+
 @protocol EventsGroupedByStartDateTableViewCellDelegate <NSObject>
 
 - (void)cell:(UITableViewCell *)cell tappedTagButton:(UIButton *)sender forEvent:(UIEvent *)event;
@@ -31,7 +33,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *eventStopMonth;
 @property (weak, nonatomic) IBOutlet UILabel *eventStopYear;
 
-@property (weak, nonatomic) IBOutlet UIButton *tagName;
+@property (weak, nonatomic) IBOutlet TagButton *tagName;
 
 - (IBAction)touchUpInsideTagButton:(UIButton *)sender forEvent:(UIEvent *)event;
 
