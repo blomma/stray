@@ -47,7 +47,7 @@
     frame.size.width += 12;
 
     frame.origin.y -= 1;
-    frame.size.height += 2;
+    frame.size.height += 1;
 
     if ([self.currentTitle isEqualToString:@""]) {
         frame.size.width = 30;
