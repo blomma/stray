@@ -21,20 +21,17 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        self.titleBackground = [CALayer layer];
-        self.titleBackground.backgroundColor = [[UIColor colorWithWhite:0.392 alpha:1.000] CGColor];
-        self.titleBackground.cornerRadius = 6;
-
-        [self.layer insertSublayer:self.titleBackground below:self.titleLabel.layer];
     }
 
     return self;
 }
 
 - (void)setTitle:(NSString *)title forState:(UIControlState)state {
-    [super setTitle:title forState:state];
+    if ([title isEqualToString:@""]) {
+        title = @"‒‒ ‒‒";
+    }
 
-    [self renderBackground];
+    [super setTitle:title forState:state];
 }
 
 #pragma mark -

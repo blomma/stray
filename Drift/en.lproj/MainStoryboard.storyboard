@@ -71,7 +71,7 @@
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="13"/>
                                 <state key="normal" title="Button">
-                                    <color key="titleColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -461,7 +461,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="13"/>
                                                     <state key="normal" title="Button">
-                                                        <color key="titleColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="titleColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
@@ -566,7 +566,7 @@
                 <relationship kind="outlet" name="eventStopYear" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="eventTimeHours" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="eventTimeMinutes" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="tagName" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="tagName" candidateClass="TagButton"/>
             </relationships>
         </class>
         <class className="EventsGroupedByStartDateViewController" superclassName="UIViewController">
