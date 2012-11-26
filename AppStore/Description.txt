@@ -1,12 +1,7 @@
-Want to keep track of how much time you spend working, eating, sleeping or maybe skydiving from a weather balloon(something we all should try). Then this app might be the thing for you. Start the timer, tag it and stop it when you are done, simple as that.
-
-But wait, that is not all, if you swipe left you can see the total time spent per day and if you swipe up you can see every event you have started. There is even a handy way for you to filter by tags what times you want to see.
-
-And that is all, for now…
+Stray is a way for you to keep track of how you spend your time, the thought being that it should be fast and easy to start a timer, tag it and be done.
 
 Features:
 • beautiful interface(or so the kitchen gnomes say)
-• absolutely no annoying music and/or sounds
 • Swiping, so much swiping, also some touching, but mostly swiping
 
 ✮ Now for something quite different, a quick tutorial ✮
@@ -27,4 +22,4 @@ Events view (screenshot ➂)
 
 Tag view (screenshot ➃)
 • Swipe right on a tag to edit/delete
-• Drag down to create tag/close view
+• Drag down to create tag/close view✮ For more information please visit http://stray.artsoftheinsane.com/ ✮
