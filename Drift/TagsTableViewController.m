@@ -225,21 +225,21 @@
     TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     [cell.frontView.layer removeAllAnimations];
 
-    UIImage *background = [UIImage imageNamed:@"stressed_linen"];
-    cell.backView.backgroundColor = [UIColor colorWithPatternImage:background];
+//    UIImage *background = [UIImage imageNamed:@"gray_jean"];
+//    cell.backView.backgroundColor = [UIColor colorWithPatternImage:background];
 
     UIImage *deleteButton = [UIImage imageNamed:@"delete"];
     [cell.deleteButton setImage:deleteButton forState:UIControlStateNormal];
     [cell.deleteButton setImage:deleteButton forState:UIControlStateHighlighted];
     [cell.deleteButton setImage:deleteButton forState:UIControlStateSelected];
 
-    if (!cell.backViewInnerShadowLayer) {
-        InnerShadowLayer *innerShadowLayer = [self innerShadowLayerForCell:cell];
-        cell.backViewInnerShadowLayer = innerShadowLayer;
-        [cell.backView.layer addSublayer:innerShadowLayer];
-    }
-
-    [self addFrontViewShadowToCell:cell];
+//    if (!cell.backViewInnerShadowLayer) {
+//        InnerShadowLayer *innerShadowLayer = [self innerShadowLayerForCell:cell];
+//        cell.backViewInnerShadowLayer = innerShadowLayer;
+//        [cell.backView.layer addSublayer:innerShadowLayer];
+//    }
+//
+//    [self addFrontViewShadowToCell:cell];
 
     // If we have a cell in editstate and it is not this cell then cancel it
     if (self.tagInEditState && indexOfTagInEditState != (NSUInteger)indexPath.row) {
