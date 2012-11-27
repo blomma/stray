@@ -13,7 +13,6 @@
 #import "TransformableTableViewGestureRecognizer.h"
 #import "TagTableViewCell.h"
 #import "SKBounceAnimation.h"
-#import "InnerShadowLayer.h"
 #import "CAAnimation+Blocks.h"
 #import "UIScrollView+SVPulling.h"
 
@@ -225,22 +224,6 @@
     TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     [cell.frontView.layer removeAllAnimations];
 
-//    UIImage *background = [UIImage imageNamed:@"gray_jean"];
-//    cell.backView.backgroundColor = [UIColor colorWithPatternImage:background];
-
-    UIImage *deleteButton = [UIImage imageNamed:@"delete"];
-    [cell.deleteButton setImage:deleteButton forState:UIControlStateNormal];
-    [cell.deleteButton setImage:deleteButton forState:UIControlStateHighlighted];
-    [cell.deleteButton setImage:deleteButton forState:UIControlStateSelected];
-
-//    if (!cell.backViewInnerShadowLayer) {
-//        InnerShadowLayer *innerShadowLayer = [self innerShadowLayerForCell:cell];
-//        cell.backViewInnerShadowLayer = innerShadowLayer;
-//        [cell.backView.layer addSublayer:innerShadowLayer];
-//    }
-//
-//    [self addFrontViewShadowToCell:cell];
-
     // If we have a cell in editstate and it is not this cell then cancel it
     if (self.tagInEditState && indexOfTagInEditState != (NSUInteger)indexPath.row) {
         NSIndexPath *indexPathInEditState = [NSIndexPath indexPathForRow:(NSInteger)indexOfTagInEditState inSection:0];
@@ -340,26 +323,6 @@
 
 #pragma mark -
 #pragma mark Private methods
-
-- (InnerShadowLayer *)innerShadowLayerForCell:(TagTableViewCell *)cell {
-    InnerShadowLayer *innerShadowLayer = [InnerShadowLayer layer];
-    innerShadowLayer.shadowMask    = InnerShadowMaskTop | InnerShadowMaskBottom;
-    innerShadowLayer.frame         = cell.backView.frame;
-    innerShadowLayer.shadowRadius  = 3;
-    innerShadowLayer.shadowOpacity = 0.8f;
-
-    return innerShadowLayer;
-}
-
-- (void)addFrontViewShadowToCell:(TagTableViewCell *)cell {
-    cell.frontView.layer.shadowColor   = [[UIColor colorWithWhite:0 alpha:1] CGColor];
-    cell.frontView.layer.masksToBounds = NO;
-    cell.frontView.layer.shadowOffset  = CGSizeMake(0.0f, 0.0f);
-    cell.frontView.layer.shadowRadius  = 2;
-    cell.frontView.layer.shadowOpacity = 0.7f;
-    CGRect shadowFrame = CGRectInset(cell.frontView.bounds, 0.0f, 4);
-    cell.frontView.layer.shadowPath = [UIBezierPath bezierPathWithRect:shadowFrame].CGPath;
-}
 
 - (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration completion:(void (^)(BOOL finished))completion {
     static NSString *keyPath = @"position";
