@@ -52,7 +52,7 @@
     if (!self.cellBottomSeparatorLayer) {
         self.cellBottomSeparatorLayer = [CALayer layer];
         self.cellBottomSeparatorLayer.frame = CGRectMake(0, self.layer.bounds.size.height - 1, self.layer.bounds.size.width, 1);
-        self.cellBottomSeparatorLayer.backgroundColor = [UIColor colorWithWhite:0.267 alpha:0.05f].CGColor;
+        self.cellBottomSeparatorLayer.backgroundColor = [UIColor colorWithWhite:0.267 alpha:0.1f].CGColor;
 
         [self.backView.layer addSublayer:self.cellBottomSeparatorLayer];
     }
@@ -60,7 +60,7 @@
     if (!self.cellTopSeparatorLayer) {
         self.cellTopSeparatorLayer = [CALayer layer];
         self.cellTopSeparatorLayer.frame = CGRectMake(0, 0, self.layer.bounds.size.width, 1);
-        self.cellTopSeparatorLayer.backgroundColor = [UIColor colorWithWhite:0.267 alpha:0.05f].CGColor;
+        self.cellTopSeparatorLayer.backgroundColor = [UIColor colorWithWhite:0.267 alpha:0.1f].CGColor;
 
         [self.backView.layer addSublayer:self.cellTopSeparatorLayer];
     }
