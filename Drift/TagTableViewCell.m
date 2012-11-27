@@ -10,60 +10,41 @@
 
 @interface TagTableViewCell ()
 
-@property (nonatomic) NoHitCAShapeLayer *dashLayer;
 @property (nonatomic) CALayer *selectLayer;
-@property (nonatomic) CALayer *cellRightSeparatorLayer;
-@property (nonatomic) CALayer *cellBottomSeparatorLayer;
-@property (nonatomic) CALayer *cellTopSeparatorLayer;
 
 @end
 
 @implementation TagTableViewCell
 
-- (void)drawRect:(CGRect)rect {
-    if (!self.dashLayer) {
-        self.dashLayer = [NoHitCAShapeLayer layer];
-        self.dashLayer.frame           = CGRectMake(self.nameTextField.frame.origin.x - 10, self.nameTextField.frame.origin.y + 33, self.nameTextField.frame.size.width + 20, 2);
-        self.dashLayer.fillColor       = [UIColor clearColor].CGColor;
-        self.dashLayer.strokeColor     = [UIColor colorWithWhite:0.267 alpha:0.8f].CGColor;
-        self.dashLayer.lineWidth       = 2.0f;
-        self.dashLayer.lineJoin        = kCALineJoinRound;
-        self.dashLayer.lineDashPattern = @[@10, @5];
+- (void)awakeFromNib {
+    CALayer *cellRightSeparatorLayer = [CALayer layer];
+    cellRightSeparatorLayer.frame = CGRectMake(-10, 0, 10, self.layer.bounds.size.height);
+    cellRightSeparatorLayer.backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.0f].CGColor;
 
-        CGMutablePathRef path = CGPathCreateMutable();
-        CGPathMoveToPoint(path, NULL, 0, 0);
-        CGPathAddLineToPoint(path, NULL, self.nameTextField.frame.size.width + 20, 0);
+    [self.frontView.layer addSublayer:cellRightSeparatorLayer];
 
-        [self.dashLayer setPath:path];
-        CGPathRelease(path);
+    NoHitCAShapeLayer *dashLayer = [NoHitCAShapeLayer layer];
+    dashLayer.frame           = CGRectMake(self.nameTextField.frame.origin.x - 10, self.nameTextField.frame.origin.y + 33, self.nameTextField.frame.size.width + 20, 2);
+    dashLayer.fillColor       = [UIColor clearColor].CGColor;
+    dashLayer.strokeColor     = [UIColor colorWithWhite:0.267 alpha:0.8f].CGColor;
+    dashLayer.lineWidth       = 2.0f;
+    dashLayer.lineJoin        = kCALineJoinRound;
+    dashLayer.lineDashPattern = @[@10, @5];
 
-        [self.backView.layer insertSublayer:self.dashLayer below:self.nameTextField.layer];
-    }
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, NULL, 0, 0);
+    CGPathAddLineToPoint(path, NULL, self.nameTextField.frame.size.width + 20, 0);
 
-    // Show a marker when sliding the cell
-    if (!self.cellRightSeparatorLayer) {
-        self.cellRightSeparatorLayer = [CALayer layer];
-        self.cellRightSeparatorLayer.frame = CGRectMake(-10, 0, 10, self.layer.bounds.size.height);
-        self.cellRightSeparatorLayer.backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.0f].CGColor;
+    [dashLayer setPath:path];
+    CGPathRelease(path);
 
-        [self.frontView.layer addSublayer:self.cellRightSeparatorLayer];
-    }
+    [self.backView.layer insertSublayer:dashLayer below:self.nameTextField.layer];
 
-    if (!self.cellBottomSeparatorLayer) {
-        self.cellBottomSeparatorLayer = [CALayer layer];
-        self.cellBottomSeparatorLayer.frame = CGRectMake(0, self.layer.bounds.size.height - 1, self.layer.bounds.size.width, 1);
-        self.cellBottomSeparatorLayer.backgroundColor = [UIColor colorWithWhite:0.267 alpha:0.1f].CGColor;
+    self.selectLayer                 = [CALayer layer];
+    self.selectLayer.frame           = CGRectMake(self.layer.bounds.size.width - 10, 0, 10, self.layer.bounds.size.height);
+    self.selectLayer.backgroundColor = [UIColor clearColor].CGColor;
 
-        [self.backView.layer addSublayer:self.cellBottomSeparatorLayer];
-    }
-
-    if (!self.cellTopSeparatorLayer) {
-        self.cellTopSeparatorLayer = [CALayer layer];
-        self.cellTopSeparatorLayer.frame = CGRectMake(0, 0, self.layer.bounds.size.width, 1);
-        self.cellTopSeparatorLayer.backgroundColor = [UIColor colorWithWhite:0.267 alpha:0.1f].CGColor;
-
-        [self.backView.layer addSublayer:self.cellTopSeparatorLayer];
-    }
+    [self.frontView.layer addSublayer:self.selectLayer];
 }
 
 - (void)prepareForReuse {
@@ -86,13 +67,6 @@
     }
 
     self.marked = marked;
-
-    if (!self.selectLayer) {
-        self.selectLayer                 = [CALayer layer];
-        self.selectLayer.frame           = CGRectMake(self.layer.bounds.size.width - 10, 0, 10, self.layer.bounds.size.height);
-        self.selectLayer.backgroundColor = [UIColor clearColor].CGColor;
-        [self.frontView.layer addSublayer:self.selectLayer];
-    }
 
     UIColor *backgroundColor = marked ? [UIColor colorWithWhite:0.251f alpha:1.000] : [UIColor clearColor];
 

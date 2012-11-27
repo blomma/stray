@@ -8,6 +8,8 @@
 
 #import "InnerShadowLayer.h"
 
+#import "TagTableViewCellBackView.h"
+
 @class TagTableViewCell;
 
 @protocol TagTableViewCellDelegate <NSObject>
@@ -26,7 +28,7 @@
 @property (nonatomic, weak) IBOutlet UILabel *name;
 @property (nonatomic, weak) IBOutlet UITextField *nameTextField;
 
-@property (nonatomic, weak) IBOutlet UIView *backView;
+@property (nonatomic, weak) IBOutlet TagTableViewCellBackView *backView;
 @property (nonatomic) InnerShadowLayer *backViewInnerShadowLayer;
 
 @property (nonatomic, weak) IBOutlet UIView *frontView;

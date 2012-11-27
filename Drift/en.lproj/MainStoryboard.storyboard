@@ -191,7 +191,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="73"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view opaque="NO" contentMode="scaleToFill" id="GBL-8y-p6I" userLabel="backView">
+                                        <view opaque="NO" contentMode="scaleToFill" id="GBL-8y-p6I" userLabel="backView" customClass="TagTableViewCellBackView">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="74"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
@@ -590,12 +590,15 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TagTableViewCell.h"/>
             <relationships>
                 <relationship kind="action" name="touchUpInsideDeleteButton:forEvent:" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="backView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="backView" candidateClass="TagTableViewCellBackView"/>
                 <relationship kind="outlet" name="deleteButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="frontView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="name" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="nameTextField" candidateClass="UITextField"/>
             </relationships>
+        </class>
+        <class className="TagTableViewCellBackView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TagTableViewCellBackView.h"/>
         </class>
         <class className="TagsTableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TagsTableViewController.h"/>
