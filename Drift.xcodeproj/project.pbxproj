@@ -69,12 +69,10 @@
 		9EAE7DFB1603D038007F32EC /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DFA1603D038007F32EC /* Default.png */; };
 		9EAF701616367B4600FA079C /* SKBounceAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAF701516367B4600FA079C /* SKBounceAnimation.m */; };
 		9EB15F6F165D6A7F0054AEA2 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB15F6E165D6A7F0054AEA2 /* TagButton.m */; };
-		9ED61BC81657CFE3005FC553 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED61BC41657CFE3005FC553 /* libTestFlight.a */; };
-		9ED61BC91657CFE3005FC553 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9ED61BC51657CFE3005FC553 /* README.md */; };
-		9ED61BCA1657CFE3005FC553 /* release_notes.md in Resources */ = {isa = PBXBuildFile; fileRef = 9ED61BC61657CFE3005FC553 /* release_notes.md */; };
 		9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCC5CA160DBFA1003CB2BB /* Tag.m */; };
 		9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */; };
 		9EF3311F166569DB005CFEF2 /* TagTableViewCellBackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EF3311E166569DB005CFEF2 /* TagTableViewCellBackView.m */; };
+		9EF331331666A066005CFEF2 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EF331321666A066005CFEF2 /* Crashlytics.framework */; };
 		9EF9909A164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EF99099164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m */; };
 /* End PBXBuildFile section */
 
@@ -166,10 +164,6 @@
 		9EAF701516367B4600FA079C /* SKBounceAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKBounceAnimation.m; sourceTree = "<group>"; };
 		9EB15F6D165D6A7F0054AEA2 /* TagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagButton.h; sourceTree = "<group>"; };
 		9EB15F6E165D6A7F0054AEA2 /* TagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagButton.m; sourceTree = "<group>"; };
-		9ED61BC41657CFE3005FC553 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
-		9ED61BC51657CFE3005FC553 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		9ED61BC61657CFE3005FC553 /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.md; sourceTree = "<group>"; };
-		9ED61BC71657CFE3005FC553 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		9EDCC5C9160DBFA1003CB2BB /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tag.h; sourceTree = "<group>"; };
 		9EDCC5CA160DBFA1003CB2BB /* Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tag.m; sourceTree = "<group>"; };
 		9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EventTimerControl.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -177,6 +171,7 @@
 		9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9EF3311D166569DB005CFEF2 /* TagTableViewCellBackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagTableViewCellBackView.h; sourceTree = "<group>"; };
 		9EF3311E166569DB005CFEF2 /* TagTableViewCellBackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagTableViewCellBackView.m; sourceTree = "<group>"; };
+		9EF331321666A066005CFEF2 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		9EF99098164CEA8F00AF6EC4 /* EventsGroupedByStartDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsGroupedByStartDate.h; sourceTree = "<group>"; };
 		9EF99099164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsGroupedByStartDate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -192,7 +187,7 @@
 				9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */,
 				9E42F1EF15570FD60087F602 /* UIKit.framework in Frameworks */,
 				9E42F1F115570FD60087F602 /* Foundation.framework in Frameworks */,
-				9ED61BC81657CFE3005FC553 /* libTestFlight.a in Frameworks */,
+				9EF331331666A066005CFEF2 /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,7 +220,6 @@
 		9E15DDA116023FE4007146CE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				9ED61BC31657CFE3005FC553 /* TestFlightSDK1.1 */,
 				9E66D0E71655661600339E99 /* Objective-Record */,
 				9EAF701316367B4600FA079C /* SKBounceAnimation */,
 				9E15DE0016024161007146CE /* libz.dylib */,
@@ -254,6 +248,7 @@
 		9E42F1ED15570FD60087F602 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9EF331321666A066005CFEF2 /* Crashlytics.framework */,
 				9E63BBF3156EAA710006FEFC /* CoreData.framework */,
 				9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */,
 				9E42F1EE15570FD60087F602 /* UIKit.framework */,
@@ -426,17 +421,6 @@
 			path = SKBounceAnimation;
 			sourceTree = "<group>";
 		};
-		9ED61BC31657CFE3005FC553 /* TestFlightSDK1.1 */ = {
-			isa = PBXGroup;
-			children = (
-				9ED61BC41657CFE3005FC553 /* libTestFlight.a */,
-				9ED61BC51657CFE3005FC553 /* README.md */,
-				9ED61BC61657CFE3005FC553 /* release_notes.md */,
-				9ED61BC71657CFE3005FC553 /* TestFlight.h */,
-			);
-			path = TestFlightSDK1.1;
-			sourceTree = "<group>";
-		};
 		9EF99092164BDCC000AF6EC4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -462,6 +446,7 @@
 				9E42F1E615570FD60087F602 /* Sources */,
 				9E42F1E715570FD60087F602 /* Frameworks */,
 				9E42F1E815570FD60087F602 /* Resources */,
+				9EF331311666A019005CFEF2 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -513,8 +498,6 @@
 				9E513DFE163433C70080313A /* Icon.png in Resources */,
 				9E1B0B8616500126009C1261 /* Delete.png in Resources */,
 				9E1B0B8716500126009C1261 /* Delete@2x.png in Resources */,
-				9ED61BC91657CFE3005FC553 /* README.md in Resources */,
-				9ED61BCA1657CFE3005FC553 /* release_notes.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -533,6 +516,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd Drift\n/usr/local/bin/mogenerator --template-var arc=true -m \"CoreDataModel.xcdatamodeld/\"";
+		};
+		9EF331311666A019005CFEF2 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Crashlytics.framework/run a7595f63555bece3a877e50607ecce88bc77984f";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -698,10 +694,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/TestFlightSDK1.1\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = Stray;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -720,10 +713,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/TestFlightSDK1.1\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = Stray;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -797,10 +787,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/TestFlightSDK1.1\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = Stray;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
