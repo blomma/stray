@@ -35,7 +35,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    int *x = NULL; *x = 42;
     self.editingStateRightOffset = 260;
     self.editingCommitLength     = 60;
 
