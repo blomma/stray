@@ -1,25 +1,27 @@
-Stray is a way for you to keep track of how you spend your time, the thought being that it should be fast and easy to start a timer, tag it and be done.
+Stray is a way for you to keep track of how you spend your time, the thought being that it should be simple and easy to start a timer, tag it and be done.
 
 Features:
 • beautiful interface(or so the kitchen gnomes say)
 • Swiping, so much swiping, also some touching, but mostly swiping
 
-✮ Now for something quite different, a quick tutorial ✮
+For more information please visit http://stray.artsoftheinsane.com ⌨
+
+➻ Now for something quite different, a quick tutorial
 
 Clock view (screenshot ➀)
 • Swipe up to see all events
 • Holding down on either the orange(start time) or the blue(stop time) triangles puts the clock in edit mode and you can freely rotate them around to change time.
-• Click “— —“ to tag it, can be clicked again after choosing tag to change again.
+• Click “‒‒ ‒‒” to tag it, can be clicked again after choosing tag to change again.
 
 Day view (screenshot ➁)
 • Filter by clicking small stripe at top
 
 Events view (screenshot ➂)
-• Swipe right on a event to delete
+• Swipe right on an event to delete
 • Click to select event to show
 • Drag down to close view
 • Filter by clicking small stripe at top
 
 Tag view (screenshot ➃)
 • Swipe right on a tag to edit/delete
-• Drag down to create tag/close view✮ For more information please visit http://stray.artsoftheinsane.com/ ✮
+• Drag down to create tag/close view
