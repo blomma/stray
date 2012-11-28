@@ -35,8 +35,16 @@
         }
     }
 
-    // EVENTGROUPS FILTER
-    NSArray *objects = [defaults objectForKey:@"eventGroupsFilter"];
+    // EVENTSGROUPEDBYDATE FILTER
+    // Check for legacy and load that first
+    NSArray *objects = nil;
+
+    objects = [defaults objectForKey:@"eventGroupsFilter"];
+
+    if (!objects) {
+        objects = [defaults objectForKey:@"eventsGroupedByDateFilter"];
+    }
+
     self.eventGroupsFilter = [NSMutableSet set];
     if (objects) {
         for (uriData in objects) {
@@ -49,8 +57,14 @@
         }
     }
 
-    // EVENTS FILTER
-    objects           = [defaults objectForKey:@"eventsFilter"];
+    // EVENTSGROUPEDBYSTARTDATE FILTER
+    // Check for legacy and load that first
+    objects = [defaults objectForKey:@"eventsFilter"];
+
+    if (!objects) {
+        objects = [defaults objectForKey:@"eventsGroupedByStartDateFilter"];
+    }
+
     self.eventsFilter = [NSMutableSet set];
     if (objects) {
         for (uriData in objects) {
@@ -76,7 +90,7 @@
 
     [defaults setObject:uriData forKey:@"activeEvent"];
 
-    // EVENTGROUPS FILTER
+    // EVENTSGROUPEDBYDATE FILTER
     NSMutableSet *objects = [NSMutableSet set];
     for (Tag *tag in self.eventGroupsFilter) {
         uri     = [tag.objectID URIRepresentation];
@@ -84,9 +98,12 @@
 
         [objects addObject:uriData];
     }
-    [defaults setObject:[objects allObjects] forKey:@"eventGroupsFilter"];
+    // Remove legacy default
+    [defaults removeObjectForKey:@"eventGroupsFilter"];
 
-    // EVENTS FILTER
+    [defaults setObject:[objects allObjects] forKey:@"eventsGroupedByDateFilter"];
+
+    // EVENTSGROUPEDBYSTARTDATE FILTER
     objects = [NSMutableSet set];
     for (Tag *tag in self.eventsFilter) {
         uri     = [tag.objectID URIRepresentation];
@@ -94,7 +111,10 @@
 
         [objects addObject:uriData];
     }
-    [defaults setObject:[objects allObjects] forKey:@"eventsFilter"];
+    // Remove legacy default
+    [defaults removeObjectForKey:@"eventsFilter"];
+
+    [defaults setObject:[objects allObjects] forKey:@"eventsGroupedByStartDateFilter"];
 }
 
 @end
