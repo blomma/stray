@@ -16,15 +16,18 @@
 
 @implementation TagTableViewCell
 
+#pragma mark -
+#pragma mark Lifecycle
+
 - (void)awakeFromNib {
     CALayer *cellRightSeparatorLayer = [CALayer layer];
-    cellRightSeparatorLayer.frame = CGRectMake(-10, 0, 10, self.layer.bounds.size.height);
+    cellRightSeparatorLayer.frame           = CGRectMake(-10, 0, 10, self.layer.bounds.size.height);
     cellRightSeparatorLayer.backgroundColor = [UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1.0f].CGColor;
 
     [self.frontView.layer addSublayer:cellRightSeparatorLayer];
 
     NoHitCAShapeLayer *dashLayer = [NoHitCAShapeLayer layer];
-    dashLayer.frame           = CGRectMake(self.nameTextField.frame.origin.x - 10, self.nameTextField.frame.origin.y + 33, self.nameTextField.frame.size.width + 20, 2);
+    dashLayer.frame           = CGRectMake(self.tagNameTextField.frame.origin.x - 10, self.tagNameTextField.frame.origin.y + 33, self.tagNameTextField.frame.size.width + 20, 2);
     dashLayer.fillColor       = [UIColor clearColor].CGColor;
     dashLayer.strokeColor     = [UIColor colorWithWhite:0.267 alpha:0.8f].CGColor;
     dashLayer.lineWidth       = 2.0f;
@@ -33,12 +36,12 @@
 
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathMoveToPoint(path, NULL, 0, 0);
-    CGPathAddLineToPoint(path, NULL, self.nameTextField.frame.size.width + 20, 0);
+    CGPathAddLineToPoint(path, NULL, self.tagNameTextField.frame.size.width + 20, 0);
 
     [dashLayer setPath:path];
     CGPathRelease(path);
 
-    [self.backView.layer insertSublayer:dashLayer below:self.nameTextField.layer];
+    [self.backView.layer insertSublayer:dashLayer below:self.tagNameTextField.layer];
 
     self.selectLayer                 = [CALayer layer];
     self.selectLayer.frame           = CGRectMake(self.layer.bounds.size.width - 10, 0, 10, self.layer.bounds.size.height);
@@ -54,6 +57,9 @@
         self.selectLayer.backgroundColor = [UIColor clearColor].CGColor;
     }
 }
+
+#pragma mark -
+#pragma mark Public methods
 
 - (IBAction)touchUpInsideDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event {
     if ([self.delegate respondsToSelector:@selector(cell:tappedDeleteButton:forEvent:)]) {
@@ -79,6 +85,15 @@
     }
 
     self.selectLayer.backgroundColor = backgroundColor.CGColor;
+}
+
+#pragma mark -
+#pragma mark Public properties
+
+- (void)setTagTitle:(NSString *)title {
+    self.tagNameTextField.text = title ? [title uppercaseString] : @"";
+    self.tagName.text = title ? [title uppercaseString] : @"Swipe ⇢ to name";
+    self.tagName.textColor = title ? [UIColor colorWithWhite:0.267 alpha:1.000] : [UIColor colorWithWhite:0.267 alpha:0.4];
 }
 
 #pragma mark -

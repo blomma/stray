@@ -245,8 +245,8 @@
                                     <outlet property="backView" destination="GBL-8y-p6I" id="Ttn-rl-pRJ"/>
                                     <outlet property="deleteButton" destination="RYh-i0-qYA" id="aWg-Js-ihZ"/>
                                     <outlet property="frontView" destination="YqV-FT-yHV" id="ww5-tS-KUj"/>
-                                    <outlet property="name" destination="kbd-ZN-Ygm" id="kg1-mR-e6R"/>
-                                    <outlet property="nameTextField" destination="oLT-tc-FcA" id="374-h3-JW1"/>
+                                    <outlet property="tagName" destination="kbd-ZN-Ygm" id="K3T-on-6RL"/>
+                                    <outlet property="tagNameTextField" destination="oLT-tc-FcA" id="k17-ce-ORQ"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

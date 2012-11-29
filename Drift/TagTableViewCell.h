@@ -25,13 +25,14 @@
 
 @property (nonatomic, weak) id<TagTableViewCellDelegate> delegate;
 
-@property (nonatomic, weak) IBOutlet UILabel *name;
-@property (nonatomic, weak) IBOutlet UITextField *nameTextField;
+@property (nonatomic, weak) IBOutlet UILabel *tagName;
+@property (nonatomic, weak) IBOutlet UITextField *tagNameTextField;
 
 @property (nonatomic, weak) IBOutlet TagTableViewCellBackView *backView;
 @property (nonatomic) InnerShadowLayer *backViewInnerShadowLayer;
 
 @property (nonatomic, weak) IBOutlet UIView *frontView;
+@property (nonatomic) NSString *tagTitle;
 
 @property (nonatomic, weak) IBOutlet UIButton *deleteButton;
 

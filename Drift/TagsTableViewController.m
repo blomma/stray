@@ -119,8 +119,7 @@
         TagTableViewCell *cell = (TagTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"TagsTableViewCellIdentifier"];
 
         NSString *tagName = [tag.name copy];
-        cell.nameTextField.text = tagName;
-        cell.name.text          = tagName ? [tagName uppercaseString] : @"-- --";
+        cell.tagTitle = tagName;
 
         cell.delegate = self;
 
@@ -198,7 +197,7 @@
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
     tag.name = name;
 
-    cell.name.text = [name uppercaseString];
+    cell.tagTitle = name;
 
     CGPoint fromValue = cell.frontView.layer.position;
     CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
@@ -265,7 +264,7 @@
         CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
 
         // Dimiss if we are showing it
-        [cell.nameTextField resignFirstResponder];
+        [cell.tagNameTextField resignFirstResponder];
         [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
 
         self.tagInEditState = nil;
