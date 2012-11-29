@@ -281,6 +281,7 @@
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
     TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    [cell.tagNameTextField resignFirstResponder];
 
     CGPoint fromValue = cell.frontView.layer.position;
     CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
