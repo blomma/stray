@@ -200,10 +200,12 @@
 - (void)cell:(TagTableViewCell *)cell didChangeTagName:(NSString *)name {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
-    Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
-    tag.name = name;
+    if (name && ![name isEqualToString:@""]) {
+        Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
+        tag.name = name;
 
-    cell.tagTitle = name;
+        cell.tagTitle = name;
+    }
 
     CGPoint fromValue = cell.frontView.layer.position;
     CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
