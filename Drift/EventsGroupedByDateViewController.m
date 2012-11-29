@@ -178,41 +178,45 @@
     [self.filterViewButtons removeAllObjects];
 
     // define number and size of elements
-    NSUInteger numElements = self.tags.count;
+    NSUInteger numElements = 0;
     CGSize elementSize     = CGSizeMake(120, self.filterView.frame.size.height);
     UIEdgeInsets titleInset = UIEdgeInsetsMake(0, 5, 0, 5);
 
     // add elements
-    for (NSUInteger i = 0; i < numElements; i++) {
+    for (NSUInteger i = 0; i < self.tags.count; i++) {
         Tag *tag = [self.tags objectAtIndex:i];
 
-        TagFilterButton *button = [[TagFilterButton alloc] init];
-        button.tagObject = tag;
-        [button addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
+        // Only show tags that have a name set
+        if (tag.name) {
+            TagFilterButton *button = [[TagFilterButton alloc] init];
+            button.tagObject = tag;
+            [button addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 
-        button.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:13];
-        button.titleLabel.backgroundColor = [UIColor clearColor];
-        button.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+            button.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:13];
+            button.titleLabel.backgroundColor = [UIColor clearColor];
+            button.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
 
-        button.backgroundColor = [UIColor clearColor];
+            button.backgroundColor = [UIColor clearColor];
 
-        button.titleEdgeInsets = titleInset;
+            button.titleEdgeInsets = titleInset;
 
-        [button setTitleColor:[UIColor colorWithWhite:0.392f alpha:1.000] forState:UIControlStateNormal];
-        [button setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor colorWithWhite:0.392f alpha:1.000] forState:UIControlStateNormal];
+            [button setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
 
-        // setup frames to appear besides each other in the slider
-        CGFloat elementX = elementSize.width * i;
-        button.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
+            // setup frames to appear besides each other in the slider
+            CGFloat elementX = elementSize.width * numElements;
+            button.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
 
-        if ([self.state.eventGroupsFilter containsObject:tag]) {
-            button.selected = YES;
+            if ([self.state.eventGroupsFilter containsObject:tag]) {
+                button.selected = YES;
+            }
+            
+            [self.filterViewButtons addObject:button];
+            
+            // add the subview
+            [self.filterView addSubview:button];
+            numElements++;
         }
-
-        [self.filterViewButtons addObject:button];
-
-        // add the subview
-        [self.filterView addSubview:button];
     }
 
     // set the size of the scrollview's content

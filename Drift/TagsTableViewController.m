@@ -140,6 +140,13 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
+
+    // If this is a tag with no name then we cant select it
+    if (!tag.name) {
+        return;
+    }
+
     // Now we check if we have any cells in editstate,
     // if so we animate them back to normal state
     if (self.tagInEditState) {
@@ -157,7 +164,6 @@
 
     [cell marked:!cell.marked withAnimation:YES];
 
-    Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
     self.event.inTag = [self.event.inTag isEqual:tag] ? nil : tag;
 
     if ([self.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
