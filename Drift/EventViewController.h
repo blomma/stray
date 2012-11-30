@@ -33,5 +33,6 @@
 @property (weak, nonatomic) IBOutlet TagButton *tag;
 
 - (IBAction)toggleEvent:(id)sender;
+- (IBAction)showTags:(id)sender;
 
 @end

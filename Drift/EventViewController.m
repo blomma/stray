@@ -73,9 +73,6 @@
     if (event) {
         [self.eventTimerControl startWithEvent:event];
 
-        NSString *tagName = event.inTag ? event.inTag.name : @"";
-        [self.tag setTitle:[tagName uppercaseString] forState:UIControlStateNormal];
-
         if ([event isActive]) {
             [self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
             [self animateStartEvent];
@@ -87,6 +84,8 @@
         [self.eventTimerControl reset];
         [self reset];
     }
+
+    [self.tag setTitle:event.inTag.name forState:UIControlStateNormal];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -141,13 +140,21 @@
         [self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
         [self animateStartEvent];
     }
+
+    [self.tag setTitle:event.inTag.name forState:UIControlStateNormal];
+}
+
+- (IBAction)showTags:(id)sender {
+    Event *event = self.state.activeEvent;
+    if (event) {
+        [self performSegueWithIdentifier:@"segueToTagsFromEvent" sender:self];
+    }
 }
 
 #pragma mark -
 #pragma mark Private methods
 
 - (void)reset {
-    [self.tag setTitle:@"" forState:UIControlStateNormal];
     [self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
 
     self.eventStartTime.text  = @"";

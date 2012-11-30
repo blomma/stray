@@ -316,9 +316,7 @@
     EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     cell.contentView.backgroundColor = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
 
-    // Tag
-    NSString *tagName = event.inTag ? event.inTag.name : @"";
-    [cell.tagName setTitle:[tagName uppercaseString] forState:UIControlStateNormal];
+    [cell.tagName setTitle:event.inTag.name forState:UIControlStateNormal];
 
     // StartTime
     static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
