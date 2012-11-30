@@ -22,7 +22,7 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         self.titleBackground = [CALayer layer];
-        self.titleBackground.backgroundColor = [[UIColor colorWithWhite:0.922 alpha:1.000] CGColor];
+        self.titleBackground.backgroundColor = [[UIColor colorWithWhite:0.878 alpha:1.000] CGColor];
         self.titleBackground.cornerRadius = 6;
         self.titleBackground.borderColor = [UIColor colorWithWhite:0.267 alpha:0.1f].CGColor;
         self.titleBackground.borderWidth = 0.5f;
