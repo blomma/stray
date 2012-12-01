@@ -1,4 +1,3 @@
-# Changes 1.1
 * Move the clock face up a bit on iPhone 5, should make the thumb action easier.
 * In the Tagview, maybe black as a background wasn’t so hot when you slide it, so I made it more white, well actually I made it really white. But it blends better now and that should count for something.
 * Overall less dark colors everywhere, not sure what my obsession with black was, lovely color, but not for this app.
