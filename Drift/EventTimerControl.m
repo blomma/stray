@@ -130,21 +130,25 @@
 }
 
 - (void)drawStart {
-    self.startLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
+    NSTimeInterval nowSeconds = [self.startDate timeIntervalSince1970];
+
+    CGFloat a = (CGFloat)((M_PI * 2) * floor(fmod(nowSeconds, 3600) / 60) / 60);
+    self.startLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
 }
 
 - (void)drawNow {
     NSDate *from = self.event.isActive ? self.nowDate : self.stopDate;
 
-    NSTimeInterval timeInterval    = [from timeIntervalSinceDate:self.startDate];
-    CGFloat elapsedSecondsIntoHour = (CGFloat)fmod(timeInterval, 3600);
+    NSTimeInterval nowSeconds = [from timeIntervalSince1970];
 
     // We want fluid updates to the seconds
-    CGFloat a = (CGFloat)((M_PI * 2) * fmod(elapsedSecondsIntoHour, 60) / 60);
+    double secondsIntoMinute = fmod(nowSeconds, 60);
+
+    CGFloat a = (CGFloat)(M_PI * 2 * (secondsIntoMinute / 60));
     self.secondLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
 
     // Update the tick marks for the seconds
-    CGFloat secondTick = (CGFloat)floor(fmod(elapsedSecondsIntoHour, 60));
+    CGFloat secondTick = (CGFloat)floor(secondsIntoMinute);
 
     if (fabs(secondTick) != fabs(self.previousSecondTick)) {
         for (NSUInteger i = 0; i < self.secondProgressTicksLayer.sublayers.count; i++) {
@@ -160,8 +164,11 @@
         self.previousSecondTick = secondTick;
     }
 
+
+    double secondsIntoHour = fmod(nowSeconds, 3600);
+
     // And for the minutes we want a more tick/tock behavior
-    a = (CGFloat)((M_PI * 2) * floor(elapsedSecondsIntoHour / 60) / 60);
+    a = (CGFloat)(M_PI * 2 * (floor(secondsIntoHour / 60) / 60));
     if (fabs(a) != fabs(self.previousNow)) {
         self.nowLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
         self.previousNow        = a;
@@ -251,14 +258,14 @@
     // We make the bounds larger for the hit test, otherwise the target is
     // to damn small for human hands, martians not included
     UIBezierPath *startHandPath = [UIBezierPath bezierPath];
-    [startHandPath moveToPoint:CGPointMake(15, 0)];     // Start at the top
-    [startHandPath addLineToPoint:CGPointMake(10, 17)];  // Move to bottom left
-    [startHandPath addLineToPoint:CGPointMake(20, 17)]; // Move to bottom right
+    [startHandPath moveToPoint:CGPointMake(15, 17)];   // Start at the top
+    [startHandPath addLineToPoint:CGPointMake(10, 0)];  // Move to bottom left
+    [startHandPath addLineToPoint:CGPointMake(20, 0)]; // Move to bottom right
 
     // position
     self.startLayer.bounds      = CGRectMake(0.0, 0.0, 30, 30);
     self.startLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-    self.startLayer.anchorPoint = CGPointMake(0.5, 3.6);
+    self.startLayer.anchorPoint = CGPointMake(0.5, 5.2);
 
     // drawing
     self.startLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
