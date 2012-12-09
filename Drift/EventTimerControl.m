@@ -457,7 +457,6 @@
         // we want to move the start to it's start position
         if (self.deltaLayer == self.startLayer) {
             [self drawStart];
-            [self drawNow];
 
             self.isTransforming = EventTimerStartDateTransformingStop;
 
@@ -470,6 +469,8 @@
                                                                    repeats:YES];
             }
         } else if (self.deltaLayer == self.nowLayer) {
+            [self drawNow];
+
             self.isTransforming = EventTimerStopDateTransformingStop;
         }
 
