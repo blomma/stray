@@ -122,7 +122,10 @@
         return;
     }
 
-    self.infoView = [[UIView alloc] initWithFrame:self.view.frame];
+    CGRect frame = [[UIScreen mainScreen] bounds];
+
+    self.infoView = [[UIView alloc] initWithFrame:frame];
+
 
     UIImageView *infoOverlay = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Info-Event"]];
     [self.infoView addSubview:infoOverlay];
@@ -131,7 +134,7 @@
     UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [dismissButton addTarget:self action:@selector(dismissInfoView) forControlEvents:UIControlEventTouchUpInside];
     dismissButton.backgroundColor = [UIColor clearColor];
-    dismissButton.frame           = self.view.frame;
+    dismissButton.frame           = frame;
     [self.infoView addSubview:dismissButton];
 
     [view addSubview:self.infoView];
