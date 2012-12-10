@@ -34,6 +34,7 @@
 @property (nonatomic) NSArray *standaloneWeekdaySymbols;
 
 @property (nonatomic, weak) State *state;
+@property (nonatomic) UIView *infoView;
 
 @end
 

@@ -14,6 +14,7 @@
 #import "TagsTableViewController.h"
 #import "Global.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIImage+Retina4.h"
 
 @interface EventViewController ()
 
@@ -23,6 +24,7 @@
 @property (nonatomic) NSDateComponents *previousNowComponents;
 
 @property (nonatomic) State *state;
+@property (nonatomic) UIView *infoView;
 
 @end
 
@@ -110,6 +112,34 @@
 
 - (void)eventsGroupedByStartDateViewControllerDidDimiss:(EventsGroupedByStartDateViewController *)viewController {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark -
+#pragma mark InfoViewDelegate
+
+- (void)showInfoViewInView:(UIView *)view {
+    if (self.infoView) {
+        return;
+    }
+
+    self.infoView = [[UIView alloc] initWithFrame:self.view.frame];
+
+    UIImageView *infoOverlay = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Info-Event"]];
+    [self.infoView addSubview:infoOverlay];
+
+    // Dismiss button
+    UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [dismissButton addTarget:self action:@selector(dismissInfoView) forControlEvents:UIControlEventTouchUpInside];
+    dismissButton.backgroundColor = [UIColor clearColor];
+    dismissButton.frame           = self.view.frame;
+    [self.infoView addSubview:dismissButton];
+
+    [view addSubview:self.infoView];
+}
+
+- (void)dismissInfoView {
+    [self.infoView removeFromSuperview];
+    self.infoView = nil;
 }
 
 #pragma mark -

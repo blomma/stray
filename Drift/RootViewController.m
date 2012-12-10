@@ -7,7 +7,9 @@
 //
 
 #import "RootViewController.h"
+
 #import "UIPageViewController+UIPageControl.h"
+#import "InfoView.h"
 
 @interface RootViewController ()
 
@@ -51,6 +53,23 @@
     self.pageControl.backgroundColor               = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
     self.pageControl.pageIndicatorTintColor        = [UIColor colorWithWhite:0.267 alpha:0.2];
     self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithWhite:0.267 alpha:0.8];
+
+    UIButton *button = [[UIButton alloc] init];
+    [button addTarget:self action:@selector(touchUpInsideInfoButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
+
+    button.titleLabel.font = [UIFont fontWithName:@"Entypo" size:30];
+
+    button.titleLabel.backgroundColor = [UIColor clearColor];
+    button.titleLabel.lineBreakMode   = NSLineBreakByTruncatingTail;
+
+    button.backgroundColor = [UIColor clearColor];
+
+    [button setTitleColor:[UIColor colorWithWhite:0.510f alpha:1.000] forState:UIControlStateNormal];
+    [button setTitle:[NSString stringWithUTF8String:"\u2753"] forState:UIControlStateNormal];
+
+    button.frame = CGRectMake(self.view.bounds.size.width - 30, self.view.bounds.size.height - 30, 30, 30);
+
+    [self.view addSubview:button];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -90,7 +109,19 @@
 #pragma mark -
 #pragma mark UIPageViewControllerDelegate
 
+
 #pragma mark -
 #pragma mark Private methods
+
+- (void)touchUpInsideInfoButton:(UIButton *)sender forEvent:(UIEvent *)event {
+    NSArray *views = self.viewControllers;
+
+    UIViewController *viewController = [views objectAtIndex:0];
+    
+    if([viewController conformsToProtocol:@protocol(InfoView)]) {
+        id<InfoView> p = (id<InfoView>)viewController;
+        [p showInfoViewInView:self.view];
+    }
+}
 
 @end
