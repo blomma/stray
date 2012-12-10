@@ -218,20 +218,15 @@
         self.eventStartMonth.alpha = 1;
         self.eventStartTime.alpha = 1;
         self.eventStartYear.alpha = 1;
-
-        self.eventStopDay.alpha = 0.2;
-        self.eventStopMonth.alpha = 0.2;
-        self.eventStopTime.alpha = 0.2;
-        self.eventStopYear.alpha = 0.2;
     } completion:nil];
 }
 
 - (void)animateStopEvent {
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         self.eventStartDay.alpha = 0.2;
-        self.eventStartMonth.alpha = 0.2;
+        self.eventStartMonth.alpha = 1;
         self.eventStartTime.alpha = 0.2;
-        self.eventStartYear.alpha = 0.2;
+        self.eventStartYear.alpha = 1;
 
         self.eventStopDay.alpha = 1;
         self.eventStopMonth.alpha = 1;
