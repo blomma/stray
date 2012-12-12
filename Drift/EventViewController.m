@@ -248,41 +248,58 @@
     Event *event = [DataRepository instance].state.activeEvent;
 
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        CGFloat eventStartAlpha, eventStopAlpha, eventTimeAlpha;
+        CGFloat eventStartAlpha, eventStopAlpha, eventTimeAlpha, eventStartMonthYearAlpha, eventStopMonthYearAlpha;
         switch (eventTimerTransformingEnum) {
             case EventTimerStartDateTransformingStart:
                 eventStartAlpha = 1;
+                eventStartMonthYearAlpha = 1;
+
                 eventStopAlpha = 0.2f;
+                eventStopMonthYearAlpha = 0.2f;
+
                 eventTimeAlpha = 0.2f;
                 break;
             case EventTimerStartDateTransformingStop:
                 eventStartAlpha = event.isActive ? 1:0.2f;
-                eventStopAlpha = event.isActive ? 0.2f:1;
+                eventStartMonthYearAlpha = 1;
+
+                eventStopAlpha = 1;
+                eventStopMonthYearAlpha = 1;
+
                 eventTimeAlpha = 1;
                 break;
             case EventTimerStopDateTransformingStart:
                 eventStartAlpha = 0.2f;
+                eventStartMonthYearAlpha = 0.2f;
+                
                 eventStopAlpha = 1;
+                eventStopMonthYearAlpha = 1;
+                
                 eventTimeAlpha = 0.2f;
+
                 break;
             case EventTimerStopDateTransformingStop:
                 eventStartAlpha = event.isActive ? 1:0.2f;
+                eventStartMonthYearAlpha = 1;
+
                 eventStopAlpha = event.isActive ? 0.2f:1;
+                eventStopMonthYearAlpha = 1;
+                
                 eventTimeAlpha = 1;
                 break;
-                default:
+            default:
                 break;
         }
 
         self.eventStartDay.alpha = eventStartAlpha;
-        self.eventStartMonth.alpha = eventStartAlpha;
+        self.eventStartMonth.alpha = eventStartMonthYearAlpha;
         self.eventStartTime.alpha = eventStartAlpha;
-        self.eventStartYear.alpha = eventStartAlpha;
+        self.eventStartYear.alpha = eventStartMonthYearAlpha;
 
         self.eventStopDay.alpha = eventStopAlpha;
-        self.eventStopMonth.alpha = eventStopAlpha;
+        self.eventStopMonth.alpha = eventStopMonthYearAlpha;
         self.eventStopTime.alpha = eventStopAlpha;
-        self.eventStopYear.alpha = eventStopAlpha;
+        self.eventStopYear.alpha = eventStopMonthYearAlpha;
 
         self.eventTimeHours.alpha = eventTimeAlpha;
         self.eventTimeMinutes.alpha = eventTimeAlpha;
