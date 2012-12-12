@@ -274,7 +274,7 @@
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="4" id="CZO-Ue-RJ9">
                                 <rect key="frame" x="0.0" y="444" width="320" height="36"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <color key="backgroundColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.37647058823529411" green="0.37254901960784315" blue="0.36862745098039218" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <action selector="pageChanged:" destination="BUI-Lx-VWJ" eventType="valueChanged" id="yme-oC-yfj"/>
                                 </connections>
@@ -283,7 +283,7 @@
                                 <rect key="frame" x="284" y="444" width="36" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="X">
+                                <state key="normal">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -297,6 +297,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="zJu-01-NjE">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="444"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="backgroundColor" red="0.37647058820000001" green="0.37254901959999998" blue="0.36862745099999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <outlet property="delegate" destination="BUI-Lx-VWJ" id="trt-iT-asQ"/>
                                 </connections>
