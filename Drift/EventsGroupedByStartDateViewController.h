@@ -21,7 +21,8 @@
 
 @property (nonatomic, weak) id<EventsGroupedByStartDateViewControllerDelegate> delegate;
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, weak) IBOutlet UIView *backView;
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet UIScrollView *filterView;
 
 @end

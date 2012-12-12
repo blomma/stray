@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol InfoView <NSObject>
+@protocol InfoHintViewDelegate <NSObject>
 
-- (void)showInfoViewInView:(UIView *)view;
+- (void)showInfoHintView:(UIView *)view;
 
 @end

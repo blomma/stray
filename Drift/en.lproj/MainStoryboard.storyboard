@@ -5,10 +5,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1930"/>
     </dependencies>
     <scenes>
-        <!--Root View Controller - Root View-->
+        <!--RootViewController-->
         <scene sceneID="KvM-gm-lw9">
             <objects>
-                <pageViewController storyboardIdentifier="RootViewController" autoresizesArchivedViewToFullSize="NO" title="Root View" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="ftN-u6-d28" customClass="RootViewController" sceneMemberID="viewController">
+                <pageViewController storyboardIdentifier="RootViewController" autoresizesArchivedViewToFullSize="NO" title="Root View" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="ftN-u6-d28" userLabel="RootViewController" customClass="RootViewController" sceneMemberID="viewController">
                     <nil key="simulatedStatusBarMetrics"/>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m8r-Is-cfE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -165,6 +165,7 @@
                         <outlet property="tag" destination="gZy-kP-gXw" id="lcQ-12-LHh"/>
                         <outlet property="toggleStartStopButton" destination="dP9-OE-O85" id="ZPS-ao-uD9"/>
                         <segue destination="rGB-yR-mDw" kind="modal" identifier="segueToTagsFromEvent" id="9uM-fu-hMr"/>
+                        <segue destination="BUI-Lx-VWJ" kind="modal" identifier="segueToInfoHintViewFromEvent" id="mSw-Km-UVG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9TD-yZ-86c" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -174,7 +175,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="522" y="-236"/>
+            <point key="canvasLocation" x="515" y="-245"/>
         </scene>
         <!--TagsTableViewController-->
         <scene sceneID="zQ2-00-SiN">
@@ -261,6 +262,58 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wuN-Iu-I2O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="522" y="-825"/>
+        </scene>
+        <!--InfoHintViewController-->
+        <scene sceneID="ntc-rR-qma">
+            <objects>
+                <viewController storyboardIdentifier="InfoHintViewController" id="BUI-Lx-VWJ" userLabel="InfoHintViewController" customClass="InfoHintViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="SWy-RT-7XS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="4" id="CZO-Ue-RJ9">
+                                <rect key="frame" x="0.0" y="444" width="320" height="36"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <color key="backgroundColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="pageChanged:" destination="BUI-Lx-VWJ" eventType="valueChanged" id="yme-oC-yfj"/>
+                                </connections>
+                            </pageControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="bkD-Xw-xDv">
+                                <rect key="frame" x="284" y="444" width="36" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="X">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="dismissInfoHintView:" destination="BUI-Lx-VWJ" eventType="touchUpInside" id="6pc-Ph-EmI"/>
+                                </connections>
+                            </button>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="zJu-01-NjE">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="444"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BUI-Lx-VWJ" id="trt-iT-asQ"/>
+                                </connections>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <connections>
+                        <outlet property="closeInfoHintView" destination="bkD-Xw-xDv" id="hkQ-db-rth"/>
+                        <outlet property="pageControl" destination="CZO-Ue-RJ9" id="Ltg-cX-2Hm"/>
+                        <outlet property="scrollView" destination="zJu-01-NjE" id="M2Q-lV-1ey"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Q6i-so-y2d" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="873" y="-826"/>
         </scene>
         <!--EventsGroupedByDateViewController-->
         <scene sceneID="aWJ-lh-tEK">
@@ -361,6 +414,7 @@
                     <connections>
                         <outlet property="filterView" destination="nQy-aQ-EHb" id="Btj-nL-koh"/>
                         <outlet property="tableView" destination="Bla-gS-XRc" id="Pdu-8Z-Ze9"/>
+                        <segue destination="BUI-Lx-VWJ" kind="modal" identifier="segueToInfoHintViewFromEventGroups" id="Mf1-Qw-U8v"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W9f-Gb-0ky" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -503,6 +557,7 @@
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="backView" destination="0md-r9-gBi" id="JNq-by-MeN"/>
                         <outlet property="filterView" destination="OEb-AI-qv9" id="B5f-v9-xt1"/>
                         <outlet property="tableView" destination="eEg-yt-w1f" id="yXd-dQ-fPa"/>
                         <segue destination="rGB-yR-mDw" kind="modal" identifier="segueToTagsFromEvents" id="tQF-pe-67W"/>
@@ -578,8 +633,19 @@
         <class className="EventsGroupedByStartDateViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/EventsGroupedByStartDateViewController.h"/>
             <relationships>
+                <relationship kind="outlet" name="backView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="filterView" candidateClass="UIScrollView"/>
                 <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="InfoHintViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/InfoHintViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="dismissInfoHintView:"/>
+                <relationship kind="action" name="pageChanged:"/>
+                <relationship kind="outlet" name="closeInfoHintView" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="pageControl" candidateClass="UIPageControl"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
             </relationships>
         </class>
         <class className="RootViewController" superclassName="UIPageViewController">
@@ -613,5 +679,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="9uM-fu-hMr"/>
+        <segue reference="Mf1-Qw-U8v"/>
     </inferredMetricsTieBreakers>
 </document>

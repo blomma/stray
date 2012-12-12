@@ -9,7 +9,7 @@
 #import "RootViewController.h"
 
 #import "UIPageViewController+UIPageControl.h"
-#import "InfoView.h"
+#import "InfoHintViewDelegate.h"
 
 @interface RootViewController ()
 
@@ -109,7 +109,6 @@
 #pragma mark -
 #pragma mark UIPageViewControllerDelegate
 
-
 #pragma mark -
 #pragma mark Private methods
 
@@ -117,10 +116,10 @@
     NSArray *views = self.viewControllers;
 
     UIViewController *viewController = [views objectAtIndex:0];
-    
-    if([viewController conformsToProtocol:@protocol(InfoView)]) {
-        id<InfoView> p = (id<InfoView>)viewController;
-        [p showInfoViewInView:self.view];
+
+    if ([viewController conformsToProtocol:@protocol(InfoHintViewDelegate)]) {
+        id<InfoHintViewDelegate> p = (id<InfoHintViewDelegate>)viewController;
+        [p showInfoHintView:self.view];
     }
 }
 

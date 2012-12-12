@@ -117,32 +117,8 @@
 #pragma mark -
 #pragma mark InfoViewDelegate
 
-- (void)showInfoViewInView:(UIView *)view {
-    if (self.infoView) {
-        return;
-    }
-
-    CGRect frame = [[UIScreen mainScreen] bounds];
-
-    self.infoView = [[UIView alloc] initWithFrame:frame];
-
-
-    UIImageView *infoOverlay = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Info-Event"]];
-    [self.infoView addSubview:infoOverlay];
-
-    // Dismiss button
-    UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [dismissButton addTarget:self action:@selector(dismissInfoView) forControlEvents:UIControlEventTouchUpInside];
-    dismissButton.backgroundColor = [UIColor clearColor];
-    dismissButton.frame           = frame;
-    [self.infoView addSubview:dismissButton];
-
-    [view addSubview:self.infoView];
-}
-
-- (void)dismissInfoView {
-    [self.infoView removeFromSuperview];
-    self.infoView = nil;
+- (void)showInfoHintView:(UIView *)view {
+    [self performSegueWithIdentifier:@"segueToInfoHintViewFromEvent" sender:self];
 }
 
 #pragma mark -

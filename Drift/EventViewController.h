@@ -11,9 +11,9 @@
 #import "TagsTableViewController.h"
 #import "EventsGroupedByStartDateViewController.h"
 #import "TagButton.h"
-#import "InfoView.h"
+#import "InfoHintViewDelegate.h"
 
-@interface EventViewController : UIViewController <InfoView, TagsTableViewControllerDelegate, EventsGroupedByStartDateViewControllerDelegate>
+@interface EventViewController : UIViewController <InfoHintViewDelegate, TagsTableViewControllerDelegate, EventsGroupedByStartDateViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet EventTimerControl *eventTimerControl;
 @property (weak, nonatomic) IBOutlet UIButton *toggleStartStopButton;

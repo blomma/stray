@@ -34,7 +34,6 @@
 @property (nonatomic) NSArray *standaloneWeekdaySymbols;
 
 @property (nonatomic, weak) State *state;
-@property (nonatomic) UIView *infoView;
 
 @end
 
@@ -55,7 +54,7 @@
     [self initFilterView];
 
     self.eventGroups = [[EventsGroupedByDate alloc] initWithEvents:[DataRepository instance].events
-                                               withFilters:self.state.eventGroupsFilter];
+                                                       withFilters:self.state.eventGroupsFilter];
     self.isEventGroupsInvalid = YES;
 
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -88,6 +87,10 @@
 
 #pragma mark -
 #pragma mark Private properties
+
+- (void)showInfoHintView:(UIView *)view {
+    [self performSegueWithIdentifier:@"segueToInfoHintViewFromEventGroups" sender:self];
+}
 
 - (BOOL)isFilterViewVisible {
     return self.tags.count > 0;
@@ -179,8 +182,8 @@
     [self.filterViewButtons removeAllObjects];
 
     // define number and size of elements
-    NSUInteger numElements = 0;
-    CGSize elementSize     = CGSizeMake(120, self.filterView.frame.size.height);
+    NSUInteger numElements  = 0;
+    CGSize elementSize      = CGSizeMake(120, self.filterView.frame.size.height);
     UIEdgeInsets titleInset = UIEdgeInsetsMake(0, 5, 0, 5);
 
     // add elements
@@ -195,7 +198,7 @@
 
             button.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:13];
             button.titleLabel.backgroundColor = [UIColor clearColor];
-            button.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+            button.titleLabel.lineBreakMode   = NSLineBreakByTruncatingTail;
 
             button.backgroundColor = [UIColor clearColor];
 
@@ -211,9 +214,9 @@
             if ([self.state.eventGroupsFilter containsObject:tag]) {
                 button.selected = YES;
             }
-            
+
             [self.filterViewButtons addObject:button];
-            
+
             // add the subview
             [self.filterView addSubview:button];
             numElements++;
