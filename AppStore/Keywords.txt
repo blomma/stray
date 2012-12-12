@@ -1,1 +1,1 @@
-time,timer,track,tracker,tracking,event,work,clock,clocking,clocked,punch,record,tag,event,keep
+time,timer,timers,track,tracker,trackers,tracking,event,events,work,clock,clocking,clocked,clocks
