@@ -77,7 +77,6 @@
 		9E92637115EF350D00393946 /* _Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E92637015EF350D00393946 /* _Tag.m */; };
 		9E954D84164419F50022D5BE /* UIScrollView+SVPulling.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E954D83164419F50022D5BE /* UIScrollView+SVPulling.m */; };
 		9E96A907163981B600164D76 /* CAAnimation+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E96A90616397DB400164D76 /* CAAnimation+Blocks.m */; };
-		9E98C3FC163845D2007D2CF2 /* InnerShadowLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E98C3F816384433007D2CF2 /* InnerShadowLayer.m */; };
 		9E9C237815F3617200572FB7 /* EventsGroupedByStartDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C237715F3617100572FB7 /* EventsGroupedByStartDateViewController.m */; };
 		9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB520E15C9553C008952FB /* NSDate+Utilities.m */; };
 		9EAE7DEE1603C1C5007F32EC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DED1603C1C5007F32EC /* Default-568h@2x.png */; };
@@ -187,8 +186,6 @@
 		9E954D83164419F50022D5BE /* UIScrollView+SVPulling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SVPulling.m"; sourceTree = "<group>"; };
 		9E96A90516397DB400164D76 /* CAAnimation+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CAAnimation+Blocks.h"; sourceTree = "<group>"; };
 		9E96A90616397DB400164D76 /* CAAnimation+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CAAnimation+Blocks.m"; sourceTree = "<group>"; };
-		9E98C3F716384433007D2CF2 /* InnerShadowLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InnerShadowLayer.h; sourceTree = "<group>"; };
-		9E98C3F816384433007D2CF2 /* InnerShadowLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InnerShadowLayer.m; sourceTree = "<group>"; };
 		9E9C237615F3617100572FB7 /* EventsGroupedByStartDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsGroupedByStartDateViewController.h; sourceTree = "<group>"; };
 		9E9C237715F3617100572FB7 /* EventsGroupedByStartDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventsGroupedByStartDateViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9EAB520D15C9553C008952FB /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
@@ -383,15 +380,6 @@
 			name = TransformableTableView;
 			sourceTree = "<group>";
 		};
-		9E98C3F616384426007D2CF2 /* ShadowLayer */ = {
-			isa = PBXGroup;
-			children = (
-				9E98C3F716384433007D2CF2 /* InnerShadowLayer.h */,
-				9E98C3F816384433007D2CF2 /* InnerShadowLayer.m */,
-			);
-			name = ShadowLayer;
-			sourceTree = "<group>";
-		};
 		9E9C232D15F288D400572FB7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -416,7 +404,6 @@
 			isa = PBXGroup;
 			children = (
 				9E15AB76163C6D1C006D16B3 /* TableViewCells */,
-				9E98C3F616384426007D2CF2 /* ShadowLayer */,
 				9E96FCE016359F8600AB5B0A /* TransformableTableView */,
 				9E63E1D515EA3338009C0A2D /* NoHitCAShapeLayer.h */,
 				9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */,
@@ -615,7 +602,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E96A907163981B600164D76 /* CAAnimation+Blocks.m in Sources */,
-				9E98C3FC163845D2007D2CF2 /* InnerShadowLayer.m in Sources */,
 				9E42F1FB15570FD60087F602 /* main.m in Sources */,
 				9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */,
 				9E42F22915571E9C0087F602 /* RootViewController.m in Sources */,

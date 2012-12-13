@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "InnerShadowLayer.h"
-
 #import "TagTableViewCellBackView.h"
 
 @class TagTableViewCell;
@@ -29,7 +27,6 @@
 @property (nonatomic, weak) IBOutlet UITextField *tagNameTextField;
 
 @property (nonatomic, weak) IBOutlet TagTableViewCellBackView *backView;
-@property (nonatomic) InnerShadowLayer *backViewInnerShadowLayer;
 
 @property (nonatomic, weak) IBOutlet UIView *frontView;
 @property (nonatomic) NSString *tagTitle;

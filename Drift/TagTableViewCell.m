@@ -8,6 +8,8 @@
 
 #import "TagTableViewCell.h"
 
+#import "NoHitCAShapeLayer.h"
+
 @interface TagTableViewCell ()
 
 @property (nonatomic) CALayer *selectLayer;
