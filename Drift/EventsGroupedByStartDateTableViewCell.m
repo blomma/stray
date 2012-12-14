@@ -31,7 +31,7 @@
 
     [self.frontView.layer addSublayer:separatorLayer];
 
-    self.willDelete.font = [UIFont fontWithName:@"Entypo" size:70];
+    self.willDelete.font = [UIFont fontWithName:@"Entypo" size:60];
     self.willDelete.text = [NSString stringWithUTF8String:"\u274C"];
 }
 
