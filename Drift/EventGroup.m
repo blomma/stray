@@ -25,8 +25,6 @@
 @property (nonatomic) BOOL filteredEventsContainsActiveEvent;
 @property (nonatomic) BOOL isFilteredEventsContainsActiveEventInvalid;
 
-@property (nonatomic) NSCalendar *calendar;
-
 @end
 
 @implementation EventGroup
@@ -41,8 +39,6 @@
 - (id)initWithGroupDate:(NSDate *)groupDate {
     self = [super init];
     if (self) {
-        self.calendar = [Global instance].calendar;
-
         self.groupDate = groupDate;
 
         self.events                  = [NSMutableSet set];
@@ -155,7 +151,7 @@
 - (void)updateFilteredEventsDateComponents {
     static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
 
-    NSDate *endOfDay = [self.groupDate endOfDayWithCalendar:self.calendar];
+    NSDate *endOfDay = [self.groupDate endOfDayWithCalendar:[Global instance].calendar];
 
     NSDate *deltaStart = [self.groupDate copy];
     NSDate *deltaEnd   = [self.groupDate copy];
@@ -165,17 +161,17 @@
         NSDate *stopDate  = [event isActive] ? [NSDate date] : event.stopDate;
         stopDate = [stopDate earlierDate:endOfDay];
 
-        NSDateComponents *components = [self.calendar components:unitFlags
+        NSDateComponents *components = [[Global instance].calendar components:unitFlags
                                                         fromDate:startDate
                                                           toDate:stopDate
                                                          options:NSWrapCalendarComponents];
 
-        deltaEnd = [self.calendar dateByAddingComponents:components
+        deltaEnd = [[Global instance].calendar dateByAddingComponents:components
                                                   toDate:deltaEnd
                                                  options:0];
     }
 
-    self.filteredEventsDateComponents = [self.calendar components:unitFlags
+    self.filteredEventsDateComponents = [[Global instance].calendar components:unitFlags
                                                          fromDate:deltaStart
                                                            toDate:deltaEnd
                                                           options:0];

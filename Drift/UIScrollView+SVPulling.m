@@ -185,13 +185,17 @@
         [self addSubview:view];
         self.pullingView = view;
 
-        [self addObserver:self.pullingView forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
+        [self addObserver:self.pullingView
+               forKeyPath:@"contentOffset"
+                  options:NSKeyValueObservingOptionNew
+                  context:nil];
     }
 }
 
 - (void)disablePulling {
     if (self.pullingView) {
-        [self removeObserver:self.pullingView forKeyPath:@"contentOffset"];
+        [self removeObserver:self.pullingView
+                  forKeyPath:@"contentOffset"];
 
         self.pullingView.actionHandler = nil;
         self.pullingView.scrollView    = nil;

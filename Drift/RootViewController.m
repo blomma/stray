@@ -14,6 +14,7 @@
 @interface RootViewController ()
 
 @property (nonatomic) NSArray *dataModel;
+@property (nonatomic) BOOL isInited;
 
 @end
 
@@ -48,28 +49,32 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    // Try and set the background of the pagecontroller if one is present
-    self.view.backgroundColor                      = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
-    self.pageControl.backgroundColor               = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
-    self.pageControl.pageIndicatorTintColor        = [UIColor colorWithWhite:0.267 alpha:0.2];
-    self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithWhite:0.267 alpha:0.8];
+    if (!self.isInited) {
+        // Try and set the background of the pagecontroller if one is present
+        self.view.backgroundColor                      = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
+        self.pageControl.backgroundColor               = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
+        self.pageControl.pageIndicatorTintColor        = [UIColor colorWithWhite:0.267 alpha:0.2];
+        self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithWhite:0.267 alpha:0.8];
 
-    UIButton *button = [[UIButton alloc] init];
-    [button addTarget:self action:@selector(touchUpInsideInfoButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
+        UIButton *button = [[UIButton alloc] init];
+        [button addTarget:self action:@selector(touchUpInsideInfoButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 
-    button.titleLabel.font = [UIFont fontWithName:@"Entypo" size:30];
+        button.titleLabel.font = [UIFont fontWithName:@"Entypo" size:30];
 
-    button.titleLabel.backgroundColor = [UIColor clearColor];
-    button.titleLabel.lineBreakMode   = NSLineBreakByTruncatingTail;
+        button.titleLabel.backgroundColor = [UIColor clearColor];
+        button.titleLabel.lineBreakMode   = NSLineBreakByTruncatingTail;
 
-    button.backgroundColor = [UIColor clearColor];
+        button.backgroundColor = [UIColor clearColor];
 
-    [button setTitleColor:[UIColor colorWithWhite:0.510f alpha:1.000] forState:UIControlStateNormal];
-    [button setTitle:[NSString stringWithUTF8String:"\u2753"] forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor colorWithWhite:0.510f alpha:1.000] forState:UIControlStateNormal];
+        [button setTitle:[NSString stringWithUTF8String:"\u2753"] forState:UIControlStateNormal];
 
-    button.frame = CGRectMake(self.view.bounds.size.width - 30, self.view.bounds.size.height - 30, 30, 30);
+        button.frame = CGRectMake(self.view.bounds.size.width - 30, self.view.bounds.size.height - 30, 30, 30);
+        
+        [self.view addSubview:button];
 
-    [self.view addSubview:button];
+        self.isInited = YES;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

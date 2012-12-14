@@ -87,7 +87,7 @@
         [self reset];
     }
 
-    [self.tag setTitle:event.inTag.name forState:UIControlStateNormal];
+    [self.tag setTitle:[event.inTag.name copy] forState:UIControlStateNormal];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

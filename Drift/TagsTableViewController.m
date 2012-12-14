@@ -21,7 +21,6 @@
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
 
 @property (nonatomic) Tag *tagInEditState;
-@property (nonatomic, weak) Tags *tags;
 
 @property (nonatomic) NSIndexPath *transformingMovingIndexPath;
 
@@ -38,14 +37,12 @@
     self.editingStateRightOffset = 260;
     self.editingCommitLength     = 60;
 
-    self.tags = [DataRepository instance].tags;
-
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"grabbedTableViewCellIdentifier"];
 
     __block __weak TagsTableViewController *weakSelf = self;
-    __block __weak Tags *weakTags                    = self.tags;
+    __block __weak Tags *weakTags                    = [DataRepository instance].tags;
 
     [self.tableView addPullingWithActionHandler:^(SVPullingState state, SVPullingState previousState, CGFloat height) {
         if (state == SVPullingStateAction && previousState == SVPullingStatePullingAdd) {
@@ -55,6 +52,7 @@
 
                 Tag *tag = [[DataRepository instance] createTag];
                 [weakTags insertObject:tag atIndex:0];
+                tag = nil;
 
                 [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
 
@@ -75,8 +73,6 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    self.tags = nil;
-
     [self.tableView disablePulling];
 
     [self.tableView disableGestureTableViewWithRecognizer:self.tableViewRecognizer];
@@ -88,7 +84,7 @@
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     if (self.tagInEditState) {
-        NSUInteger index       = [self.tags indexOfObject:self.tagInEditState];
+        NSUInteger index       = [[DataRepository instance].tags indexOfObject:self.tagInEditState];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(NSInteger)index inSection:0];
 
         [self gestureRecognizer:self.tableViewRecognizer cancelEditingState:TransformableTableViewCellEditingStateRight forRowAtIndexPath:indexPath];
@@ -99,7 +95,7 @@
 #pragma mark UITableViewDatasource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (NSInteger)self.tags.count;
+    return (NSInteger)[DataRepository instance].tags.count;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -114,7 +110,7 @@
         return cell;
     } else {
         NSUInteger index = (NSUInteger)indexPath.row;
-        Tag *tag         = [self.tags objectAtIndex:index];
+        Tag *tag         = [[DataRepository instance].tags objectAtIndex:index];
 
         TagTableViewCell *cell = (TagTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"TagsTableViewCellIdentifier"];
 
@@ -140,7 +136,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
+    Tag *tag = [[DataRepository instance].tags objectAtIndex:(NSUInteger)indexPath.row];
 
     // If this is a tag with no name then we cant select it
     if (!tag.name) {
@@ -150,7 +146,7 @@
     // Now we check if we have any cells in editstate,
     // if so we animate them back to normal state
     if (self.tagInEditState) {
-        NSUInteger editStateIndex       = [self.tags indexOfObject:self.tagInEditState];
+        NSUInteger editStateIndex       = [[DataRepository instance].tags indexOfObject:self.tagInEditState];
         NSIndexPath *editStateIndexPath = [NSIndexPath indexPathForRow:(NSInteger)editStateIndex inSection:0];
 
         TagTableViewCell *cell = (TagTableViewCell *)[self.tableView cellForRowAtIndexPath:editStateIndexPath];
@@ -177,7 +173,7 @@
 - (void)cell:(TagTableViewCell *)cell tappedDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
-    Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
+    Tag *tag = [[DataRepository instance].tags objectAtIndex:(NSUInteger)indexPath.row];
 
     // Delete this tag from all of the filter also, if present
     State *state = [DataRepository instance].state;
@@ -193,7 +189,7 @@
 
     self.tagInEditState = nil;
 
-    [self.tags removeObjectAtIndex:(NSUInteger)indexPath.row];
+    [[DataRepository instance].tags removeObjectAtIndex:(NSUInteger)indexPath.row];
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
 }
 
@@ -201,10 +197,10 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
     if (name && ![name isEqualToString:@""]) {
-        Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
-        tag.name = name;
+        Tag *tag = [[DataRepository instance].tags objectAtIndex:(NSUInteger)indexPath.row];
+        tag.name = [name copy];
 
-        cell.tagTitle = name;
+        cell.tagTitle = [name copy];
     }
 
     CGPoint fromValue = cell.frontView.layer.position;
@@ -223,7 +219,7 @@
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didEnterEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
+    NSUInteger indexOfTagInEditState = [[DataRepository instance].tags indexOfObject:self.tagInEditState];
     if (state == TransformableTableViewCellEditingStateLeft && indexOfTagInEditState != (NSUInteger)indexPath.row) {
         return;
     }
@@ -239,7 +235,7 @@
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didChangeEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
+    NSUInteger indexOfTagInEditState = [[DataRepository instance].tags indexOfObject:self.tagInEditState];
     if (state == TransformableTableViewCellEditingStateLeft && indexOfTagInEditState != (NSUInteger)indexPath.row) {
         return;
     }
@@ -253,7 +249,7 @@
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer commitEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
+    NSUInteger indexOfTagInEditState = [[DataRepository instance].tags indexOfObject:self.tagInEditState];
     if (state == TransformableTableViewCellEditingStateLeft && indexOfTagInEditState != (NSUInteger)indexPath.row) {
         return;
     }
@@ -266,7 +262,7 @@
 
         [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
 
-        self.tagInEditState = [self.tags objectAtIndex:indexPath.row];
+        self.tagInEditState = [[DataRepository instance].tags objectAtIndex:indexPath.row];
     } else {
         CGPoint fromValue = cell.frontView.layer.position;
         CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
@@ -292,7 +288,7 @@
 }
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
+    NSUInteger indexOfTagInEditState = [[DataRepository instance].tags indexOfObject:self.tagInEditState];
     // if this indexPath is in a edit state then return 0 else return normal
     return indexPath.row == (NSInteger)indexOfTagInEditState ? 0 : self.editingCommitLength;
 }
@@ -313,7 +309,7 @@
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsMoveRowAtIndexPath:(NSIndexPath *)atIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
     self.transformingMovingIndexPath = toIndexPath;
 
-    [self.tags moveObjectAtIndex:(NSUInteger)atIndexPath.row toIndex:(NSUInteger)toIndexPath.row];
+    [[DataRepository instance].tags moveObjectAtIndex:(NSUInteger)atIndexPath.row toIndex:(NSUInteger)toIndexPath.row];
 
     [self.tableView beginUpdates];
 

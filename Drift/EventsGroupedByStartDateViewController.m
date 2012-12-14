@@ -25,16 +25,12 @@
 
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
 
-@property (nonatomic) NSCalendar *calendar;
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) NSArray *shortStandaloneWeekdaySymbols;
 
 @property (nonatomic) NSMutableArray *filterViewButtons;
 
-@property (nonatomic) Tags *tags;
 @property (nonatomic) BOOL isTagsInvalid;
-
-@property (nonatomic) State *state;
 
 @property (nonatomic) EventsGroupedByStartDate *eventGroups;
 @property (nonatomic) BOOL isEventGroupsInvalid;
@@ -48,19 +44,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.calendar                      = [Global instance].calendar;
     self.shortStandaloneMonthSymbols   = [[NSDateFormatter new] shortStandaloneMonthSymbols];
     self.shortStandaloneWeekdaySymbols = [[NSDateFormatter new] shortStandaloneWeekdaySymbols];
 
-    self.state = [DataRepository instance].state;
-
-    self.tags          = [DataRepository instance].tags;
     self.isTagsInvalid = YES;
 
     [self initFilterView];
 
     self.eventGroups = [[EventsGroupedByStartDate alloc] initWithEvents:[DataRepository instance].events
-                                                            withFilters:self.state.eventsFilter];
+                                                            withFilters:[DataRepository instance].state.eventsFilter];
     self.isEventGroupsInvalid = YES;
 
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
@@ -77,8 +69,8 @@
             }
         }
 
-        CGRect frame = CGRectMake(0, MIN(0, height), self.view.bounds.size.width, 30);
-        self.filterView.frame = frame;
+        CGRect frame = CGRectMake(0, MIN(0, height), weakSelf.view.bounds.size.width, 30);
+        weakSelf.filterView.frame = frame;
     }];
 
     self.tableView.pullingView.addingHeight  = 0;
@@ -104,7 +96,7 @@
 
     [self.tableView reloadData];
 
-    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:self.state.activeEvent];
+    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:[DataRepository instance].state.activeEvent];
     if (indexPath) {
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
     }
@@ -122,10 +114,10 @@
         [self.tableView disableGestureTableViewWithRecognizer:self.tableViewRecognizer];
         self.tableViewRecognizer = nil;
 
-        for (id subView in self.filterViewButtons) {
-            [subView removeFromSuperview];
-        }
-        [self.filterViewButtons removeAllObjects];
+//        for (id subView in self.filterViewButtons) {
+//            [subView removeFromSuperview];
+//        }
+//        [self.filterViewButtons removeAllObjects];
 
         [[NSNotificationCenter defaultCenter] removeObserver:self
                                                         name:kDataManagerObjectsDidChangeNotification
@@ -158,7 +150,7 @@
 
 - (EventsGroupedByStartDate *)eventGroups {
     if (self.isEventGroupsInvalid) {
-        _eventGroups.filters      = self.state.eventsFilter;
+        _eventGroups.filters      = [DataRepository instance].state.eventsFilter;
         self.isEventGroupsInvalid = NO;
     }
 
@@ -229,8 +221,8 @@
     Event *event           = [eventGroup.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
 
     // Are we about to remove the active event
-    if ([self.state.activeEvent isEqual:event]) {
-        self.state.activeEvent = nil;
+    if ([[DataRepository instance].state.activeEvent isEqual:event]) {
+        [DataRepository instance].state.activeEvent = nil;
     }
 
     [[DataRepository instance] deleteEvent:event];
@@ -274,7 +266,7 @@
     headerLabel.textAlignment   = NSTextAlignmentCenter;
 
     static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
-    NSDateComponents *components          = [self.calendar components:unitFlagsEventStart fromDate:eventGroup.groupDate];
+    NSDateComponents *components          = [[Global instance].calendar components:unitFlagsEventStart fromDate:eventGroup.groupDate];
 
     headerLabel.text = [NSString stringWithFormat:@"%@  ·  %02d %@ %04d", [[self.shortStandaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString], components.day, [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString], components.year];
 
@@ -288,7 +280,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Event *event = [self.eventGroups filteredEventAtIndexPath:indexPath];
 
-    self.state.activeEvent = event;
+    [DataRepository instance].state.activeEvent = event;
 
     if ([self.delegate respondsToSelector:@selector(eventsGroupedByStartDateViewControllerDidDimiss:)]) {
         [self.delegate eventsGroupedByStartDateViewControllerDidDimiss:self];
@@ -317,7 +309,7 @@
 
     // StartTime
     static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
-    NSDateComponents *components          = [self.calendar components:unitFlagsEventStart fromDate:event.startDate];
+    NSDateComponents *components          = [[Global instance].calendar components:unitFlagsEventStart fromDate:event.startDate];
 
     cell.eventStartTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
     cell.eventStartDay.text   = [NSString stringWithFormat:@"%02d", components.day];
@@ -327,7 +319,7 @@
     // EventTime
     NSDate *stopDate                     = event.stopDate ? event.stopDate : [NSDate date];
     static NSUInteger unitFlagsEventTime = NSHourCalendarUnit | NSMinuteCalendarUnit;
-    components = [self.calendar components:unitFlagsEventTime fromDate:event.startDate toDate:stopDate options:0];
+    components = [[Global instance].calendar components:unitFlagsEventTime fromDate:event.startDate toDate:stopDate options:0];
 
     cell.eventTimeHours.text   = [NSString stringWithFormat:@"%02d", components.hour];
     cell.eventTimeMinutes.text = [NSString stringWithFormat:@"%02d", components.minute];
@@ -335,7 +327,7 @@
     // StopTime
     if (event.stopDate) {
         static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
-        components = [self.calendar components:unitFlags fromDate:event.stopDate];
+        components = [[Global instance].calendar components:unitFlags fromDate:event.stopDate];
 
         cell.eventStopTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
         cell.eventStopDay.text   = [NSString stringWithFormat:@"%02d", components.day];
@@ -372,19 +364,19 @@
             return [obj isKindOfClass:[Tag class]];
         }];
 
-    [self.tags addObjectsFromArray:[insertedTags allObjects]];
+    [[DataRepository instance].tags addObjectsFromArray:[insertedTags allObjects]];
 
     NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
             return [obj isKindOfClass:[Tag class]];
         }];
 
-    [self.tags removeObjectsInArray:[deletedTags allObjects]];
+    [[DataRepository instance].tags removeObjectsInArray:[deletedTags allObjects]];
 
     if (updatedTags.count > 0 || insertedTags.count > 0 || deletedTags.count > 0) {
         self.isTagsInvalid = YES;
     }
 
-    if ([deletedTags intersectsSet:self.state.eventsFilter]) {
+    if ([deletedTags intersectsSet:[DataRepository instance].state.eventsFilter]) {
         self.isEventGroupsInvalid = YES;
     }
 }
@@ -394,12 +386,12 @@
 }
 
 - (void)touchUpInsideTagFilterButton:(TagFilterButton *)sender forEvent:(UIEvent *)event {
-    if ([self.state.eventsFilter containsObject:sender.tagObject]) {
-        [self.state.eventsFilter removeObject:sender.tagObject];
+    if ([[DataRepository instance].state.eventsFilter containsObject:sender.tagObject]) {
+        [[DataRepository instance].state.eventsFilter removeObject:sender.tagObject];
 
         sender.selected = NO;
     } else {
-        [self.state.eventsFilter addObject:sender.tagObject];
+        [[DataRepository instance].state.eventsFilter addObject:sender.tagObject];
 
         sender.selected = YES;
     }
@@ -408,7 +400,7 @@
 
     [self.tableView reloadData];
 
-    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:self.state.activeEvent];
+    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:[DataRepository instance].state.activeEvent];
     if (indexPath) {
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
@@ -456,8 +448,8 @@
     UIEdgeInsets titleInset = UIEdgeInsetsMake(0, 5, 0, 5);
 
     // add elements
-    for (NSUInteger i = 0; i < self.tags.count; i++) {
-        Tag *tag = [self.tags objectAtIndex:i];
+    for (NSUInteger i = 0; i < [DataRepository instance].tags.count; i++) {
+        Tag *tag = [[DataRepository instance].tags objectAtIndex:i];
 
         if (tag.name) {
             TagFilterButton *button = [[TagFilterButton alloc] init];
@@ -479,7 +471,7 @@
             CGFloat elementX = elementSize.width * numElements;
             button.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
 
-            if ([self.state.eventsFilter containsObject:tag]) {
+            if ([[DataRepository instance].state.eventsFilter containsObject:tag]) {
                 button.selected = YES;
             }
 
