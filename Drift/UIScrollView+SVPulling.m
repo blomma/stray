@@ -14,13 +14,17 @@
 @property (nonatomic, copy) void (^actionHandler)(SVPullingState state, SVPullingState previousState, CGFloat height);
 
 @property (nonatomic) UILabel *titleLabel;
+@property (nonatomic) UILabel *stateIcon;
+
 @property (nonatomic, readwrite) SVPullingState state;
 
 @property (nonatomic, weak) UIScrollView *scrollView;
 
 @end
 
+#pragma mark -
 #pragma mark - SVPulling
+
 @implementation SVPullingView
 
 @synthesize actionHandler;
@@ -31,7 +35,7 @@
         self.textColor        = [UIColor whiteColor];
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.state            = SVPullingStateInitial;
-        self.clipsToBounds = YES;
+        self.clipsToBounds    = YES;
 
         // Default values;
         self.addingHeight  = 60;
@@ -40,6 +44,22 @@
         // Default colors
         self.backgroundColorForAddState   = [UIColor colorWithRed:0.510f green:0.784f blue:0.431f alpha:1];
         self.backgroundColorForCloseState = [UIColor colorWithRed:0.745 green:0.106 blue:0.169 alpha:1.000];
+
+        self.titleLabel                 = [[UILabel alloc] initWithFrame:CGRectMake(0, 25, self.bounds.size.width, 50)];
+        self.titleLabel.font            = [UIFont fontWithName:@"Futura-CondensedMedium" size:17];
+        self.titleLabel.backgroundColor = [UIColor clearColor];
+        self.titleLabel.textColor       = self.textColor;
+        self.titleLabel.textAlignment   = NSTextAlignmentCenter;
+
+        [self addSubview:self.titleLabel];
+
+        self.stateIcon                 = [[UILabel alloc] initWithFrame:CGRectMake(60, 10, 50, 50)];
+        self.stateIcon.font            = [UIFont fontWithName:@"Entypo" size:60];
+        self.stateIcon.backgroundColor = [UIColor clearColor];
+        self.stateIcon.textColor       = self.textColor;
+        self.stateIcon.textAlignment   = NSTextAlignmentCenter;
+
+        [self addSubview:self.stateIcon];
     }
 
     return self;
@@ -50,19 +70,28 @@
 
     CGFloat yDelta = MIN(fabsf(self.scrollView.contentOffset.y), self.scrollView.frame.origin.y);
     CGFloat height = fabsf(self.scrollView.contentOffset.y) + yDelta;
-    CGFloat y = -height;
+    CGFloat y      = -height;
 
     CGRect frame = CGRectMake(0, y, self.bounds.size.width, height);
+    self.frame = frame;
+
+    CGRect titleLabelFrame = self.titleLabel.frame;
+    titleLabelFrame.origin.y = height / 2 - (self.titleLabel.frame.size.height / 2);
+    self.titleLabel.frame    = titleLabelFrame;
+
+    CGRect stateIconFrame = self.stateIcon.frame;
+    stateIconFrame.origin.y = height / 2 - (self.stateIcon.frame.size.height / 2);
+    self.stateIcon.frame    = stateIconFrame;
 
     if (self.state == SVPullingStatePullingClose) {
         self.backgroundColor = self.backgroundColorForCloseState;
         self.titleLabel.text = @"Release to Close...";
-        self.frame = frame;
+        self.stateIcon.text  = [NSString stringWithUTF8String:"\u274C"];
 
     } else if (self.state == SVPullingStatePullingAdd) {
         self.backgroundColor = self.backgroundColorForAddState;
         self.titleLabel.text = @"Release to Add...";
-        self.frame = frame;
+        self.stateIcon.text  = [NSString stringWithUTF8String:"\u2713"];
 
     } else if (self.state == SVPullingStatePulling) {
         CGFloat alphaHeight = self.addingHeight == 0 ? self.closingHeight : self.addingHeight;
@@ -72,19 +101,20 @@
 
         self.backgroundColor = self.addingHeight == 0 ? [self.backgroundColorForCloseState colorWithAlphaComponent:alpha] : [self.backgroundColorForAddState colorWithAlphaComponent:alpha];
         self.titleLabel.text = self.addingHeight == 0 ? @"Pull to Close..." : @"Pull to Add...";
-        self.frame = frame;
+        self.stateIcon.text  = @"";
 
     } else if (self.state == SVPullingStateAction) {
         self.titleLabel.text = @"";
-        self.frame = frame;
+        self.stateIcon.text  = @"";
 
     } else if (self.state == SVPullingStateInitial) {
         self.backgroundColor = [UIColor clearColor];
         self.titleLabel.text = @"";
-        self.frame = frame;
+        self.stateIcon.text  = @"";
     }
 }
 
+#pragma mark -
 #pragma mark - Observing
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -125,23 +155,8 @@
     }
 }
 
-#pragma mark - Getters
-
-- (UILabel *)titleLabel {
-    if (!_titleLabel) {
-        _titleLabel                 = [[UILabel alloc] initWithFrame:CGRectMake(0, 25, self.bounds.size.width, 20)];
-        _titleLabel.font            = [UIFont fontWithName:@"Futura-CondensedMedium" size:17];
-        _titleLabel.backgroundColor = [UIColor clearColor];
-        _titleLabel.textColor       = self.textColor;
-        _titleLabel.textAlignment   = NSTextAlignmentCenter;
-
-        [self addSubview:_titleLabel];
-    }
-
-    return _titleLabel;
-}
-
 #pragma mark -
+#pragma mark - Public properties
 
 - (void)setState:(SVPullingState)state {
     SVPullingState previousState = _state;
@@ -156,6 +171,7 @@
 
 @end
 
+#pragma mark -
 #pragma mark - UIScrollView (SVPulling)
 
 @implementation UITableView (SVPulling)
@@ -163,7 +179,7 @@
 - (void)addPullingWithActionHandler:(void (^)(SVPullingState state, SVPullingState previousState, CGFloat height))actionHandler  {
     if (!self.pullingView) {
         SVPullingView *view = [[SVPullingView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 0)];
-        view.actionHandler  = actionHandler;
+        view.actionHandler = actionHandler;
         view.scrollView    = self;
 
         [self addSubview:view];
@@ -177,11 +193,14 @@
     if (self.pullingView) {
         [self removeObserver:self.pullingView forKeyPath:@"contentOffset"];
 
-        self.pullingView.actionHandler  = nil;
-        self.pullingView.scrollView     = nil;
+        self.pullingView.actionHandler = nil;
+        self.pullingView.scrollView    = nil;
 
         [self.pullingView.titleLabel removeFromSuperview];
         self.pullingView.titleLabel = nil;
+
+        [self.pullingView.stateIcon removeFromSuperview];
+        self.pullingView.stateIcon = nil;
 
         [self.pullingView removeFromSuperview];
         self.pullingView = nil;
