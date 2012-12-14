@@ -23,13 +23,13 @@
     self.selectLayer.frame           = CGRectMake(self.layer.bounds.size.width - 10, 0, 10, self.layer.bounds.size.height);
     self.selectLayer.backgroundColor = [UIColor clearColor].CGColor;
 
-    [self.layer addSublayer:self.selectLayer];
+    [self.frontView.layer addSublayer:self.selectLayer];
 
-    CALayer *separatorLayer                 = [CALayer layer];
+    CALayer *separatorLayer = [CALayer layer];
     separatorLayer.backgroundColor = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:0.8].CGColor;
     separatorLayer.frame           = CGRectMake(221, 45, 1, 60);
 
-    [self.layer addSublayer:separatorLayer];
+    [self.frontView.layer addSublayer:separatorLayer];
 }
 
 - (IBAction)touchUpInsideTagButton:(UIButton *)sender forEvent:(UIEvent *)event {
@@ -39,9 +39,9 @@
 }
 
 - (void)prepareForReuse {
-    self.contentView.alpha = 1;
+    [self.frontView.layer removeAllAnimations];
 
-    [self.layer removeAllAnimations];
+    self.frontView.layer.position = self.backView.layer.position;
 
     if (self.selectLayer) {
         self.selectLayer.backgroundColor = [UIColor clearColor].CGColor;

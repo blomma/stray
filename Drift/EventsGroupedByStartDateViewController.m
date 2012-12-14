@@ -150,7 +150,7 @@
 #pragma mark Private properties
 
 - (NSInteger)editingCommitLength {
-    return 120;
+    return 200;
 }
 
 #pragma mark -
@@ -192,15 +192,9 @@
     }
 
     EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
-    [cell.layer removeAllAnimations];
+    [cell.frontView.layer removeAllAnimations];
 
-    if (!cell.backgroundView) {
-        cell.backgroundView                 = [[UIView alloc] initWithFrame:cell.contentView.frame];
-        cell.backgroundView.backgroundColor = [UIColor colorWithRed:0.843f
-                                                              green:0.306f
-                                                               blue:0.314f
-                                                              alpha:1];
-    }
+    cell.willDelete.hidden = YES;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didChangeEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -209,11 +203,16 @@
     }
 
     EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
-    CGFloat alpha             = 1 - (gestureRecognizer.translationInTableView.x / self.editingCommitLength);
-    cell.contentView.alpha = alpha;
+    CGFloat alpha                               = (gestureRecognizer.translationInTableView.x / self.editingCommitLength);
+    cell.backView.backgroundColor = [UIColor colorWithRed:0.843f
+                                                    green:0.306f
+                                                     blue:0.314f
+                                                    alpha:alpha];
 
-    CGPoint point = CGPointMake(CGRectGetMidX(cell.layer.bounds) + gestureRecognizer.translationInTableView.x, cell.layer.position.y);
-    cell.layer.position = point;
+    cell.willDelete.hidden = alpha >= 1 ? NO : YES;
+
+    CGPoint point = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + gestureRecognizer.translationInTableView.x, cell.frontView.layer.position.y);
+    cell.frontView.layer.position = point;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer commitEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -244,12 +243,10 @@
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
     EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
-    CGPoint fromValue         = cell.layer.position;
-    CGPoint toValue           = CGPointMake(CGRectGetMidX(cell.layer.bounds), fromValue.y);
+    CGPoint fromValue                           = cell.frontView.layer.position;
+    CGPoint toValue                             = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
 
-    cell.contentView.alpha = 1;
-
-    [self animateBounceOnLayer:cell.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
+    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
 }
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -307,12 +304,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellIdentifier = @"EventsGroupedByStartDateTableViewCell";
-    
+
     Event *event = [self.eventGroups filteredEventAtIndexPath:indexPath];
 
     EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    cell.contentView.backgroundColor = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
-
     [cell.tagName setTitle:event.inTag.name forState:UIControlStateNormal];
 
     // StartTime
@@ -482,9 +477,9 @@
             if ([self.state.eventsFilter containsObject:tag]) {
                 button.selected = YES;
             }
-            
+
             [self.filterViewButtons addObject:button];
-            
+
             // add the subview
             [self.filterView addSubview:button];
             numElements++;

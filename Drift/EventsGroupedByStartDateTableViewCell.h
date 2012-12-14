@@ -20,6 +20,9 @@
 
 @property (nonatomic, weak) id<EventsGroupedByStartDateTableViewCellDelegate> delegate;
 
+@property (nonatomic, weak) IBOutlet UIView *backView;
+@property (nonatomic, weak) IBOutlet UIView *frontView;
+
 @property (weak, nonatomic) IBOutlet UILabel *eventStartTime;
 @property (weak, nonatomic) IBOutlet UILabel *eventStartDay;
 @property (weak, nonatomic) IBOutlet UILabel *eventStartMonth;
@@ -34,6 +37,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *eventStopYear;
 
 @property (weak, nonatomic) IBOutlet TagButton *tagName;
+@property (weak, nonatomic) IBOutlet UIImageView *willDelete;
 
 - (IBAction)touchUpInsideTagButton:(UIButton *)sender forEvent:(UIEvent *)event;
 
