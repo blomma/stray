@@ -20,7 +20,7 @@
 
 - (void)awakeFromNib {
     self.selectLayer                 = [CALayer layer];
-    self.selectLayer.frame           = CGRectMake(self.layer.bounds.size.width - 10, 0, 10, self.layer.bounds.size.height);
+    self.selectLayer.frame           = CGRectMake(self.frontView.layer.bounds.size.width - 10, 0, 10, self.frontView.layer.bounds.size.height);
     self.selectLayer.backgroundColor = [UIColor clearColor].CGColor;
 
     [self.frontView.layer addSublayer:self.selectLayer];
