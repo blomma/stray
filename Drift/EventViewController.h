@@ -15,23 +15,23 @@
 
 @interface EventViewController : UIViewController <InfoHintViewDelegate, TagsTableViewControllerDelegate, EventsGroupedByStartDateViewControllerDelegate>
 
-@property (weak, nonatomic) IBOutlet EventTimerControl *eventTimerControl;
-@property (weak, nonatomic) IBOutlet UIButton *toggleStartStopButton;
+@property (nonatomic, weak) IBOutlet EventTimerControl *eventTimerControl;
+@property (nonatomic, weak) IBOutlet UIButton *toggleStartStopButton;
 
-@property (weak, nonatomic) IBOutlet UILabel *eventStartTime;
-@property (weak, nonatomic) IBOutlet UILabel *eventStartDay;
-@property (weak, nonatomic) IBOutlet UILabel *eventStartMonth;
-@property (weak, nonatomic) IBOutlet UILabel *eventStartYear;
+@property (nonatomic, weak) IBOutlet UILabel *eventStartTime;
+@property (nonatomic, weak) IBOutlet UILabel *eventStartDay;
+@property (nonatomic, weak) IBOutlet UILabel *eventStartMonth;
+@property (nonatomic, weak) IBOutlet UILabel *eventStartYear;
 
-@property (weak, nonatomic) IBOutlet UILabel *eventTimeHours;
-@property (weak, nonatomic) IBOutlet UILabel *eventTimeMinutes;
+@property (nonatomic, weak) IBOutlet UILabel *eventTimeHours;
+@property (nonatomic, weak) IBOutlet UILabel *eventTimeMinutes;
 
-@property (weak, nonatomic) IBOutlet UILabel *eventStopTime;
-@property (weak, nonatomic) IBOutlet UILabel *eventStopDay;
-@property (weak, nonatomic) IBOutlet UILabel *eventStopMonth;
-@property (weak, nonatomic) IBOutlet UILabel *eventStopYear;
+@property (nonatomic, weak) IBOutlet UILabel *eventStopTime;
+@property (nonatomic, weak) IBOutlet UILabel *eventStopDay;
+@property (nonatomic, weak) IBOutlet UILabel *eventStopMonth;
+@property (nonatomic, weak) IBOutlet UILabel *eventStopYear;
 
-@property (weak, nonatomic) IBOutlet TagButton *tag;
+@property (nonatomic, weak) IBOutlet TagButton *tag;
 
 - (IBAction)toggleEvent:(id)sender;
 - (IBAction)showTags:(id)sender;

@@ -12,7 +12,7 @@
 
 @property (nonatomic, weak) IBOutlet UIPageControl *pageControl;
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
-@property (weak, nonatomic) IBOutlet UIButton *closeInfoHintView;
+@property (nonatomic, weak) IBOutlet UIButton *closeInfoHintView;
 
 - (IBAction)pageChanged:(id)sender;
 - (IBAction)dismissInfoHintView:(id)sender;
