@@ -37,7 +37,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *eventStopYear;
 
 @property (weak, nonatomic) IBOutlet TagButton *tagName;
-@property (weak, nonatomic) IBOutlet UIImageView *willDelete;
+@property (weak, nonatomic) IBOutlet UILabel *willDelete;
 
 - (IBAction)touchUpInsideTagButton:(UIButton *)sender forEvent:(UIEvent *)event;
 

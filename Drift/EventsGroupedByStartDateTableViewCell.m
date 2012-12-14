@@ -30,6 +30,9 @@
     separatorLayer.frame           = CGRectMake(221, 45, 1, 60);
 
     [self.frontView.layer addSublayer:separatorLayer];
+
+    self.willDelete.font = [UIFont fontWithName:@"Entypo" size:70];
+    self.willDelete.text = [NSString stringWithUTF8String:"\u274C"];
 }
 
 - (IBAction)touchUpInsideTagButton:(UIButton *)sender forEvent:(UIEvent *)event {

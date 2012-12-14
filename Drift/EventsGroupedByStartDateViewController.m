@@ -209,10 +209,15 @@
                                                      blue:0.314f
                                                     alpha:alpha];
 
+    CGPoint frontViewPoint = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + gestureRecognizer.translationInTableView.x, cell.frontView.layer.position.y);
+    cell.frontView.layer.position = frontViewPoint;
+
     cell.willDelete.hidden = alpha >= 1 ? NO : YES;
 
-    CGPoint point = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + gestureRecognizer.translationInTableView.x, cell.frontView.layer.position.y);
-    cell.frontView.layer.position = point;
+    if (alpha >= 1) {
+        CGPoint willDeletePoint = CGPointMake(CGRectGetMinX(cell.frontView.layer.bounds) + gestureRecognizer.translationInTableView.x - 20, cell.frontView.layer.position.y);
+        cell.willDelete.layer.position = willDeletePoint;
+    }
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer commitEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {

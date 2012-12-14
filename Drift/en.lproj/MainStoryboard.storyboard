@@ -447,10 +447,13 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="Delete.png" id="Xkg-EW-Ta6" userLabel="Delete">
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="MgW-7E-jgE" userLabel="Delete">
                                                             <rect key="frame" x="7" y="45" width="30" height="30"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                        </imageView>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <color key="textColor" red="0.94117647058823528" green="0.93333333333333335" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                     </subviews>
                                                     <color key="backgroundColor" red="0.87843137979999997" green="0.87843137979999997" blue="0.87843137979999997" alpha="1" colorSpace="calibratedRGB"/>
                                                 </view>
@@ -561,7 +564,7 @@
                                             <outlet property="eventTimeMinutes" destination="yLT-ZP-jt0" id="c9c-ke-Kqh"/>
                                             <outlet property="frontView" destination="Daf-GT-Fi9" id="DJp-aB-BIY"/>
                                             <outlet property="tagName" destination="1LA-G9-qpd" id="S9c-Gi-dlQ"/>
-                                            <outlet property="willDelete" destination="Xkg-EW-Ta6" id="D31-EQ-vfs"/>
+                                            <outlet property="willDelete" destination="MgW-7E-jgE" id="yqa-EK-Etk"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -651,13 +654,12 @@
                 <relationship kind="outlet" name="eventTimeMinutes" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="frontView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="tagName" candidateClass="TagButton"/>
-                <relationship kind="outlet" name="willDelete" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="willDelete" candidateClass="UILabel"/>
             </relationships>
         </class>
         <class className="EventsGroupedByStartDateViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/EventsGroupedByStartDateViewController.h"/>
             <relationships>
-                <relationship kind="outlet" name="backView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="filterView" candidateClass="UIScrollView"/>
                 <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
             </relationships>
