@@ -54,7 +54,7 @@
     self.closeInfoHintView.backgroundColor = [UIColor clearColor];
 
     [self.closeInfoHintView setTitleColor:[UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:1.000] forState:UIControlStateNormal];
-    [self.closeInfoHintView setTitle:[NSString stringWithUTF8String:"\u2716"] forState:UIControlStateNormal];
+    [self.closeInfoHintView setTitle:@"\u2716" forState:UIControlStateNormal];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender {

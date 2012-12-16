@@ -67,7 +67,7 @@
         button.backgroundColor = [UIColor clearColor];
 
         [button setTitleColor:[UIColor colorWithWhite:0.510f alpha:1.000] forState:UIControlStateNormal];
-        [button setTitle:[NSString stringWithUTF8String:"\u2753"] forState:UIControlStateNormal];
+        [button setTitle:@"\u2753" forState:UIControlStateNormal];
 
         button.frame = CGRectMake(self.view.bounds.size.width - 30, self.view.bounds.size.height - 30, 30, 30);
         

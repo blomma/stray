@@ -41,7 +41,7 @@
         title = [title uppercaseString];
     } else {
         self.titleLabel.font = [UIFont fontWithName:@"Entypo" size:40];
-        title = [NSString stringWithUTF8String:"\uE70C"];
+        title = @"\uE70C";
     }
 
     [super setTitle:title forState:state];
