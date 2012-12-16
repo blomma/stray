@@ -87,7 +87,9 @@
         NSUInteger index       = [[DataRepository instance].tags indexOfObject:self.tagInEditState];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(NSInteger)index inSection:0];
 
-        [self gestureRecognizer:self.tableViewRecognizer cancelEditingState:TransformableTableViewCellEditingStateRight forRowAtIndexPath:indexPath];
+        [self gestureRecognizer:self.tableViewRecognizer
+             cancelEditingState:TransformableTableViewCellEditingStateRight
+              forRowAtIndexPath:indexPath];
     }
 }
 

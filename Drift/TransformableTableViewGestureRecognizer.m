@@ -88,11 +88,6 @@ static NSInteger kCellSnapShotTag = 100000;
         CGPoint translation    = [recognizer translationInView:self.tableView];
         self.translationInTableView = translation;
 
-        CGFloat commitEditingLength = kCommitEditingRowDefaultLength;
-        if ([self.delegate respondsToSelector:@selector(gestureRecognizer:lengthForCommitEditingRowAtIndexPath:)]) {
-            commitEditingLength = [self.delegate gestureRecognizer:self lengthForCommitEditingRowAtIndexPath:indexPath];
-        }
-
         self.editingCellState = translation.x > 0 ? TransformableTableViewCellEditingStateRight : TransformableTableViewCellEditingStateLeft;
 
         if ([self.delegate respondsToSelector:@selector(gestureRecognizer:didChangeEditingState:forRowAtIndexPath:)]) {
@@ -101,8 +96,6 @@ static NSInteger kCellSnapShotTag = 100000;
     } else if (recognizer.state == UIGestureRecognizerStateEnded) {
         NSIndexPath *indexPath = self.transformIndexPath;
 
-        // Removes addingIndexPath before updating then tableView will be able
-        // to determine correct table row height
         self.transformIndexPath = nil;
 
         CGPoint translation = [recognizer translationInView:self.tableView];

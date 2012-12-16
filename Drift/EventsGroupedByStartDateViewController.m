@@ -114,11 +114,6 @@
         [self.tableView disableGestureTableViewWithRecognizer:self.tableViewRecognizer];
         self.tableViewRecognizer = nil;
 
-//        for (id subView in self.filterViewButtons) {
-//            [subView removeFromSuperview];
-//        }
-//        [self.filterViewButtons removeAllObjects];
-
         [[NSNotificationCenter defaultCenter] removeObserver:self
                                                         name:kDataManagerObjectsDidChangeNotification
                                                       object:[DataRepository instance]];
@@ -305,7 +300,7 @@
     Event *event = [self.eventGroups filteredEventAtIndexPath:indexPath];
 
     EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    [cell.tagName setTitle:event.inTag.name forState:UIControlStateNormal];
+    [cell.tagName setTitle:[event.inTag.name copy] forState:UIControlStateNormal];
 
     // StartTime
     static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
@@ -491,7 +486,7 @@
 }
 
 - (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration completion:(void (^)(BOOL finished))completion {
-    static NSString *keyPath = @"position";
+    NSString *keyPath = @"position";
 
     SKBounceAnimation *positionAnimation = [SKBounceAnimation animationWithKeyPath:keyPath];
     positionAnimation.fromValue       = [NSValue valueWithCGPoint:from];
