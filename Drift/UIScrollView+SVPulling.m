@@ -86,12 +86,12 @@
     if (self.state == SVPullingStatePullingClose) {
         self.backgroundColor = self.backgroundColorForCloseState;
         self.titleLabel.text = @"Release to Close...";
-        self.stateIcon.text  = [NSString stringWithUTF8String:"\u274C"];
+        self.stateIcon.text  = @"\u274C";
 
     } else if (self.state == SVPullingStatePullingAdd) {
         self.backgroundColor = self.backgroundColorForAddState;
         self.titleLabel.text = @"Release to Add...";
-        self.stateIcon.text  = [NSString stringWithUTF8String:"\u2713"];
+        self.stateIcon.text  = @"\u2713";
 
     } else if (self.state == SVPullingStatePulling) {
         CGFloat alphaHeight = self.addingHeight == 0 ? self.closingHeight : self.addingHeight;

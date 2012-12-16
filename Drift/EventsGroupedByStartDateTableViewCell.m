@@ -32,7 +32,7 @@
     [self.frontView.layer addSublayer:separatorLayer];
 
     self.willDelete.font = [UIFont fontWithName:@"Entypo" size:60];
-    self.willDelete.text = [NSString stringWithUTF8String:"\u274C"];
+    self.willDelete.text = @"\u274C";
 }
 
 - (IBAction)touchUpInsideTagButton:(UIButton *)sender forEvent:(UIEvent *)event {
