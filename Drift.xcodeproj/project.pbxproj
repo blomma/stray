@@ -41,6 +41,7 @@
 		9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */; };
 		9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F20015570FD60087F602 /* MainStoryboard.storyboard */; };
 		9E42F22915571E9C0087F602 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F22815571E9C0087F602 /* RootViewController.m */; };
+		9E4A0FED167F57D1006BC207 /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E4A0FEC167F57D1006BC207 /* PopoverView.m */; };
 		9E513DFB163430E90080313A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E513DFA163430E90080313A /* Icon@2x.png */; };
 		9E513DFE163433C70080313A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E513DFD163433C70080313A /* Icon.png */; };
 		9E51511615C7CEF100901655 /* EventGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511315C7CEF100901655 /* EventGroup.m */; };
@@ -129,6 +130,8 @@
 		9E42F22715571E9C0087F602 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = RootViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9E42F22815571E9C0087F602 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RootViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9E472ABF167614C000D32DEB /* InfoHintViewDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InfoHintViewDelegate.h; sourceTree = "<group>"; };
+		9E4A0FEB167F57D1006BC207 /* PopoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverView.h; sourceTree = "<group>"; };
+		9E4A0FEC167F57D1006BC207 /* PopoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverView.m; sourceTree = "<group>"; };
 		9E513DFA163430E90080313A /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
 		9E513DFD163433C70080313A /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../Icon.png; sourceTree = "<group>"; };
 		9E51511215C7CEF100901655 /* EventGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroup.h; sourceTree = "<group>"; };
@@ -253,6 +256,7 @@
 		9E15DDA116023FE4007146CE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				9E4A0FEA167F57D1006BC207 /* PopoverView */,
 				9E66D0E71655661600339E99 /* Objective-Record */,
 				9EAF701316367B4600FA079C /* SKBounceAnimation */,
 				9E15DE0016024161007146CE /* libz.dylib */,
@@ -327,6 +331,15 @@
 				9E472ABF167614C000D32DEB /* InfoHintViewDelegate.h */,
 			);
 			name = Protocols;
+			sourceTree = "<group>";
+		};
+		9E4A0FEA167F57D1006BC207 /* PopoverView */ = {
+			isa = PBXGroup;
+			children = (
+				9E4A0FEB167F57D1006BC207 /* PopoverView.h */,
+				9E4A0FEC167F57D1006BC207 /* PopoverView.m */,
+			);
+			path = PopoverView;
 			sourceTree = "<group>";
 		};
 		9E561DE415FBB04D008D3895 /* Controls */ = {
@@ -640,6 +653,7 @@
 				9E810ED816762C4100CA2009 /* NSBundle+Retina4.m in Sources */,
 				9E810ED916762C4100CA2009 /* UIImage+Retina4.m in Sources */,
 				9E5DECD4167899B200E21B8E /* InfoHintViewController.m in Sources */,
+				9E4A0FED167F57D1006BC207 /* PopoverView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,6 +15,7 @@
 #import "Global.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIImage+Retina4.h"
+#import "PopoverView.h"
 
 @interface EventViewController ()
 
@@ -25,6 +26,8 @@
 
 @property (nonatomic) State *state;
 @property (nonatomic) UIView *infoView;
+
+@property (nonatomic, weak) Event *selectedEvent;
 
 @end
 
@@ -59,6 +62,8 @@
                              forKeyPath:@"isTransforming"
                                 options:NSKeyValueObservingOptionNew
                                 context:NULL];
+
+    self.selectedEvent = self.state.activeEvent;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -70,12 +75,10 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    Event *event = self.state.activeEvent;
+    if (self.selectedEvent) {
+        [self.eventTimerControl startWithEvent:self.selectedEvent];
 
-    if (event) {
-        [self.eventTimerControl startWithEvent:event];
-
-        if ([event isActive]) {
+        if ([self.selectedEvent isActive]) {
             [self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
             [self animateStartEvent];
         } else {
@@ -87,19 +90,19 @@
         [self reset];
     }
 
-    [self.tag setTitle:[event.inTag.name copy] forState:UIControlStateNormal];
+    [self.tag setTitle:[self.selectedEvent.inTag.name copy] forState:UIControlStateNormal];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToTagsFromEvent"]) {
         [[segue destinationViewController] setDelegate:self];
-        Event *event = [[DataRepository instance] state].activeEvent;
 
         if ([[segue destinationViewController] respondsToSelector:@selector(event)]) {
-            [[segue destinationViewController] setEvent:event];
+            [[segue destinationViewController] setEvent:self.selectedEvent];
         }
     } else if ([segue.identifier isEqualToString:@"segueToEventsFromEvent"]) {
         [[segue destinationViewController] setDelegate:self];
+        [[segue destinationViewController] setSelectedEvent:self.selectedEvent];
     }
 }
 
@@ -111,6 +114,7 @@
 }
 
 - (void)eventsGroupedByStartDateViewControllerDidDimiss:(EventsGroupedByStartDateViewController *)viewController {
+    self.selectedEvent = viewController.selectedEvent;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -124,13 +128,30 @@
 #pragma mark -
 #pragma mark Public methods
 
-- (IBAction)toggleEvent:(id)sender {
+- (IBAction)showTags:(id)sender {
+    if (self.selectedEvent) {
+        [self performSegueWithIdentifier:@"segueToTagsFromEvent" sender:self];
+    }
+}
+
+- (IBAction)toggleEventTouchUpInside:(id)sender forEvent:(UIEvent *)event {
     NSDate *now = [NSDate date];
 
-    Event *event = self.state.activeEvent;
+    if (![self.selectedEvent isEqual:self.state.activeEvent] && self.state.activeEvent.isActive) {
+        UIView *button = (UIView *)sender;
+        UITouch *touch = [[event touchesForView:button] anyObject];
+        CGPoint point  = [touch locationInView:self.view];
+        point.y -= 30;
 
-    if ([event isActive]) {
-        event.stopDate = now;
+        [PopoverView showPopoverAtPoint:point
+                                 inView:self.view
+                               withText:@"A timer is already running, stop that one before starting a new"
+                               delegate:nil];
+        return;
+    }
+
+    if ([self.selectedEvent isActive]) {
+        self.selectedEvent.stopDate = now;
 
         [self.eventTimerControl stop];
 
@@ -139,25 +160,18 @@
     } else {
         [self reset];
 
-        event           = [[DataRepository instance] createEvent];
-        event.startDate = now;
+        self.selectedEvent           = [[DataRepository instance] createEvent];
+        self.selectedEvent.startDate = now;
 
-        [DataRepository instance].state.activeEvent = event;
+        [DataRepository instance].state.activeEvent = self.selectedEvent;
 
-        [self.eventTimerControl startWithEvent:event];
+        [self.eventTimerControl startWithEvent:self.selectedEvent];
 
         [self.toggleStartStopButton setTitle:@"STOP" forState:UIControlStateNormal];
         [self animateStartEvent];
     }
 
-    [self.tag setTitle:event.inTag.name forState:UIControlStateNormal];
-}
-
-- (IBAction)showTags:(id)sender {
-    Event *event = self.state.activeEvent;
-    if (event) {
-        [self performSegueWithIdentifier:@"segueToTagsFromEvent" sender:self];
-    }
+    [self.tag setTitle:self.selectedEvent.inTag.name forState:UIControlStateNormal];
 }
 
 #pragma mark -
@@ -193,12 +207,10 @@
 }
 
 - (void)updateEventTimeWithDate:(NSDate *)date {
-    Event *event = self.state.activeEvent;
-
-    if (date && event.startDate) {
+    if (date && self.selectedEvent.startDate) {
         static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit;
 
-        NSDateComponents *components = [self.calendar components:unitFlags fromDate:event.startDate toDate:date options:0];
+        NSDateComponents *components = [self.calendar components:unitFlags fromDate:self.selectedEvent.startDate toDate:date options:0];
 
         if (components.hour != self.previousNowComponents.hour
             || components.minute != self.previousNowComponents.minute) {
@@ -245,8 +257,6 @@
 }
 
 - (void)animateEventTransforming:(EventTimerTransformingEnum)eventTimerTransformingEnum {
-    Event *event = [DataRepository instance].state.activeEvent;
-
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         CGFloat eventStartAlpha, eventStopAlpha, eventTimeAlpha, eventStartMonthYearAlpha, eventStopMonthYearAlpha;
         switch (eventTimerTransformingEnum) {
@@ -260,7 +270,7 @@
                 eventTimeAlpha = 0.2f;
                 break;
             case EventTimerStartDateTransformingStop:
-                eventStartAlpha = event.isActive ? 1:0.2f;
+                eventStartAlpha = self.selectedEvent.isActive ? 1:0.2f;
                 eventStartMonthYearAlpha = 1;
 
                 eventStopAlpha = 1;
@@ -271,23 +281,23 @@
             case EventTimerStopDateTransformingStart:
                 eventStartAlpha = 0.2f;
                 eventStartMonthYearAlpha = 0.2f;
-                
+
                 eventStopAlpha = 1;
                 eventStopMonthYearAlpha = 1;
-                
+
                 eventTimeAlpha = 0.2f;
 
                 break;
             case EventTimerStopDateTransformingStop:
-                eventStartAlpha = event.isActive ? 1:0.2f;
+                eventStartAlpha = self.selectedEvent.isActive ? 1:0.2f;
                 eventStartMonthYearAlpha = 1;
 
-                eventStopAlpha = event.isActive ? 0.2f:1;
+                eventStopAlpha = self.selectedEvent.isActive ? 0.2f:1;
                 eventStopMonthYearAlpha = 1;
-                
+
                 eventTimeAlpha = 1;
                 break;
-            default:
+                default:
                 break;
         }
 
@@ -307,11 +317,9 @@
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    Event *event = [DataRepository instance].state.activeEvent;
-
     if ([keyPath isEqualToString:@"startDate"]) {
         NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
-        event.startDate = date;
+        self.selectedEvent.startDate = date;
 
         [self updateStartLabelWithDate:date];
     } else if ([keyPath isEqualToString:@"nowDate"]) {
@@ -320,7 +328,7 @@
         [self updateEventTimeWithDate:date];
     } else if ([keyPath isEqualToString:@"stopDate"]) {
         NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
-        event.stopDate = date;
+        self.selectedEvent.stopDate = date;
 
         [self updateStopLabelWithDate:date];
     } else if ([keyPath isEqualToString:@"isTransforming"]) {

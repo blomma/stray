@@ -96,7 +96,7 @@
 
     [self.tableView reloadData];
 
-    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:[DataRepository instance].state.activeEvent];
+    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:self.selectedEvent];
     if (indexPath) {
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
     }
@@ -220,6 +220,11 @@
         [DataRepository instance].state.activeEvent = nil;
     }
 
+    // Are we about to remove the selected event
+    if ([self.selectedEvent isEqual:event]) {
+        self.selectedEvent = nil;
+    }
+
     [[DataRepository instance] deleteEvent:event];
     [self.eventGroups removeEvent:event];
 
@@ -275,7 +280,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Event *event = [self.eventGroups filteredEventAtIndexPath:indexPath];
 
-    [DataRepository instance].state.activeEvent = event;
+    self.selectedEvent = event;
 
     if ([self.delegate respondsToSelector:@selector(eventsGroupedByStartDateViewControllerDidDimiss:)]) {
         [self.delegate eventsGroupedByStartDateViewControllerDidDimiss:self];
@@ -395,7 +400,7 @@
 
     [self.tableView reloadData];
 
-    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:[DataRepository instance].state.activeEvent];
+    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:self.selectedEvent];
     if (indexPath) {
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     }

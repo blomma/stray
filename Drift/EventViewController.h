@@ -33,7 +33,7 @@
 
 @property (nonatomic, weak) IBOutlet TagButton *tag;
 
-- (IBAction)toggleEvent:(id)sender;
 - (IBAction)showTags:(id)sender;
+- (IBAction)toggleEventTouchUpInside:(id)sender forEvent:(UIEvent *)event;
 
 @end
