@@ -14,6 +14,9 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+@property (copy, nonatomic) NSString *databaseName;
+@property (copy, nonatomic) NSString *modelName;
+
 + (id)instance;
 - (BOOL)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

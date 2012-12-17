@@ -8,9 +8,6 @@
 
 #import "CoreDataManager.h"
 
-NSString *const kModelName    = @"CoreDataModel";
-NSString *const kDatabaseName = @"CoreDataModel.sqlite";
-
 @interface CoreDataManager ()
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -31,7 +28,27 @@ NSString *const kDatabaseName = @"CoreDataModel.sqlite";
     return sharedCoreDataManager;
 }
 
-#pragma mark - Public
+#pragma mark -
+#pragma mark Public properties
+
+- (NSString *)databaseName {
+    if (!_databaseName) {
+        _databaseName = [[@"CoreDataModel" stringByAppendingString:@".sqlite"] copy];
+    }
+
+    return _databaseName;
+}
+
+- (NSString *)modelName {
+    if (!_modelName) {
+        _modelName = @"CoreDataModel";
+    }
+
+    return _modelName;
+}
+
+#pragma mark -
+#pragma mark Public methods
 
 - (NSManagedObjectContext *)managedObjectContext {
     if (!_managedObjectContext) {
@@ -46,7 +63,7 @@ NSString *const kDatabaseName = @"CoreDataModel.sqlite";
 
 - (NSManagedObjectModel *)managedObjectModel {
     if (!_managedObjectModel) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:kModelName
+        NSString *path = [[NSBundle mainBundle] pathForResource:self.modelName
                                                          ofType:@"momd"];
         NSURL *momURL = [NSURL fileURLWithPath:path];
 
@@ -58,7 +75,7 @@ NSString *const kDatabaseName = @"CoreDataModel.sqlite";
 
 - (void)setUpPersistentStoreCoordinator {
 
-    NSURL *storeURL = [self.applicationDocumentsDirectory URLByAppendingPathComponent:kDatabaseName];
+    NSURL *storeURL = [self.applicationDocumentsDirectory URLByAppendingPathComponent:self.databaseName];
     NSError *error  = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
 
