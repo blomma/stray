@@ -71,7 +71,7 @@
     [super viewWillAppear:animated];
 
     DataRepository *repository = [DataRepository instance];
-    
+
     if (repository.state.selectedEvent) {
         [self.eventTimerControl startWithEvent:repository.state.selectedEvent];
 
@@ -185,6 +185,19 @@
     self.eventStopDay.text   = @"";
     self.eventStopYear.text  = @"";
     self.eventStopMonth.text = @"";
+
+    self.eventStartDay.alpha = 1;
+    self.eventStartMonth.alpha = 1;
+    self.eventStartTime.alpha = 1;
+    self.eventStartYear.alpha = 1;
+
+    self.eventStopDay.alpha = 1;
+    self.eventStopMonth.alpha = 1;
+    self.eventStopTime.alpha = 1;
+    self.eventStopYear.alpha = 1;
+
+    self.eventTimeHours.alpha = 1;
+    self.eventTimeMinutes.alpha = 1;
 }
 
 - (void)updateStartLabelWithDate:(NSDate *)date {
