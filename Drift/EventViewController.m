@@ -20,7 +20,6 @@
 @interface EventViewController ()
 
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
-@property (nonatomic) NSCalendar *calendar;
 
 @property (nonatomic) NSDateComponents *previousNowComponents;
 
@@ -36,7 +35,6 @@
     [self reset];
 
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
-    self.calendar                    = [Global instance].calendar;
 
     [self.eventTimerControl addObserver:self
                              forKeyPath:@"startDate"
@@ -203,7 +201,7 @@
 - (void)updateStartLabelWithDate:(NSDate *)date {
     if (date) {
         static NSUInteger unitFlags  = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
-        NSDateComponents *components = [self.calendar components:unitFlags fromDate:date];
+        NSDateComponents *components = [[Global instance].calendar components:unitFlags fromDate:date];
 
         self.eventStartTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
         self.eventStartDay.text   = [NSString stringWithFormat:@"%02d", components.day];
@@ -218,7 +216,7 @@
     if (date && repository.state.selectedEvent.startDate) {
         static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit;
 
-        NSDateComponents *components = [self.calendar components:unitFlags fromDate:repository.state.selectedEvent.startDate toDate:date options:0];
+        NSDateComponents *components = [[Global instance].calendar components:unitFlags fromDate:repository.state.selectedEvent.startDate toDate:date options:0];
 
         if (components.hour != self.previousNowComponents.hour
             || components.minute != self.previousNowComponents.minute) {
@@ -232,7 +230,7 @@
 - (void)updateStopLabelWithDate:(NSDate *)date {
     if (date) {
         static NSUInteger unitFlags  = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
-        NSDateComponents *components = [self.calendar components:unitFlags fromDate:date];
+        NSDateComponents *components = [[Global instance].calendar components:unitFlags fromDate:date];
 
         self.eventStopTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
         self.eventStopDay.text   = [NSString stringWithFormat:@"%02d", components.day];

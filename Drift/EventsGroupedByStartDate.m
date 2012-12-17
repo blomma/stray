@@ -14,8 +14,6 @@
 
 @interface EventsGroupedByStartDate ()
 
-@property (nonatomic) NSCalendar *calendar;
-
 @property (nonatomic) NSMutableArray *eventGroups;
 
 @property (nonatomic) NSMutableArray *filteredEventGroups;
@@ -32,8 +30,6 @@
 - (id)initWithEvents:(NSArray *)events withFilters:(NSSet *)filters {
     self = [super init];
     if (self) {
-        self.calendar = [Global instance].calendar;
-
         self.eventGroups         = [NSMutableArray new];
         self.filteredEventGroups = [NSMutableArray new];
 
@@ -80,7 +76,7 @@
 #pragma mark Public methods
 
 - (void)addEvent:(Event *)event {
-    NSDate *groupDate = [event.startDate beginningOfDayWithCalendar:self.calendar];
+    NSDate *groupDate = [event.startDate beginningOfDayWithCalendar:[Global instance].calendar];
     NSUInteger index  = [self indexForGroupDate:groupDate];
 
     EventGroup *eventGroup = nil;
@@ -132,7 +128,7 @@
         return;
     }
 
-    NSDate *groupDate = [event.startDate beginningOfDayWithCalendar:self.calendar];
+    NSDate *groupDate = [event.startDate beginningOfDayWithCalendar:[Global instance].calendar];
 
     if ([eventGroup.groupDate isEqualToDate:groupDate]) {
         [eventGroup updateEvent:event];

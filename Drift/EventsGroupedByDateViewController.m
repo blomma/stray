@@ -29,11 +29,8 @@
 @property (nonatomic) BOOL isTagsInvalid;
 @property (nonatomic, readonly) BOOL isFilterViewVisible;
 
-@property (nonatomic) NSCalendar *calendar;
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) NSArray *standaloneWeekdaySymbols;
-
-@property (nonatomic, weak) State *state;
 
 @end
 
@@ -42,11 +39,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.calendar                    = [Global instance].calendar;
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
     self.standaloneWeekdaySymbols    = [[NSDateFormatter new] standaloneWeekdaySymbols];
-
-    self.state = [DataRepository instance].state;
 
     self.tags          = [DataRepository instance].tags;
     self.isTagsInvalid = YES;
@@ -54,7 +48,7 @@
     [self initFilterView];
 
     self.eventGroups = [[EventsGroupedByDate alloc] initWithEvents:[DataRepository instance].events
-                                                       withFilters:self.state.eventGroupsFilter];
+                                                       withFilters:[DataRepository instance].state.eventGroupsFilter];
     self.isEventGroupsInvalid = YES;
 
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -101,7 +95,7 @@
 
 - (EventsGroupedByDate *)eventGroups {
     if (self.isEventGroupsInvalid) {
-        _eventGroups.filters      = self.state.eventGroupsFilter;
+        _eventGroups.filters      = [DataRepository instance].state.eventGroupsFilter;
         self.isEventGroupsInvalid = NO;
     }
 
@@ -132,7 +126,7 @@
     cell.minutes.text = [NSString stringWithFormat:@"%02d", components.minute];
 
     static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
-    components = [self.calendar components:unitFlags fromDate:eventGroup.groupDate];
+    components = [[Global instance].calendar components:unitFlags fromDate:eventGroup.groupDate];
 
     cell.day.text     = [NSString stringWithFormat:@"%02d", components.day];
     cell.year.text    = [NSString stringWithFormat:@"%04d", components.year];
@@ -211,7 +205,7 @@
             CGFloat elementX = elementSize.width * numElements;
             button.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
 
-            if ([self.state.eventGroupsFilter containsObject:tag]) {
+            if ([[DataRepository instance].state.eventGroupsFilter containsObject:tag]) {
                 button.selected = YES;
             }
 
@@ -231,12 +225,12 @@
 }
 
 - (void)touchUpInsideTagFilterButton:(TagFilterButton *)sender forEvent:(UIEvent *)event {
-    if ([self.state.eventGroupsFilter containsObject:sender.tagObject]) {
-        [self.state.eventGroupsFilter removeObject:sender.tagObject];
+    if ([[DataRepository instance].state.eventGroupsFilter containsObject:sender.tagObject]) {
+        [[DataRepository instance].state.eventGroupsFilter removeObject:sender.tagObject];
 
         sender.selected = NO;
     } else {
-        [self.state.eventGroupsFilter addObject:sender.tagObject];
+        [[DataRepository instance].state.eventGroupsFilter addObject:sender.tagObject];
 
         sender.selected = YES;
     }
@@ -304,7 +298,7 @@
         self.isTagsInvalid = YES;
     }
 
-    if ([deletedTags intersectsSet:self.state.eventGroupsFilter]) {
+    if ([deletedTags intersectsSet:[DataRepository instance].state.eventGroupsFilter]) {
         self.isEventGroupsInvalid = YES;
     }
 }
