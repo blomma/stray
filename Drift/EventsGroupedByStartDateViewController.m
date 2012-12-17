@@ -95,11 +95,6 @@
     }
 
     [self.tableView reloadData];
-
-    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:self.selectedEvent];
-    if (indexPath) {
-        [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -123,13 +118,6 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToTagsFromEvents"]) {
         [[segue destinationViewController] setDelegate:self];
-
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        Event *event           = [self.eventGroups filteredEventAtIndexPath:indexPath];
-
-        if ([[segue destinationViewController] respondsToSelector:@selector(event)]) {
-            [[segue destinationViewController] setEvent:event];
-        }
     }
 }
 
@@ -221,8 +209,8 @@
     }
 
     // Are we about to remove the selected event
-    if ([self.selectedEvent isEqual:event]) {
-        self.selectedEvent = nil;
+    if ([[DataRepository instance].state.selectedEvent isEqual:event]) {
+        [DataRepository instance].state.selectedEvent = nil;
     }
 
     [[DataRepository instance] deleteEvent:event];
@@ -280,11 +268,19 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Event *event = [self.eventGroups filteredEventAtIndexPath:indexPath];
 
-    self.selectedEvent = event;
+    EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [cell marked:YES withAnimation:YES];
+
+    [DataRepository instance].state.selectedEvent = event;
 
     if ([self.delegate respondsToSelector:@selector(eventsGroupedByStartDateViewControllerDidDimiss:)]) {
         [self.delegate eventsGroupedByStartDateViewControllerDidDimiss:self];
     }
+}
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [cell marked:NO withAnimation:YES];
 }
 
 #pragma mark -
@@ -339,6 +335,9 @@
         cell.eventStopYear.text  = @"";
         cell.eventStopMonth.text = @"";
     }
+
+    BOOL marked = [[DataRepository instance].state.selectedEvent isEqual:event] ? YES : NO;
+    [cell marked:marked withAnimation:YES];
 
     cell.delegate = self;
 
@@ -400,7 +399,7 @@
 
     [self.tableView reloadData];
 
-    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:self.selectedEvent];
+    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:[DataRepository instance].state.selectedEvent];
     if (indexPath) {
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     }

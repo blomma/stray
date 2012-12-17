@@ -35,6 +35,16 @@
         }
     }
 
+    // SELECTED EVENT
+    uriData = [defaults objectForKey:@"selectedEvent"];
+    if (uriData) {
+        NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
+        NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
+        if (objectID) {
+            self.selectedEvent = (Event *)[context objectWithID:objectID];
+        }
+    }
+
     // EVENTSGROUPEDBYDATE FILTER
     // Check for legacy and load that first
     NSArray *objects = nil;
@@ -89,6 +99,12 @@
     NSData *uriData = [NSKeyedArchiver archivedDataWithRootObject:uri];
 
     [defaults setObject:uriData forKey:@"activeEvent"];
+
+    // SELECTED EVENT
+    uri      = [self.selectedEvent.objectID URIRepresentation];
+    uriData = [NSKeyedArchiver archivedDataWithRootObject:uri];
+
+    [defaults setObject:uriData forKey:@"selectedEvent"];
 
     // EVENTSGROUPEDBYDATE FILTER
     NSMutableSet *objects = [NSMutableSet set];

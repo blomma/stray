@@ -39,6 +39,10 @@
 @property (nonatomic, weak) IBOutlet TagButton *tagName;
 @property (nonatomic, weak) IBOutlet UILabel *willDelete;
 
+@property (nonatomic) BOOL marked;
+
+- (void)marked:(BOOL)marked withAnimation:(BOOL)animation;
+
 - (IBAction)touchUpInsideTagButton:(UIButton *)sender forEvent:(UIEvent *)event;
 
 @end

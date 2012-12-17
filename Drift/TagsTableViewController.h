@@ -18,7 +18,6 @@
 
 @interface TagsTableViewController : UITableViewController
 
-@property (nonatomic, weak) Event *event;
 @property (nonatomic, weak) id<TagsTableViewControllerDelegate> delegate;
 
 @end

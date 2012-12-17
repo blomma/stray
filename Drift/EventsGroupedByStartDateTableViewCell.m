@@ -45,24 +45,27 @@
     [self.frontView.layer removeAllAnimations];
 
     self.frontView.layer.position = self.backView.layer.position;
-
-    if (self.selectLayer) {
-        self.selectLayer.backgroundColor = [UIColor clearColor].CGColor;
-    }
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
+- (void)marked:(BOOL)marked withAnimation:(BOOL)animation {
+    if (self.marked == marked) {
+        return;
+    }
 
-    UIColor *backgroundColor = selected ? [UIColor colorWithWhite:0.251f alpha:1.000] : [UIColor clearColor];
+    self.marked = marked;
 
-    CABasicAnimation *backgroundAnimation = [CABasicAnimation animationWithKeyPath:@"backgroundColor"];
-    backgroundAnimation.fromValue = (id)self.selectLayer.backgroundColor;
-    backgroundAnimation.toValue   = (id)backgroundColor.CGColor;
-    backgroundAnimation.duration  = 0.4;
+    UIColor *backgroundColor = marked ? [UIColor colorWithWhite:0.251f alpha:1.000] : [UIColor clearColor];
+
+    if (animation) {
+        CABasicAnimation *backgroundAnimation = [CABasicAnimation animationWithKeyPath:@"backgroundColor"];
+        backgroundAnimation.fromValue = (id)self.selectLayer.backgroundColor;
+        backgroundAnimation.toValue   = (id)backgroundColor.CGColor;
+        backgroundAnimation.duration  = 0.4;
+        [self.selectLayer addAnimation:backgroundAnimation forKey:@"backgroundColor"];
+    }
 
     self.selectLayer.backgroundColor = backgroundColor.CGColor;
-    [self.selectLayer addAnimation:backgroundAnimation forKey:@"backgroundColor"];
 }
+
 
 @end

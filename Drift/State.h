@@ -13,6 +13,8 @@
 @interface State : NSObject
 
 @property (nonatomic, weak) Event *activeEvent;
+@property (nonatomic, weak) Event *selectedEvent;
+
 @property (nonatomic) NSMutableSet *eventGroupsFilter;
 @property (nonatomic) NSMutableSet *eventsFilter;
 

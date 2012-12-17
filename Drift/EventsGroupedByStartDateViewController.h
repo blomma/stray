@@ -24,6 +24,4 @@
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet UIScrollView *filterView;
 
-@property (nonatomic, weak) Event *selectedEvent;
-
 @end
