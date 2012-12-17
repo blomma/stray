@@ -101,7 +101,7 @@
     [defaults setObject:uriData forKey:@"activeEvent"];
 
     // SELECTED EVENT
-    uri      = [self.selectedEvent.objectID URIRepresentation];
+    uri     = [self.selectedEvent.objectID URIRepresentation];
     uriData = [NSKeyedArchiver archivedDataWithRootObject:uri];
 
     [defaults setObject:uriData forKey:@"selectedEvent"];

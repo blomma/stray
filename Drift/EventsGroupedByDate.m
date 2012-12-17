@@ -86,9 +86,9 @@
     // Calculate how many seconds this event spans
     unsigned int unitFlags                  = NSSecondCalendarUnit;
     NSDateComponents *eventSecondsComponent = [[Global instance].calendar components:unitFlags
-                                                               fromDate:startDate
-                                                                 toDate:stopDate
-                                                                options:0];
+                                                                            fromDate:startDate
+                                                                              toDate:stopDate
+                                                                             options:0];
 
     NSDateComponents *totalSecondsComponent = [[NSDateComponents alloc] init];
     totalSecondsComponent.second = 0;
@@ -96,8 +96,8 @@
     // Loop over it until there are no more future time left in it
     while (eventSecondsComponent.second >= 0) {
         startDate = [[Global instance].calendar dateByAddingComponents:totalSecondsComponent
-                                                   toDate:event.startDate
-                                                  options:0];
+                                                                toDate:event.startDate
+                                                               options:0];
 
         // Find a EventGroup for this startDate
         NSDate *groupDate = [startDate beginningOfDayWithCalendar:[Global instance].calendar];
@@ -132,9 +132,9 @@
         // we need to add one second to this to tip it over
         NSDate *endOfDay                        = [startDate endOfDayWithCalendar:[Global instance].calendar];
         NSDateComponents *deltaSecondsComponent = [[Global instance].calendar components:unitFlags
-                                                                   fromDate:startDate
-                                                                     toDate:endOfDay
-                                                                    options:0];
+                                                                                fromDate:startDate
+                                                                                  toDate:endOfDay
+                                                                                 options:0];
         deltaSecondsComponent.second += 1;
 
         totalSecondsComponent.second += deltaSecondsComponent.second;

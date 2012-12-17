@@ -113,7 +113,7 @@
     [self.events addObject:event];
 
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
-        self.isFilteredEventsInvalid = YES;
+        self.isFilteredEventsInvalid                    = YES;
         self.isFilteredEventsContainsActiveEventInvalid = YES;
     }
 }
@@ -122,14 +122,14 @@
     [self.events removeObject:event];
 
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
-        self.isFilteredEventsInvalid = YES;
+        self.isFilteredEventsInvalid                    = YES;
         self.isFilteredEventsContainsActiveEventInvalid = YES;
     }
 }
 
 - (void)updateEvent:(Event *)event {
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
-        self.isFilteredEventsInvalid = YES;
+        self.isFilteredEventsInvalid                    = YES;
         self.isFilteredEventsContainsActiveEventInvalid = YES;
     }
 }
@@ -162,19 +162,19 @@
         stopDate = [stopDate earlierDate:endOfDay];
 
         NSDateComponents *components = [[Global instance].calendar components:unitFlags
-                                                        fromDate:startDate
-                                                          toDate:stopDate
-                                                         options:NSWrapCalendarComponents];
+                                                                     fromDate:startDate
+                                                                       toDate:stopDate
+                                                                      options:NSWrapCalendarComponents];
 
         deltaEnd = [[Global instance].calendar dateByAddingComponents:components
-                                                  toDate:deltaEnd
-                                                 options:0];
+                                                               toDate:deltaEnd
+                                                              options:0];
     }
 
     self.filteredEventsDateComponents = [[Global instance].calendar components:unitFlags
-                                                         fromDate:deltaStart
-                                                           toDate:deltaEnd
-                                                          options:0];
+                                                                      fromDate:deltaStart
+                                                                        toDate:deltaEnd
+                                                                       options:0];
     self.isFilteredEventsDateComponentsInvalid = NO;
 }
 
