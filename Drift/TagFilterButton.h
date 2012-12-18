@@ -10,6 +10,6 @@
 
 @interface TagFilterButton : UIButton
 
-@property (nonatomic, weak) Tag *tagObject;
+@property (nonatomic) Tag *eventTag;
 
 @end

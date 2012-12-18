@@ -25,10 +25,6 @@
 @property (nonatomic) EventsGroupedByDate *eventGroups;
 @property (nonatomic) BOOL isEventGroupsInvalid;
 
-@property (nonatomic) Tags *tags;
-@property (nonatomic) BOOL isTagsInvalid;
-@property (nonatomic, readonly) BOOL isFilterViewVisible;
-
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) NSArray *standaloneWeekdaySymbols;
 
@@ -41,9 +37,6 @@
 
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
     self.standaloneWeekdaySymbols    = [[NSDateFormatter new] standaloneWeekdaySymbols];
-
-    self.tags          = [DataRepository instance].tags;
-    self.isTagsInvalid = YES;
 
     [self initFilterView];
 
@@ -66,9 +59,7 @@
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
 
-    if (self.isTagsInvalid) {
-        [self setupFilterView];
-    }
+    [self setupFilterView];
 
     [self.tableView reloadData];
 }
@@ -84,10 +75,6 @@
 
 - (void)showInfoHintView:(UIView *)view {
     [self performSegueWithIdentifier:@"segueToInfoHintViewFromEventGroups" sender:self];
-}
-
-- (BOOL)isFilterViewVisible {
-    return self.tags.count > 0;
 }
 
 #pragma mark -
@@ -180,14 +167,16 @@
     CGSize elementSize      = CGSizeMake(120, self.filterView.frame.size.height);
     UIEdgeInsets titleInset = UIEdgeInsetsMake(0, 5, 0, 5);
 
+    Tags *tags          =  [[Tags alloc] initWithTags:[DataRepository instance].tags];
+
     // add elements
-    for (NSUInteger i = 0; i < self.tags.count; i++) {
-        Tag *tag = [self.tags objectAtIndex:i];
+    for (NSUInteger i = 0; i < tags.count; i++) {
+        Tag *tag = [tags objectAtIndex:i];
 
         // Only show tags that have a name set
         if (tag.name) {
             TagFilterButton *button = [[TagFilterButton alloc] init];
-            button.tagObject = tag;
+            button.eventTag = tag;
             [button addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 
             button.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:13];
@@ -220,17 +209,16 @@
     // set the size of the scrollview's content
     self.filterView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
 
-    self.isTagsInvalid        = NO;
     self.isEventGroupsInvalid = YES;
 }
 
 - (void)touchUpInsideTagFilterButton:(TagFilterButton *)sender forEvent:(UIEvent *)event {
-    if ([[DataRepository instance].state.eventGroupsFilter containsObject:sender.tagObject]) {
-        [[DataRepository instance].state.eventGroupsFilter removeObject:sender.tagObject];
+    if ([[DataRepository instance].state.eventGroupsFilter containsObject:sender.eventTag]) {
+        [[DataRepository instance].state.eventGroupsFilter removeObject:sender.eventTag];
 
         sender.selected = NO;
     } else {
-        [[DataRepository instance].state.eventGroupsFilter addObject:sender.tagObject];
+        [[DataRepository instance].state.eventGroupsFilter addObject:sender.eventTag];
 
         sender.selected = YES;
     }
@@ -282,21 +270,9 @@
     // ========
     // = Tags =
     // ========
-    NSSet *updatedTags = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-            return [obj isKindOfClass:[Tag class]];
-        }];
-
-    NSSet *insertedTags = [insertedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-            return [obj isKindOfClass:[Tag class]];
-        }];
-
     NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
             return [obj isKindOfClass:[Tag class]];
         }];
-
-    if (updatedTags.count > 0 || insertedTags.count > 0 || deletedTags.count > 0) {
-        self.isTagsInvalid = YES;
-    }
 
     if ([deletedTags intersectsSet:[DataRepository instance].state.eventGroupsFilter]) {
         self.isEventGroupsInvalid = YES;

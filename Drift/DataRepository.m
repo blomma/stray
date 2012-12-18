@@ -15,7 +15,6 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 @interface DataRepository ()
 
 @property (nonatomic) State *state;
-@property (nonatomic) Tags *tags;
 
 @end
 
@@ -72,12 +71,8 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 #pragma mark -
 #pragma mark Public properties
 
-- (Tags *)tags {
-    if (!_tags) {
-        _tags = [[Tags alloc] initWithTags:[Tag all]];
-    }
-
-    return _tags;
+- (NSArray *)tags {
+    return [Tag all];
 }
 
 - (NSArray *)events {
@@ -95,25 +90,6 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
         });
 
     return sharedDataManager;
-}
-
-#pragma mark -
-#pragma mark Public methods
-
-- (Tag *)createTag {
-    return [Tag create];
-}
-
-- (void)deleteTag:(Tag *)tag {
-    [tag delete];
-}
-
-- (Event *)createEvent {
-    return [Event create];
-}
-
-- (void)deleteEvent:(Event *)event {
-    [event delete];
 }
 
 #pragma mark -

@@ -8,10 +8,11 @@
 
 #import "Tags.h"
 
+#import "NSManagedObject+ActiveRecord.h"
+
 @interface Tags ()
 
 @property (nonatomic) NSMutableOrderedSet *tags;
-@property (nonatomic) BOOL isTagsInvalid;
 
 @end
 
@@ -53,54 +54,32 @@
 #pragma mark -
 #pragma mark Public methods
 
-- (void)addObjectsFromArray:(NSArray *)objects {
-    if (objects.count == 0) {
-        return;
+- (void)addObject:(id)object {
+    if (![self.tags containsObject:object]) {
+        [self.tags addObject:object];
+
+        [self updateSortIndex];
     }
-
-    [self.tags addObjectsFromArray:objects];
-
-    [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[Tag class]]) {
-            [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
-        }
-    }];
 }
 
-- (void)removeObjectsInArray:(NSArray *)objects {
-    if (objects.count == 0) {
-        return;
-    }
+- (void)removeObject:(id)object {
+    [self.tags removeObject:object];
 
-    [self.tags removeObjectsInArray:objects];
-
-    [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[Tag class]]) {
-            [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
-        }
-    }];
+    [self updateSortIndex];
 }
 
 - (void)insertObject:(id)object atIndex:(NSUInteger)index {
     if (![self.tags containsObject:object]) {
         [self.tags insertObject:object atIndex:index];
 
-        [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if ([obj isKindOfClass:[Tag class]]) {
-                [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
-            }
-        }];
+        [self updateSortIndex];
     }
 }
 
 - (void)removeObjectAtIndex:(NSUInteger)index {
     [self.tags removeObjectAtIndex:index];
 
-    [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[Tag class]]) {
-            [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
-        }
-    }];
+    [self updateSortIndex];
 }
 
 - (void)moveObjectAtIndex:(NSUInteger)atIndex toIndex:(NSUInteger)toIndex {
@@ -109,11 +88,7 @@
     [self.tags removeObjectAtIndex:atIndex];
     [self.tags insertObject:object atIndex:toIndex];
 
-    [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[Tag class]]) {
-            [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
-        }
-    }];
+    [self updateSortIndex];
 }
 
 - (id)objectAtIndex:(NSUInteger)index {
@@ -122,6 +97,16 @@
 
 - (NSUInteger)indexOfObject:(id)object {
     return [self.tags indexOfObject:object];
+}
+
+#pragma mark -
+#pragma mark Private methods
+
+- (void)updateSortIndex {
+    [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
+        [obj save];
+    }];
 }
 
 @end
