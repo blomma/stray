@@ -111,7 +111,7 @@
         }
 
         // Check if this eventGroup already has this event
-        if (![eventGroup containsEvent:event]) {
+        if (![eventGroup.events containsObject:event]) {
             if (index == NSNotFound) {
                 index = [self insertionIndexForGroupDate:groupDate];
                 [self.eventGroups insertObject:eventGroup atIndex:index];
@@ -155,7 +155,7 @@
     for (EventGroup *eventGroup in eventGroups) {
         [eventGroup removeEvent:event];
 
-        if (eventGroup.count == 0) {
+        if (eventGroup.events.count == 0) {
             [self.eventGroups removeObject:eventGroup];
         }
     }
@@ -184,7 +184,7 @@
             [eventGroup removeEvent:event];
             [eventGroupsToRemove addObject:eventGroup];
 
-            if (eventGroup.count == 0) {
+            if (eventGroup.events.count == 0) {
                 [self.eventGroups removeObject:eventGroup];
             }
         }

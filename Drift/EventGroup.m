@@ -13,7 +13,7 @@
 
 @interface EventGroup ()
 
-@property (nonatomic, readwrite) NSMutableSet *events;
+@property (nonatomic) NSMutableSet *events;
 @property (nonatomic) NSMutableOrderedSet *filteredEvents;
 @property (nonatomic) BOOL isFilteredEventsInvalid;
 
@@ -54,10 +54,6 @@
 
 #pragma mark -
 #pragma mark Public properties
-
-- (NSUInteger)count {
-    return self.events.count;
-}
 
 - (NSDateComponents *)filteredEventsDateComponents {
     if (self.filteredEventsContainsActiveEvent || self.isFilteredEventsDateComponentsInvalid) {
@@ -104,10 +100,6 @@
 
 #pragma mark -
 #pragma mark Public methods
-
-- (BOOL)containsEvent:(Event *)event {
-    return [self.events containsObject:event];
-}
 
 - (void)addEvent:(Event *)event {
     [self.events addObject:event];
