@@ -18,7 +18,6 @@
 - (void)removeEvent:(Event *)event;
 - (void)updateEvent:(Event *)event;
 
-// Filtered methods
 @property (nonatomic, readonly) NSUInteger filteredEventGroupCount;
 
 - (NSIndexPath *)indexPathOfFilteredEvent:(Event *)event;

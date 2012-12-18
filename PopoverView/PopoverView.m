@@ -1022,8 +1022,6 @@
         //Calculate the height of the title bg
         float titleBGHeight = -1;
 
-        //NSLog(@"titleView:%@", titleView);
-
         if (titleView != nil) {
             titleBGHeight = kBoxPadding * 2.f + titleView.frame.size.height;
         }

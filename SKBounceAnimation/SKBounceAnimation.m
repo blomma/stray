@@ -152,9 +152,6 @@
         } else if ([self.fromValue isKindOfClass:[UIColor class]] && [self.toValue isKindOfClass:[UIColor class]]) {
             const CGFloat *fromComponents = CGColorGetComponents(((UIColor *)self.fromValue).CGColor);
             const CGFloat *toComponents   = CGColorGetComponents(((UIColor *)self.toValue).CGColor);
-            //			NSLog(@"thing");
-            //			NSLog(@"from %0.2f %0.2f %0.2f %0.2f", fromComponents[0], fromComponents[1], fromComponents[2], fromComponents[3]);
-            //			NSLog(@"to %0.2f %0.2f %0.2f %0.2f", toComponents[0], toComponents[1], toComponents[2], toComponents[3]);
             self.values = [self createColorArrayFromRed:
                 [self valueArrayForStartValue:fromComponents[0] endValue:toComponents[0]]
                                                   green:
@@ -187,10 +184,6 @@
             } else if ([valueType rangeOfString:@"CATransform3D"].location == 1) {
                 CATransform3D fromTransform = [self.fromValue CATransform3DValue];
                 CATransform3D toTransform   = [self.toValue CATransform3DValue];
-
-                //				NSLog(@"from [%0.2f %0.2f %0.2f %0.2f; %0.2f %0.2f %0.2f %0.2f; %0.2f %0.2f %0.2f %0.2f; %0.2f %0.2f %0.2f %0.2f]", fromTransform.m11, fromTransform.m12, fromTransform.m13, fromTransform.m14, fromTransform.m21, fromTransform.m22, fromTransform.m23, fromTransform.m24, fromTransform.m31, fromTransform.m32, fromTransform.m33, fromTransform.m34, fromTransform.m41, fromTransform.m42, fromTransform.m43, fromTransform.m44);
-                //
-                //				NSLog(@"to [%0.2f %0.2f %0.2f %0.2f; %0.2f %0.2f %0.2f %0.2f; %0.2f %0.2f %0.2f %0.2f; %0.2f %0.2f %0.2f %0.2f]", toTransform.m11, toTransform.m12, toTransform.m13, toTransform.m14, toTransform.m21, toTransform.m22, toTransform.m23, toTransform.m24, toTransform.m31, toTransform.m32, toTransform.m33, toTransform.m34, toTransform.m41, toTransform.m42, toTransform.m43, toTransform.m44);
 
                 self.values = [self createTransformArrayFromM11:
                     [self valueArrayForStartValue:fromTransform.m11 endValue:toTransform.m11]
@@ -319,7 +312,6 @@ static CGPathRef createPathFromXYValues(NSArray *xValues, NSArray *yValues) {
                                 green:[[greenValues objectAtIndex:i] floatValue]
                                  blue:[[blueValues objectAtIndex:i] floatValue]
                                 alpha:[[alphaValues objectAtIndex:i] floatValue]];
-        //		NSLog(@"a color %@", value);
         [values addObject:(id)value.CGColor];
     }
     return values;
@@ -339,9 +331,6 @@ static CGPathRef createPathFromXYValues(NSArray *xValues, NSArray *yValues) {
     }
     CGFloat numberOfPeriods = self.numberOfBounces / 2 + 0.5f;
     CGFloat omega           = numberOfPeriods * 2 * (CGFloat)M_PI / steps;
-
-    //uncomment this to get the equation of motion
-    //	NSLog(@"y = %0.2f * e^(%0.5f*x)*cos(%0.10f*x) + %0.0f over %d frames", startValue - endValue, alpha, omega, endValue, steps);
 
     NSMutableArray *values = [NSMutableArray arrayWithCapacity:steps];
     CGFloat value          = 0;

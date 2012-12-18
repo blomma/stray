@@ -18,8 +18,8 @@
 - (void)removeEvent:(Event *)event;
 - (void)updateEvent:(Event *)event;
 
-// Filtered methods
-- (id)filteredObjectAtIndex:(NSUInteger)index;
-- (NSUInteger)filteredCount;
+@property (nonatomic, readonly) NSUInteger filteredEventGroupCount;
+
+- (id)filteredEventGroupAtIndex:(NSUInteger)index;
 
 @end

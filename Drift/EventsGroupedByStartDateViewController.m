@@ -468,7 +468,7 @@
 }
 
 - (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration completion:(void (^)(BOOL finished))completion {
-    NSString *keyPath = @"position";
+    static NSString *keyPath = @"position";
 
     SKBounceAnimation *positionAnimation = [SKBounceAnimation animationWithKeyPath:keyPath];
     positionAnimation.fromValue       = [NSValue valueWithCGPoint:from];

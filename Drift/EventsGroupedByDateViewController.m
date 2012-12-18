@@ -97,13 +97,13 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (NSInteger)[self.eventGroups filteredCount];
+    return (NSInteger)self.eventGroups.filteredEventGroupCount;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellIdentifier = @"EventsGroupedByDateTableViewCell";
 
-    EventGroup *eventGroup = [self.eventGroups filteredObjectAtIndex:(NSUInteger)indexPath.row];
+    EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)indexPath.row];
 
     EventsGroupedByDateTableViewCell *cell = (EventsGroupedByDateTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 

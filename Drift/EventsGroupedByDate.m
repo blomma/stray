@@ -202,11 +202,11 @@
 #pragma mark -
 #pragma mark Filtered methods
 
-- (id)filteredObjectAtIndex:(NSUInteger)index {
+- (id)filteredEventGroupAtIndex:(NSUInteger)index {
     return [self.filteredEventGroups objectAtIndex:index];
 }
 
-- (NSUInteger)filteredCount {
+- (NSUInteger)filteredEventGroupCount {
     return self.filteredEventGroups.count;
 }
 
