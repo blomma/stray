@@ -1,2 +1,3 @@
-✓ Tweaks and fixes, really, 
-
+✓ Code tweaks and fixes, you know, unearthing the warts and whatnot and making sure they are as shiny (not sun shiny but more like shiny on a good summer day with maybe a few clouds in the sky) as the rest of the code.
+✓ Design tweaks, like George Lucas I will continue to tweak and tweak until the day you will notice in the changes an entry saying ‘Greedo shot first!’ and then I’m done.
+✓ Right, the biggie, I put a stop to the nonsense of being able to start a timer while the old timer was still running. Now now, its for your own good, all kinds of weird things happens if you do this and having your best interest at heart I put a stop to this.
