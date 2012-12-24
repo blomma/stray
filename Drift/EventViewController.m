@@ -92,6 +92,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToTagsFromEvent"]) {
         [[segue destinationViewController] setDelegate:self];
+        [[segue destinationViewController] setEvent:[DataRepository instance].state.selectedEvent];
     } else if ([segue.identifier isEqualToString:@"segueToEventsFromEvent"]) {
         [[segue destinationViewController] setDelegate:self];
     }

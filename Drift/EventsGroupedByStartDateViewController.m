@@ -113,6 +113,12 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToTagsFromEvents"]) {
         [[segue destinationViewController] setDelegate:self];
+
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+        EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)indexPath.section];
+        Event *event           = [eventGroup.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
+
+        [[segue destinationViewController] setEvent:event];
     }
 }
 

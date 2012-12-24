@@ -124,8 +124,7 @@
 
         cell.delegate = self;
 
-        DataRepository *repository = [DataRepository instance];
-        BOOL selected = [repository.state.selectedEvent.inTag isEqual:tag] ? YES : NO;
+        BOOL selected = [self.event.inTag isEqual:tag] ? YES : NO;
         [cell marked:selected withAnimation:NO];
 
         return cell;
@@ -166,8 +165,7 @@
 
     [cell marked:!cell.marked withAnimation:YES];
 
-    DataRepository *repository = [DataRepository instance];
-    repository.state.selectedEvent.inTag = [repository.state.selectedEvent.inTag isEqual:tag] ? nil : tag;
+    self.event.inTag = [self.event.inTag isEqual:tag] ? nil : tag;
 
     if ([self.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
         [self.delegate tagsTableViewControllerDidDimiss:self];
