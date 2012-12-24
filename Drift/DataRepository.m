@@ -20,9 +20,40 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 
 @implementation DataRepository
 
-//-(int)getRandomNumber:(int)from to:(int)to {
-//    return (int)from + arc4random() % (to-from+1);
-//}
+-(int)getRandomNumber:(int)from to:(int)to {
+    return (int)from + arc4random() % (to-from+1);
+}
+
+- (void)populateRandomData {
+    NSMutableArray *tags = [NSMutableArray array];
+
+    Tag *tag = [Tag create];
+    tag.name = @"Work";
+    [tags addObject:tag];
+
+    tag      = [Tag create];
+    tag.name = @"Fun";
+    [tags addObject:tag];
+
+    tag      = [Tag create];
+    tag.name = @"Reading";
+    [tags addObject:tag];
+
+    tag      = [Tag create];
+    tag.name = @"Lunch";
+    [tags addObject:tag];
+
+    NSDate *nowDate = [NSDate dateWithTimeIntervalSinceReferenceDate:0];
+    for (int i = 0; i < 365; i++) {
+        NSTimeInterval interval = 60 * 60 * 24 * i;
+
+        Event *event = [Event create];
+        event.startDate = nowDate;
+        nowDate         = [NSDate dateWithTimeIntervalSinceReferenceDate:interval];
+        event.stopDate  = nowDate;
+        event.inTag     = [tags objectAtIndex:[self getRandomNumber:0 to:3]];
+    }
+}
 
 - (id)init {
     self = [super init];
@@ -30,34 +61,7 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 
         self.state = [[State alloc] init];
 
-//        NSMutableArray *tags = [NSMutableArray array];
-//
-//        Tag *tag = [self createTag];
-//        tag.name = @"Work";
-//        [tags addObject:tag];
-//
-//        tag = [self createTag];
-//        tag.name = @"Fun";
-//        [tags addObject:tag];
-//
-//        tag = [self createTag];
-//        tag.name = @"Reading";
-//        [tags addObject:tag];
-//
-//        tag = [self createTag];
-//        tag.name = @"Lunch";
-//        [tags addObject:tag];
-//
-//        NSDate *nowDate = [NSDate dateWithTimeIntervalSinceReferenceDate:0];
-//        for (int i = 0; i < 1000; i++) {
-//            NSTimeInterval interval = 60 * [self getRandomNumber:60 to:300];
-//
-//            Event *event = [self createEvent];
-//            event.startDate = nowDate;
-//            nowDate = [nowDate dateByAddingTimeInterval:interval];
-//            event.stopDate = nowDate;
-//            event.inTag = [tags objectAtIndex:[self getRandomNumber:0 to:2]];
-//        }
+        //[self populateRandomData];
 
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(objectsDidChange:)
