@@ -378,8 +378,6 @@
 		2747D9B5E82543FBA9113ED2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Mikael Hultgren (J36VB2WCY5)";
-				PROVISIONING_PROFILE = "BD86CC39-8292-4A7C-AB06-C106CB02A106";
 			};
 			name = Debug;
 		};
@@ -476,8 +474,6 @@
 		E570A44403ED4708834D6A94 /* Ad Hoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Mikael Hultgren";
-				PROVISIONING_PROFILE = "9B2D5FE2-CB65-4A85-AE8F-4B97D1182B25";
 			};
 			name = "Ad Hoc";
 		};
