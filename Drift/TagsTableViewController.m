@@ -15,7 +15,6 @@
 #import "SKBounceAnimation.h"
 #import "CAAnimation+Blocks.h"
 #import "UIScrollView+SVPulling.h"
-#import "NSManagedObject+ActiveRecord.h"
 
 @interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureMovingRowDelegate, TagTableViewCellDelegate>
 
@@ -53,7 +52,7 @@
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
                 [weakSelf.tableView beginUpdates];
 
-                Tag *tag = [Tag create];
+                Tag *tag = [Tag MR_createEntity];
                 [weakTags insertObject:tag atIndex:0];
                 tag = nil;
 
@@ -185,7 +184,7 @@
     [state.eventGroupsFilter removeObject:tag];
     [state.eventsFilter removeObject:tag];
 
-    [tag delete];
+    [tag MR_deleteEntity];
 
     CGPoint fromValue = cell.frontView.layer.position;
     CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);

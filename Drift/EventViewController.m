@@ -16,7 +16,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIImage+Retina4.h"
 #import "PopoverView.h"
-#import "NSManagedObject+ActiveRecord.h"
 
 @interface EventViewController ()
 
@@ -153,7 +152,7 @@
     } else {
         [self reset];
 
-        repository.state.selectedEvent           = [Event create];
+        repository.state.selectedEvent           = [Event MR_createEntity];
         repository.state.selectedEvent.startDate = now;
 
         repository.state.activeEvent = repository.state.selectedEvent;

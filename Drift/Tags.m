@@ -8,8 +8,6 @@
 
 #import "Tags.h"
 
-#import "NSManagedObject+ActiveRecord.h"
-
 @interface Tags ()
 
 @property (nonatomic) NSMutableOrderedSet *tags;
@@ -104,8 +102,9 @@
 
 - (void)updateSortIndex {
     [self.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
-        [obj save];
+        if ([obj isKindOfClass:[Tag class]]) {
+            [obj setSortIndex:[NSNumber numberWithInteger:(NSInteger)idx]];
+        }
     }];
 }
 

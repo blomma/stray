@@ -20,7 +20,6 @@
 #import "TransformableTableViewGestureRecognizer.h"
 #import "UIScrollView+SVPulling.h"
 #import "EventsGroupedByStartDate.h"
-#import "NSManagedObject+ActiveRecord.h"
 
 @interface EventsGroupedByStartDateViewController ()<TransformableTableViewGestureEditingRowDelegate, EventsGroupedByStartDateTableViewCellDelegate>
 
@@ -214,7 +213,7 @@
         [DataRepository instance].state.selectedEvent = nil;
     }
 
-    [event delete];
+    [event MR_deleteEntity];
     [self.eventGroups removeEvent:event];
 
     [self.tableView beginUpdates];

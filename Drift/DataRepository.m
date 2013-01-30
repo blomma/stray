@@ -8,8 +8,6 @@
 
 #import "DataRepository.h"
 
-#import "NSManagedObject+ActiveRecord.h"
-
 NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjectsDidChangeNotification";
 
 @interface DataRepository ()
@@ -27,19 +25,19 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 - (void)populateRandomData {
     NSMutableArray *tags = [NSMutableArray array];
 
-    Tag *tag = [Tag create];
+    Tag *tag = [Tag MR_createEntity];
     tag.name = @"Work";
     [tags addObject:tag];
 
-    tag      = [Tag create];
+    tag      = [Tag MR_createEntity];
     tag.name = @"Fun";
     [tags addObject:tag];
 
-    tag      = [Tag create];
+    tag      = [Tag MR_createEntity];
     tag.name = @"Reading";
     [tags addObject:tag];
 
-    tag      = [Tag create];
+    tag      = [Tag MR_createEntity];
     tag.name = @"Lunch";
     [tags addObject:tag];
 
@@ -47,7 +45,7 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
     for (int i = 0; i < 365; i++) {
         NSTimeInterval interval = 60 * 60 * 24 * i;
 
-        Event *event = [Event create];
+        Event *event = [Event MR_createEntity];
         event.startDate = nowDate;
         nowDate         = [NSDate dateWithTimeIntervalSinceReferenceDate:interval];
         event.stopDate  = nowDate;
@@ -66,7 +64,7 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(objectsDidChange:)
                                                      name:NSManagedObjectContextObjectsDidChangeNotification
-                                                   object:[[CoreDataManager instance] managedObjectContext]];
+                                                   object:[NSManagedObjectContext MR_defaultContext]];
     }
 
     return self;
@@ -76,11 +74,11 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 #pragma mark Public properties
 
 - (NSArray *)tags {
-    return [Tag all];
+    return [Tag MR_findAll];
 }
 
 - (NSArray *)events {
-    return [Event all];
+    return [Event MR_findAll];
 }
 
 #pragma mark -
