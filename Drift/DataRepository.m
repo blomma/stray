@@ -19,7 +19,7 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 @implementation DataRepository
 
 -(int)getRandomNumber:(int)from to:(int)to {
-    return (int)from + arc4random() % (to-from+1);
+    return (int)(from + (int)arc4random() % (to - from + 1));
 }
 
 - (void)populateRandomData {
