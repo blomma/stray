@@ -9,12 +9,12 @@
 #import "TagsTableViewController.h"
 
 #import "Tags.h"
-#import "DataRepository.h"
 #import "TransformableTableViewGestureRecognizer.h"
 #import "TagTableViewCell.h"
 #import "SKBounceAnimation.h"
 #import "CAAnimation+Blocks.h"
 #import "UIScrollView+SVPulling.h"
+#import "State.h"
 
 @interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureMovingRowDelegate, TagTableViewCellDelegate>
 
@@ -38,7 +38,7 @@
     self.editingStateRightOffset = 260;
     self.editingCommitLength     = 60;
 
-    self.tags = [[Tags alloc] initWithTags:[DataRepository instance].tags];
+    self.tags = [[Tags alloc] initWithTags:[Tag MR_findAll]];
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"grabbedTableViewCellIdentifier"];
@@ -180,9 +180,7 @@
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
 
     // Delete this tag from all of the filter also, if present
-    State *state = [DataRepository instance].state;
-    [state.eventGroupsFilter removeObject:tag];
-    [state.eventsFilter removeObject:tag];
+    [[State instance].eventGroupsFilter removeObject:tag];
 
     [tag MR_deleteEntity];
 

@@ -4,6 +4,7 @@
 #import "_Tag.h"
 
 const struct TagAttributes TagAttributes = {
+	.guid = @"guid",
 	.name = @"name",
 	.sortIndex = @"sortIndex",
 };
@@ -49,6 +50,13 @@ const struct TagFetchedProperties TagFetchedProperties = {
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic guid;
+
+
 
 
 

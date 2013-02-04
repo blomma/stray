@@ -9,7 +9,6 @@
 #import "EventsGroupedByStartDateViewController.h"
 
 #import "CAAnimation+Blocks.h"
-#import "DataRepository.h"
 #import "Event.h"
 #import "EventsGroupedByStartDateTableViewCell.h"
 #import "Global.h"
@@ -20,6 +19,7 @@
 #import "TransformableTableViewGestureRecognizer.h"
 #import "UIScrollView+SVPulling.h"
 #import "EventsGroupedByStartDate.h"
+#import "State.h"
 
 @interface EventsGroupedByStartDateViewController ()<TransformableTableViewGestureEditingRowDelegate, EventsGroupedByStartDateTableViewCellDelegate>
 
@@ -47,9 +47,12 @@
 
     [self initFilterView];
 
-    self.eventGroups = [[EventsGroupedByStartDate alloc] initWithEvents:[DataRepository instance].events
-                                                            withFilters:[DataRepository instance].state.eventsFilter];
-    self.isEventGroupsInvalid = YES;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"guid IN %@", [[State instance].eventsGroupedByStartDateFilter allObjects]];
+    NSArray *filters       = [Tag MR_findAllWithPredicate:predicate];
+    NSArray *events        = [Event MR_findAllSortedBy:@"startDate" ascending:NO];
+
+    self.eventGroups = [[EventsGroupedByStartDate alloc] initWithEvents:events
+                                                            withFilters:[NSSet setWithArray:filters]];
 
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
@@ -74,8 +77,8 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(objectsDidChange:)
-                                                 name:kDataManagerObjectsDidChangeNotification
-                                               object:[DataRepository instance]];
+                                                 name:NSManagedObjectContextObjectsDidChangeNotification
+                                               object:[NSManagedObjectContext MR_defaultContext]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -104,8 +107,8 @@
         self.tableViewRecognizer = nil;
 
         [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                        name:kDataManagerObjectsDidChangeNotification
-                                                      object:[DataRepository instance]];
+                                                        name:NSManagedObjectContextObjectsDidChangeNotification
+                                                      object:[NSManagedObjectContext MR_defaultContext]];
     }
 }
 
@@ -133,7 +136,10 @@
 
 - (EventsGroupedByStartDate *)eventGroups {
     if (self.isEventGroupsInvalid) {
-        _eventGroups.filters      = [DataRepository instance].state.eventsFilter;
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"guid IN %@", [[State instance].eventsGroupedByStartDateFilter allObjects]];
+        NSArray *filters       = [Tag MR_findAllWithPredicate:predicate];
+
+        _eventGroups.filters      = [NSSet setWithArray:filters];
         self.isEventGroupsInvalid = NO;
     }
 
@@ -203,14 +209,9 @@
     EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)indexPath.section];
     Event *event           = [eventGroup.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
 
-    // Are we about to remove the active event
-    if ([[DataRepository instance].state.activeEvent isEqual:event]) {
-        [DataRepository instance].state.activeEvent = nil;
-    }
-
     // Are we about to remove the selected event
-    if ([[DataRepository instance].state.selectedEvent isEqual:event]) {
-        [DataRepository instance].state.selectedEvent = nil;
+    if ([[State instance].selectedEvent isEqual:event]) {
+        [State instance].selectedEvent = nil;
     }
 
     [event MR_deleteEntity];
@@ -271,7 +272,7 @@
     EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
     [cell marked:YES withAnimation:YES];
 
-    [DataRepository instance].state.selectedEvent = event;
+    [State instance].selectedEvent = event;
 
     if ([self.delegate respondsToSelector:@selector(eventsGroupedByStartDateViewControllerDidDimiss:)]) {
         [self.delegate eventsGroupedByStartDateViewControllerDidDimiss:self];
@@ -336,7 +337,7 @@
         cell.eventStopMonth.text = @"";
     }
 
-    BOOL marked = [[DataRepository instance].state.selectedEvent isEqual:event] ? YES : NO;
+    BOOL marked = [[State instance].selectedEvent isEqual:event] ? YES : NO;
     [cell marked:marked withAnimation:YES];
 
     cell.delegate = self;
@@ -348,7 +349,7 @@
 #pragma mark Private methods
 
 - (void)objectsDidChange:(NSNotification *)note {
-    NSSet *deletedObjects  = [[note userInfo] objectForKey:NSDeletedObjectsKey];
+    NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
 
     // ========
     // = Tags =
@@ -357,8 +358,22 @@
             return [obj isKindOfClass:[Tag class]];
         }];
 
-    if ([deletedTags intersectsSet:[DataRepository instance].state.eventsFilter]) {
-        self.isEventGroupsInvalid = YES;
+    for (Tag *tag in deletedTags) {
+        NSUInteger index = [self.filterViewButtons indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
+                NSString *guid = ((TagFilterButton *)obj).eventGUID;
+                if ([guid isEqualToString:tag.guid]) {
+                    *stop = YES;
+                    return YES;
+                }
+
+                return NO;
+            }];
+
+        if (index != NSNotFound) {
+            self.isEventGroupsInvalid = YES;
+
+            [[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
+        }
     }
 }
 
@@ -367,12 +382,12 @@
 }
 
 - (void)touchUpInsideTagFilterButton:(TagFilterButton *)sender forEvent:(UIEvent *)event {
-    if ([[DataRepository instance].state.eventsFilter containsObject:sender.eventTag]) {
-        [[DataRepository instance].state.eventsFilter removeObject:sender.eventTag];
+    if ([[State instance].eventsGroupedByStartDateFilter containsObject:sender.eventGUID]) {
+        [[State instance].eventsGroupedByStartDateFilter removeObject:sender.eventGUID];
 
         sender.selected = NO;
     } else {
-        [[DataRepository instance].state.eventsFilter addObject:sender.eventTag];
+        [[State instance].eventsGroupedByStartDateFilter addObject:sender.eventGUID];
 
         sender.selected = YES;
     }
@@ -381,7 +396,7 @@
 
     [self.tableView reloadData];
 
-    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:[DataRepository instance].state.selectedEvent];
+    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:[State instance].selectedEvent];
     if (indexPath) {
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
@@ -428,7 +443,7 @@
     CGSize elementSize      = CGSizeMake(120, self.filterView.frame.size.height);
     UIEdgeInsets titleInset = UIEdgeInsetsMake(0, 5, 0, 5);
 
-    Tags *tags = [[Tags alloc] initWithTags:[DataRepository instance].tags];
+    Tags *tags = [[Tags alloc] initWithTags:[Tag MR_findAll]];
 
     // add elements
     for (NSUInteger i = 0; i < tags.count; i++) {
@@ -436,7 +451,8 @@
 
         if (tag.name) {
             TagFilterButton *button = [[TagFilterButton alloc] init];
-            button.eventTag = tag;
+            button.eventGUID = tag.guid;
+
             [button addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 
             button.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:13];
@@ -454,7 +470,7 @@
             CGFloat elementX = elementSize.width * numElements;
             button.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
 
-            if ([[DataRepository instance].state.eventsFilter containsObject:tag]) {
+            if ([[State instance].eventsGroupedByStartDateFilter containsObject:tag.guid]) {
                 button.selected = YES;
             }
 
@@ -468,8 +484,6 @@
 
     // set the size of the scrollview's content
     self.filterView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
-
-    self.isEventGroupsInvalid = YES;
 }
 
 - (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration completion:(void (^)(BOOL finished))completion {

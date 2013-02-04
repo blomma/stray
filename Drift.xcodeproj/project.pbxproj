@@ -165,6 +165,7 @@
 		9E66D0EB1655661600339E99 /* NSArray+Accessors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Accessors.m"; sourceTree = "<group>"; };
 		9E66D0EC1655661600339E99 /* NSManagedObject+ActiveRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+ActiveRecord.h"; sourceTree = "<group>"; };
 		9E66D0ED1655661600339E99 /* NSManagedObject+ActiveRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+ActiveRecord.m"; sourceTree = "<group>"; };
+		9E6C6C8716BABD5400613E86 /* CoreDataModel-7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CoreDataModel-7.xcdatamodel"; sourceTree = "<group>"; };
 		9E73A5FE16B87B0900F299C6 /* Stray.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Stray.entitlements; sourceTree = "<group>"; };
 		9E7CEDF2157B778300718FA6 /* _Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Event.h; sourceTree = "<group>"; };
 		9E7CEDF3157B778300718FA6 /* _Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Event.m; sourceTree = "<group>"; };
@@ -958,6 +959,7 @@
 		9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				9E6C6C8716BABD5400613E86 /* CoreDataModel-7.xcdatamodel */,
 				9E66D0DA16553B3700339E99 /* CoreDataModel-6.xcdatamodel */,
 				9E15AB7A163D0C45006D16B3 /* CoreDataModel-5.xcdatamodel */,
 				9E916E14163197A40058C777 /* CoreDataModel-4.xcdatamodel */,
@@ -965,7 +967,7 @@
 				9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */,
 				9E21F925156EA9510075EAAC /* CoreDataModel.xcdatamodel */,
 			);
-			currentVersion = 9E66D0DA16553B3700339E99 /* CoreDataModel-6.xcdatamodel */;
+			currentVersion = 9E6C6C8716BABD5400613E86 /* CoreDataModel-7.xcdatamodel */;
 			path = CoreDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

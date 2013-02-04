@@ -11,13 +11,9 @@
 #import "State.h"
 #import "Event.h"
 
-FOUNDATION_EXPORT NSString *const kDataManagerObjectsDidChangeNotification;
-
 @interface DataRepository : NSObject
 
-@property (nonatomic, readonly) NSArray *tags;
-@property (nonatomic, readonly) State *state;
-@property (nonatomic, readonly) NSArray *events;
+//@property (nonatomic, readonly) State *state;
 
 + (DataRepository *)instance;
 

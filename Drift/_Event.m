@@ -4,6 +4,7 @@
 #import "_Event.h"
 
 const struct EventAttributes EventAttributes = {
+	.guid = @"guid",
 	.startDate = @"startDate",
 	.stopDate = @"stopDate",
 };
@@ -44,6 +45,13 @@ const struct EventFetchedProperties EventFetchedProperties = {
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic guid;
+
+
 
 
 

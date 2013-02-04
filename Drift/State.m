@@ -21,26 +21,43 @@
     return self;
 }
 
+#pragma mark -
+#pragma mark Class methods
+
++ (State *)instance {
+    static State *sharedState = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+            sharedState = [[self alloc] init];
+        });
+
+    return sharedState;
+}
+
+- (Event *)activeEvent {
+    NSPredicate *activeEventFilter = [NSPredicate predicateWithFormat:@"(startDate != nil) AND (stopDate = nil)"];
+    return [Event MR_findFirstWithPredicate:activeEventFilter];
+}
+
 - (void)loadState {
     NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
 
-    // ACTIVE EVENT
-    NSData *uriData = [SDCloudUserDefaults objectForKey:@"activeEvent"];
-    if (uriData) {
-        NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
-        NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
-        if (objectID) {
-            self.activeEvent = (Event *)[context objectWithID:objectID];
-        }
-    }
-
     // SELECTED EVENT
-    uriData = [SDCloudUserDefaults objectForKey:@"selectedEvent"];
+    // Check for legacy and load that first
+    NSData *uriData = [SDCloudUserDefaults objectForKey:@"selectedEvent"];
     if (uriData) {
         NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
         NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
         if (objectID) {
             self.selectedEvent = (Event *)[context objectWithID:objectID];
+        }
+    }
+
+    // No legacy found, load the new key
+    if (!uriData) {
+        NSString *selectedEventGUID = [SDCloudUserDefaults stringForKey:@"selectedEventGUID"];
+        if (selectedEventGUID) {
+            self.selectedEvent = [Event MR_findFirstByAttribute:@"guid" withValue:selectedEventGUID];
         }
     }
 
@@ -50,38 +67,55 @@
 
     objects = [SDCloudUserDefaults objectForKey:@"eventGroupsFilter"];
 
+    self.eventGroupsFilter = [NSMutableSet set];
     if (!objects) {
         objects = [SDCloudUserDefaults objectForKey:@"eventsGroupedByDateFilter"];
-    }
-
-    self.eventGroupsFilter = [NSMutableSet set];
-    if (objects) {
-        for (uriData in objects) {
-            NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
-            NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
-            if (objectID) {
-                Tag *tag = (Tag *)[context objectWithID:objectID];
-                [self.eventGroupsFilter addObject:tag];
+        if (objects) {
+            for (uriData in objects) {
+                NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
+                NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
+                if (objectID) {
+                    Tag *tag = (Tag *)[context objectWithID:objectID];
+                    [self.eventGroupsFilter addObject:tag.guid];
+                }
             }
         }
     }
+
+    if (!objects) {
+        objects = [SDCloudUserDefaults objectForKey:@"eventGUIDSGroupedByDateFilter"];
+        if (objects) {
+            for (NSString *guid in objects) {
+                [self.eventGroupsFilter addObject:guid];
+            }
+        }
+    }
+
 
     // EVENTSGROUPEDBYSTARTDATE FILTER
     // Check for legacy and load that first
     objects = [SDCloudUserDefaults objectForKey:@"eventsFilter"];
 
+    self.eventsGroupedByStartDateFilter = [NSMutableSet set];
     if (!objects) {
         objects = [SDCloudUserDefaults objectForKey:@"eventsGroupedByStartDateFilter"];
+        if (objects) {
+            for (uriData in objects) {
+                NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
+                NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
+                if (objectID) {
+                    Tag *tag = (Tag *)[context objectWithID:objectID];
+                    [self.eventsGroupedByStartDateFilter addObject:tag.guid];
+                }
+            }
+        }
     }
 
-    self.eventsFilter = [NSMutableSet set];
-    if (objects) {
-        for (uriData in objects) {
-            NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
-            NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
-            if (objectID) {
-                Tag *tag = (Tag *)[context objectWithID:objectID];
-                [self.eventsFilter addObject:tag];
+    if (!objects) {
+        objects = [SDCloudUserDefaults objectForKey:@"eventGUIDSGroupedByStartDateFilter"];
+        if (objects) {
+            for (NSString *guid in objects) {
+                [self.eventsGroupedByStartDateFilter addObject:guid];
             }
         }
     }
@@ -92,42 +126,40 @@
 
 - (void)persistState {
     // ACTIVE EVENT
-    NSURL *uri      = [self.activeEvent.objectID URIRepresentation];
-    NSData *uriData = [NSKeyedArchiver archivedDataWithRootObject:uri];
 
-    [SDCloudUserDefaults setObject:uriData forKey:@"activeEvent"];
+    // Remove legacy default
+    [SDCloudUserDefaults removeObjectForKey:@"activeEvent"];
 
     // SELECTED EVENT
-    uri     = [self.selectedEvent.objectID URIRepresentation];
-    uriData = [NSKeyedArchiver archivedDataWithRootObject:uri];
 
-    [SDCloudUserDefaults setObject:uriData forKey:@"selectedEvent"];
+    // Remove legacy default
+    [SDCloudUserDefaults removeObjectForKey:@"selectedEvent"];
+
+    [SDCloudUserDefaults setString:self.selectedEvent.guid forKey:@"selectedEventGUID"];
 
     // EVENTSGROUPEDBYDATE FILTER
     NSMutableSet *objects = [NSMutableSet set];
     for (Tag *tag in self.eventGroupsFilter) {
-        uri     = [tag.objectID URIRepresentation];
-        uriData = [NSKeyedArchiver archivedDataWithRootObject:uri];
-
-        [objects addObject:uriData];
+        [objects addObject:tag.guid];
     }
+
     // Remove legacy default
     [SDCloudUserDefaults removeObjectForKey:@"eventGroupsFilter"];
+    [SDCloudUserDefaults removeObjectForKey:@"eventsGroupedByDateFilter"];
 
-    [SDCloudUserDefaults setObject:[objects allObjects] forKey:@"eventsGroupedByDateFilter"];
+    [SDCloudUserDefaults setObject:[objects allObjects] forKey:@"eventGUIDSGroupedByDateFilter"];
 
     // EVENTSGROUPEDBYSTARTDATE FILTER
     objects = [NSMutableSet set];
-    for (Tag *tag in self.eventsFilter) {
-        uri     = [tag.objectID URIRepresentation];
-        uriData = [NSKeyedArchiver archivedDataWithRootObject:uri];
-
-        [objects addObject:uriData];
+    for (Tag *tag in self.eventsGroupedByStartDateFilter) {
+        [objects addObject:tag.guid];
     }
+
     // Remove legacy default
     [SDCloudUserDefaults removeObjectForKey:@"eventsFilter"];
+    [SDCloudUserDefaults removeObjectForKey:@"eventsGroupedByStartDateFilter"];
 
-    [SDCloudUserDefaults setObject:[objects allObjects] forKey:@"eventsGroupedByStartDateFilter"];
+    [SDCloudUserDefaults setObject:[objects allObjects] forKey:@"eventGUIDSGroupedByStartDateFilter"];
 }
 
 @end

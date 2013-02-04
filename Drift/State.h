@@ -12,11 +12,13 @@
 
 @interface State : NSObject
 
-@property (nonatomic, weak) Event *activeEvent;
++ (State *)instance;
+
+@property (nonatomic, weak, readonly) Event *activeEvent;
 @property (nonatomic, weak) Event *selectedEvent;
 
 @property (nonatomic) NSMutableSet *eventGroupsFilter;
-@property (nonatomic) NSMutableSet *eventsFilter;
+@property (nonatomic) NSMutableSet *eventsGroupedByStartDateFilter;
 
 - (void)persistState;
 

@@ -8,8 +8,6 @@
 
 #import "DataRepository.h"
 
-NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjectsDidChangeNotification";
-
 @interface DataRepository ()
 
 @property (nonatomic) State *state;
@@ -18,40 +16,40 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
 
 @implementation DataRepository
 
--(int)getRandomNumber:(int)from to:(int)to {
-    return (int)(from + (int)arc4random() % (to - from + 1));
-}
-
-- (void)populateRandomData {
-    NSMutableArray *tags = [NSMutableArray array];
-
-    Tag *tag = [Tag MR_createEntity];
-    tag.name = @"Work";
-    [tags addObject:tag];
-
-    tag      = [Tag MR_createEntity];
-    tag.name = @"Fun";
-    [tags addObject:tag];
-
-    tag      = [Tag MR_createEntity];
-    tag.name = @"Reading";
-    [tags addObject:tag];
-
-    tag      = [Tag MR_createEntity];
-    tag.name = @"Lunch";
-    [tags addObject:tag];
-
-    NSDate *nowDate = [NSDate dateWithTimeIntervalSinceReferenceDate:0];
-    for (int i = 0; i < 365; i++) {
-        NSTimeInterval interval = 60 * 60 * 24 * i;
-
-        Event *event = [Event MR_createEntity];
-        event.startDate = nowDate;
-        nowDate         = [NSDate dateWithTimeIntervalSinceReferenceDate:interval];
-        event.stopDate  = nowDate;
-        event.inTag     = [tags objectAtIndex:[self getRandomNumber:0 to:3]];
-    }
-}
+//- (int)getRandomNumber:(int)from to:(int)to {
+//    return (int)from + arc4random() % (to - from + 1);
+//}
+//
+//- (void)populateRandomData {
+//    NSMutableArray *tags = [NSMutableArray array];
+//
+//    Tag *tag = [Tag MR_createEntity];
+//    tag.name = @"Work";
+//    [tags addObject:tag];
+//
+//    tag      = [Tag MR_createEntity];
+//    tag.name = @"Fun";
+//    [tags addObject:tag];
+//
+//    tag      = [Tag MR_createEntity];
+//    tag.name = @"Reading";
+//    [tags addObject:tag];
+//
+//    tag      = [Tag MR_createEntity];
+//    tag.name = @"Lunch";
+//    [tags addObject:tag];
+//
+//    NSDate *nowDate = [NSDate dateWithTimeIntervalSinceReferenceDate:0];
+//    for (int i = 0; i < 365; i++) {
+//        NSTimeInterval interval = 60 * 60 * 24 * i;
+//
+//        Event *event = [Event MR_createEntity];
+//        event.startDate = nowDate;
+//        nowDate         = [NSDate dateWithTimeIntervalSinceReferenceDate:interval];
+//        event.stopDate  = nowDate;
+//        event.inTag     = [tags objectAtIndex:[self getRandomNumber:0 to:3]];
+//    }
+//}
 
 - (id)init {
     self = [super init];
@@ -60,25 +58,9 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
         self.state = [[State alloc] init];
 
         //[self populateRandomData];
-
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(objectsDidChange:)
-                                                     name:NSManagedObjectContextObjectsDidChangeNotification
-                                                   object:[NSManagedObjectContext MR_defaultContext]];
     }
 
     return self;
-}
-
-#pragma mark -
-#pragma mark Public properties
-
-- (NSArray *)tags {
-    return [Tag MR_findAll];
-}
-
-- (NSArray *)events {
-    return [Event MR_findAll];
 }
 
 #pragma mark -
@@ -92,15 +74,6 @@ NSString *const kDataManagerObjectsDidChangeNotification = @"kDataManagerObjects
         });
 
     return sharedDataManager;
-}
-
-#pragma mark -
-#pragma mark Private methods
-
-- (void)objectsDidChange:(NSNotification *)note {
-    [[NSNotificationCenter defaultCenter] postNotificationName:kDataManagerObjectsDidChangeNotification
-                                                        object:self
-                                                      userInfo:[note userInfo]];
 }
 
 @end

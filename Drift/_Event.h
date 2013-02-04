@@ -5,6 +5,7 @@
 
 
 extern const struct EventAttributes {
+	__unsafe_unretained NSString *guid;
 	__unsafe_unretained NSString *startDate;
 	__unsafe_unretained NSString *stopDate;
 } EventAttributes;
@@ -21,6 +22,7 @@ extern const struct EventFetchedProperties {
 
 
 
+
 @interface EventID : NSManagedObjectID {}
 @end
 
@@ -29,6 +31,16 @@ extern const struct EventFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (EventID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSString* guid;
+
+
+
+//- (BOOL)validateGuid:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -69,6 +81,12 @@ extern const struct EventFetchedProperties {
 @end
 
 @interface _Event (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSString*)primitiveGuid;
+- (void)setPrimitiveGuid:(NSString*)value;
+
+
 
 
 - (NSDate*)primitiveStartDate;

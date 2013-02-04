@@ -35,9 +35,7 @@
 
         self.eventToEventGroupsMap = [NSMapTable weakToWeakObjectsMapTable];
 
-        for (Event *event in events) {
-            [self addEvent:event];
-        }
+        [self addEvents:events];
 
         self.filters = filters;
     }
@@ -82,17 +80,15 @@
     EventGroup *eventGroup = nil;
     if (index == NSNotFound) {
         eventGroup = [[EventGroup alloc] initWithGroupDate:groupDate];
+
+        index = [self insertionIndexForGroupDate:groupDate];
+        [self.eventGroups insertObject:eventGroup atIndex:index];
     } else {
         eventGroup = [self.eventGroups objectAtIndex:index];
     }
 
     // Check if this eventGroup already has this event
     if (![eventGroup.events containsObject:event]) {
-        if (index == NSNotFound) {
-            index = [self insertionIndexForGroupDate:groupDate];
-            [self.eventGroups insertObject:eventGroup atIndex:index];
-        }
-
         [self.eventToEventGroupsMap setObject:eventGroup forKey:event];
 
         [eventGroup addEvent:event];
@@ -179,6 +175,28 @@
 
 #pragma mark -
 #pragma mark Private methods
+
+- (void)addEvents:(NSArray *)events {
+    NSDate *groupDate, *previousGroupDate;
+    EventGroup *eventGroup;
+    
+    for (Event *event in events) {
+        groupDate = [event.startDate beginningOfDayWithCalendar:[Global instance].calendar];
+
+        // If groupDate is different from previousGroupDate then we need to create a new eventGroup
+        if (![groupDate isEqualToDate:previousGroupDate]) {
+            eventGroup = [[EventGroup alloc] initWithGroupDate:groupDate];
+            [self.eventGroups addObject:eventGroup];
+        }
+
+        [self.eventToEventGroupsMap setObject:eventGroup forKey:event];
+        [eventGroup addEvent:event];
+
+        previousGroupDate = groupDate;
+    }
+
+    self.isFilteredEventGroupsInvalid = YES;
+}
 
 - (NSUInteger)indexForGroupDate:(NSDate *)groupDate {
     NSUInteger index = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {

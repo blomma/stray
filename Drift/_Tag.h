@@ -5,6 +5,7 @@
 
 
 extern const struct TagAttributes {
+	__unsafe_unretained NSString *guid;
 	__unsafe_unretained NSString *name;
 	__unsafe_unretained NSString *sortIndex;
 } TagAttributes;
@@ -21,6 +22,7 @@ extern const struct TagFetchedProperties {
 
 
 
+
 @interface TagID : NSManagedObjectID {}
 @end
 
@@ -29,6 +31,16 @@ extern const struct TagFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (TagID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSString* guid;
+
+
+
+//- (BOOL)validateGuid:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -78,6 +90,12 @@ extern const struct TagFetchedProperties {
 @end
 
 @interface _Tag (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSString*)primitiveGuid;
+- (void)setPrimitiveGuid:(NSString*)value;
+
+
 
 
 - (NSString*)primitiveName;

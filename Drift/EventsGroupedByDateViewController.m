@@ -12,11 +12,11 @@
 
 #import "Event.h"
 #import "EventsGroupedByDate.h"
-#import "DataRepository.h"
 #import "TagFilterButton.h"
 #import "EventsGroupedByDateTableViewCell.h"
 #import "Global.h"
 #import "Tags.h"
+#import "State.h"
 
 @interface EventsGroupedByDateViewController ()
 
@@ -40,15 +40,17 @@
 
     [self initFilterView];
 
-    self.eventGroups = [[EventsGroupedByDate alloc] initWithEvents:[DataRepository instance].events
-                                                       withFilters:[DataRepository instance].state.eventGroupsFilter];
-    self.isEventGroupsInvalid = YES;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"guid IN %@", [[State instance].eventGroupsFilter allObjects]];
+    NSArray *filters       = [Tag MR_findAllWithPredicate:predicate];
+    NSArray *events        = [Event MR_findAllSortedBy:@"startDate" ascending:NO];
+
+    self.eventGroups = [[EventsGroupedByDate alloc] initWithEvents:events
+                                                       withFilters:[NSSet setWithArray:filters]];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(objectsDidChange:)
-                                                 name:kDataManagerObjectsDidChangeNotification
-                                               object:[DataRepository instance]];
-
+                                                 name:NSManagedObjectContextObjectsDidChangeNotification
+                                               object:[NSManagedObjectContext MR_defaultContext]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -82,7 +84,10 @@
 
 - (EventsGroupedByDate *)eventGroups {
     if (self.isEventGroupsInvalid) {
-        _eventGroups.filters      = [DataRepository instance].state.eventGroupsFilter;
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"guid IN %@", [[State instance].eventGroupsFilter allObjects]];
+        NSArray *filters       = [Tag MR_findAllWithPredicate:predicate];
+
+        _eventGroups.filters      = [NSSet setWithArray:filters];
         self.isEventGroupsInvalid = NO;
     }
 
@@ -125,108 +130,6 @@
 
 #pragma mark -
 #pragma mark Private methods
-
-- (void)initFilterView {
-    self.filterViewButtons = [NSMutableArray array];
-
-    self.filterView.showsHorizontalScrollIndicator = NO;
-    self.filterView.backgroundColor                = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:0.90];
-
-    UIColor *colorOne = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:0.3f];
-    UIColor *colorTwo = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:1];
-
-    NSArray *colors = @[(id)colorOne.CGColor, (id)colorTwo.CGColor, (id)colorTwo.CGColor, (id)colorOne.CGColor];
-
-    NSArray *locations = @[@0.0, @0.4, @0.6, @1.0];
-
-    CAGradientLayer *barrier = [CAGradientLayer layer];
-    barrier.colors     = colors;
-    barrier.locations  = locations;
-    barrier.startPoint = CGPointMake(0, 0.5);
-    barrier.endPoint   = CGPointMake(1.0, 0.5);
-
-    barrier.bounds = CGRectMake(0, 0, self.filterView.layer.bounds.size.width, 1);
-    CGPoint position = self.filterView.layer.position;
-    position.y         += 14;
-    barrier.position    = position;
-    barrier.anchorPoint = self.filterView.layer.anchorPoint;
-
-    [self.filterView.layer addSublayer:barrier];
-}
-
-- (void)setupFilterView {
-    // Remove all the old subviews and recreate them, lazy option
-    for (id subView in self.filterViewButtons) {
-        [subView removeFromSuperview];
-    }
-
-    [self.filterViewButtons removeAllObjects];
-
-    // define number and size of elements
-    NSUInteger numElements  = 0;
-    CGSize elementSize      = CGSizeMake(120, self.filterView.frame.size.height);
-    UIEdgeInsets titleInset = UIEdgeInsetsMake(0, 5, 0, 5);
-
-    Tags *tags          =  [[Tags alloc] initWithTags:[DataRepository instance].tags];
-
-    // add elements
-    for (NSUInteger i = 0; i < tags.count; i++) {
-        Tag *tag = [tags objectAtIndex:i];
-
-        // Only show tags that have a name set
-        if (tag.name) {
-            TagFilterButton *button = [[TagFilterButton alloc] init];
-            button.eventTag = tag;
-            [button addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
-
-            button.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:13];
-            button.titleLabel.backgroundColor = [UIColor clearColor];
-            button.titleLabel.lineBreakMode   = NSLineBreakByTruncatingTail;
-
-            button.backgroundColor = [UIColor clearColor];
-
-            button.titleEdgeInsets = titleInset;
-
-            [button setTitleColor:[UIColor colorWithWhite:0.392f alpha:1.000] forState:UIControlStateNormal];
-            [button setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
-
-            // setup frames to appear besides each other in the slider
-            CGFloat elementX = elementSize.width * numElements;
-            button.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
-
-            if ([[DataRepository instance].state.eventGroupsFilter containsObject:tag]) {
-                button.selected = YES;
-            }
-
-            [self.filterViewButtons addObject:button];
-
-            // add the subview
-            [self.filterView addSubview:button];
-            numElements++;
-        }
-    }
-
-    // set the size of the scrollview's content
-    self.filterView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
-
-    self.isEventGroupsInvalid = YES;
-}
-
-- (void)touchUpInsideTagFilterButton:(TagFilterButton *)sender forEvent:(UIEvent *)event {
-    if ([[DataRepository instance].state.eventGroupsFilter containsObject:sender.eventTag]) {
-        [[DataRepository instance].state.eventGroupsFilter removeObject:sender.eventTag];
-
-        sender.selected = NO;
-    } else {
-        [[DataRepository instance].state.eventGroupsFilter addObject:sender.eventTag];
-
-        sender.selected = YES;
-    }
-
-    self.isEventGroupsInvalid = YES;
-
-    [self.tableView reloadData];
-}
 
 - (void)objectsDidChange:(NSNotification *)note {
     NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
@@ -272,15 +175,129 @@
     // ========
     NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
             return [obj isKindOfClass:[Tag class]];
-        }];
+	}];
 
-    if ([deletedTags intersectsSet:[DataRepository instance].state.eventGroupsFilter]) {
-        self.isEventGroupsInvalid = YES;
+    for (Tag *tag in deletedTags) {
+        NSUInteger index = [self.filterViewButtons indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
+                NSString *guid = ((TagFilterButton *)obj).eventGUID;
+                if ([guid isEqualToString:tag.guid]) {
+                    *stop = YES;
+                    return YES;
+                }
+
+                return NO;
+            }];
+
+        if (index != NSNotFound) {
+            self.isEventGroupsInvalid = YES;
+
+            [[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
+        }
     }
 }
 
 - (void)appWillEnterForegroundNotification:(NSNotification *)note {
     [self.tableView reloadData];
+}
+
+- (void)touchUpInsideTagFilterButton:(TagFilterButton *)sender forEvent:(UIEvent *)event {
+    if ([[State instance].eventGroupsFilter containsObject:sender.eventTag]) {
+        [[State instance].eventGroupsFilter removeObject:sender.eventTag];
+
+        sender.selected = NO;
+    } else {
+        [[State instance].eventGroupsFilter addObject:sender.eventTag];
+
+        sender.selected = YES;
+    }
+
+    self.isEventGroupsInvalid = YES;
+
+    [self.tableView reloadData];
+}
+
+- (void)initFilterView {
+    self.filterViewButtons = [NSMutableArray array];
+
+    self.filterView.showsHorizontalScrollIndicator = NO;
+    self.filterView.backgroundColor                = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:0.90];
+
+    UIColor *colorOne = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:0.3f];
+    UIColor *colorTwo = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:1];
+
+    NSArray *colors = @[(id)colorOne.CGColor, (id)colorTwo.CGColor, (id)colorTwo.CGColor, (id)colorOne.CGColor];
+
+    NSArray *locations = @[@0.0, @0.4, @0.6, @1.0];
+
+    CAGradientLayer *barrier = [CAGradientLayer layer];
+    barrier.colors     = colors;
+    barrier.locations  = locations;
+    barrier.startPoint = CGPointMake(0, 0.5);
+    barrier.endPoint   = CGPointMake(1.0, 0.5);
+
+    barrier.bounds = CGRectMake(0, 0, self.filterView.layer.bounds.size.width, 1);
+    CGPoint position = self.filterView.layer.position;
+    position.y         += 14;
+    barrier.position    = position;
+    barrier.anchorPoint = self.filterView.layer.anchorPoint;
+
+    [self.filterView.layer addSublayer:barrier];
+}
+
+- (void)setupFilterView {
+    // Remove all the old subviews and recreate them, lazy option
+    for (id subView in self.filterViewButtons) {
+        [subView removeFromSuperview];
+    }
+
+    [self.filterViewButtons removeAllObjects];
+
+    // define number and size of elements
+    NSUInteger numElements  = 0;
+    CGSize elementSize      = CGSizeMake(120, self.filterView.frame.size.height);
+    UIEdgeInsets titleInset = UIEdgeInsetsMake(0, 5, 0, 5);
+
+    Tags *tags = [[Tags alloc] initWithTags:[Tag MR_findAll]];
+
+    // add elements
+    for (NSUInteger i = 0; i < tags.count; i++) {
+        Tag *tag = [tags objectAtIndex:i];
+
+        // Only show tags that have a name set
+        if (tag.name) {
+            TagFilterButton *button = [[TagFilterButton alloc] init];
+            button.eventTag = tag;
+            [button addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
+
+            button.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:13];
+            button.titleLabel.backgroundColor = [UIColor clearColor];
+            button.titleLabel.lineBreakMode   = NSLineBreakByTruncatingTail;
+
+            button.backgroundColor = [UIColor clearColor];
+
+            button.titleEdgeInsets = titleInset;
+
+            [button setTitleColor:[UIColor colorWithWhite:0.392f alpha:1.000] forState:UIControlStateNormal];
+            [button setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
+
+            // setup frames to appear besides each other in the slider
+            CGFloat elementX = elementSize.width * numElements;
+            button.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
+
+            if ([[State instance].eventGroupsFilter containsObject:tag]) {
+                button.selected = YES;
+            }
+
+            [self.filterViewButtons addObject:button];
+
+            // add the subview
+            [self.filterView addSubview:button];
+            numElements++;
+        }
+    }
+
+    // set the size of the scrollview's content
+    self.filterView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
 }
 
 @end
