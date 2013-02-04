@@ -2,9 +2,9 @@
 tabSize               = 4
 projectDirectory      = "$CWD"
 windowTitle           = "$TM_DISPLAYNAME — ${CWD/^.*\///}"
-excludeInFileChooser  = "{$exclude,*.xib,*.sublime-project,*.sublime-workspace}"
-excludeInBrowser      = "{$exclude,*.xib,*.sublime-project,*.sublime-workspace}"
-excludeInFolderSearch = "{$exclude,*.xib,*.sublime-project,*.sublime-workspace}"
+excludeInFileChooser  = "{$exclude,*.xib,*.sublime-project,*.sublime-workspace,build}"
+excludeInBrowser      = "{$exclude,*.xib,*.sublime-project,*.sublime-workspace,build}"
+excludeInFolderSearch = "{$exclude,*.xib,*.sublime-project,*.sublime-workspace,build}"
 
 # Variables
 TM_ORGANIZATION_NAME = 'Artsoftheinsane'
