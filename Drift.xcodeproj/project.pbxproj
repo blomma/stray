@@ -60,9 +60,6 @@
 		9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E63BBF3156EAA710006FEFC /* CoreData.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9E63E1D715EA3339009C0A2D /* NoHitCAShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */; };
 		9E66D0DD16553D6700339E99 /* State.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E66D0DC16553D6700339E99 /* State.m */; };
-		9E66D0EE1655661600339E99 /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E66D0E91655661600339E99 /* CoreDataManager.m */; };
-		9E66D0EF1655661600339E99 /* NSArray+Accessors.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E66D0EB1655661600339E99 /* NSArray+Accessors.m */; };
-		9E66D0F01655661600339E99 /* NSManagedObject+ActiveRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E66D0ED1655661600339E99 /* NSManagedObject+ActiveRecord.m */; };
 		9E7CEDF4157B778300718FA6 /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEDF3157B778300718FA6 /* _Event.m */; };
 		9E7EB52C15E8F89C00604B79 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */; };
 		9E7EB52D15E8F8C100604B79 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F215570FD60087F602 /* CoreGraphics.framework */; };
@@ -159,13 +156,7 @@
 		9E66D0DA16553B3700339E99 /* CoreDataModel-6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-6.xcdatamodel"; sourceTree = "<group>"; };
 		9E66D0DB16553D6700339E99 /* State.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = State.h; sourceTree = "<group>"; };
 		9E66D0DC16553D6700339E99 /* State.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = State.m; sourceTree = "<group>"; };
-		9E66D0E81655661600339E99 /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
-		9E66D0E91655661600339E99 /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
-		9E66D0EA1655661600339E99 /* NSArray+Accessors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Accessors.h"; sourceTree = "<group>"; };
-		9E66D0EB1655661600339E99 /* NSArray+Accessors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Accessors.m"; sourceTree = "<group>"; };
-		9E66D0EC1655661600339E99 /* NSManagedObject+ActiveRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+ActiveRecord.h"; sourceTree = "<group>"; };
-		9E66D0ED1655661600339E99 /* NSManagedObject+ActiveRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+ActiveRecord.m"; sourceTree = "<group>"; };
-		9E6C6C8716BABD5400613E86 /* CoreDataModel-7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CoreDataModel-7.xcdatamodel"; sourceTree = "<group>"; };
+		9E6C6C8716BABD5400613E86 /* CoreDataModel-7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-7.xcdatamodel"; sourceTree = "<group>"; };
 		9E73A5FE16B87B0900F299C6 /* Stray.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Stray.entitlements; sourceTree = "<group>"; };
 		9E7CEDF2157B778300718FA6 /* _Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Event.h; sourceTree = "<group>"; };
 		9E7CEDF3157B778300718FA6 /* _Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Event.m; sourceTree = "<group>"; };
@@ -264,7 +255,6 @@
 			children = (
 				9EA408A216B9C60D008A686B /* SDCloudUserDefaults */,
 				9E4A0FEA167F57D1006BC207 /* PopoverView */,
-				9E66D0E71655661600339E99 /* Objective-Record */,
 				9EAF701316367B4600FA079C /* SKBounceAnimation */,
 			);
 			name = Vendor;
@@ -378,19 +368,6 @@
 				9E66D0DC16553D6700339E99 /* State.m */,
 			);
 			name = Repository;
-			sourceTree = "<group>";
-		};
-		9E66D0E71655661600339E99 /* Objective-Record */ = {
-			isa = PBXGroup;
-			children = (
-				9E66D0E81655661600339E99 /* CoreDataManager.h */,
-				9E66D0E91655661600339E99 /* CoreDataManager.m */,
-				9E66D0EA1655661600339E99 /* NSArray+Accessors.h */,
-				9E66D0EB1655661600339E99 /* NSArray+Accessors.m */,
-				9E66D0EC1655661600339E99 /* NSManagedObject+ActiveRecord.h */,
-				9E66D0ED1655661600339E99 /* NSManagedObject+ActiveRecord.m */,
-			);
-			path = "Objective-Record";
 			sourceTree = "<group>";
 		};
 		9E96FCE016359F8600AB5B0A /* TransformableTableView */ = {
@@ -678,9 +655,6 @@
 				9E954D84164419F50022D5BE /* UIScrollView+SVPulling.m in Sources */,
 				9EF9909A164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m in Sources */,
 				9E66D0DD16553D6700339E99 /* State.m in Sources */,
-				9E66D0EE1655661600339E99 /* CoreDataManager.m in Sources */,
-				9E66D0EF1655661600339E99 /* NSArray+Accessors.m in Sources */,
-				9E66D0F01655661600339E99 /* NSManagedObject+ActiveRecord.m in Sources */,
 				9EB15F6F165D6A7F0054AEA2 /* TagButton.m in Sources */,
 				9EF3311F166569DB005CFEF2 /* TagTableViewCellBackView.m in Sources */,
 				9E810ED816762C4100CA2009 /* NSBundle+Retina4.m in Sources */,
