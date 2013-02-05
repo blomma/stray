@@ -13,8 +13,8 @@
 
 @interface DataRepository : NSObject
 
-//@property (nonatomic, readonly) State *state;
-
 + (DataRepository *)instance;
+
+- (void)populateRandomData;
 
 @end
