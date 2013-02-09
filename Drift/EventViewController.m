@@ -23,8 +23,6 @@
 
 @property (nonatomic) NSDateComponents *previousNowComponents;
 
-@property (nonatomic) UIView *infoView;
-
 @end
 
 @implementation EventViewController
@@ -55,8 +53,6 @@
                              forKeyPath:@"isTransforming"
                                 options:NSKeyValueObservingOptionNew
                                 context:NULL];
-
-    [State instance].selectedEvent = [State instance].activeEvent;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -125,18 +121,18 @@
 - (IBAction)toggleEventTouchUpInside:(id)sender forEvent:(UIEvent *)event {
     NSDate *now = [NSDate date];
 
-    if (![[State instance].selectedEvent isEqual:[State instance].activeEvent] && [State instance].activeEvent.isActive) {
-        UIView *button = (UIView *)sender;
-        UITouch *touch = [[event touchesForView:button] anyObject];
-        CGPoint point  = [touch locationInView:self.view];
-        point.y -= 30;
-
-        [PopoverView showPopoverAtPoint:point
-                                 inView:self.view
-                               withText:@"A timer is already running, stop that one before starting a new"
-                               delegate:nil];
-        return;
-    }
+//    if (![[State instance].selectedEvent isEqual:[State instance].activeEvent] && [State instance].activeEvent.isActive) {
+//        UIView *button = (UIView *)sender;
+//        UITouch *touch = [[event touchesForView:button] anyObject];
+//        CGPoint point  = [touch locationInView:self.view];
+//        point.y -= 30;
+//
+//        [PopoverView showPopoverAtPoint:point
+//                                 inView:self.view
+//                               withText:@"A timer is already running, stop that one before starting a new"
+//                               delegate:nil];
+//        return;
+//    }
 
     if ([[State instance].selectedEvent isActive]) {
         [State instance].selectedEvent.stopDate = now;
