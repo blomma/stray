@@ -201,12 +201,12 @@
 }
 
 - (void)touchUpInsideTagFilterButton:(TagFilterButton *)sender forEvent:(UIEvent *)event {
-    if ([[State instance].eventGroupsFilter containsObject:sender.eventTag]) {
-        [[State instance].eventGroupsFilter removeObject:sender.eventTag];
+    if ([[State instance].eventGroupsFilter containsObject:sender.eventGUID]) {
+        [[State instance].eventGroupsFilter removeObject:sender.eventGUID];
 
         sender.selected = NO;
     } else {
-        [[State instance].eventGroupsFilter addObject:sender.eventTag];
+        [[State instance].eventGroupsFilter addObject:sender.eventGUID];
 
         sender.selected = YES;
     }
@@ -266,7 +266,7 @@
         // Only show tags that have a name set
         if (tag.name) {
             TagFilterButton *button = [[TagFilterButton alloc] init];
-            button.eventTag = tag;
+            button.eventGUID = tag.guid;
             [button addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 
             button.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:13];
