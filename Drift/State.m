@@ -139,8 +139,8 @@
 
     // EVENTSGROUPEDBYDATE FILTER
     NSMutableSet *objects = [NSMutableSet set];
-    for (Tag *tag in self.eventsGroupedByDateFilter) {
-        [objects addObject:tag.guid];
+    for (NSString *guid in self.eventsGroupedByDateFilter) {
+        [objects addObject:guid];
     }
 
     // Remove legacy default
@@ -151,8 +151,8 @@
 
     // EVENTSGROUPEDBYSTARTDATE FILTER
     objects = [NSMutableSet set];
-    for (Tag *tag in self.eventsGroupedByStartDateFilter) {
-        [objects addObject:tag.guid];
+    for (NSString *guid in self.eventsGroupedByStartDateFilter) {
+        [objects addObject:guid];
     }
 
     // Remove legacy default
