@@ -47,12 +47,10 @@
 
     [self initFilterView];
 
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"guid IN %@", [[State instance].eventsGroupedByStartDateFilter allObjects]];
-    NSArray *filters       = [Tag MR_findAllWithPredicate:predicate];
     NSArray *events        = [Event MR_findAllSortedBy:@"startDate" ascending:NO];
 
     self.eventGroups = [[EventsGroupedByStartDate alloc] initWithEvents:events
-                                                            withFilters:[NSSet setWithArray:filters]];
+                                                            withFilters:[State instance].eventsGroupedByStartDateFilter];
 
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
@@ -136,10 +134,7 @@
 
 - (EventsGroupedByStartDate *)eventGroups {
     if (self.isEventGroupsInvalid) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"guid IN %@", [[State instance].eventsGroupedByStartDateFilter allObjects]];
-        NSArray *filters       = [Tag MR_findAllWithPredicate:predicate];
-
-        _eventGroups.filters      = [NSSet setWithArray:filters];
+        _eventGroups.filters      = [State instance].eventsGroupedByStartDateFilter;
         self.isEventGroupsInvalid = NO;
     }
 

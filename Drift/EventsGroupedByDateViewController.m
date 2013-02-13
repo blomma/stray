@@ -17,6 +17,7 @@
 #import "Global.h"
 #import "Tags.h"
 #import "State.h"
+#import "Tag.h"
 
 @interface EventsGroupedByDateViewController ()
 
@@ -40,12 +41,10 @@
 
     [self initFilterView];
 
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"guid IN %@", [[State instance].eventGroupsFilter allObjects]];
-    NSArray *filters       = [Tag MR_findAllWithPredicate:predicate];
     NSArray *events        = [Event MR_findAllSortedBy:@"startDate" ascending:NO];
 
     self.eventGroups = [[EventsGroupedByDate alloc] initWithEvents:events
-                                                       withFilters:[NSSet setWithArray:filters]];
+                                                       withFilters:[State instance].eventsGroupedByDateFilter];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(objectsDidChange:)
@@ -84,10 +83,7 @@
 
 - (EventsGroupedByDate *)eventGroups {
     if (self.isEventGroupsInvalid) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"guid IN %@", [[State instance].eventGroupsFilter allObjects]];
-        NSArray *filters       = [Tag MR_findAllWithPredicate:predicate];
-
-        _eventGroups.filters      = [NSSet setWithArray:filters];
+        _eventGroups.filters      = [State instance].eventsGroupedByDateFilter;
         self.isEventGroupsInvalid = NO;
     }
 
@@ -201,12 +197,12 @@
 }
 
 - (void)touchUpInsideTagFilterButton:(TagFilterButton *)sender forEvent:(UIEvent *)event {
-    if ([[State instance].eventGroupsFilter containsObject:sender.eventGUID]) {
-        [[State instance].eventGroupsFilter removeObject:sender.eventGUID];
+    if ([[State instance].eventsGroupedByDateFilter containsObject:sender.eventGUID]) {
+        [[State instance].eventsGroupedByDateFilter removeObject:sender.eventGUID];
 
         sender.selected = NO;
     } else {
-        [[State instance].eventGroupsFilter addObject:sender.eventGUID];
+        [[State instance].eventsGroupedByDateFilter addObject:sender.eventGUID];
 
         sender.selected = YES;
     }
@@ -284,7 +280,7 @@
             CGFloat elementX = elementSize.width * numElements;
             button.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
 
-            if ([[State instance].eventGroupsFilter containsObject:tag]) {
+            if ([[State instance].eventsGroupedByDateFilter containsObject:tag]) {
                 button.selected = YES;
             }
 

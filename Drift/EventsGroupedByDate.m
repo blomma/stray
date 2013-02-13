@@ -11,6 +11,7 @@
 #import "NSDate+Utilities.h"
 #import "Global.h"
 #import "EventGroup.h"
+#import "Tag.h"
 
 @interface EventsGroupedByDate ()
 
@@ -139,7 +140,7 @@
         eventSecondsComponent.second -= deltaSecondsComponent.second;
     }
 
-    if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
+    if (self.filters.count == 0 || [self.filters containsObject:event.inTag.guid]) {
         self.isFilteredEventGroupsInvalid = YES;
     }
 }
@@ -160,7 +161,7 @@
 
     [self.eventToEventGroupsMap removeObjectForKey:event];
 
-    if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
+    if (self.filters.count == 0 || [self.filters containsObject:event.inTag.guid]) {
         self.isFilteredEventGroupsInvalid = YES;
     }
 }
@@ -192,7 +193,7 @@
 
     [self addEvent:event];
 
-    if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
+    if (self.filters.count == 0 || [self.filters containsObject:event.inTag.guid]) {
         self.isFilteredEventGroupsInvalid = YES;
     }
 }

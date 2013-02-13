@@ -10,6 +10,7 @@
 
 #import "NSDate+Utilities.h"
 #import "Global.h"
+#import "Tag.h"
 
 @interface EventGroup ()
 
@@ -83,8 +84,7 @@
         if (self.filters.count == 0) {
             [_filteredEvents unionSet:self.events];
         } else {
-            [_filteredEvents unionSet:[self.events filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"inTag in %@",
-            self.filters]]];
+            [_filteredEvents unionSet:[self.events filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"inTag.guid in %@", self.filters]]];
         }
 
         [_filteredEvents sortUsingComparator:^NSComparisonResult (id obj1, id obj2) {
@@ -104,7 +104,7 @@
 - (void)addEvent:(Event *)event {
     [self.events addObject:event];
 
-    if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
+    if (self.filters.count == 0 || [self.filters containsObject:event.inTag.guid]) {
         self.isFilteredEventsInvalid                    = YES;
         self.isFilteredEventsContainsActiveEventInvalid = YES;
     }
@@ -113,14 +113,14 @@
 - (void)removeEvent:(Event *)event {
     [self.events removeObject:event];
 
-    if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
+    if (self.filters.count == 0 || [self.filters containsObject:event.inTag.guid]) {
         self.isFilteredEventsInvalid                    = YES;
         self.isFilteredEventsContainsActiveEventInvalid = YES;
     }
 }
 
 - (void)updateEvent:(Event *)event {
-    if (self.filters.count == 0 || [self.filters containsObject:event.inTag]) {
+    if (self.filters.count == 0 || [self.filters containsObject:event.inTag.guid]) {
         self.isFilteredEventsInvalid                    = YES;
         self.isFilteredEventsContainsActiveEventInvalid = YES;
     }
@@ -135,6 +135,7 @@
     for (Event *event in self.filteredEvents) {
         if ([event isActive]) {
             self.filteredEventsContainsActiveEvent = YES;
+            
             return;
         }
     }

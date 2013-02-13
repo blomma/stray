@@ -67,7 +67,7 @@
 
     objects = [SDCloudUserDefaults objectForKey:@"eventGroupsFilter"];
 
-    self.eventGroupsFilter = [NSMutableSet set];
+    self.eventsGroupedByDateFilter = [NSMutableSet set];
     if (!objects) {
         objects = [SDCloudUserDefaults objectForKey:@"eventsGroupedByDateFilter"];
         if (objects) {
@@ -76,7 +76,7 @@
                 NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
                 if (objectID) {
                     Tag *tag = (Tag *)[context objectWithID:objectID];
-                    [self.eventGroupsFilter addObject:tag.guid];
+                    [self.eventsGroupedByDateFilter addObject:tag.guid];
                 }
             }
         }
@@ -86,7 +86,7 @@
         objects = [SDCloudUserDefaults objectForKey:@"eventGUIDSGroupedByDateFilter"];
         if (objects) {
             for (NSString *guid in objects) {
-                [self.eventGroupsFilter addObject:guid];
+                [self.eventsGroupedByDateFilter addObject:guid];
             }
         }
     }
@@ -139,7 +139,7 @@
 
     // EVENTSGROUPEDBYDATE FILTER
     NSMutableSet *objects = [NSMutableSet set];
-    for (Tag *tag in self.eventGroupsFilter) {
+    for (Tag *tag in self.eventsGroupedByDateFilter) {
         [objects addObject:tag.guid];
     }
 

@@ -180,7 +180,7 @@
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
 
     // Delete this tag from all of the filter also, if present
-    [[State instance].eventGroupsFilter removeObject:tag];
+    [[State instance].eventsGroupedByDateFilter removeObject:tag];
 
     [tag MR_deleteEntity];
 
