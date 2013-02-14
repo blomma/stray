@@ -66,7 +66,16 @@
 
 - (BOOL)filteredEventsContainsActiveEvent {
     if (self.isFilteredEventsContainsActiveEventInvalid) {
-        [self updateFilteredEventsContainsActiveEvent];
+        _filteredEventsContainsActiveEvent = NO;
+
+        for (Event *event in self.filteredEvents) {
+            if ([event isActive]) {
+                _filteredEventsContainsActiveEvent = YES;
+                break;
+            }
+        }
+
+        self.isFilteredEventsContainsActiveEventInvalid = NO;
     }
 
     return _filteredEventsContainsActiveEvent;
@@ -106,7 +115,10 @@
 
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag.guid]) {
         self.isFilteredEventsInvalid                    = YES;
-        self.isFilteredEventsContainsActiveEventInvalid = YES;
+
+        if ([event isActive]) {
+            self.isFilteredEventsContainsActiveEventInvalid = YES;
+        }
     }
 }
 
@@ -115,31 +127,25 @@
 
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag.guid]) {
         self.isFilteredEventsInvalid                    = YES;
-        self.isFilteredEventsContainsActiveEventInvalid = YES;
+
+        if ([event isActive]) {
+            self.isFilteredEventsContainsActiveEventInvalid = YES;
+        }
     }
 }
 
 - (void)updateEvent:(Event *)event {
     if (self.filters.count == 0 || [self.filters containsObject:event.inTag.guid]) {
         self.isFilteredEventsInvalid                    = YES;
-        self.isFilteredEventsContainsActiveEventInvalid = YES;
+
+        if ([event isActive]) {
+            self.isFilteredEventsContainsActiveEventInvalid = YES;
+        }
     }
 }
 
 #pragma mark -
 #pragma mark Private methods
-
-- (void)updateFilteredEventsContainsActiveEvent {
-    self.filteredEventsContainsActiveEvent = NO;
-
-    for (Event *event in self.filteredEvents) {
-        if ([event isActive]) {
-            self.filteredEventsContainsActiveEvent = YES;
-            
-            return;
-        }
-    }
-}
 
 - (void)updateFilteredEventsDateComponents {
     static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
