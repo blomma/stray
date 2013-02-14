@@ -14,7 +14,6 @@
 
 + (State *)instance;
 
-@property (nonatomic, weak, readonly) Event *activeEvent;
 @property (nonatomic, weak) Event *selectedEvent;
 
 @property (nonatomic) NSMutableSet *eventsGroupedByDateFilter;

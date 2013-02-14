@@ -34,11 +34,6 @@
     return sharedState;
 }
 
-- (Event *)activeEvent {
-    NSPredicate *activeEventFilter = [NSPredicate predicateWithFormat:@"(startDate != nil) AND (stopDate = nil)"];
-    return [Event MR_findFirstWithPredicate:activeEventFilter];
-}
-
 - (void)loadState {
     NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
 
