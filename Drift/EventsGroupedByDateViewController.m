@@ -280,7 +280,7 @@
             CGFloat elementX = elementSize.width * numElements;
             button.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
 
-            if ([[State instance].eventsGroupedByDateFilter containsObject:tag]) {
+            if ([[State instance].eventsGroupedByDateFilter containsObject:tag.guid]) {
                 button.selected = YES;
             }
 
