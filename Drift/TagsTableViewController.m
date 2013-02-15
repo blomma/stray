@@ -44,7 +44,6 @@
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"grabbedTableViewCellIdentifier"];
 
     __block __weak TagsTableViewController *weakSelf = self;
-    __block __weak Tags *weakTags                    = self.tags;
 
     [self.tableView addPullingWithActionHandler:^(SVPullingState state, SVPullingState previousState, CGFloat height) {
         if (state == SVPullingStateAction && previousState == SVPullingStatePullingAdd) {
@@ -53,8 +52,7 @@
                 [weakSelf.tableView beginUpdates];
 
                 Tag *tag = [Tag MR_createEntity];
-                [weakTags insertObject:tag atIndex:0];
-                tag = nil;
+                [weakSelf.tags insertObject:tag atIndex:0];
 
                 [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
 
@@ -78,7 +76,6 @@
     [self.tableView disablePulling];
 
     [self.tableView disableGestureTableViewWithRecognizer:self.tableViewRecognizer];
-    self.tableViewRecognizer = nil;
 }
 
 #pragma mark -
@@ -118,8 +115,7 @@
 
         TagTableViewCell *cell = (TagTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"TagsTableViewCellIdentifier"];
 
-        NSString *tagName = [tag.name copy];
-        cell.tagTitle = tagName;
+        cell.tagTitle = [tag.name copy];
 
         cell.delegate = self;
 
@@ -178,10 +174,6 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
-
-    // Delete this tag from all of the filter also, if present
-    [[State instance].eventsGroupedByDateFilter removeObject:tag];
-
     [tag MR_deleteEntity];
 
     CGPoint fromValue = cell.frontView.layer.position;
