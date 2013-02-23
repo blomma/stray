@@ -40,7 +40,7 @@
     [tags addObject:tag];
 
     NSDate *nowDate = [NSDate dateWithTimeIntervalSinceReferenceDate:0];
-    for (int i = 0; i < 365; i++) {
+    for (int i = 0; i < 2365; i++) {
         NSTimeInterval interval = 60 * 60 * 24 * i;
 
         Event *event = [Event MR_createEntity];
