@@ -121,19 +121,6 @@
 - (IBAction)toggleEventTouchUpInside:(id)sender forEvent:(UIEvent *)event {
     NSDate *now = [NSDate date];
 
-//    if (![[State instance].selectedEvent isEqual:[State instance].activeEvent] && [State instance].activeEvent.isActive) {
-//        UIView *button = (UIView *)sender;
-//        UITouch *touch = [[event touchesForView:button] anyObject];
-//        CGPoint point  = [touch locationInView:self.view];
-//        point.y -= 30;
-//
-//        [PopoverView showPopoverAtPoint:point
-//                                 inView:self.view
-//                               withText:@"A timer is already running, stop that one before starting a new"
-//                               delegate:nil];
-//        return;
-//    }
-
     if ([[State instance].selectedEvent isActive]) {
         [State instance].selectedEvent.stopDate = now;
 
@@ -162,7 +149,7 @@
 - (void)reset {
     [self.toggleStartStopButton setTitle:@"START" forState:UIControlStateNormal];
 
-    self.eventStartTime.text  = @"";
+    self.eventStartTime.text  = @"--:--";
     self.eventStartDay.text   = @"";
     self.eventStartYear.text  = @"";
     self.eventStartMonth.text = @"";
@@ -170,7 +157,7 @@
     self.eventTimeHours.text   = @"00";
     self.eventTimeMinutes.text = @"00";
 
-    self.eventStopTime.text  = @"";
+    self.eventStopTime.text  = @"--:--";
     self.eventStopDay.text   = @"";
     self.eventStopYear.text  = @"";
     self.eventStopMonth.text = @"";
@@ -207,8 +194,7 @@
 
         NSDateComponents *components = [[Global instance].calendar components:unitFlags fromDate:[State instance].selectedEvent.startDate toDate:date options:0];
 
-        if (components.hour != self.previousNowComponents.hour
-            || components.minute != self.previousNowComponents.minute) {
+        if (components.hour != self.previousNowComponents.hour || components.minute != self.previousNowComponents.minute) {
             self.eventTimeHours.text   = [NSString stringWithFormat:@"%02d", components.hour];
             self.eventTimeMinutes.text = [NSString stringWithFormat:@"%02d", components.minute];
             self.previousNowComponents = components;
@@ -229,26 +215,37 @@
 }
 
 - (void)animateStartEvent {
-    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.eventStartDay.alpha = 1;
-        self.eventStartMonth.alpha = 1;
-        self.eventStartTime.alpha = 1;
-        self.eventStartYear.alpha = 1;
-    } completion:nil];
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseIn
+                     animations:^{
+                         self.eventStartTime.alpha = 1;
+                         self.eventStartDay.alpha = 1;
+                         self.eventStartMonth.alpha = 1;
+                         self.eventStartYear.alpha = 1;
+
+                         self.eventStopTime.alpha = 0.2;
+                         self.eventStopDay.alpha = 0.2;
+                         self.eventStopMonth.alpha = 1;
+                         self.eventStopYear.alpha = 1;
+                     } completion:nil];
 }
 
 - (void)animateStopEvent {
-    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.eventStartDay.alpha = 0.2;
-        self.eventStartMonth.alpha = 1;
-        self.eventStartTime.alpha = 0.2;
-        self.eventStartYear.alpha = 1;
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseIn
+                     animations:^{
+                         self.eventStartTime.alpha = 0.2;
+                         self.eventStartDay.alpha = 0.2;
+                         self.eventStartMonth.alpha = 1;
+                         self.eventStartYear.alpha = 1;
 
-        self.eventStopDay.alpha = 1;
-        self.eventStopMonth.alpha = 1;
-        self.eventStopTime.alpha = 1;
-        self.eventStopYear.alpha = 1;
-    } completion:nil];
+                         self.eventStopTime.alpha = 1;
+                         self.eventStopDay.alpha = 1;
+                         self.eventStopMonth.alpha = 1;
+                         self.eventStopYear.alpha = 1;
+                     } completion:nil];
 }
 
 - (void)animateEventTransforming:(EventTimerTransformingEnum)eventTimerTransformingEnum {
@@ -265,10 +262,10 @@
                 eventTimeAlpha = 0.2f;
                 break;
             case EventTimerStartDateTransformingStop:
-                eventStartAlpha = [State instance].selectedEvent.isActive ? 1:0.2f;
+                eventStartAlpha = [State instance].selectedEvent.isActive ? 1 : 0.2f;
                 eventStartMonthYearAlpha = 1;
 
-                eventStopAlpha = 1;
+                eventStopAlpha = [State instance].selectedEvent.isActive ? 0.2f : 1;
                 eventStopMonthYearAlpha = 1;
 
                 eventTimeAlpha = 1;
@@ -284,15 +281,15 @@
 
                 break;
             case EventTimerStopDateTransformingStop:
-                eventStartAlpha = [State instance].selectedEvent.isActive ? 1:0.2f;
+                eventStartAlpha = [State instance].selectedEvent.isActive ? 1 : 0.2f;
                 eventStartMonthYearAlpha = 1;
 
-                eventStopAlpha = [State instance].selectedEvent.isActive ? 0.2f:1;
+                eventStopAlpha = [State instance].selectedEvent.isActive ? 0.2f : 1;
                 eventStopMonthYearAlpha = 1;
 
                 eventTimeAlpha = 1;
                 break;
-                default:
+            default:
                 break;
         }
 
@@ -321,6 +318,7 @@
         NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
 
         [self updateEventTimeWithDate:date];
+        [self updateStopLabelWithDate:date];
     } else if ([keyPath isEqualToString:@"stopDate"]) {
         NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
         [State instance].selectedEvent.stopDate = date;

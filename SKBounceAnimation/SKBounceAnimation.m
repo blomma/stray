@@ -52,23 +52,7 @@
 
  */
 
-@interface SKBounceAnimation (Private)
-
-- (void)createValueArray;
-- (NSArray *)valueArrayForStartValue:(CGFloat)startValue endValue:(CGFloat)endValue;
-- (CGPathRef)createPathFromXValues:(NSArray *)xValues yValues:(NSArray *)yValues;
-- (NSArray *)createRectArrayFromXValues:(NSArray *)xValues yValues:(NSArray *)yValues widths:(NSArray *)widths heights:(NSArray *)heights;
-- (NSArray *)createColorArrayFromRed:(NSArray *)redValues green:(NSArray *)greenValues blue:(NSArray *)blueValues alpha:(NSArray *)alphaValues;
-- (NSArray *)createTransformArrayFromM11:(NSArray *)m11 M12:(NSArray *)m12 M13:(NSArray *)m13 M14:(NSArray *)m14
-                                     M21:(NSArray *)m21 M22:(NSArray *)m22 M23:(NSArray *)m23 M14:(NSArray *)m24
-                                     M31:(NSArray *)m31 M32:(NSArray *)m32 M33:(NSArray *)m33 M14:(NSArray *)m34
-                                     M41:(NSArray *)m41 M42:(NSArray *)m42 M43:(NSArray *)m43 M14:(NSArray *)m44;
-
-@end
-
 @implementation SKBounceAnimation
-
-@synthesize fromValue, byValue, toValue, numberOfBounces, shouldOvershoot;
 
 + (SKBounceAnimation *)animationWithKeyPath:(NSString *)keyPath {
     return [[self alloc] initWithKeyPath:keyPath];
@@ -185,38 +169,23 @@
                 CATransform3D fromTransform = [self.fromValue CATransform3DValue];
                 CATransform3D toTransform   = [self.toValue CATransform3DValue];
 
-                self.values = [self createTransformArrayFromM11:
-                    [self valueArrayForStartValue:fromTransform.m11 endValue:toTransform.m11]
-                                                            M12:
-                    [self valueArrayForStartValue:fromTransform.m12 endValue:toTransform.m12]
-                    M13:
-                    [self valueArrayForStartValue:fromTransform.m13 endValue:toTransform.m13]
-                    M14:
-                    [self valueArrayForStartValue:fromTransform.m14 endValue:toTransform.m14]
-                    M21:
-                    [self valueArrayForStartValue:fromTransform.m21 endValue:toTransform.m21]
-                    M22:
-                    [self valueArrayForStartValue:fromTransform.m22 endValue:toTransform.m22]
-                    M23:
-                    [self valueArrayForStartValue:fromTransform.m23 endValue:toTransform.m23]
-                    M24:
-                    [self valueArrayForStartValue:fromTransform.m24 endValue:toTransform.m24]
-                    M31:
-                    [self valueArrayForStartValue:fromTransform.m31 endValue:toTransform.m31]
-                    M32:
-                    [self valueArrayForStartValue:fromTransform.m32 endValue:toTransform.m32]
-                    M33:
-                    [self valueArrayForStartValue:fromTransform.m33 endValue:toTransform.m33]
-                    M34:
-                    [self valueArrayForStartValue:fromTransform.m34 endValue:toTransform.m34]
-                    M41:
-                    [self valueArrayForStartValue:fromTransform.m41 endValue:toTransform.m41]
-                    M42:
-                    [self valueArrayForStartValue:fromTransform.m42 endValue:toTransform.m42]
-                    M43:
-                    [self valueArrayForStartValue:fromTransform.m43 endValue:toTransform.m43]
-                    M44:
-                    [self valueArrayForStartValue:fromTransform.m44 endValue:toTransform.m44]
+                self.values = [self
+                               createTransformArrayFromM11:[self valueArrayForStartValue:fromTransform.m11 endValue:toTransform.m11]
+                               M12:[self valueArrayForStartValue:fromTransform.m12 endValue:toTransform.m12]
+                               M13:[self valueArrayForStartValue:fromTransform.m13 endValue:toTransform.m13]
+                               M14:[self valueArrayForStartValue:fromTransform.m14 endValue:toTransform.m14]
+                               M21:[self valueArrayForStartValue:fromTransform.m21 endValue:toTransform.m21]
+                               M22:[self valueArrayForStartValue:fromTransform.m22 endValue:toTransform.m22]
+                               M23:[self valueArrayForStartValue:fromTransform.m23 endValue:toTransform.m23]
+                               M24:[self valueArrayForStartValue:fromTransform.m24 endValue:toTransform.m24]
+                               M31:[self valueArrayForStartValue:fromTransform.m31 endValue:toTransform.m31]
+                               M32:[self valueArrayForStartValue:fromTransform.m32 endValue:toTransform.m32]
+                               M33:[self valueArrayForStartValue:fromTransform.m33 endValue:toTransform.m33]
+                               M34:[self valueArrayForStartValue:fromTransform.m34 endValue:toTransform.m34]
+                               M41:[self valueArrayForStartValue:fromTransform.m41 endValue:toTransform.m41]
+                               M42:[self valueArrayForStartValue:fromTransform.m42 endValue:toTransform.m42]
+                               M43:[self valueArrayForStartValue:fromTransform.m43 endValue:toTransform.m43]
+                               M44:[self valueArrayForStartValue:fromTransform.m44 endValue:toTransform.m44]
                     ];
             } else if ([valueType rangeOfString:@"CGSize"].location == 1) {
                 CGSize fromSize = [self.fromValue CGSizeValue];
