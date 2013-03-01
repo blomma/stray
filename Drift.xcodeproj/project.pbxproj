@@ -64,7 +64,6 @@
 		9E7EB52C15E8F89C00604B79 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */; };
 		9E7EB52D15E8F8C100604B79 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F215570FD60087F602 /* CoreGraphics.framework */; };
 		9E7ED53216DA0F1300217F1B /* Changelog.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9E7ED51F16DA0F1300217F1B /* Changelog.txt */; };
-		9E7ED53416DA0F1300217F1B /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7ED53016DA0F1300217F1B /* libGoogleAnalytics_debug.a */; };
 		9E7ED53516DA0F1300217F1B /* Readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9E7ED53116DA0F1300217F1B /* Readme.txt */; };
 		9E810ED11676288200CA2009 /* Info-Event-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E810ECE1676288200CA2009 /* Info-Event-568h@2x.png */; };
 		9E810ED21676288200CA2009 /* Info-Event.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E810ECF1676288200CA2009 /* Info-Event.png */; };
@@ -87,6 +86,8 @@
 		9EAF701616367B4600FA079C /* SKBounceAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAF701516367B4600FA079C /* SKBounceAnimation.m */; };
 		9EB15F6F165D6A7F0054AEA2 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB15F6E165D6A7F0054AEA2 /* TagButton.m */; };
 		9EC837F916DA0C7500087997 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EC837F816DA0C7500087997 /* SystemConfiguration.framework */; };
+		9ED7F6C316DD027F0035A6E7 /* Api.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ED7F6C216DD027F0035A6E7 /* Api.m */; };
+		9EDB354F16E1360300E98C94 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7ED52F16DA0F1300217F1B /* libGoogleAnalytics.a */; };
 		9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCC5CA160DBFA1003CB2BB /* Tag.m */; };
 		9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */; };
 		9EF3311F166569DB005CFEF2 /* TagTableViewCellBackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EF3311E166569DB005CFEF2 /* TagTableViewCellBackView.m */; };
@@ -211,6 +212,8 @@
 		9EB15F6D165D6A7F0054AEA2 /* TagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagButton.h; sourceTree = "<group>"; };
 		9EB15F6E165D6A7F0054AEA2 /* TagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagButton.m; sourceTree = "<group>"; };
 		9EC837F816DA0C7500087997 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		9ED7F6C116DD027F0035A6E7 /* Api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Api.h; sourceTree = "<group>"; };
+		9ED7F6C216DD027F0035A6E7 /* Api.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Api.m; sourceTree = "<group>"; };
 		9EDCC5C9160DBFA1003CB2BB /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tag.h; sourceTree = "<group>"; };
 		9EDCC5CA160DBFA1003CB2BB /* Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tag.m; sourceTree = "<group>"; };
 		9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EventTimerControl.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -236,7 +239,7 @@
 				9E42F1F115570FD60087F602 /* Foundation.framework in Frameworks */,
 				9EF331331666A066005CFEF2 /* Crashlytics.framework in Frameworks */,
 				125790D47091430EA9A63B06 /* libPods.a in Frameworks */,
-				9E7ED53416DA0F1300217F1B /* libGoogleAnalytics_debug.a in Frameworks */,
+				9EDB354F16E1360300E98C94 /* libGoogleAnalytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,6 +529,8 @@
 				9E9239EA162F3A5000E265E6 /* Global.m */,
 				9EB15F6D165D6A7F0054AEA2 /* TagButton.h */,
 				9EB15F6E165D6A7F0054AEA2 /* TagButton.m */,
+				9ED7F6C116DD027F0035A6E7 /* Api.h */,
+				9ED7F6C216DD027F0035A6E7 /* Api.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -778,6 +783,7 @@
 				9E5DECD4167899B200E21B8E /* InfoHintViewController.m in Sources */,
 				9E4A0FED167F57D1006BC207 /* PopoverView.m in Sources */,
 				9EA408A516B9C60D008A686B /* SDCloudUserDefaults.m in Sources */,
+				9ED7F6C316DD027F0035A6E7 /* Api.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
