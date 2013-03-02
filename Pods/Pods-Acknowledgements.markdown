@@ -1,6 +1,11 @@
 # Acknowledgements
 This application makes use of the following third party libraries:
 
+## GoogleAnalytics-iOS-SDK
+
+Copyright 2009 - 2012 Google, Inc. All rights reserved.
+
+
 ## MagicalRecord
 
  Copyright (c) 2010, Magical Panda Software, LLC

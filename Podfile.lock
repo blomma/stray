@@ -1,11 +1,14 @@
 
 PODS:
+- GoogleAnalytics-iOS-SDK (2.0beta4)
 - MagicalRecord (2.1)
 
 DEPENDENCIES:
+- GoogleAnalytics-iOS-SDK (~> 2.0Beta4)
 - MagicalRecord (~> 2.1.0)
 
 SPEC CHECKSUMS:
+  GoogleAnalytics-iOS-SDK: 11332eedcffb0c88b2dd9bff0ac1444e3a85e890
   MagicalRecord: aedbebe987d02d1215718a904c93d7965e48e398
 
-COCOAPODS: 0.16.3
+COCOAPODS: 0.16.4

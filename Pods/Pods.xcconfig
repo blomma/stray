@@ -1,7 +1,8 @@
 ALWAYS_SEARCH_USER_PATHS = YES
 HEADER_SEARCH_PATHS = ${PODS_HEADERS_SEARCH_PATHS}
-OTHER_LDFLAGS = -ObjC -framework CoreData
-PODS_BUILD_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/MagicalRecord"
+LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/GoogleAnalytics-iOS-SDK/Library"
+OTHER_LDFLAGS = -ObjC -lGoogleAnalytics -framework CFNetwork -framework CoreData -framework SystemConfiguration
+PODS_BUILD_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/GoogleAnalytics-iOS-SDK" "${PODS_ROOT}/BuildHeaders/MagicalRecord"
 PODS_HEADERS_SEARCH_PATHS = ${PODS_PUBLIC_HEADERS_SEARCH_PATHS}
-PODS_PUBLIC_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/MagicalRecord"
+PODS_PUBLIC_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/GoogleAnalytics-iOS-SDK" "${PODS_ROOT}/Headers/MagicalRecord"
 PODS_ROOT = ${SRCROOT}/Pods
