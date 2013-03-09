@@ -47,8 +47,7 @@
 
     [self initFilterView];
 
-    NSArray *events        = [Event MR_findAllSortedBy:@"startDate" ascending:NO];
-
+    NSArray *events = [Event MR_findAllSortedBy:@"startDate" ascending:NO];
     self.eventGroups = [[EventsGroupedByStartDate alloc] initWithEvents:events
                                                             withFilters:[State instance].eventsGroupedByStartDateFilter];
 

@@ -12,10 +12,4 @@
     self.guid = [[NSProcessInfo processInfo] globallyUniqueString];
 }
 
-- (void)awakeFromFetch {
-    if (!self.guid) {
-        self.guid = [[NSProcessInfo processInfo] globallyUniqueString];
-    }
-}
-
 @end
