@@ -10,11 +10,21 @@
 #import "Tag.h"
 #import "SDCloudUserDefaults.h"
 
+@interface State ()
+
+@property (nonatomic) NSMutableSet *eventsGroupedByDateFilter;
+@property (nonatomic) NSMutableSet *eventsGroupedByStartDateFilter;
+
+@end
+
 @implementation State
 
 - (id)init {
     self = [super init];
     if (self) {
+        self.eventsGroupedByDateFilter = [NSMutableSet set];
+        self.eventsGroupedByStartDateFilter = [NSMutableSet set];
+
         [self loadState];
     }
 
@@ -35,83 +45,31 @@
 }
 
 - (void)loadState {
-    NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-
+    //==================================================================================//
     // SELECTED EVENT
-    // Check for legacy and load that first
-    NSData *uriData = [SDCloudUserDefaults objectForKey:@"selectedEvent"];
-    if (uriData) {
-        NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
-        NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
-        if (objectID) {
-            self.selectedEvent = (Event *)[context objectWithID:objectID];
-        }
+    //==================================================================================//
+    NSString *selectedEventGUID = [SDCloudUserDefaults stringForKey:@"selectedEventGUID"];
+    if (selectedEventGUID) {
+        self.selectedEvent = [Event MR_findFirstByAttribute:@"guid" withValue:selectedEventGUID];
     }
 
-    // No legacy found, load the new key
-    if (!uriData) {
-        NSString *selectedEventGUID = [SDCloudUserDefaults stringForKey:@"selectedEventGUID"];
-        if (selectedEventGUID) {
-            self.selectedEvent = [Event MR_findFirstByAttribute:@"guid" withValue:selectedEventGUID];
-        }
-    }
-
+    //==================================================================================//
     // EVENTSGROUPEDBYDATE FILTER
-    // Check for legacy and load that first
-    NSArray *objects = nil;
-
-    objects = [SDCloudUserDefaults objectForKey:@"eventGroupsFilter"];
-
-    self.eventsGroupedByDateFilter = [NSMutableSet set];
-    if (!objects) {
-        objects = [SDCloudUserDefaults objectForKey:@"eventsGroupedByDateFilter"];
-        if (objects) {
-            for (uriData in objects) {
-                NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
-                NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
-                if (objectID) {
-                    Tag *tag = (Tag *)[context objectWithID:objectID];
-                    [self.eventsGroupedByDateFilter addObject:tag.guid];
-                }
-            }
+    //==================================================================================//
+    NSArray *objects = [SDCloudUserDefaults objectForKey:@"eventGUIDSGroupedByDateFilter"];
+    if (objects) {
+        for (NSString *guid in objects) {
+            [self.eventsGroupedByDateFilter addObject:guid];
         }
     }
 
-    if (!objects) {
-        objects = [SDCloudUserDefaults objectForKey:@"eventGUIDSGroupedByDateFilter"];
-        if (objects) {
-            for (NSString *guid in objects) {
-                [self.eventsGroupedByDateFilter addObject:guid];
-            }
-        }
-    }
-
-
+    //==================================================================================//
     // EVENTSGROUPEDBYSTARTDATE FILTER
-    // Check for legacy and load that first
-    objects = [SDCloudUserDefaults objectForKey:@"eventsFilter"];
-
-    self.eventsGroupedByStartDateFilter = [NSMutableSet set];
-    if (!objects) {
-        objects = [SDCloudUserDefaults objectForKey:@"eventsGroupedByStartDateFilter"];
-        if (objects) {
-            for (uriData in objects) {
-                NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
-                NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
-                if (objectID) {
-                    Tag *tag = (Tag *)[context objectWithID:objectID];
-                    [self.eventsGroupedByStartDateFilter addObject:tag.guid];
-                }
-            }
-        }
-    }
-
-    if (!objects) {
-        objects = [SDCloudUserDefaults objectForKey:@"eventGUIDSGroupedByStartDateFilter"];
-        if (objects) {
-            for (NSString *guid in objects) {
-                [self.eventsGroupedByStartDateFilter addObject:guid];
-            }
+    //==================================================================================//
+    objects = [SDCloudUserDefaults objectForKey:@"eventGUIDSGroupedByStartDateFilter"];
+    if (objects) {
+        for (NSString *guid in objects) {
+            [self.eventsGroupedByStartDateFilter addObject:guid];
         }
     }
 }
@@ -120,41 +78,20 @@
 #pragma mark Public methods
 
 - (void)persistState {
-    // ACTIVE EVENT
-
-    // Remove legacy default
-    [SDCloudUserDefaults removeObjectForKey:@"activeEvent"];
-
+    //==================================================================================//
     // SELECTED EVENT
-
-    // Remove legacy default
-    [SDCloudUserDefaults removeObjectForKey:@"selectedEvent"];
-
+    //==================================================================================//
     [SDCloudUserDefaults setString:self.selectedEvent.guid forKey:@"selectedEventGUID"];
 
+    //==================================================================================//
     // EVENTSGROUPEDBYDATE FILTER
-    NSMutableSet *objects = [NSMutableSet set];
-    for (NSString *guid in self.eventsGroupedByDateFilter) {
-        [objects addObject:guid];
-    }
+    //==================================================================================//
+    [SDCloudUserDefaults setObject:[self.eventsGroupedByDateFilter allObjects] forKey:@"eventGUIDSGroupedByDateFilter"];
 
-    // Remove legacy default
-    [SDCloudUserDefaults removeObjectForKey:@"eventGroupsFilter"];
-    [SDCloudUserDefaults removeObjectForKey:@"eventsGroupedByDateFilter"];
-
-    [SDCloudUserDefaults setObject:[objects allObjects] forKey:@"eventGUIDSGroupedByDateFilter"];
-
+    //==================================================================================//
     // EVENTSGROUPEDBYSTARTDATE FILTER
-    objects = [NSMutableSet set];
-    for (NSString *guid in self.eventsGroupedByStartDateFilter) {
-        [objects addObject:guid];
-    }
-
-    // Remove legacy default
-    [SDCloudUserDefaults removeObjectForKey:@"eventsFilter"];
-    [SDCloudUserDefaults removeObjectForKey:@"eventsGroupedByStartDateFilter"];
-
-    [SDCloudUserDefaults setObject:[objects allObjects] forKey:@"eventGUIDSGroupedByStartDateFilter"];
+    //==================================================================================//
+    [SDCloudUserDefaults setObject:[self.eventsGroupedByStartDateFilter allObjects] forKey:@"eventGUIDSGroupedByStartDateFilter"];
 }
 
 @end

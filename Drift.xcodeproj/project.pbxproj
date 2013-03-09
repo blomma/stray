@@ -84,6 +84,9 @@
 		9EAF701616367B4600FA079C /* SKBounceAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAF701516367B4600FA079C /* SKBounceAnimation.m */; };
 		9EB15F6F165D6A7F0054AEA2 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB15F6E165D6A7F0054AEA2 /* TagButton.m */; };
 		9EC837F916DA0C7500087997 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EC837F816DA0C7500087997 /* SystemConfiguration.framework */; };
+		9ECF3B7A16EAF4D40097FF37 /* _Compatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7716EAF4D40097FF37 /* _Compatibility.m */; };
+		9ECF3B7B16EAF4D40097FF37 /* Compatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7916EAF4D40097FF37 /* Compatibility.m */; };
+		9ECF3B7E16EAF6290097FF37 /* CompatibilityMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7D16EAF6290097FF37 /* CompatibilityMigration.m */; };
 		9ED7F6C316DD027F0035A6E7 /* Api.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ED7F6C216DD027F0035A6E7 /* Api.m */; };
 		9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCC5CA160DBFA1003CB2BB /* Tag.m */; };
 		9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */; };
@@ -200,6 +203,12 @@
 		9EB15F6D165D6A7F0054AEA2 /* TagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagButton.h; sourceTree = "<group>"; };
 		9EB15F6E165D6A7F0054AEA2 /* TagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagButton.m; sourceTree = "<group>"; };
 		9EC837F816DA0C7500087997 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		9ECF3B7616EAF4D40097FF37 /* _Compatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Compatibility.h; sourceTree = "<group>"; };
+		9ECF3B7716EAF4D40097FF37 /* _Compatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Compatibility.m; sourceTree = "<group>"; };
+		9ECF3B7816EAF4D40097FF37 /* Compatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Compatibility.h; sourceTree = "<group>"; };
+		9ECF3B7916EAF4D40097FF37 /* Compatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Compatibility.m; sourceTree = "<group>"; };
+		9ECF3B7C16EAF6290097FF37 /* CompatibilityMigration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompatibilityMigration.h; sourceTree = "<group>"; };
+		9ECF3B7D16EAF6290097FF37 /* CompatibilityMigration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompatibilityMigration.m; sourceTree = "<group>"; };
 		9ED7F6C116DD027F0035A6E7 /* Api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Api.h; sourceTree = "<group>"; };
 		9ED7F6C216DD027F0035A6E7 /* Api.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Api.m; sourceTree = "<group>"; };
 		9EDCC5C9160DBFA1003CB2BB /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tag.h; sourceTree = "<group>"; };
@@ -360,6 +369,10 @@
 		9E63BBF6156EAAA80006FEFC /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				9ECF3B7616EAF4D40097FF37 /* _Compatibility.h */,
+				9ECF3B7716EAF4D40097FF37 /* _Compatibility.m */,
+				9ECF3B7816EAF4D40097FF37 /* Compatibility.h */,
+				9ECF3B7916EAF4D40097FF37 /* Compatibility.m */,
 				9EDCC5C9160DBFA1003CB2BB /* Tag.h */,
 				9EDCC5CA160DBFA1003CB2BB /* Tag.m */,
 				9E92636F15EF350D00393946 /* _Tag.h */,
@@ -373,6 +386,8 @@
 				9E2F076D161745B400F1C24D /* DataRepository.m */,
 				9E66D0DB16553D6700339E99 /* State.h */,
 				9E66D0DC16553D6700339E99 /* State.m */,
+				9ECF3B7C16EAF6290097FF37 /* CompatibilityMigration.h */,
+				9ECF3B7D16EAF6290097FF37 /* CompatibilityMigration.m */,
 			);
 			name = Repository;
 			sourceTree = "<group>";
@@ -672,6 +687,9 @@
 				9E4A0FED167F57D1006BC207 /* PopoverView.m in Sources */,
 				9EA408A516B9C60D008A686B /* SDCloudUserDefaults.m in Sources */,
 				9ED7F6C316DD027F0035A6E7 /* Api.m in Sources */,
+				9ECF3B7A16EAF4D40097FF37 /* _Compatibility.m in Sources */,
+				9ECF3B7B16EAF4D40097FF37 /* Compatibility.m in Sources */,
+				9ECF3B7E16EAF6290097FF37 /* CompatibilityMigration.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -16,8 +16,8 @@
 
 @property (nonatomic, weak) Event *selectedEvent;
 
-@property (nonatomic) NSMutableSet *eventsGroupedByDateFilter;
-@property (nonatomic) NSMutableSet *eventsGroupedByStartDateFilter;
+@property (nonatomic, readonly) NSMutableSet *eventsGroupedByDateFilter;
+@property (nonatomic, readonly) NSMutableSet *eventsGroupedByStartDateFilter;
 
 - (void)persistState;
 
