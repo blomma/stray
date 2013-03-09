@@ -48,30 +48,30 @@
     //==================================================================================//
     // SELECTED EVENT
     //==================================================================================//
-    NSString *selectedEventGUID = [SDCloudUserDefaults stringForKey:@"selectedEventGUID"];
-    if (selectedEventGUID) {
-        self.selectedEvent = [Event MR_findFirstByAttribute:@"guid" withValue:selectedEventGUID];
-    }
+//    NSString *selectedEventGUID = [SDCloudUserDefaults stringForKey:@"selectedEventGUID"];
+//    if (selectedEventGUID) {
+//        self.selectedEvent = [Event MR_findFirstByAttribute:@"guid" withValue:selectedEventGUID];
+//    }
 
     //==================================================================================//
     // EVENTSGROUPEDBYDATE FILTER
     //==================================================================================//
-    NSArray *objects = [SDCloudUserDefaults objectForKey:@"eventGUIDSGroupedByDateFilter"];
-    if (objects) {
-        for (NSString *guid in objects) {
-            [self.eventsGroupedByDateFilter addObject:guid];
-        }
-    }
+//    NSArray *objects = [SDCloudUserDefaults objectForKey:@"eventGUIDSGroupedByDateFilter"];
+//    if (objects) {
+//        for (NSString *guid in objects) {
+//            [self.eventsGroupedByDateFilter addObject:guid];
+//        }
+//    }
 
     //==================================================================================//
     // EVENTSGROUPEDBYSTARTDATE FILTER
     //==================================================================================//
-    objects = [SDCloudUserDefaults objectForKey:@"eventGUIDSGroupedByStartDateFilter"];
-    if (objects) {
-        for (NSString *guid in objects) {
-            [self.eventsGroupedByStartDateFilter addObject:guid];
-        }
-    }
+//    objects = [SDCloudUserDefaults objectForKey:@"eventGUIDSGroupedByStartDateFilter"];
+//    if (objects) {
+//        for (NSString *guid in objects) {
+//            [self.eventsGroupedByStartDateFilter addObject:guid];
+//        }
+//    }
 }
 
 #pragma mark -
