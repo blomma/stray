@@ -13,6 +13,9 @@
 #import "Tag.h"
 #import "SDCloudUserDefaults.h"
 
+#define STRAY_COMPATIBILITY_LEVEL_KEY @"StrayCompatibilityLevel"
+#define STATE_COMPATIBILITY_LEVEL_KEY @"stateCompatibilityLevel"
+
 @implementation CompatibilityMigration
 
 - (id)init {
@@ -36,172 +39,152 @@
 	return sharedCompatibilityMigration;
 }
 
-- (void)migrate {
-	NSNumber *compatibilityLevel = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"StrayCompatibilityLevel"];
+- (void)migrateToCompatibilityLevel:(NSNumber *)toLevel lastCompatibilityLevel:(NSNumber *)lastLevel migrationBlock:(void (^)())migrationBlock {
+	// toLevel > lastLevel && toLevel <= appCompatibilityLevel
+    NSNumber *appCompatibilityLevel = [[[NSBundle mainBundle] infoDictionary] objectForKey:STRAY_COMPATIBILITY_LEVEL_KEY];
 
+    if ([toLevel compare:lastLevel] == NSOrderedDescending && [toLevel compare:appCompatibilityLevel] != NSOrderedDescending) {
+        migrationBlock();
+    }
+}
+
+- (void)migrate {
     //==================================================================================//
     // Migrate CoreData
     //==================================================================================//
-	Compatibility *compatibility        = [Compatibility MR_findFirst];
-	NSNumber *coredataCompatibilityLevel = !compatibility ? [NSNumber numberWithInt:0] : compatibility.level;
-
-	if (![coredataCompatibilityLevel isEqualToNumber:compatibilityLevel]) {
-		[self migrateCoreDataFromCompatibilityLevel:coredataCompatibilityLevel toCompatibilityLevel:compatibilityLevel];
-	}
+    [self migrateCoreData];
 
     //==================================================================================//
     // Migrate State
     //==================================================================================//
-    NSNumber *stateCompatibilityLevel = [SDCloudUserDefaults objectForKey:@"stateCompatibilityLevel"];
-    if (!stateCompatibilityLevel) {
-        stateCompatibilityLevel = [NSNumber numberWithInt:0];
-    }
-
-    if (![stateCompatibilityLevel isEqualToNumber:compatibilityLevel]) {
-        [self migrateStateFromCompatibilityLevel:stateCompatibilityLevel toCompatibilityLevel:compatibilityLevel];
-    }
+    [self migrateState];
 }
 
-- (void)migrateStateFromCompatibilityLevel:(NSNumber *)fromLevel toCompatibilityLevel:(NSNumber *)toLevel {
-	for (NSUInteger i = (NSUInteger)[fromLevel longLongValue] + 1; i <= [toLevel longLongValue]; i++) {
-		switch (i) {
-            case 0:
-                // Do Nothing, this is the base state
-                break;
+- (NSNumber *)stateCompatibilityLevel {
+    NSNumber *stateCompatibilityLevel = [SDCloudUserDefaults objectForKey:STATE_COMPATIBILITY_LEVEL_KEY];
+    return stateCompatibilityLevel ? stateCompatibilityLevel : @0;
+}
 
-            case 1:
-                [self stateUp_1];
-
-            default:
-                break;
-		}
-	}
-
-    [SDCloudUserDefaults setObject:toLevel forKey:@"stateCompatibilityLevel"];
+- (void)setStateCompatibilityLevel:(NSNumber *)level {
+    [SDCloudUserDefaults setObject:level forKey:STATE_COMPATIBILITY_LEVEL_KEY];
     [SDCloudUserDefaults synchronize];
 }
 
-- (void)stateUp_1 {
-    NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
+- (void)migrateState {
+    [self migrateToCompatibilityLevel:@1 lastCompatibilityLevel:[self stateCompatibilityLevel] migrationBlock:^{
+        NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
 
-    //==================================================================================//
-    // ACTIVE EVENT
-    //==================================================================================//
-    [SDCloudUserDefaults removeObjectForKey:@"activeEvent"];
+        //==================================================================================//
+        // ACTIVE EVENT
+        //==================================================================================//
+        [SDCloudUserDefaults removeObjectForKey:@"activeEvent"];
 
-    //==================================================================================//
-    // SELECTED EVENT
-    //==================================================================================//
-    NSData *uriData = [SDCloudUserDefaults objectForKey:@"selectedEvent"];
-    if (uriData) {
-        NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
-        NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
-        if (objectID) {
-            Event *event = (Event *)[context objectWithID:objectID];
-            [SDCloudUserDefaults setString:event.guid forKey:@"selectedEventGUID"];
-        }
-    }
-
-    [SDCloudUserDefaults removeObjectForKey:@"selectedEvent"];
-
-    //==================================================================================//
-    // EVENTSGROUPEDBYDATE FILTER
-    //==================================================================================//
-    NSArray *objects = [SDCloudUserDefaults objectForKey:@"eventGroupsFilter"];
-
-    if (!objects) {
-        objects = [SDCloudUserDefaults objectForKey:@"eventsGroupedByDateFilter"];
-    }
-
-    if (objects) {
-        NSMutableSet *eventsGroupedByDateFilter = [NSMutableSet set];
-
-        // Load them up
-        for (uriData in objects) {
+        //==================================================================================//
+        // SELECTED EVENT
+        //==================================================================================//
+        NSData *uriData = [SDCloudUserDefaults objectForKey:@"selectedEvent"];
+        if (uriData) {
             NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
             NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
             if (objectID) {
-                Tag *tag = (Tag *)[context objectWithID:objectID];
-                [eventsGroupedByDateFilter addObject:tag.guid];
+                Event *event = (Event *)[context objectWithID:objectID];
+                [SDCloudUserDefaults setString:event.guid forKey:@"selectedEventGUID"];
             }
         }
 
-        // And resave them
-        [SDCloudUserDefaults setObject:[eventsGroupedByDateFilter allObjects] forKey:@"eventGUIDSGroupedByDateFilter"];
-    }
+        [SDCloudUserDefaults removeObjectForKey:@"selectedEvent"];
 
-    [SDCloudUserDefaults removeObjectForKey:@"eventGroupsFilter"];
-    [SDCloudUserDefaults removeObjectForKey:@"eventsGroupedByDateFilter"];
+        //==================================================================================//
+        // EVENTSGROUPEDBYDATE FILTER
+        //==================================================================================//
+        NSArray *objects = [SDCloudUserDefaults objectForKey:@"eventGroupsFilter"];
 
-
-    //==================================================================================//
-    // EVENTSGROUPEDBYSTARTDATE FILTER
-    //==================================================================================//
-    objects = [SDCloudUserDefaults objectForKey:@"eventsFilter"];
-
-    if (!objects) {
-        objects = [SDCloudUserDefaults objectForKey:@"eventsGroupedByStartDateFilter"];
-    }
-
-    if (objects) {
-        NSMutableSet *eventsGroupedByStartDateFilter = [NSMutableSet set];
-
-        // Load them up
-        for (uriData in objects) {
-            NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
-            NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
-            if (objectID) {
-                Tag *tag = (Tag *)[context objectWithID:objectID];
-                [eventsGroupedByStartDateFilter addObject:tag.guid];
-            }
+        if (!objects) {
+            objects = [SDCloudUserDefaults objectForKey:@"eventsGroupedByDateFilter"];
         }
 
-        // And resave them
-        [SDCloudUserDefaults setObject:[eventsGroupedByStartDateFilter allObjects] forKey:@"eventGUIDSGroupedByStartDateFilter"];
-    }
+        if (objects) {
+            NSMutableSet *eventsGroupedByDateFilter = [NSMutableSet set];
 
-    [SDCloudUserDefaults removeObjectForKey:@"eventsFilter"];
-    [SDCloudUserDefaults removeObjectForKey:@"eventsGroupedByStartDateFilter"];
-}
+            // Load them up
+            for (uriData in objects) {
+                NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
+                NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
+                if (objectID) {
+                    Tag *tag = (Tag *)[context objectWithID:objectID];
+                    [eventsGroupedByDateFilter addObject:tag.guid];
+                }
+            }
 
-- (void)migrateCoreDataFromCompatibilityLevel:(NSNumber *)fromLevel toCompatibilityLevel:(NSNumber *)toLevel {
-	for (NSUInteger i = (NSUInteger)[fromLevel longLongValue] + 1; i <= [toLevel longLongValue]; i++) {
-		switch (i) {
-            case 0:
-                // Do Nothing, this is the base state
-                break;
-                
-            case 1:
-                [self eventUp_1];
-                [self tagUp_1];
-                
-            default:
-                break;
-		}
-	}
+            // And resave them
+            [SDCloudUserDefaults setObject:[eventsGroupedByDateFilter allObjects] forKey:@"eventGUIDSGroupedByDateFilter"];
+        }
 
-	Compatibility *compatibility = [Compatibility MR_findFirst];
-	if (!compatibility) {
-		compatibility = [Compatibility MR_createEntity];
-	}
+        [SDCloudUserDefaults removeObjectForKey:@"eventGroupsFilter"];
+        [SDCloudUserDefaults removeObjectForKey:@"eventsGroupedByDateFilter"];
 
-	compatibility.level = toLevel;
-	[[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
-}
 
-- (void)eventUp_1 {
-	// We go thru every Event and add a guid to it
-	NSArray *events = [Event MR_findAll];
-	[events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [obj setGuid:[[NSProcessInfo processInfo] globallyUniqueString]];
+        //==================================================================================//
+        // EVENTSGROUPEDBYSTARTDATE FILTER
+        //==================================================================================//
+        objects = [SDCloudUserDefaults objectForKey:@"eventsFilter"];
+
+        if (!objects) {
+            objects = [SDCloudUserDefaults objectForKey:@"eventsGroupedByStartDateFilter"];
+        }
+
+        if (objects) {
+            NSMutableSet *eventsGroupedByStartDateFilter = [NSMutableSet set];
+
+            // Load them up
+            for (uriData in objects) {
+                NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
+                NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
+                if (objectID) {
+                    Tag *tag = (Tag *)[context objectWithID:objectID];
+                    [eventsGroupedByStartDateFilter addObject:tag.guid];
+                }
+            }
+            
+            // And resave them
+            [SDCloudUserDefaults setObject:[eventsGroupedByStartDateFilter allObjects] forKey:@"eventGUIDSGroupedByStartDateFilter"];
+        }
+        
+        [SDCloudUserDefaults removeObjectForKey:@"eventsFilter"];
+        [SDCloudUserDefaults removeObjectForKey:@"eventsGroupedByStartDateFilter"];
+
+        [self setStateCompatibilityLevel:@1];
     }];
 }
 
-- (void)tagUp_1 {
-	// We go thru every Tag and add a guid to it
-	NSArray *tags = [Tag MR_findAll];
-	[tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [obj setGuid:[[NSProcessInfo processInfo] globallyUniqueString]];
+- (NSNumber *)coredataCompatibilityLevel {
+	Compatibility *compatibility = [Compatibility MR_findFirst];
+	return compatibility ? compatibility.level : @0;
+}
+
+- (void)setCoredataCompatibilityLevel:(NSNumber *)level {
+    Compatibility *compatibility = [Compatibility MR_findFirst];
+    if (!compatibility) {
+        compatibility = [Compatibility MR_createEntity];
+    }
+
+    compatibility.level = level;
+    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+}
+
+- (void)migrateCoreData {
+    [self migrateToCompatibilityLevel:@1 lastCompatibilityLevel:[self coredataCompatibilityLevel] migrationBlock:^{
+        NSArray *events = [Event MR_findAll];
+        [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [obj setGuid:[[NSProcessInfo processInfo] globallyUniqueString]];
+        }];
+
+        NSArray *tags = [Tag MR_findAll];
+        [tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [obj setGuid:[[NSProcessInfo processInfo] globallyUniqueString]];
+        }];
+
+        [self setCoredataCompatibilityLevel:@1];
     }];
 }
 
