@@ -13,7 +13,7 @@
 #import "TagTableViewCell.h"
 #import "SKBounceAnimation.h"
 #import "CAAnimation+Blocks.h"
-#import "UIScrollView+SVPulling.h"
+#import "UIScrollView+AIPulling.h"
 #import "State.h"
 
 @interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureMovingRowDelegate, TagTableViewCellDelegate>
@@ -45,8 +45,8 @@
 
     __block __weak TagsTableViewController *weakSelf = self;
 
-    [self.tableView addPullingWithActionHandler:^(SVPullingState state, SVPullingState previousState, CGFloat height) {
-        if (state == SVPullingStateAction && previousState == SVPullingStatePullingAdd) {
+    [self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
+        if (state == AIPullingStateAction && previousState == AIPullingStatePullingAdd) {
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
                 [weakSelf.tableView beginUpdates];
@@ -58,7 +58,7 @@
 
                 [weakSelf.tableView endUpdates];
             });
-        } else if (state == SVPullingStateAction && previousState == SVPullingStatePullingClose) {
+        } else if (state == AIPullingStateAction && previousState == AIPullingStatePullingClose) {
             if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {

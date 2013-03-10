@@ -1,31 +1,32 @@
-//
-// UIScrollView+SVPulling.m
-//
-// Created by Sam Vermette on 23.04.12.
-// Copyright (c) 2012 samvermette.com. All rights reserved.
-//
+// 
+//  UIScrollView+AIPulling.m
+//  stray
+//  
+//  Created by Mikael Hultgren on 2013-03-10.
+//  Copyright 2013 Artsoftheinsane. All rights reserved.
+// 
 
-#import "UIScrollView+SVPulling.h"
+#import "UIScrollView+AIPulling.h"
 
 #import <objc/runtime.h>
 
-@interface SVPullingView ()
+@interface AIPullingView ()
 
-@property (nonatomic, copy) void (^actionHandler)(SVPullingState state, SVPullingState previousState, CGFloat height);
+@property (nonatomic, copy) void (^actionHandler)(AIPullingState state, AIPullingState previousState, CGFloat height);
 
 @property (nonatomic) UILabel *titleLabel;
 @property (nonatomic) UILabel *stateIcon;
 
-@property (nonatomic, readwrite) SVPullingState state;
+@property (nonatomic, readwrite) AIPullingState state;
 
 @property (nonatomic, weak) UIScrollView *scrollView;
 
 @end
 
 #pragma mark -
-#pragma mark - SVPulling
+#pragma mark - AIPulling
 
-@implementation SVPullingView
+@implementation AIPullingView
 
 @synthesize actionHandler;
 
@@ -34,7 +35,7 @@
         // default styling values
         self.textColor        = [UIColor whiteColor];
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.state            = SVPullingStateInitial;
+        self.state            = AIPullingStateInitial;
         self.clipsToBounds    = YES;
 
         // Default values;
@@ -83,17 +84,17 @@
     stateIconFrame.origin.y = height / 2 - (self.stateIcon.frame.size.height / 2);
     self.stateIcon.frame    = stateIconFrame;
 
-    if (self.state == SVPullingStatePullingClose) {
+    if (self.state == AIPullingStatePullingClose) {
         self.backgroundColor = self.backgroundColorForCloseState;
         self.titleLabel.text = @"Release to Close...";
         self.stateIcon.text  = @"\u274C";
 
-    } else if (self.state == SVPullingStatePullingAdd) {
+    } else if (self.state == AIPullingStatePullingAdd) {
         self.backgroundColor = self.backgroundColorForAddState;
         self.titleLabel.text = @"Release to Add...";
         self.stateIcon.text  = @"\u2713";
 
-    } else if (self.state == SVPullingStatePulling) {
+    } else if (self.state == AIPullingStatePulling) {
         CGFloat alphaHeight = self.addingHeight == 0 ? self.closingHeight : self.addingHeight;
         alphaHeight += self.scrollView.contentInset.top;
 
@@ -103,11 +104,11 @@
         self.titleLabel.text = self.addingHeight == 0 ? @"Pull to Close..." : @"Pull to Add...";
         self.stateIcon.text  = @"";
 
-    } else if (self.state == SVPullingStateAction) {
+    } else if (self.state == AIPullingStateAction) {
         self.titleLabel.text = @"";
         self.stateIcon.text  = @"";
 
-    } else if (self.state == SVPullingStateInitial) {
+    } else if (self.state == AIPullingStateInitial) {
         self.backgroundColor = [UIColor clearColor];
         self.titleLabel.text = @"";
         self.stateIcon.text  = @"";
@@ -125,18 +126,18 @@
 
 - (void)scrollViewDidScroll:(CGPoint)contentOffset {
     if (self.scrollView.decelerating) {
-        if (self.state == SVPullingStateAction && self.state != SVPullingStateInitial && fabsf(contentOffset.y) <= fabsf(self.scrollView.contentInset.top)) {
-            self.state = SVPullingStateInitial;
-        } else if (self.state != SVPullingStateInitial) {
-            self.state = SVPullingStateAction;
+        if (self.state == AIPullingStateAction && self.state != AIPullingStateInitial && fabsf(contentOffset.y) <= fabsf(self.scrollView.contentInset.top)) {
+            self.state = AIPullingStateInitial;
+        } else if (self.state != AIPullingStateInitial) {
+            self.state = AIPullingStateAction;
         }
 
         return;
     }
 
     if (contentOffset.y >= -self.scrollView.contentInset.top) {
-        if (self.state != SVPullingStateInitial) {
-            self.state = SVPullingStateInitial;
+        if (self.state != AIPullingStateInitial) {
+            self.state = AIPullingStateInitial;
         }
 
         return;
@@ -147,19 +148,19 @@
     CGFloat heightForCancelState = self.addingHeight == 0 ? heightForCloseState : heightForAddState;
 
     if (fabsf(contentOffset.y) < heightForCancelState) {
-        self.state = SVPullingStatePulling;
+        self.state = AIPullingStatePulling;
     } else if (fabsf(contentOffset.y) > heightForCloseState) {
-        self.state = SVPullingStatePullingClose;
+        self.state = AIPullingStatePullingClose;
     } else if (fabsf(contentOffset.y) >= heightForAddState && self.addingHeight != 0) {
-        self.state = SVPullingStatePullingAdd;
+        self.state = AIPullingStatePullingAdd;
     }
 }
 
 #pragma mark -
 #pragma mark - Public properties
 
-- (void)setState:(SVPullingState)state {
-    SVPullingState previousState = _state;
+- (void)setState:(AIPullingState)state {
+    AIPullingState previousState = _state;
     _state = state;
 
     [self setNeedsLayout];
@@ -172,13 +173,13 @@
 @end
 
 #pragma mark -
-#pragma mark - UIScrollView (SVPulling)
+#pragma mark - UIScrollView (AIPulling)
 
-@implementation UITableView (SVPulling)
+@implementation UITableView (AIPulling)
 
-- (void)addPullingWithActionHandler:(void (^)(SVPullingState state, SVPullingState previousState, CGFloat height))actionHandler  {
+- (void)addPullingWithActionHandler:(void (^)(AIPullingState state, AIPullingState previousState, CGFloat height))actionHandler  {
     if (!self.pullingView) {
-        SVPullingView *view = [[SVPullingView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 0)];
+        AIPullingView *view = [[AIPullingView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 0)];
         view.actionHandler = actionHandler;
         view.scrollView    = self;
 
@@ -211,11 +212,11 @@
     }
 }
 
-- (void)setPullingView:(SVPullingView *)pullingView {
+- (void)setPullingView:(AIPullingView *)pullingView {
     objc_setAssociatedObject(self, (__bridge const void *)(@"kPullingViewKey"), pullingView, OBJC_ASSOCIATION_ASSIGN);
 }
 
-- (SVPullingView *)pullingView {
+- (AIPullingView *)pullingView {
     return objc_getAssociatedObject(self, (__bridge const void *)(@"kPullingViewKey"));
 }
 

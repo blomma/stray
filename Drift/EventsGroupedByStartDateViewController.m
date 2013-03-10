@@ -17,7 +17,7 @@
 #import "Tags.h"
 #import "TagsTableViewController.h"
 #import "TransformableTableViewGestureRecognizer.h"
-#import "UIScrollView+SVPulling.h"
+#import "UIScrollView+AIPulling.h"
 #import "EventsGroupedByStartDate.h"
 #import "State.h"
 
@@ -55,8 +55,8 @@
 
     __block __weak EventsGroupedByStartDateViewController *weakSelf = self;
 
-    [self.tableView addPullingWithActionHandler:^(SVPullingState state, SVPullingState previousState, CGFloat height) {
-        if (state == SVPullingStateAction && (previousState == SVPullingStatePullingAdd || previousState == SVPullingStatePullingClose)) {
+    [self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
+        if (state == AIPullingStateAction && (previousState == AIPullingStatePullingAdd || previousState == AIPullingStatePullingClose)) {
             if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 200000000);
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
