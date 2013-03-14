@@ -43,7 +43,7 @@
 
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"grabbedTableViewCellIdentifier"];
 
-    __block __weak TagsTableViewController *weakSelf = self;
+    TagsTableViewController * __weak weakSelf = self;
 
     [self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
         if (state == AIPullingStateAction && previousState == AIPullingStatePullingAdd) {

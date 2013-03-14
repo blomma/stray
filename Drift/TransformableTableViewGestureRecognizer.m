@@ -162,12 +162,8 @@ static NSInteger kCellSnapShotTag = 100000;
     } else if (recognizer.state == UIGestureRecognizerStateEnded) {
         // While long press ends, we remove the snapshot imageView
 
-        __block __weak UIImageView *snapShotView                         = (UIImageView *)[self.tableView viewWithTag:kCellSnapShotTag];
-        __block __weak TransformableTableViewGestureRecognizer *weakSelf = self;
-
-        // We use self.addingIndexPath directly to make sure we dropped on a valid indexPath
-        // which we've already ensure while UIGestureRecognizerStateChanged
-        __block __weak NSIndexPath *weakAddingIndexPath = self.transformIndexPath;
+        UIImageView *snapShotView = (UIImageView *)[self.tableView viewWithTag:kCellSnapShotTag];
+        TransformableTableViewGestureRecognizer * __weak weakSelf = self;
 
         // Stop timer
         [self.movingTimer invalidate];
@@ -176,14 +172,14 @@ static NSInteger kCellSnapShotTag = 100000;
 
         [UIView animateWithDuration:kAddingAnimationDuration
                          animations:^{
-            CGRect rect = [weakSelf.tableView rectForRowAtIndexPath:weakAddingIndexPath];
-            snapShotView.transform = CGAffineTransformIdentity;                     // restore the transformed value
-            snapShotView.frame = CGRectOffset(snapShotView.bounds, rect.origin.x, rect.origin.y);
-            snapShotView.alpha = 1;
+                             CGRect rect = [weakSelf.tableView rectForRowAtIndexPath:weakSelf.transformIndexPath];
+                             snapShotView.transform = CGAffineTransformIdentity;                     // restore the transformed value
+                             snapShotView.frame = CGRectOffset(snapShotView.bounds, rect.origin.x, rect.origin.y);
+                             snapShotView.alpha = 1;
         } completion:^(BOOL finished) {
             [snapShotView removeFromSuperview];
 
-            [weakSelf.delegate gestureRecognizer:weakSelf needsReplacePlaceholderForRowAtIndexPath:weakAddingIndexPath];
+            [weakSelf.delegate gestureRecognizer:weakSelf needsReplacePlaceholderForRowAtIndexPath:weakSelf.transformIndexPath];
 
             // Update state and clear instance variables
             weakSelf.transformIndexPath = nil;

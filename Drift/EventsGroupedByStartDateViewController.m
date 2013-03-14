@@ -53,7 +53,7 @@
 
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
-    __block __weak EventsGroupedByStartDateViewController *weakSelf = self;
+    EventsGroupedByStartDateViewController * __weak weakSelf = self;
 
     [self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
         if (state == AIPullingStateAction && (previousState == AIPullingStatePullingAdd || previousState == AIPullingStatePullingClose)) {
