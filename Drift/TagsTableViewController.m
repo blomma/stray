@@ -53,16 +53,15 @@
 
                 Tag *tag = [Tag MR_createEntity];
                 [weakSelf.tags insertObject:tag atIndex:0];
-
-                [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
-
+                [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
+                                          withRowAnimation:UITableViewRowAnimationTop];
                 [weakSelf.tableView endUpdates];
             });
         } else if (state == AIPullingStateAction && previousState == AIPullingStatePullingClose) {
-            if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
+            if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss)]) {
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                    [weakSelf.delegate tagsTableViewControllerDidDimiss:weakSelf];
+                    [weakSelf.delegate tagsTableViewControllerDidDimiss];
                 });
             }
         }
@@ -162,8 +161,8 @@
 
     self.event.inTag = [self.event.inTag isEqual:tag] ? nil : tag;
 
-    if ([self.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
-        [self.delegate tagsTableViewControllerDidDimiss:self];
+    if ([self.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss)]) {
+        [self.delegate tagsTableViewControllerDidDimiss];
     }
 }
 

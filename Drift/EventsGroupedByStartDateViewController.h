@@ -1,5 +1,5 @@
 //
-//  EventGroupViewController.h
+//  EventsGroupedByStartDateViewController.h
 //  Drift
 //
 //  Created by Mikael Hultgren on 9/2/12.
@@ -13,7 +13,7 @@
 
 @protocol EventsGroupedByStartDateViewControllerDelegate <NSObject>
 
-- (void)eventsGroupedByStartDateViewControllerDidDimiss:(EventsGroupedByStartDateViewController *)viewController;
+- (void)eventsGroupedByStartDateViewControllerDidDimiss;
 
 @end
 

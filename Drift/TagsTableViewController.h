@@ -12,7 +12,7 @@
 
 @protocol TagsTableViewControllerDelegate <NSObject>
 
-- (void)tagsTableViewControllerDidDimiss:(TagsTableViewController *)tagsTableViewController;
+- (void)tagsTableViewControllerDidDimiss;
 
 @end
 

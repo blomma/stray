@@ -95,11 +95,11 @@
 #pragma mark -
 #pragma mark TagsTableViewControllerDelegate, EventsGroupedByStartDateViewControllerDelegate
 
-- (void)tagsTableViewControllerDidDimiss:(TagsTableViewController *)tagsTableViewController {
+- (void)tagsTableViewControllerDidDimiss {
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)eventsGroupedByStartDateViewControllerDidDimiss:(EventsGroupedByStartDateViewController *)viewController {
+- (void)eventsGroupedByStartDateViewControllerDidDimiss {
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 

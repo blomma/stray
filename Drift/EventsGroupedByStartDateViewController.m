@@ -55,12 +55,12 @@
 
     EventsGroupedByStartDateViewController * __weak weakSelf = self;
 
-    [self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
+	[self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
         if (state == AIPullingStateAction && (previousState == AIPullingStatePullingAdd || previousState == AIPullingStatePullingClose)) {
-            if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss:)]) {
+            if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss)]) {
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 200000000);
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                    [weakSelf.delegate eventsGroupedByStartDateViewControllerDidDimiss:weakSelf];
+                    [weakSelf.delegate eventsGroupedByStartDateViewControllerDidDimiss];
                 });
             }
         }
@@ -143,8 +143,8 @@
 #pragma mark -
 #pragma mark TagsTableViewControllerDelegate
 
-- (void)tagsTableViewControllerDidDimiss:(TagsTableViewController *)tagsTableViewController {
-    [self dismissViewControllerAnimated:YES completion:nil];
+- (void)tagsTableViewControllerDidDimiss {
+	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -
@@ -268,8 +268,8 @@
 
     [State instance].selectedEvent = event;
 
-    if ([self.delegate respondsToSelector:@selector(eventsGroupedByStartDateViewControllerDidDimiss:)]) {
-        [self.delegate eventsGroupedByStartDateViewControllerDidDimiss:self];
+    if ([self.delegate respondsToSelector:@selector(eventsGroupedByStartDateViewControllerDidDimiss)]) {
+        [self.delegate eventsGroupedByStartDateViewControllerDidDimiss];
     }
 }
 
