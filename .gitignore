@@ -21,5 +21,4 @@ build/
 *.dat
 *.dep
 # Cocoapods
-Pods
 Podfile.lock
