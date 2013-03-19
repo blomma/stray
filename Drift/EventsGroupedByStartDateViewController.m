@@ -249,7 +249,7 @@
     headerLabel.textAlignment   = NSTextAlignmentCenter;
 
     static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
-    NSDateComponents *components          = [[Global instance].calendar components:unitFlagsEventStart fromDate:eventGroup.groupDate];
+    NSDateComponents *components          = [[NSDate calendar] components:unitFlagsEventStart fromDate:eventGroup.groupDate];
 
     headerLabel.text = [NSString stringWithFormat:@"%@  ·  %02d %@ %04d", [[self.shortStandaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString], components.day, [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString], components.year];
 
@@ -300,7 +300,7 @@
 
     // StartTime
     static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
-    NSDateComponents *components          = [[Global instance].calendar components:unitFlagsEventStart fromDate:event.startDate];
+    NSDateComponents *components          = [[NSDate calendar] components:unitFlagsEventStart fromDate:event.startDate];
 
     cell.eventStartTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
     cell.eventStartDay.text   = [NSString stringWithFormat:@"%02d", components.day];
@@ -310,7 +310,7 @@
     // EventTime
     NSDate *stopDate                     = event.stopDate ? event.stopDate : [NSDate date];
     static NSUInteger unitFlagsEventTime = NSHourCalendarUnit | NSMinuteCalendarUnit;
-    components = [[Global instance].calendar components:unitFlagsEventTime fromDate:event.startDate toDate:stopDate options:0];
+    components                 = [[NSDate calendar] components:unitFlagsEventTime fromDate:event.startDate toDate:stopDate options:0];
 
     cell.eventTimeHours.text   = [NSString stringWithFormat:@"%02d", components.hour];
     cell.eventTimeMinutes.text = [NSString stringWithFormat:@"%02d", components.minute];
@@ -318,7 +318,7 @@
     // StopTime
     if (event.stopDate) {
         static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
-        components = [[Global instance].calendar components:unitFlags fromDate:event.stopDate];
+        components               = [[NSDate calendar] components:unitFlags fromDate:event.stopDate];
 
         cell.eventStopTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
         cell.eventStopDay.text   = [NSString stringWithFormat:@"%02d", components.day];
