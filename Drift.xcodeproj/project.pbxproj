@@ -71,7 +71,6 @@
 		9E89816F15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89816E15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m */; };
 		9E9239DB162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239D8162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m */; };
 		9E9239DC162D4F9B00E265E6 /* TagTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239DA162D4F9B00E265E6 /* TagTableViewCell.m */; };
-		9E9239EB162F3A5000E265E6 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239EA162F3A5000E265E6 /* Global.m */; };
 		9E92637115EF350D00393946 /* _Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E92637015EF350D00393946 /* _Tag.m */; };
 		9E954D84164419F50022D5BE /* UIScrollView+AIPulling.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E954D83164419F50022D5BE /* UIScrollView+AIPulling.m */; };
 		9E96A907163981B600164D76 /* CAAnimation+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E96A90616397DB400164D76 /* CAAnimation+Blocks.m */; };
@@ -180,8 +179,6 @@
 		9E9239D9162D4F9B00E265E6 /* TagTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagTableViewCell.h; sourceTree = "<group>"; };
 		9E9239DA162D4F9B00E265E6 /* TagTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagTableViewCell.m; sourceTree = "<group>"; };
 		9E9239E2162DA56900E265E6 /* CoreDataModel-3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-3.xcdatamodel"; sourceTree = "<group>"; };
-		9E9239E9162F3A5000E265E6 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
-		9E9239EA162F3A5000E265E6 /* Global.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Global.m; sourceTree = "<group>"; };
 		9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-2.xcdatamodel"; sourceTree = "<group>"; };
 		9E92636F15EF350D00393946 /* _Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Tag.h; sourceTree = "<group>"; };
 		9E92637015EF350D00393946 /* _Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Tag.m; sourceTree = "<group>"; };
@@ -430,8 +427,6 @@
 				9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */,
 				9E14D450162B3D3F008D9E43 /* TagFilterButton.h */,
 				9E14D451162B3D3F008D9E43 /* TagFilterButton.m */,
-				9E9239E9162F3A5000E265E6 /* Global.h */,
-				9E9239EA162F3A5000E265E6 /* Global.m */,
 				9EB15F6D165D6A7F0054AEA2 /* TagButton.h */,
 				9EB15F6E165D6A7F0054AEA2 /* TagButton.m */,
 				9ED7F6C116DD027F0035A6E7 /* Api.h */,
@@ -674,7 +669,6 @@
 				9E14D452162B3D3F008D9E43 /* TagFilterButton.m in Sources */,
 				9E9239DB162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m in Sources */,
 				9E9239DC162D4F9B00E265E6 /* TagTableViewCell.m in Sources */,
-				9E9239EB162F3A5000E265E6 /* Global.m in Sources */,
 				9EAF701616367B4600FA079C /* SKBounceAnimation.m in Sources */,
 				9E954D84164419F50022D5BE /* UIScrollView+AIPulling.m in Sources */,
 				9EF9909A164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m in Sources */,

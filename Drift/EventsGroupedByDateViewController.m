@@ -14,10 +14,10 @@
 #import "EventsGroupedByDate.h"
 #import "TagFilterButton.h"
 #import "EventsGroupedByDateTableViewCell.h"
-#import "Global.h"
 #import "Tags.h"
 #import "State.h"
 #import "Tag.h"
+#import "NSDate+Utilities.h"
 
 @interface EventsGroupedByDateViewController ()
 
@@ -113,7 +113,7 @@
     cell.minutes.text = [NSString stringWithFormat:@"%02d", components.minute];
 
     static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
-    components = [[Global instance].calendar components:unitFlags fromDate:eventGroup.groupDate];
+    components = [[NSDate calendar] components:unitFlags fromDate:eventGroup.groupDate];
 
     cell.day.text     = [NSString stringWithFormat:@"%02d", components.day];
     cell.year.text    = [NSString stringWithFormat:@"%04d", components.year];

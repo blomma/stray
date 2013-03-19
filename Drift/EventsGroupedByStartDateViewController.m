@@ -11,7 +11,6 @@
 #import "CAAnimation+Blocks.h"
 #import "Event.h"
 #import "EventsGroupedByStartDateTableViewCell.h"
-#import "Global.h"
 #import "SKBounceAnimation.h"
 #import "TagFilterButton.h"
 #import "Tags.h"
@@ -20,6 +19,7 @@
 #import "UIScrollView+AIPulling.h"
 #import "EventsGroupedByStartDate.h"
 #import "State.h"
+#import "NSDate+Utilities.h"
 
 @interface EventsGroupedByStartDateViewController ()<TransformableTableViewGestureEditingRowDelegate, EventsGroupedByStartDateTableViewCellDelegate>
 

@@ -11,12 +11,12 @@
 #import "Event.h"
 #import "Tag.h"
 #import "TagsTableViewController.h"
-#import "Global.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIImage+Retina4.h"
 #import "PopoverView.h"
 #import "State.h"
 #import "GAI.h"
+#import "NSDate+Utilities.h"
 
 @interface EventViewController ()
 
@@ -187,7 +187,7 @@
 - (void)updateStartLabelWithDate:(NSDate *)date {
 	if (date) {
 		static NSUInteger unitFlags  = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
-		NSDateComponents *components = [[Global instance].calendar components:unitFlags fromDate:date];
+		NSDateComponents *components = [[NSDate calendar] components:unitFlags fromDate:date];
 
 		self.eventStartTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
 		self.eventStartDay.text   = [NSString stringWithFormat:@"%02d", components.day];
@@ -200,7 +200,7 @@
 	if (date && [State instance].selectedEvent.startDate) {
 		static NSUInteger unitFlags  = NSHourCalendarUnit | NSMinuteCalendarUnit;
 
-		NSDateComponents *components = [[Global instance].calendar components:unitFlags fromDate:[State instance].selectedEvent.startDate toDate:date options:0];
+		NSDateComponents *components = [[NSDate calendar] components:unitFlags fromDate:[State instance].selectedEvent.startDate toDate:date options:0];
 
 		if (components.hour != self.previousNowComponents.hour || components.minute != self.previousNowComponents.minute) {
 			self.eventTimeHours.text   = [NSString stringWithFormat:@"%02d", components.hour];
@@ -213,7 +213,7 @@
 - (void)updateStopLabelWithDate:(NSDate *)date {
 	if (date) {
 		static NSUInteger unitFlags  = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
-		NSDateComponents *components = [[Global instance].calendar components:unitFlags fromDate:date];
+		NSDateComponents *components = [[NSDate calendar] components:unitFlags fromDate:date];
 
 		self.eventStopTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
 		self.eventStopDay.text   = [NSString stringWithFormat:@"%02d", components.day];

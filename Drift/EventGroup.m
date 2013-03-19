@@ -8,9 +8,8 @@
 
 #import "EventGroup.h"
 
-#import "NSDate+Utilities.h"
-#import "Global.h"
 #import "Tag.h"
+#import "NSDate+Utilities.h"
 
 @interface EventGroup ()
 
@@ -150,7 +149,7 @@
 - (void)updateFilteredEventsDateComponents {
     static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
 
-    NSDate *endOfDay = [self.groupDate endOfDayWithCalendar:[Global instance].calendar];
+    NSDate *endOfDay = [self.groupDate endOfCurrentDay];
 
     NSDate *deltaStart = [self.groupDate copy];
     NSDate *deltaEnd   = [self.groupDate copy];
@@ -160,20 +159,21 @@
         NSDate *stopDate  = [event isActive] ? [NSDate date] : event.stopDate;
         stopDate = [stopDate earlierDate:endOfDay];
 
-        NSDateComponents *components = [[Global instance].calendar components:unitFlags
-                                                                     fromDate:startDate
-                                                                       toDate:stopDate
-                                                                      options:NSWrapCalendarComponents];
 
-        deltaEnd = [[Global instance].calendar dateByAddingComponents:components
-                                                               toDate:deltaEnd
-                                                              options:0];
+        NSDateComponents *components = [[NSDate calendar] components:unitFlags
+                                                            fromDate:startDate
+                                                              toDate:stopDate
+                                                             options:NSWrapCalendarComponents];
+
+        deltaEnd = [[NSDate calendar] dateByAddingComponents:components
+                                                      toDate:deltaEnd
+                                                     options:0];
     }
 
-    self.filteredEventsDateComponents = [[Global instance].calendar components:unitFlags
-                                                                      fromDate:deltaStart
-                                                                        toDate:deltaEnd
-                                                                       options:0];
+    self.filteredEventsDateComponents = [[NSDate calendar] components:unitFlags
+                                                             fromDate:deltaStart
+                                                               toDate:deltaEnd
+                                                              options:0];
     self.isFilteredEventsDateComponentsInvalid = NO;
 }
 

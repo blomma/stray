@@ -9,7 +9,6 @@
 #import "EventsGroupedByStartDate.h"
 
 #import "NSDate+Utilities.h"
-#import "Global.h"
 #import "EventGroup.h"
 #import "Tag.h"
 
@@ -75,7 +74,7 @@
 #pragma mark Public methods
 
 - (void)addEvent:(Event *)event {
-    NSDate *groupDate = [event.startDate beginningOfDayWithCalendar:[Global instance].calendar];
+    NSDate *groupDate = [event.startDate startOfCurrentDay];
     NSUInteger index  = [self indexForGroupDate:groupDate];
 
     EventGroup *eventGroup = nil;
@@ -125,7 +124,7 @@
         return;
     }
 
-    NSDate *groupDate = [event.startDate beginningOfDayWithCalendar:[Global instance].calendar];
+    NSDate *groupDate = [event.startDate startOfCurrentDay];
 
     if ([eventGroup.groupDate isEqualToDate:groupDate]) {
         [eventGroup updateEvent:event];
@@ -182,7 +181,7 @@
     EventGroup *eventGroup;
     
     for (Event *event in events) {
-        groupDate = [event.startDate beginningOfDayWithCalendar:[Global instance].calendar];
+        groupDate = [event.startDate startOfCurrentDay];
 
         // If groupDate is different from previousGroupDate then we need to create a new eventGroup
         if (![groupDate isEqualToDate:previousGroupDate]) {
