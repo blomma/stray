@@ -8,7 +8,7 @@
 
 #import "InfoHintViewDelegate.h"
 
-@interface EventsGroupedByDateViewController : UIViewController <InfoHintViewDelegate, UITableViewDelegate>
+@interface EventsGroupedByDateViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, InfoHintViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet UIScrollView *filterView;
