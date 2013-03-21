@@ -35,7 +35,9 @@
 
         self.eventToEventGroupsMap = [NSMapTable weakToWeakObjectsMapTable];
 
-        [self addEvents:events];
+        for (Event *event in events) {
+            [self addEvent:event];
+        }
 
         self.filters = filters;
     }
@@ -176,53 +178,52 @@
 #pragma mark -
 #pragma mark Private methods
 
-- (void)addEvents:(NSArray *)events {
-    NSDate *groupDate, *previousGroupDate;
-    EventGroup *eventGroup;
-    
-    for (Event *event in events) {
-        groupDate = [event.startDate startOfCurrentDay];
-
-        // If groupDate is different from previousGroupDate then we need to create a new eventGroup
-        if (![groupDate isEqualToDate:previousGroupDate]) {
-            eventGroup = [[EventGroup alloc] initWithGroupDate:groupDate];
-            [self.eventGroups addObject:eventGroup];
-        }
-
-        [self.eventToEventGroupsMap setObject:eventGroup forKey:event];
-        [eventGroup addEvent:event];
-
-        previousGroupDate = groupDate;
-    }
-
-    self.isFilteredEventGroupsInvalid = YES;
-}
-
 - (NSUInteger)indexForGroupDate:(NSDate *)groupDate {
     NSUInteger index = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
-            if ([[obj groupDate] isEqualToDate:groupDate]) {
+        NSComparisonResult result = [[obj groupDate] compare:groupDate];
+
+        switch (result) {
+            case NSOrderedSame:
                 *stop = YES;
                 return YES;
-            }
-            return NO;
-        }];
+                break;
+
+            case NSOrderedAscending:
+                *stop = YES;
+                return NO;
+                break;
+
+            default:
+                break;
+        }
+
+        return NO;
+    }];
 
     return index;
 }
 
-- (NSUInteger)insertionIndexForGroupDate:(NSDate *)date {
+- (NSUInteger)insertionIndexForGroupDate:(NSDate *)groupDate {
     NSUInteger index = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
-            if ([[obj groupDate] compare:date] == NSOrderedAscending) {
+        NSComparisonResult result = [[obj groupDate] compare:groupDate];
+
+        switch (result) {
+            case NSOrderedAscending:
                 *stop = YES;
                 return YES;
-            }
-            return NO;
-        }];
+                break;
+
+            default:
+                break;
+        }
+
+        return NO;
+    }];
 
     if (index == NSNotFound) {
         index = self.eventGroups.count;
     }
-
+    
     return index;
 }
 
