@@ -60,6 +60,7 @@
 
         for (EventGroup *eventGroup in self.eventGroups) {
             eventGroup.filters = self.filters;
+
             if (eventGroup.filteredEvents.count > 0) {
                 [_filteredEventGroups addObject:eventGroup];
             }
@@ -89,7 +90,7 @@
                                                                    fromDate:startDate
                                                                      toDate:stopDate
                                                                     options:0];
-    
+
     NSDateComponents *totalSecondsComponent = [[NSDateComponents alloc] init];
     totalSecondsComponent.second = 0;
 
@@ -98,7 +99,7 @@
         startDate = [[NSDate calendar] dateByAddingComponents:totalSecondsComponent
                                                        toDate:event.startDate
                                                       options:0];
-        
+
         // Find a EventGroup for this startDate
         NSDate *groupDate = [startDate startOfCurrentDay];
         NSUInteger index  = [self indexForGroupDate:groupDate];
@@ -213,9 +214,21 @@
 
 - (NSUInteger)indexForGroupDate:(NSDate *)groupDate {
     NSUInteger index = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
-        if ([[obj groupDate] isEqualToDate:groupDate]) {
-            *stop = YES;
-            return YES;
+        NSComparisonResult result = [[obj groupDate] compare:groupDate];
+
+        switch (result) {
+            case NSOrderedSame:
+                *stop = YES;
+                return YES;
+                break;
+
+            case NSOrderedAscending:
+                *stop = YES;
+                return NO;
+                break;
+
+            default:
+                break;
         }
 
         return NO;
@@ -224,11 +237,18 @@
     return index;
 }
 
-- (NSUInteger)insertionIndexForGroupDate:(NSDate *)date {
+- (NSUInteger)insertionIndexForGroupDate:(NSDate *)groupDate {
     NSUInteger index = [self.eventGroups indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
-        if ([[obj groupDate] compare:date] == NSOrderedAscending) {
-            *stop = YES;
-            return YES;
+        NSComparisonResult result = [[obj groupDate] compare:groupDate];
+
+        switch (result) {
+            case NSOrderedAscending:
+                *stop = YES;
+                return YES;
+                break;
+
+            default:
+                break;
         }
 
         return NO;
