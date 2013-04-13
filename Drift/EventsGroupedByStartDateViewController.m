@@ -35,12 +35,6 @@
 
 @property (nonatomic, readonly) NSInteger editingCommitLength;
 
-////keep track of the maximum cell index that has been displayed (for the animation, so as we move down the table the cells are animated when they're viewed for the first time - if index is greated than currentMaxDisplayedCell - but then as you scroll back up they're not re-animated.
-//@property (nonatomic) NSInteger currentMaxDisplayedCell;
-//
-////keep track of the maximum cell index that has been displayed (for the animation, so as we move down the table the cells are animated when they're viewed for the first time - if index is greated than currentMaxDisplayedCell - but then as you scroll back up they're not re-animated.
-//@property (nonatomic) NSInteger currentMaxDisplayedSection;
-
 @end
 
 @implementation EventsGroupedByStartDateViewController
@@ -59,7 +53,7 @@
 
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
-    EventsGroupedByStartDateViewController * __weak weakSelf = self;
+    __weak typeof(self) weakSelf = self;
 
 	[self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
         if (state == AIPullingStateAction && (previousState == AIPullingStatePullingAdd || previousState == AIPullingStatePullingClose)) {
@@ -241,29 +235,6 @@
 
 #pragma mark -
 #pragma mark UITableViewDelegate
-
-//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-//
-//    if (indexPath.section > self.currentMaxDisplayedSection){ //first item in a new section, reset the max row count
-//        self.currentMaxDisplayedCell = 0;
-//    }
-//
-//    // This check makes cells only animate the first time you view them (as you're scrolling down) and stops them re-animating as you scroll back up, or scroll past them for a second time.
-//    if (indexPath.section >= self.currentMaxDisplayedSection && indexPath.row >= self.currentMaxDisplayedCell){
-//        // Now make the image view a bit bigger, so we can do a zoomout effect when it becomes visible
-//        cell.contentView.alpha = 0.3f;
-//        cell.contentView.transform = CGAffineTransformMakeScale(1.1f, 1.1f);
-//
-//        [self.tableView bringSubviewToFront:cell.contentView];
-//        [UIView animateWithDuration:0.65f animations:^{
-//            cell.contentView.alpha = 1;
-//            cell.contentView.transform = CGAffineTransformIdentity;
-//        } completion:nil];
-//
-//        self.currentMaxDisplayedCell = indexPath.row;
-//        self.currentMaxDisplayedSection = indexPath.section;
-//    }
-//}
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)section];

@@ -43,7 +43,7 @@
 
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"grabbedTableViewCellIdentifier"];
 
-    TagsTableViewController * __weak weakSelf = self;
+    __weak typeof(self) weakSelf = self;
 
     [self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
         if (state == AIPullingStateAction && previousState == AIPullingStatePullingAdd) {
@@ -51,8 +51,7 @@
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
                 [weakSelf.tableView beginUpdates];
 
-                Tag *tag = [Tag MR_createEntity];
-                [weakSelf.tags insertObject:tag atIndex:0];
+                [weakSelf.tags insertObject:[Tag MR_createEntity] atIndex:0];
                 [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
                                           withRowAnimation:UITableViewRowAnimationTop];
                 [weakSelf.tableView endUpdates];

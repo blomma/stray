@@ -163,7 +163,7 @@ static NSInteger kCellSnapShotTag = 100000;
         // While long press ends, we remove the snapshot imageView
 
         UIImageView *snapShotView = (UIImageView *)[self.tableView viewWithTag:kCellSnapShotTag];
-        TransformableTableViewGestureRecognizer * __weak weakSelf = self;
+        __weak typeof(self) weakSelf = self;
 
         // Stop timer
         [self.movingTimer invalidate];
