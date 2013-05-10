@@ -284,8 +284,6 @@
 		9E42F1DF15570FD60087F602 = {
 			isa = PBXGroup;
 			children = (
-				9ECB5A1C173D29D4006E86F1 /* Security.framework */,
-				9ECB5A1A173D29BA006E86F1 /* CFNetwork.framework */,
 				9E15DDA116023FE4007146CE /* Vendor */,
 				9E42F1F415570FD60087F602 /* Drift */,
 				9E42F1ED15570FD60087F602 /* Frameworks */,
@@ -305,6 +303,8 @@
 		9E42F1ED15570FD60087F602 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9ECB5A1C173D29D4006E86F1 /* Security.framework */,
+				9ECB5A1A173D29BA006E86F1 /* CFNetwork.framework */,
 				9ECB5A18173D29A8006E86F1 /* Dropbox.framework */,
 				9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */,
 				9EC837F816DA0C7500087997 /* SystemConfiguration.framework */,
