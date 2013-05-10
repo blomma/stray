@@ -2,7 +2,7 @@
 //  Crashlytics.h
 //  Crashlytics
 //
-//  Copyright 2013 Crashlytics, Inc. All rights reserved.
+//  Copyright 2012 Crashlytics, Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -148,27 +148,12 @@ OBJC_EXTERN void CLSNSLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
 /**
  * Returns the session identifier for the crash report.
  **/
-@property (nonatomic, readonly) NSString *identifier;
+- (NSString *)identifier;
 
 /**
  * Returns the custom key value data for the crash report.
  **/
-@property (nonatomic, readonly) NSDictionary *customKeys;
-
-/**
- * Returns the CFBundleVersion of the application that crashed.
- **/
-@property (nonatomic, readonly) NSString *bundleVersion;
-
-/**
- * Returns the CFBundleShortVersionString of the application that crashed.
- **/
-@property (nonatomic, readonly) NSString *bundleShortVersionString;
-
-/**
- * Returns the date that the application crashed at.
- **/
-@property (nonatomic, readonly) NSDate *crashedOnDate;
+- (NSDictionary *)customKeys;
 
 @end
 

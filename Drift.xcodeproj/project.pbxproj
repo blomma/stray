@@ -41,7 +41,6 @@
 		9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */; };
 		9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F20015570FD60087F602 /* MainStoryboard.storyboard */; };
 		9E42F22915571E9C0087F602 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F22815571E9C0087F602 /* RootViewController.m */; };
-		9E4A0FED167F57D1006BC207 /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E4A0FEC167F57D1006BC207 /* PopoverView.m */; };
 		9E513DFB163430E90080313A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E513DFA163430E90080313A /* Icon@2x.png */; };
 		9E513DFE163433C70080313A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E513DFD163433C70080313A /* Icon.png */; };
 		9E51511615C7CEF100901655 /* EventGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511315C7CEF100901655 /* EventGroup.m */; };
@@ -75,14 +74,19 @@
 		9E954D84164419F50022D5BE /* UIScrollView+AIPulling.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E954D83164419F50022D5BE /* UIScrollView+AIPulling.m */; };
 		9E96A907163981B600164D76 /* CAAnimation+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E96A90616397DB400164D76 /* CAAnimation+Blocks.m */; };
 		9E9C237815F3617200572FB7 /* EventsGroupedByStartDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C237715F3617100572FB7 /* EventsGroupedByStartDateViewController.m */; };
-		9EA408A516B9C60D008A686B /* SDCloudUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EA408A416B9C60D008A686B /* SDCloudUserDefaults.m */; };
 		9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB520E15C9553C008952FB /* NSDate+Utilities.m */; };
 		9EAE7DEE1603C1C5007F32EC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DED1603C1C5007F32EC /* Default-568h@2x.png */; };
 		9EAE7DF91603D006007F32EC /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DF81603D006007F32EC /* Default@2x.png */; };
 		9EAE7DFB1603D038007F32EC /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DFA1603D038007F32EC /* Default.png */; };
-		9EAF701616367B4600FA079C /* SKBounceAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAF701516367B4600FA079C /* SKBounceAnimation.m */; };
 		9EB15F6F165D6A7F0054AEA2 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB15F6E165D6A7F0054AEA2 /* TagButton.m */; };
 		9EC837F916DA0C7500087997 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EC837F816DA0C7500087997 /* SystemConfiguration.framework */; };
+		9ECB5A0B173D287C006E86F1 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */; };
+		9ECB5A0F173D288B006E86F1 /* SDCloudUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB5A0E173D288B006E86F1 /* SDCloudUserDefaults.m */; };
+		9ECB5A13173D28A2006E86F1 /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB5A12173D28A2006E86F1 /* PopoverView.m */; };
+		9ECB5A17173D28A8006E86F1 /* SKBounceAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB5A16173D28A8006E86F1 /* SKBounceAnimation.m */; };
+		9ECB5A19173D29A9006E86F1 /* Dropbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A18173D29A8006E86F1 /* Dropbox.framework */; };
+		9ECB5A1B173D29BA006E86F1 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A1A173D29BA006E86F1 /* CFNetwork.framework */; };
+		9ECB5A1D173D29D4006E86F1 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A1C173D29D4006E86F1 /* Security.framework */; };
 		9ECF3B7A16EAF4D40097FF37 /* _Compatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7716EAF4D40097FF37 /* _Compatibility.m */; };
 		9ECF3B7B16EAF4D40097FF37 /* Compatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7916EAF4D40097FF37 /* Compatibility.m */; };
 		9ECF3B7E16EAF6290097FF37 /* CompatibilityMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7D16EAF6290097FF37 /* CompatibilityMigration.m */; };
@@ -90,7 +94,6 @@
 		9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCC5CA160DBFA1003CB2BB /* Tag.m */; };
 		9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */; };
 		9EF3311F166569DB005CFEF2 /* TagTableViewCellBackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EF3311E166569DB005CFEF2 /* TagTableViewCellBackView.m */; };
-		9EF331331666A066005CFEF2 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EF331321666A066005CFEF2 /* Crashlytics.framework */; };
 		9EF9909A164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EF99099164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m */; };
 /* End PBXBuildFile section */
 
@@ -133,8 +136,6 @@
 		9E42F22715571E9C0087F602 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = RootViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9E42F22815571E9C0087F602 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RootViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9E472ABF167614C000D32DEB /* InfoHintViewDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InfoHintViewDelegate.h; sourceTree = "<group>"; };
-		9E4A0FEB167F57D1006BC207 /* PopoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverView.h; sourceTree = "<group>"; };
-		9E4A0FEC167F57D1006BC207 /* PopoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverView.m; sourceTree = "<group>"; };
 		9E513DFA163430E90080313A /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
 		9E513DFD163433C70080313A /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../Icon.png; sourceTree = "<group>"; };
 		9E51511215C7CEF100901655 /* EventGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroup.h; sourceTree = "<group>"; };
@@ -188,18 +189,24 @@
 		9E96A90616397DB400164D76 /* CAAnimation+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CAAnimation+Blocks.m"; sourceTree = "<group>"; };
 		9E9C237615F3617100572FB7 /* EventsGroupedByStartDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsGroupedByStartDateViewController.h; sourceTree = "<group>"; };
 		9E9C237715F3617100572FB7 /* EventsGroupedByStartDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventsGroupedByStartDateViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		9EA408A316B9C60D008A686B /* SDCloudUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDCloudUserDefaults.h; sourceTree = "<group>"; };
-		9EA408A416B9C60D008A686B /* SDCloudUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDCloudUserDefaults.m; sourceTree = "<group>"; };
 		9EAB520D15C9553C008952FB /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
 		9EAB520E15C9553C008952FB /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utilities.m"; sourceTree = "<group>"; };
 		9EAE7DED1603C1C5007F32EC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		9EAE7DF81603D006007F32EC /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
 		9EAE7DFA1603D038007F32EC /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
-		9EAF701416367B4600FA079C /* SKBounceAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKBounceAnimation.h; sourceTree = "<group>"; };
-		9EAF701516367B4600FA079C /* SKBounceAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKBounceAnimation.m; sourceTree = "<group>"; };
 		9EB15F6D165D6A7F0054AEA2 /* TagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagButton.h; sourceTree = "<group>"; };
 		9EB15F6E165D6A7F0054AEA2 /* TagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagButton.m; sourceTree = "<group>"; };
 		9EC837F816DA0C7500087997 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Vendor/Crashlytics.framework; sourceTree = "<group>"; };
+		9ECB5A0D173D288B006E86F1 /* SDCloudUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDCloudUserDefaults.h; sourceTree = "<group>"; };
+		9ECB5A0E173D288B006E86F1 /* SDCloudUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDCloudUserDefaults.m; sourceTree = "<group>"; };
+		9ECB5A11173D28A2006E86F1 /* PopoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverView.h; sourceTree = "<group>"; };
+		9ECB5A12173D28A2006E86F1 /* PopoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverView.m; sourceTree = "<group>"; };
+		9ECB5A15173D28A8006E86F1 /* SKBounceAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKBounceAnimation.h; sourceTree = "<group>"; };
+		9ECB5A16173D28A8006E86F1 /* SKBounceAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKBounceAnimation.m; sourceTree = "<group>"; };
+		9ECB5A18173D29A8006E86F1 /* Dropbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Dropbox.framework; path = Vendor/Dropbox.framework; sourceTree = "<group>"; };
+		9ECB5A1A173D29BA006E86F1 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		9ECB5A1C173D29D4006E86F1 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		9ECF3B7616EAF4D40097FF37 /* _Compatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Compatibility.h; sourceTree = "<group>"; };
 		9ECF3B7716EAF4D40097FF37 /* _Compatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Compatibility.m; sourceTree = "<group>"; };
 		9ECF3B7816EAF4D40097FF37 /* Compatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Compatibility.h; sourceTree = "<group>"; };
@@ -215,7 +222,6 @@
 		9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9EF3311D166569DB005CFEF2 /* TagTableViewCellBackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagTableViewCellBackView.h; sourceTree = "<group>"; };
 		9EF3311E166569DB005CFEF2 /* TagTableViewCellBackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagTableViewCellBackView.m; sourceTree = "<group>"; };
-		9EF331321666A066005CFEF2 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		9EF99098164CEA8F00AF6EC4 /* EventsGroupedByStartDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsGroupedByStartDate.h; sourceTree = "<group>"; };
 		9EF99099164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsGroupedByStartDate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -225,14 +231,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9ECB5A1D173D29D4006E86F1 /* Security.framework in Frameworks */,
+				9ECB5A1B173D29BA006E86F1 /* CFNetwork.framework in Frameworks */,
 				9EC837F916DA0C7500087997 /* SystemConfiguration.framework in Frameworks */,
 				9E7EB52D15E8F8C100604B79 /* CoreGraphics.framework in Frameworks */,
 				9E7EB52C15E8F89C00604B79 /* QuartzCore.framework in Frameworks */,
 				9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */,
 				9E42F1EF15570FD60087F602 /* UIKit.framework in Frameworks */,
 				9E42F1F115570FD60087F602 /* Foundation.framework in Frameworks */,
-				9EF331331666A066005CFEF2 /* Crashlytics.framework in Frameworks */,
 				125790D47091430EA9A63B06 /* libPods.a in Frameworks */,
+				9ECB5A0B173D287C006E86F1 /* Crashlytics.framework in Frameworks */,
+				9ECB5A19173D29A9006E86F1 /* Dropbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,9 +274,9 @@
 		9E15DDA116023FE4007146CE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				9EA408A216B9C60D008A686B /* SDCloudUserDefaults */,
-				9E4A0FEA167F57D1006BC207 /* PopoverView */,
-				9EAF701316367B4600FA079C /* SKBounceAnimation */,
+				9ECB5A14173D28A8006E86F1 /* SKBounceAnimation */,
+				9ECB5A10173D28A2006E86F1 /* PopoverView */,
+				9ECB5A0C173D288B006E86F1 /* SDCloudUserDefaults */,
 			);
 			name = Vendor;
 			sourceTree = "<group>";
@@ -275,6 +284,8 @@
 		9E42F1DF15570FD60087F602 = {
 			isa = PBXGroup;
 			children = (
+				9ECB5A1C173D29D4006E86F1 /* Security.framework */,
+				9ECB5A1A173D29BA006E86F1 /* CFNetwork.framework */,
 				9E15DDA116023FE4007146CE /* Vendor */,
 				9E42F1F415570FD60087F602 /* Drift */,
 				9E42F1ED15570FD60087F602 /* Frameworks */,
@@ -294,8 +305,9 @@
 		9E42F1ED15570FD60087F602 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9ECB5A18173D29A8006E86F1 /* Dropbox.framework */,
+				9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */,
 				9EC837F816DA0C7500087997 /* SystemConfiguration.framework */,
-				9EF331321666A066005CFEF2 /* Crashlytics.framework */,
 				9E63BBF3156EAA710006FEFC /* CoreData.framework */,
 				9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */,
 				9E42F1EE15570FD60087F602 /* UIKit.framework */,
@@ -343,15 +355,6 @@
 				9E472ABF167614C000D32DEB /* InfoHintViewDelegate.h */,
 			);
 			name = Protocols;
-			sourceTree = "<group>";
-		};
-		9E4A0FEA167F57D1006BC207 /* PopoverView */ = {
-			isa = PBXGroup;
-			children = (
-				9E4A0FEB167F57D1006BC207 /* PopoverView.h */,
-				9E4A0FEC167F57D1006BC207 /* PopoverView.m */,
-			);
-			path = PopoverView;
 			sourceTree = "<group>";
 		};
 		9E561DE415FBB04D008D3895 /* Controls */ = {
@@ -462,15 +465,6 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		9EA408A216B9C60D008A686B /* SDCloudUserDefaults */ = {
-			isa = PBXGroup;
-			children = (
-				9EA408A316B9C60D008A686B /* SDCloudUserDefaults.h */,
-				9EA408A416B9C60D008A686B /* SDCloudUserDefaults.m */,
-			);
-			path = SDCloudUserDefaults;
-			sourceTree = "<group>";
-		};
 		9EAB520B15C95523008952FB /* Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -490,13 +484,34 @@
 			name = Categories;
 			sourceTree = "<group>";
 		};
-		9EAF701316367B4600FA079C /* SKBounceAnimation */ = {
+		9ECB5A0C173D288B006E86F1 /* SDCloudUserDefaults */ = {
 			isa = PBXGroup;
 			children = (
-				9EAF701416367B4600FA079C /* SKBounceAnimation.h */,
-				9EAF701516367B4600FA079C /* SKBounceAnimation.m */,
+				9ECB5A0D173D288B006E86F1 /* SDCloudUserDefaults.h */,
+				9ECB5A0E173D288B006E86F1 /* SDCloudUserDefaults.m */,
 			);
-			path = SKBounceAnimation;
+			name = SDCloudUserDefaults;
+			path = Vendor/SDCloudUserDefaults;
+			sourceTree = "<group>";
+		};
+		9ECB5A10173D28A2006E86F1 /* PopoverView */ = {
+			isa = PBXGroup;
+			children = (
+				9ECB5A11173D28A2006E86F1 /* PopoverView.h */,
+				9ECB5A12173D28A2006E86F1 /* PopoverView.m */,
+			);
+			name = PopoverView;
+			path = Vendor/PopoverView;
+			sourceTree = "<group>";
+		};
+		9ECB5A14173D28A8006E86F1 /* SKBounceAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				9ECB5A15173D28A8006E86F1 /* SKBounceAnimation.h */,
+				9ECB5A16173D28A8006E86F1 /* SKBounceAnimation.m */,
+			);
+			name = SKBounceAnimation;
+			path = Vendor/SKBounceAnimation;
 			sourceTree = "<group>";
 		};
 		9EF99092164BDCC000AF6EC4 /* Models */ = {
@@ -620,7 +635,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Crashlytics.framework/run a7595f63555bece3a877e50607ecce88bc77984f";
+			shellScript = "./Vendor/Crashlytics.framework/run a7595f63555bece3a877e50607ecce88bc77984f";
 		};
 		D27A1FFFB090419D81A35A1F /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -669,7 +684,6 @@
 				9E14D452162B3D3F008D9E43 /* TagFilterButton.m in Sources */,
 				9E9239DB162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m in Sources */,
 				9E9239DC162D4F9B00E265E6 /* TagTableViewCell.m in Sources */,
-				9EAF701616367B4600FA079C /* SKBounceAnimation.m in Sources */,
 				9E954D84164419F50022D5BE /* UIScrollView+AIPulling.m in Sources */,
 				9EF9909A164CEA8F00AF6EC4 /* EventsGroupedByStartDate.m in Sources */,
 				9E66D0DD16553D6700339E99 /* State.m in Sources */,
@@ -678,12 +692,13 @@
 				9E810ED816762C4100CA2009 /* NSBundle+Retina4.m in Sources */,
 				9E810ED916762C4100CA2009 /* UIImage+Retina4.m in Sources */,
 				9E5DECD4167899B200E21B8E /* InfoHintViewController.m in Sources */,
-				9E4A0FED167F57D1006BC207 /* PopoverView.m in Sources */,
-				9EA408A516B9C60D008A686B /* SDCloudUserDefaults.m in Sources */,
 				9ED7F6C316DD027F0035A6E7 /* Api.m in Sources */,
 				9ECF3B7A16EAF4D40097FF37 /* _Compatibility.m in Sources */,
 				9ECF3B7B16EAF4D40097FF37 /* Compatibility.m in Sources */,
 				9ECF3B7E16EAF6290097FF37 /* CompatibilityMigration.m in Sources */,
+				9ECB5A0F173D288B006E86F1 /* SDCloudUserDefaults.m in Sources */,
+				9ECB5A13173D28A2006E86F1 /* PopoverView.m in Sources */,
+				9ECB5A17173D28A8006E86F1 /* SKBounceAnimation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -798,6 +813,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/Vendor\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
@@ -819,6 +835,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/Vendor\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
@@ -896,6 +913,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/Vendor\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Drift/Drift-Prefix.pch";
