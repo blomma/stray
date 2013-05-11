@@ -13,7 +13,62 @@
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m8r-Is-cfE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="522" y="338"/>
+            <point key="canvasLocation" x="-219" y="-245"/>
+        </scene>
+        <!--PreferencesViewController-->
+        <scene sceneID="Bga-cI-UK1">
+            <objects>
+                <viewController storyboardIdentifier="PreferencesViewController" id="0ON-iK-eBY" userLabel="PreferencesViewController" customClass="PreferencesViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8NK-YZ-fqJ">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Bc6-Qv-Kbq">
+                                <rect key="frame" x="124" y="208" width="73" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Dropbox">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="linkToDropbox:forEvent:" destination="0ON-iK-eBY" eventType="touchUpInside" id="f4Y-y6-DN6"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="4Hq-QV-Bkf">
+                                <rect key="frame" x="124" y="355" width="73" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Unwind">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="9YJ-Hu-QYW" kind="unwind" unwindAction="unwindFromSegue:" id="yE2-hg-cna"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                        <gestureRecognizers/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="N0J-2u-9hS" appends="YES" id="3Xj-xl-iNw"/>
+                        </connections>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="agt-sn-6iJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer cancelsTouchesInView="NO" direction="up" id="N0J-2u-9hS">
+                    <connections>
+                        <segue destination="9YJ-Hu-QYW" kind="unwind" unwindAction="unwindFromSegue:" id="rdV-BY-oxh"/>
+                    </connections>
+                </swipeGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="134" y="-245"/>
         </scene>
         <!--EventViewController-->
         <scene sceneID="HBC-Pb-M3Y">
@@ -150,6 +205,7 @@
                         <gestureRecognizers/>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="wKd-F6-UDR" appends="YES" id="C5f-qc-NP6"/>
+                            <outletCollection property="gestureRecognizers" destination="WTl-Wj-md5" appends="YES" id="iz5-Ed-tNK"/>
                         </connections>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
@@ -172,13 +228,19 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9TD-yZ-86c" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer cancelsTouchesInView="NO" direction="up" id="wKd-F6-UDR">
+                <exit id="9YJ-Hu-QYW" userLabel="Exit" sceneMemberID="exit"/>
+                <swipeGestureRecognizer cancelsTouchesInView="NO" direction="up" id="wKd-F6-UDR" userLabel="SwipeUp">
                     <connections>
                         <segue destination="MkX-Cq-2XK" kind="modal" identifier="segueToEventsFromEvent" id="eOR-jt-riL"/>
                     </connections>
                 </swipeGestureRecognizer>
+                <swipeGestureRecognizer cancelsTouchesInView="NO" direction="down" id="WTl-Wj-md5" userLabel="SwipeDown">
+                    <connections>
+                        <segue destination="0ON-iK-eBY" kind="custom" identifier="SegueSlideDown" customClass="SegueSlideDown" id="4vO-oV-DjV"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="515" y="-245"/>
+            <point key="canvasLocation" x="507" y="-245"/>
         </scene>
         <!--TagsTableViewController-->
         <scene sceneID="zQ2-00-SiN">
@@ -604,7 +666,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5d9-Ya-5JT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="52" y="-328"/>
+            <point key="canvasLocation" x="515" y="324"/>
         </scene>
     </scenes>
     <resources>
@@ -619,6 +681,7 @@
             <relationships>
                 <relationship kind="action" name="showTags:"/>
                 <relationship kind="action" name="toggleEventTouchUpInside:forEvent:"/>
+                <relationship kind="action" name="unwindFromSegue:" candidateClass="UIStoryboardSegue"/>
                 <relationship kind="outlet" name="eventStartDay" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="eventStartMonth" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="eventStartTime" candidateClass="UILabel"/>
@@ -689,6 +752,12 @@
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
             </relationships>
         </class>
+        <class className="PreferencesViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PreferencesViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="linkToDropbox:forEvent:"/>
+            </relationships>
+        </class>
         <class className="RootViewController" superclassName="UIPageViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RootViewController.h"/>
         </class>
@@ -712,6 +781,9 @@
         <class className="TagsTableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TagsTableViewController.h"/>
         </class>
+        <class className="UIStoryboardSegue" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIStoryboardSegue.h"/>
+        </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -719,7 +791,7 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="tQF-pe-67W"/>
-        <segue reference="Mf1-Qw-U8v"/>
+        <segue reference="9uM-fu-hMr"/>
+        <segue reference="mSw-Km-UVG"/>
     </inferredMetricsTieBreakers>
 </document>

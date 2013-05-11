@@ -79,6 +79,7 @@
 		9EAE7DF91603D006007F32EC /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DF81603D006007F32EC /* Default@2x.png */; };
 		9EAE7DFB1603D038007F32EC /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DFA1603D038007F32EC /* Default.png */; };
 		9EB15F6F165D6A7F0054AEA2 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB15F6E165D6A7F0054AEA2 /* TagButton.m */; };
+		9EC7253D173D8A160090B1D5 /* PreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EC7253C173D8A160090B1D5 /* PreferencesViewController.m */; };
 		9EC837F916DA0C7500087997 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EC837F816DA0C7500087997 /* SystemConfiguration.framework */; };
 		9ECB5A0B173D287C006E86F1 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */; };
 		9ECB5A0F173D288B006E86F1 /* SDCloudUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB5A0E173D288B006E86F1 /* SDCloudUserDefaults.m */; };
@@ -205,6 +206,8 @@
 		9EAE7DFA1603D038007F32EC /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
 		9EB15F6D165D6A7F0054AEA2 /* TagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagButton.h; sourceTree = "<group>"; };
 		9EB15F6E165D6A7F0054AEA2 /* TagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagButton.m; sourceTree = "<group>"; };
+		9EC7253B173D8A160090B1D5 /* PreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesViewController.h; sourceTree = "<group>"; };
+		9EC7253C173D8A160090B1D5 /* PreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesViewController.m; sourceTree = "<group>"; };
 		9EC837F816DA0C7500087997 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Vendor/Crashlytics.framework; sourceTree = "<group>"; };
 		9ECB5A0D173D288B006E86F1 /* SDCloudUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDCloudUserDefaults.h; sourceTree = "<group>"; };
@@ -444,6 +447,8 @@
 				9E2CFDE8162190E8004D9D8D /* TagsTableViewController.m */,
 				9E5DECD2167899B200E21B8E /* InfoHintViewController.h */,
 				9E5DECD3167899B200E21B8E /* InfoHintViewController.m */,
+				9EC7253B173D8A160090B1D5 /* PreferencesViewController.h */,
+				9EC7253C173D8A160090B1D5 /* PreferencesViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -752,6 +757,7 @@
 				9ECB5A0F173D288B006E86F1 /* SDCloudUserDefaults.m in Sources */,
 				9ECB5A13173D28A2006E86F1 /* PopoverView.m in Sources */,
 				9ECB5A17173D28A8006E86F1 /* SKBounceAnimation.m in Sources */,
+				9EC7253D173D8A160090B1D5 /* PreferencesViewController.m in Sources */,
 				9ECF0B1C173D962B008DF575 /* SegueSlide.m in Sources */,
 				9ECF0B1D173D962B008DF575 /* SegueSlideLeft.m in Sources */,
 				9ECF0B1E173D962B008DF575 /* SegueSlideUp.m in Sources */,

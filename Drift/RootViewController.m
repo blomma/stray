@@ -35,7 +35,7 @@
     self.dataModel = @[
         [self.storyboard instantiateViewControllerWithIdentifier:@"EventViewController"],
         [self.storyboard instantiateViewControllerWithIdentifier:@"EventsGroupedByDateViewController"]
-        ];
+                     ];
 
     self.dataSource = self;
     self.delegate   = self;
@@ -70,7 +70,7 @@
         [button setTitle:@"\u2753" forState:UIControlStateNormal];
 
         button.frame = CGRectMake(self.view.bounds.size.width - 30, self.view.bounds.size.height - 30, 30, 30);
-        
+
         [self.view addSubview:button];
 
         self.isInited = YES;

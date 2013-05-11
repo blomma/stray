@@ -35,5 +35,6 @@
 
 - (IBAction)showTags:(id)sender;
 - (IBAction)toggleEventTouchUpInside:(id)sender forEvent:(UIEvent *)event;
+- (IBAction)unwindFromSegue:(UIStoryboardSegue *)segue;
 
 @end

@@ -17,6 +17,7 @@
 #import "State.h"
 #import "GAI.h"
 #import "NSDate+Utilities.h"
+#import "UnwindSegueSlideDown.h"
 
 @interface EventViewController ()
 
@@ -101,6 +102,9 @@
     } else if ([segue.identifier isEqualToString:@"segueToEventsFromEvent"]) {
         [[segue destinationViewController] setDelegate:self];
     }
+}
+
+- (IBAction)unwindFromSegue:(UIStoryboardSegue *)segue {
 }
 
 #pragma mark -
