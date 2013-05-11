@@ -41,7 +41,7 @@
 }
 
 - (IBAction)linkToDropbox:(id)sender forEvent:(UIEvent *)event {
-    [[DBAccountManager sharedManager] linkFromController:self];
+    [[DBAccountManager sharedManager] linkFromController:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
 }
 
 @end
