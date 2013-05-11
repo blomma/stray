@@ -87,6 +87,15 @@
 		9ECB5A19173D29A9006E86F1 /* Dropbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A18173D29A8006E86F1 /* Dropbox.framework */; };
 		9ECB5A1B173D29BA006E86F1 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A1A173D29BA006E86F1 /* CFNetwork.framework */; };
 		9ECB5A1D173D29D4006E86F1 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A1C173D29D4006E86F1 /* Security.framework */; };
+		9ECF0B1C173D962B008DF575 /* SegueSlide.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF0B11173D962B008DF575 /* SegueSlide.m */; };
+		9ECF0B1D173D962B008DF575 /* SegueSlideLeft.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF0B13173D962B008DF575 /* SegueSlideLeft.m */; };
+		9ECF0B1E173D962B008DF575 /* SegueSlideUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF0B15173D962B008DF575 /* SegueSlideUp.m */; };
+		9ECF0B1F173D962B008DF575 /* UnwindSegueSlide.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF0B17173D962B008DF575 /* UnwindSegueSlide.m */; };
+		9ECF0B20173D962B008DF575 /* UnwindSegueSlideDown.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF0B19173D962B008DF575 /* UnwindSegueSlideDown.m */; };
+		9ECF0B21173D962B008DF575 /* UnwindSegueSlideRight.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF0B1B173D962B008DF575 /* UnwindSegueSlideRight.m */; };
+		9ECF0B24173D9721008DF575 /* SegueSlideDown.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF0B23173D9721008DF575 /* SegueSlideDown.m */; };
+		9ECF0B27173D9789008DF575 /* UnwindSegueSlideUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF0B26173D9789008DF575 /* UnwindSegueSlideUp.m */; };
+		9ECF0B2A173D97DF008DF575 /* BaseCustomSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF0B29173D97DF008DF575 /* BaseCustomSegue.m */; };
 		9ECF3B7A16EAF4D40097FF37 /* _Compatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7716EAF4D40097FF37 /* _Compatibility.m */; };
 		9ECF3B7B16EAF4D40097FF37 /* Compatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7916EAF4D40097FF37 /* Compatibility.m */; };
 		9ECF3B7E16EAF6290097FF37 /* CompatibilityMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7D16EAF6290097FF37 /* CompatibilityMigration.m */; };
@@ -207,6 +216,24 @@
 		9ECB5A18173D29A8006E86F1 /* Dropbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Dropbox.framework; path = Vendor/Dropbox.framework; sourceTree = "<group>"; };
 		9ECB5A1A173D29BA006E86F1 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		9ECB5A1C173D29D4006E86F1 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		9ECF0B10173D962B008DF575 /* SegueSlide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SegueSlide.h; sourceTree = "<group>"; };
+		9ECF0B11173D962B008DF575 /* SegueSlide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SegueSlide.m; sourceTree = "<group>"; };
+		9ECF0B12173D962B008DF575 /* SegueSlideLeft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SegueSlideLeft.h; sourceTree = "<group>"; };
+		9ECF0B13173D962B008DF575 /* SegueSlideLeft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SegueSlideLeft.m; sourceTree = "<group>"; };
+		9ECF0B14173D962B008DF575 /* SegueSlideUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SegueSlideUp.h; sourceTree = "<group>"; };
+		9ECF0B15173D962B008DF575 /* SegueSlideUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SegueSlideUp.m; sourceTree = "<group>"; };
+		9ECF0B16173D962B008DF575 /* UnwindSegueSlide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnwindSegueSlide.h; sourceTree = "<group>"; };
+		9ECF0B17173D962B008DF575 /* UnwindSegueSlide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnwindSegueSlide.m; sourceTree = "<group>"; };
+		9ECF0B18173D962B008DF575 /* UnwindSegueSlideDown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnwindSegueSlideDown.h; sourceTree = "<group>"; };
+		9ECF0B19173D962B008DF575 /* UnwindSegueSlideDown.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnwindSegueSlideDown.m; sourceTree = "<group>"; };
+		9ECF0B1A173D962B008DF575 /* UnwindSegueSlideRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnwindSegueSlideRight.h; sourceTree = "<group>"; };
+		9ECF0B1B173D962B008DF575 /* UnwindSegueSlideRight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnwindSegueSlideRight.m; sourceTree = "<group>"; };
+		9ECF0B22173D9721008DF575 /* SegueSlideDown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SegueSlideDown.h; sourceTree = "<group>"; };
+		9ECF0B23173D9721008DF575 /* SegueSlideDown.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SegueSlideDown.m; sourceTree = "<group>"; };
+		9ECF0B25173D9789008DF575 /* UnwindSegueSlideUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnwindSegueSlideUp.h; sourceTree = "<group>"; };
+		9ECF0B26173D9789008DF575 /* UnwindSegueSlideUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnwindSegueSlideUp.m; sourceTree = "<group>"; };
+		9ECF0B28173D97DF008DF575 /* BaseCustomSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseCustomSegue.h; sourceTree = "<group>"; };
+		9ECF0B29173D97DF008DF575 /* BaseCustomSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseCustomSegue.m; sourceTree = "<group>"; };
 		9ECF3B7616EAF4D40097FF37 /* _Compatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Compatibility.h; sourceTree = "<group>"; };
 		9ECF3B7716EAF4D40097FF37 /* _Compatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Compatibility.m; sourceTree = "<group>"; };
 		9ECF3B7816EAF4D40097FF37 /* Compatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Compatibility.h; sourceTree = "<group>"; };
@@ -424,6 +451,7 @@
 		9E9C232F15F2895000572FB7 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				9ECF0B0F173D9618008DF575 /* Segue */,
 				9E15AB76163C6D1C006D16B3 /* TableViewCells */,
 				9E96FCE016359F8600AB5B0A /* TransformableTableView */,
 				9E63E1D515EA3338009C0A2D /* NoHitCAShapeLayer.h */,
@@ -512,6 +540,31 @@
 			);
 			name = SKBounceAnimation;
 			path = Vendor/SKBounceAnimation;
+			sourceTree = "<group>";
+		};
+		9ECF0B0F173D9618008DF575 /* Segue */ = {
+			isa = PBXGroup;
+			children = (
+				9ECF0B28173D97DF008DF575 /* BaseCustomSegue.h */,
+				9ECF0B29173D97DF008DF575 /* BaseCustomSegue.m */,
+				9ECF0B10173D962B008DF575 /* SegueSlide.h */,
+				9ECF0B11173D962B008DF575 /* SegueSlide.m */,
+				9ECF0B12173D962B008DF575 /* SegueSlideLeft.h */,
+				9ECF0B13173D962B008DF575 /* SegueSlideLeft.m */,
+				9ECF0B14173D962B008DF575 /* SegueSlideUp.h */,
+				9ECF0B15173D962B008DF575 /* SegueSlideUp.m */,
+				9ECF0B22173D9721008DF575 /* SegueSlideDown.h */,
+				9ECF0B23173D9721008DF575 /* SegueSlideDown.m */,
+				9ECF0B16173D962B008DF575 /* UnwindSegueSlide.h */,
+				9ECF0B17173D962B008DF575 /* UnwindSegueSlide.m */,
+				9ECF0B25173D9789008DF575 /* UnwindSegueSlideUp.h */,
+				9ECF0B26173D9789008DF575 /* UnwindSegueSlideUp.m */,
+				9ECF0B18173D962B008DF575 /* UnwindSegueSlideDown.h */,
+				9ECF0B19173D962B008DF575 /* UnwindSegueSlideDown.m */,
+				9ECF0B1A173D962B008DF575 /* UnwindSegueSlideRight.h */,
+				9ECF0B1B173D962B008DF575 /* UnwindSegueSlideRight.m */,
+			);
+			name = Segue;
 			sourceTree = "<group>";
 		};
 		9EF99092164BDCC000AF6EC4 /* Models */ = {
@@ -699,6 +752,15 @@
 				9ECB5A0F173D288B006E86F1 /* SDCloudUserDefaults.m in Sources */,
 				9ECB5A13173D28A2006E86F1 /* PopoverView.m in Sources */,
 				9ECB5A17173D28A8006E86F1 /* SKBounceAnimation.m in Sources */,
+				9ECF0B1C173D962B008DF575 /* SegueSlide.m in Sources */,
+				9ECF0B1D173D962B008DF575 /* SegueSlideLeft.m in Sources */,
+				9ECF0B1E173D962B008DF575 /* SegueSlideUp.m in Sources */,
+				9ECF0B1F173D962B008DF575 /* UnwindSegueSlide.m in Sources */,
+				9ECF0B20173D962B008DF575 /* UnwindSegueSlideDown.m in Sources */,
+				9ECF0B21173D962B008DF575 /* UnwindSegueSlideRight.m in Sources */,
+				9ECF0B24173D9721008DF575 /* SegueSlideDown.m in Sources */,
+				9ECF0B27173D9789008DF575 /* UnwindSegueSlideUp.m in Sources */,
+				9ECF0B2A173D97DF008DF575 /* BaseCustomSegue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
