@@ -10,6 +10,10 @@
             <objects>
                 <pageViewController storyboardIdentifier="RootViewController" autoresizesArchivedViewToFullSize="NO" title="Root View" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="ftN-u6-d28" userLabel="RootViewController" customClass="RootViewController" sceneMemberID="viewController">
                     <nil key="simulatedStatusBarMetrics"/>
+                    <connections>
+                        <segue destination="BUI-Lx-VWJ" kind="modal" identifier="segueToInfoHintView" id="vjV-x8-epP"/>
+                        <segue destination="0ON-iK-eBY" kind="modal" identifier="segueToPreferences" id="qgz-YQ-lEQ"/>
+                    </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m8r-Is-cfE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -20,7 +24,7 @@
             <objects>
                 <viewController storyboardIdentifier="PreferencesViewController" id="0ON-iK-eBY" userLabel="PreferencesViewController" customClass="PreferencesViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8NK-YZ-fqJ">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Bc6-Qv-Kbq">
@@ -56,17 +60,9 @@
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="N0J-2u-9hS" appends="YES" id="3Xj-xl-iNw"/>
-                        </connections>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="agt-sn-6iJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer cancelsTouchesInView="NO" direction="up" id="N0J-2u-9hS">
-                    <connections>
-                        <segue destination="9YJ-Hu-QYW" kind="unwind" unwindAction="unwindFromSegue:" id="rdV-BY-oxh"/>
-                    </connections>
-                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="134" y="-245"/>
         </scene>
@@ -205,7 +201,6 @@
                         <gestureRecognizers/>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="wKd-F6-UDR" appends="YES" id="C5f-qc-NP6"/>
-                            <outletCollection property="gestureRecognizers" destination="WTl-Wj-md5" appends="YES" id="iz5-Ed-tNK"/>
                         </connections>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
@@ -224,7 +219,6 @@
                         <outlet property="tag" destination="gZy-kP-gXw" id="lcQ-12-LHh"/>
                         <outlet property="toggleStartStopButton" destination="dP9-OE-O85" id="ZPS-ao-uD9"/>
                         <segue destination="rGB-yR-mDw" kind="modal" identifier="segueToTagsFromEvent" id="9uM-fu-hMr"/>
-                        <segue destination="BUI-Lx-VWJ" kind="modal" identifier="segueToInfoHintViewFromEvent" id="mSw-Km-UVG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9TD-yZ-86c" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -232,11 +226,6 @@
                 <swipeGestureRecognizer cancelsTouchesInView="NO" direction="up" id="wKd-F6-UDR" userLabel="SwipeUp">
                     <connections>
                         <segue destination="MkX-Cq-2XK" kind="modal" identifier="segueToEventsFromEvent" id="eOR-jt-riL"/>
-                    </connections>
-                </swipeGestureRecognizer>
-                <swipeGestureRecognizer cancelsTouchesInView="NO" direction="down" id="WTl-Wj-md5" userLabel="SwipeDown">
-                    <connections>
-                        <segue destination="0ON-iK-eBY" kind="custom" identifier="SegueSlideDown" customClass="SegueSlideDown" id="4vO-oV-DjV"/>
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
@@ -380,7 +369,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q6i-so-y2d" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="873" y="-826"/>
+            <point key="canvasLocation" x="-219" y="-825"/>
         </scene>
         <!--EventsGroupedByDateViewController-->
         <scene sceneID="aWJ-lh-tEK">
@@ -481,7 +470,6 @@
                     <connections>
                         <outlet property="filterView" destination="nQy-aQ-EHb" id="Btj-nL-koh"/>
                         <outlet property="tableView" destination="Bla-gS-XRc" id="Pdu-8Z-Ze9"/>
-                        <segue destination="BUI-Lx-VWJ" kind="modal" identifier="segueToInfoHintViewFromEventGroups" id="Mf1-Qw-U8v"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W9f-Gb-0ky" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -792,6 +780,5 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="9uM-fu-hMr"/>
-        <segue reference="mSw-Km-UVG"/>
     </inferredMetricsTieBreakers>
 </document>

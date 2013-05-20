@@ -22,6 +22,7 @@
 @interface EventViewController ()
 
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
+@property (nonatomic) dispatch_queue_t backgroundQueue;
 
 @end
 
@@ -31,6 +32,7 @@
     [super viewDidLoad];
 
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
+    self.backgroundQueue = dispatch_queue_create("com.artsoftheinsane.Stray.bgqueue", NULL);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -118,14 +120,6 @@
 - (void)eventsGroupedByStartDateViewControllerDidDimiss {
     [self dismissViewControllerAnimated:YES
                              completion:nil];
-}
-
-#pragma mark -
-#pragma mark InfoViewDelegate
-
-- (void)showInfoHintView:(UIView *)view {
-    [self performSegueWithIdentifier:@"segueToInfoHintViewFromEvent"
-                              sender:self];
 }
 
 #pragma mark -

@@ -4,6 +4,7 @@
 #import "_Event.h"
 
 const struct EventAttributes EventAttributes = {
+	.exported = @"exported",
 	.guid = @"guid",
 	.startDate = @"startDate",
 	.stopDate = @"stopDate",
@@ -42,9 +43,40 @@ const struct EventFetchedProperties EventFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"exportedValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"exported"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic exported;
+
+
+
+- (BOOL)exportedValue {
+	NSNumber *result = [self exported];
+	return [result boolValue];
+}
+
+- (void)setExportedValue:(BOOL)value_ {
+	[self setExported:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveExportedValue {
+	NSNumber *result = [self primitiveExported];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveExportedValue:(BOOL)value_ {
+	[self setPrimitiveExported:[NSNumber numberWithBool:value_]];
+}
+
 
 
 

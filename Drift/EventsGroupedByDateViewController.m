@@ -71,13 +71,6 @@
 }
 
 #pragma mark -
-#pragma mark Private properties
-
-- (void)showInfoHintView:(UIView *)view {
-    [self performSegueWithIdentifier:@"segueToInfoHintViewFromEventGroups" sender:self];
-}
-
-#pragma mark -
 #pragma mark Public properties
 
 - (EventsGroupedByDate *)eventGroups {

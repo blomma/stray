@@ -9,12 +9,14 @@
 #import "RootViewController.h"
 
 #import "UIPageViewController+UIPageControl.h"
-#import "InfoHintViewDelegate.h"
+#import <FontAwesomeKit.h>
+#import <HMSideMenu.h>
+#import "IconView.h"
 
 @interface RootViewController ()
 
 @property (nonatomic) NSArray *dataModel;
-@property (nonatomic) BOOL isInited;
+@property (nonatomic) HMSideMenu *sideMenu;
 
 @end
 
@@ -23,13 +25,11 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
     }
     return self;
 }
 
 - (void)viewDidLoad {
-    // Do any additional setup after loading the view, typically from a nib.
     [super viewDidLoad];
 
     self.dataModel = @[
@@ -49,37 +49,66 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    if (!self.isInited) {
-        // Try and set the background of the pagecontroller if one is present
+    static dispatch_once_t once;
+    dispatch_once(&once, ^{
         self.view.backgroundColor                      = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
         self.pageControl.backgroundColor               = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
         self.pageControl.pageIndicatorTintColor        = [UIColor colorWithWhite:0.267 alpha:0.2];
         self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithWhite:0.267 alpha:0.8];
 
         UIButton *button = [[UIButton alloc] init];
-        [button addTarget:self action:@selector(touchUpInsideInfoButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:self
+                   action:@selector(touchUpInsideInfoButton:forEvent:)
+         forControlEvents:UIControlEventTouchUpInside];
 
-        button.titleLabel.font = [UIFont fontWithName:@"Entypo" size:30];
-
+        button.titleLabel.font = [FontAwesomeKit fontWithSize:30];
         button.titleLabel.backgroundColor = [UIColor clearColor];
         button.titleLabel.lineBreakMode   = NSLineBreakByTruncatingTail;
 
         button.backgroundColor = [UIColor clearColor];
 
-        [button setTitleColor:[UIColor colorWithWhite:0.510f alpha:1.000] forState:UIControlStateNormal];
-        [button setTitle:@"\u2753" forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor colorWithWhite:0.510f alpha:1.000]
+                     forState:UIControlStateNormal];
+        [button setTitle:FAKIconOkCircle
+                forState:UIControlStateNormal];
 
         button.frame = CGRectMake(self.view.bounds.size.width - 30, self.view.bounds.size.height - 30, 30, 30);
 
         [self.view addSubview:button];
 
-        self.isInited = YES;
-    }
+        __weak typeof(self) weakSelf = self;
+        IconView *settingsItem = [[IconView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
+        settingsItem.backgroundColor = [UIColor clearColor];
+        settingsItem.font = [FontAwesomeKit fontWithSize:40];
+        settingsItem.text = FAKIconCogs;
+        settingsItem.editable = NO;
+        [settingsItem setMenuActionWithBlock:^{
+            [weakSelf.sideMenu close];
+            [weakSelf performSegueWithIdentifier:@"segueToPreferences"
+                                          sender:self];
+        }];
+
+        IconView *infoItem = [[IconView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
+        infoItem.backgroundColor = [UIColor clearColor];
+        infoItem.font = [FontAwesomeKit fontWithSize:40];
+        infoItem.text = FAKIconInfoSign;
+        infoItem.editable = NO;
+        [infoItem setMenuActionWithBlock:^{
+            [weakSelf.sideMenu close];
+            [weakSelf performSegueWithIdentifier:@"segueToInfoHintView"
+                                          sender:self];
+        }];
+
+        self.sideMenu = [[HMSideMenu alloc] initWithItems:@[settingsItem, infoItem]];
+        [self.sideMenu setItemSpacing:10.0f];
+        self.sideMenu.menuPosition = HMSideMenuPositionBottom;
+
+        [self.view addSubview:self.sideMenu];
+    });
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark -
@@ -112,20 +141,13 @@
 }
 
 #pragma mark -
-#pragma mark UIPageViewControllerDelegate
-
-#pragma mark -
 #pragma mark Private methods
 
 - (void)touchUpInsideInfoButton:(UIButton *)sender forEvent:(UIEvent *)event {
-    NSArray *views = self.viewControllers;
-
-    UIViewController *viewController = [views objectAtIndex:0];
-
-    if ([viewController conformsToProtocol:@protocol(InfoHintViewDelegate)]) {
-        id<InfoHintViewDelegate> p = (id<InfoHintViewDelegate>)viewController;
-        [p showInfoHintView:self.view];
-    }
+    if (self.sideMenu.isOpen)
+        [self.sideMenu close];
+    else
+        [self.sideMenu open];
 }
 
 @end

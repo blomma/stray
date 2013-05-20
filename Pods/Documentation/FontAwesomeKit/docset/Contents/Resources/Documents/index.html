@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>FontAwesomeKit HEAD based on 1.1.2 Reference</title>
+		<link rel="stylesheet" type="text/css" href="css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.1 (build 840)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="index.html">FontAwesomeKit HEAD based on 1.1.2 </a></h1>
+				<a id="developerHome" href="index.html">Pride Chung</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">FontAwesomeKit HEAD based on 1.1.2 Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar"></ul>
+		</header>
+		<article>
+			<div id="overview_contents" role="main">
+				<div class="main-navigation navigation-top">
+					<a href="hierarchy.html">Next</a>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">FontAwesomeKit HEAD based on 1.1.2 Reference</h1>
+					</div>		
+				</div>
+				<div id="container">
+					
+					<div class="section section-overview index-overview">
+						
+						
+						<h1><a href="Classes/FontAwesomeKit.html">FontAwesomeKit</a></h1>
+
+<p>Simple helper for using Font-Awesome on iOS.</p>
+
+<p>!<a href="https://raw.github.com/PrideChung/FontAwesomeKit/master/screenshot.png">image</a></p>
+
+<h2>What is Font-Awesome</h2>
+
+<p><a href="http://fortawesome.github.com/Font-Awesome/">Font-Awesome</a> is a set of iconic fonts used in Twitter Bootstrap.</p>
+
+<h2>Installation</h2>
+
+<h4>Requirements</h4>
+
+<ul>
+<li>Xcode 4.5 +</li>
+<li>iOS 5.0 +</li>
+<li>ARC enabled</li>
+<li>CoreText framework</li>
+</ul>
+
+
+<h3>via CocoaPods (recommended)</h3>
+
+<p>Add <code>pod 'FontAwesomeKit'</code> to your Podfile, then run <code>pod update</code></p>
+
+<h3>Manully</h3>
+
+<p>Download source code, then drag the folder <a href="Classes/FontAwesomeKit.html"><code>FontAwesomeKit</code></a> into your project, add CoreText framework to you project.</p>
+
+<h2>Example Usage</h2>
+
+<h3>Using Font-Awesome on UIBarButtonItem</h3>
+
+<p>```objective-c
+self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:FAKIconRefresh</p>
+
+<pre><code>                                                                      style:UIBarButtonItemStyleBordered
+                                                                     target:nil
+                                                                     action:nil];
+</code></pre>
+
+<p>[self.navigationItem.rightBarButtonItem setTitleTextAttributes:@{UITextAttributeFont:[FontAwesomeKit fontWithSize:20]}</p>
+
+<pre><code>                                 forState:UIControlStateNormal];
+</code></pre>
+
+<p>```</p>
+
+<h3>Get an UIImage of an icon so you can use it on tabbar</h3>
+
+<p>```objective-c
+UIImage *tabBarIcon = [<a href="Classes/FontAwesomeKit.html">FontAwesomeKit</a> imageForIcon:FAKIconHeart</p>
+
+<pre><code>                                     imageSize:CGSizeMake(30, 30)
+                                      fontSize:29
+                                    attributes:nil];
+</code></pre>
+
+<p>self.tabBarItem.image = tabBarIcon;
+self.tabBarItem.title = @&ldquo;Title you like&rdquo;;
+```</p>
+
+<h3>Get a linear gradient pattern image</h3>
+
+<p>```objective-c
+// Notice that we use CGColor here like using CAGradientLayer
+NSArray *colors = @[(id)[UIColor colorWithHue:59.0/360 saturation:0.2 brightness:1.0 alpha:1.0].CGColor,</p>
+
+<pre><code>             (id)[UIColor colorWithHue:59.0/360 saturation:1.0 brightness:1.0 alpha:1.0].CGColor,
+             (id)[UIColor colorWithHue:59.0/360 saturation:0.8 brightness:0.8 alpha:1.0].CGColor];
+</code></pre>
+
+<p>// Gradient stops, from 0.0 to 1.0, values must be monotonically increasing
+NSArray <em>locations = @[@0.2, @0.8, @1.0];
+UIImage </em>gradientPattern = [<a href="Classes/FontAwesomeKit.html">FontAwesomeKit</a> linearGradientImageWithSize:CGSizeMake(45, 45)</p>
+
+<pre><code>                                                                colors:colors
+                                                             locations:locations];
+</code></pre>
+
+<p>```</p>
+
+<h4>Related methods</h4>
+
+<p>Gives you control about where to start and stop the gradient.<br/>
+```objective-c
++ (UIImage *)linearGradientImageWithSize:(CGSize)size</p>
+
+<pre><code>                              colors:(NSArray *)colors
+                           locations:(NSArray *)locations
+                          startPoint:(CGPoint)startPoint
+                            endPoint:(CGPoint)endPoint;
+</code></pre>
+
+<p>```</p>
+
+<p>Omit the locations parameter, the first color in colors is assigned to location 0, the last color in colors is assigned to location 1, and intervening colors are assigned locations that are at equal intervals in between.<br/>
+```objective-c
++ (UIImage *)linearGradientImageWithSize:(CGSize)size</p>
+
+<pre><code>                              colors:(NSArray *)colors;
+</code></pre>
+
+<p>```</p>
+
+<h3>Get a radial gradient pattern image</h3>
+
+<p>```objective-c
+NSArray *colors = @[(id)[UIColor colorWithHue:111.0/360 saturation:1.0 brightness:1.0 alpha:1.0].CGColor,</p>
+
+<pre><code>            (id)[UIColor colorWithHue:111.0/360 saturation:1.0 brightness:0.7 alpha:1.0].CGColor];
+</code></pre>
+
+<p>CGPoint centerPoint = CGPointMake(45.0/2 &ndash; 5, 45.0/2);
+gradientPattern = [<a href="Classes/FontAwesomeKit.html">FontAwesomeKit</a> radialGradientImageWithSize:CGSizeMake(45, 45)</p>
+
+<pre><code>                                                   colors:colors // Gradient colors
+                                                locations:locations // Gradient stops
+                                              startCenter:centerPoint // The coordinate that defines the center of the starting circle.
+                                              startRadius:1.0 // The radius of the starting circle.
+                                                endCenter:centerPoint // The coordinate that defines the center of the ending circle.
+                                                endRadius:27]; // The radius of the ending circle.
+</code></pre>
+
+<p>```</p>
+
+<h3>Use gradient pattern image as Forgeground color on icon</h3>
+
+<p>```objective-c
+NSDictionary <em>attr =@{FAKImageAttributeForegroundColor:[UIColor colorWithPatternImage:gradientPattern]};
+UIImage </em>gradientIcon = [<a href="Classes/FontAwesomeKit.html">FontAwesomeKit</a> imageForIcon:FAKIconGithub</p>
+
+<pre><code>                                       imageSize:CGSizeMake(45, 45)
+                                        fontSize:45
+                                      attributes:githubAttr]; // Available attributes are listed below
+</code></pre>
+
+<p>```</p>
+
+<p><strong>Available attributes:</strong> (Both are optional, use default value if you don&rsquo;t specify)</p>
+
+<h6>FAKImageAttributeRect</h6>
+
+<p>The value of this attribute is a NSValue object containing a CGRect structure, the icon will be draw in this CGRect. You can wrap a CGRect structure into NSValue object like this:
+<code>NSValue *rectValue = [NSValue valueWithCGRect:aCGRect];</code><br/>
+<em>Default: Center the icon in both directions.</em></p>
+
+<h6>FAKImageAttributeForegroundColor</h6>
+
+<p>The value of this attribute is an UIColor object. Use this attribute to specify the color of the icon.<br/>
+<em>Default: Black color.</em></p>
+
+<h6>FAKImageAttributeBackgroundColor</h6>
+
+<p>The value of this attribute is an UIColor object. Use this attribute to specify the color of the background area behind the icon.<br/>
+<em>Default: Transparent color.</em></p>
+
+<h6>FAKImageAttributeFont</h6>
+
+<p>The value of this attribute is an UIFont object. Use this attribute to specify the icon font you want to use. You can pass the value to use another icon font.<br/>
+<em>Default: Use FontAwesome.</em></p>
+
+<h6>FAKImageAttributeShadow</h6>
+
+<p>The value of this attribute is an NSDictionary object. Use this attribute to specify the shadow you want to use.
+There are two required parameters &amp; an optional one:
+&ndash; Shadow Offset (<code>FAKShadowAttributeOffset</code>) : Pass a <code>CGSize</code> wrapped into an <code>NSValue</code> (see <code>FAKImageAttributeRect</code>)
+&ndash; Shadow Blur (<code>FAKShadowAttributeBlur</code>) : Pass an <code>NSNumber</code> (for example <code>@(1.0f)</code>)
+&ndash; Shadow Color (<code>FAKShadowAttributeColor</code>) [optional] : Pass a <code>UIColor</code> (the default is Black)</p>
+
+<p><em>Default: No Shadow.</em></p>
+
+<h2>Change Log</h2>
+
+<ul>
+<li>1.1.2 Add Font-Awesome 3.1.1 support. 54 new icon added.</li>
+<li>1.1.1 Add Shadows option while drawing icons on image.</li>
+</ul>
+
+
+<h2>Contributors</h2>
+
+<ul>
+<li><a href="https://github.com/alladinian">alladinian</a></li>
+</ul>
+
+
+<p><a href="https://github.com/PrideChung/FontAwesomeKit/contributors">Contribute list</a></p>
+
+<h2>License</h2>
+
+<p><a href="Classes/FontAwesomeKit.html">FontAwesomeKit</a> is available under the MIT license. See the LICENSE file for more information.</p>
+						
+						
+					</div>
+					
+                        
+                    
+					
+					
+					<div class="index-column">
+						<h2 class="index-title">Class References</h2>
+						<ul>
+							
+							<li><a href="Classes/FontAwesomeKit.html">FontAwesomeKit</a></li>
+							
+						</ul>
+					</div>
+					
+					
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<a href="hierarchy.html">Next</a>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2013 Pride Chung. All rights reserved. (Last updated: 2013-05-19)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 840)</a>.</span></p>
+						
+	
+					</div>
+				</div>
+			</div>
+		</article>		
+	</body>
+</html>

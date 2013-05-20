@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>HMSideMenu HEAD based on 1.1.0 Reference</title>
+		<link rel="stylesheet" type="text/css" href="css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.1 (build 840)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="index.html">HMSideMenu HEAD based on 1.1.0 </a></h1>
+				<a id="developerHome" href="index.html">Hesham Abd-Elmegid</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">HMSideMenu HEAD based on 1.1.0 Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar"></ul>
+		</header>
+		<article>
+			<div id="overview_contents" role="main">
+				<div class="main-navigation navigation-top">
+					<a href="hierarchy.html">Next</a>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">HMSideMenu HEAD based on 1.1.0 Reference</h1>
+					</div>		
+				</div>
+				<div id="container">
+					
+					<div class="section section-overview index-overview">
+						
+						
+						<h1><a href="Classes/HMSideMenu.html">HMSideMenu</a></h1>
+
+<p><a href="Classes/HMSideMenu.html">HMSideMenu</a> allows you to display a menu of items that show from the left, right, top or bottom of a view controller with a delightful animation.</p>
+
+<p>Check <a href="http://www.youtube.com/watch?v=2dswvXSdDzM">this video</a> to see it in action.</p>
+
+<p><a href="http://www.youtube.com/watch?v=2dswvXSdDzM"><img src="https://raw.github.com/HeshamMegid/HMSideMenu/master/screenshot.gif" alt="screenshot" /></a></p>
+
+<h1>Features</h1>
+
+<ul>
+<li>Menu items are UIView subclasses, so they are fully customizable.</li>
+<li>Supports blocks</li>
+<li>Works with ARC and iOS >= 5</li>
+</ul>
+
+
+<h1>Installation</h1>
+
+<ul>
+<li>Drag <a href="Classes/HMSideMenu.html">HMSideMenu</a> folder to your project.</li>
+<li>Add <code>QuartzCore.framework</code> to your linked frameworks.</li>
+<li><code>#import "</code>HMSideMenu<code>.h"</code> where you want to add the control.</li>
+</ul>
+
+
+<h1>Usage</h1>
+
+<p>```  objective-c
+UIView *twitterItem = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+[twitterItem setMenuActionWithBlock:^{</p>
+
+<pre><code>NSLog(@"tapped twitter item");
+</code></pre>
+
+<p>}];</p>
+
+<p>UIImageView *twitterIcon = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+[twitterIcon setImage:[UIImage imageNamed:@&ldquo;twitter&rdquo;]];
+[twitterItem addSubview:twitterIcon];</p>
+
+<p><a href="Classes/HMSideMenu.html">HMSideMenu</a> *sideMenu = [[HMSideMenu alloc] initWithItems:@[twitterItem]];
+[self.sideMenu setVerticalSpacing:1.0f];
+[self.view addSubview:self.sideMenu];
+```</p>
+
+<p>Please check the included demo project for more options.</p>
+
+<h1>Change log</h1>
+
+<ul>
+<li>v1.1.1
+
+<ul>
+<li>Removed HMSideMenuItem. Control is now initialized with an array of UIView objects. To set action block use <code>[UIView setMenuActionWithBlock:]</code></li>
+</ul>
+</li>
+<li>v1.1.0
+
+<ul>
+<li>Added left, top and bottom menu positions</li>
+<li>Code refactoring</li>
+</ul>
+</li>
+<li>v1.0.0
+
+<ul>
+<li>Initial release</li>
+</ul>
+</li>
+</ul>
+
+
+<h1>To do</h1>
+
+<ul>
+<li>Support for orientation changes.</li>
+</ul>
+
+
+<h1>Credits</h1>
+
+<p>Thanks to <a href="https://github.com/bryanoltman/">@bryanoltman</a>&rsquo;s <a href="https://github.com/bryanoltman/CAAnimation-EasingEquations">CAAnimation-EasingEquations</a> for the animation easing function.</p>
+
+<h1>License</h1>
+
+<p><a href="Classes/HMSideMenu.html">HMSideMenu</a> is licensed under the terms of the MIT License. Please see the <a href="LICENSE.md">LICENSE</a> file for full details.</p>
+
+<p>If this code was helpful, I would love to hear from you.</p>
+
+<p><a href="http://twitter.com/HeshamMegid">@HeshamMegid</a> <br/>
+<a href="http://hesh.am">http://hesh.am</a></p>
+						
+						
+					</div>
+					
+                        
+                    
+					
+					
+					<div class="index-column">
+						<h2 class="index-title">Class References</h2>
+						<ul>
+							
+							<li><a href="Classes/HMSideMenu.html">HMSideMenu</a></li>
+							
+						</ul>
+					</div>
+					
+					
+						
+					<div class="index-column">
+						
+						
+						<h2 class="index-title">Category References</h2>
+						<ul>
+							
+							<li><a href="Categories/UIView+MenuActionHandlers.html">UIView(MenuActionHandlers)</a></li>
+							
+						</ul>
+						
+					</div>
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<a href="hierarchy.html">Next</a>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2013 Hesham Abd-Elmegid. All rights reserved. (Last updated: 2013-05-19)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 840)</a>.</span></p>
+						
+	
+					</div>
+				</div>
+			</div>
+		</article>		
+	</body>
+</html>

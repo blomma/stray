@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="12D78" minimumToolsVersion="Xcode 4.5" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Compatibility" representedClassName="Compatibility" syncable="YES">
+        <attribute name="level" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="Event" representedClassName="Event" syncable="YES">
+        <attribute name="exported" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="guid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="startDate" attributeType="Date" indexed="YES" versionHashModifier="changed" syncable="YES"/>
+        <attribute name="stopDate" optional="YES" attributeType="Date" indexed="YES" versionHashModifier="changed" syncable="YES"/>
+        <relationship name="inTag" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tag" inverseName="heldByEvents" inverseEntity="Tag" syncable="YES"/>
+    </entity>
+    <entity name="Tag" representedClassName="Tag" syncable="YES">
+        <attribute name="guid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sortIndex" optional="YES" attributeType="Integer 64" defaultValueString="0" indexed="YES" versionHashModifier="changed" syncable="YES"/>
+        <relationship name="heldByEvents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="inTag" inverseEntity="Event" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Compatibility" positionX="160" positionY="192" width="128" height="60"/>
+        <element name="Event" positionX="-5429" positionY="972" width="173" height="120"/>
+        <element name="Tag" positionX="-5175" positionY="1061" width="189" height="105"/>
+    </elements>
+</model>

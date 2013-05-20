@@ -5,6 +5,7 @@
 
 
 extern const struct EventAttributes {
+	__unsafe_unretained NSString *exported;
 	__unsafe_unretained NSString *guid;
 	__unsafe_unretained NSString *startDate;
 	__unsafe_unretained NSString *stopDate;
@@ -23,6 +24,7 @@ extern const struct EventFetchedProperties {
 
 
 
+
 @interface EventID : NSManagedObjectID {}
 @end
 
@@ -31,6 +33,20 @@ extern const struct EventFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (EventID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* exported;
+
+
+
+@property BOOL exportedValue;
+- (BOOL)exportedValue;
+- (void)setExportedValue:(BOOL)value_;
+
+//- (BOOL)validateExported:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -81,6 +97,15 @@ extern const struct EventFetchedProperties {
 @end
 
 @interface _Event (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSNumber*)primitiveExported;
+- (void)setPrimitiveExported:(NSNumber*)value;
+
+- (BOOL)primitiveExportedValue;
+- (void)setPrimitiveExportedValue:(BOOL)value_;
+
+
 
 
 - (NSString*)primitiveGuid;

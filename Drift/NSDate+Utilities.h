@@ -14,4 +14,11 @@
 - (NSDate *)endOfCurrentDay;
 - (BOOL)isBetweenDate:(NSDate *)beginDate andDate:(NSDate *)endDate;
 
+- (NSString *)stringByFormat:(NSString *)format;
+- (NSString *)stringByLongDateTimeFormat;
+- (NSString *)stringByLongDateFormat;
+- (NSString *)stringByLongTimeFormat;
+- (NSString *)stringByShortDateFormat;
+- (NSString *)stringByShortTimeFormat;
+
 @end

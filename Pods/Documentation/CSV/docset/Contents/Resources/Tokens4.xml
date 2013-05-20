@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/CSVComponent.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/CSVComponent</TokenIdentifier>
+			<Abstract type="html">Interface for any component in a hierarchy.</Abstract>
+			<DeclaredIn>CSVComponent.h</DeclaredIn>
+			
+			<NodeRef refid="4"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CSVComponent/accept:</TokenIdentifier>
+			<Abstract type="html">Accept a visitor.
+Composites (groups) forward the visitor to each component.
+Components invoke the appropriate method on the visitor.</Abstract>
+			<DeclaredIn>CSVComponent.h</DeclaredIn>			
+			
+			<Declaration>- (void)accept:(id&lt;CSVVisitor&gt;)visitor</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>visitor</Name>
+					<Abstract type="html">The visitor to accept.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/accept:</Anchor>
+		</Token>
+		
+	</File>
+</Tokens>

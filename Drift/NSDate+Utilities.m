@@ -10,10 +10,11 @@
 
 @implementation NSDate (Utilities)
 
-static NSMutableDictionary *__calendars = nil;
+static NSMutableDictionary * __calendars = nil;
+static NSMutableDictionary * __dateFormatters = nil;
 
 + (NSString *)threadIdentifier {
-    return [NSString stringWithFormat:@"%p", (void *) [NSThread currentThread]];
+    return [NSString stringWithFormat:@"%p", (void *)[NSThread currentThread]];
 }
 
 + (NSCalendar *)calendar {
@@ -30,6 +31,22 @@ static NSMutableDictionary *__calendars = nil;
     }
 
     return calendar;
+}
+
++ (NSDateFormatter *)dateFormatter {
+    if (!__dateFormatters)
+        __dateFormatters = [[NSMutableDictionary alloc] initWithCapacity:0];
+    
+    NSString *keyName = [NSDate threadIdentifier];
+    NSDateFormatter *dateFormatter = __dateFormatters[keyName];
+
+    if (!dateFormatter) {
+        dateFormatter = [[NSDateFormatter alloc] init];
+
+        __dateFormatters[keyName] = dateFormatter;
+    }
+
+    return dateFormatter;
 }
 
 - (NSDate *)startOfCurrentDay {
@@ -60,6 +77,47 @@ static NSMutableDictionary *__calendars = nil;
 
 - (BOOL)isBetweenDate:(NSDate *)beginDate andDate:(NSDate *)endDate {
     return (([self compare:beginDate] != NSOrderedAscending) && ([self compare:endDate] != NSOrderedDescending));
+}
+
+- (NSString *)stringByFormat:(NSString *)format {
+    NSDateFormatter *formatter = [NSDate dateFormatter];
+    [formatter setDateFormat:format];
+    return [formatter stringFromDate:self];
+}
+
+- (NSString *)stringByLongDateTimeFormat {
+    NSDateFormatter *formatter = [NSDate dateFormatter];
+    [formatter setDateStyle:NSDateFormatterFullStyle];
+    [formatter setTimeStyle:NSDateFormatterFullStyle];
+    return [formatter stringFromDate:self];
+}
+
+- (NSString *)stringByLongDateFormat {
+    NSDateFormatter *formatter = [NSDate dateFormatter];
+    [formatter setDateStyle:NSDateFormatterFullStyle];
+    [formatter setTimeStyle:NSDateFormatterNoStyle];
+    return [formatter stringFromDate:self];
+}
+
+- (NSString *)stringByLongTimeFormat {
+    NSDateFormatter *formatter = [NSDate dateFormatter];
+    [formatter setDateStyle:NSDateFormatterNoStyle];
+    [formatter setTimeStyle:NSDateFormatterFullStyle];
+    return [formatter stringFromDate:self];
+}
+
+- (NSString *)stringByShortDateFormat {
+    NSDateFormatter *formatter = [NSDate dateFormatter];
+    [formatter setDateStyle:NSDateFormatterShortStyle];
+    [formatter setTimeStyle:NSDateFormatterNoStyle];
+    return [formatter stringFromDate:self];
+}
+
+- (NSString *)stringByShortTimeFormat {
+    NSDateFormatter *formatter = [NSDate dateFormatter];
+    [formatter setDateStyle:NSDateFormatterNoStyle];
+    [formatter setTimeStyle:NSDateFormatterMediumStyle];
+    return [formatter stringFromDate:self];
 }
 
 @end

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleIdentifier</key>
+	<string>org.cocoapods.hmsidemenu.HMSideMenu-HEAD-based-on-1.1.0</string>
+	<key>CFBundleName</key>
+	<string>HMSideMenu HEAD based on 1.1.0 Documentation</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	
+	
+	<key>DocSetDescription</key>
+	<string>Allows you to display a menu of items that show from the left, right, top or bottom of a view controller with a delightful animation.</string>
+	
+	<key>DocSetFeedName</key>
+	<string>HMSideMenu HEAD based on 1.1.0 Documentation</string>
+	
+	<key>DocSetMinimumXcodeVersion</key>
+	<string>3.0</string>
+	
+	<key>DashDocSetFamily</key>
+	<string>appledoc</string>
+	<key>DocSetPublisherIdentifier</key>
+	<string>org.cocoapods.hmsidemenu.documentation</string>
+	<key>DocSetPublisherName</key>
+	<string>Hesham Abd-Elmegid</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Hesham Abd-Elmegid</string>
+</dict>
+</plist>

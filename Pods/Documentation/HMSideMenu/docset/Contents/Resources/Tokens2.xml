@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Categories/UIView+MenuActionHandlers.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cat/UIView(MenuActionHandlers)</TokenIdentifier>
+			<Abstract type="html">A category on UIView to attach a given block as an action for a single tap gesture.
+Credit: http://www.cocoanetics.com/2012/06/associated-objects/</Abstract>
+			<DeclaredIn>HMSideMenu.h</DeclaredIn>
+			
+			<NodeRef refid="2"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/UIView(MenuActionHandlers)/setMenuActionWithBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>HMSideMenu.h</DeclaredIn>			
+			
+			<Declaration>- (void)setMenuActionWithBlock:(void ( ^ ) ( void ))block</Declaration>
+			
+			
+			<Anchor>//api/name/setMenuActionWithBlock:</Anchor>
+		</Token>
+		
+	</File>
+</Tokens>

@@ -6,9 +6,7 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "InfoHintViewDelegate.h"
-
-@interface EventsGroupedByDateViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, InfoHintViewDelegate>
+@interface EventsGroupedByDateViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet UIScrollView *filterView;

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/HMSideMenu.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/HMSideMenu</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>HMSideMenu.h</DeclaredIn>
+			
+			<NodeRef refid="1"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/HMSideMenu/setIsOpen:</TokenIdentifier>
+			<Abstract type="html">Current state of the side menu.</Abstract>
+			<DeclaredIn>HMSideMenu.h</DeclaredIn>			
+			
+			<Declaration>@property (nonatomic, assign, readonly) BOOL isOpen</Declaration>
+			
+			
+			<Anchor>//api/name/isOpen</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/HMSideMenu/isOpen</TokenIdentifier>
+			<Abstract type="html">Current state of the side menu.</Abstract>
+			<DeclaredIn>HMSideMenu.h</DeclaredIn>			
+			
+			<Declaration>@property (nonatomic, assign, readonly) BOOL isOpen</Declaration>
+			
+			
+			<Anchor>//api/name/isOpen</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/HMSideMenu/setItemSpacing:</TokenIdentifier>
+			<Abstract type="html">Spacing between each menu item and the next. This will be the horizontal spacing between items in case the menu is added on the top/bottom, or vertical spacing in case the menu is added on the left/right.</Abstract>
+			<DeclaredIn>HMSideMenu.h</DeclaredIn>			
+			
+			<Declaration>@property (nonatomic, assign) CGFloat itemSpacing</Declaration>
+			
+			
+			<Anchor>//api/name/itemSpacing</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/HMSideMenu/itemSpacing</TokenIdentifier>
+			<Abstract type="html">Spacing between each menu item and the next. This will be the horizontal spacing between items in case the menu is added on the top/bottom, or vertical spacing in case the menu is added on the left/right.</Abstract>
+			<DeclaredIn>HMSideMenu.h</DeclaredIn>			
+			
+			<Declaration>@property (nonatomic, assign) CGFloat itemSpacing</Declaration>
+			
+			
+			<Anchor>//api/name/itemSpacing</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/HMSideMenu/setAnimationDuration:</TokenIdentifier>
+			<Abstract type="html">Duration of the opening/closing animation.</Abstract>
+			<DeclaredIn>HMSideMenu.h</DeclaredIn>			
+			
+			<Declaration>@property (nonatomic, assign) CGFloat animationDuration</Declaration>
+			
+			
+			<Anchor>//api/name/animationDuration</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/HMSideMenu/animationDuration</TokenIdentifier>
+			<Abstract type="html">Duration of the opening/closing animation.</Abstract>
+			<DeclaredIn>HMSideMenu.h</DeclaredIn>			
+			
+			<Declaration>@property (nonatomic, assign) CGFloat animationDuration</Declaration>
+			
+			
+			<Anchor>//api/name/animationDuration</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/HMSideMenu/setMenuPosition:</TokenIdentifier>
+			<Abstract type="html">Position the side menu will be added at.</Abstract>
+			<DeclaredIn>HMSideMenu.h</DeclaredIn>			
+			
+			<Declaration>@property (nonatomic, assign) HMSideMenuPosition menuPosition</Declaration>
+			
+			
+			<Anchor>//api/name/menuPosition</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/HMSideMenu/menuPosition</TokenIdentifier>
+			<Abstract type="html">Position the side menu will be added at.</Abstract>
+			<DeclaredIn>HMSideMenu.h</DeclaredIn>			
+			
+			<Declaration>@property (nonatomic, assign) HMSideMenuPosition menuPosition</Declaration>
+			
+			
+			<Anchor>//api/name/menuPosition</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/HMSideMenu/initWithItems:</TokenIdentifier>
+			<Abstract type="html">Initialize the menu with an array of items.</Abstract>
+			<DeclaredIn>HMSideMenu.h</DeclaredIn>			
+			
+			<Declaration>- (id)initWithItems:(NSArray *)items</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>items</Name>
+					<Abstract type="html">An array of UIView objects.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/initWithItems:</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/HMSideMenu/open</TokenIdentifier>
+			<Abstract type="html">Show all menu items with animation.</Abstract>
+			<DeclaredIn>HMSideMenu.h</DeclaredIn>			
+			
+			<Declaration>- (void)open</Declaration>
+			
+			
+			<Anchor>//api/name/open</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/HMSideMenu/close</TokenIdentifier>
+			<Abstract type="html">Hide all menu items with animation.</Abstract>
+			<DeclaredIn>HMSideMenu.h</DeclaredIn>			
+			
+			<Declaration>- (void)close</Declaration>
+			
+			
+			<Anchor>//api/name/close</Anchor>
+		</Token>
+		
+	</File>
+</Tokens>
