@@ -61,7 +61,7 @@
                    action:@selector(touchUpInsideInfoButton:forEvent:)
          forControlEvents:UIControlEventTouchUpInside];
 
-        button.titleLabel.font = [FontAwesomeKit fontWithSize:30];
+        button.titleLabel.font = [FontAwesomeKit fontWithSize:25];
         button.titleLabel.backgroundColor = [UIColor clearColor];
         button.titleLabel.lineBreakMode   = NSLineBreakByTruncatingTail;
 
@@ -69,7 +69,7 @@
 
         [button setTitleColor:[UIColor colorWithWhite:0.510f alpha:1.000]
                      forState:UIControlStateNormal];
-        [button setTitle:FAKIconOkCircle
+        [button setTitle:FAKIconChevronSignUp
                 forState:UIControlStateNormal];
 
         button.frame = CGRectMake(self.view.bounds.size.width - 30, self.view.bounds.size.height - 30, 30, 30);
@@ -84,6 +84,7 @@
         settingsItem.editable = NO;
         [settingsItem setMenuActionWithBlock:^{
             [weakSelf.sideMenu close];
+
             [weakSelf performSegueWithIdentifier:@"segueToPreferences"
                                           sender:self];
         }];
@@ -144,10 +145,18 @@
 #pragma mark Private methods
 
 - (void)touchUpInsideInfoButton:(UIButton *)sender forEvent:(UIEvent *)event {
-    if (self.sideMenu.isOpen)
+    if (self.sideMenu.isOpen) {
         [self.sideMenu close];
-    else
+        [UIView animateWithDuration:0.6f animations:^{
+            sender.transform = CGAffineTransformMakeRotation(0);
+        }];
+    }
+    else {
         [self.sideMenu open];
+        [UIView animateWithDuration:0.6f animations:^{
+            sender.transform = CGAffineTransformMakeRotation(M_PI);
+        }];
+    }
 }
 
 @end
