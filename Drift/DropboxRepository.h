@@ -15,5 +15,6 @@
 
 - (void)setup;
 - (BOOL)handleOpenURL:(NSURL *)url;
+- (void)sync;
 
 @end

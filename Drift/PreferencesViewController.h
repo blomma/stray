@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface PreferencesViewController : UIViewController
-- (IBAction)linkToDropbox:(id)sender forEvent:(UIEvent *)event;
+- (IBAction)onDropboxSyncSwitch:(id)sender forEvent:(UIEvent *)event;
+- (IBAction)onDropboxSync:(id)sender forEvent:(UIEvent *)event;
+
+@property (weak, nonatomic) IBOutlet UISwitch *dropboxSyncSwitch;
 
 @end

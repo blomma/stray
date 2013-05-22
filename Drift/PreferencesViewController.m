@@ -10,6 +10,7 @@
 
 #import "UnwindSegueSlideDown.h"
 #import <Dropbox/Dropbox.h>
+#import "DropboxRepository.h"
 
 @interface PreferencesViewController ()
 
@@ -29,9 +30,9 @@
     [super viewDidLoad];
 
     if ([DBAccountManager sharedManager].linkedAccount) {
-        [[[UIAlertView alloc]
-          initWithTitle:@"linked" message:@"Aleady linked" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]
-         show];
+        self.dropboxSyncSwitch.on = YES;
+    } else {
+        self.dropboxSyncSwitch.on = NO;
     }
 }
 
@@ -40,8 +41,16 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)linkToDropbox:(id)sender forEvent:(UIEvent *)event {
-    [[DBAccountManager sharedManager] linkFromController:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
+- (IBAction)onDropboxSyncSwitch:(id)sender forEvent:(UIEvent *)event {
+    if (self.dropboxSyncSwitch.on) {
+        [[DBAccountManager sharedManager] linkFromController:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
+    } else {
+        [[DBAccountManager sharedManager].linkedAccount unlink];
+    }
+}
+
+- (IBAction)onDropboxSync:(id)sender forEvent:(UIEvent *)event {
+    [[DropboxRepository instance] sync];
 }
 
 @end

@@ -60,6 +60,10 @@
                                                object:[NSManagedObjectContext MR_defaultContext]];
 }
 
+
+#pragma mark -
+#pragma mark Public methods
+
 - (BOOL)handleOpenURL:(NSURL *)url {
     DBAccount *account = [[DBAccountManager sharedManager] handleOpenURL:url];
     if (account) {
@@ -68,6 +72,46 @@
     }
 
     return account ? YES : NO;
+}
+
+- (void)sync {
+    NSArray *events = [Event MR_findAll];
+    for (Event *event in events) {
+        dispatch_async(self.backgroundQueue, ^{
+            DBError *deleteError, *createError;
+            DBPath *path = [[DBPath root] childPath:event.guid];
+
+            // First we remove the old file if it exists
+            [[DBFilesystem sharedFilesystem] deletePath:path error:&deleteError];
+
+            DLog(@"%@", deleteError);
+
+            // Then we create the new file
+            DBFile *file = [[DBFilesystem sharedFilesystem] createFile:path error:&createError];
+
+            DLog(@"%@", createError);
+
+            if (file) {
+                CSVRow *header = [[CSVRow alloc] initWithValues:@[@"Tag", @"StartDate", @"EndDate"]];
+
+                NSString *tag = event.inTag.name ? event.inTag.name : @"";
+                NSString *startDate = event.startDate ? [event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
+                NSString *stopDate = event.stopDate ? [event.stopDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
+                CSVRow *row = [[CSVRow alloc] initWithValues:@[
+                               tag,
+                               startDate,
+                               stopDate
+                               ]];
+
+                CSVTable *table = [[CSVTable alloc] initWithRows:@[header, row]];
+                NSMutableString *output = [[NSMutableString alloc] init];
+                CSVSerializer *serializer = [[CSVSerializer alloc] initWithOutput:output];
+                [serializer serialize:table];
+                
+                [file writeString:output error:nil];
+            }
+        });
+    }
 }
 
 #pragma mark -
@@ -90,26 +134,38 @@
 //            NSString *fileName = [NSString stringWithFormat:@"%@ - %@"
 //                                  ,[event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"]
 //                                  ,event.guid];
+            DBError *deleteError, *createError;
             DBPath *path = [[DBPath root] childPath:event.guid];
-            DBFile *file = [[DBFilesystem sharedFilesystem] createFile:path error:nil];
 
-            CSVRow *header = [[CSVRow alloc] initWithValues:@[@"Tag", @"StartDate", @"EndDate"]];
+            // First we remove the old file if it exists
+            [[DBFilesystem sharedFilesystem] deletePath:path error:&deleteError];
 
-            NSString *tag = event.inTag.name ? event.inTag.name : @"";
-            NSString *startDate = event.startDate ? [event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
-            NSString *stopDate = event.stopDate ? [event.stopDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
-            CSVRow *row = [[CSVRow alloc] initWithValues:@[
-                           tag,
-                           startDate,
-                           stopDate
-                           ]];
+            DLog(@"%@", deleteError);
 
-            CSVTable *table = [[CSVTable alloc] initWithRows:@[header, row]];
-            NSMutableString *output = [[NSMutableString alloc] init];
-            CSVSerializer *serializer = [[CSVSerializer alloc] initWithOutput:output];
-            [serializer serialize:table];
+            // Then we create the new file
+            DBFile *file = [[DBFilesystem sharedFilesystem] createFile:path error:&createError];
 
-            [file writeString:output error:nil];
+            DLog(@"%@", createError);
+
+            if (file) {
+                CSVRow *header = [[CSVRow alloc] initWithValues:@[@"Tag", @"StartDate", @"EndDate"]];
+
+                NSString *tag = event.inTag.name ? event.inTag.name : @"";
+                NSString *startDate = event.startDate ? [event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
+                NSString *stopDate = event.stopDate ? [event.stopDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
+                CSVRow *row = [[CSVRow alloc] initWithValues:@[
+                                   tag,
+                                   startDate,
+                                   stopDate
+                               ]];
+
+                CSVTable *table = [[CSVTable alloc] initWithRows:@[header, row]];
+                NSMutableString *output = [[NSMutableString alloc] init];
+                CSVSerializer *serializer = [[CSVSerializer alloc] initWithOutput:output];
+                [serializer serialize:table];
+
+                [file writeString:output error:nil];
+            }
         });
     }
 
@@ -122,8 +178,19 @@
             //            NSString *fileName = [NSString stringWithFormat:@"%@ - %@"
             //                                  ,[event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"]
             //                                  ,event.guid];
+            DBError *deleteError, *createError;
             DBPath *path = [[DBPath root] childPath:event.guid];
-            DBFile *file = [[DBFilesystem sharedFilesystem] openFile:path error:nil];
+
+            // First we remove the old file if it exists
+            [[DBFilesystem sharedFilesystem] deletePath:path error:&deleteError];
+
+            DLog(@"%@", deleteError);
+
+            // Then we create the new file
+            DBFile *file = [[DBFilesystem sharedFilesystem] createFile:path error:&createError];
+
+            DLog(@"%@", createError);
+
             if (file) {
                 CSVRow *header = [[CSVRow alloc] initWithValues:@[@"Tag", @"StartDate", @"EndDate"]];
 
