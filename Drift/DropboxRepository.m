@@ -198,8 +198,10 @@
 
     for (Event *event in deletedEvents) {
         dispatch_async(self.backgroundQueue, ^{
-            DBPath *path = [[DBPath root] childPath:event.guid];
-            [[DBFilesystem sharedFilesystem] deletePath:path error:nil];
+            DBError *deleteError;
+            NSString *fileName = [NSString stringWithFormat:@"%@.csv", event.guid];
+            DBPath *path = [[DBPath root] childPath:fileName];
+            [[DBFilesystem sharedFilesystem] deletePath:path error:&deleteError];
         });
     }
 }
