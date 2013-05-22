@@ -77,42 +77,56 @@
 - (void)sync {
     NSArray *events = [Event MR_findAll];
     for (Event *event in events) {
-        NSString *guid = [event.guid copy];
-        NSString *tag = event.inTag.name ? [event.inTag.name copy ] : @"";
-        NSString *startDate = event.startDate ? [event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
-        NSString *stopDate = event.stopDate ? [event.stopDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
-
-        dispatch_async(self.backgroundQueue, ^{
-            DBError *deleteError, *createError;
-            NSString *fileName = [NSString stringWithFormat:@"%@.csv", guid];
-            DBPath *path = [[DBPath root] childPath:fileName];
-
-            // First we remove the old file if it exists
-            [[DBFilesystem sharedFilesystem] deletePath:path error:&deleteError];
-
-            // Then we create the new file
-            DBFile *file = [[DBFilesystem sharedFilesystem] createFile:path error:&createError];
-
-            if (file) {
-                CSVRow *row = [[CSVRow alloc] initWithValues:@[
-                               tag,
-                               startDate,
-                               stopDate
-                               ]];
-
-                CSVTable *table = [[CSVTable alloc] initWithRows:@[row]];
-                NSMutableString *output = [[NSMutableString alloc] init];
-                CSVSerializer *serializer = [[CSVSerializer alloc] initWithOutput:output];
-                [serializer serialize:table];
-                
-                [file writeString:output error:nil];
-            }
-        });
+        [self deleteEvent:event];
+        [self syncEvent:event];
     }
 }
 
 #pragma mark -
 #pragma mark Private methods
+
+- (void)deleteEvent:(Event *)event {
+    NSString *guid = [event.guid copy];
+
+    // First we remove the old file if it exists
+    dispatch_async(self.backgroundQueue, ^{
+        DBError *deleteError;
+        NSString *fileName = [NSString stringWithFormat:@"%@.csv", guid];
+        DBPath *path = [[DBPath root] childPath:fileName];
+
+        [[DBFilesystem sharedFilesystem] deletePath:path error:&deleteError];
+    });
+}
+
+- (void)syncEvent:(Event *)event {
+    NSString *guid = [event.guid copy];
+    NSString *tag = event.inTag.name ? [event.inTag.name copy ] : @"";
+    NSString *startDate = event.startDate ? [event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
+    NSString *stopDate = event.stopDate ? [event.stopDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
+
+    dispatch_async(self.backgroundQueue, ^{
+        DBError *createError;
+        NSString *fileName = [NSString stringWithFormat:@"%@.csv", guid];
+        DBPath *path = [[DBPath root] childPath:fileName];
+
+        DBFile *file = [[DBFilesystem sharedFilesystem] createFile:path error:&createError];
+
+        if (file) {
+            CSVRow *row = [[CSVRow alloc] initWithValues:@[
+                           tag,
+                           startDate,
+                           stopDate
+                           ]];
+
+            CSVTable *table = [[CSVTable alloc] initWithRows:@[row]];
+            NSMutableString *output = [[NSMutableString alloc] init];
+            CSVSerializer *serializer = [[CSVSerializer alloc] initWithOutput:output];
+            [serializer serialize:table];
+
+            [file writeString:output error:nil];
+        }
+    });
+}
 
 - (void)objectsDidChange:(NSNotification *)note {
     NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
@@ -127,37 +141,8 @@
     }];
 
     for (Event *event in insertedEvents) {
-        NSString *guid = [event.guid copy];
-        NSString *tag = event.inTag.name ? [event.inTag.name copy ] : @"";
-        NSString *startDate = event.startDate ? [event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
-        NSString *stopDate = event.stopDate ? [event.stopDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
-
-        dispatch_async(self.backgroundQueue, ^{
-            DBError *deleteError, *createError;
-            NSString *fileName = [NSString stringWithFormat:@"%@.csv", guid];
-            DBPath *path = [[DBPath root] childPath:fileName];
-
-            // First we remove the old file if it exists
-            [[DBFilesystem sharedFilesystem] deletePath:path error:&deleteError];
-
-            // Then we create the new file
-            DBFile *file = [[DBFilesystem sharedFilesystem] createFile:path error:&createError];
-
-            if (file) {
-                CSVRow *row = [[CSVRow alloc] initWithValues:@[
-                               tag,
-                               startDate,
-                               stopDate
-                               ]];
-
-                CSVTable *table = [[CSVTable alloc] initWithRows:@[row]];
-                NSMutableString *output = [[NSMutableString alloc] init];
-                CSVSerializer *serializer = [[CSVSerializer alloc] initWithOutput:output];
-                [serializer serialize:table];
-
-                [file writeString:output error:nil];
-            }
-        });
+        [self deleteEvent:event];
+        [self syncEvent:event];
     }
 
     NSSet *updatedEvents = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
@@ -165,37 +150,8 @@
     }];
 
     for (Event *event in updatedEvents) {
-        NSString *guid = [event.guid copy];
-        NSString *tag = event.inTag.name ? [event.inTag.name copy ] : @"";
-        NSString *startDate = event.startDate ? [event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
-        NSString *stopDate = event.stopDate ? [event.stopDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
-
-        dispatch_async(self.backgroundQueue, ^{
-            DBError *deleteError, *createError;
-            NSString *fileName = [NSString stringWithFormat:@"%@.csv", guid];
-            DBPath *path = [[DBPath root] childPath:fileName];
-
-            // First we remove the old file if it exists
-            [[DBFilesystem sharedFilesystem] deletePath:path error:&deleteError];
-
-            // Then we create the new file
-            DBFile *file = [[DBFilesystem sharedFilesystem] createFile:path error:&createError];
-
-            if (file) {
-                CSVRow *row = [[CSVRow alloc] initWithValues:@[
-                               tag,
-                               startDate,
-                               stopDate
-                               ]];
-
-                CSVTable *table = [[CSVTable alloc] initWithRows:@[row]];
-                NSMutableString *output = [[NSMutableString alloc] init];
-                CSVSerializer *serializer = [[CSVSerializer alloc] initWithOutput:output];
-                [serializer serialize:table];
-
-                [file writeString:output error:nil];
-            }
-        });
+        [self deleteEvent:event];
+        [self syncEvent:event];
     }
 
     NSSet *deletedEvents = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
@@ -203,13 +159,7 @@
     }];
 
     for (Event *event in deletedEvents) {
-        NSString *guid = [event.guid copy];
-        dispatch_async(self.backgroundQueue, ^{
-            DBError *deleteError;
-            NSString *fileName = [NSString stringWithFormat:@"%@.csv", guid];
-            DBPath *path = [[DBPath root] childPath:fileName];
-            [[DBFilesystem sharedFilesystem] deletePath:path error:&deleteError];
-        });
+        [self deleteEvent:event];
     }
 }
 
