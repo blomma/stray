@@ -21,15 +21,12 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
     }
     return self;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-    if ([DBAccountManager sharedManager].linkedAccount) {
+- (void)viewWillAppear:(BOOL)animated {
+    if ([DropboxRepository instance].account) {
         self.dropboxSyncSwitch.on = YES;
     } else {
         self.dropboxSyncSwitch.on = NO;
@@ -38,14 +35,13 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (IBAction)onDropboxSyncSwitch:(id)sender forEvent:(UIEvent *)event {
     if (self.dropboxSyncSwitch.on) {
-        [[DBAccountManager sharedManager] linkFromController:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
+        [[DropboxRepository instance] link];
     } else {
-        [[DBAccountManager sharedManager].linkedAccount unlink];
+        [[DropboxRepository instance] unLink];
     }
 }
 
