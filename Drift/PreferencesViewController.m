@@ -14,6 +14,8 @@
 
 @interface PreferencesViewController ()
 
+@property (nonatomic) id dropboxChangeObserver;
+
 @end
 
 @implementation PreferencesViewController
@@ -26,11 +28,25 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    if ([DropboxRepository instance].account) {
-        self.dropboxSyncSwitch.on = YES;
-    } else {
-        self.dropboxSyncSwitch.on = NO;
-    }
+    [super viewWillAppear:animated];
+
+    self.dropboxSyncSwitch.on = [DropboxRepository instance].account ? YES : NO;
+
+    __weak typeof(self) weakSelf = self;
+    self.dropboxChangeObserver = [[NSNotificationCenter defaultCenter]
+                                  addObserverForName:@"changeAccount"
+                                  object:[DropboxRepository instance]
+                                  queue:nil
+                                  usingBlock:^(NSNotification *note) {
+                                      id account = [[note userInfo] objectForKey:@"account"];
+                                      weakSelf.dropboxSyncSwitch.on = account != [NSNull null] ? YES : NO;
+                                  }];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self.dropboxChangeObserver];
 }
 
 - (void)didReceiveMemoryWarning {

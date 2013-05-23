@@ -40,9 +40,20 @@
         DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"70tdvqrgpzmzc6k"
                                                                              secret:@"4k12ncc57avo9fe"];
         [DBAccountManager setSharedManager:accountManager];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(objectsDidChange:)
+                                                     name:NSManagedObjectContextObjectsDidChangeNotification
+                                                   object:[NSManagedObjectContext MR_defaultContext]];
     }
 
     return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:NSManagedObjectContextObjectsDidChangeNotification
+                                                  object:[NSManagedObjectContext MR_defaultContext]];
 }
 
 #pragma mark -
@@ -69,22 +80,26 @@
 #pragma mark Public methods
 
 - (void)setupWithAccount:(DBAccount *)account {
-    if (!self.backgroundQueue) {
-        self.backgroundQueue = dispatch_queue_create("com.artsoftheinsane.stray.bgqueue", NULL);
-    }
-    
     if (account) {
+        self.canceller.cancel = NO;
+        
+        if (!self.backgroundQueue) {
+            self.backgroundQueue = dispatch_queue_create("com.artsoftheinsane.stray.bgqueue", NULL);
+        }
+        
         DBFilesystem *filesystem = [[DBFilesystem alloc] initWithAccount:[DBAccountManager sharedManager].linkedAccount];
         [DBFilesystem setSharedFilesystem:filesystem];
-
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(objectsDidChange:)
-                                                     name:NSManagedObjectContextObjectsDidChangeNotification
-                                                   object:[NSManagedObjectContext MR_defaultContext]];
+    } else {
+        self.canceller.cancel = YES;
     }
-    
+
+    // Notify about this
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"changeAccount"
+                                                        object:self
+                                                      userInfo:@{@"account": account ? account : [NSNull null]}];
 }
 
+// At this point we have recieved a response, either a account or nil
 - (BOOL)handleOpenURL:(NSURL *)url {
     DBAccount *account = [[DBAccountManager sharedManager] handleOpenURL:url];
     [self setupWithAccount:account];
@@ -105,7 +120,7 @@
 }
 
 - (void)unLink {
-    self.canceller.cancel = YES;
+    [self setupWithAccount:nil];
     [[DBAccountManager sharedManager].linkedAccount unlink];
 }
 
@@ -165,37 +180,39 @@
 }
 
 - (void)objectsDidChange:(NSNotification *)note {
-    NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
-    NSSet *deletedObjects  = [[note userInfo] objectForKey:NSDeletedObjectsKey];
-    NSSet *updatedObjects  = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
+    if ([DBAccountManager sharedManager].linkedAccount) {
+        NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
+        NSSet *deletedObjects  = [[note userInfo] objectForKey:NSDeletedObjectsKey];
+        NSSet *updatedObjects  = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
 
-    // ==========
-    // = Events =
-    // ==========
-    NSSet *insertedEvents = [insertedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-        return [obj isKindOfClass:[Event class]];
-    }];
+        // ==========
+        // = Events =
+        // ==========
+        NSSet *insertedEvents = [insertedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+            return [obj isKindOfClass:[Event class]];
+        }];
 
-    for (Event *event in insertedEvents) {
-        [self deleteEvent:event];
-        [self syncEvent:event];
-    }
+        for (Event *event in insertedEvents) {
+            [self deleteEvent:event];
+            [self syncEvent:event];
+        }
 
-    NSSet *updatedEvents = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-        return [obj isKindOfClass:[Event class]];
-    }];
+        NSSet *updatedEvents = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+            return [obj isKindOfClass:[Event class]];
+        }];
 
-    for (Event *event in updatedEvents) {
-        [self deleteEvent:event];
-        [self syncEvent:event];
-    }
+        for (Event *event in updatedEvents) {
+            [self deleteEvent:event];
+            [self syncEvent:event];
+        }
 
-    NSSet *deletedEvents = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-        return [obj isKindOfClass:[Event class]];
-    }];
-
-    for (Event *event in deletedEvents) {
-        [self deleteEvent:event];
+        NSSet *deletedEvents = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+            return [obj isKindOfClass:[Event class]];
+        }];
+        
+        for (Event *event in deletedEvents) {
+            [self deleteEvent:event];
+        }
     }
 }
 
