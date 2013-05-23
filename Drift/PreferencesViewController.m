@@ -35,12 +35,12 @@
     __weak typeof(self) weakSelf = self;
     self.dropboxChangeObserver = [[NSNotificationCenter defaultCenter]
                                   addObserverForName:@"changeAccount"
-                                  object:[DropboxRepository instance]
-                                  queue:nil
-                                  usingBlock:^(NSNotification *note) {
-                                      id account = [[note userInfo] objectForKey:@"account"];
-                                      weakSelf.dropboxSyncSwitch.on = account != [NSNull null] ? YES : NO;
-                                  }];
+                                              object:[DropboxRepository instance]
+                                               queue:nil
+                                          usingBlock:^(NSNotification *note) {
+        id account = [[note userInfo] objectForKey:@"account"];
+        weakSelf.dropboxSyncSwitch.on = account != [NSNull null] ? YES : NO;
+    }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
