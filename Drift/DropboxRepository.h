@@ -11,10 +11,14 @@
 
 @interface DropboxRepository : NSObject
 
+@property (nonatomic,readonly) DBAccount *account;
+
 + (DropboxRepository *)instance;
 
-- (void)setup;
+- (void)setupWithAccount:(DBAccount *)account;
 - (BOOL)handleOpenURL:(NSURL *)url;
 - (void)sync;
+- (void)link;
+- (void)unLink;
 
 @end

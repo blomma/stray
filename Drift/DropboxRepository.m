@@ -14,9 +14,19 @@
 #import "CSV.h"
 #import "NSDate+Utilities.h"
 
+@interface Canceller : NSObject
+
+@property (nonatomic) BOOL cancel;
+
+@end
+
+@implementation Canceller
+@end
+
 @interface DropboxRepository ()
 
 @property (nonatomic) dispatch_queue_t backgroundQueue;
+@property (nonatomic) Canceller *canceller;
 
 @end
 
@@ -25,7 +35,7 @@
 - (id)init {
     self = [super init];
     if (self) {
-        self.backgroundQueue = dispatch_queue_create("com.artsoftheinsane.Stray.bgqueue", NULL);
+        self.canceller = [[Canceller alloc] init];
 
         DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"70tdvqrgpzmzc6k"
                                                                              secret:@"4k12ncc57avo9fe"];
@@ -33,6 +43,13 @@
     }
 
     return self;
+}
+
+#pragma mark -
+#pragma mark Class methods
+
+- (DBAccount *)account {
+    return [DBAccountManager sharedManager].linkedAccount;
 }
 
 #pragma mark -
@@ -48,28 +65,29 @@
     return sharedDropboxRepository;
 }
 
-- (void)setup {
-    if ([DBAccountManager sharedManager].linkedAccount) {
-        DBFilesystem *filesystem = [[DBFilesystem alloc] initWithAccount:[DBAccountManager sharedManager].linkedAccount];
-        [DBFilesystem setSharedFilesystem:filesystem];
-    }
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(objectsDidChange:)
-                                                 name:NSManagedObjectContextObjectsDidChangeNotification
-                                               object:[NSManagedObjectContext MR_defaultContext]];
-}
-
-
 #pragma mark -
 #pragma mark Public methods
 
+- (void)setupWithAccount:(DBAccount *)account {
+    if (!self.backgroundQueue) {
+        self.backgroundQueue = dispatch_queue_create("com.artsoftheinsane.stray.bgqueue", NULL);
+    }
+    
+    if (account) {
+        DBFilesystem *filesystem = [[DBFilesystem alloc] initWithAccount:[DBAccountManager sharedManager].linkedAccount];
+        [DBFilesystem setSharedFilesystem:filesystem];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(objectsDidChange:)
+                                                     name:NSManagedObjectContextObjectsDidChangeNotification
+                                                   object:[NSManagedObjectContext MR_defaultContext]];
+    }
+    
+}
+
 - (BOOL)handleOpenURL:(NSURL *)url {
     DBAccount *account = [[DBAccountManager sharedManager] handleOpenURL:url];
-    if (account) {
-        DBFilesystem *filesystem = [[DBFilesystem alloc] initWithAccount:account];
-        [DBFilesystem setSharedFilesystem:filesystem];
-    }
+    [self setupWithAccount:account];
 
     return account ? YES : NO;
 }
@@ -82,14 +100,27 @@
     }
 }
 
+- (void)link {
+    [[DBAccountManager sharedManager] linkFromController:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
+}
+
+- (void)unLink {
+    self.canceller.cancel = YES;
+    [[DBAccountManager sharedManager].linkedAccount unlink];
+}
+
 #pragma mark -
 #pragma mark Private methods
 
 - (void)deleteEvent:(Event *)event {
     NSString *guid = [event.guid copy];
 
-    // First we remove the old file if it exists
+    __weak typeof(self) weakSelf = self;
     dispatch_async(self.backgroundQueue, ^{
+        if (weakSelf.canceller.cancel) {
+            return;
+        }
+
         DBError *deleteError;
         NSString *fileName = [NSString stringWithFormat:@"%@.csv", guid];
         DBPath *path = [[DBPath root] childPath:fileName];
@@ -104,7 +135,12 @@
     NSString *startDate = event.startDate ? [event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
     NSString *stopDate = event.stopDate ? [event.stopDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
 
+    __weak typeof(self) weakSelf = self;
     dispatch_async(self.backgroundQueue, ^{
+        if (weakSelf.canceller.cancel) {
+            return;
+        }
+        
         DBError *createError;
         NSString *fileName = [NSString stringWithFormat:@"%@.csv", guid];
         DBPath *path = [[DBPath root] childPath:fileName];
