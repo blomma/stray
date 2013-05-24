@@ -5,9 +5,9 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.cocoapods.csv.CSV-0.0.1</string>
+	<string>org.cocoapods.csv.CSV-HEAD-based-on-0.0.1</string>
 	<key>CFBundleName</key>
-	<string>CSV 0.0.1 Documentation</string>
+	<string>CSV HEAD based on 0.0.1 Documentation</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
@@ -18,7 +18,7 @@
 	<string>Format data to the comma-separated values format.</string>
 	
 	<key>DocSetFeedName</key>
-	<string>CSV 0.0.1 Documentation</string>
+	<string>CSV HEAD based on 0.0.1 Documentation</string>
 	
 	<key>DocSetMinimumXcodeVersion</key>
 	<string>3.0</string>

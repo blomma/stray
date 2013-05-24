@@ -1,12 +1,12 @@
 PODS:
-  - CSV (0.0.1)
+  - CSV (HEAD based on 0.0.1)
   - FontAwesomeKit (HEAD based on 1.1.2)
   - GoogleAnalytics-iOS-SDK (2.0beta4)
   - HMSideMenu (HEAD based on 1.1.0)
   - MagicalRecord (2.1)
 
 DEPENDENCIES:
-  - CSV (~> 0.0.1)
+  - CSV (HEAD)
   - FontAwesomeKit (HEAD)
   - GoogleAnalytics-iOS-SDK (~> 2.0Beta4)
   - HMSideMenu (HEAD)
