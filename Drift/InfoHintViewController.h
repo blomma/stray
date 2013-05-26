@@ -15,6 +15,5 @@
 @property (nonatomic, weak) IBOutlet UIButton *closeInfoHintView;
 
 - (IBAction)pageChanged:(id)sender;
-- (IBAction)dismissInfoHintView:(id)sender;
 
 @end

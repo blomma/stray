@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MGScrollView.h>
 
 @interface PreferencesViewController : UIViewController
-- (IBAction)onDropboxSyncSwitch:(id)sender forEvent:(UIEvent *)event;
-- (IBAction)onDropboxSync:(id)sender forEvent:(UIEvent *)event;
 
-@property (weak, nonatomic) IBOutlet UISwitch *dropboxSyncSwitch;
+@property (weak, nonatomic) IBOutlet MGScrollView *scroller;
+@property (weak, nonatomic) IBOutlet UIButton *close;
 
 @end

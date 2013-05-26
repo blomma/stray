@@ -9,6 +9,8 @@
 #import "TagTableViewCell.h"
 
 #import "NoHitCAShapeLayer.h"
+#import <UIColor+MGExpanded.h>
+#import <FontAwesomeKit.h>
 
 @interface TagTableViewCell ()
 
@@ -42,6 +44,18 @@
 
     [dashLayer setPath:path];
     CGPathRelease(path);
+
+    self.deleteButton.titleLabel.font = [UIFont fontWithName:@"FontAwesome" size:30];
+    self.deleteButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.deleteButton.titleLabel.backgroundColor = [UIColor clearColor];
+
+    self.deleteButton.backgroundColor = [UIColor clearColor];
+
+    UIColor *color = [UIColor colorWithRed:0.318f green:0.318f blue:0.318f alpha:1];
+    [self.deleteButton setTitleColor:color forState:UIControlStateNormal];
+    [self.deleteButton setTitleColor:[color colorByAdding:-0.16f alpha:0] forState:UIControlStateHighlighted];
+
+    [self.deleteButton setTitle:FAKIconRemoveSign forState:UIControlStateNormal];
 
     [self.backView.layer insertSublayer:dashLayer below:self.tagNameTextField.layer];
 

@@ -6,3 +6,5 @@ pod 'GoogleAnalytics-iOS-SDK', '~> 2.0Beta4'
 pod 'CSV', :head
 pod 'HMSideMenu', :head
 pod 'FontAwesomeKit', :head
+pod 'MGBox2', :head
+pod 'BButton', :head

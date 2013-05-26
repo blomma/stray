@@ -1,22 +1,28 @@
 PODS:
+  - BButton (HEAD based on 2.0.0)
   - CSV (HEAD based on 0.0.1)
   - FontAwesomeKit (HEAD based on 1.1.2)
   - GoogleAnalytics-iOS-SDK (2.0beta4)
   - HMSideMenu (HEAD based on 1.1.0)
   - MagicalRecord (2.1)
+  - MGBox2 (HEAD based on 2.0.0)
 
 DEPENDENCIES:
+  - BButton (HEAD)
   - CSV (HEAD)
   - FontAwesomeKit (HEAD)
   - GoogleAnalytics-iOS-SDK (~> 2.0Beta4)
   - HMSideMenu (HEAD)
   - MagicalRecord (~> 2.1.0)
+  - MGBox2 (HEAD)
 
 SPEC CHECKSUMS:
+  BButton: cb3b6dbbb7d56c646f14c406be40fbc7c950295d
   CSV: b0983e041f30ca1e3e80a81c490d9c6fe3672c98
   FontAwesomeKit: ee3b0f8795bb8ab490d1f55b584004c29aa77b6d
   GoogleAnalytics-iOS-SDK: ae8e58e771b6dec84c0047154cc0e550a15e6f54
   HMSideMenu: 3a359e321b90045d64a5e7ad9165d4b0f20c828a
   MagicalRecord: 64e7184c240087a45e9588a722eaf05b0ad837f7
+  MGBox2: 7c09e36c2271f9af16fdb5141a0ca554ecee4d8d
 
 COCOAPODS: 0.20.1

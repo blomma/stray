@@ -9,6 +9,7 @@
 #import "RootViewController.h"
 
 #import "UIPageViewController+UIPageControl.h"
+#import <NSString+FontAwesome.h>
 #import <FontAwesomeKit.h>
 #import <HMSideMenu.h>
 #import "IconView.h"
@@ -63,8 +64,8 @@
                       forControlEvents:UIControlEventTouchUpInside];
 
         self.sideMenuButton.titleLabel.font = [FontAwesomeKit fontWithSize:25];
+        self.sideMenuButton.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.sideMenuButton.titleLabel.backgroundColor = [UIColor clearColor];
-        self.sideMenuButton.titleLabel.lineBreakMode   = NSLineBreakByTruncatingTail;
 
         self.sideMenuButton.backgroundColor = [UIColor clearColor];
 
