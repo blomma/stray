@@ -124,7 +124,7 @@
     header.bottomBorderColor = [header.backgroundColor colorByAdding:0.16 alpha:-0.5];
     [box.boxes addObject:header];
 
-    description = [MGLine lineWithMultilineLeft:@"Pushing this red button (you know you want to) will resync every timer you have ever created to your dropbox folder. This might come in handy in cases of extreme clumsiness, i.e., accidentally deleting them from your computer. Nee"
+    description = [MGLine lineWithMultilineLeft:@"Pushing this red button (you know you want to) will resync every timer you have ever created to your dropbox folder. This might come in handy in cases of extreme clumsiness, i.e., accidentally deleting them from your computer."
                                           right:nil
                                           width:width
                                       minHeight:40];
@@ -136,27 +136,6 @@
     [box.boxes addObject:description];
 
     [self.grid.boxes addObject:box];
-
-    /// Information
-//    MGBox *box2 = [MGBox boxWithSize:(CGSize){width, 148}];
-//    box2.backgroundColor = [box.backgroundColor colorByAdding:-0.16 alpha:-0.5];
-//    box2.leftMargin = 10;
-//    box2.topMargin = 40;
-//    box2.borderStyle = MGBorderEtchedAll;
-//    [box2 setBorderColors:[box2.backgroundColor colorByAdding:-0.16f alpha:-0.5f]];
-//
-//    MGLine *description2 = [MGLine lineWithMultilineLeft:@"Resyncs every timer you have back to dropbox"
-//                                                  right:nil
-//                                                  width:width
-//                                              minHeight:40];
-//
-//    description2.leftPadding = description2.rightPadding = 20;
-//    description2.topPadding = 10;
-//    description2.font = [UIFont fontWithName:@"HelveticaNeue" size:13];
-//    description2.textColor = [UIColor colorWithWhite:0.510f alpha:1.000];
-//    [box2.boxes addObject:description2];
-//
-//    [self.grid.boxes addObject:box2];
 
     [self.grid layoutWithSpeed:0.3 completion:nil];
     [self.scroller layoutWithSpeed:0.3 completion:nil];
