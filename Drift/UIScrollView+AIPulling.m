@@ -9,6 +9,7 @@
 #import "UIScrollView+AIPulling.h"
 
 #import <objc/runtime.h>
+#import <FontAwesomeKit.h>
 
 @interface AIPullingView ()
 
@@ -55,7 +56,7 @@
         [self addSubview:self.titleLabel];
 
         self.stateIcon                 = [[UILabel alloc] initWithFrame:CGRectMake(60, 10, 50, 50)];
-        self.stateIcon.font            = [UIFont fontWithName:@"Entypo" size:60];
+        self.stateIcon.font            = [FontAwesomeKit fontWithSize:30];
         self.stateIcon.backgroundColor = [UIColor clearColor];
         self.stateIcon.textColor       = self.textColor;
         self.stateIcon.textAlignment   = NSTextAlignmentCenter;
@@ -87,12 +88,12 @@
     if (self.state == AIPullingStatePullingClose) {
         self.backgroundColor = self.backgroundColorForCloseState;
         self.titleLabel.text = @"Release to Close...";
-        self.stateIcon.text  = @"\u274C";
+        self.stateIcon.text  = FAKIconRemove;
 
     } else if (self.state == AIPullingStatePullingAdd) {
         self.backgroundColor = self.backgroundColorForAddState;
         self.titleLabel.text = @"Release to Add...";
-        self.stateIcon.text  = @"\u2713";
+        self.stateIcon.text  = FAKIconOk;
 
     } else if (self.state == AIPullingStatePulling) {
         CGFloat alphaHeight = self.addingHeight == 0 ? self.closingHeight : self.addingHeight;
