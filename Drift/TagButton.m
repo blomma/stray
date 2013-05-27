@@ -9,6 +9,7 @@
 #import "TagButton.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import <FontAwesomeKit.h>
 
 @interface TagButton ()
 
@@ -40,8 +41,8 @@
         self.titleLabel.font = [UIFont fontWithName:@"Futura-Medium" size:12];
         title = [title uppercaseString];
     } else {
-        self.titleLabel.font = [UIFont fontWithName:@"Entypo" size:40];
-        title = @"\uE70C";
+        self.titleLabel.font = [FontAwesomeKit fontWithSize:20];
+        title = FAKIconTag;
     }
 
     [super setTitle:title forState:state];
