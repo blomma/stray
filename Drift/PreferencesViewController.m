@@ -24,6 +24,7 @@
 @property (nonatomic) UISwitch *dropboxSyncOldSwitch;
 @property (nonatomic) BButton *dropboxSyncOldButton;
 @property (nonatomic) id dropboxChangeObserver;
+@property (nonatomic) id dropboxSyncObserver;
 
 @end
 
@@ -147,16 +148,36 @@
     self.dropboxSyncSwitch.on = [DropboxRepository instance].account ? YES : NO;
     self.dropboxSyncOldButton.enabled = self.dropboxSyncSwitch.on;
 
+    if ([DropboxRepository instance].isSynced) {
+        [self.dropboxSyncOldButton.layer removeAllAnimations];
+    }
+
     __weak typeof(self) weakSelf = self;
-    self.dropboxChangeObserver = [[NSNotificationCenter defaultCenter]
-                                  addObserverForName:@"changeAccount"
-                                  object:[DropboxRepository instance]
-                                  queue:nil
-                                  usingBlock:^(NSNotification *note) {
-                                      id account = [[note userInfo] objectForKey:@"account"];
-                                      weakSelf.dropboxSyncSwitch.on = account != [NSNull null] ? YES : NO;
-                                      weakSelf.dropboxSyncOldButton.enabled = weakSelf.dropboxSyncSwitch.on;
-                                  }];
+    self.dropboxChangeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:@"changeAccount" object:[DropboxRepository instance] queue:nil
+                                                                               usingBlock:^(NSNotification *note) {
+                                                                                   id account = [[note userInfo] objectForKey:@"account"];
+                                                                                   weakSelf.dropboxSyncSwitch.on = account != [NSNull null] ? YES : NO;
+                                                                                   weakSelf.dropboxSyncOldButton.enabled = weakSelf.dropboxSyncSwitch.on;
+                                                                                   [weakSelf.dropboxSyncOldButton.layer removeAllAnimations];
+                                                                               }];
+
+    self.dropboxSyncObserver = [[NSNotificationCenter defaultCenter] addObserverForName:@"sync" object:[DropboxRepository instance] queue:nil
+                                                                             usingBlock:^(NSNotification *note) {
+                                                                                 NSString *action = [[note userInfo] objectForKey:@"action"];
+
+                                                                                 DLog(@"%@", action);
+
+                                                                                 if ([action isEqualToString:@"start"]) {
+                                                                                     [UIView animateWithDuration:1.0f delay:0.0f options:(UIViewAnimationOptionAutoreverse | UIViewAnimationOptionRepeat)
+                                                                                                      animations:^{
+                                                                                                          weakSelf.dropboxSyncOldButton.transform = CGAffineTransformMakeRotation(M_PI);
+                                                                                                      } completion:nil];
+                                                                                 }
+
+                                                                                 if ([action isEqualToString:@"end"]) {
+                                                                                     [weakSelf.dropboxSyncOldButton.layer removeAllAnimations];
+                                                                                 }
+                                                                             }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

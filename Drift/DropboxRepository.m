@@ -27,6 +27,7 @@
 
 @property (nonatomic) dispatch_queue_t backgroundQueue;
 @property (nonatomic) Canceller *canceller;
+@property (nonatomic) NSInteger queueCount;
 
 @end
 
@@ -36,6 +37,7 @@
     self = [super init];
     if (self) {
         self.canceller = [[Canceller alloc] init];
+        self.queueCount = 0;
 
         DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"70tdvqrgpzmzc6k"
                                                                              secret:@"4k12ncc57avo9fe"];
@@ -54,6 +56,10 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:NSManagedObjectContextObjectsDidChangeNotification
                                                   object:[NSManagedObjectContext MR_defaultContext]];
+}
+
+- (BOOL)isSynced {
+    return self.queueCount == 0 ? YES : NO;
 }
 
 #pragma mark -
@@ -93,7 +99,6 @@
         self.canceller.cancel = YES;
     }
 
-    // Notify about this
     [[NSNotificationCenter defaultCenter] postNotificationName:@"changeAccount"
                                                         object:self
                                                       userInfo:@{@"account": account ? account : [NSNull null]}];
@@ -108,11 +113,21 @@
 }
 
 - (void)sync {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"sync"
+                                                        object:self
+                                                      userInfo:@{@"action": @"start"}];
+
     NSArray *events = [Event MR_findAll];
     for (Event *event in events) {
         [self deleteEvent:event];
         [self syncEvent:event];
     }
+
+    dispatch_async(self.backgroundQueue, ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"sync"
+                                                            object:self
+                                                          userInfo:@{@"action": @"end"}];
+    });
 }
 
 - (void)link {
@@ -130,9 +145,11 @@
 - (void)deleteEvent:(Event *)event {
     NSString *guid = [event.guid copy];
 
+    self.queueCount += 1;
     __weak typeof(self) weakSelf = self;
     dispatch_async(self.backgroundQueue, ^{
         if (weakSelf.canceller.cancel) {
+            weakSelf.queueCount -= 1;
             return;
         }
 
@@ -141,6 +158,7 @@
         DBPath *path = [[DBPath root] childPath:fileName];
 
         [[DBFilesystem sharedFilesystem] deletePath:path error:&deleteError];
+        weakSelf.queueCount -= 1;
     });
 }
 
@@ -150,9 +168,11 @@
     NSString *startDate = event.startDate ? [event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
     NSString *stopDate = event.stopDate ? [event.stopDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
 
+    self.queueCount += 1;
     __weak typeof(self) weakSelf = self;
     dispatch_async(self.backgroundQueue, ^{
         if (weakSelf.canceller.cancel) {
+            weakSelf.queueCount -= 1;
             return;
         }
         
@@ -176,6 +196,7 @@
 
             [file writeString:output error:nil];
         }
+        weakSelf.queueCount -= 1;
     });
 }
 
