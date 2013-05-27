@@ -28,6 +28,7 @@
 @property (nonatomic) dispatch_queue_t backgroundQueue;
 @property (nonatomic) Canceller *canceller;
 @property (nonatomic) NSInteger queueCount;
+@property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
 
 @end
 
@@ -142,10 +143,25 @@
 #pragma mark -
 #pragma mark Private methods
 
+- (void)beginBackgroundTask {
+    __weak typeof(self) weakSelf = self;
+    self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [weakSelf endBackgroundTask];
+    }];
+}
+
+- (void)endBackgroundTask {
+    [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+    self.backgroundTask = UIBackgroundTaskInvalid;
+}
+
 - (void)deleteEvent:(Event *)event {
+    [self beginBackgroundTask];
+
     NSString *guid = [event.guid copy];
 
     self.queueCount += 1;
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(self.backgroundQueue, ^{
         if (weakSelf.canceller.cancel) {
@@ -158,17 +174,23 @@
         DBPath *path = [[DBPath root] childPath:fileName];
 
         [[DBFilesystem sharedFilesystem] deletePath:path error:&deleteError];
+
         weakSelf.queueCount -= 1;
     });
+
+    [self endBackgroundTask];
 }
 
 - (void)syncEvent:(Event *)event {
+    [self beginBackgroundTask];
+
     NSString *guid = [event.guid copy];
     NSString *tag = event.inTag.name ? [event.inTag.name copy ] : @"";
     NSString *startDate = event.startDate ? [event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
     NSString *stopDate = event.stopDate ? [event.stopDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
 
     self.queueCount += 1;
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(self.backgroundQueue, ^{
         if (weakSelf.canceller.cancel) {
@@ -196,8 +218,11 @@
 
             [file writeString:output error:nil];
         }
+
         weakSelf.queueCount -= 1;
     });
+
+    [self endBackgroundTask];
 }
 
 - (void)objectsDidChange:(NSNotification *)note {
