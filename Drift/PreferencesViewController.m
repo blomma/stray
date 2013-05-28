@@ -165,8 +165,6 @@
                                                                              usingBlock:^(NSNotification *note) {
                                                                                  NSString *action = [[note userInfo] objectForKey:@"action"];
 
-                                                                                 DLog(@"%@", action);
-
                                                                                  if ([action isEqualToString:@"start"]) {
                                                                                      [UIView animateWithDuration:1.0f delay:0.0f options:(UIViewAnimationOptionAutoreverse | UIViewAnimationOptionRepeat)
                                                                                                       animations:^{
@@ -184,6 +182,7 @@
     [super viewWillDisappear:animated];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self.dropboxChangeObserver];
+    [[NSNotificationCenter defaultCenter] removeObserver:self.dropboxSyncObserver];
 }
 
 - (void)didReceiveMemoryWarning {

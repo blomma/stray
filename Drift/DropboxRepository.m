@@ -13,6 +13,7 @@
 #import <Dropbox/Dropbox.h>
 #import "CSV.h"
 #import "NSDate+Utilities.h"
+#import <THObserversAndBinders.h>
 
 @interface Canceller : NSObject
 
@@ -29,6 +30,7 @@
 @property (nonatomic) Canceller *canceller;
 @property (nonatomic) NSInteger queueCount;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
+@property (nonatomic) id observer;
 
 @end
 
@@ -44,19 +46,54 @@
                                                                              secret:@"4k12ncc57avo9fe"];
         [DBAccountManager setSharedManager:accountManager];
 
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(objectsDidChange:)
-                                                     name:NSManagedObjectContextObjectsDidChangeNotification
-                                                   object:[NSManagedObjectContext MR_defaultContext]];
+        __weak typeof(self) weakSelf = self;
+        self.observer = [[NSNotificationCenter defaultCenter]
+                         addObserverForName:NSManagedObjectContextDidSaveNotification
+                         object:[NSManagedObjectContext MR_defaultContext]
+                         queue:nil
+                         usingBlock:^(NSNotification *note) {
+                             if ([DBAccountManager sharedManager].linkedAccount) {
+                                 NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
+                                 NSSet *deletedObjects  = [[note userInfo] objectForKey:NSDeletedObjectsKey];
+                                 NSSet *updatedObjects  = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
+                                 
+                                 // ==========
+                                 // = Events =
+                                 // ==========
+                                 NSSet *insertedEvents = [insertedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                                     return [obj isKindOfClass:[Event class]];
+                                 }];
+                                 
+                                 for (Event *event in insertedEvents) {
+                                     [weakSelf deleteEvent:event];
+                                     [weakSelf syncEvent:event];
+                                 }
+                                 
+                                 NSSet *updatedEvents = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                                     return [obj isKindOfClass:[Event class]];
+                                 }];
+                                 
+                                 for (Event *event in updatedEvents) {
+                                     [weakSelf deleteEvent:event];
+                                     [weakSelf syncEvent:event];
+                                 }
+                                 
+                                 NSSet *deletedEvents = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                                     return [obj isKindOfClass:[Event class]];
+                                 }];
+                                 
+                                 for (Event *event in deletedEvents) {
+                                     [weakSelf deleteEvent:event];
+                                 }
+                             }
+                         }];
     }
 
     return self;
 }
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:NSManagedObjectContextObjectsDidChangeNotification
-                                                  object:[NSManagedObjectContext MR_defaultContext]];
+    [[NSNotificationCenter defaultCenter] removeObserver:self.observer];
 }
 
 - (BOOL)isSynced {
@@ -223,43 +260,6 @@
     });
 
     [self endBackgroundTask];
-}
-
-- (void)objectsDidChange:(NSNotification *)note {
-    if ([DBAccountManager sharedManager].linkedAccount) {
-        NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
-        NSSet *deletedObjects  = [[note userInfo] objectForKey:NSDeletedObjectsKey];
-        NSSet *updatedObjects  = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
-
-        // ==========
-        // = Events =
-        // ==========
-        NSSet *insertedEvents = [insertedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-            return [obj isKindOfClass:[Event class]];
-        }];
-
-        for (Event *event in insertedEvents) {
-            [self deleteEvent:event];
-            [self syncEvent:event];
-        }
-
-        NSSet *updatedEvents = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-            return [obj isKindOfClass:[Event class]];
-        }];
-
-        for (Event *event in updatedEvents) {
-            [self deleteEvent:event];
-            [self syncEvent:event];
-        }
-
-        NSSet *deletedEvents = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-            return [obj isKindOfClass:[Event class]];
-        }];
-        
-        for (Event *event in deletedEvents) {
-            [self deleteEvent:event];
-        }
-    }
 }
 
 @end

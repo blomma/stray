@@ -6,6 +6,7 @@ PODS:
   - HMSideMenu (HEAD based on 1.1.0)
   - MagicalRecord (2.1)
   - MGBox2 (HEAD based on 2.0.0)
+  - THObserversAndBinders (HEAD based on 1.0.0)
 
 DEPENDENCIES:
   - BButton (HEAD)
@@ -15,6 +16,7 @@ DEPENDENCIES:
   - HMSideMenu (HEAD)
   - MagicalRecord (~> 2.1.0)
   - MGBox2 (HEAD)
+  - THObserversAndBinders (HEAD)
 
 SPEC CHECKSUMS:
   BButton: cb3b6dbbb7d56c646f14c406be40fbc7c950295d
@@ -24,5 +26,6 @@ SPEC CHECKSUMS:
   HMSideMenu: 3a359e321b90045d64a5e7ad9165d4b0f20c828a
   MagicalRecord: 64e7184c240087a45e9588a722eaf05b0ad837f7
   MGBox2: 7c09e36c2271f9af16fdb5141a0ca554ecee4d8d
+  THObserversAndBinders: 5f0e709e8b704a8646ffdee9beb01a8aefc1dcb2
 
 COCOAPODS: 0.20.1

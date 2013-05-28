@@ -18,11 +18,18 @@
 #import "GAI.h"
 #import "NSDate+Utilities.h"
 #import "UnwindSegueSlideDown.h"
+#import <THObserversAndBinders.h>
 
 @interface EventViewController ()
 
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) dispatch_queue_t backgroundQueue;
+
+// Observer
+@property (nonatomic) THObserver *startDateObserver;
+@property (nonatomic) THObserver *nowDateObserver;
+@property (nonatomic) THObserver *stopDateObserver;
+@property (nonatomic) THObserver *isTransformingObserver;
 
 @end
 
@@ -38,25 +45,34 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [self.eventTimerControl addObserver:self
-                             forKeyPath:@"startDate"
-                                options:NSKeyValueObservingOptionNew
-                                context:NULL];
+    __weak typeof(self) weakSelf = self;
+    self.startDateObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"startDate" oldAndNewBlock:^(id oldValue, id newValue) {
+        if ([NSNull null] != oldValue && ![oldValue isEqualToDate:newValue]) {
+            [State instance].selectedEvent.startDate = newValue;
+            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+        }
 
-    [self.eventTimerControl addObserver:self
-                             forKeyPath:@"nowDate"
-                                options:NSKeyValueObservingOptionNew
-                                context:NULL];
+        [weakSelf updateStartLabelWithDate:newValue];
+    }];
 
-    [self.eventTimerControl addObserver:self
-                             forKeyPath:@"stopDate"
-                                options:NSKeyValueObservingOptionNew
-                                context:NULL];
+    self.nowDateObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"nowDate" oldAndNewBlock:^(id oldValue, id newValue) {
+        [weakSelf updateEventTimeWithDate:newValue];
+        [weakSelf updateStopLabelWithDate:newValue];
+    }];
 
-    [self.eventTimerControl addObserver:self
-                             forKeyPath:@"isTransforming"
-                                options:NSKeyValueObservingOptionNew
-                                context:NULL];
+    self.stopDateObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"stopDate" oldAndNewBlock:^(id oldValue, id newValue) {
+        if ([NSNull null] != oldValue && ![oldValue isEqualToDate:newValue]) {
+            [State instance].selectedEvent.stopDate = newValue;
+            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+        }
+
+        [weakSelf updateStopLabelWithDate:newValue];
+    }];
+
+    self.isTransformingObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"isTransforming" oldAndNewBlock:^(id oldValue, id newValue) {
+        EventTimerTransformingEnum eventTimerTransformingEnum = [newValue integerValue];
+        [weakSelf animateEventTransforming:eventTimerTransformingEnum];
+    }];
 
     if ([State instance].selectedEvent) {
         [self.eventTimerControl startWithEvent:[State instance].selectedEvent];
@@ -84,17 +100,10 @@
 
     [self.eventTimerControl paus];
 
-    [self.eventTimerControl removeObserver:self
-                                forKeyPath:@"startDate"];
-
-    [self.eventTimerControl removeObserver:self
-                                forKeyPath:@"nowDate"];
-
-    [self.eventTimerControl removeObserver:self
-                                forKeyPath:@"stopDate"];
-
-    [self.eventTimerControl removeObserver:self
-                                forKeyPath:@"isTransforming"];
+    [self.startDateObserver stopObserving];
+    [self.nowDateObserver stopObserving];
+    [self.stopDateObserver stopObserving];
+    [self.isTransformingObserver stopObserving];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -165,6 +174,8 @@
 
     [self.tag setTitle:[State instance].selectedEvent.inTag.name
               forState:UIControlStateNormal];
+
+    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
 }
 
 #pragma mark -
@@ -335,28 +346,6 @@
         self.eventTimeHours.alpha = eventTimeAlpha;
         self.eventTimeMinutes.alpha = eventTimeAlpha;
     } completion:nil];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"startDate"]) {
-        NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
-        [State instance].selectedEvent.startDate = date;
-
-        [self updateStartLabelWithDate:date];
-    } else if ([keyPath isEqualToString:@"nowDate"]) {
-        NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
-
-        [self updateEventTimeWithDate:date];
-        [self updateStopLabelWithDate:date];
-    } else if ([keyPath isEqualToString:@"stopDate"]) {
-        NSDate *date = [change objectForKey:NSKeyValueChangeNewKey];
-        [State instance].selectedEvent.stopDate = date;
-
-        [self updateStopLabelWithDate:date];
-    } else if ([keyPath isEqualToString:@"isTransforming"]) {
-        EventTimerTransformingEnum eventTimerTransformingEnum = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
-        [self animateEventTransforming:eventTimerTransformingEnum];
-    }
 }
 
 @end

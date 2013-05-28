@@ -3,7 +3,7 @@ GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 HEADER_SEARCH_PATHS = ${PODS_HEADERS_SEARCH_PATHS}
 LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/GoogleAnalytics-iOS-SDK/Library"
 OTHER_LDFLAGS = -ObjC -lGoogleAnalytics -framework CFNetwork -framework CoreData -framework CoreText -framework QuartzCore -framework SystemConfiguration
-PODS_BUILD_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/BButton" "${PODS_ROOT}/BuildHeaders/CSV" "${PODS_ROOT}/BuildHeaders/FontAwesomeKit" "${PODS_ROOT}/BuildHeaders/GoogleAnalytics-iOS-SDK" "${PODS_ROOT}/BuildHeaders/HMSideMenu" "${PODS_ROOT}/BuildHeaders/MGBox2" "${PODS_ROOT}/BuildHeaders/MagicalRecord"
+PODS_BUILD_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/BButton" "${PODS_ROOT}/BuildHeaders/CSV" "${PODS_ROOT}/BuildHeaders/FontAwesomeKit" "${PODS_ROOT}/BuildHeaders/GoogleAnalytics-iOS-SDK" "${PODS_ROOT}/BuildHeaders/HMSideMenu" "${PODS_ROOT}/BuildHeaders/MGBox2" "${PODS_ROOT}/BuildHeaders/MagicalRecord" "${PODS_ROOT}/BuildHeaders/THObserversAndBinders"
 PODS_HEADERS_SEARCH_PATHS = ${PODS_PUBLIC_HEADERS_SEARCH_PATHS}
-PODS_PUBLIC_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/BButton" "${PODS_ROOT}/Headers/CSV" "${PODS_ROOT}/Headers/FontAwesomeKit" "${PODS_ROOT}/Headers/GoogleAnalytics-iOS-SDK" "${PODS_ROOT}/Headers/HMSideMenu" "${PODS_ROOT}/Headers/MGBox2" "${PODS_ROOT}/Headers/MagicalRecord"
+PODS_PUBLIC_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/BButton" "${PODS_ROOT}/Headers/CSV" "${PODS_ROOT}/Headers/FontAwesomeKit" "${PODS_ROOT}/Headers/GoogleAnalytics-iOS-SDK" "${PODS_ROOT}/Headers/HMSideMenu" "${PODS_ROOT}/Headers/MGBox2" "${PODS_ROOT}/Headers/MagicalRecord" "${PODS_ROOT}/Headers/THObserversAndBinders"
 PODS_ROOT = ${SRCROOT}/Pods

@@ -28,6 +28,8 @@
 
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) NSArray *standaloneWeekdaySymbols;
+@property (nonatomic) id managedContextObserver;
+@property (nonatomic) id foregroundObserver;
 
 @end
 
@@ -45,20 +47,89 @@
     self.eventGroups = [[EventsGroupedByDate alloc] initWithEvents:events
                                                        withFilters:[State instance].eventsGroupedByDateFilter];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(objectsDidChange:)
-                                                 name:NSManagedObjectContextObjectsDidChangeNotification
-                                               object:[NSManagedObjectContext MR_defaultContext]];
+    __weak typeof(self) weakSelf = self;
+    self.managedContextObserver = [[NSNotificationCenter defaultCenter]
+                     addObserverForName:NSManagedObjectContextDidSaveNotification
+                     object:[NSManagedObjectContext MR_defaultContext]
+                     queue:nil
+                     usingBlock:^(NSNotification *note) {
+                         NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
+                         NSSet *deletedObjects  = [[note userInfo] objectForKey:NSDeletedObjectsKey];
+                         NSSet *updatedObjects  = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
+
+                         // ==========
+                         // = Events =
+                         // ==========
+
+                         // Updated Events
+                         // this can generate update, insert and delete changes
+                         NSSet *updatedEvents = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                             return [obj isKindOfClass:[Event class]];
+                         }];
+
+                         NSSet *insertedEvents = [insertedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                             return [obj isKindOfClass:[Event class]];
+                         }];
+
+                         NSSet *deletedEvents = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                             return [obj isKindOfClass:[Event class]];
+                         }];
+
+                         for (Event *event in updatedEvents) {
+                             [weakSelf.eventGroups updateEvent:event];
+                         }
+
+                         for (Event *event in insertedEvents) {
+                             [weakSelf.eventGroups addEvent:event];
+                         }
+
+                         for (Event *event in deletedEvents) {
+                             [weakSelf.eventGroups removeEvent:event];
+                         }
+
+                         if (updatedEvents.count > 0 || insertedEvents.count > 0 || deletedEvents.count > 0) {
+                             weakSelf.isEventGroupsInvalid = YES;
+                         }
+
+                         // ========
+                         // = Tags =
+                         // ========
+                         NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                             return [obj isKindOfClass:[Tag class]];
+                         }];
+                         
+                         for (Tag *tag in deletedTags) {
+                             NSUInteger index = [weakSelf.filterViewButtons indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
+                                 NSString *guid = ((TagFilterButton *)obj).eventGUID;
+                                 if ([guid isEqualToString:tag.guid]) {
+                                     *stop = YES;
+                                     return YES;
+                                 }
+                                 
+                                 return NO;
+                             }];
+                             
+                             if (index != NSNotFound) {
+                                 weakSelf.isEventGroupsInvalid = YES;
+                                 
+                                 [[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
+                             }
+                         }
+                     }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(appWillEnterForegroundNotification:)
-                                                 name:UIApplicationWillEnterForegroundNotification
-                                               object:nil];
-
+    __weak typeof(self) weakSelf = self;
+    self.foregroundObserver = [[NSNotificationCenter defaultCenter]
+                               addObserverForName:UIApplicationWillEnterForegroundNotification
+                               object:nil
+                               queue:nil
+                               usingBlock:^(NSNotification *note) {
+                                   [weakSelf.tableView reloadData];
+                               }];
+    
     [self setupFilterView];
 
     [self.tableView reloadData];
@@ -67,9 +138,11 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIApplicationWillEnterForegroundNotification
-                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self.foregroundObserver];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self.managedContextObserver];
 }
 
 #pragma mark -
@@ -120,75 +193,6 @@
 
 #pragma mark -
 #pragma mark Private methods
-
-- (void)objectsDidChange:(NSNotification *)note {
-    NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
-    NSSet *deletedObjects  = [[note userInfo] objectForKey:NSDeletedObjectsKey];
-    NSSet *updatedObjects  = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
-
-    // ==========
-    // = Events =
-    // ==========
-
-    // Updated Events
-    // this can generate update, insert and delete changes
-    NSSet *updatedEvents = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-            return [obj isKindOfClass:[Event class]];
-        }];
-
-    NSSet *insertedEvents = [insertedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-            return [obj isKindOfClass:[Event class]];
-        }];
-
-    NSSet *deletedEvents = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-            return [obj isKindOfClass:[Event class]];
-        }];
-
-    for (Event *event in updatedEvents) {
-        [self.eventGroups updateEvent:event];
-    }
-
-    for (Event *event in insertedEvents) {
-        [self.eventGroups addEvent:event];
-    }
-
-    for (Event *event in deletedEvents) {
-        [self.eventGroups removeEvent:event];
-    }
-
-    if (updatedEvents.count > 0 || insertedEvents.count > 0 || deletedEvents.count > 0) {
-        self.isEventGroupsInvalid = YES;
-    }
-
-    // ========
-    // = Tags =
-    // ========
-    NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-            return [obj isKindOfClass:[Tag class]];
-	}];
-
-    for (Tag *tag in deletedTags) {
-        NSUInteger index = [self.filterViewButtons indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
-                NSString *guid = ((TagFilterButton *)obj).eventGUID;
-                if ([guid isEqualToString:tag.guid]) {
-                    *stop = YES;
-                    return YES;
-                }
-
-                return NO;
-            }];
-
-        if (index != NSNotFound) {
-            self.isEventGroupsInvalid = YES;
-
-            [[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
-        }
-    }
-}
-
-- (void)appWillEnterForegroundNotification:(NSNotification *)note {
-    [self.tableView reloadData];
-}
 
 - (void)touchUpInsideTagFilterButton:(TagFilterButton *)sender forEvent:(UIEvent *)event {
     if ([[State instance].eventsGroupedByDateFilter containsObject:sender.eventGUID]) {

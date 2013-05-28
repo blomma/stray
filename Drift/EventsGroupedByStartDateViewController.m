@@ -34,6 +34,8 @@
 @property (nonatomic) BOOL isEventGroupsInvalid;
 
 @property (nonatomic, readonly) NSInteger editingCommitLength;
+@property (nonatomic) id managedContextObserver;
+@property (nonatomic) id foregroundObserver;
 
 @end
 
@@ -72,19 +74,51 @@
     self.tableView.pullingView.addingHeight  = 0;
     self.tableView.pullingView.closingHeight = 60;
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(objectsDidChange:)
-                                                 name:NSManagedObjectContextObjectsDidChangeNotification
-                                               object:[NSManagedObjectContext MR_defaultContext]];
+    self.managedContextObserver = [[NSNotificationCenter defaultCenter]
+                                   addObserverForName:NSManagedObjectContextDidSaveNotification
+                                   object:[NSManagedObjectContext MR_defaultContext]
+                                   queue:nil
+                                   usingBlock:^(NSNotification *note) {
+                                       NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
+
+                                       // ========
+                                       // = Tags =
+                                       // ========
+                                       NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                                           return [obj isKindOfClass:[Tag class]];
+                                       }];
+
+                                       for (Tag *tag in deletedTags) {
+                                           NSUInteger index = [weakSelf.filterViewButtons indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
+                                               NSString *guid = ((TagFilterButton *)obj).eventGUID;
+                                               if ([guid isEqualToString:tag.guid]) {
+                                                   *stop = YES;
+                                                   return YES;
+                                               }
+                                               
+                                               return NO;
+                                           }];
+                                           
+                                           if (index != NSNotFound) {
+                                               weakSelf.isEventGroupsInvalid = YES;
+                                               
+                                               [[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
+                                           }
+                                       }
+                                   }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(appWillEnterForegroundNotification:)
-                                                 name:UIApplicationWillEnterForegroundNotification
-                                               object:nil];
+    __weak typeof(self) weakSelf = self;
+    self.foregroundObserver = [[NSNotificationCenter defaultCenter]
+                               addObserverForName:UIApplicationWillEnterForegroundNotification
+                               object:nil
+                               queue:nil
+                               usingBlock:^(NSNotification *note) {
+                                   [weakSelf.tableView reloadData];
+                               }];
 
     [self setupFilterView];
 
@@ -94,9 +128,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIApplicationWillEnterForegroundNotification
-                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self.foregroundObserver];
 
     // Check if we disapeared because of presenting a controller
     if (!self.presentedViewController) {
@@ -109,6 +141,10 @@
                                                         name:NSManagedObjectContextObjectsDidChangeNotification
                                                       object:[NSManagedObjectContext MR_defaultContext]];
     }
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self.managedContextObserver];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -221,6 +257,8 @@
     }
 
     [self.tableView endUpdates];
+
+    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -371,10 +409,6 @@
             [[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
         }
     }
-}
-
-- (void)appWillEnterForegroundNotification:(NSNotification *)note {
-    [self.tableView reloadData];
 }
 
 - (void)touchUpInsideTagFilterButton:(TagFilterButton *)sender forEvent:(UIEvent *)event {

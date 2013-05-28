@@ -49,3 +49,9 @@
 #define COCOAPODS_VERSION_MINOR_MagicalRecord 1
 #define COCOAPODS_VERSION_PATCH_MagicalRecord 0
 
+// THObserversAndBinders
+#define COCOAPODS_POD_AVAILABLE_THObserversAndBinders
+#define COCOAPODS_VERSION_MAJOR_THObserversAndBinders 1
+#define COCOAPODS_VERSION_MINOR_THObserversAndBinders 0
+#define COCOAPODS_VERSION_PATCH_THObserversAndBinders 0
+
