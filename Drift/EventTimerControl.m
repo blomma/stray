@@ -49,6 +49,8 @@
 #pragma mark Public methods
 
 - (void)startWithEvent:(Event *)event {
+    self.isTransforming = EventTimerNotTransforming;
+    
     self.previousSecondTick = -1;
     self.previousNow        = -1;
 
@@ -476,6 +478,8 @@
 
         self.deltaLayer = nil;
     }
+
+    self.isTransforming = EventTimerNotTransforming;
 
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }

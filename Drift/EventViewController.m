@@ -47,12 +47,12 @@
 
     __weak typeof(self) weakSelf = self;
     self.startDateObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"startDate" oldAndNewBlock:^(id oldValue, id newValue) {
-        if ([NSNull null] != oldValue && ![oldValue isEqualToDate:newValue]) {
-            [State instance].selectedEvent.startDate = newValue;
+        [State instance].selectedEvent.startDate = newValue;
+        [weakSelf updateStartLabelWithDate:newValue];
+
+        if (self.eventTimerControl.isTransforming == EventTimerNotTransforming) {
             [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
         }
-
-        [weakSelf updateStartLabelWithDate:newValue];
     }];
 
     self.nowDateObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"nowDate" oldAndNewBlock:^(id oldValue, id newValue) {
@@ -61,17 +61,23 @@
     }];
 
     self.stopDateObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"stopDate" oldAndNewBlock:^(id oldValue, id newValue) {
-        if ([NSNull null] != oldValue && ![oldValue isEqualToDate:newValue]) {
-            [State instance].selectedEvent.stopDate = newValue;
+        [State instance].selectedEvent.stopDate = newValue;
+        [weakSelf updateStopLabelWithDate:newValue];
+
+        if (self.eventTimerControl.isTransforming == EventTimerNotTransforming) {
             [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
         }
-
-        [weakSelf updateStopLabelWithDate:newValue];
     }];
 
     self.isTransformingObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"isTransforming" oldAndNewBlock:^(id oldValue, id newValue) {
-        EventTimerTransformingEnum eventTimerTransformingEnum = [newValue integerValue];
-        [weakSelf animateEventTransforming:eventTimerTransformingEnum];
+        EventTimerTransformingEnum isTransforming = [newValue integerValue];
+        if (isTransforming != EventTimerNotTransforming) {
+            [weakSelf animateEventTransforming:isTransforming];
+        }
+
+        if (self.eventTimerControl.isTransforming == EventTimerNotTransforming) {
+            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+        }
     }];
 
     if ([State instance].selectedEvent) {
