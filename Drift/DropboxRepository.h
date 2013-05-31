@@ -11,8 +11,8 @@
 
 @interface DropboxRepository : NSObject
 
-@property (nonatomic,readonly) DBAccount *account;
-@property (nonatomic, readonly) BOOL isSynced;
+@property (nonatomic, readonly) DBAccount *account;
+@property (nonatomic, readonly) BOOL isSyncing;
 
 + (DropboxRepository *)instance;
 

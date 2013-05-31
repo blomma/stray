@@ -14,6 +14,7 @@
 #import "CSV.h"
 #import "NSDate+Utilities.h"
 #import <THObserversAndBinders.h>
+#import "State.h"
 
 @interface Canceller : NSObject
 
@@ -26,11 +27,14 @@
 
 @interface DropboxRepository ()
 
+@property (nonatomic) BOOL isSyncing;
+
 @property (nonatomic) dispatch_queue_t backgroundQueue;
 @property (nonatomic) Canceller *canceller;
-@property (nonatomic) NSInteger queueCount;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
-@property (nonatomic) id observer;
+
+@property (nonatomic) id contextObserver;
+@property (nonatomic) id dbSyncStatusObserver;
 
 @end
 
@@ -40,14 +44,13 @@
     self = [super init];
     if (self) {
         self.canceller = [[Canceller alloc] init];
-        self.queueCount = 0;
 
         DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"70tdvqrgpzmzc6k"
                                                                              secret:@"4k12ncc57avo9fe"];
         [DBAccountManager setSharedManager:accountManager];
 
         __weak typeof(self) weakSelf = self;
-        self.observer = [[NSNotificationCenter defaultCenter]
+        self.contextObserver = [[NSNotificationCenter defaultCenter]
                          addObserverForName:NSManagedObjectContextDidSaveNotification
                          object:[NSManagedObjectContext MR_defaultContext]
                          queue:nil
@@ -93,11 +96,7 @@
 }
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self.observer];
-}
-
-- (BOOL)isSynced {
-    return self.queueCount == 0 ? YES : NO;
+    [[NSNotificationCenter defaultCenter] removeObserver:self.contextObserver];
 }
 
 #pragma mark -
@@ -131,9 +130,23 @@
             self.backgroundQueue = dispatch_queue_create("com.artsoftheinsane.stray.bgqueue", NULL);
         }
         
-        DBFilesystem *filesystem = [[DBFilesystem alloc] initWithAccount:[DBAccountManager sharedManager].linkedAccount];
+        DBFilesystem *filesystem = [[DBFilesystem alloc] initWithAccount:account];
         [DBFilesystem setSharedFilesystem:filesystem];
+
+        self.isSyncing = (filesystem.status & DBSyncStatusUploading) ==  DBSyncStatusUploading ? YES : NO;
+
+        __weak typeof(self) weakSelf = self;
+        [filesystem addObserver:self.dbSyncStatusObserver forPathAndChildren:[DBPath root] block:^{
+            DBSyncStatus status = [DBFilesystem sharedFilesystem].status;
+
+            if ((status & DBSyncStatusUploading) ==  DBSyncStatusUploading) {
+                weakSelf.isSyncing = YES;
+            } else {
+                weakSelf.isSyncing = NO;
+            }
+        }];
     } else {
+        [[DBFilesystem sharedFilesystem] removeObserver:self.dbSyncStatusObserver];
         self.canceller.cancel = YES;
     }
 
@@ -151,21 +164,13 @@
 }
 
 - (void)sync {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"sync"
-                                                        object:self
-                                                      userInfo:@{@"action": @"start"}];
-
+//    [self deleteEvent:[State instance].selectedEvent];
+//    [self syncEvent:[State instance].selectedEvent];
     NSArray *events = [Event MR_findAll];
     for (Event *event in events) {
         [self deleteEvent:event];
         [self syncEvent:event];
     }
-
-    dispatch_async(self.backgroundQueue, ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"sync"
-                                                            object:self
-                                                          userInfo:@{@"action": @"end"}];
-    });
 }
 
 - (void)link {
@@ -197,12 +202,9 @@
 
     NSString *guid = [event.guid copy];
 
-    self.queueCount += 1;
-
     __weak typeof(self) weakSelf = self;
     dispatch_async(self.backgroundQueue, ^{
         if (weakSelf.canceller.cancel) {
-            weakSelf.queueCount -= 1;
             return;
         }
 
@@ -211,8 +213,6 @@
         DBPath *path = [[DBPath root] childPath:fileName];
 
         [[DBFilesystem sharedFilesystem] deletePath:path error:&deleteError];
-
-        weakSelf.queueCount -= 1;
     });
 
     [self endBackgroundTask];
@@ -226,12 +226,9 @@
     NSString *startDate = event.startDate ? [event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
     NSString *stopDate = event.stopDate ? [event.stopDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
 
-    self.queueCount += 1;
-
     __weak typeof(self) weakSelf = self;
     dispatch_async(self.backgroundQueue, ^{
         if (weakSelf.canceller.cancel) {
-            weakSelf.queueCount -= 1;
             return;
         }
         
@@ -255,8 +252,6 @@
 
             [file writeString:output error:nil];
         }
-
-        weakSelf.queueCount -= 1;
     });
 
     [self endBackgroundTask];
