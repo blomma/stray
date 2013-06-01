@@ -51,45 +51,45 @@
 
         __weak typeof(self) weakSelf = self;
         self.contextObserver = [[NSNotificationCenter defaultCenter]
-                         addObserverForName:NSManagedObjectContextDidSaveNotification
-                         object:[NSManagedObjectContext MR_defaultContext]
-                         queue:nil
-                         usingBlock:^(NSNotification *note) {
-                             if ([DBAccountManager sharedManager].linkedAccount) {
-                                 NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
-                                 NSSet *deletedObjects  = [[note userInfo] objectForKey:NSDeletedObjectsKey];
-                                 NSSet *updatedObjects  = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
-                                 
-                                 // ==========
-                                 // = Events =
-                                 // ==========
-                                 NSSet *insertedEvents = [insertedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-                                     return [obj isKindOfClass:[Event class]];
-                                 }];
-                                 
-                                 for (Event *event in insertedEvents) {
-                                     [weakSelf deleteEvent:event];
-                                     [weakSelf syncEvent:event];
-                                 }
-                                 
-                                 NSSet *updatedEvents = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-                                     return [obj isKindOfClass:[Event class]];
-                                 }];
-                                 
-                                 for (Event *event in updatedEvents) {
-                                     [weakSelf deleteEvent:event];
-                                     [weakSelf syncEvent:event];
-                                 }
-                                 
-                                 NSSet *deletedEvents = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-                                     return [obj isKindOfClass:[Event class]];
-                                 }];
-                                 
-                                 for (Event *event in deletedEvents) {
-                                     [weakSelf deleteEvent:event];
-                                 }
-                             }
-                         }];
+                                addObserverForName:NSManagedObjectContextDidSaveNotification
+                                            object:[NSManagedObjectContext MR_defaultContext]
+                                             queue:nil
+                                        usingBlock:^(NSNotification *note) {
+            if ([DBAccountManager sharedManager].linkedAccount) {
+                NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
+                NSSet *deletedObjects  = [[note userInfo] objectForKey:NSDeletedObjectsKey];
+                NSSet *updatedObjects  = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
+
+                // ==========
+                // = Events =
+                // ==========
+                NSSet *insertedEvents = [insertedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                        return [obj isKindOfClass:[Event class]];
+                    }];
+
+                for (Event *event in insertedEvents) {
+                    [weakSelf deleteEvent:event];
+                    [weakSelf syncEvent:event];
+                }
+
+                NSSet *updatedEvents = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                        return [obj isKindOfClass:[Event class]];
+                    }];
+
+                for (Event *event in updatedEvents) {
+                    [weakSelf deleteEvent:event];
+                    [weakSelf syncEvent:event];
+                }
+
+                NSSet *deletedEvents = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                        return [obj isKindOfClass:[Event class]];
+                    }];
+
+                for (Event *event in deletedEvents) {
+                    [weakSelf deleteEvent:event];
+                }
+            }
+        }];
     }
 
     return self;
@@ -125,11 +125,11 @@
 - (void)setupWithAccount:(DBAccount *)account {
     if (account) {
         self.canceller.cancel = NO;
-        
+
         if (!self.backgroundQueue) {
             self.backgroundQueue = dispatch_queue_create("com.artsoftheinsane.stray.bgqueue", NULL);
         }
-        
+
         DBFilesystem *filesystem = [[DBFilesystem alloc] initWithAccount:account];
         [DBFilesystem setSharedFilesystem:filesystem];
 
@@ -152,7 +152,7 @@
 
     [[NSNotificationCenter defaultCenter] postNotificationName:@"changeAccount"
                                                         object:self
-                                                      userInfo:@{@"account": account ? account : [NSNull null]}];
+                                                      userInfo:@{ @"account":account ? account : [NSNull null] }];
 }
 
 // At this point we have recieved a response, either a account or nil
@@ -164,8 +164,6 @@
 }
 
 - (void)sync {
-//    [self deleteEvent:[State instance].selectedEvent];
-//    [self syncEvent:[State instance].selectedEvent];
     NSArray *events = [Event MR_findAll];
     for (Event *event in events) {
         [self deleteEvent:event];
@@ -231,7 +229,7 @@
         if (weakSelf.canceller.cancel) {
             return;
         }
-        
+
         DBError *createError;
         NSString *fileName = [NSString stringWithFormat:@"%@.csv", guid];
         DBPath *path = [[DBPath root] childPath:fileName];
@@ -240,9 +238,9 @@
 
         if (file) {
             CSVRow *row = [[CSVRow alloc] initWithValues:@[
-                           tag,
-                           startDate,
-                           stopDate
+                               tag,
+                               startDate,
+                               stopDate
                            ]];
 
             CSVTable *table = [[CSVTable alloc] initWithRows:@[row]];
