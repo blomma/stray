@@ -2,9 +2,10 @@ Stray is a way for you to keep track of how you spend your time, the thought bei
 
 Features:
 • Create timers (a given)
+• Sync timers to Dropbox
 • Tag them as an easy way to remember what they were for (memories are a fickle thing)
 • Overview of past timers
-• beautiful interface (or so the kitchen gnomes say)
+• Beautiful interface (or so the kitchen gnomes say)
 • Swiping, so much swiping, also some touching, but mostly swiping
 
 For more information please visit http://stray.artsoftheinsane.com ⌨
