@@ -169,7 +169,7 @@
     }
 
     compatibility.level = level;
-    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
 }
 
 - (void)migrateCoreData {

@@ -161,7 +161,7 @@
     [cell marked:!cell.marked withAnimation:YES];
 
     self.event.inTag = [self.event.inTag isEqual:tag] ? nil : tag;
-    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
 
     if ([self.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss)]) {
         [self.delegate tagsTableViewControllerDidDimiss];
@@ -187,7 +187,7 @@
     [self.tags removeObjectAtIndex:(NSUInteger)indexPath.row];
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
 
-    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
 }
 
 - (void)cell:(TagTableViewCell *)cell didChangeTagName:(NSString *)name {

@@ -57,13 +57,13 @@
 
     __weak typeof(self) weakSelf = self;
 
-	[self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
+    [self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
         if (state == AIPullingStateAction && (previousState == AIPullingStatePullingAdd || previousState == AIPullingStatePullingClose)) {
             if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss)]) {
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 200000000);
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                    [weakSelf.delegate eventsGroupedByStartDateViewControllerDidDimiss];
-                });
+                        [weakSelf.delegate eventsGroupedByStartDateViewControllerDidDimiss];
+                    });
             }
         }
 
@@ -76,36 +76,36 @@
 
     self.managedContextObserver = [[NSNotificationCenter defaultCenter]
                                    addObserverForName:NSManagedObjectContextDidSaveNotification
-                                   object:[NSManagedObjectContext MR_defaultContext]
-                                   queue:nil
-                                   usingBlock:^(NSNotification *note) {
-                                       NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
+                                               object:[NSManagedObjectContext MR_defaultContext]
+                                                queue:nil
+                                           usingBlock:^(NSNotification *note) {
+        NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
 
-                                       // ========
-                                       // = Tags =
-                                       // ========
-                                       NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-                                           return [obj isKindOfClass:[Tag class]];
-                                       }];
+        // ========
+        // = Tags =
+        // ========
+        NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                return [obj isKindOfClass:[Tag class]];
+            }];
 
-                                       for (Tag *tag in deletedTags) {
-                                           NSUInteger index = [weakSelf.filterViewButtons indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
-                                               NSString *guid = ((TagFilterButton *)obj).eventGUID;
-                                               if ([guid isEqualToString:tag.guid]) {
-                                                   *stop = YES;
-                                                   return YES;
-                                               }
-                                               
-                                               return NO;
-                                           }];
-                                           
-                                           if (index != NSNotFound) {
-                                               weakSelf.isEventGroupsInvalid = YES;
-                                               
-                                               [[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
-                                           }
-                                       }
-                                   }];
+        for (Tag *tag in deletedTags) {
+            NSUInteger index = [weakSelf.filterViewButtons indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
+                    NSString *guid = ((TagFilterButton *)obj).eventGUID;
+                    if ([guid isEqualToString:tag.guid]) {
+                        *stop = YES;
+                        return YES;
+                    }
+
+                    return NO;
+                }];
+
+            if (index != NSNotFound) {
+                weakSelf.isEventGroupsInvalid = YES;
+
+                [[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
+            }
+        }
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -114,11 +114,11 @@
     __weak typeof(self) weakSelf = self;
     self.foregroundObserver = [[NSNotificationCenter defaultCenter]
                                addObserverForName:UIApplicationWillEnterForegroundNotification
-                               object:nil
-                               queue:nil
-                               usingBlock:^(NSNotification *note) {
-                                   [weakSelf.tableView reloadData];
-                               }];
+                                           object:nil
+                                            queue:nil
+                                       usingBlock:^(NSNotification *note) {
+        [weakSelf.tableView reloadData];
+    }];
 
     [self setupFilterView];
 
@@ -137,14 +137,8 @@
         [self.tableView disableGestureTableViewWithRecognizer:self.tableViewRecognizer];
         self.tableViewRecognizer = nil;
 
-        [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                        name:NSManagedObjectContextObjectsDidChangeNotification
-                                                      object:[NSManagedObjectContext MR_defaultContext]];
+        [[NSNotificationCenter defaultCenter] removeObserver:self.managedContextObserver];
     }
-}
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self.managedContextObserver];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -182,7 +176,7 @@
 #pragma mark TagsTableViewControllerDelegate
 
 - (void)tagsTableViewControllerDidDimiss {
-	[self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -
@@ -247,6 +241,8 @@
     }
 
     [event MR_deleteEntity];
+    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
+
     [self.eventGroups removeEvent:event];
 
     [self.tableView beginUpdates];
@@ -257,8 +253,6 @@
     }
 
     [self.tableView endUpdates];
-
-    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -381,35 +375,6 @@
 
 #pragma mark -
 #pragma mark Private methods
-
-- (void)objectsDidChange:(NSNotification *)note {
-    NSSet *deletedObjects = [[note userInfo] objectForKey:NSDeletedObjectsKey];
-
-    // ========
-    // = Tags =
-    // ========
-    NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-            return [obj isKindOfClass:[Tag class]];
-        }];
-
-    for (Tag *tag in deletedTags) {
-        NSUInteger index = [self.filterViewButtons indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
-                NSString *guid = ((TagFilterButton *)obj).eventGUID;
-                if ([guid isEqualToString:tag.guid]) {
-                    *stop = YES;
-                    return YES;
-                }
-
-                return NO;
-            }];
-
-        if (index != NSNotFound) {
-            self.isEventGroupsInvalid = YES;
-
-            [[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
-        }
-    }
-}
 
 - (void)touchUpInsideTagFilterButton:(TagFilterButton *)sender forEvent:(UIEvent *)event {
     if ([[State instance].eventsGroupedByStartDateFilter containsObject:sender.eventGUID]) {

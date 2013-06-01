@@ -50,8 +50,8 @@
         [State instance].selectedEvent.startDate = newValue;
         [weakSelf updateStartLabelWithDate:newValue];
 
-        if (self.eventTimerControl.isTransforming == EventTimerNotTransforming) {
-            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+        if (self.eventTimerControl.isTransforming == EventTimerNotTransforming && oldValue != [NSNull null]) {
+            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
         }
     }];
 
@@ -64,8 +64,8 @@
         [State instance].selectedEvent.stopDate = newValue;
         [weakSelf updateStopLabelWithDate:newValue];
 
-        if (self.eventTimerControl.isTransforming == EventTimerNotTransforming) {
-            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+        if (self.eventTimerControl.isTransforming == EventTimerNotTransforming && oldValue != [NSNull null]) {
+            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
         }
     }];
 
@@ -76,7 +76,7 @@
         }
 
         if (self.eventTimerControl.isTransforming == EventTimerNotTransforming) {
-            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
         }
     }];
 
@@ -181,7 +181,7 @@
     [self.tag setTitle:[State instance].selectedEvent.inTag.name
               forState:UIControlStateNormal];
 
-    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
 }
 
 #pragma mark -
