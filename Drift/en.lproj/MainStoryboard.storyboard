@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12D78" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="ftN-u6-d28">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4457.6" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="ftN-u6-d28">
     <dependencies>
-        <development version="4500" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
+        <deployment defaultVersion="1536" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3682.6"/>
     </dependencies>
     <scenes>
         <!--RootViewController-->
         <scene sceneID="KvM-gm-lw9">
             <objects>
                 <pageViewController storyboardIdentifier="RootViewController" autoresizesArchivedViewToFullSize="NO" title="Root View" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="ftN-u6-d28" userLabel="RootViewController" customClass="RootViewController" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <segue destination="BUI-Lx-VWJ" kind="modal" identifier="segueToInfoHintView" id="vjV-x8-epP"/>
@@ -50,6 +51,7 @@
                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
                         <outlet property="close" destination="Deg-ed-Pfm" id="01O-nU-FlE"/>
                         <outlet property="scroller" destination="niq-u8-g5p" id="MDh-Tr-njy"/>
@@ -197,6 +199,7 @@
                             <outletCollection property="gestureRecognizers" destination="wKd-F6-UDR" appends="YES" id="C5f-qc-NP6"/>
                         </connections>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="eventStartDay" destination="xRk-W2-bMK" id="o2D-s6-ecT"/>
@@ -227,7 +230,7 @@
         <!--TagsTableViewController-->
         <scene sceneID="zQ2-00-SiN">
             <objects>
-                <tableViewController storyboardIdentifier="" id="rGB-yR-mDw" userLabel="TagsTableViewController" customClass="TagsTableViewController" sceneMemberID="viewController">
+                <tableViewController id="rGB-yR-mDw" userLabel="TagsTableViewController" customClass="TagsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="74" sectionHeaderHeight="22" sectionFooterHeight="22" id="Drg-ei-boB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -305,6 +308,7 @@
                             <outlet property="delegate" destination="rGB-yR-mDw" id="si1-YW-02P"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <nil key="simulatedStatusBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wuN-Iu-I2O" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -320,7 +324,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="4" id="CZO-Ue-RJ9">
-                                <rect key="frame" x="0.0" y="444" width="320" height="36"/>
+                                <rect key="frame" x="-1" y="444" width="320" height="36"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" red="0.37647058823529411" green="0.37254901960784315" blue="0.36862745098039218" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -353,6 +357,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="closeInfoHintView" destination="bkD-Xw-xDv" id="hkQ-db-rth"/>
@@ -460,6 +465,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="filterView" destination="nQy-aQ-EHb" id="Btj-nL-koh"/>
@@ -639,6 +645,7 @@
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="filterView" destination="OEb-AI-qv9" id="B5f-v9-xt1"/>
@@ -651,122 +658,6 @@
             <point key="canvasLocation" x="515" y="324"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="EventTimerControl" superclassName="UIControl">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventTimerControl.h"/>
-        </class>
-        <class className="EventViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="showTags:"/>
-                <relationship kind="action" name="toggleEventTouchUpInside:forEvent:"/>
-                <relationship kind="action" name="unwindFromSegue:" candidateClass="UIStoryboardSegue"/>
-                <relationship kind="outlet" name="eventStartDay" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStartMonth" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStartTime" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStartYear" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopDay" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopMonth" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopTime" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopYear" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventTimeHours" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventTimeMinutes" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventTimerControl" candidateClass="EventTimerControl"/>
-                <relationship kind="outlet" name="tag" candidateClass="TagButton"/>
-                <relationship kind="outlet" name="toggleStartStopButton" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="EventsGroupedByDateTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventsGroupedByDateTableViewCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="day" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="hours" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="minutes" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="month" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="weekDay" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="year" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="EventsGroupedByDateViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventsGroupedByDateViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="filterView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="EventsGroupedByStartDateTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventsGroupedByStartDateTableViewCell.h"/>
-            <relationships>
-                <relationship kind="action" name="touchUpInsideTagButton:forEvent:" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="backView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="eventStartDay" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStartMonth" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStartTime" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStartYear" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopDay" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopMonth" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopTime" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventStopYear" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventTimeHours" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="eventTimeMinutes" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="frontView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="tagName" candidateClass="TagButton"/>
-                <relationship kind="outlet" name="willDelete" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="EventsGroupedByStartDateViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EventsGroupedByStartDateViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="filterView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="InfoHintViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/InfoHintViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="pageChanged:"/>
-                <relationship kind="outlet" name="closeInfoHintView" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="pageControl" candidateClass="UIPageControl"/>
-                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
-            </relationships>
-        </class>
-        <class className="MGScrollView" superclassName="UIScrollView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MGScrollView.h"/>
-        </class>
-        <class className="PreferencesViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PreferencesViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="close" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="scroller" candidateClass="MGScrollView"/>
-            </relationships>
-        </class>
-        <class className="RootViewController" superclassName="UIPageViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RootViewController.h"/>
-        </class>
-        <class className="TagButton" superclassName="UIButton">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TagButton.h"/>
-        </class>
-        <class className="TagTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TagTableViewCell.h"/>
-            <relationships>
-                <relationship kind="action" name="touchUpInsideDeleteButton:forEvent:" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="backView" candidateClass="TagTableViewCellBackView"/>
-                <relationship kind="outlet" name="deleteButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="frontView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="tagName" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="tagNameTextField" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="TagTableViewCellBackView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TagTableViewCellBackView.h"/>
-        </class>
-        <class className="TagsTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TagsTableViewController.h"/>
-        </class>
-        <class className="UIStoryboardSegue" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIStoryboardSegue.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
