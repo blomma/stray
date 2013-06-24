@@ -172,7 +172,6 @@
 		9E66D0DB16553D6700339E99 /* State.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = State.h; sourceTree = "<group>"; };
 		9E66D0DC16553D6700339E99 /* State.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = State.m; sourceTree = "<group>"; };
 		9E6C6C8716BABD5400613E86 /* CoreDataModel-7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-7.xcdatamodel"; sourceTree = "<group>"; };
-		9E73A5FE16B87B0900F299C6 /* Stray.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Stray.entitlements; sourceTree = "<group>"; };
 		9E7CEDF2157B778300718FA6 /* _Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Event.h; sourceTree = "<group>"; };
 		9E7CEDF3157B778300718FA6 /* _Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Event.m; sourceTree = "<group>"; };
 		9E810ECE1676288200CA2009 /* Info-Event-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Info-Event-568h@2x.png"; sourceTree = "<group>"; };
@@ -352,7 +351,6 @@
 		9E42F1F415570FD60087F602 /* Drift */ = {
 			isa = PBXGroup;
 			children = (
-				9E73A5FE16B87B0900F299C6 /* Stray.entitlements */,
 				9E472ABD167614AB00D32DEB /* Protocols */,
 				9E42F1F515570FD60087F602 /* Supporting Files */,
 				9EAB520B15C95523008952FB /* Categories */,
@@ -617,6 +615,19 @@
 			attributes = {
 				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = Artsoftheinsane;
+				TargetAttributes = {
+					9E42F1E915570FD60087F602 = {
+						DevelopmentTeam = 32J7P2AA46;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 0;
+							};
+							com.apple.iCloud = {
+								enabled = 0;
+							};
+						};
+					};
+				};
 			};
 			buildConfigurationList = 9E42F1E415570FD60087F602 /* Build configuration list for PBXProject "Drift" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -878,7 +889,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5EB57372691447A9B39384E9 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = Drift/Stray.entitlements;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -900,7 +912,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5EB57372691447A9B39384E9 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = Drift/Stray.entitlements;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -975,7 +988,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5EB57372691447A9B39384E9 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = Drift/Stray.entitlements;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
