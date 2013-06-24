@@ -8,8 +8,6 @@
 
 #import "RootViewController.h"
 
-#import "UIPageViewController+UIPageControl.h"
-#import <NSString+FontAwesome.h>
 #import <FontAwesomeKit.h>
 #import <HMSideMenu.h>
 #import "IconView.h"
@@ -23,13 +21,6 @@
 @end
 
 @implementation RootViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-    }
-    return self;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -46,6 +37,12 @@
                    direction:UIPageViewControllerNavigationDirectionForward
                     animated:YES
                   completion:nil];
+
+    self.view.backgroundColor = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
+
+    [[UIPageControl appearanceWhenContainedIn:[UIPageViewController class], nil] setBackgroundColor:[UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:1]];
+    [[UIPageControl appearanceWhenContainedIn:[UIPageViewController class], nil] setCurrentPageIndicatorTintColor:[UIColor colorWithWhite:0.267f alpha:0.8f]];
+    [[UIPageControl appearanceWhenContainedIn:[UIPageViewController class], nil] setPageIndicatorTintColor:[UIColor colorWithWhite:0.267f alpha:0.2f]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -53,10 +50,6 @@
 
     static dispatch_once_t once;
     dispatch_once(&once, ^{
-        self.view.backgroundColor                      = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
-        self.pageControl.backgroundColor               = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
-        self.pageControl.pageIndicatorTintColor        = [UIColor colorWithWhite:0.267 alpha:0.2];
-        self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithWhite:0.267 alpha:0.8];
 
         self.sideMenuButton = [[UIButton alloc] init];
         [self.sideMenuButton addTarget:self

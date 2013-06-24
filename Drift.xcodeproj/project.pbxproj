@@ -30,7 +30,6 @@
 		9E20D71317454E0600087AB8 /* DropboxRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E20D71217454E0600087AB8 /* DropboxRepository.m */; };
 		9E21F926156EA9510075EAAC /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */; };
 		9E21F929156EAA2F0075EAAC /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F928156EAA2F0075EAAC /* Event.m */; };
-		9E2200E016088C0E008623F3 /* UIPageViewController+UIPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E2200DF16088C0E008623F3 /* UIPageViewController+UIPageControl.m */; };
 		9E2CFDE9162190E8004D9D8D /* TagsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E2CFDE8162190E8004D9D8D /* TagsTableViewController.m */; };
 		9E2F076E161745B400F1C24D /* DataRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E2F076D161745B400F1C24D /* DataRepository.m */; };
 		9E42F1EF15570FD60087F602 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1EE15570FD60087F602 /* UIKit.framework */; };
@@ -126,8 +125,6 @@
 		9E21F925156EA9510075EAAC /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
 		9E21F927156EAA2F0075EAAC /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		9E21F928156EAA2F0075EAAC /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
-		9E2200DE16088C0E008623F3 /* UIPageViewController+UIPageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIPageViewController+UIPageControl.h"; sourceTree = "<group>"; };
-		9E2200DF16088C0E008623F3 /* UIPageViewController+UIPageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIPageViewController+UIPageControl.m"; sourceTree = "<group>"; };
 		9E2CFDE7162190E8004D9D8D /* TagsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagsTableViewController.h; sourceTree = "<group>"; };
 		9E2CFDE8162190E8004D9D8D /* TagsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagsTableViewController.m; sourceTree = "<group>"; };
 		9E2F076C161745B400F1C24D /* DataRepository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataRepository.h; sourceTree = "<group>"; };
@@ -509,8 +506,6 @@
 				9E96A90616397DB400164D76 /* CAAnimation+Blocks.m */,
 				9EAB520D15C9553C008952FB /* NSDate+Utilities.h */,
 				9EAB520E15C9553C008952FB /* NSDate+Utilities.m */,
-				9E2200DE16088C0E008623F3 /* UIPageViewController+UIPageControl.h */,
-				9E2200DF16088C0E008623F3 /* UIPageViewController+UIPageControl.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -742,7 +737,6 @@
 				9E92637115EF350D00393946 /* _Tag.m in Sources */,
 				9E9C237815F3617200572FB7 /* EventsGroupedByStartDateViewController.m in Sources */,
 				9E561DDB15FA08FB008D3895 /* EventsGroupedByStartDateTableViewCell.m in Sources */,
-				9E2200E016088C0E008623F3 /* UIPageViewController+UIPageControl.m in Sources */,
 				9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */,
 				9E2F076E161745B400F1C24D /* DataRepository.m in Sources */,
 				9E15897D16183F7100DB19EB /* Tags.m in Sources */,
