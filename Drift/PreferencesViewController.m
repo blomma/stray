@@ -14,7 +14,6 @@
 #import <MGLine.h>
 #import <MGLineStyled.h>
 #import <UIColor+MGExpanded.h>
-#import <BButton.h>
 #import <FontAwesomeKit.h>
 #import <THObserversAndBinders.h>
 
@@ -22,7 +21,7 @@
 
 @property (nonatomic) MGBox *grid;
 @property (nonatomic) UISwitch *dropboxSync;
-@property (nonatomic) BButton *dropboxResync;
+@property (nonatomic) UIButton *dropboxResync;
 @property (nonatomic) id dropboxChangeObserver;
 @property (nonatomic) id dropboxSyncObserver;
 @property (nonatomic) THObserver *dropboxActivityObserver;
@@ -106,12 +105,13 @@
     box.borderStyle = MGBorderEtchedAll;
     [box setBorderColors:[box.backgroundColor colorByAdding:-0.16f alpha:-0.5f]];
 
-    self.dropboxResync = [[BButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)
-                                                          type:BButtonTypeDanger];
-    self.dropboxResync.shouldShowDisabled = YES;
+    self.dropboxResync = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.dropboxResync.frame = CGRectMake(0, 0, 30, 30);
     self.dropboxResync.titleLabel.font = [FontAwesomeKit fontWithSize:18];
     self.dropboxResync.titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.dropboxResync setTitle:FAKIconRetweet forState:UIControlStateNormal];
+    [self.dropboxResync setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [self.dropboxResync setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
 
     [self.dropboxResync addTarget:self
                                   action:@selector(onDropboxSync:forEvent:)
