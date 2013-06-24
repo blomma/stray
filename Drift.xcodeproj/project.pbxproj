@@ -57,6 +57,7 @@
 		9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E63BBF3156EAA710006FEFC /* CoreData.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9E63E1D715EA3339009C0A2D /* NoHitCAShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */; };
 		9E66D0DD16553D6700339E99 /* State.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E66D0DC16553D6700339E99 /* State.m */; };
+		9E7636661778A31D005C755F /* AIStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7636651778A1A4005C755F /* AIStyle.m */; };
 		9E7CEDF4157B778300718FA6 /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEDF3157B778300718FA6 /* _Event.m */; };
 		9E7EB52C15E8F89C00604B79 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */; };
 		9E7EB52D15E8F8C100604B79 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F215570FD60087F602 /* CoreGraphics.framework */; };
@@ -169,6 +170,8 @@
 		9E66D0DB16553D6700339E99 /* State.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = State.h; sourceTree = "<group>"; };
 		9E66D0DC16553D6700339E99 /* State.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = State.m; sourceTree = "<group>"; };
 		9E6C6C8716BABD5400613E86 /* CoreDataModel-7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-7.xcdatamodel"; sourceTree = "<group>"; };
+		9E7636641778A1A4005C755F /* AIStyle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AIStyle.h; sourceTree = "<group>"; };
+		9E7636651778A1A4005C755F /* AIStyle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AIStyle.m; sourceTree = "<group>"; };
 		9E7CEDF2157B778300718FA6 /* _Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Event.h; sourceTree = "<group>"; };
 		9E7CEDF3157B778300718FA6 /* _Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Event.m; sourceTree = "<group>"; };
 		9E810ECE1676288200CA2009 /* Info-Event-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Info-Event-568h@2x.png"; sourceTree = "<group>"; };
@@ -465,6 +468,8 @@
 				9ED7F6C216DD027F0035A6E7 /* Api.m */,
 				9E02A6E8174A7B8900C1ED21 /* IconView.h */,
 				9E02A6E9174A7B8900C1ED21 /* IconView.m */,
+				9E7636641778A1A4005C755F /* AIStyle.h */,
+				9E7636651778A1A4005C755F /* AIStyle.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -719,6 +724,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E7636661778A31D005C755F /* AIStyle.m in Sources */,
 				9E96A907163981B600164D76 /* CAAnimation+Blocks.m in Sources */,
 				9E42F1FB15570FD60087F602 /* main.m in Sources */,
 				9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */,
