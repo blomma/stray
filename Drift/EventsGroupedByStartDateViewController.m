@@ -66,13 +66,15 @@
                     });
             }
         }
-
-        CGRect frame = CGRectMake(0, MIN(0, height), weakSelf.view.bounds.size.width, 30);
-        weakSelf.filterView.frame = frame;
     }];
 
     self.tableView.pullingView.addingHeight  = 0;
     self.tableView.pullingView.closingHeight = 60;
+
+    self.tableView.contentInset = UIEdgeInsetsMake(50, 0, 30, 0);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(50, 0, 30, 0);
+
+    
 
     self.managedContextObserver = [[NSNotificationCenter defaultCenter]
                                    addObserverForName:NSManagedObjectContextDidSaveNotification
