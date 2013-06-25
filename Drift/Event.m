@@ -8,7 +8,7 @@
 - (void)awakeFromInsert {
     [super awakeFromInsert];
 
-    self.guid = [[NSProcessInfo processInfo] globallyUniqueString];
+    self.guid = [[NSUUID UUID] UUIDString];
 }
 
 - (BOOL)isActive {
