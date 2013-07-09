@@ -23,7 +23,4 @@
 
 +(void)synchronize;
 
-+(void)registerForNotifications;
-+(void)removeNotifications;
-
 @end

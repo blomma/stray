@@ -18,13 +18,7 @@
 }
 
 + (id)objectForKey:(NSString *)aKey {
-    NSUbiquitousKeyValueStore *cloud = [NSUbiquitousKeyValueStore defaultStore];
-    id retv                          = [cloud objectForKey:aKey];
-    if (!retv) {
-        retv = [[NSUserDefaults standardUserDefaults] objectForKey:aKey];
-        [cloud setObject:retv forKey:aKey];
-    }
-    return retv;
+    return [[NSUserDefaults standardUserDefaults] objectForKey:aKey];
 }
 
 + (NSInteger)integerForKey:(NSString *)aKey {
@@ -40,7 +34,6 @@
 }
 
 + (void)setObject:(id)anObject forKey:(NSString *)aKey {
-    [[NSUbiquitousKeyValueStore defaultStore] setObject:anObject forKey:aKey];
     [[NSUserDefaults standardUserDefaults] setObject:anObject forKey:aKey];
 }
 
@@ -50,32 +43,11 @@
 }
 
 + (void)removeObjectForKey:(NSString *)aKey {
-    [[NSUbiquitousKeyValueStore defaultStore] removeObjectForKey:aKey];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:aKey];
 }
 
 + (void)synchronize {
-    [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-+ (void)registerForNotifications {
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"NSUbiquitousKeyValueStoreDidChangeExternallyNotification"
-                                                      object:[NSUbiquitousKeyValueStore defaultStore]
-                                                       queue:nil
-                                                  usingBlock:^(NSNotification *notification) {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSUbiquitousKeyValueStore *cloud = [NSUbiquitousKeyValueStore defaultStore];
-        NSDictionary *changedKeys = [notification.userInfo objectForKey:@"NSUbiquitousKeyValueStoreChangedKeysKey"];
-        for (NSString * a in changedKeys) {
-            [defaults setObject:[cloud objectForKey:a] forKey:a];
-        }
-    }];
-
-}
-
-+ (void)removeNotifications {
-    [[NSNotificationCenter defaultCenter] removeObserver:[NSUbiquitousKeyValueStore defaultStore]];
 }
 
 @end
