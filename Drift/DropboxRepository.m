@@ -9,12 +9,15 @@
 #import "DropboxRepository.h"
 #import "Event.h"
 #import "Tag.h"
+#import "Repository.h"
 #import <dispatch/dispatch.h>
 #import <Dropbox/Dropbox.h>
 #import "CSV.h"
 #import "NSDate+Utilities.h"
 #import <THObserversAndBinders.h>
 #import "State.h"
+
+static NSString *const RepositoryName = @"dropbox";
 
 @interface Canceller : NSObject
 
@@ -51,42 +54,87 @@
 
         __weak typeof(self) weakSelf = self;
         self.contextObserver = [[NSNotificationCenter defaultCenter]
-                                addObserverForName:NSManagedObjectContextDidSaveNotification
+                                addObserverForName:NSManagedObjectContextObjectsDidChangeNotification
                                             object:[NSManagedObjectContext MR_defaultContext]
                                              queue:nil
                                         usingBlock:^(NSNotification *note) {
             if ([DBAccountManager sharedManager].linkedAccount) {
-                NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
-                NSSet *deletedObjects  = [[note userInfo] objectForKey:NSDeletedObjectsKey];
-                NSSet *updatedObjects  = [[note userInfo] objectForKey:NSUpdatedObjectsKey];
+                NSManagedObjectContext *context = [note object];
 
-                // ==========
-                // = Events =
-                // ==========
-                NSSet *insertedEvents = [insertedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-                        return [obj isKindOfClass:[Event class]];
-                    }];
+                NSSet *insertedEvents = [[context insertedObjects] objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                    return [obj isKindOfClass:[Event class]];
+                }];
 
                 for (Event *event in insertedEvents) {
-                    [weakSelf deleteEvent:event];
-                    [weakSelf syncEvent:event];
+                    NSSet *validChanges = [[event changedValues] keysOfEntriesPassingTest:^BOOL(id key, id obj, BOOL *stop) {
+                        if ([key isEqualToString:@"inRepositories"]) {
+                            return NO;
+                        }
+
+                        return YES;
+                    }];
+
+                    NSSet *validChangesSinceLastChanges = [[event changedValuesForCurrentEvent] keysOfEntriesPassingTest:^BOOL(id key, id obj, BOOL *stop) {
+                        if ([key isEqualToString:@"inRepositories"]) {
+                            return NO;
+                        }
+                        
+                        return YES;
+                    }];
+
+                    if (validChanges.count > 0 && validChangesSinceLastChanges.count > 0) {
+                        [weakSelf deleteEvent:event];
+                        [weakSelf syncEvent:event];
+                    }
                 }
 
-                NSSet *updatedEvents = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                NSSet *updatedEvents = [[context updatedObjects] objectsPassingTest:^BOOL (id obj, BOOL *stop) {
                         return [obj isKindOfClass:[Event class]];
                     }];
 
                 for (Event *event in updatedEvents) {
-                    [weakSelf deleteEvent:event];
-                    [weakSelf syncEvent:event];
-                }
+                    NSSet *validChanges = [[event changedValues] keysOfEntriesPassingTest:^BOOL(id key, id obj, BOOL *stop) {
+                        if ([key isEqualToString:@"inRepositories"]) {
+                            return NO;
+                        }
 
-                NSSet *deletedEvents = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
-                        return [obj isKindOfClass:[Event class]];
+                        return YES;
                     }];
 
+
+                    NSSet *validChangesSinceLastChanges = [[event changedValuesForCurrentEvent] keysOfEntriesPassingTest:^BOOL(id key, id obj, BOOL *stop) {
+                        if ([key isEqualToString:@"inRepositories"]) {
+                            return NO;
+                        }
+
+                        return YES;
+                    }];
+
+                    if (validChanges.count > 0 && validChangesSinceLastChanges.count > 0) {
+                        [weakSelf deleteEvent:event];
+                        [weakSelf syncEvent:event];
+                    }
+                }
+
+                NSSet *deletedEvents = [[context deletedObjects] objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                    return [obj isKindOfClass:[Event class]];
+                }];
+
+                NSSet *deletedRepositories = [[context deletedObjects] objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                    return [obj isKindOfClass:[Repository class]];
+                }];
+
                 for (Event *event in deletedEvents) {
-                    [weakSelf deleteEvent:event];
+                    Repository *repo = [[deletedRepositories objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+                        if ([[obj name] isEqualToString:RepositoryName]) {
+                            *stop = YES;
+                            return YES;
+                        }
+
+                        return NO;
+                    }] anyObject];
+
+                    [weakSelf deleteEvent:event withRepo:repo];
                 }
             }
         }];
@@ -196,9 +244,28 @@
 }
 
 - (void)deleteEvent:(Event *)event {
+    NSSet *repos = [event.inRepositories objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        if ([[obj name] isEqualToString:RepositoryName]) {
+            *stop = YES;
+            return YES;
+        }
+
+        return NO;
+    }];
+
+    Repository *repo = [repos anyObject];
+
+    [self deleteEvent:event withRepo:repo];
+}
+
+- (void)deleteEvent:(Event *)event withRepo:(Repository *)repo {
     [self beginBackgroundTask];
 
-    NSString *guid = [event.guid copy];
+    // To maintain backwards compat we try and delete the old name first if no repo exists
+    NSString *path = [NSString stringWithFormat:@"%@.csv", event.guid];
+    if (repo) {
+        path = [repo.path copy];
+    }
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(self.backgroundQueue, ^{
@@ -207,10 +274,9 @@
         }
 
         DBError *deleteError;
-        NSString *fileName = [NSString stringWithFormat:@"%@.csv", guid];
-        DBPath *path = [[DBPath root] childPath:fileName];
 
-        [[DBFilesystem sharedFilesystem] deletePath:path error:&deleteError];
+        DBPath *dbPath = [[DBPath root] childPath:path];
+        [[DBFilesystem sharedFilesystem] deletePath:dbPath error:&deleteError];
     });
 
     [self endBackgroundTask];
@@ -219,10 +285,32 @@
 - (void)syncEvent:(Event *)event {
     [self beginBackgroundTask];
 
-    NSString *guid = [event.guid copy];
+    NSSet *repos = [event.inRepositories objectsPassingTest:^BOOL(id obj, BOOL *stop) {
+        if ([[obj name] isEqualToString:RepositoryName]) {
+            *stop = YES;
+            return YES;
+        }
+
+        return NO;
+    }];
+
+    Repository *repo = [repos anyObject];
+
+    // If no repo then create one
+    if (!repo) {
+        repo = [Repository MR_createEntity];
+        repo.name = RepositoryName;
+
+        [event addInRepositoriesObject:repo];
+    }
+
     NSString *tag = event.inTag.name ? [event.inTag.name copy ] : @"";
     NSString *startDate = event.startDate ? [event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
     NSString *stopDate = event.stopDate ? [event.stopDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
+    NSString *path = [NSString stringWithFormat:@"%@-%@.csv", [event.startDate stringByFormat:@"yyyy-MM-dd HHmmss"], event.guid];
+
+    // Update the pathname to the potential new filename
+    repo.path = path;
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(self.backgroundQueue, ^{
@@ -231,24 +319,25 @@
         }
 
         DBError *createError;
-        NSString *fileName = [NSString stringWithFormat:@"%@.csv", guid];
-        DBPath *path = [[DBPath root] childPath:fileName];
+            
+        DBPath *dbPath = [[DBPath root] childPath:path];
+        DBFile *dbFile = [[DBFilesystem sharedFilesystem] createFile:dbPath error:&createError];
 
-        DBFile *file = [[DBFilesystem sharedFilesystem] createFile:path error:&createError];
-
-        if (file) {
-            CSVRow *row = [[CSVRow alloc] initWithValues:@[
-                               tag,
-                               startDate,
-                               stopDate
-                           ]];
+        if (dbFile) {
+            CSVRow *row = [[CSVRow alloc] initWithValues:
+                           @[
+                             tag,
+                             startDate,
+                             stopDate
+                             ]];
 
             CSVTable *table = [[CSVTable alloc] initWithRows:@[row]];
             NSMutableString *output = [[NSMutableString alloc] init];
             CSVSerializer *serializer = [[CSVSerializer alloc] initWithOutput:output];
             [serializer serialize:table];
 
-            [file writeString:output error:nil];
+            [dbFile writeString:output error:&createError];
+            [dbFile close];
         }
     });
 

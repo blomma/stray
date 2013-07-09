@@ -10,6 +10,6 @@
 
 @interface TagFilterButton : UIButton
 
-@property (nonatomic) NSString *eventGUID;
+@property (nonatomic) NSString *tagGuid;
 
 @end

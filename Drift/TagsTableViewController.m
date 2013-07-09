@@ -161,7 +161,6 @@
     [cell marked:!cell.marked withAnimation:YES];
 
     self.event.inTag = [self.event.inTag isEqual:tag] ? nil : tag;
-    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
 
     if ([self.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss)]) {
         [self.delegate tagsTableViewControllerDidDimiss];
@@ -175,6 +174,11 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
+
+    if ([self.delegate respondsToSelector:@selector(didDeleteTag:)]) {
+        [self.delegate didDeleteTag:tag];
+    }
+
     [tag MR_deleteEntity];
 
     CGPoint fromValue = cell.frontView.layer.position;
@@ -186,8 +190,6 @@
 
     [self.tags removeObjectAtIndex:(NSUInteger)indexPath.row];
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-
-    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
 }
 
 - (void)cell:(TagTableViewCell *)cell didChangeTagName:(NSString *)name {
@@ -198,6 +200,10 @@
         tag.name = [name copy];
 
         cell.tagTitle = [name copy];
+
+        if ([self.delegate respondsToSelector:@selector(didEditTag:)]) {
+            [self.delegate didEditTag:tag];
+        }
     }
 
     CGPoint fromValue = cell.frontView.layer.position;

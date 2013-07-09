@@ -22,9 +22,11 @@
 @interface EventsGroupedByDateViewController ()
 
 @property (nonatomic) NSMutableArray *filterViewButtons;
+@property (nonatomic) BOOL isFilterViewInvalid;
 
 @property (nonatomic) EventsGroupedByDate *eventGroups;
 @property (nonatomic) BOOL isEventGroupsInvalid;
+@property (nonatomic) BOOL isEventGroupsViewInvalid;
 
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) NSArray *standaloneWeekdaySymbols;
@@ -46,10 +48,13 @@
     NSArray *events = [Event MR_findAllSortedBy:@"startDate" ascending:YES];
     self.eventGroups = [[EventsGroupedByDate alloc] initWithEvents:events
                                                        withFilters:[State instance].eventsGroupedByDateFilter];
+    self.isEventGroupsInvalid = YES;
+    self.isEventGroupsViewInvalid = YES;
+    self.isFilterViewInvalid = YES;
 
     __weak typeof(self) weakSelf = self;
     self.managedContextObserver = [[NSNotificationCenter defaultCenter]
-                     addObserverForName:NSManagedObjectContextDidSaveNotification
+                     addObserverForName:NSManagedObjectContextObjectsDidChangeNotification
                      object:[NSManagedObjectContext MR_defaultContext]
                      queue:nil
                      usingBlock:^(NSNotification *note) {
@@ -60,9 +65,6 @@
                          // ==========
                          // = Events =
                          // ==========
-
-                         // Updated Events
-                         // this can generate update, insert and delete changes
                          NSSet *updatedEvents = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
                              return [obj isKindOfClass:[Event class]];
                          }];
@@ -89,18 +91,31 @@
 
                          if (updatedEvents.count > 0 || insertedEvents.count > 0 || deletedEvents.count > 0) {
                              weakSelf.isEventGroupsInvalid = YES;
+                             weakSelf.isEventGroupsViewInvalid = YES;
                          }
 
                          // ========
                          // = Tags =
                          // ========
+                         NSSet *updatedTags = [updatedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                             return [obj isKindOfClass:[Tag class]];
+                         }];
+
+                         NSSet *insertedTags = [insertedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
+                             return [obj isKindOfClass:[Tag class]];
+                         }];
+
                          NSSet *deletedTags = [deletedObjects objectsPassingTest:^BOOL (id obj, BOOL *stop) {
                              return [obj isKindOfClass:[Tag class]];
                          }];
-                         
+
+                         if (updatedTags.count > 0 || insertedTags.count > 0) {
+                             weakSelf.isFilterViewInvalid = YES;
+                         }
+
                          for (Tag *tag in deletedTags) {
                              NSUInteger index = [weakSelf.filterViewButtons indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
-                                 NSString *guid = ((TagFilterButton *)obj).eventGUID;
+                                 NSString *guid = ((TagFilterButton *)obj).tagGuid;
                                  if ([guid isEqualToString:tag.guid]) {
                                      *stop = YES;
                                      return YES;
@@ -111,6 +126,8 @@
                              
                              if (index != NSNotFound) {
                                  weakSelf.isEventGroupsInvalid = YES;
+                                 weakSelf.isEventGroupsViewInvalid = YES;
+                                 weakSelf.isFilterViewInvalid = YES;
                                  
                                  [[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
                              }
@@ -129,10 +146,16 @@
                                usingBlock:^(NSNotification *note) {
                                    [weakSelf.tableView reloadData];
                                }];
-    
-    [self setupFilterView];
 
-    [self.tableView reloadData];
+    if (self.isFilterViewInvalid) {
+        [self setupFilterView];
+    }
+
+    if (self.isEventGroupsViewInvalid) {
+        [self.tableView reloadData];
+
+        self.isEventGroupsViewInvalid = NO;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -195,12 +218,12 @@
 #pragma mark Private methods
 
 - (void)touchUpInsideTagFilterButton:(TagFilterButton *)sender forEvent:(UIEvent *)event {
-    if ([[State instance].eventsGroupedByDateFilter containsObject:sender.eventGUID]) {
-        [[State instance].eventsGroupedByDateFilter removeObject:sender.eventGUID];
+    if ([[State instance].eventsGroupedByDateFilter containsObject:sender.tagGuid]) {
+        [[State instance].eventsGroupedByDateFilter removeObject:sender.tagGuid];
 
         sender.selected = NO;
     } else {
-        [[State instance].eventsGroupedByDateFilter addObject:sender.eventGUID];
+        [[State instance].eventsGroupedByDateFilter addObject:sender.tagGuid];
 
         sender.selected = YES;
     }
@@ -260,7 +283,7 @@
         // Only show tags that have a name set
         if (tag.name) {
             TagFilterButton *button = [[TagFilterButton alloc] init];
-            button.eventGUID = tag.guid;
+            button.tagGuid = tag.guid;
             [button addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 
             button.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:13];
@@ -292,6 +315,8 @@
 
     // set the size of the scrollview's content
     self.filterView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
+
+    self.isFilterViewInvalid = NO;
 }
 
 @end

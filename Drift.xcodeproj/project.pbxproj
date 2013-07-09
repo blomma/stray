@@ -25,6 +25,8 @@
 		9E00A75F157734AE002FC707 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E00A75E157734AE002FC707 /* EventViewController.m */; };
 		9E00A76315773859002FC707 /* EventsGroupedByDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E00A76215773859002FC707 /* EventsGroupedByDateViewController.m */; };
 		9E02A6EA174A7B8900C1ED21 /* IconView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E02A6E9174A7B8900C1ED21 /* IconView.m */; };
+		9E03424B1779DFFF00D87564 /* _Repository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E0342491779DFE700D87564 /* _Repository.m */; };
+		9E03424C1779DFFF00D87564 /* Repository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E03424A1779DFE700D87564 /* Repository.m */; };
 		9E14D452162B3D3F008D9E43 /* TagFilterButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E14D451162B3D3F008D9E43 /* TagFilterButton.m */; };
 		9E15897D16183F7100DB19EB /* Tags.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E15897C16183F7100DB19EB /* Tags.m */; };
 		9E20D71317454E0600087AB8 /* DropboxRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E20D71217454E0600087AB8 /* DropboxRepository.m */; };
@@ -115,6 +117,10 @@
 		9E00A76215773859002FC707 /* EventsGroupedByDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventsGroupedByDateViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9E02A6E8174A7B8900C1ED21 /* IconView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IconView.h; sourceTree = "<group>"; };
 		9E02A6E9174A7B8900C1ED21 /* IconView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IconView.m; sourceTree = "<group>"; };
+		9E0342471779C5E200D87564 /* _Repository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _Repository.h; sourceTree = "<group>"; };
+		9E0342481779C5E200D87564 /* Repository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Repository.h; sourceTree = "<group>"; };
+		9E0342491779DFE700D87564 /* _Repository.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _Repository.m; sourceTree = "<group>"; };
+		9E03424A1779DFE700D87564 /* Repository.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Repository.m; sourceTree = "<group>"; };
 		9E14D450162B3D3F008D9E43 /* TagFilterButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagFilterButton.h; sourceTree = "<group>"; };
 		9E14D451162B3D3F008D9E43 /* TagFilterButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagFilterButton.m; sourceTree = "<group>"; };
 		9E15323F173FDE3800605B65 /* CoreDataModel- 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel- 8.xcdatamodel"; sourceTree = "<group>"; };
@@ -200,6 +206,7 @@
 		9E9C237715F3617100572FB7 /* EventsGroupedByStartDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventsGroupedByStartDateViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9EAB520D15C9553C008952FB /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
 		9EAB520E15C9553C008952FB /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utilities.m"; sourceTree = "<group>"; };
+		9EAE685F1779BEC7005D8E47 /* CoreDataModel-9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-9.xcdatamodel"; sourceTree = "<group>"; };
 		9EAE7DED1603C1C5007F32EC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		9EAE7DF81603D006007F32EC /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
 		9EAE7DFA1603D038007F32EC /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
@@ -396,6 +403,10 @@
 		9E63BBF6156EAAA80006FEFC /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				9E0342491779DFE700D87564 /* _Repository.m */,
+				9E03424A1779DFE700D87564 /* Repository.m */,
+				9E0342471779C5E200D87564 /* _Repository.h */,
+				9E0342481779C5E200D87564 /* Repository.h */,
 				9ECF3B7616EAF4D40097FF37 /* _Compatibility.h */,
 				9ECF3B7716EAF4D40097FF37 /* _Compatibility.m */,
 				9ECF3B7816EAF4D40097FF37 /* Compatibility.h */,
@@ -724,6 +735,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E03424B1779DFFF00D87564 /* _Repository.m in Sources */,
+				9E03424C1779DFFF00D87564 /* Repository.m in Sources */,
 				9E7636661778A31D005C755F /* AIStyle.m in Sources */,
 				9E96A907163981B600164D76 /* CAAnimation+Blocks.m in Sources */,
 				9E42F1FB15570FD60087F602 /* main.m in Sources */,
@@ -1048,6 +1061,7 @@
 		9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				9EAE685F1779BEC7005D8E47 /* CoreDataModel-9.xcdatamodel */,
 				9E15323F173FDE3800605B65 /* CoreDataModel- 8.xcdatamodel */,
 				9E6C6C8716BABD5400613E86 /* CoreDataModel-7.xcdatamodel */,
 				9E66D0DA16553B3700339E99 /* CoreDataModel-6.xcdatamodel */,
@@ -1057,7 +1071,7 @@
 				9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */,
 				9E21F925156EA9510075EAAC /* CoreDataModel.xcdatamodel */,
 			);
-			currentVersion = 9E15323F173FDE3800605B65 /* CoreDataModel- 8.xcdatamodel */;
+			currentVersion = 9EAE685F1779BEC7005D8E47 /* CoreDataModel-9.xcdatamodel */;
 			path = CoreDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

@@ -4,13 +4,13 @@
 #import "_Event.h"
 
 const struct EventAttributes EventAttributes = {
-	.exported = @"exported",
 	.guid = @"guid",
 	.startDate = @"startDate",
 	.stopDate = @"stopDate",
 };
 
 const struct EventRelationships EventRelationships = {
+	.inRepositories = @"inRepositories",
 	.inTag = @"inTag",
 };
 
@@ -43,40 +43,9 @@ const struct EventFetchedProperties EventFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
-	if ([key isEqualToString:@"exportedValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"exported"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
 
 	return keyPaths;
 }
-
-
-
-
-@dynamic exported;
-
-
-
-- (BOOL)exportedValue {
-	NSNumber *result = [self exported];
-	return [result boolValue];
-}
-
-- (void)setExportedValue:(BOOL)value_ {
-	[self setExported:[NSNumber numberWithBool:value_]];
-}
-
-- (BOOL)primitiveExportedValue {
-	NSNumber *result = [self primitiveExported];
-	return [result boolValue];
-}
-
-- (void)setPrimitiveExportedValue:(BOOL)value_ {
-	[self setPrimitiveExported:[NSNumber numberWithBool:value_]];
-}
-
 
 
 
@@ -101,6 +70,19 @@ const struct EventFetchedProperties EventFetchedProperties = {
 
 
 
+
+@dynamic inRepositories;
+
+	
+- (NSMutableSet*)inRepositoriesSet {
+	[self willAccessValueForKey:@"inRepositories"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"inRepositories"];
+  
+	[self didAccessValueForKey:@"inRepositories"];
+	return result;
+}
+	
 
 @dynamic inTag;
 

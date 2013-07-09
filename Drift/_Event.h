@@ -5,21 +5,21 @@
 
 
 extern const struct EventAttributes {
-	__unsafe_unretained NSString *exported;
 	__unsafe_unretained NSString *guid;
 	__unsafe_unretained NSString *startDate;
 	__unsafe_unretained NSString *stopDate;
 } EventAttributes;
 
 extern const struct EventRelationships {
+	__unsafe_unretained NSString *inRepositories;
 	__unsafe_unretained NSString *inTag;
 } EventRelationships;
 
 extern const struct EventFetchedProperties {
 } EventFetchedProperties;
 
+@class Repository;
 @class Tag;
-
 
 
 
@@ -33,20 +33,6 @@ extern const struct EventFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (EventID*)objectID;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* exported;
-
-
-
-@property BOOL exportedValue;
-- (BOOL)exportedValue;
-- (void)setExportedValue:(BOOL)value_;
-
-//- (BOOL)validateExported:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -82,6 +68,13 @@ extern const struct EventFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *inRepositories;
+
+- (NSMutableSet*)inRepositoriesSet;
+
+
+
+
 @property (nonatomic, strong) Tag *inTag;
 
 //- (BOOL)validateInTag:(id*)value_ error:(NSError**)error_;
@@ -94,18 +87,14 @@ extern const struct EventFetchedProperties {
 
 @interface _Event (CoreDataGeneratedAccessors)
 
+- (void)addInRepositories:(NSSet*)value_;
+- (void)removeInRepositories:(NSSet*)value_;
+- (void)addInRepositoriesObject:(Repository*)value_;
+- (void)removeInRepositoriesObject:(Repository*)value_;
+
 @end
 
 @interface _Event (CoreDataGeneratedPrimitiveAccessors)
-
-
-- (NSNumber*)primitiveExported;
-- (void)setPrimitiveExported:(NSNumber*)value;
-
-- (BOOL)primitiveExportedValue;
-- (void)setPrimitiveExportedValue:(BOOL)value_;
-
-
 
 
 - (NSString*)primitiveGuid;
@@ -124,6 +113,11 @@ extern const struct EventFetchedProperties {
 - (void)setPrimitiveStopDate:(NSDate*)value;
 
 
+
+
+
+- (NSMutableSet*)primitiveInRepositories;
+- (void)setPrimitiveInRepositories:(NSMutableSet*)value;
 
 
 

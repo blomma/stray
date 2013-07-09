@@ -8,11 +8,15 @@
 
 #import "Event.h"
 
+#import "Tag.h"
+
 @class TagsTableViewController;
 
 @protocol TagsTableViewControllerDelegate <NSObject>
 
 - (void)tagsTableViewControllerDidDimiss;
+- (void)didDeleteTag:(Tag *)tag;
+- (void)didEditTag:(Tag *)tag;
 
 @end
 

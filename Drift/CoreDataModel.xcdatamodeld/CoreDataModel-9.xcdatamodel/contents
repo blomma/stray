@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3381.3" systemVersion="12E55" minimumToolsVersion="Xcode 4.5" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Compatibility" representedClassName="Compatibility" syncable="YES">
+        <attribute name="level" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="Event" representedClassName="Event" syncable="YES">
+        <attribute name="guid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="startDate" attributeType="Date" indexed="YES" versionHashModifier="changed" syncable="YES"/>
+        <attribute name="stopDate" optional="YES" attributeType="Date" indexed="YES" versionHashModifier="changed" syncable="YES"/>
+        <relationship name="inRepositories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Repository" inverseName="heldByEvent" inverseEntity="Repository" syncable="YES"/>
+        <relationship name="inTag" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tag" inverseName="heldByEvents" inverseEntity="Tag" syncable="YES"/>
+    </entity>
+    <entity name="Repository" representedClassName="Repository" syncable="YES">
+        <attribute name="lastSynced" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="heldByEvent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="inRepositories" inverseEntity="Event" syncable="YES"/>
+    </entity>
+    <entity name="Tag" representedClassName="Tag" syncable="YES">
+        <attribute name="guid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sortIndex" optional="YES" attributeType="Integer 64" defaultValueString="0" indexed="YES" versionHashModifier="changed" syncable="YES"/>
+        <relationship name="heldByEvents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="inTag" inverseEntity="Event" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Compatibility" positionX="-5427" positionY="876" width="128" height="60"/>
+        <element name="Event" positionX="-5429" positionY="972" width="173" height="118"/>
+        <element name="Repository" positionX="-5427" positionY="1143" width="128" height="103"/>
+        <element name="Tag" positionX="-5175" positionY="1061" width="189" height="105"/>
+    </elements>
+</model>

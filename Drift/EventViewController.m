@@ -11,13 +11,8 @@
 #import "Event.h"
 #import "Tag.h"
 #import "TagsTableViewController.h"
-#import <QuartzCore/QuartzCore.h>
-#import "UIImage+Retina4.h"
-#import "PopoverView.h"
 #import "State.h"
-#import "GAI.h"
 #import "NSDate+Utilities.h"
-#import "UnwindSegueSlideDown.h"
 #import <THObserversAndBinders.h>
 
 @interface EventViewController ()
@@ -28,8 +23,7 @@
 // Observer
 @property (nonatomic) THObserver *startDateObserver;
 @property (nonatomic) THObserver *nowDateObserver;
-@property (nonatomic) THObserver *stopDateObserver;
-@property (nonatomic) THObserver *isTransformingObserver;
+@property (nonatomic) THObserver *transformingObserver;
 
 @end
 
@@ -47,36 +41,30 @@
 
     __weak typeof(self) weakSelf = self;
     self.startDateObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"startDate" oldAndNewBlock:^(id oldValue, id newValue) {
-        [State instance].selectedEvent.startDate = newValue;
         [weakSelf updateStartLabelWithDate:newValue];
-
-        if (self.eventTimerControl.isTransforming == EventTimerNotTransforming && oldValue != [NSNull null]) {
-            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
-        }
+        [weakSelf updateEventTimeFromDate:newValue toDate:self.eventTimerControl.nowDate];
     }];
 
     self.nowDateObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"nowDate" oldAndNewBlock:^(id oldValue, id newValue) {
-        [weakSelf updateEventTimeWithDate:newValue];
         [weakSelf updateStopLabelWithDate:newValue];
+        [weakSelf updateEventTimeFromDate:self.eventTimerControl.startDate toDate:newValue];
     }];
 
-    self.stopDateObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"stopDate" oldAndNewBlock:^(id oldValue, id newValue) {
-        [State instance].selectedEvent.stopDate = newValue;
-        [weakSelf updateStopLabelWithDate:newValue];
-
-        if (self.eventTimerControl.isTransforming == EventTimerNotTransforming && oldValue != [NSNull null]) {
-            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
-        }
-    }];
-
-    self.isTransformingObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"isTransforming" oldAndNewBlock:^(id oldValue, id newValue) {
-        EventTimerTransformingEnum isTransforming = [newValue integerValue];
-        if (isTransforming != EventTimerNotTransforming) {
-            [weakSelf animateEventTransforming:isTransforming];
+    self.transformingObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"transforming" oldAndNewBlock:^(id oldValue, id newValue) {
+        EventTimerTransformingEnum transforming = [newValue integerValue];
+        if (transforming != EventTimerNotTransforming) {
+            [weakSelf animateEventTransforming:transforming];
         }
 
-        if (self.eventTimerControl.isTransforming == EventTimerNotTransforming) {
-            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
+        switch (transforming) {
+            case EventTimerNowDateTransformingStop:
+                [State instance].selectedEvent.stopDate = self.eventTimerControl.nowDate;
+                break;
+            case EventTimerStartDateTransformingStop:
+                [State instance].selectedEvent.startDate = self.eventTimerControl.startDate;
+                break;
+            default:
+                break;
         }
     }];
 
@@ -108,8 +96,7 @@
 
     [self.startDateObserver stopObserving];
     [self.nowDateObserver stopObserving];
-    [self.stopDateObserver stopObserving];
-    [self.isTransformingObserver stopObserving];
+    [self.transformingObserver stopObserving];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -150,8 +137,6 @@
 - (IBAction)toggleEventTouchUpInside:(id)sender forEvent:(UIEvent *)event {
     NSDate *now = [NSDate date];
 
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-
     if ([[State instance].selectedEvent isActive]) {
         [State instance].selectedEvent.stopDate = now;
 
@@ -161,11 +146,6 @@
                                     forState:UIControlStateNormal];
         [self animateStopEvent];
     } else {
-        tracker.sessionStart = YES;
-        [tracker sendEventWithCategory:@"app_flow"
-                            withAction:@"event_start"
-                             withLabel:nil
-                             withValue:nil];
         [self reset];
 
         [State instance].selectedEvent           = [Event MR_createEntity];
@@ -180,8 +160,6 @@
 
     [self.tag setTitle:[State instance].selectedEvent.inTag.name
               forState:UIControlStateNormal];
-
-    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
 }
 
 #pragma mark -
@@ -231,13 +209,13 @@
     }
 }
 
-- (void)updateEventTimeWithDate:(NSDate *)date {
-    if (date && [State instance].selectedEvent.startDate) {
+- (void)updateEventTimeFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate {
+    if (fromDate && toDate) {
         static NSUInteger unitFlags  = NSHourCalendarUnit | NSMinuteCalendarUnit;
 
         NSDateComponents *components = [[NSDate calendar] components:unitFlags
-                                                            fromDate:[State instance].selectedEvent.startDate
-                                                              toDate:date options:0];
+                                                            fromDate:fromDate
+                                                              toDate:toDate options:0];
 
         self.eventTimeHours.text   = [NSString stringWithFormat:@"%02d", components.hour];
         self.eventTimeMinutes.text = [NSString stringWithFormat:@"%02d", components.minute];
@@ -291,13 +269,13 @@
     } completion:nil];
 }
 
-- (void)animateEventTransforming:(EventTimerTransformingEnum)eventTimerTransformingEnum {
+- (void)animateEventTransforming:(EventTimerTransformingEnum)transforming {
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseIn
                      animations:^{
         CGFloat eventStartAlpha = 1, eventStopAlpha = 1, eventTimeAlpha = 1, eventStartMonthYearAlpha = 1, eventStopMonthYearAlpha = 1;
-        switch (eventTimerTransformingEnum) {
+        switch (transforming) {
             case EventTimerStartDateTransformingStart:
                 eventStartAlpha = 1;
                 eventStartMonthYearAlpha = 1;
@@ -316,7 +294,7 @@
 
                 eventTimeAlpha = 1;
                 break;
-            case EventTimerStopDateTransformingStart:
+            case EventTimerNowDateTransformingStart:
                 eventStartAlpha = 0.2f;
                 eventStartMonthYearAlpha = 0.2f;
 
@@ -326,7 +304,7 @@
                 eventTimeAlpha = 0.2f;
 
                 break;
-            case EventTimerStopDateTransformingStop:
+            case EventTimerNowDateTransformingStop:
                 eventStartAlpha = [State instance].selectedEvent.isActive ? 1 : 0.2f;
                 eventStartMonthYearAlpha = 1;
 
