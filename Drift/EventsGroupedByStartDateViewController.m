@@ -17,7 +17,6 @@
 #import "TagsTableViewController.h"
 #import "TransformableTableViewGestureRecognizer.h"
 #import "UIScrollView+AIPulling.h"
-#import "EventsGroupedByStartDate.h"
 #import "State.h"
 #import "NSDate+Utilities.h"
 
@@ -31,12 +30,10 @@
 @property (nonatomic) NSMutableArray *filterViewButtons;
 @property (nonatomic) BOOL isFilterViewInvalid;
 
-@property (nonatomic) EventsGroupedByStartDate *eventGroups;
-@property (nonatomic) BOOL isEventGroupsInvalid;
-@property (nonatomic) BOOL isEventGroupsViewInvalid;
-
 @property (nonatomic, readonly) NSInteger editingCommitLength;
 @property (nonatomic) id foregroundObserver;
+
+@property (nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @end
 
@@ -50,13 +47,7 @@
 
 	[self initFilterView];
 
-	NSArray *events = [Event MR_findAllSortedBy:@"startDate" ascending:YES];
-	self.eventGroups = [[EventsGroupedByStartDate alloc] initWithEvents:events
-	                                                        withFilters:[State instance].eventsGroupedByStartDateFilter];
-
-    self.isEventGroupsInvalid = YES;
-    self.isEventGroupsViewInvalid = YES;
-    self.isFilterViewInvalid = YES;
+	self.isFilterViewInvalid = YES;
 
 	self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
@@ -82,32 +73,12 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	__weak typeof(self) weakSelf = self;
-
-	self.foregroundObserver = [[NSNotificationCenter defaultCenter]
-	                           addObserverForName:UIApplicationWillEnterForegroundNotification
-                               object:nil
-                               queue:nil
-                               usingBlock: ^(NSNotification *note) {
-                                   [weakSelf.tableView reloadData];
-                               }];
-
-
-    if (self.isFilterViewInvalid) {
-        [self setupFilterView];
-    }
-
-    if (self.isEventGroupsViewInvalid) {
-        [self.tableView reloadData];
-
-        self.isEventGroupsViewInvalid = NO;
-    }
+	if (self.isFilterViewInvalid)
+		[self setupFilterView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-
-	[[NSNotificationCenter defaultCenter] removeObserver:self.foregroundObserver];
 
 	// Check if we disapeared because of presenting a controller
 	if (!self.presentedViewController) {
@@ -121,8 +92,7 @@
 		[[segue destinationViewController] setDelegate:self];
 
 		NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-		EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)indexPath.section];
-		Event *event           = [eventGroup.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
+		Event *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
 		[[segue destinationViewController] setEvent:event];
 	}
@@ -135,16 +105,20 @@
 	return 200;
 }
 
-#pragma mark -
-#pragma mark Public properties
+- (NSFetchedResultsController *)fetchedResultsController {
+	if (_fetchedResultsController == nil) {
+		NSPredicate *predicate = nil;
+		if ([State instance].eventsGroupedByStartDateFilter.count > 0)
+			predicate = [NSPredicate predicateWithFormat:@"inTag.guid IN %@", [State instance].eventsGroupedByStartDateFilter];
 
-- (EventsGroupedByStartDate *)eventGroups {
-	if (self.isEventGroupsInvalid) {
-		_eventGroups.filters      = [State instance].eventsGroupedByStartDateFilter;
-		self.isEventGroupsInvalid = NO;
+		_fetchedResultsController = [Event MR_fetchAllGroupedBy:@"startDate"
+		                                          withPredicate:predicate
+		                                               sortedBy:@"startDate"
+		                                              ascending:NO
+		                                               delegate:self];
 	}
 
-	return _eventGroups;
+	return _fetchedResultsController;
 }
 
 #pragma mark -
@@ -155,40 +129,41 @@
 }
 
 - (void)didDeleteTag:(Tag *)tag {
-    self.isFilterViewInvalid = YES;
+	self.isFilterViewInvalid = YES;
 
-    NSUInteger index = [self.filterViewButtons indexOfObjectPassingTest: ^BOOL (id obj, NSUInteger idx, BOOL *stop) {
-        if ([tag.guid isEqualToString:[obj tagGuid]]) {
-            *stop = YES;
-            return YES;
-        }
+	NSUInteger index = [self.filterViewButtons indexOfObjectPassingTest: ^BOOL (id obj, NSUInteger idx, BOOL *stop) {
+	    if ([tag.guid isEqualToString:[obj tagGuid]]) {
+	        *stop = YES;
+	        return YES;
+		}
 
-        return NO;
-    }];
+	    return NO;
+	}];
 
-    if (index != NSNotFound) {
-        self.isEventGroupsInvalid = YES;
-        self.isEventGroupsViewInvalid = YES;
+	if (index != NSNotFound) {
+		[[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
 
-        [[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
-    }
+		self.fetchedResultsController = nil;
+		[self.tableView reloadData];
+	}
 }
 
 - (void)didEditTag:(Tag *)tag {
-    self.isFilterViewInvalid = YES;
+	self.isFilterViewInvalid = YES;
 
-    NSUInteger index = [self.filterViewButtons indexOfObjectPassingTest: ^BOOL (id obj, NSUInteger idx, BOOL *stop) {
-        if ([tag.guid isEqualToString:[obj tagGuid]]) {
-            *stop = YES;
-            return YES;
-        }
+	NSUInteger index = [self.filterViewButtons indexOfObjectPassingTest: ^BOOL (id obj, NSUInteger idx, BOOL *stop) {
+	    if ([tag.guid isEqualToString:[obj tagGuid]]) {
+	        *stop = YES;
+	        return YES;
+		}
 
-        return NO;
-    }];
+	    return NO;
+	}];
 
-    if (index != NSNotFound) {
-        self.isEventGroupsViewInvalid = YES;
-    }
+	if (index != NSNotFound) {
+		self.fetchedResultsController = nil;
+		[self.tableView reloadData];
+	}
 }
 
 #pragma mark -
@@ -241,24 +216,13 @@
 	if (state == TransformableTableViewCellEditingStateLeft)
 		return;
 
-	EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)indexPath.section];
-	Event *event           = [eventGroup.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
+	Event *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
 	// Are we about to remove the selected event
 	if ([[State instance].selectedEvent isEqual:event])
 		[State instance].selectedEvent = nil;
 
-	[self.eventGroups removeEvent:event];
-
 	[event MR_deleteEntity];
-
-	[self.tableView beginUpdates];
-
-	[self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-	if (eventGroup.filteredEvents.count == 0)
-		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:(NSUInteger)indexPath.section] withRowAnimation:UITableViewRowAnimationRight];
-
-	[self.tableView endUpdates];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -277,7 +241,8 @@
 #pragma mark UITableViewDelegate
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-	EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)section];
+	id sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:(NSUInteger)section];
+	Event *event = [[sectionInfo objects] objectAtIndex:(NSUInteger)0];
 
 	CGRect frame = CGRectMake(0, 0.0, tableView.bounds.size.width, 36.0);
 
@@ -289,24 +254,22 @@
 	headerLabel.textAlignment   = NSTextAlignmentCenter;
 
 	static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
-	NSDateComponents *components          = [[NSDate calendar] components:unitFlagsEventStart fromDate:eventGroup.groupDate];
+	NSDateComponents *components          = [[NSDate calendar] components:unitFlagsEventStart fromDate:event.startDate];
 
 	headerLabel.text = [NSString stringWithFormat:@"%@  ·  %02d %@ %04d",
-                        [[self.shortStandaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString],
-                        components.day,
-                        [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString],
-                        components.year];
+	                    [[self.shortStandaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString],
+	                    components.day,
+	                    [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString],
+	                    components.year];
 
 	return headerLabel;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	Event *event = [self.eventGroups filteredEventAtIndexPath:indexPath];
-
 	EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 	[cell marked:YES withAnimation:YES];
 
-	[State instance].selectedEvent = event;
+	[State instance].selectedEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
 	if ([self.delegate respondsToSelector:@selector(eventsGroupedByStartDateViewControllerDidDimiss)])
 		[self.delegate eventsGroupedByStartDateViewControllerDidDimiss];
@@ -321,20 +284,25 @@
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return (NSInteger)self.eventGroups.filteredEventGroupCount;
+	return (NSInteger)[[self.fetchedResultsController sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)section];
-	return (NSInteger)eventGroup.filteredEvents.count;
+	return (NSInteger)[[[self.fetchedResultsController sections] objectAtIndex:(NSUInteger)section] numberOfObjects];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *cellIdentifier = @"EventsGroupedByStartDateTableViewCell";
 
-	Event *event = [self.eventGroups filteredEventAtIndexPath:indexPath];
-
 	EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	[self configureCell:cell atIndexPath:indexPath];
+
+	return cell;
+}
+
+- (void)configureCell:(EventsGroupedByStartDateTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+	Event *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
+
 	[cell.tagName setTitle:[event.inTag.name copy] forState:UIControlStateNormal];
 
 	// StartTime
@@ -374,8 +342,54 @@
 	[cell marked:marked withAnimation:YES];
 
 	cell.delegate = self;
+}
 
-	return cell;
+#pragma mark -
+#pragma mark NSFetchedResultsControllerDelegate
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+	[self.tableView beginUpdates];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+	UITableView *tableView = self.tableView;
+
+	switch (type) {
+		case NSFetchedResultsChangeInsert:
+			[tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+
+		case NSFetchedResultsChangeDelete:
+			[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+
+		case NSFetchedResultsChangeUpdate:
+			[self configureCell:(EventsGroupedByStartDateTableViewCell *)[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+			break;
+
+		case NSFetchedResultsChangeMove:
+			[tableView deleteRowsAtIndexPaths:[NSArray
+			                                   arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+			[tableView insertRowsAtIndexPaths:[NSArray
+			                                   arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+	}
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+	switch (type) {
+		case NSFetchedResultsChangeInsert:
+			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+
+		case NSFetchedResultsChangeDelete:
+			[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+	}
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+	[self.tableView endUpdates];
 }
 
 #pragma mark -
@@ -392,13 +406,8 @@
 		sender.selected = YES;
 	}
 
-	self.isEventGroupsInvalid = YES;
-
+	self.fetchedResultsController = nil;
 	[self.tableView reloadData];
-
-	NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:[State instance].selectedEvent];
-	if (indexPath)
-		[self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
 }
 
 - (void)initFilterView {
@@ -483,7 +492,7 @@
 	// set the size of the scrollview's content
 	self.filterView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
 
-    self.isFilterViewInvalid = NO;
+	self.isFilterViewInvalid = NO;
 }
 
 - (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration completion:(void (^)(BOOL finished))completion {

@@ -17,7 +17,7 @@
 
 @end
 
-@interface EventsGroupedByStartDateViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, TagsTableViewControllerDelegate>
+@interface EventsGroupedByStartDateViewController : UIViewController <NSFetchedResultsControllerDelegate, UITableViewDelegate, UITableViewDataSource, TagsTableViewControllerDelegate>
 
 @property (nonatomic, weak) id<EventsGroupedByStartDateViewControllerDelegate> delegate;
 
