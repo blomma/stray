@@ -10,18 +10,12 @@
 
 @class TagTableViewCell;
 
-@protocol TagTableViewCellDelegate <NSObject>
-
-- (void)cell:(TagTableViewCell *)cell tappedDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event;
-- (void)cell:(TagTableViewCell *)cell didChangeTagName:(NSString *)name;
-
-@end
-
 @interface TagTableViewCell : UITableViewCell
 
 - (IBAction)touchUpInsideDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event;
 
-@property (nonatomic, weak) id<TagTableViewCellDelegate> delegate;
+@property (nonatomic, copy) void (^didEditHandler)(NSString *name);
+@property (nonatomic, copy) void (^didDeleteHandler)();
 
 @property (nonatomic, weak) IBOutlet UILabel *tagName;
 @property (nonatomic, weak) IBOutlet UITextField *tagNameTextField;

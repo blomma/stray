@@ -7,19 +7,12 @@
 //
 
 #import "EventGroup.h"
-#import "TagsTableViewController.h"
 
 @class EventsGroupedByStartDateViewController;
 
-@protocol EventsGroupedByStartDateViewControllerDelegate <NSObject>
+@interface EventsGroupedByStartDateViewController : UIViewController <NSFetchedResultsControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 
-- (void)eventsGroupedByStartDateViewControllerDidDimiss;
-
-@end
-
-@interface EventsGroupedByStartDateViewController : UIViewController <NSFetchedResultsControllerDelegate, UITableViewDelegate, UITableViewDataSource, TagsTableViewControllerDelegate>
-
-@property (nonatomic, weak) id<EventsGroupedByStartDateViewControllerDelegate> delegate;
+@property (nonatomic, copy) void (^didDismissHandler)();
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet UIScrollView *filterView;

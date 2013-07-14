@@ -33,6 +33,7 @@
 @property (nonatomic) id foregroundObserver;
 
 @property (nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic) BOOL isTableViewInvalid;
 
 @end
 
@@ -53,12 +54,9 @@
 	__weak typeof(self) weakSelf = self;
 	[self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
 	    if (state == AIPullingStateAction && (previousState == AIPullingStatePullingAdd || previousState == AIPullingStatePullingClose))
-			if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss)]) {
-			    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 200000000);
-			    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-			        [weakSelf.delegate eventsGroupedByStartDateViewControllerDidDimiss];
-				});
-			}
+            if (weakSelf.didDismissHandler) {
+                weakSelf.didDismissHandler();
+            }
 	}];
 
 	self.tableView.pullingView.addingHeight  = 0;
@@ -73,6 +71,11 @@
 
 	if (self.isFilterViewInvalid)
 		[self setupFilterView];
+
+    if (self.isTableViewInvalid) {
+        [self.tableView reloadData];
+        self.isTableViewInvalid = NO;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -87,7 +90,53 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 	if ([segue.identifier isEqualToString:@"segueToTagsFromEvents"]) {
-		[[segue destinationViewController] setDelegate:self];
+
+        __weak typeof(self) weakSelf = self;
+        [[segue destinationViewController] setDidDismissHandler:^{
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+            });
+        }];
+
+        [[segue destinationViewController] setDidEditTagHandler:^(Tag *tag) {
+            weakSelf.isFilterViewInvalid = YES;
+
+            NSUInteger index = [weakSelf.filterViewButtons indexOfObjectPassingTest: ^BOOL (id obj, NSUInteger idx, BOOL *stop) {
+                if ([tag.guid isEqualToString:[obj tagGuid]]) {
+                    *stop = YES;
+                    return YES;
+                }
+
+                return NO;
+            }];
+            
+            if (index != NSNotFound) {
+                weakSelf.isTableViewInvalid = YES;
+                weakSelf.fetchedResultsController = nil;
+            }
+        }];
+
+        [[segue destinationViewController] setDidDeleteTagHandler:^(Tag *tag) {
+            weakSelf.isFilterViewInvalid = YES;
+
+            NSUInteger index = [weakSelf.filterViewButtons indexOfObjectPassingTest: ^BOOL (id obj, NSUInteger idx, BOOL *stop) {
+                if ([tag.guid isEqualToString:[obj tagGuid]]) {
+                    *stop = YES;
+                    return YES;
+                }
+
+                return NO;
+            }];
+
+            if (index != NSNotFound) {
+                [[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
+
+                weakSelf.isTableViewInvalid = YES;
+                weakSelf.fetchedResultsController = nil;
+            }
+        }];
+
 		[[segue destinationViewController] setEvent:sender];
 	}
 }
@@ -113,51 +162,6 @@
 	}
 
 	return _fetchedResultsController;
-}
-
-#pragma mark -
-#pragma mark TagsTableViewControllerDelegate
-
-- (void)tagsTableViewControllerDidDimiss {
-	[self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)didDeleteTag:(Tag *)tag {
-	self.isFilterViewInvalid = YES;
-
-	NSUInteger index = [self.filterViewButtons indexOfObjectPassingTest: ^BOOL (id obj, NSUInteger idx, BOOL *stop) {
-	    if ([tag.guid isEqualToString:[obj tagGuid]]) {
-	        *stop = YES;
-	        return YES;
-		}
-
-	    return NO;
-	}];
-
-	if (index != NSNotFound) {
-		[[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
-
-		self.fetchedResultsController = nil;
-		[self.tableView reloadData];
-	}
-}
-
-- (void)didEditTag:(Tag *)tag {
-	self.isFilterViewInvalid = YES;
-
-	NSUInteger index = [self.filterViewButtons indexOfObjectPassingTest: ^BOOL (id obj, NSUInteger idx, BOOL *stop) {
-	    if ([tag.guid isEqualToString:[obj tagGuid]]) {
-	        *stop = YES;
-	        return YES;
-		}
-
-	    return NO;
-	}];
-
-	if (index != NSNotFound) {
-		self.fetchedResultsController = nil;
-		[self.tableView reloadData];
-	}
 }
 
 #pragma mark -
@@ -258,8 +262,9 @@
 
 	[State instance].selectedEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
-	if ([self.delegate respondsToSelector:@selector(eventsGroupedByStartDateViewControllerDidDimiss)])
-		[self.delegate eventsGroupedByStartDateViewControllerDidDimiss];
+    if (self.didDismissHandler) {
+        self.didDismissHandler();
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -330,9 +335,9 @@
 
 	__weak typeof(self) weakSelf = self;
     __weak Event *weakEvent = event;
-    cell.tagPressHandler = ^() {
+    [cell setTagPressHandler:^{
         [weakSelf performSegueWithIdentifier:@"segueToTagsFromEvents" sender:weakEvent];
-    };
+    }];
 }
 
 #pragma mark -

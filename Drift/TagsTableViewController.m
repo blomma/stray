@@ -15,7 +15,7 @@
 #import "UIScrollView+AIPulling.h"
 #import "State.h"
 
-@interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureMovingRowDelegate, TagTableViewCellDelegate>
+@interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureMovingRowDelegate>
 
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
 
@@ -50,11 +50,8 @@
                 [Tag MR_createEntity];
             });
         } else if (state == AIPullingStateAction && previousState == AIPullingStatePullingClose) {
-            if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss)]) {
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                    [weakSelf.delegate tagsTableViewControllerDidDimiss];
-                });
+            if (weakSelf.didDismissHandler) {
+                weakSelf.didDismissHandler();
             }
         }
     }];
@@ -67,7 +64,6 @@
     [super viewWillDisappear:animated];
 
     [self.tableView disablePulling];
-
     [self.tableView disableGestureTableViewWithRecognizer:self.tableViewRecognizer];
 }
 
@@ -127,9 +123,53 @@
 - (void)configureCell:(TagTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Tag *tag = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.tagTitle = [tag.name copy];
-    cell.delegate = self;
     BOOL selected = [self.event.inTag isEqual:tag] ? YES : NO;
     [cell marked:selected withAnimation:NO];
+
+    __weak typeof(self) weakSelf = self;
+    __weak Tag *weakTag = tag;
+    __weak TagTableViewCell *weakCell = cell;
+    
+    [cell setDidDeleteHandler:^{
+        CGPoint fromValue = weakCell.frontView.layer.position;
+        CGPoint toValue   = CGPointMake(CGRectGetMidX(weakCell.frontView.layer.bounds), fromValue.y);
+
+        [weakSelf animateBounceOnLayer:weakCell.frontView.layer
+                             fromPoint:fromValue
+                               toPoint:toValue
+                          withDuration:1.5f
+                            completion:nil];
+
+        weakSelf.tagInEditState = nil;
+
+        [weakTag MR_deleteEntity];
+
+        if (self.didDeleteTagHandler) {
+            self.didDeleteTagHandler(weakTag);
+        }
+    }];
+
+    [cell setDidEditHandler:^(NSString *name) {
+        if (name && ![name isEqualToString:@""]) {
+            weakTag.name = [name copy];
+            weakCell.tagTitle = [name copy];
+
+            if (weakSelf.didEditTagHandler) {
+                weakSelf.didEditTagHandler(weakTag);
+            }
+        }
+
+        CGPoint fromValue = weakCell.frontView.layer.position;
+        CGPoint toValue   = CGPointMake(CGRectGetMidX(weakCell.frontView.layer.bounds), fromValue.y);
+
+        [self animateBounceOnLayer:weakCell.frontView.layer
+                         fromPoint:fromValue
+                           toPoint:toValue
+                      withDuration:1.5f
+                        completion:nil];
+        
+        self.tagInEditState = nil;
+    }];
 }
 
 #pragma mark -
@@ -167,55 +207,9 @@
 
     self.event.inTag = [self.event.inTag isEqual:tag] ? nil : tag;
 
-    if ([self.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss)]) {
-        [self.delegate tagsTableViewControllerDidDimiss];
+    if (self.didDismissHandler) {
+        self.didDismissHandler();
     }
-}
-
-#pragma mark -
-#pragma mark TagTableViewCellDelegate
-
-- (void)cell:(TagTableViewCell *)cell tappedDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-
-    Tag *tag = [self.fetchedResultsController objectAtIndexPath:indexPath];
-
-    if ([self.delegate respondsToSelector:@selector(didDeleteTag:)]) {
-        [self.delegate didDeleteTag:tag];
-    }
-
-    [tag MR_deleteEntity];
-
-    CGPoint fromValue = cell.frontView.layer.position;
-    CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
-
-    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
-
-    self.tagInEditState = nil;
-
-    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-}
-
-- (void)cell:(TagTableViewCell *)cell didChangeTagName:(NSString *)name {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-
-    if (name && ![name isEqualToString:@""]) {
-        Tag *tag = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        tag.name = [name copy];
-
-        cell.tagTitle = [name copy];
-
-        if ([self.delegate respondsToSelector:@selector(didEditTag:)]) {
-            [self.delegate didEditTag:tag];
-        }
-    }
-
-    CGPoint fromValue = cell.frontView.layer.position;
-    CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
-
-    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
-
-    self.tagInEditState = nil;
 }
 
 #pragma mark -

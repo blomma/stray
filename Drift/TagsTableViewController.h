@@ -12,17 +12,12 @@
 
 @class TagsTableViewController;
 
-@protocol TagsTableViewControllerDelegate <NSObject>
-
-- (void)tagsTableViewControllerDidDimiss;
-- (void)didDeleteTag:(Tag *)tag;
-- (void)didEditTag:(Tag *)tag;
-
-@end
-
 @interface TagsTableViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, weak) id<TagsTableViewControllerDelegate> delegate;
+@property (nonatomic, copy) void (^didDismissHandler)();
+@property (nonatomic, copy) void (^didEditTagHandler)(Tag *tag);
+@property (nonatomic, copy) void (^didDeleteTagHandler)(Tag *tag);
+
 @property (nonatomic, weak) Event *event;
 
 @end

@@ -78,8 +78,8 @@
 #pragma mark Public methods
 
 - (IBAction)touchUpInsideDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event {
-    if ([self.delegate respondsToSelector:@selector(cell:tappedDeleteButton:forEvent:)]) {
-        [self.delegate cell:self tappedDeleteButton:sender forEvent:event];
+    if (self.didDeleteHandler) {
+        self.didDeleteHandler();
     }
 }
 
@@ -125,8 +125,8 @@
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    if ([self.delegate respondsToSelector:@selector(cell:didChangeTagName:)]) {
-        [self.delegate cell:self didChangeTagName:[textField.text copy]];
+    if (self.didEditHandler) {
+        self.didEditHandler(textField.text);
     }
 }
 

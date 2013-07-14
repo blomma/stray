@@ -100,28 +100,20 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    __weak typeof(self) weakSelf = self;
+    [[segue destinationViewController] setDidDismissHandler:^{
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+            [weakSelf dismissViewControllerAnimated:YES completion:nil];
+        });
+    }];
+
     if ([segue.identifier isEqualToString:@"segueToTagsFromEvent"]) {
-        [[segue destinationViewController] setDelegate:self];
         [[segue destinationViewController] setEvent:[State instance].selectedEvent];
-    } else if ([segue.identifier isEqualToString:@"segueToEventsFromEvent"]) {
-        [[segue destinationViewController] setDelegate:self];
     }
 }
 
 - (IBAction)unwindFromSegue:(UIStoryboardSegue *)segue {
-}
-
-#pragma mark -
-#pragma mark TagsTableViewControllerDelegate, EventsGroupedByStartDateViewControllerDelegate
-
-- (void)tagsTableViewControllerDidDimiss {
-    [self dismissViewControllerAnimated:YES
-                             completion:nil];
-}
-
-- (void)eventsGroupedByStartDateViewControllerDidDimiss {
-    [self dismissViewControllerAnimated:YES
-                             completion:nil];
 }
 
 #pragma mark -
