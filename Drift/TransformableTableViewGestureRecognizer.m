@@ -156,7 +156,7 @@ static NSInteger kCellSnapShotTag = 100000;
         [self.delegate gestureRecognizer:self needsCreatePlaceholderForRowAtIndexPath:indexPath];
         self.transformIndexPath = indexPath;
 
-        // Start timer to prep	are for auto scrolling
+        // Start timer to prep area for auto scrolling
         self.movingTimer = [NSTimer timerWithTimeInterval:1 / 8 target:self selector:@selector(scrollTable) userInfo:nil repeats:YES];
         [[NSRunLoop mainRunLoop] addTimer:self.movingTimer forMode:NSDefaultRunLoopMode];
     } else if (recognizer.state == UIGestureRecognizerStateEnded) {

@@ -13,7 +13,6 @@
 #import "EventsGroupedByStartDateTableViewCell.h"
 #import "SKBounceAnimation.h"
 #import "TagFilterButton.h"
-#import "Tags.h"
 #import "TagsTableViewController.h"
 #import "TransformableTableViewGestureRecognizer.h"
 #import "UIScrollView+AIPulling.h"
@@ -443,7 +442,7 @@
 	CGSize elementSize      = CGSizeMake(120, self.filterView.frame.size.height);
 	UIEdgeInsets titleInset = UIEdgeInsetsMake(0, 5, 0, 5);
 
-	Tags *tags = [[Tags alloc] initWithTags:[Tag MR_findAll]];
+    NSArray *tags = [Tag MR_findAllSortedBy:@"sortIndex" ascending:YES];
 
 	// add elements
 	for (NSUInteger i = 0; i < tags.count; i++) {

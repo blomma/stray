@@ -8,7 +8,6 @@
 
 #import "TagsTableViewController.h"
 
-#import "Tags.h"
 #import "TransformableTableViewGestureRecognizer.h"
 #import "TagTableViewCell.h"
 #import "SKBounceAnimation.h"
@@ -20,13 +19,14 @@
 
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
 
-@property (nonatomic) Tags *tags;
 @property (nonatomic) Tag *tagInEditState;
 
 @property (nonatomic) NSIndexPath *transformingMovingIndexPath;
 
 @property (nonatomic) NSInteger editingStateRightOffset;
 @property (nonatomic) NSInteger editingCommitLength;
+
+@property (nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @end
 
@@ -38,23 +38,16 @@
     self.editingStateRightOffset = 260;
     self.editingCommitLength     = 60;
 
-    self.tags = [[Tags alloc] initWithTags:[Tag MR_findAll]];
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"grabbedTableViewCellIdentifier"];
 
     __weak typeof(self) weakSelf = self;
-
     [self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
         if (state == AIPullingStateAction && previousState == AIPullingStatePullingAdd) {
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                [weakSelf.tableView beginUpdates];
-
-                [weakSelf.tags insertObject:[Tag MR_createEntity] atIndex:0];
-                [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
-                                          withRowAnimation:UITableViewRowAnimationTop];
-                [weakSelf.tableView endUpdates];
+                [Tag MR_createEntity];
             });
         } else if (state == AIPullingStateAction && previousState == AIPullingStatePullingClose) {
             if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss)]) {
@@ -79,12 +72,26 @@
 }
 
 #pragma mark -
+#pragma mark Private properties
+
+- (NSFetchedResultsController *)fetchedResultsController {
+	if (_fetchedResultsController == nil) {
+        _fetchedResultsController = [Tag MR_fetchAllSortedBy:@"sortIndex"
+                                                   ascending:YES
+                                               withPredicate:nil
+                                                     groupBy:nil
+                                                    delegate:self];
+	}
+
+	return _fetchedResultsController;
+}
+
+#pragma mark -
 #pragma mark UIScrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     if (self.tagInEditState) {
-        NSUInteger index       = [self.tags indexOfObject:self.tagInEditState];
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(NSInteger)index inSection:0];
+        NSIndexPath *indexPath = [self.fetchedResultsController indexPathForObject:self.tagInEditState];
 
         [self gestureRecognizer:self.tableViewRecognizer
              cancelEditingState:TransformableTableViewCellEditingStateRight
@@ -96,34 +103,33 @@
 #pragma mark UITableViewDatasource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (NSInteger)self.tags.count;
+	return (NSInteger)[[[self.fetchedResultsController sections] objectAtIndex:(NSUInteger)section] numberOfObjects];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+	return (NSInteger)[[self.fetchedResultsController sections] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.transformingMovingIndexPath && self.transformingMovingIndexPath.row == indexPath.row) {
+    if (self.transformingMovingIndexPath && [self.transformingMovingIndexPath isEqual:indexPath]) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"grabbedTableViewCellIdentifier"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
         return cell;
     } else {
-        NSUInteger index = (NSUInteger)indexPath.row;
-        Tag *tag         = [self.tags objectAtIndex:index];
-
         TagTableViewCell *cell = (TagTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"TagsTableViewCellIdentifier"];
-
-        cell.tagTitle = [tag.name copy];
-
-        cell.delegate = self;
-
-        BOOL selected = [self.event.inTag isEqual:tag] ? YES : NO;
-        [cell marked:selected withAnimation:NO];
+        [self configureCell:cell atIndexPath:indexPath];
 
         return cell;
     }
+}
+
+- (void)configureCell:(TagTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    Tag *tag = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.tagTitle = [tag.name copy];
+    cell.delegate = self;
+    BOOL selected = [self.event.inTag isEqual:tag] ? YES : NO;
+    [cell marked:selected withAnimation:NO];
 }
 
 #pragma mark -
@@ -136,7 +142,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
+    Tag *tag = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
     // If this is a tag with no name then we cant select it
     if (!tag.name) {
@@ -146,8 +152,7 @@
     // Now we check if we have any cells in editstate,
     // if so we animate them back to normal state
     if (self.tagInEditState) {
-        NSUInteger editStateIndex       = [self.tags indexOfObject:self.tagInEditState];
-        NSIndexPath *editStateIndexPath = [NSIndexPath indexPathForRow:(NSInteger)editStateIndex inSection:0];
+        NSIndexPath *editStateIndexPath = [self.fetchedResultsController indexPathForObject:self.tagInEditState];
 
         TagTableViewCell *cell = (TagTableViewCell *)[self.tableView cellForRowAtIndexPath:editStateIndexPath];
         CGPoint fromValue      = cell.frontView.layer.position;
@@ -173,7 +178,7 @@
 - (void)cell:(TagTableViewCell *)cell tappedDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
-    Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
+    Tag *tag = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
     if ([self.delegate respondsToSelector:@selector(didDeleteTag:)]) {
         [self.delegate didDeleteTag:tag];
@@ -188,7 +193,6 @@
 
     self.tagInEditState = nil;
 
-    [self.tags removeObjectAtIndex:(NSUInteger)indexPath.row];
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
 }
 
@@ -196,7 +200,7 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
     if (name && ![name isEqualToString:@""]) {
-        Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
+        Tag *tag = [self.fetchedResultsController objectAtIndexPath:indexPath];
         tag.name = [name copy];
 
         cell.tagTitle = [name copy];
@@ -222,8 +226,9 @@
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didEnterEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
-    if (state == TransformableTableViewCellEditingStateLeft && indexOfTagInEditState != (NSUInteger)indexPath.row) {
+    NSIndexPath *editStateIndexPath = [self.fetchedResultsController indexPathForObject:self.tagInEditState];
+
+    if (state == TransformableTableViewCellEditingStateLeft && ![editStateIndexPath isEqual:indexPath]) {
         return;
     }
 
@@ -231,29 +236,31 @@
     [cell.frontView.layer removeAllAnimations];
 
     // If we have a cell in editstate and it is not this cell then cancel it
-    if (self.tagInEditState && indexOfTagInEditState != (NSUInteger)indexPath.row) {
-        NSIndexPath *indexPathInEditState = [NSIndexPath indexPathForRow:(NSInteger)indexOfTagInEditState inSection:0];
-        [self gestureRecognizer:gestureRecognizer cancelEditingState:state forRowAtIndexPath:indexPathInEditState];
+    if (self.tagInEditState && ![editStateIndexPath isEqual:indexPath]) {
+        [self gestureRecognizer:gestureRecognizer cancelEditingState:state forRowAtIndexPath:editStateIndexPath];
     }
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didChangeEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
-    if (state == TransformableTableViewCellEditingStateLeft && indexOfTagInEditState != (NSUInteger)indexPath.row) {
+    NSIndexPath *editStateIndexPath = [self.fetchedResultsController indexPathForObject:self.tagInEditState];
+    if (state == TransformableTableViewCellEditingStateLeft && ![editStateIndexPath isEqual:indexPath]) {
         return;
     }
 
     TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
-    NSInteger xOffset = indexOfTagInEditState == (NSUInteger)indexPath.row ? self.editingStateRightOffset : 0;
+    NSInteger xOffset = 0;
+    if ([editStateIndexPath isEqual:indexPath]) {
+        xOffset = self.editingStateRightOffset;
+    }
 
     CGPoint point = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + gestureRecognizer.translationInTableView.x + xOffset, cell.frontView.layer.position.y);
     cell.frontView.layer.position = point;
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer commitEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
-    if (state == TransformableTableViewCellEditingStateLeft && indexOfTagInEditState != (NSUInteger)indexPath.row) {
+    NSIndexPath *editStateIndexPath = [self.fetchedResultsController indexPathForObject:self.tagInEditState];
+    if (state == TransformableTableViewCellEditingStateLeft && ![editStateIndexPath isEqual:indexPath]) {
         return;
     }
 
@@ -265,7 +272,7 @@
 
         [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
 
-        self.tagInEditState = [self.tags objectAtIndex:indexPath.row];
+        self.tagInEditState = [self.fetchedResultsController objectAtIndexPath:indexPath];
     } else {
         CGPoint fromValue = cell.frontView.layer.position;
         CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
@@ -291,9 +298,13 @@
 }
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger indexOfTagInEditState = [self.tags indexOfObject:self.tagInEditState];
+    NSIndexPath *editStateIndexPath = [self.fetchedResultsController indexPathForObject:self.tagInEditState];
     // if this indexPath is in a edit state then return 0 else return normal
-    return indexPath.row == (NSInteger)indexOfTagInEditState ? 0 : self.editingCommitLength;
+    if ([editStateIndexPath isEqual:indexPath]) {
+        return 0;
+    } else {
+        return self.editingCommitLength;
+    }
 }
 
 #pragma mark -
@@ -312,7 +323,11 @@
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsMoveRowAtIndexPath:(NSIndexPath *)atIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
     self.transformingMovingIndexPath = toIndexPath;
 
-    [self.tags moveObjectAtIndex:(NSUInteger)atIndexPath.row toIndex:(NSUInteger)toIndexPath.row];
+    Tag *atTag = [self.fetchedResultsController objectAtIndexPath:atIndexPath];
+    Tag *toTag = [self.fetchedResultsController objectAtIndexPath:toIndexPath];
+
+    atTag.sortIndex = [NSNumber numberWithInteger:toIndexPath.row];
+    toTag.sortIndex = [NSNumber numberWithInteger:atIndexPath.row];
 
     [self.tableView beginUpdates];
 
@@ -326,6 +341,58 @@
     self.transformingMovingIndexPath = nil;
 
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+#pragma mark -
+#pragma mark NSFetchedResultsControllerDelegate
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+	[self.tableView beginUpdates];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+    if (self.transformingMovingIndexPath) {
+        return;
+    }
+
+    UITableView *tableView = self.tableView;
+
+	switch (type) {
+		case NSFetchedResultsChangeInsert:
+			[tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+
+		case NSFetchedResultsChangeDelete:
+			[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+
+		case NSFetchedResultsChangeUpdate:
+			[self configureCell:(TagTableViewCell *)[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+			break;
+
+		case NSFetchedResultsChangeMove:
+			[tableView deleteRowsAtIndexPaths:[NSArray
+			                                   arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+			[tableView insertRowsAtIndexPaths:[NSArray
+			                                   arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+	}
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+	switch (type) {
+		case NSFetchedResultsChangeInsert:
+			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+
+		case NSFetchedResultsChangeDelete:
+			[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+	}
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+	[self.tableView endUpdates];
 }
 
 #pragma mark -

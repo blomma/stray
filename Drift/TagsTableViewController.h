@@ -20,7 +20,7 @@
 
 @end
 
-@interface TagsTableViewController : UITableViewController
+@interface TagsTableViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, weak) id<TagsTableViewControllerDelegate> delegate;
 @property (nonatomic, weak) Event *event;
