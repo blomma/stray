@@ -38,8 +38,8 @@
 }
 
 - (IBAction)touchUpInsideTagButton:(UIButton *)sender forEvent:(UIEvent *)event {
-    if ([self.delegate respondsToSelector:@selector(cell:tappedTagButton:forEvent:)]) {
-        [self.delegate cell:self tappedTagButton:sender forEvent:event];
+    if (self.tagPressHandler) {
+        self.tagPressHandler();
     }
 }
 

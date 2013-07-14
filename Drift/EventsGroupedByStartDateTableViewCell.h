@@ -10,15 +10,9 @@
 
 #import "TagButton.h"
 
-@protocol EventsGroupedByStartDateTableViewCellDelegate <NSObject>
-
-- (void)cell:(UITableViewCell *)cell tappedTagButton:(UIButton *)sender forEvent:(UIEvent *)event;
-
-@end
-
 @interface EventsGroupedByStartDateTableViewCell : UITableViewCell
 
-@property (nonatomic, weak) id<EventsGroupedByStartDateTableViewCellDelegate> delegate;
+@property (nonatomic, copy) void (^tagPressHandler)();
 
 @property (nonatomic, weak) IBOutlet UIView *backView;
 @property (nonatomic, weak) IBOutlet UIView *frontView;

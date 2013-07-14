@@ -20,7 +20,7 @@
 #import "State.h"
 #import "NSDate+Utilities.h"
 
-@interface EventsGroupedByStartDateViewController () <TransformableTableViewGestureEditingRowDelegate, EventsGroupedByStartDateTableViewCellDelegate>
+@interface EventsGroupedByStartDateViewController () <TransformableTableViewGestureEditingRowDelegate>
 
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
 
@@ -52,8 +52,7 @@
 	self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
 	__weak typeof(self) weakSelf = self;
-
-	[self.tableView addPullingWithActionHandler: ^(AIPullingState state, AIPullingState previousState, CGFloat height) {
+	[self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
 	    if (state == AIPullingStateAction && (previousState == AIPullingStatePullingAdd || previousState == AIPullingStatePullingClose))
 			if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss)]) {
 			    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 200000000);
@@ -90,11 +89,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 	if ([segue.identifier isEqualToString:@"segueToTagsFromEvents"]) {
 		[[segue destinationViewController] setDelegate:self];
-
-		NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-		Event *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
-
-		[[segue destinationViewController] setEvent:event];
+		[[segue destinationViewController] setEvent:sender];
 	}
 }
 
@@ -164,13 +159,6 @@
 		self.fetchedResultsController = nil;
 		[self.tableView reloadData];
 	}
-}
-
-#pragma mark -
-#pragma mark EventTableViewCellDelegate
-
-- (void)cell:(UITableViewCell *)cell tappedTagButton:(UIButton *)sender forEvent:(UIEvent *)event {
-	[self performSegueWithIdentifier:@"segueToTagsFromEvents" sender:cell];
 }
 
 #pragma mark -
@@ -341,7 +329,11 @@
 	BOOL marked = [[State instance].selectedEvent isEqual:event] ? YES : NO;
 	[cell marked:marked withAnimation:YES];
 
-	cell.delegate = self;
+	__weak typeof(self) weakSelf = self;
+    __weak Event *weakEvent = event;
+    cell.tagPressHandler = ^() {
+        [weakSelf performSegueWithIdentifier:@"segueToTagsFromEvents" sender:weakEvent];
+    };
 }
 
 #pragma mark -
