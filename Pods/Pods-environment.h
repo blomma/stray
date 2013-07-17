@@ -37,11 +37,17 @@
 #define COCOAPODS_VERSION_MINOR_MGBox2 0
 #define COCOAPODS_VERSION_PATCH_MGBox2 0
 
-// MagicalRecord
-#define COCOAPODS_POD_AVAILABLE_MagicalRecord
-#define COCOAPODS_VERSION_MAJOR_MagicalRecord 2
-#define COCOAPODS_VERSION_MINOR_MagicalRecord 1
-#define COCOAPODS_VERSION_PATCH_MagicalRecord 0
+// ObjectiveRecord
+#define COCOAPODS_POD_AVAILABLE_ObjectiveRecord
+#define COCOAPODS_VERSION_MAJOR_ObjectiveRecord 1
+#define COCOAPODS_VERSION_MINOR_ObjectiveRecord 3
+#define COCOAPODS_VERSION_PATCH_ObjectiveRecord 1
+
+// ObjectiveSugar
+#define COCOAPODS_POD_AVAILABLE_ObjectiveSugar
+#define COCOAPODS_VERSION_MAJOR_ObjectiveSugar 0
+#define COCOAPODS_VERSION_MINOR_ObjectiveSugar 9
+#define COCOAPODS_VERSION_PATCH_ObjectiveSugar 0
 
 // THObserversAndBinders
 #define COCOAPODS_POD_AVAILABLE_THObserversAndBinders

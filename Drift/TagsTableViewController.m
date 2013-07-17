@@ -47,7 +47,7 @@
         if (state == AIPullingStateAction && previousState == AIPullingStatePullingAdd) {
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                [Tag MR_createEntity];
+                [Tag create];
             });
         } else if (state == AIPullingStateAction && previousState == AIPullingStatePullingClose) {
             if (weakSelf.didDismissHandler) {
@@ -72,11 +72,37 @@
 
 - (NSFetchedResultsController *)fetchedResultsController {
 	if (_fetchedResultsController == nil) {
-        _fetchedResultsController = [Tag MR_fetchAllSortedBy:@"sortIndex"
-                                                   ascending:YES
-                                               withPredicate:nil
-                                                     groupBy:nil
-                                                    delegate:self];
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription
+                                       entityForName:@"Tag"
+                                       inManagedObjectContext:[NSManagedObjectContext defaultContext]];
+        [fetchRequest setEntity:entity];
+
+        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"sortIndex" ascending:YES];
+        [fetchRequest setSortDescriptors:@[sort]];
+
+        [fetchRequest setFetchBatchSize:20];
+
+        NSFetchedResultsController *theFetchedResultsController =
+        [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                            managedObjectContext:[NSManagedObjectContext defaultContext]
+                                              sectionNameKeyPath:nil
+                                                       cacheName:nil];
+
+        _fetchedResultsController = theFetchedResultsController;
+        _fetchedResultsController.delegate = self;
+
+        NSError *error;
+        if (![_fetchedResultsController performFetch:&error]) {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            exit(-1);
+        }
+//
+//        _fetchedResultsController = [Tag MR_fetchAllSortedBy:@"sortIndex"
+//                                                   ascending:YES
+//                                               withPredicate:nil
+//                                                     groupBy:nil
+//                                                    delegate:self];
 	}
 
 	return _fetchedResultsController;
@@ -142,7 +168,7 @@
 
         weakSelf.tagInEditState = nil;
 
-        [weakTag MR_deleteEntity];
+        [weakTag delete];
 
         if (self.didDeleteTagHandler) {
             self.didDeleteTagHandler(weakTag);

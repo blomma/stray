@@ -52,11 +52,12 @@
 	self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
 	__weak typeof(self) weakSelf = self;
-	[self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
+
+	[self.tableView addPullingWithActionHandler: ^(AIPullingState state, AIPullingState previousState, CGFloat height) {
 	    if (state == AIPullingStateAction && (previousState == AIPullingStatePullingAdd || previousState == AIPullingStatePullingClose))
-            if (weakSelf.didDismissHandler) {
-                weakSelf.didDismissHandler();
-            }
+			if (weakSelf.didDismissHandler)
+				weakSelf.didDismissHandler();
+
 	}];
 
 	self.tableView.pullingView.addingHeight  = 0;
@@ -72,10 +73,10 @@
 	if (self.isFilterViewInvalid)
 		[self setupFilterView];
 
-    if (self.isTableViewInvalid) {
-        [self.tableView reloadData];
-        self.isTableViewInvalid = NO;
-    }
+	if (self.isTableViewInvalid) {
+		[self.tableView reloadData];
+		self.isTableViewInvalid = NO;
+	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -90,52 +91,52 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 	if ([segue.identifier isEqualToString:@"segueToTagsFromEvents"]) {
+		__weak typeof(self) weakSelf = self;
 
-        __weak typeof(self) weakSelf = self;
-        [[segue destinationViewController] setDidDismissHandler:^{
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                [weakSelf dismissViewControllerAnimated:YES completion:nil];
-            });
-        }];
+		[[segue destinationViewController] setDidDismissHandler: ^{
+		    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
+		    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+		        [weakSelf dismissViewControllerAnimated:YES completion:nil];
+			});
+		}];
 
-        [[segue destinationViewController] setDidEditTagHandler:^(Tag *tag) {
-            weakSelf.isFilterViewInvalid = YES;
+		[[segue destinationViewController] setDidEditTagHandler: ^(Tag *tag) {
+		    weakSelf.isFilterViewInvalid = YES;
 
-            NSUInteger index = [weakSelf.filterViewButtons indexOfObjectPassingTest: ^BOOL (id obj, NSUInteger idx, BOOL *stop) {
-                if ([tag.guid isEqualToString:[obj tagGuid]]) {
-                    *stop = YES;
-                    return YES;
-                }
+		    NSUInteger index = [weakSelf.filterViewButtons indexOfObjectPassingTest: ^BOOL (id obj, NSUInteger idx, BOOL *stop) {
+		        if ([tag.guid isEqualToString:[obj tagGuid]]) {
+		            *stop = YES;
+		            return YES;
+				}
 
-                return NO;
-            }];
-            
-            if (index != NSNotFound) {
-                weakSelf.isTableViewInvalid = YES;
-                weakSelf.fetchedResultsController = nil;
-            }
-        }];
+		        return NO;
+			}];
 
-        [[segue destinationViewController] setDidDeleteTagHandler:^(Tag *tag) {
-            weakSelf.isFilterViewInvalid = YES;
+		    if (index != NSNotFound) {
+		        weakSelf.isTableViewInvalid = YES;
+		        weakSelf.fetchedResultsController = nil;
+			}
+		}];
 
-            NSUInteger index = [weakSelf.filterViewButtons indexOfObjectPassingTest: ^BOOL (id obj, NSUInteger idx, BOOL *stop) {
-                if ([tag.guid isEqualToString:[obj tagGuid]]) {
-                    *stop = YES;
-                    return YES;
-                }
+		[[segue destinationViewController] setDidDeleteTagHandler: ^(Tag *tag) {
+		    weakSelf.isFilterViewInvalid = YES;
 
-                return NO;
-            }];
+		    NSUInteger index = [weakSelf.filterViewButtons indexOfObjectPassingTest: ^BOOL (id obj, NSUInteger idx, BOOL *stop) {
+		        if ([tag.guid isEqualToString:[obj tagGuid]]) {
+		            *stop = YES;
+		            return YES;
+				}
 
-            if (index != NSNotFound) {
-                [[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
+		        return NO;
+			}];
 
-                weakSelf.isTableViewInvalid = YES;
-                weakSelf.fetchedResultsController = nil;
-            }
-        }];
+		    if (index != NSNotFound) {
+		        [[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
+
+		        weakSelf.isTableViewInvalid = YES;
+		        weakSelf.fetchedResultsController = nil;
+			}
+		}];
 
 		[[segue destinationViewController] setEvent:sender];
 	}
@@ -150,15 +151,51 @@
 
 - (NSFetchedResultsController *)fetchedResultsController {
 	if (_fetchedResultsController == nil) {
-		NSPredicate *predicate = nil;
-		if ([State instance].eventsGroupedByStartDateFilter.count > 0)
-			predicate = [NSPredicate predicateWithFormat:@"inTag.guid IN %@", [State instance].eventsGroupedByStartDateFilter];
+		NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+		NSEntityDescription *entity = [NSEntityDescription
+		                               entityForName:@"Event"
+                                       inManagedObjectContext:[NSManagedObjectContext defaultContext]];
+		[fetchRequest setEntity:entity];
 
-		_fetchedResultsController = [Event MR_fetchAllGroupedBy:@"startDate"
-		                                          withPredicate:predicate
-		                                               sortedBy:@"startDate"
-		                                              ascending:NO
-		                                               delegate:self];
+		NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"startDate"
+		                                                     ascending:YES];
+
+		[fetchRequest setSortDescriptors:@[sort]];
+		[fetchRequest setFetchBatchSize:10];
+
+		NSFetchedResultsController *theFetchedResultsController =
+        [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                            managedObjectContext:[NSManagedObjectContext defaultContext]
+                                              sectionNameKeyPath:@"startDate"
+                                                       cacheName:nil];
+
+		_fetchedResultsController = theFetchedResultsController;
+		_fetchedResultsController.delegate = self;
+
+		NSError *error;
+		if (![_fetchedResultsController performFetch:&error]) {
+			NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+			exit(-1);
+		}
+
+        //        [NSManagedObject MR_setDefaultBatchSize:20];
+
+        //        NSPredicate *predicate = nil;
+        //		if ([State instance].eventsGroupedByStartDateFilter.count > 0)
+        //			predicate = [NSPredicate predicateWithFormat:@"inTag.guid IN %@", [State instance].eventsGroupedByStartDateFilter];
+        //
+        //        _fetchedResultsController = [Event MR_fetchAllSortedBy:@"startDate"
+        //                                                     ascending:YES
+        //                                                 withPredicate:predicate
+        //                                                       groupBy:@"startDate"
+        //                                                      delegate:self
+        //                                                     inContext:[NSManagedObjectContext MR_defaultContext]];
+
+        //		_fetchedResultsController = [Event MR_fetchAllGroupedBy:@"startDate"
+        //		                                          withPredicate:predicate
+        //		                                               sortedBy:@"startDate"
+        //		                                              ascending:NO
+        //		                                               delegate:self];
 	}
 
 	return _fetchedResultsController;
@@ -213,7 +250,7 @@
 	if ([[State instance].selectedEvent isEqual:event])
 		[State instance].selectedEvent = nil;
 
-	[event MR_deleteEntity];
+	[event delete];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -233,7 +270,6 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
 	id sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:(NSUInteger)section];
-	Event *event = [[sectionInfo objects] objectAtIndex:(NSUInteger)0];
 
 	CGRect frame = CGRectMake(0, 0.0, tableView.bounds.size.width, 36.0);
 
@@ -244,14 +280,19 @@
 	headerLabel.font            = [UIFont fontWithName:@"Futura-CondensedMedium" size:16];
 	headerLabel.textAlignment   = NSTextAlignmentCenter;
 
-	static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
-	NSDateComponents *components          = [[NSDate calendar] components:unitFlagsEventStart fromDate:event.startDate];
-
-	headerLabel.text = [NSString stringWithFormat:@"%@  ·  %02d %@ %04d",
-	                    [[self.shortStandaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString],
-	                    components.day,
-	                    [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString],
-	                    components.year];
+	headerLabel.text = [sectionInfo name];
+    //    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    //    [dateFormat setDateFormat:@"yyyy-MM-dd"];
+    //    NSDate *date = [dateFormat dateFromString:[sectionInfo name]];
+    //
+    //	static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
+    //	NSDateComponents *components          = [[NSDate calendar] components:unitFlagsEventStart fromDate:date];
+    //
+    //	headerLabel.text = [NSString stringWithFormat:@"%@  ·  %02d %@ %04d",
+    //	                    [[self.shortStandaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString],
+    //	                    components.day,
+    //	                    [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString],
+    //	                    components.year];
 
 	return headerLabel;
 }
@@ -262,9 +303,8 @@
 
 	[State instance].selectedEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
-    if (self.didDismissHandler) {
-        self.didDismissHandler();
-    }
+	if (self.didDismissHandler)
+		self.didDismissHandler();
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -276,14 +316,17 @@
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    //    DLog(NSStringFromSelector(_cmd));
 	return (NSInteger)[[self.fetchedResultsController sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    //    DLog(NSStringFromSelector(_cmd));
 	return (NSInteger)[[[self.fetchedResultsController sections] objectAtIndex:(NSUInteger)section] numberOfObjects];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    //    DLog(NSStringFromSelector(_cmd));
 	static NSString *cellIdentifier = @"EventsGroupedByStartDateTableViewCell";
 
 	EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -334,10 +377,11 @@
 	[cell marked:marked withAnimation:YES];
 
 	__weak typeof(self) weakSelf = self;
-    __weak Event *weakEvent = event;
-    [cell setTagPressHandler:^{
-        [weakSelf performSegueWithIdentifier:@"segueToTagsFromEvents" sender:weakEvent];
-    }];
+
+	__weak Event *weakEvent = event;
+	[cell setTagPressHandler: ^{
+	    [weakSelf performSegueWithIdentifier:@"segueToTagsFromEvents" sender:weakEvent];
+	}];
 }
 
 #pragma mark -
@@ -447,7 +491,7 @@
 	CGSize elementSize      = CGSizeMake(120, self.filterView.frame.size.height);
 	UIEdgeInsets titleInset = UIEdgeInsetsMake(0, 5, 0, 5);
 
-    NSArray *tags = [Tag MR_findAllSortedBy:@"sortIndex" ascending:YES];
+	NSArray *tags = [Tag allSortedBy:@{ @"sortIndex" : @YES }];
 
 	// add elements
 	for (NSUInteger i = 0; i < tags.count; i++) {

@@ -20,78 +20,75 @@
 @implementation State
 
 - (id)init {
-    self = [super init];
-    if (self) {
-        self.eventsGroupedByDateFilter = [NSMutableSet set];
-        self.eventsGroupedByStartDateFilter = [NSMutableSet set];
+	self = [super init];
+	if (self) {
+		self.eventsGroupedByDateFilter = [NSMutableSet set];
+		self.eventsGroupedByStartDateFilter = [NSMutableSet set];
 
-        [self loadState];
-    }
+		[self loadState];
+	}
 
-    return self;
+	return self;
 }
 
 #pragma mark -
 #pragma mark Class methods
 
 + (State *)instance {
-    static State *sharedState = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-            sharedState = [[self alloc] init];
-        });
+	static State *sharedState = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+	    sharedState = [[self alloc] init];
+	});
 
-    return sharedState;
+	return sharedState;
 }
 
 - (void)loadState {
-    //==================================================================================//
-    // SELECTED EVENT
-    //==================================================================================//
-    NSString *selectedEventGUID = [SDCloudUserDefaults stringForKey:@"selectedEventGUID"];
-    if (selectedEventGUID) {
-        self.selectedEvent = [Event MR_findFirstByAttribute:@"guid" withValue:selectedEventGUID];
-    }
+	//==================================================================================//
+	// SELECTED EVENT
+	//==================================================================================//
+	NSString *selectedEventGUID = [SDCloudUserDefaults stringForKey:@"selectedEventGUID"];
+	if (selectedEventGUID)
+		self.selectedEvent = [Event firstWhere:@{ @"guid": selectedEventGUID }];
 
-    //==================================================================================//
-    // EVENTSGROUPEDBYDATE FILTER
-    //==================================================================================//
-    NSArray *objects = [SDCloudUserDefaults objectForKey:@"eventGUIDSGroupedByDateFilter"];
-    if (objects) {
-        for (NSString *guid in objects) {
-            [self.eventsGroupedByDateFilter addObject:guid];
-        }
-    }
+	//==================================================================================//
+	// EVENTSGROUPEDBYDATE FILTER
+	//==================================================================================//
+	NSArray *objects = [SDCloudUserDefaults objectForKey:@"eventGUIDSGroupedByDateFilter"];
+	if (objects)
+		for (NSString *guid in objects) {
+			[self.eventsGroupedByDateFilter addObject:guid];
+		}
 
-    //==================================================================================//
-    // EVENTSGROUPEDBYSTARTDATE FILTER
-    //==================================================================================//
-    objects = [SDCloudUserDefaults objectForKey:@"eventGUIDSGroupedByStartDateFilter"];
-    if (objects) {
-        for (NSString *guid in objects) {
-            [self.eventsGroupedByStartDateFilter addObject:guid];
-        }
-    }
+	//==================================================================================//
+	// EVENTSGROUPEDBYSTARTDATE FILTER
+	//==================================================================================//
+	objects = [SDCloudUserDefaults objectForKey:@"eventGUIDSGroupedByStartDateFilter"];
+	if (objects)
+		for (NSString *guid in objects) {
+			[self.eventsGroupedByStartDateFilter addObject:guid];
+		}
 }
 
 #pragma mark -
 #pragma mark Public methods
 
 - (void)persistState {
-    //==================================================================================//
-    // SELECTED EVENT
-    //==================================================================================//
-    [SDCloudUserDefaults setString:self.selectedEvent.guid forKey:@"selectedEventGUID"];
+	//==================================================================================//
+	// SELECTED EVENT
+	//==================================================================================//
+	[SDCloudUserDefaults setString:self.selectedEvent.guid forKey:@"selectedEventGUID"];
 
-    //==================================================================================//
-    // EVENTSGROUPEDBYDATE FILTER
-    //==================================================================================//
-    [SDCloudUserDefaults setObject:[self.eventsGroupedByDateFilter allObjects] forKey:@"eventGUIDSGroupedByDateFilter"];
+	//==================================================================================//
+	// EVENTSGROUPEDBYDATE FILTER
+	//==================================================================================//
+	[SDCloudUserDefaults setObject:[self.eventsGroupedByDateFilter allObjects] forKey:@"eventGUIDSGroupedByDateFilter"];
 
-    //==================================================================================//
-    // EVENTSGROUPEDBYSTARTDATE FILTER
-    //==================================================================================//
-    [SDCloudUserDefaults setObject:[self.eventsGroupedByStartDateFilter allObjects] forKey:@"eventGUIDSGroupedByStartDateFilter"];
+	//==================================================================================//
+	// EVENTSGROUPEDBYSTARTDATE FILTER
+	//==================================================================================//
+	[SDCloudUserDefaults setObject:[self.eventsGroupedByStartDateFilter allObjects] forKey:@"eventGUIDSGroupedByStartDateFilter"];
 }
 
 @end

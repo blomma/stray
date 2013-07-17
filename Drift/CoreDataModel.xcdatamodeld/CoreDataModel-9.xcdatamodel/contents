@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3381.3" systemVersion="12E55" minimumToolsVersion="Xcode 4.5" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3383" systemVersion="12E3067" minimumToolsVersion="Xcode 4.5" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Compatibility" representedClassName="Compatibility" syncable="YES">
         <attribute name="level" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
     </entity>
@@ -23,9 +23,9 @@
         <relationship name="heldByEvents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="inTag" inverseEntity="Event" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Compatibility" positionX="-5427" positionY="876" width="128" height="60"/>
-        <element name="Event" positionX="-5429" positionY="972" width="173" height="118"/>
-        <element name="Repository" positionX="-5427" positionY="1143" width="128" height="103"/>
-        <element name="Tag" positionX="-5175" positionY="1061" width="189" height="105"/>
+        <element name="Compatibility" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Event" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Repository" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Tag" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>
