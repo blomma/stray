@@ -82,8 +82,16 @@ static NSString *const RepositoryName = @"dropbox";
                                             }];
 
                                             if (validChanges.count > 0 && validChangesSinceLastChanges.count > 0) {
-                                                [weakSelf deleteEvent:event];
-                                                [weakSelf syncEvent:event];
+                                                Repository *repo = [[event.inRepositories objectsPassingTest: ^BOOL (id obj, BOOL *stop) {
+                                                    if ([[obj name] isEqualToString:RepositoryName]) {
+                                                        *stop = YES;
+                                                        return YES;
+                                                    }
+                                                    
+                                                    return NO;
+                                                }] anyObject];
+
+                                                [weakSelf syncEvent:event withRepo:repo];
                                             }
                                         }
 
@@ -108,8 +116,16 @@ static NSString *const RepositoryName = @"dropbox";
                                             }];
 
                                             if (validChanges.count > 0 && validChangesSinceLastChanges.count > 0) {
-                                                [weakSelf deleteEvent:event];
-                                                [weakSelf syncEvent:event];
+                                                Repository *repo = [[event.inRepositories objectsPassingTest: ^BOOL (id obj, BOOL *stop) {
+                                                    if ([[obj name] isEqualToString:RepositoryName]) {
+                                                        *stop = YES;
+                                                        return YES;
+                                                    }
+
+                                                    return NO;
+                                                }] anyObject];
+
+                                                [weakSelf syncEvent:event withRepo:repo];
                                             }
                                         }
 
@@ -210,8 +226,16 @@ static NSString *const RepositoryName = @"dropbox";
 - (void)sync {
 	NSArray *events = [Event all];
 	for (Event *event in events) {
-		[self deleteEvent:event];
-		[self syncEvent:event];
+        Repository *repo = [[event.inRepositories objectsPassingTest: ^BOOL (id obj, BOOL *stop) {
+            if ([[obj name] isEqualToString:RepositoryName]) {
+                *stop = YES;
+                return YES;
+            }
+
+            return NO;
+        }] anyObject];
+
+		[self syncEvent:event withRepo:repo];
 	}
 }
 
@@ -227,117 +251,87 @@ static NSString *const RepositoryName = @"dropbox";
 #pragma mark -
 #pragma mark Private methods
 
-- (void)beginBackgroundTask {
-	__weak typeof(self) weakSelf = self;
-
-	self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler: ^{
-	    [weakSelf endBackgroundTask];
-	}];
-}
-
-- (void)endBackgroundTask {
-	[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
-	self.backgroundTask = UIBackgroundTaskInvalid;
-}
-
-- (void)deleteEvent:(Event *)event {
-	NSSet *repos = [event.inRepositories objectsPassingTest: ^BOOL (id obj, BOOL *stop) {
-	    if ([[obj name] isEqualToString:RepositoryName]) {
-	        *stop = YES;
-	        return YES;
-		}
-
-	    return NO;
-	}];
-
-	Repository *repo = [repos anyObject];
-
-	[self deleteEvent:event withRepo:repo];
-}
+//- (void)beginBackgroundTask {
+//	__weak typeof(self) weakSelf = self;
+//
+//	self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler: ^{
+//	    [weakSelf endBackgroundTask];
+//	}];
+//}
+//
+//- (void)endBackgroundTask {
+//	[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+//	self.backgroundTask = UIBackgroundTaskInvalid;
+//}
 
 - (void)deleteEvent:(Event *)event withRepo:(Repository *)repo {
-	[self beginBackgroundTask];
-
 	// To maintain backwards compat we try and delete the old name first if no repo exists
-	NSString *path = [NSString stringWithFormat:@"%@.csv", event.guid];
-	if (repo)
-		path = [repo.path copy];
+	NSString *path = repo ? repo.path : [NSString stringWithFormat:@"%@.csv", event.guid];
 
-	__weak typeof(self) weakSelf = self;
+	DBError *deleteError;
 
-	dispatch_async(self.backgroundQueue, ^{
-	    if (weakSelf.canceller.cancel)
-			return;
-
-	    DBError *deleteError;
-
-	    DBPath *dbPath = [[DBPath root] childPath:path];
-	    [[DBFilesystem sharedFilesystem] deletePath:dbPath error:&deleteError];
-	});
-
-	[self endBackgroundTask];
+	DBPath *dbPath = [[DBPath root] childPath:path];
+	[[DBFilesystem sharedFilesystem] deletePath:dbPath error:&deleteError];
+    DLog(@"%@", deleteError);
 }
 
-- (void)syncEvent:(Event *)event {
-	[self beginBackgroundTask];
-
-	NSSet *repos = [event.inRepositories objectsPassingTest: ^BOOL (id obj, BOOL *stop) {
-	    if ([[obj name] isEqualToString:RepositoryName]) {
-	        *stop = YES;
-	        return YES;
-		}
-
-	    return NO;
-	}];
-
-	Repository *repo = [repos anyObject];
+- (void)syncEvent:(Event *)event withRepo:(Repository *)repo {
+	// Save the previous path
+	NSString *previousPath = repo ? repo.path : [NSString stringWithFormat:@"%@.csv", event.guid];
 
 	// If no repo then create one
 	if (!repo) {
-		repo = [Repository create];
-		repo.name = RepositoryName;
-
+		repo = [Repository create:@{ @"name": RepositoryName }];
 		[event addInRepositoriesObject:repo];
 	}
 
-	NSString *tag = event.inTag.name ? [event.inTag.name copy] : @"";
+	NSString *tag = event.inTag.name ? event.inTag.name : @"";
 	NSString *startDate = event.startDate ? [event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
 	NSString *stopDate = event.stopDate ? [event.stopDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
 	NSString *path = [NSString stringWithFormat:@"%@-%@.csv", [event.startDate stringByFormat:@"yyyy-MM-dd HHmmss"], event.guid];
 
-	// Update the pathname to the potential new filename
-	repo.path = path;
+	// Check if file exist
+	DBError *fileInfoError;
+	DBPath *dbPath = [[DBPath root] childPath:previousPath];
+	DBFileInfo *fileInfo = [[DBFilesystem sharedFilesystem] fileInfoForPath:dbPath error:&fileInfoError];
+    DLog(@"%@",fileInfoError);
 
-	__weak typeof(self) weakSelf = self;
+	// Remove the file if it exists
+	if (fileInfo) {
+        DBError *deleteError;
+		[[DBFilesystem sharedFilesystem] deletePath:dbPath error:&deleteError];
+        DLog(@"%@", deleteError);
+    }
 
-	dispatch_async(self.backgroundQueue, ^{
-	    if (weakSelf.canceller.cancel)
-			return;
+	// Create a new one
+    DBError *createError;
+	dbPath = [[DBPath root] childPath:path];
+	DBFile *dbFile = [[DBFilesystem sharedFilesystem] createFile:dbPath error:&createError];
+    DLog(@"%@", createError);
 
-	    DBError *createError;
+	if (dbFile) {
+		CSVRow *row = [[CSVRow alloc] initWithValues:
+		               @[
+                         tag,
+                         startDate,
+                         stopDate
+                         ]];
 
-	    DBPath *dbPath = [[DBPath root] childPath:path];
-	    DBFile *dbFile = [[DBFilesystem sharedFilesystem] createFile:dbPath error:&createError];
+		CSVTable *table = [[CSVTable alloc] initWithRows:@[row]];
+		NSMutableString *output = [[NSMutableString alloc] init];
+		CSVSerializer *serializer = [[CSVSerializer alloc] initWithOutput:output];
+		[serializer serialize:table];
 
-	    if (dbFile) {
-	        CSVRow *row = [[CSVRow alloc] initWithValues:
-	                       @[
-                             tag,
-                             startDate,
-                             stopDate
-                             ]];
+        DBError *writeError;
+		[dbFile writeString:output error:&writeError];
+        DLog(@"%@", writeError);
 
-	        CSVTable *table = [[CSVTable alloc] initWithRows:@[row]];
-	        NSMutableString *output = [[NSMutableString alloc] init];
-	        CSVSerializer *serializer = [[CSVSerializer alloc] initWithOutput:output];
-	        [serializer serialize:table];
+		[dbFile close];
 
-	        [dbFile writeString:output error:&createError];
-	        [dbFile close];
-		}
-	});
-
-	[self endBackgroundTask];
+        if (!writeError) {
+            repo.path = path;
+        }
+	}
 }
 
 @end
