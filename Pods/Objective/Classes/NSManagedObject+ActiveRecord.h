@@ -1,10 +1,10 @@
-//
+// 
 //  NSManagedObject+ActiveRecord.h
-//  WidgetPush
-//
-//  Created by Marin Usalj on 4/15/12.
-//  Copyright (c) 2012 http://mneorr.com. All rights reserved.
-//
+//  Objective
+//  
+//  Created by Mikael Hultgren on 2013-07-22.
+//  Copyright 2013 Mikael Hultgren. All rights reserved.
+// 
 
 #import <CoreData/CoreData.h>
 #import "NSManagedObject+Mappings.h"

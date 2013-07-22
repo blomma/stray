@@ -1,0 +1,1 @@
+../../Objective/Classes/NSManagedObject+ActiveRecord.h

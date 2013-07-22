@@ -1,0 +1,5 @@
+#include "Pods-Objective.xcconfig"
+GCC_PREPROCESSOR_DEFINITIONS = COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/Objective" "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/CSV" "${PODS_ROOT}/Headers/FontAwesomeKit" "${PODS_ROOT}/Headers/GoogleAnalytics-iOS-SDK" "${PODS_ROOT}/Headers/HMSideMenu" "${PODS_ROOT}/Headers/MGBox2" "${PODS_ROOT}/Headers/Objective" "${PODS_ROOT}/Headers/ObjectiveSugar" "${PODS_ROOT}/Headers/THObserversAndBinders"
+OTHER_LDFLAGS = -ObjC ${PODS_OBJECTIVE_OTHER_LDFLAGS}
+PODS_ROOT = ${SRCROOT}

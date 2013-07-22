@@ -1,0 +1,1 @@
+PODS_OBJECTIVE_OTHER_LDFLAGS = -framework CoreData

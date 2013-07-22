@@ -1,10 +1,10 @@
-//
+// 
 //  CoreDataManager.m
-//  WidgetPush
-//
-//  Created by Marin on 9/1/11.
-//  Copyright (c) 2011 mneorr.com. All rights reserved.
-//
+//  Objective
+//  
+//  Created by Mikael Hultgren on 2013-07-22.
+//  Copyright 2013 Mikael Hultgren. All rights reserved.
+// 
 
 #import "CoreDataManager.h"
 

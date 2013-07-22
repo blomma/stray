@@ -11,7 +11,7 @@
 #ifdef __OBJC__
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import <ObjectiveRecord.h>
+#import <Objective.h>
 #import <ObjectiveSugar.h>
 #endif
 

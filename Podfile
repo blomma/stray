@@ -1,7 +1,7 @@
 platform :ios, '6.0'
 inhibit_all_warnings!
 
-pod 'ObjectiveRecord', :head
+pod 'Objective', :head
 pod 'GoogleAnalytics-iOS-SDK', '~> 2.0Beta4'
 pod 'CSV', :head
 pod 'HMSideMenu', :head

@@ -1,10 +1,10 @@
-//
+// 
 //  NSManagedObject+Mappings.m
-//  CORE
-//
-//  Created by Marin Usalj on 5/28/13.
-//  Copyright (c) 2013 Clinically Relevant. All rights reserved.
-//
+//  Objective
+//  
+//  Created by Mikael Hultgren on 2013-07-22.
+//  Copyright 2013 Mikael Hultgren. All rights reserved.
+// 
 
 #import "NSManagedObject+Mappings.h"
 #import "ObjectiveSugar.h"
