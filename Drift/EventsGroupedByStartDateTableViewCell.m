@@ -7,7 +7,6 @@
 //
 
 #import "EventsGroupedByStartDateTableViewCell.h"
-
 #import <FontAwesomeKit.h>
 
 @interface EventsGroupedByStartDateTableViewCell ()

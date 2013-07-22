@@ -7,9 +7,8 @@
 //
 
 #import "UIScrollView+AIPulling.h"
-
-#import <objc/runtime.h>
 #import <FontAwesomeKit.h>
+#import <objc/runtime.h>
 
 @interface AIPullingView ()
 

@@ -6,15 +6,14 @@
 //  Copyright (c) 2013 Artsoftheinsane. All rights reserved.
 //
 
-#import "PreferencesViewController.h"
-
 #import "DropboxRepository.h"
+#import "PreferencesViewController.h"
+#import <FontAwesomeKit.h>
 #import <MGBox.h>
 #import <MGLine.h>
 #import <MGLineStyled.h>
-#import <UIColor+MGExpanded.h>
-#import <FontAwesomeKit.h>
 #import <THObserversAndBinders.h>
+#import <UIColor+MGExpanded.h>
 
 @interface PreferencesViewController ()
 

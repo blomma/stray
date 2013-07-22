@@ -6,18 +6,17 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventsGroupedByStartDateViewController.h"
-
 #import "CAAnimation+Blocks.h"
 #import "Event.h"
 #import "EventsGroupedByStartDateTableViewCell.h"
+#import "EventsGroupedByStartDateViewController.h"
+#import "NSDate+Utilities.h"
 #import "SKBounceAnimation.h"
+#import "State.h"
 #import "TagFilterButton.h"
 #import "TagsTableViewController.h"
 #import "TransformableTableViewGestureRecognizer.h"
 #import "UIScrollView+AIPulling.h"
-#import "State.h"
-#import "NSDate+Utilities.h"
 #import <Objective.h>
 
 @interface EventsGroupedByStartDateViewController () <TransformableTableViewGestureEditingRowDelegate>

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventTimerControl.h"
 #import "Event.h"
+#import "EventTimerControl.h"
 #import "NoHitCAShapeLayer.h"
 
 @interface EventTimerControl ()

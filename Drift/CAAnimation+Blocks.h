@@ -1,10 +1,10 @@
-//
+// 
 //  CAAnimation+Blocks.h
-//  CAAnimationBlocks
-//
-//  Created by xissburg on 7/7/11.
-//  Copyright 2011 xissburg. All rights reserved.
-//
+//  stray
+//  
+//  Created by Mikael Hultgren on 2013-07-22.
+//  Copyright 2013 Artsoftheinsane. All rights reserved.
+// 
 
 @import QuartzCore;
 

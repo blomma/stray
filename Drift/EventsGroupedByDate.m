@@ -6,10 +6,9 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventsGroupedByDate.h"
-
-#import "NSDate+Utilities.h"
 #import "EventGroup.h"
+#import "EventsGroupedByDate.h"
+#import "NSDate+Utilities.h"
 #import "Tag.h"
 
 @interface EventsGroupedByDate ()

@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "Event.h"
 #import "TagButton.h"
 
 @interface EventsGroupedByStartDateTableViewCell : UITableViewCell

@@ -6,15 +6,14 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventViewController.h"
-
 #import "Event.h"
+#import "EventViewController.h"
+#import "NSDate+Utilities.h"
+#import "State.h"
 #import "Tag.h"
 #import "TagsTableViewController.h"
-#import "State.h"
-#import "NSDate+Utilities.h"
-#import <THObserversAndBinders.h>
 #import <Objective.h>
+#import <THObserversAndBinders.h>
 
 @interface EventViewController ()
 

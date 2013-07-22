@@ -6,16 +6,16 @@
 //  Copyright (c) 2013 Artsoftheinsane. All rights reserved.
 //
 
+#import "CSV.h"
 #import "DropboxRepository.h"
 #import "Event.h"
-#import "Tag.h"
+#import "NSDate+Utilities.h"
 #import "Repository.h"
+#import "State.h"
+#import "Tag.h"
 #import <dispatch/dispatch.h>
 #import <Dropbox/Dropbox.h>
-#import "CSV.h"
-#import "NSDate+Utilities.h"
 #import <THObserversAndBinders.h>
-#import "State.h"
 
 static NSString *const RepositoryName = @"dropbox";
 

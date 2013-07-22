@@ -6,11 +6,10 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "TagTableViewCell.h"
-
 #import "NoHitCAShapeLayer.h"
-#import <UIColor+MGExpanded.h>
+#import "TagTableViewCell.h"
 #import <FontAwesomeKit.h>
+#import <UIColor+MGExpanded.h>
 
 @interface TagTableViewCell ()
 

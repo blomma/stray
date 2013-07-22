@@ -7,7 +7,6 @@
 //
 
 #import "TagButton.h"
-
 #import <FontAwesomeKit.h>
 
 @interface TagButton ()

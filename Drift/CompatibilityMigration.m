@@ -6,12 +6,11 @@
 //  Copyright (c) 2013 Artsoftheinsane. All rights reserved.
 //
 
-#import "CompatibilityMigration.h"
-
 #import "Compatibility.h"
+#import "CompatibilityMigration.h"
 #import "Event.h"
-#import "Tag.h"
 #import "SDCloudUserDefaults.h"
+#import "Tag.h"
 
 #define STRAY_COMPATIBILITY_LEVEL_KEY @"StrayCompatibilityLevel"
 #define STATE_COMPATIBILITY_LEVEL_KEY @"stateCompatibilityLevel"

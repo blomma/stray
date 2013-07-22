@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
+#import "SDCloudUserDefaults.h"
 #import "State.h"
 #import "Tag.h"
-#import "SDCloudUserDefaults.h"
 
 @interface State ()
 

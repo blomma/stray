@@ -6,11 +6,10 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
+#import "IconView.h"
 #import "RootViewController.h"
-
 #import <FontAwesomeKit.h>
 #import <HMSideMenu.h>
-#import "IconView.h"
 
 @interface RootViewController ()
 

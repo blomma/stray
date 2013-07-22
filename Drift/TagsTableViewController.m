@@ -6,14 +6,13 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "TagsTableViewController.h"
-
-#import "TransformableTableViewGestureRecognizer.h"
-#import "TagTableViewCell.h"
-#import "SKBounceAnimation.h"
 #import "CAAnimation+Blocks.h"
-#import "UIScrollView+AIPulling.h"
+#import "SKBounceAnimation.h"
 #import "State.h"
+#import "TagsTableViewController.h"
+#import "TagTableViewCell.h"
+#import "TransformableTableViewGestureRecognizer.h"
+#import "UIScrollView+AIPulling.h"
 #import <Objective.h>
 
 @interface TagsTableViewController () <TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureMovingRowDelegate>

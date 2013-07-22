@@ -1,3 +1,11 @@
+// 
+//  TransformableTableViewGestureRecognizer.h
+//  stray
+//  
+//  Created by Mikael Hultgren on 2013-07-22.
+//  Copyright 2013 Artsoftheinsane. All rights reserved.
+// 
+
 typedef NS_ENUM (uint16_t, TransformableTableViewCellEditingState) {
 	TransformableTableViewCellEditingStateNone,
 	TransformableTableViewCellEditingStateLeft,
