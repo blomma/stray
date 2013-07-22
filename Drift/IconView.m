@@ -11,14 +11,14 @@
 @implementation IconView
 
 - (id)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-    }
-    return self;
+	self = [super initWithFrame:frame];
+	if (self) {
+	}
+	return self;
 }
 
 - (BOOL)canBecomeFirstResponder {
-    return NO;
+	return NO;
 }
 
 @end

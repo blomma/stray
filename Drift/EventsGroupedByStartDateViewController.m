@@ -58,7 +58,6 @@
 	    if (state == AIPullingStateAction && (previousState == AIPullingStatePullingAdd || previousState == AIPullingStatePullingClose))
 			if (weakSelf.didDismissHandler)
 				weakSelf.didDismissHandler();
-
 	}];
 
 	self.tableView.pullingView.addingHeight  = 0;
@@ -163,11 +162,11 @@
 
 		[fetchRequest setSortDescriptors:@[sort]];
 
-        NSPredicate *predicate = nil;
-        if ([State instance].eventsGroupedByStartDateFilter.count > 0) {
-            predicate = [NSPredicate predicateWithFormat:@"inTag.guid IN %@", [State instance].eventsGroupedByStartDateFilter];
-            [fetchRequest setPredicate:predicate];
-        }
+		NSPredicate *predicate = nil;
+		if ([State instance].eventsGroupedByStartDateFilter.count > 0) {
+			predicate = [NSPredicate predicateWithFormat:@"inTag.guid IN %@", [State instance].eventsGroupedByStartDateFilter];
+			[fetchRequest setPredicate:predicate];
+		}
 
 
 		[fetchRequest setFetchBatchSize:10];
@@ -271,18 +270,18 @@
 	headerLabel.textAlignment   = NSTextAlignmentCenter;
 
 	headerLabel.text = [sectionInfo name];
-    //    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    //    [dateFormat setDateFormat:@"yyyy-MM-dd"];
-    //    NSDate *date = [dateFormat dateFromString:[sectionInfo name]];
-    //
-    //	static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
-    //	NSDateComponents *components          = [[NSDate calendar] components:unitFlagsEventStart fromDate:date];
-    //
-    //	headerLabel.text = [NSString stringWithFormat:@"%@  ·  %02d %@ %04d",
-    //	                    [[self.shortStandaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString],
-    //	                    components.day,
-    //	                    [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString],
-    //	                    components.year];
+	//    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+	//    [dateFormat setDateFormat:@"yyyy-MM-dd"];
+	//    NSDate *date = [dateFormat dateFromString:[sectionInfo name]];
+	//
+	//	static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
+	//	NSDateComponents *components          = [[NSDate calendar] components:unitFlagsEventStart fromDate:date];
+	//
+	//	headerLabel.text = [NSString stringWithFormat:@"%@  ·  %02d %@ %04d",
+	//	                    [[self.shortStandaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString],
+	//	                    components.day,
+	//	                    [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString],
+	//	                    components.year];
 
 	return headerLabel;
 }

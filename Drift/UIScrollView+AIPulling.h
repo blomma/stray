@@ -1,19 +1,19 @@
-// 
+//
 //  UIScrollView+AIPulling.h
 //  stray
-//  
+//
 //  Created by Mikael Hultgren on 2013-03-10.
 //  Copyright 2013 Artsoftheinsane. All rights reserved.
-// 
+//
 
 @class AIPullingView;
 
 typedef NS_ENUM (NSUInteger, AIPullingState) {
-    AIPullingStatePulling = 0,
-    AIPullingStatePullingAdd,
-    AIPullingStatePullingClose,
-    AIPullingStateAction,
-    AIPullingStateInitial
+	AIPullingStatePulling = 0,
+	AIPullingStatePullingAdd,
+	AIPullingStatePullingClose,
+	AIPullingStateAction,
+	AIPullingStateInitial
 };
 
 @interface UITableView (AIPulling)

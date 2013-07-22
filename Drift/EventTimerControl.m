@@ -345,7 +345,7 @@
 		self.transforming = EventTimerStartDateTransformingStart;
 
 		[self.updateTimer invalidate];
-	} else if ([self.nowLayer.presentationLayer hitTest:point] && ![self.event isActive])   {
+	} else if ([self.nowLayer.presentationLayer hitTest:point] && ![self.event isActive]) {
 		self.deltaLayer = self.nowLayer;
 		self.deltaDate  = self.nowDate;
 
@@ -409,7 +409,7 @@
 			}
 
 			self.startDate = startDate;
-		} else if (self.deltaLayer == self.nowLayer)   {
+		} else if (self.deltaLayer == self.nowLayer) {
 			CGFloat seconds = (CGFloat)[self angleToTimeInterval : da];
 
 			NSDate *nowDate = [self.deltaDate dateByAddingTimeInterval:seconds];
@@ -452,7 +452,7 @@
 				                                                  selector:@selector(timerUpdate)
 				                                                  userInfo:nil
 				                                                   repeats:YES];
-		} else if (self.deltaLayer == self.nowLayer)   {
+		} else if (self.deltaLayer == self.nowLayer) {
 			[self drawNow];
 
 			self.transforming = EventTimerNowDateTransformingStop;

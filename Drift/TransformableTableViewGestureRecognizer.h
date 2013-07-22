@@ -1,7 +1,7 @@
 typedef NS_ENUM (uint16_t, TransformableTableViewCellEditingState) {
-    TransformableTableViewCellEditingStateNone,
-    TransformableTableViewCellEditingStateLeft,
-    TransformableTableViewCellEditingStateRight
+	TransformableTableViewCellEditingStateNone,
+	TransformableTableViewCellEditingStateLeft,
+	TransformableTableViewCellEditingStateRight
 };
 
 @protocol TransformableTableViewGestureEditingRowDelegate;

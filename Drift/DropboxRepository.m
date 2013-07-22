@@ -87,7 +87,7 @@ static NSString *const RepositoryName = @"dropbox";
                                                         *stop = YES;
                                                         return YES;
                                                     }
-                                                    
+
                                                     return NO;
                                                 }] anyObject];
 
@@ -226,14 +226,14 @@ static NSString *const RepositoryName = @"dropbox";
 - (void)sync {
 	NSArray *events = [Event all];
 	for (Event *event in events) {
-        Repository *repo = [[event.inRepositories objectsPassingTest: ^BOOL (id obj, BOOL *stop) {
-            if ([[obj name] isEqualToString:RepositoryName]) {
-                *stop = YES;
-                return YES;
-            }
+		Repository *repo = [[event.inRepositories objectsPassingTest: ^BOOL (id obj, BOOL *stop) {
+		    if ([[obj name] isEqualToString:RepositoryName]) {
+		        *stop = YES;
+		        return YES;
+			}
 
-            return NO;
-        }] anyObject];
+		    return NO;
+		}] anyObject];
 
 		[self syncEvent:event withRepo:repo];
 	}
@@ -272,7 +272,7 @@ static NSString *const RepositoryName = @"dropbox";
 
 	DBPath *dbPath = [[DBPath root] childPath:path];
 	[[DBFilesystem sharedFilesystem] deletePath:dbPath error:&deleteError];
-    DLog(@"%@", deleteError);
+	DLog(@"%@", deleteError);
 }
 
 - (void)syncEvent:(Event *)event withRepo:(Repository *)repo {
@@ -294,20 +294,20 @@ static NSString *const RepositoryName = @"dropbox";
 	DBError *fileInfoError;
 	DBPath *dbPath = [[DBPath root] childPath:previousPath];
 	DBFileInfo *fileInfo = [[DBFilesystem sharedFilesystem] fileInfoForPath:dbPath error:&fileInfoError];
-    DLog(@"%@",fileInfoError);
+	DLog(@"%@", fileInfoError);
 
 	// Remove the file if it exists
 	if (fileInfo) {
-        DBError *deleteError;
+		DBError *deleteError;
 		[[DBFilesystem sharedFilesystem] deletePath:dbPath error:&deleteError];
-        DLog(@"%@", deleteError);
-    }
+		DLog(@"%@", deleteError);
+	}
 
 	// Create a new one
-    DBError *createError;
+	DBError *createError;
 	dbPath = [[DBPath root] childPath:path];
 	DBFile *dbFile = [[DBFilesystem sharedFilesystem] createFile:dbPath error:&createError];
-    DLog(@"%@", createError);
+	DLog(@"%@", createError);
 
 	if (dbFile) {
 		CSVRow *row = [[CSVRow alloc] initWithValues:
@@ -322,15 +322,14 @@ static NSString *const RepositoryName = @"dropbox";
 		CSVSerializer *serializer = [[CSVSerializer alloc] initWithOutput:output];
 		[serializer serialize:table];
 
-        DBError *writeError;
+		DBError *writeError;
 		[dbFile writeString:output error:&writeError];
-        DLog(@"%@", writeError);
+		DLog(@"%@", writeError);
 
 		[dbFile close];
 
-        if (!writeError) {
-            repo.path = path;
-        }
+		if (!writeError)
+			repo.path = path;
 	}
 }
 

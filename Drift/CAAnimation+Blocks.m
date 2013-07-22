@@ -21,30 +21,28 @@
 @implementation CAAnimationDelegate
 
 - (id)init {
-    self = [super init];
-    if (self) {
-        self.completion = nil;
-        self.start      = nil;
-    }
+	self = [super init];
+	if (self) {
+		self.completion = nil;
+		self.start      = nil;
+	}
 
-    return self;
+	return self;
 }
 
 - (void)dealloc {
-    self.completion = nil;
-    self.start      = nil;
+	self.completion = nil;
+	self.start      = nil;
 }
 
 - (void)animationDidStart:(CAAnimation *)anim {
-    if (self.start != nil) {
-        self.start();
-    }
+	if (self.start != nil)
+		self.start();
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    if (self.completion != nil) {
-        self.completion(flag);
-    }
+	if (self.completion != nil)
+		self.completion(flag);
 }
 
 @end
@@ -52,31 +50,31 @@
 @implementation CAAnimation (BlocksAddition)
 
 - (void)setCompletion:(void (^)(BOOL))completion {
-    if ([self.delegate isKindOfClass:[CAAnimationDelegate class]]) {
-        ((CAAnimationDelegate *)self.delegate).completion = completion;
-    } else {
-        CAAnimationDelegate *delegate = [[CAAnimationDelegate alloc] init];
-        delegate.completion = completion;
-        self.delegate       = delegate;
-    }
+	if ([self.delegate isKindOfClass:[CAAnimationDelegate class]]) {
+		((CAAnimationDelegate *)self.delegate).completion = completion;
+	} else {
+		CAAnimationDelegate *delegate = [[CAAnimationDelegate alloc] init];
+		delegate.completion = completion;
+		self.delegate       = delegate;
+	}
 }
 
 - (void (^)(BOOL))completion {
-    return [self.delegate isKindOfClass:[CAAnimationDelegate class]] ? ((CAAnimationDelegate *)self.delegate).completion : nil;
+	return [self.delegate isKindOfClass:[CAAnimationDelegate class]] ? ((CAAnimationDelegate *)self.delegate).completion : nil;
 }
 
 - (void)setStart:(void (^)(void))start {
-    if ([self.delegate isKindOfClass:[CAAnimationDelegate class]]) {
-        ((CAAnimationDelegate *)self.delegate).start = start;
-    } else {
-        CAAnimationDelegate *delegate = [[CAAnimationDelegate alloc] init];
-        delegate.start = start;
-        self.delegate  = delegate;
-    }
+	if ([self.delegate isKindOfClass:[CAAnimationDelegate class]]) {
+		((CAAnimationDelegate *)self.delegate).start = start;
+	} else {
+		CAAnimationDelegate *delegate = [[CAAnimationDelegate alloc] init];
+		delegate.start = start;
+		self.delegate  = delegate;
+	}
 }
 
 - (void (^)(void))start {
-    return [self.delegate isKindOfClass:[CAAnimationDelegate class]] ? ((CAAnimationDelegate *)self.delegate).start : nil;
+	return [self.delegate isKindOfClass:[CAAnimationDelegate class]] ? ((CAAnimationDelegate *)self.delegate).start : nil;
 }
 
 @end

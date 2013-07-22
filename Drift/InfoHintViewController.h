@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-@interface InfoHintViewController : UIViewController<UIScrollViewDelegate>
+@interface InfoHintViewController : UIViewController <UIScrollViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UIPageControl *pageControl;
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;

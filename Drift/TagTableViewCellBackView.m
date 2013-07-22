@@ -11,22 +11,22 @@
 @implementation TagTableViewCellBackView
 
 - (id)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-    }
-    return self;
+	self = [super initWithFrame:frame];
+	if (self) {
+	}
+	return self;
 }
 
 - (void)drawRect:(CGRect)rect {
-    CGContextRef context = UIGraphicsGetCurrentContext();
+	CGContextRef context = UIGraphicsGetCurrentContext();
 
-    // bottom line
-    CGContextSetFillColorWithColor(context, [UIColor colorWithWhite:0.267 alpha:0.1f].CGColor);
-    CGContextFillRect (context, CGRectMake(0, self.bounds.size.height - 1, self.bounds.size.width, 1));
+	// bottom line
+	CGContextSetFillColorWithColor(context, [UIColor colorWithWhite:0.267 alpha:0.1f].CGColor);
+	CGContextFillRect(context, CGRectMake(0, self.bounds.size.height - 1, self.bounds.size.width, 1));
 
-    // top line
-    CGContextSetFillColorWithColor(context, [UIColor colorWithWhite:0.267 alpha:0.1f].CGColor);
-    CGContextFillRect (context, CGRectMake(0, 0, self.bounds.size.width, 1));
+	// top line
+	CGContextSetFillColorWithColor(context, [UIColor colorWithWhite:0.267 alpha:0.1f].CGColor);
+	CGContextFillRect(context, CGRectMake(0, 0, self.bounds.size.width, 1));
 }
 
 @end

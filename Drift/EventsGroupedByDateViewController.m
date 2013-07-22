@@ -51,6 +51,7 @@
 	self.isFilterViewInvalid = YES;
 
 	__weak typeof(self) weakSelf = self;
+
 	void (^notificationBlock)(NSNotification *) = ^(NSNotification *note) {
 		NSSet *insertedObjects = [[note userInfo] objectForKey:NSInsertedObjectsKey];
 		NSSet *deletedObjects  = [[note userInfo] objectForKey:NSDeletedObjectsKey];
@@ -138,6 +139,7 @@
 	[super viewWillAppear:animated];
 
 	__weak typeof(self) weakSelf = self;
+
 	self.foregroundObserver = [[NSNotificationCenter defaultCenter]
 	                           addObserverForName:UIApplicationWillEnterForegroundNotification
                                object:nil

@@ -9,11 +9,11 @@
 #import "Event.h"
 
 typedef enum : NSInteger {
-    EventTimerStartDateTransformingStart,
-    EventTimerStartDateTransformingStop,
-    EventTimerNowDateTransformingStart,
-    EventTimerNowDateTransformingStop,
-    EventTimerNotTransforming
+	EventTimerStartDateTransformingStart,
+	EventTimerStartDateTransformingStop,
+	EventTimerNowDateTransformingStart,
+	EventTimerNowDateTransformingStop,
+	EventTimerNotTransforming
 } EventTimerTransformingEnum;
 
 @interface EventTimerControl : UIControl
