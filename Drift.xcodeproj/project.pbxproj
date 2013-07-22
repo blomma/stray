@@ -65,8 +65,6 @@
 		9E810ED11676288200CA2009 /* Info-Event-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E810ECE1676288200CA2009 /* Info-Event-568h@2x.png */; };
 		9E810ED21676288200CA2009 /* Info-Event.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E810ECF1676288200CA2009 /* Info-Event.png */; };
 		9E810ED31676288200CA2009 /* Info-Event@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E810ED01676288200CA2009 /* Info-Event@2x.png */; };
-		9E810ED816762C4100CA2009 /* NSBundle+Retina4.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E810ED516762C4100CA2009 /* NSBundle+Retina4.m */; };
-		9E810ED916762C4100CA2009 /* UIImage+Retina4.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E810ED716762C4100CA2009 /* UIImage+Retina4.m */; };
 		9E89816F15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89816E15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m */; };
 		9E8D917A178CBEF400827A5D /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E8D9179178CBEF400827A5D /* libc++.dylib */; };
 		9E9239DB162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239D8162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m */; };
@@ -174,10 +172,6 @@
 		9E810ECE1676288200CA2009 /* Info-Event-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Info-Event-568h@2x.png"; sourceTree = "<group>"; };
 		9E810ECF1676288200CA2009 /* Info-Event.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Info-Event.png"; sourceTree = "<group>"; };
 		9E810ED01676288200CA2009 /* Info-Event@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Info-Event@2x.png"; sourceTree = "<group>"; };
-		9E810ED416762C4100CA2009 /* NSBundle+Retina4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+Retina4.h"; sourceTree = "<group>"; };
-		9E810ED516762C4100CA2009 /* NSBundle+Retina4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+Retina4.m"; sourceTree = "<group>"; };
-		9E810ED616762C4100CA2009 /* UIImage+Retina4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Retina4.h"; sourceTree = "<group>"; };
-		9E810ED716762C4100CA2009 /* UIImage+Retina4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Retina4.m"; sourceTree = "<group>"; };
 		9E89816D15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsGroupedByDateTableViewCell.h; sourceTree = "<group>"; };
 		9E89816E15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsGroupedByDateTableViewCell.m; sourceTree = "<group>"; };
 		9E8D9179178CBEF400827A5D /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
@@ -482,10 +476,6 @@
 		9EAB520B15C95523008952FB /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				9E810ED416762C4100CA2009 /* NSBundle+Retina4.h */,
-				9E810ED516762C4100CA2009 /* NSBundle+Retina4.m */,
-				9E810ED616762C4100CA2009 /* UIImage+Retina4.h */,
-				9E810ED716762C4100CA2009 /* UIImage+Retina4.m */,
 				9E954D82164419F50022D5BE /* UIScrollView+AIPulling.h */,
 				9E954D83164419F50022D5BE /* UIScrollView+AIPulling.m */,
 				9E96A90516397DB400164D76 /* CAAnimation+Blocks.h */,
@@ -711,8 +701,6 @@
 				9E66D0DD16553D6700339E99 /* State.m in Sources */,
 				9EB15F6F165D6A7F0054AEA2 /* TagButton.m in Sources */,
 				9EF3311F166569DB005CFEF2 /* TagTableViewCellBackView.m in Sources */,
-				9E810ED816762C4100CA2009 /* NSBundle+Retina4.m in Sources */,
-				9E810ED916762C4100CA2009 /* UIImage+Retina4.m in Sources */,
 				9E5DECD4167899B200E21B8E /* InfoHintViewController.m in Sources */,
 				9ECF3B7A16EAF4D40097FF37 /* _Compatibility.m in Sources */,
 				9ECF3B7B16EAF4D40097FF37 /* Compatibility.m in Sources */,
