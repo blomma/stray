@@ -39,6 +39,7 @@
 		9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */; };
 		9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F20015570FD60087F602 /* MainStoryboard.storyboard */; };
 		9E42F22915571E9C0087F602 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F22815571E9C0087F602 /* RootViewController.m */; };
+		9E4E9FCE179CC65F007E8A99 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E4E9FCD179CC65F007E8A99 /* SystemConfiguration.framework */; };
 		9E513DFB163430E90080313A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E513DFA163430E90080313A /* Icon@2x.png */; };
 		9E513DFE163433C70080313A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E513DFD163433C70080313A /* Icon.png */; };
 		9E51511615C7CEF100901655 /* EventGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511315C7CEF100901655 /* EventGroup.m */; };
@@ -140,6 +141,7 @@
 		9E42F20115570FD60087F602 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		9E42F22715571E9C0087F602 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = RootViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9E42F22815571E9C0087F602 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RootViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		9E4E9FCD179CC65F007E8A99 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9E513DFA163430E90080313A /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
 		9E513DFD163433C70080313A /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../Icon.png; sourceTree = "<group>"; };
 		9E51511215C7CEF100901655 /* EventGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroup.h; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E4E9FCE179CC65F007E8A99 /* SystemConfiguration.framework in Frameworks */,
 				9E8D917A178CBEF400827A5D /* libc++.dylib in Frameworks */,
 				9ECB5A1D173D29D4006E86F1 /* Security.framework in Frameworks */,
 				9ECB5A1B173D29BA006E86F1 /* CFNetwork.framework in Frameworks */,
@@ -322,6 +325,7 @@
 		9E42F1ED15570FD60087F602 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9E4E9FCD179CC65F007E8A99 /* SystemConfiguration.framework */,
 				9E8D9179178CBEF400827A5D /* libc++.dylib */,
 				9ECB5A1C173D29D4006E86F1 /* Security.framework */,
 				9ECB5A1A173D29BA006E86F1 /* CFNetwork.framework */,
