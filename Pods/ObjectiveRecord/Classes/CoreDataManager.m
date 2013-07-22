@@ -31,20 +31,16 @@
 #pragma mark - Private
 
 - (NSString *)modelName {
-	if (_modelName != nil)
-		return _modelName;
+	if (!_modelName)
+		_modelName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
 
-	_modelName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
 	return _modelName;
 }
 
 #pragma mark - Public
 
 - (NSManagedObjectContext *)managedObjectContext {
-	if (_managedObjectContext)
-		return _managedObjectContext;
-
-	if (self.persistentStoreCoordinator) {
+	if (!_managedObjectContext) {
 		_managedObjectContext = [[NSManagedObjectContext alloc] init];
 		[_managedObjectContext setPersistentStoreCoordinator:self.persistentStoreCoordinator];
 	}
@@ -53,26 +49,25 @@
 }
 
 - (NSManagedObjectModel *)managedObjectModel {
-	if (_managedObjectModel)
-		return _managedObjectModel;
-
-	NSURL *modelURL = [[NSBundle mainBundle] URLForResource:[self modelName] withExtension:@"momd"];
-	_managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+	if (!_managedObjectModel) {
+		NSURL *url          = [[NSBundle mainBundle] URLForResource:[self modelName] withExtension:@"momd"];
+		_managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:url];
+	}
 
 	return _managedObjectModel;
 }
 
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-	if (_persistentStoreCoordinator)
-		return _persistentStoreCoordinator;
+	if (!_persistentStoreCoordinator)
+		_persistentStoreCoordinator = [self persistentStoreCoordinatorWithStoreType:NSSQLiteStoreType
+		                                                                   storeURL:[self storeURL]];
 
-	_persistentStoreCoordinator = [self persistentStoreCoordinatorWithStoreType:NSSQLiteStoreType
-	                                                                   storeURL:[self sqliteStoreURL]];
 	return _persistentStoreCoordinator;
 }
 
 - (void)useInMemoryStore {
-	_persistentStoreCoordinator = [self persistentStoreCoordinatorWithStoreType:NSInMemoryStoreType storeURL:nil];
+	_persistentStoreCoordinator = [self persistentStoreCoordinatorWithStoreType:NSInMemoryStoreType
+	                                                                   storeURL:nil];
 }
 
 - (BOOL)saveContext {
@@ -97,21 +92,28 @@
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinatorWithStoreType:(NSString *const)storeType storeURL:(NSURL *)storeURL {
 	NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
 
-	NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption: @YES,
-		                       NSInferMappingModelAutomaticallyOption: @YES };
-
+	NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption:@YES,
+		                       NSInferMappingModelAutomaticallyOption:@YES,
+		                       NSSQLitePragmasOption: @{ @"journal_mode": @"WAL" }
+                               };
 	NSError *error = nil;
-	if (![coordinator addPersistentStoreWithType:storeType configuration:nil URL:storeURL options:options error:&error])
+	NSPersistentStore *store = [coordinator addPersistentStoreWithType:storeType
+	                                                     configuration:nil
+	                                                               URL:storeURL
+	                                                           options:options
+	                                                             error:&error];
+
+	if (!store)
 		NSLog(@"ERROR WHILE CREATING PERSISTENT STORE COORDINATOR! %@, %@", error, [error userInfo]);
 
 	return coordinator;
 }
 
-- (NSURL *)sqliteStoreURL {
-	NSArray *urls           = [[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask];
-	NSString *pathComponent = [[self modelName] stringByAppendingString:@".sqlite"];
+- (NSURL *)storeURL {
+	NSString *documentDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+	NSString *storePath = [documentDirectory stringByAppendingPathComponent:[[self modelName] stringByAppendingString:@".sqlite"]];
 
-	return [[urls lastObject] URLByAppendingPathComponent:pathComponent];
+	return [NSURL fileURLWithPath:storePath];
 }
 
 @end
