@@ -80,7 +80,6 @@
 		9EAE7DFB1603D038007F32EC /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DFA1603D038007F32EC /* Default.png */; };
 		9EB15F6F165D6A7F0054AEA2 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB15F6E165D6A7F0054AEA2 /* TagButton.m */; };
 		9EC7253D173D8A160090B1D5 /* PreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EC7253C173D8A160090B1D5 /* PreferencesViewController.m */; };
-		9EC837F916DA0C7500087997 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EC837F816DA0C7500087997 /* SystemConfiguration.framework */; };
 		9ECB5A0B173D287C006E86F1 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */; };
 		9ECB5A0F173D288B006E86F1 /* SDCloudUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB5A0E173D288B006E86F1 /* SDCloudUserDefaults.m */; };
 		9ECB5A17173D28A8006E86F1 /* SKBounceAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB5A16173D28A8006E86F1 /* SKBounceAnimation.m */; };
@@ -139,7 +138,6 @@
 		9E42F1FD15570FD60087F602 /* DriftAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DriftAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DriftAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9E42F20115570FD60087F602 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		9E42F20C15570FD70087F602 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		9E42F22715571E9C0087F602 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = RootViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9E42F22815571E9C0087F602 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RootViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9E513DFA163430E90080313A /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
@@ -207,7 +205,6 @@
 		9EB15F6E165D6A7F0054AEA2 /* TagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagButton.m; sourceTree = "<group>"; };
 		9EC7253B173D8A160090B1D5 /* PreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesViewController.h; sourceTree = "<group>"; };
 		9EC7253C173D8A160090B1D5 /* PreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesViewController.m; sourceTree = "<group>"; };
-		9EC837F816DA0C7500087997 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Vendor/Crashlytics.framework; sourceTree = "<group>"; };
 		9ECB5A0D173D288B006E86F1 /* SDCloudUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDCloudUserDefaults.h; sourceTree = "<group>"; };
 		9ECB5A0E173D288B006E86F1 /* SDCloudUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDCloudUserDefaults.m; sourceTree = "<group>"; };
@@ -257,7 +254,6 @@
 				9E8D917A178CBEF400827A5D /* libc++.dylib in Frameworks */,
 				9ECB5A1D173D29D4006E86F1 /* Security.framework in Frameworks */,
 				9ECB5A1B173D29BA006E86F1 /* CFNetwork.framework in Frameworks */,
-				9EC837F916DA0C7500087997 /* SystemConfiguration.framework in Frameworks */,
 				9E7EB52D15E8F8C100604B79 /* CoreGraphics.framework in Frameworks */,
 				9E7EB52C15E8F89C00604B79 /* QuartzCore.framework in Frameworks */,
 				9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */,
@@ -331,13 +327,11 @@
 				9ECB5A1A173D29BA006E86F1 /* CFNetwork.framework */,
 				9ECB5A18173D29A8006E86F1 /* Dropbox.framework */,
 				9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */,
-				9EC837F816DA0C7500087997 /* SystemConfiguration.framework */,
 				9E63BBF3156EAA710006FEFC /* CoreData.framework */,
 				9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */,
 				9E42F1EE15570FD60087F602 /* UIKit.framework */,
 				9E42F1F015570FD60087F602 /* Foundation.framework */,
 				9E42F1F215570FD60087F602 /* CoreGraphics.framework */,
-				9E42F20C15570FD70087F602 /* SenTestingKit.framework */,
 				0DAF25AC4BF244CD84717515 /* libPods.a */,
 			);
 			name = Frameworks;
