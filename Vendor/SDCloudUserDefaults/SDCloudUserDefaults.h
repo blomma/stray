@@ -5,8 +5,6 @@
 //  Copyright (c) 2011 Wandle Software Limited. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 @interface SDCloudUserDefaults : NSObject
 
 +(NSString*)stringForKey:(NSString*)aKey;

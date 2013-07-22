@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 Artsoftheinsane. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import <MGScrollView.h>
 
 @interface PreferencesViewController : UIViewController

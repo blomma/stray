@@ -7,8 +7,6 @@
 //
 
 #import "EventTimerControl.h"
-
-#import "EventsGroupedByStartDateViewController.h"
 #import "TagButton.h"
 
 @interface EventViewController : UIViewController

@@ -6,8 +6,6 @@
 //  Copyright 2013 Artsoftheinsane. All rights reserved.
 // 
 
-#import <UIKit/UIKit.h>
-
 @class AIPullingView;
 
 typedef NS_ENUM (NSUInteger, AIPullingState) {

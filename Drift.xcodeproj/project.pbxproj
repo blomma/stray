@@ -83,7 +83,6 @@
 		9EC7253D173D8A160090B1D5 /* PreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EC7253C173D8A160090B1D5 /* PreferencesViewController.m */; };
 		9ECB5A0B173D287C006E86F1 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */; };
 		9ECB5A0F173D288B006E86F1 /* SDCloudUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB5A0E173D288B006E86F1 /* SDCloudUserDefaults.m */; };
-		9ECB5A17173D28A8006E86F1 /* SKBounceAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB5A16173D28A8006E86F1 /* SKBounceAnimation.m */; };
 		9ECB5A19173D29A9006E86F1 /* Dropbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A18173D29A8006E86F1 /* Dropbox.framework */; };
 		9ECB5A1B173D29BA006E86F1 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A1A173D29BA006E86F1 /* CFNetwork.framework */; };
 		9ECB5A1D173D29D4006E86F1 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A1C173D29D4006E86F1 /* Security.framework */; };
@@ -210,8 +209,6 @@
 		9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Vendor/Crashlytics.framework; sourceTree = "<group>"; };
 		9ECB5A0D173D288B006E86F1 /* SDCloudUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDCloudUserDefaults.h; sourceTree = "<group>"; };
 		9ECB5A0E173D288B006E86F1 /* SDCloudUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDCloudUserDefaults.m; sourceTree = "<group>"; };
-		9ECB5A15173D28A8006E86F1 /* SKBounceAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKBounceAnimation.h; sourceTree = "<group>"; };
-		9ECB5A16173D28A8006E86F1 /* SKBounceAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKBounceAnimation.m; sourceTree = "<group>"; };
 		9ECB5A18173D29A8006E86F1 /* Dropbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Dropbox.framework; path = Vendor/Dropbox.framework; sourceTree = "<group>"; };
 		9ECB5A1A173D29BA006E86F1 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		9ECB5A1C173D29D4006E86F1 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -297,7 +294,6 @@
 		9E15DDA116023FE4007146CE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				9ECB5A14173D28A8006E86F1 /* SKBounceAnimation */,
 				9ECB5A0C173D288B006E86F1 /* SDCloudUserDefaults */,
 			);
 			name = Vendor;
@@ -344,7 +340,6 @@
 		9E42F1F415570FD60087F602 /* Drift */ = {
 			isa = PBXGroup;
 			children = (
-				9E472ABD167614AB00D32DEB /* Protocols */,
 				9E42F1F515570FD60087F602 /* Supporting Files */,
 				9EAB520B15C95523008952FB /* Categories */,
 				9E9FFF9215925CAE00BA5200 /* Resources */,
@@ -368,13 +363,6 @@
 				9E42F1FC15570FD60087F602 /* Drift-Prefix.pch */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		9E472ABD167614AB00D32DEB /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Protocols;
 			sourceTree = "<group>";
 		};
 		9E561DE415FBB04D008D3895 /* Controls */ = {
@@ -516,16 +504,6 @@
 			);
 			name = SDCloudUserDefaults;
 			path = Vendor/SDCloudUserDefaults;
-			sourceTree = "<group>";
-		};
-		9ECB5A14173D28A8006E86F1 /* SKBounceAnimation */ = {
-			isa = PBXGroup;
-			children = (
-				9ECB5A15173D28A8006E86F1 /* SKBounceAnimation.h */,
-				9ECB5A16173D28A8006E86F1 /* SKBounceAnimation.m */,
-			);
-			name = SKBounceAnimation;
-			path = Vendor/SKBounceAnimation;
 			sourceTree = "<group>";
 		};
 		9ECF0B0F173D9618008DF575 /* Segue */ = {
@@ -740,7 +718,6 @@
 				9ECF3B7B16EAF4D40097FF37 /* Compatibility.m in Sources */,
 				9ECF3B7E16EAF6290097FF37 /* CompatibilityMigration.m in Sources */,
 				9ECB5A0F173D288B006E86F1 /* SDCloudUserDefaults.m in Sources */,
-				9ECB5A17173D28A8006E86F1 /* SKBounceAnimation.m in Sources */,
 				9EC7253D173D8A160090B1D5 /* PreferencesViewController.m in Sources */,
 				9ECF0B1C173D962B008DF575 /* SegueSlide.m in Sources */,
 				9ECF0B1D173D962B008DF575 /* SegueSlideLeft.m in Sources */,

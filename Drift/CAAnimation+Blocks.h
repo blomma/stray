@@ -6,8 +6,7 @@
 //  Copyright 2011 xissburg. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <QuartzCore/QuartzCore.h>
+@import QuartzCore;
 
 @interface CAAnimation (BlocksAddition)
 

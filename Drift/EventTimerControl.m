@@ -7,8 +7,6 @@
 //
 
 #import "EventTimerControl.h"
-
-#import <QuartzCore/QuartzCore.h>
 #import "Event.h"
 #import "NoHitCAShapeLayer.h"
 

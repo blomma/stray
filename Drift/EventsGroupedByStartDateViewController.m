@@ -18,6 +18,7 @@
 #import "UIScrollView+AIPulling.h"
 #import "State.h"
 #import "NSDate+Utilities.h"
+#import <Objective.h>
 
 @interface EventsGroupedByStartDateViewController () <TransformableTableViewGestureEditingRowDelegate>
 
@@ -158,9 +159,17 @@
 		[fetchRequest setEntity:entity];
 
 		NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"startDate"
-		                                                     ascending:YES];
+		                                                     ascending:NO];
 
 		[fetchRequest setSortDescriptors:@[sort]];
+
+        NSPredicate *predicate = nil;
+        if ([State instance].eventsGroupedByStartDateFilter.count > 0) {
+            predicate = [NSPredicate predicateWithFormat:@"inTag.guid IN %@", [State instance].eventsGroupedByStartDateFilter];
+            [fetchRequest setPredicate:predicate];
+        }
+
+
 		[fetchRequest setFetchBatchSize:10];
 
 		NSFetchedResultsController *theFetchedResultsController =
@@ -177,25 +186,6 @@
 			NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 			exit(-1);
 		}
-
-        //        [NSManagedObject MR_setDefaultBatchSize:20];
-
-        //        NSPredicate *predicate = nil;
-        //		if ([State instance].eventsGroupedByStartDateFilter.count > 0)
-        //			predicate = [NSPredicate predicateWithFormat:@"inTag.guid IN %@", [State instance].eventsGroupedByStartDateFilter];
-        //
-        //        _fetchedResultsController = [Event MR_fetchAllSortedBy:@"startDate"
-        //                                                     ascending:YES
-        //                                                 withPredicate:predicate
-        //                                                       groupBy:@"startDate"
-        //                                                      delegate:self
-        //                                                     inContext:[NSManagedObjectContext MR_defaultContext]];
-
-        //		_fetchedResultsController = [Event MR_fetchAllGroupedBy:@"startDate"
-        //		                                          withPredicate:predicate
-        //		                                               sortedBy:@"startDate"
-        //		                                              ascending:NO
-        //		                                               delegate:self];
 	}
 
 	return _fetchedResultsController;
@@ -316,17 +306,14 @@
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    //    DLog(NSStringFromSelector(_cmd));
 	return (NSInteger)[[self.fetchedResultsController sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    //    DLog(NSStringFromSelector(_cmd));
 	return (NSInteger)[[[self.fetchedResultsController sections] objectAtIndex:(NSUInteger)section] numberOfObjects];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    //    DLog(NSStringFromSelector(_cmd));
 	static NSString *cellIdentifier = @"EventsGroupedByStartDateTableViewCell";
 
 	EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];

@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import <QuartzCore/QuartzCore.h>
+@import QuartzCore;
 
 @interface NoHitCAShapeLayer : CAShapeLayer
 

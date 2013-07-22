@@ -8,8 +8,6 @@
 
 #import "EventsGroupedByDateViewController.h"
 
-#import <QuartzCore/QuartzCore.h>
-
 #import "Event.h"
 #import "EventsGroupedByDate.h"
 #import "TagFilterButton.h"
@@ -17,6 +15,7 @@
 #import "State.h"
 #import "Tag.h"
 #import "NSDate+Utilities.h"
+#import <Objective.h>
 
 @interface EventsGroupedByDateViewController ()
 

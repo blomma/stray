@@ -7,6 +7,7 @@ PODS:
   - Objective (HEAD based on 0.9):
     - ObjectiveSugar
   - ObjectiveSugar (0.9)
+  - SKBounceAnimation (HEAD based on 1.0.03)
   - THObserversAndBinders (HEAD based on 1.0.0)
 
 DEPENDENCIES:
@@ -16,6 +17,7 @@ DEPENDENCIES:
   - HMSideMenu (HEAD)
   - MGBox2 (HEAD)
   - Objective (HEAD)
+  - SKBounceAnimation (HEAD)
   - THObserversAndBinders (HEAD)
 
 SPEC CHECKSUMS:
@@ -26,6 +28,7 @@ SPEC CHECKSUMS:
   MGBox2: 7c09e36c2271f9af16fdb5141a0ca554ecee4d8d
   Objective: c2843368fcf80c746992942b73f9a17101e0baa0
   ObjectiveSugar: 5b33fb396f3e93c0a543bdf55d2d48f29ee46bfb
+  SKBounceAnimation: 116cdcda440d52f2f6d176032678ffd526ec652a
   THObserversAndBinders: 5f0e709e8b704a8646ffdee9beb01a8aefc1dcb2
 
 COCOAPODS: 0.22.2

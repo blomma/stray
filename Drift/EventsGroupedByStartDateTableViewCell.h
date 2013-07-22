@@ -7,7 +7,6 @@
 //
 
 #import "Event.h"
-
 #import "TagButton.h"
 
 @interface EventsGroupedByStartDateTableViewCell : UITableViewCell

@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 Artsoftheinsane. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 @interface AIStyle : NSObject
 
 + (void)applyStyle;

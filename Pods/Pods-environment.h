@@ -49,6 +49,12 @@
 #define COCOAPODS_VERSION_MINOR_ObjectiveSugar 9
 #define COCOAPODS_VERSION_PATCH_ObjectiveSugar 0
 
+// SKBounceAnimation
+#define COCOAPODS_POD_AVAILABLE_SKBounceAnimation
+#define COCOAPODS_VERSION_MAJOR_SKBounceAnimation 1
+#define COCOAPODS_VERSION_MINOR_SKBounceAnimation 0
+#define COCOAPODS_VERSION_PATCH_SKBounceAnimation 3
+
 // THObserversAndBinders
 #define COCOAPODS_POD_AVAILABLE_THObserversAndBinders
 #define COCOAPODS_VERSION_MAJOR_THObserversAndBinders 1

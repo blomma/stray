@@ -8,8 +8,6 @@
 
 #import "EventsGroupedByStartDateTableViewCell.h"
 
-#import <QuartzCore/QuartzCore.h>
-
 #import <FontAwesomeKit.h>
 
 @interface EventsGroupedByStartDateTableViewCell ()

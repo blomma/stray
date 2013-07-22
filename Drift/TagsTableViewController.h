@@ -7,7 +7,6 @@
 //
 
 #import "Event.h"
-
 #import "Tag.h"
 
 @class TagsTableViewController;
