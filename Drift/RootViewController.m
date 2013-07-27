@@ -36,8 +36,6 @@
 	               direction:UIPageViewControllerNavigationDirectionForward
 	                animated:YES
 	              completion:nil];
-
-	self.view.backgroundColor = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -117,14 +115,6 @@
 		return nil;
 
 	return [self.dataModel objectAtIndex:index - 1];
-}
-
-- (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController {
-	return (NSInteger)self.dataModel.count;
-}
-
-- (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController {
-	return 0;
 }
 
 #pragma mark -
