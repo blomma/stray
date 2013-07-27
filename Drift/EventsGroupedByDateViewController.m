@@ -31,6 +31,8 @@
 @property (nonatomic) id managedContextObserver;
 @property (nonatomic) id foregroundObserver;
 
+@property (nonatomic) CGFloat contentOffsetY;
+
 @end
 
 @implementation EventsGroupedByDateViewController
@@ -178,6 +180,44 @@
 	}
 
 	return _eventGroups;
+}
+
+#pragma mark -
+#pragma mark UIScrollViewDelegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+	self.contentOffsetY = scrollView.contentOffset.y;
+}
+
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
+	CGRect frame = CGRectMake(self.filterView.frame.origin.x,
+	                          30,
+	                          self.filterView.frame.size.width,
+	                          self.filterView.frame.size.height);
+
+	[UIView animateWithDuration:0.2 animations: ^{
+	    self.filterView.frame = frame;
+	}];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+	// If this was a flick of the finger and it was in a downward direction (scrolling up) then show the tagview
+	// else we hide it
+	CGRect frame;
+	if (decelerate && self.contentOffsetY > scrollView.contentOffset.y)
+		frame = CGRectMake(self.filterView.frame.origin.x,
+		                   30,
+		                   self.filterView.frame.size.width,
+		                   self.filterView.frame.size.height);
+	else
+		frame = CGRectMake(self.filterView.frame.origin.x,
+		                   -30,
+		                   self.filterView.frame.size.width,
+		                   self.filterView.frame.size.height);
+
+	[UIView animateWithDuration:0.2 animations: ^{
+	    self.filterView.frame = frame;
+	}];
 }
 
 #pragma mark -
