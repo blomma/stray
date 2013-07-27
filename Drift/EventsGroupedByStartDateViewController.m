@@ -173,7 +173,7 @@
 		NSFetchedResultsController *theFetchedResultsController =
         [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                             managedObjectContext:[NSManagedObjectContext defaultContext]
-                                              sectionNameKeyPath:@"startDate"
+                                              sectionNameKeyPath:nil
                                                        cacheName:nil];
 
 		_fetchedResultsController = theFetchedResultsController;
@@ -256,34 +256,34 @@
 #pragma mark -
 #pragma mark UITableViewDelegate
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-	id sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:(NSUInteger)section];
-
-	CGRect frame = CGRectMake(0, 0.0, tableView.bounds.size.width, 36.0);
-
-	UILabel *headerLabel = [[UILabel alloc] initWithFrame:frame];
-	headerLabel.backgroundColor = [UIColor colorWithRed:0.745 green:0.106 blue:0.169 alpha:0.8];
-	headerLabel.opaque          = YES;
-	headerLabel.textColor       = [UIColor whiteColor];
-	headerLabel.font            = [UIFont fontWithName:@"Futura-CondensedMedium" size:16];
-	headerLabel.textAlignment   = NSTextAlignmentCenter;
-
-	headerLabel.text = [sectionInfo name];
-	//    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-	//    [dateFormat setDateFormat:@"yyyy-MM-dd"];
-	//    NSDate *date = [dateFormat dateFromString:[sectionInfo name]];
-	//
-	//	static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
-	//	NSDateComponents *components          = [[NSDate calendar] components:unitFlagsEventStart fromDate:date];
-	//
-	//	headerLabel.text = [NSString stringWithFormat:@"%@  ·  %02d %@ %04d",
-	//	                    [[self.shortStandaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString],
-	//	                    components.day,
-	//	                    [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString],
-	//	                    components.year];
-
-	return headerLabel;
-}
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+//	id sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:(NSUInteger)section];
+//
+//	CGRect frame = CGRectMake(0, 0.0, tableView.bounds.size.width, 36.0);
+//
+//	UILabel *headerLabel = [[UILabel alloc] initWithFrame:frame];
+//	headerLabel.backgroundColor = [UIColor colorWithRed:0.745 green:0.106 blue:0.169 alpha:0.8];
+//	headerLabel.opaque          = YES;
+//	headerLabel.textColor       = [UIColor whiteColor];
+//	headerLabel.font            = [UIFont fontWithName:@"Futura-CondensedMedium" size:16];
+//	headerLabel.textAlignment   = NSTextAlignmentCenter;
+//
+//	headerLabel.text = [sectionInfo name];
+//	//    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+//	//    [dateFormat setDateFormat:@"yyyy-MM-dd"];
+//	//    NSDate *date = [dateFormat dateFromString:[sectionInfo name]];
+//	//
+//	//	static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
+//	//	NSDateComponents *components          = [[NSDate calendar] components:unitFlagsEventStart fromDate:date];
+//	//
+//	//	headerLabel.text = [NSString stringWithFormat:@"%@  ·  %02d %@ %04d",
+//	//	                    [[self.shortStandaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString],
+//	//	                    components.day,
+//	//	                    [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString],
+//	//	                    components.year];
+//
+//	return headerLabel;
+//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
@@ -303,9 +303,9 @@
 #pragma mark -
 #pragma mark UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return (NSInteger)[[self.fetchedResultsController sections] count];
-}
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+//	return (NSInteger)[[self.fetchedResultsController sections] count];
+//}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	return (NSInteger)[[[self.fetchedResultsController sections] objectAtIndex:(NSUInteger)section] numberOfObjects];
