@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4471.1" systemVersion="12E3067" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="ftN-u6-d28">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4488.1" systemVersion="12E3067" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="ftN-u6-d28">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3697.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3715.3"/>
     </dependencies>
     <scenes>
         <!--RootViewController-->
@@ -81,8 +81,8 @@
             <objects>
                 <viewController storyboardIdentifier="EventViewController" id="pW2-Iw-5Bg" userLabel="EventViewController" customClass="EventViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top"/>
-                        <viewControllerLayoutGuide type="bottom"/>
+                        <viewControllerLayoutGuide type="top" id="nAt-pz-zPW"/>
+                        <viewControllerLayoutGuide type="bottom" id="2Yv-gD-nMX"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8Qo-UI-s2h">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
@@ -257,7 +257,7 @@
                                 <rect key="frame" x="0.0" y="22" width="320" height="74"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7lp-Vw-Iv0" id="ul5-IV-lqT">
-                                    <rect key="frame" x="0.0" y="0.0" width="322" height="73"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="74"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GBL-8y-p6I" userLabel="backView" customClass="TagTableViewCellBackView">
@@ -411,8 +411,8 @@
             <objects>
                 <viewController storyboardIdentifier="EventsGroupedByDateViewController" id="ONY-RJ-IiQ" userLabel="EventsGroupedByDateViewController" customClass="EventsGroupedByDateViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top"/>
-                        <viewControllerLayoutGuide type="bottom"/>
+                        <viewControllerLayoutGuide type="top" id="TjA-Kw-qBQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="Qbn-2w-ekM"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="GX1-mM-rxe">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
@@ -422,16 +422,17 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <inset key="scrollIndicatorInsets" minX="0.0" minY="60" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="EventsGroupedByDateTableViewCell" rowHeight="100" id="UtO-Rb-o4n" userLabel="EventsGroupedByDateTableViewCell" customClass="EventsGroupedByDateTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UtO-Rb-o4n" id="6sE-ee-EMb">
-                                            <rect key="frame" x="0.0" y="0.0" width="322" height="99"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="00" lineBreakMode="tailTruncation" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qPF-v3-4Dm" userLabel="RunningTimeHours">
-                                                    <rect key="frame" x="7" y="18" width="88" height="63"/>
+                                                    <rect key="frame" x="7" y="19" width="88" height="63"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="73"/>
@@ -439,7 +440,7 @@
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="60" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zam-CZ-wC7" userLabel="RunningTimeMinutes">
-                                                    <rect key="frame" x="94" y="15" width="38" height="35"/>
+                                                    <rect key="frame" x="94" y="16" width="38" height="35"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="31"/>
@@ -447,7 +448,7 @@
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="18" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CfG-GK-mXX" userLabel="DateDay">
-                                                    <rect key="frame" x="194" y="15" width="51" height="39"/>
+                                                    <rect key="frame" x="194" y="16" width="51" height="39"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="42"/>
@@ -455,7 +456,7 @@
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="September" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rcY-LZ-Run" userLabel="DateMonth">
-                                                    <rect key="frame" x="247" y="13" width="72" height="23"/>
+                                                    <rect key="frame" x="247" y="14" width="72" height="23"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="17"/>
@@ -463,7 +464,7 @@
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="2012" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g5d-wH-aLq" userLabel="DateYear">
-                                                    <rect key="frame" x="247" y="35" width="42" height="17"/>
+                                                    <rect key="frame" x="247" y="36" width="42" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="17"/>
@@ -471,7 +472,7 @@
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Måndag" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="EdD-0m-87w" userLabel="DayOfWeek">
-                                                    <rect key="frame" x="214" y="53" width="106" height="24"/>
+                                                    <rect key="frame" x="214" y="54" width="106" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="18"/>
@@ -497,10 +498,10 @@
                                 </connections>
                             </tableView>
                             <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nQy-aQ-EHb" userLabel="TagView">
-                                <rect key="frame" x="0.0" y="20" width="320" height="30"/>
+                                <rect key="frame" x="0.0" y="20" width="320" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="BMR-qc-P50"/>
+                                    <constraint firstAttribute="height" constant="20" id="BMR-qc-P50"/>
                                     <constraint firstAttribute="width" constant="320" id="wTJ-OX-GIM"/>
                                 </constraints>
                             </scrollView>
@@ -515,6 +516,7 @@
                             <constraint firstItem="Bla-gS-XRc" firstAttribute="top" secondItem="GX1-mM-rxe" secondAttribute="top" id="vPK-Th-2Aj"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
                         <outlet property="filterView" destination="nQy-aQ-EHb" id="Btj-nL-koh"/>
                         <outlet property="tableView" destination="Bla-gS-XRc" id="Pdu-8Z-Ze9"/>
@@ -545,7 +547,7 @@
                                         <rect key="frame" x="0.0" y="36" width="320" height="120"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qyp-c4-X1Y" id="eNF-tq-UlP">
-                                            <rect key="frame" x="0.0" y="0.0" width="322" height="119"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ilS-si-GKj" userLabel="backView">
