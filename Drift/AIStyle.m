@@ -7,10 +7,27 @@
 //
 
 #import "AIStyle.h"
+#import "TagFilterButton.h"
 
 @implementation AIStyle
 
 + (void)applyStyle {
+	//==================================================================================//
+	// Shared
+	//==================================================================================//
+	NSString *primaryFont = @"HelveticaNeue";
+	
+	//==================================================================================//
+	// UIButton
+	//==================================================================================//
+    [[TagFilterButton appearance] setTitleFont:[UIFont fontWithName:primaryFont size:12]];
+    [[TagFilterButton appearance] setTitleBackgroundColor:[UIColor clearColor]];
+    [[TagFilterButton appearance] setTitleColor:[UIColor colorWithWhite:0.392f alpha:1.000]];
+    [[TagFilterButton appearance] setSelectedTitleColor:[UIColor colorWithWhite:0.251f alpha:1.000]];
+    [[TagFilterButton appearance] setBackgroundColor:[UIColor clearColor]];
+    [[TagFilterButton appearance] setSelectedColor:[UIColor colorWithWhite:0.251f alpha:1.000]];
+    [[TagFilterButton appearance] setTitleEdgeInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
+
 	//==================================================================================//
 	// RootViewController
 	//==================================================================================//

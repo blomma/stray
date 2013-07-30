@@ -312,7 +312,6 @@
 	// define number and size of elements
 	NSUInteger numElements  = 0;
 	CGSize elementSize      = CGSizeMake(120, self.filterView.frame.size.height);
-	UIEdgeInsets titleInset = UIEdgeInsetsMake(0, 5, 0, 5);
 
 	NSArray *tags = [Tag allSortedBy:@{ @"sortIndex" : @YES }];
 
@@ -322,32 +321,23 @@
 
 		// Only show tags that have a name set
 		if (tag.name) {
-			TagFilterButton *button = [[TagFilterButton alloc] init];
-			button.tagGuid = tag.guid;
-			[button addTarget:self action:@selector(touchUpInsideTagFilterButton:forEvent:) forControlEvents:UIControlEventTouchUpInside];
+			CGFloat x = elementSize.width * numElements;
+			CGRect frame = CGRectMake(x, 0, elementSize.width, elementSize.height);
 
-			button.titleLabel.font            = [UIFont fontWithName:@"Futura-Medium" size:13];
-			button.titleLabel.backgroundColor = [UIColor clearColor];
-			button.titleLabel.lineBreakMode   = NSLineBreakByTruncatingTail;
-
-			button.backgroundColor = [UIColor clearColor];
-
-			button.titleEdgeInsets = titleInset;
-
-			[button setTitleColor:[UIColor colorWithWhite:0.392f alpha:1.000] forState:UIControlStateNormal];
+			TagFilterButton *button = [[TagFilterButton alloc] initWithFrame:frame];
 			[button setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
+			button.tagGuid = tag.guid;
 
-			// setup frames to appear besides each other in the slider
-			CGFloat elementX = elementSize.width * numElements;
-			button.frame = CGRectMake(elementX, 0, elementSize.width, elementSize.height);
+            [button addTarget:self
+                       action:@selector(touchUpInsideTagFilterButton:forEvent:)
+             forControlEvents:UIControlEventTouchUpInside];
 
 			if ([[State instance].eventsGroupedByDateFilter containsObject:tag.guid])
 				button.selected = YES;
 
 			[self.filterViewButtons addObject:button];
-
-			// add the subview
 			[self.filterView addSubview:button];
+
 			numElements++;
 		}
 	}
