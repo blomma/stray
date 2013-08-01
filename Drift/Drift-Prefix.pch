@@ -13,6 +13,7 @@
 
 #import <Objective.h>
 #import <ObjectiveSugar.h>
+#import <Masonry.h>
 #endif
 
 #ifdef DEBUG

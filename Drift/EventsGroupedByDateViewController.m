@@ -19,8 +19,8 @@
 
 @interface EventsGroupedByDateViewController ()
 
-@property (nonatomic) NSMutableArray *filterViewButtons;
 @property (nonatomic) BOOL isFilterViewInvalid;
+@property (nonatomic) UIScrollView *filterView;
 
 @property (nonatomic) EventsGroupedByDate *eventGroups;
 @property (nonatomic) BOOL isEventGroupsInvalid;
@@ -32,6 +32,7 @@
 @property (nonatomic) id foregroundObserver;
 
 @property (nonatomic) CGFloat contentOffsetY;
+@property (nonatomic) BOOL showFilterView;
 
 @end
 
@@ -44,6 +45,7 @@
 	self.standaloneWeekdaySymbols    = [[NSDateFormatter new] standaloneWeekdaySymbols];
 
 	[self initFilterView];
+    [self initBorder];
 
 	NSArray *events = [Event allSortedBy:@{ @"startDate" : @YES }];
 	self.eventGroups = [[EventsGroupedByDate alloc] initWithEvents:events
@@ -110,7 +112,7 @@
 			weakSelf.isFilterViewInvalid = YES;
 
 		for (Tag *tag in deletedTags) {
-			NSUInteger index = [weakSelf.filterViewButtons indexOfObjectPassingTest: ^BOOL (id obj, NSUInteger idx, BOOL *stop) {
+			NSUInteger index = [weakSelf.filterView.subviews indexOfObjectPassingTest: ^BOOL (id obj, NSUInteger idx, BOOL *stop) {
 			    NSString *guid = ((TagFilterButton *)obj).tagGuid;
 			    if ([guid isEqualToString:tag.guid]) {
 			        *stop = YES;
@@ -185,40 +187,64 @@
 #pragma mark -
 #pragma mark UIScrollViewDelegate
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-	self.contentOffsetY = scrollView.contentOffset.y;
-}
-
-- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
-	CGRect frame = CGRectMake(self.filterView.frame.origin.x,
-	                          30,
-	                          self.filterView.frame.size.width,
-	                          self.filterView.frame.size.height);
-
-	[UIView animateWithDuration:0.2 animations: ^{
-	    self.filterView.frame = frame;
-	}];
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-	// If this was a flick of the finger and it was in a downward direction (scrolling up) then show the tagview
-	// else we hide it
-	CGRect frame;
-	if (decelerate && self.contentOffsetY > scrollView.contentOffset.y)
-		frame = CGRectMake(self.filterView.frame.origin.x,
-		                   30,
-		                   self.filterView.frame.size.width,
-		                   self.filterView.frame.size.height);
-	else
-		frame = CGRectMake(self.filterView.frame.origin.x,
-		                   -30,
-		                   self.filterView.frame.size.width,
-		                   self.filterView.frame.size.height);
-
-	[UIView animateWithDuration:0.2 animations: ^{
-	    self.filterView.frame = frame;
-	}];
-}
+//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+//	self.contentOffsetY = scrollView.contentOffset.y + scrollView.contentInset.top;
+//}
+//
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+//	// We are only interested in doing this at the top of the stack
+//	CGFloat offSet = scrollView.contentOffset.y + scrollView.contentInset.top;
+//	CGFloat top = [UIApplication sharedApplication].statusBarFrame.size.height + 30.0f;
+//
+//	if (offSet <= top) {
+//		if ((self.contentOffsetY > offSet || offSet < 0)) {
+//			CGFloat y = MIN(30 - (scrollView.contentOffset.y + scrollView.contentInset.top), 30);
+//            [self.filterView mas_makeConstraints:^(MASConstraintMaker *make) {
+//                make.top.equalTo(@(y));
+//            }];
+//		} else if (self.contentOffsetY < offSet) {
+//			CGFloat y = MAX(30 - (scrollView.contentOffset.y + scrollView.contentInset.top), -30);
+//            [self.filterView mas_makeConstraints:^(MASConstraintMaker *make) {
+//                make.top.equalTo(@(y));
+//            }];
+//		}
+//	} else if (offSet > top) {
+//		if (self.showFilterView) {
+//			CGFloat y = MIN(30 - (scrollView.contentOffset.y + scrollView.contentInset.top), 30);
+//            [self.filterView mas_makeConstraints:^(MASConstraintMaker *make) {
+//                make.top.equalTo(@(y));
+//            }];
+//		} else {
+//			CGFloat y = MAX(30 - (scrollView.contentOffset.y + scrollView.contentInset.top), -30);
+//            [self.filterView mas_makeConstraints:^(MASConstraintMaker *make) {
+//                make.top.equalTo(@(y));
+//            }];
+//		}
+//	}
+//
+//	self.contentOffsetY = scrollView.contentOffset.y;
+//}
+//
+////- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
+////	CGRect frame = CGRectMake(self.filterView.frame.origin.x,
+////	                          30,
+////	                          self.filterView.frame.size.width,
+////	                          self.filterView.frame.size.height);
+////
+////	[UIView animateWithDuration:0.2 animations: ^{
+////	    self.filterView.frame = frame;
+////	}];
+////}
+//
+//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+//	// If this was a flick of the finger and it was in a downward direction (scrolling up) then show the tagview
+//	// else we hide it
+//	CGFloat offSet = scrollView.contentOffset.y + scrollView.contentInset.top;
+//	if (decelerate && self.contentOffsetY > offSet)
+//		self.showFilterView = YES;
+//	else
+//		self.showFilterView = NO;
+//}
 
 #pragma mark -
 #pragma mark UITableViewDataSource
@@ -273,77 +299,87 @@
 	[self.tableView reloadData];
 }
 
-- (void)initFilterView {
-	self.filterViewButtons = [NSMutableArray array];
+- (void)initBorder {
+    UIView *bottomBorder = UIView.new;
+    bottomBorder.layer.borderWidth = 0.5f;
+    bottomBorder.layer.borderColor = [UIColor colorWithRed:0.729 green:0.729 blue:0.725 alpha:0.90].CGColor;
 
+    [self.view addSubview:bottomBorder];
+
+    [bottomBorder mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.filterView.mas_bottom);
+        make.left.equalTo(self.filterView.mas_left);
+        make.right.equalTo(self.filterView.mas_right);
+        make.height.equalTo(@0.5);
+    }];
+}
+
+- (void)initFilterView {
+    self.filterView = UIScrollView.new;
 	self.filterView.showsHorizontalScrollIndicator = NO;
 	self.filterView.backgroundColor                = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:0.90];
 
-	UIColor *colorOne = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:0.3f];
-	UIColor *colorTwo = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:1];
+    [self.view addSubview:self.filterView];
 
-	NSArray *colors = @[(id)colorOne.CGColor, (id)colorTwo.CGColor, (id)colorTwo.CGColor, (id)colorOne.CGColor];
-
-	NSArray *locations = @[@0.0, @0.4, @0.6, @1.0];
-
-	CAGradientLayer *barrier = [CAGradientLayer layer];
-	barrier.colors     = colors;
-	barrier.locations  = locations;
-	barrier.startPoint = CGPointMake(0, 0.5);
-	barrier.endPoint   = CGPointMake(1.0, 0.5);
-
-	barrier.bounds = CGRectMake(0, 0, self.filterView.layer.bounds.size.width, 1);
-	CGPoint position = self.filterView.layer.position;
-	position.y         += 14;
-	barrier.position    = position;
-	barrier.anchorPoint = self.filterView.layer.anchorPoint;
-
-	[self.filterView.layer addSublayer:barrier];
+    [self.filterView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(@20);
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.height.equalTo(@30);
+    }];
 }
 
 - (void)setupFilterView {
-	// Remove all the old subviews and recreate them, lazy option
-	for (id subView in self.filterViewButtons) {
-		[subView removeFromSuperview];
+	for (id button in self.filterView.subviews) {
+		[button removeFromSuperview];
 	}
-
-	[self.filterViewButtons removeAllObjects];
-
-	// define number and size of elements
-	NSUInteger numElements  = 0;
-	CGSize elementSize      = CGSizeMake(120, self.filterView.frame.size.height);
 
 	NSArray *tags = [Tag allSortedBy:@{ @"sortIndex" : @YES }];
 
-	// add elements
+    UIView *previousView;
 	for (NSUInteger i = 0; i < tags.count; i++) {
 		Tag *tag = [tags objectAtIndex:i];
 
 		// Only show tags that have a name set
 		if (tag.name) {
-			CGFloat x = elementSize.width * numElements;
-			CGRect frame = CGRectMake(x, 0, elementSize.width, elementSize.height);
-
-			TagFilterButton *button = [[TagFilterButton alloc] initWithFrame:frame];
+			TagFilterButton *button = TagFilterButton.new;
 			[button setTitle:[tag.name uppercaseString] forState:UIControlStateNormal];
 			button.tagGuid = tag.guid;
 
-            [button addTarget:self
-                       action:@selector(touchUpInsideTagFilterButton:forEvent:)
-             forControlEvents:UIControlEventTouchUpInside];
+           [button addTarget:self
+                      action:@selector(touchUpInsideTagFilterButton:forEvent:)
+            forControlEvents:UIControlEventTouchUpInside];
 
 			if ([[State instance].eventsGroupedByDateFilter containsObject:tag.guid])
 				button.selected = YES;
 
-			[self.filterViewButtons addObject:button];
 			[self.filterView addSubview:button];
 
-			numElements++;
+            [button mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(self.filterView.mas_top);
+                make.height.equalTo(self.filterView.mas_height);
+                make.width.equalTo(@100);
+            }];
+
+            if (previousView) {
+                [button mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(previousView.mas_right);
+                }];
+            } else {
+                [button mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(self.filterView.mas_left);
+                }];
+            }
+
+            if (i == tags.count - 1) {
+                [button mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.right.equalTo(self.filterView.mas_right);
+                }];
+            }
+
+            previousView = button;
 		}
 	}
-
-	// set the size of the scrollview's content
-	self.filterView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
 
 	self.isFilterViewInvalid = NO;
 }

@@ -21,14 +21,17 @@
     if (self) {
         self.titleLabel.lineBreakMode   = NSLineBreakByTruncatingTail;
 
-        CGFloat width = frame.size.width - 60;
-        CGFloat x = (frame.size.width - width) / 2;
+        self.selectView = UIView.new;
+        self.selectView.userInteractionEnabled = NO;
 
-		self.selectView                        = [[UIView alloc] initWithFrame:CGRectMake(x, frame.size.height - 6, width, 6)];
-		self.selectView.backgroundColor        = [UIColor clearColor];
-		self.selectView.userInteractionEnabled = NO;
+        [self addSubview:self.selectView];
 
-		[self addSubview:self.selectView];
+        [self.selectView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.height.equalTo(@6);
+            make.left.equalTo(self.mas_left).offset(30);
+            make.right.equalTo(self.mas_right).offset(-30);
+            make.bottom.equalTo(self.mas_bottom);
+        }];
     }
 
     return self;

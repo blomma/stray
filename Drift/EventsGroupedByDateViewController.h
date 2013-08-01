@@ -9,6 +9,5 @@
 @interface EventsGroupedByDateViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
-@property (nonatomic, weak) IBOutlet UIScrollView *filterView;
 
 @end

@@ -409,7 +409,7 @@
         <!--EventsGroupedByDateViewController-->
         <scene sceneID="aWJ-lh-tEK">
             <objects>
-                <viewController storyboardIdentifier="EventsGroupedByDateViewController" id="ONY-RJ-IiQ" userLabel="EventsGroupedByDateViewController" customClass="EventsGroupedByDateViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventsGroupedByDateViewController" automaticallyAdjustsScrollViewInsets="NO" id="ONY-RJ-IiQ" userLabel="EventsGroupedByDateViewController" customClass="EventsGroupedByDateViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TjA-Kw-qBQ"/>
                         <viewControllerLayoutGuide type="bottom" id="Qbn-2w-ekM"/>
@@ -418,11 +418,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="100" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Bla-gS-XRc" userLabel="EventsGroupedByDateTableView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                            <tableView clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="100" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Bla-gS-XRc" userLabel="EventsGroupedByDateTableView">
+                                <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <inset key="scrollIndicatorInsets" minX="0.0" minY="60" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="EventsGroupedByDateTableViewCell" rowHeight="100" id="UtO-Rb-o4n" userLabel="EventsGroupedByDateTableViewCell" customClass="EventsGroupedByDateTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="100"/>
@@ -497,28 +496,16 @@
                                     <outlet property="delegate" destination="ONY-RJ-IiQ" id="L0j-y7-YST"/>
                                 </connections>
                             </tableView>
-                            <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nQy-aQ-EHb" userLabel="TagView">
-                                <rect key="frame" x="0.0" y="20" width="320" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="BMR-qc-P50"/>
-                                    <constraint firstAttribute="width" constant="320" id="wTJ-OX-GIM"/>
-                                </constraints>
-                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647058823528" green="0.93333333333333335" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="nQy-aQ-EHb" firstAttribute="trailing" secondItem="Bla-gS-XRc" secondAttribute="trailing" id="Ikv-Pf-J70"/>
-                            <constraint firstItem="Bla-gS-XRc" firstAttribute="bottom" secondItem="GX1-mM-rxe" secondAttribute="bottom" id="OR2-NV-1zD"/>
-                            <constraint firstItem="Bla-gS-XRc" firstAttribute="leading" secondItem="GX1-mM-rxe" secondAttribute="leading" id="UrF-vG-Cjr"/>
-                            <constraint firstItem="nQy-aQ-EHb" firstAttribute="leading" secondItem="Bla-gS-XRc" secondAttribute="leading" id="jQ3-oO-wkv"/>
-                            <constraint firstItem="nQy-aQ-EHb" firstAttribute="top" secondItem="GX1-mM-rxe" secondAttribute="top" constant="20" id="k1Y-RD-f6d"/>
-                            <constraint firstItem="Bla-gS-XRc" firstAttribute="top" secondItem="GX1-mM-rxe" secondAttribute="top" id="vPK-Th-2Aj"/>
+                            <constraint firstItem="Bla-gS-XRc" firstAttribute="leading" secondItem="GX1-mM-rxe" secondAttribute="leading" id="EUW-sW-QPr"/>
+                            <constraint firstAttribute="trailing" secondItem="Bla-gS-XRc" secondAttribute="trailing" id="JZC-9Y-1Db"/>
+                            <constraint firstAttribute="bottom" secondItem="Bla-gS-XRc" secondAttribute="bottom" id="dWz-ov-lph"/>
+                            <constraint firstItem="Bla-gS-XRc" firstAttribute="top" secondItem="GX1-mM-rxe" secondAttribute="top" constant="20" id="jDM-xd-0l2"/>
                         </constraints>
                     </view>
-                    <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
-                        <outlet property="filterView" destination="nQy-aQ-EHb" id="Btj-nL-koh"/>
                         <outlet property="tableView" destination="Bla-gS-XRc" id="Pdu-8Z-Ze9"/>
                     </connections>
                 </viewController>
