@@ -16,13 +16,13 @@
 	// Shared
 	//==================================================================================//
 	NSString *primaryFont = @"HelveticaNeue";
-	
+
 	//==================================================================================//
 	// UIButton
 	//==================================================================================//
     [[TagFilterButton appearance] setTitleFont:[UIFont fontWithName:primaryFont size:12]];
     [[TagFilterButton appearance] setTitleBackgroundColor:[UIColor clearColor]];
-    [[TagFilterButton appearance] setTitleColor:[UIColor colorWithWhite:0.392f alpha:1.000]];
+    [[TagFilterButton appearance] setTitleColor:[UIColor colorWithRed:1.000f green:0.000f blue:0.318f alpha:1]];
     [[TagFilterButton appearance] setSelectedTitleColor:[UIColor colorWithWhite:0.251f alpha:1.000]];
     [[TagFilterButton appearance] setBackgroundColor:[UIColor clearColor]];
     [[TagFilterButton appearance] setSelectedColor:[UIColor colorWithWhite:0.251f alpha:1.000]];
