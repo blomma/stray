@@ -307,6 +307,8 @@
 		9E42F1F415570FD60087F602 /* Drift */ = {
 			isa = PBXGroup;
 			children = (
+				9E8FB78D17AA9A01003ACBF4 /* Views */,
+				9E8FB78A17AA9878003ACBF4 /* CoreData */,
 				9E42F1F515570FD60087F602 /* Supporting Files */,
 				9EAB520B15C95523008952FB /* Categories */,
 				9E9FFF9215925CAE00BA5200 /* Resources */,
@@ -314,7 +316,6 @@
 				9E01309215E39D20005C8765 /* Storyboard */,
 				9E9C232D15F288D400572FB7 /* Controllers */,
 				9E561DE415FBB04D008D3895 /* Controls */,
-				9E9C232F15F2895000572FB7 /* Classes */,
 				9E42F1FD15570FD60087F602 /* DriftAppDelegate.h */,
 				9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */,
 				9E42F1FA15570FD60087F602 /* main.m */,
@@ -335,6 +336,8 @@
 		9E561DE415FBB04D008D3895 /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				9E9239D7162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.h */,
+				9E9239D8162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m */,
 				9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */,
 				9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */,
 			);
@@ -344,23 +347,6 @@
 		9E63BBF6156EAAA80006FEFC /* Repository */ = {
 			isa = PBXGroup;
 			children = (
-				9E0342491779DFE700D87564 /* _Repository.m */,
-				9E03424A1779DFE700D87564 /* Repository.m */,
-				9E0342471779C5E200D87564 /* _Repository.h */,
-				9E0342481779C5E200D87564 /* Repository.h */,
-				9ECF3B7616EAF4D40097FF37 /* _Compatibility.h */,
-				9ECF3B7716EAF4D40097FF37 /* _Compatibility.m */,
-				9ECF3B7816EAF4D40097FF37 /* Compatibility.h */,
-				9ECF3B7916EAF4D40097FF37 /* Compatibility.m */,
-				9EDCC5C9160DBFA1003CB2BB /* Tag.h */,
-				9EDCC5CA160DBFA1003CB2BB /* Tag.m */,
-				9E92636F15EF350D00393946 /* _Tag.h */,
-				9E92637015EF350D00393946 /* _Tag.m */,
-				9E7CEDF2157B778300718FA6 /* _Event.h */,
-				9E7CEDF3157B778300718FA6 /* _Event.m */,
-				9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */,
-				9E21F927156EAA2F0075EAAC /* Event.h */,
-				9E21F928156EAA2F0075EAAC /* Event.m */,
 				9E66D0DB16553D6700339E99 /* State.h */,
 				9E66D0DC16553D6700339E99 /* State.m */,
 				9ECF3B7C16EAF6290097FF37 /* CompatibilityMigration.h */,
@@ -371,13 +357,62 @@
 			name = Repository;
 			sourceTree = "<group>";
 		};
-		9E96FCE016359F8600AB5B0A /* TransformableTableView */ = {
+		9E8FB78A17AA9878003ACBF4 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				9E9239D7162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.h */,
-				9E9239D8162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m */,
+				9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */,
+				9E8FB78C17AA989D003ACBF4 /* Human */,
+				9E8FB78B17AA9892003ACBF4 /* Machine */,
 			);
-			name = TransformableTableView;
+			name = CoreData;
+			sourceTree = "<group>";
+		};
+		9E8FB78B17AA9892003ACBF4 /* Machine */ = {
+			isa = PBXGroup;
+			children = (
+				9ECF3B7616EAF4D40097FF37 /* _Compatibility.h */,
+				9ECF3B7716EAF4D40097FF37 /* _Compatibility.m */,
+				9E0342471779C5E200D87564 /* _Repository.h */,
+				9E0342491779DFE700D87564 /* _Repository.m */,
+				9E92636F15EF350D00393946 /* _Tag.h */,
+				9E92637015EF350D00393946 /* _Tag.m */,
+				9E7CEDF2157B778300718FA6 /* _Event.h */,
+				9E7CEDF3157B778300718FA6 /* _Event.m */,
+			);
+			name = Machine;
+			sourceTree = "<group>";
+		};
+		9E8FB78C17AA989D003ACBF4 /* Human */ = {
+			isa = PBXGroup;
+			children = (
+				9ECF3B7816EAF4D40097FF37 /* Compatibility.h */,
+				9ECF3B7916EAF4D40097FF37 /* Compatibility.m */,
+				9E0342481779C5E200D87564 /* Repository.h */,
+				9E03424A1779DFE700D87564 /* Repository.m */,
+				9EDCC5C9160DBFA1003CB2BB /* Tag.h */,
+				9EDCC5CA160DBFA1003CB2BB /* Tag.m */,
+				9E21F927156EAA2F0075EAAC /* Event.h */,
+				9E21F928156EAA2F0075EAAC /* Event.m */,
+			);
+			name = Human;
+			sourceTree = "<group>";
+		};
+		9E8FB78D17AA9A01003ACBF4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9E14D450162B3D3F008D9E43 /* TagFilterButton.h */,
+				9E14D451162B3D3F008D9E43 /* TagFilterButton.m */,
+				9EB15F6D165D6A7F0054AEA2 /* TagButton.h */,
+				9EB15F6E165D6A7F0054AEA2 /* TagButton.m */,
+				9E02A6E8174A7B8900C1ED21 /* IconView.h */,
+				9E02A6E9174A7B8900C1ED21 /* IconView.m */,
+				9E7636641778A1A4005C755F /* AIStyle.h */,
+				9E7636651778A1A4005C755F /* AIStyle.m */,
+				9E63E1D515EA3338009C0A2D /* NoHitCAShapeLayer.h */,
+				9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */,
+				9E15AB76163C6D1C006D16B3 /* TableViewCells */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		9E9C232D15F288D400572FB7 /* Controllers */ = {
@@ -400,25 +435,6 @@
 				9EC7253C173D8A160090B1D5 /* PreferencesViewController.m */,
 			);
 			name = Controllers;
-			sourceTree = "<group>";
-		};
-		9E9C232F15F2895000572FB7 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				9E15AB76163C6D1C006D16B3 /* TableViewCells */,
-				9E96FCE016359F8600AB5B0A /* TransformableTableView */,
-				9E63E1D515EA3338009C0A2D /* NoHitCAShapeLayer.h */,
-				9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */,
-				9E14D450162B3D3F008D9E43 /* TagFilterButton.h */,
-				9E14D451162B3D3F008D9E43 /* TagFilterButton.m */,
-				9EB15F6D165D6A7F0054AEA2 /* TagButton.h */,
-				9EB15F6E165D6A7F0054AEA2 /* TagButton.m */,
-				9E02A6E8174A7B8900C1ED21 /* IconView.h */,
-				9E02A6E9174A7B8900C1ED21 /* IconView.m */,
-				9E7636641778A1A4005C755F /* AIStyle.h */,
-				9E7636651778A1A4005C755F /* AIStyle.m */,
-			);
-			name = Classes;
 			sourceTree = "<group>";
 		};
 		9E9FFF9215925CAE00BA5200 /* Resources */ = {
