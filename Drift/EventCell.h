@@ -8,7 +8,7 @@
 
 #import "TagButton.h"
 
-@interface EventsGroupedByStartDateTableViewCell : UITableViewCell
+@interface EventCell : UITableViewCell
 
 @property (nonatomic, copy) void (^tagPressHandler)();
 

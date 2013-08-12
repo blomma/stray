@@ -43,7 +43,7 @@
 		9E4E9FCE179CC65F007E8A99 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E4E9FCD179CC65F007E8A99 /* SystemConfiguration.framework */; };
 		9E51511615C7CEF100901655 /* EventGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511315C7CEF100901655 /* EventGroup.m */; };
 		9E51511715C7CEF100901655 /* EventsGroupedByDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511515C7CEF100901655 /* EventsGroupedByDate.m */; };
-		9E561DDB15FA08FB008D3895 /* EventsGroupedByStartDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E561DDA15FA08FB008D3895 /* EventsGroupedByStartDateTableViewCell.m */; };
+		9E561DDB15FA08FB008D3895 /* EventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E561DDA15FA08FB008D3895 /* EventCell.m */; };
 		9E5DECD4167899B200E21B8E /* InfoHintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5DECD3167899B200E21B8E /* InfoHintViewController.m */; };
 		9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E63BBF3156EAA710006FEFC /* CoreData.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9E63E1D715EA3339009C0A2D /* NoHitCAShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */; };
@@ -52,7 +52,7 @@
 		9E7CEDF4157B778300718FA6 /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEDF3157B778300718FA6 /* _Event.m */; };
 		9E7EB52C15E8F89C00604B79 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */; };
 		9E7EB52D15E8F8C100604B79 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F215570FD60087F602 /* CoreGraphics.framework */; };
-		9E89816F15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89816E15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m */; };
+		9E89816F15A0BC2900E22EA7 /* EventSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89816E15A0BC2900E22EA7 /* EventSection.m */; };
 		9E8D917A178CBEF400827A5D /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E8D9179178CBEF400827A5D /* libc++.dylib */; };
 		9E9239DB162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239D8162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m */; };
 		9E9239DC162D4F9B00E265E6 /* TagTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239DA162D4F9B00E265E6 /* TagTableViewCell.m */; };
@@ -121,8 +121,8 @@
 		9E51511315C7CEF100901655 /* EventGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroup.m; sourceTree = "<group>"; };
 		9E51511415C7CEF100901655 /* EventsGroupedByDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsGroupedByDate.h; sourceTree = "<group>"; };
 		9E51511515C7CEF100901655 /* EventsGroupedByDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsGroupedByDate.m; sourceTree = "<group>"; };
-		9E561DD915FA08FB008D3895 /* EventsGroupedByStartDateTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsGroupedByStartDateTableViewCell.h; sourceTree = "<group>"; };
-		9E561DDA15FA08FB008D3895 /* EventsGroupedByStartDateTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsGroupedByStartDateTableViewCell.m; sourceTree = "<group>"; };
+		9E561DD915FA08FB008D3895 /* EventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventCell.h; sourceTree = "<group>"; };
+		9E561DDA15FA08FB008D3895 /* EventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventCell.m; sourceTree = "<group>"; };
 		9E5DEC9B16788F8200E21B8E /* Info-Tags-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Info-Tags-568h@2x.png"; sourceTree = "<group>"; };
 		9E5DEC9C16788F8200E21B8E /* Info-Tags.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Info-Tags.png"; sourceTree = "<group>"; };
 		9E5DEC9D16788F8200E21B8E /* Info-Tags@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Info-Tags@2x.png"; sourceTree = "<group>"; };
@@ -148,8 +148,8 @@
 		9E810ECE1676288200CA2009 /* Info-Event-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Info-Event-568h@2x.png"; sourceTree = "<group>"; };
 		9E810ECF1676288200CA2009 /* Info-Event.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Info-Event.png"; sourceTree = "<group>"; };
 		9E810ED01676288200CA2009 /* Info-Event@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Info-Event@2x.png"; sourceTree = "<group>"; };
-		9E89816D15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsGroupedByDateTableViewCell.h; sourceTree = "<group>"; };
-		9E89816E15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsGroupedByDateTableViewCell.m; sourceTree = "<group>"; };
+		9E89816D15A0BC2900E22EA7 /* EventSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventSection.h; sourceTree = "<group>"; };
+		9E89816E15A0BC2900E22EA7 /* EventSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventSection.m; sourceTree = "<group>"; };
 		9E8D9179178CBEF400827A5D /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		9E916E14163197A40058C777 /* CoreDataModel-4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-4.xcdatamodel"; sourceTree = "<group>"; };
 		9E9239D7162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransformableTableViewGestureRecognizer.h; sourceTree = "<group>"; };
@@ -231,10 +231,10 @@
 		9E15AB76163C6D1C006D16B3 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
-				9E561DD915FA08FB008D3895 /* EventsGroupedByStartDateTableViewCell.h */,
-				9E561DDA15FA08FB008D3895 /* EventsGroupedByStartDateTableViewCell.m */,
-				9E89816D15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.h */,
-				9E89816E15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m */,
+				9E561DD915FA08FB008D3895 /* EventCell.h */,
+				9E561DDA15FA08FB008D3895 /* EventCell.m */,
+				9E89816D15A0BC2900E22EA7 /* EventSection.h */,
+				9E89816E15A0BC2900E22EA7 /* EventSection.m */,
 				9E9239D9162D4F9B00E265E6 /* TagTableViewCell.h */,
 				9E9239DA162D4F9B00E265E6 /* TagTableViewCell.m */,
 				9EF3311D166569DB005CFEF2 /* TagTableViewCellBackView.h */,
@@ -617,14 +617,14 @@
 				9E00A76315773859002FC707 /* EventsGroupedByDateViewController.m in Sources */,
 				9E7CEDF4157B778300718FA6 /* _Event.m in Sources */,
 				9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */,
-				9E89816F15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m in Sources */,
+				9E89816F15A0BC2900E22EA7 /* EventSection.m in Sources */,
 				9E51511615C7CEF100901655 /* EventGroup.m in Sources */,
 				9E51511715C7CEF100901655 /* EventsGroupedByDate.m in Sources */,
 				9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */,
 				9E63E1D715EA3339009C0A2D /* NoHitCAShapeLayer.m in Sources */,
 				9E92637115EF350D00393946 /* _Tag.m in Sources */,
 				9E9C237815F3617200572FB7 /* EventsGroupedByStartDateViewController.m in Sources */,
-				9E561DDB15FA08FB008D3895 /* EventsGroupedByStartDateTableViewCell.m in Sources */,
+				9E561DDB15FA08FB008D3895 /* EventCell.m in Sources */,
 				9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */,
 				9E2CFDE9162190E8004D9D8D /* TagsTableViewController.m in Sources */,
 				9E14D452162B3D3F008D9E43 /* TagFilterButton.m in Sources */,
@@ -752,7 +752,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Mikael Hultgren (J36VB2WCY5)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -777,7 +777,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Mikael Hultgren (J36VB2WCY5)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -852,7 +852,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Mikael Hultgren (J36VB2WCY5)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",

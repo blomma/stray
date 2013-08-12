@@ -6,9 +6,7 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventGroup.h"
-
-@interface EventsGroupedByDateTableViewCell : UITableViewCell
+@interface EventSection : UITableViewCell
 
 @property (nonatomic, weak) IBOutlet UILabel *hours;
 @property (nonatomic, weak) IBOutlet UILabel *minutes;

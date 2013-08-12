@@ -8,7 +8,7 @@
 
 #import "CAAnimation+Blocks.h"
 #import "Event.h"
-#import "EventsGroupedByStartDateTableViewCell.h"
+#import "EventCell.h"
 #import "EventsGroupedByStartDateViewController.h"
 #import "NSDate+Utilities.h"
 #import "SKBounceAnimation.h"
@@ -200,7 +200,7 @@
 	if (state == TransformableTableViewCellEditingStateLeft)
 		return;
 
-	EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+	EventCell *cell = (EventCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 	[cell.frontView.layer removeAllAnimations];
 
 	cell.willDelete.hidden = YES;
@@ -210,7 +210,7 @@
 	if (state == TransformableTableViewCellEditingStateLeft)
 		return;
 
-	EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+	EventCell *cell = (EventCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 	CGFloat alpha                               = (gestureRecognizer.translationInTableView.x / self.editingCommitLength);
 	cell.backView.backgroundColor = [UIColor colorWithRed:0.843f
 	                                                green:0.306f
@@ -242,7 +242,7 @@
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-	EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+	EventCell *cell = (EventCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 	CGPoint fromValue                           = cell.frontView.layer.position;
 	CGPoint toValue                             = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
 
@@ -286,7 +286,7 @@
 //}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+	EventCell *cell = (EventCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 	[cell marked:YES withAnimation:YES];
 
 	[State instance].selectedEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
@@ -296,7 +296,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-	EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+	EventCell *cell = (EventCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 	[cell marked:NO withAnimation:YES];
 }
 
@@ -314,13 +314,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *cellIdentifier = @"EventsGroupedByStartDateTableViewCell";
 
-	EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	EventCell *cell = (EventCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	[self configureCell:cell atIndexPath:indexPath];
 
 	return cell;
 }
 
-- (void)configureCell:(EventsGroupedByStartDateTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+- (void)configureCell:(EventCell *)cell atIndexPath:(NSIndexPath *)indexPath {
 	Event *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
 	[cell.tagName setTitle:[event.inTag.name copy] forState:UIControlStateNormal];
@@ -389,7 +389,7 @@
 			break;
 
 		case NSFetchedResultsChangeUpdate:
-			[self configureCell:(EventsGroupedByStartDateTableViewCell *)[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+			[self configureCell:(EventCell *)[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
 			break;
 
 		case NSFetchedResultsChangeMove:

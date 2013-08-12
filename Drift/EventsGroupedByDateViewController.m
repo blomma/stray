@@ -10,8 +10,10 @@
 
 #import "Event.h"
 #import "EventsGroupedByDate.h"
+#import "EventGroup.h"
 #import "TagFilterButton.h"
-#import "EventsGroupedByDateTableViewCell.h"
+#import "EventSection.h"
+#import "EventCell.h"
 #import "State.h"
 #import "Tag.h"
 #import "NSDate+Utilities.h"
@@ -44,6 +46,7 @@
 	self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
 	self.standaloneWeekdaySymbols    = [[NSDateFormatter new] standaloneWeekdaySymbols];
 
+    self.tableView.contentInset = UIEdgeInsetsMake(30, 0, 0, 0);
 	[self initFilterView];
     [self initBorder];
 
@@ -160,6 +163,8 @@
 
 		self.isEventGroupsViewInvalid = NO;
 	}
+
+    [self.tableView setEditing:YES animated:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -247,22 +252,16 @@
 //}
 
 #pragma mark -
-#pragma mark UITableViewDataSource
+#pragma mark UITableViewDelegate
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 1;
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+        return UITableViewCellEditingStyleDelete;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return (NSInteger)self.eventGroups.filteredEventGroupCount;
-}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+	EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)section];
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *cellIdentifier = @"EventsGroupedByDateTableViewCell";
-
-	EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)indexPath.row];
-
-	EventsGroupedByDateTableViewCell *cell = (EventsGroupedByDateTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	EventSection *cell = (EventSection *)[tableView dequeueReusableCellWithIdentifier:@"EventSection"];
 
 	NSDateComponents *components = eventGroup.filteredEventsDateComponents;
 
@@ -276,8 +275,77 @@
 	cell.year.text    = [NSString stringWithFormat:@"%04d", components.year];
 	cell.month.text   = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
 	cell.weekDay.text = [[self.standaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString];
+    
+	return cell;
+}
+
+#pragma mark -
+#pragma mark UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+	return (NSInteger)self.eventGroups.filteredEventGroupCount;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)section];
+	return (NSInteger)eventGroup.filteredEvents.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	EventCell *cell = (EventCell *)[tableView dequeueReusableCellWithIdentifier:@"EventCell"];
+	[self configureCell:cell atIndexPath:indexPath];
 
 	return cell;
+}
+
+- (void)configureCell:(EventCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+	EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)indexPath.section];
+	Event *event = [eventGroup.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
+
+	[cell.tagName setTitle:[event.inTag.name copy] forState:UIControlStateNormal];
+
+	// StartTime
+	static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
+	NSDateComponents *components          = [[NSDate calendar] components:unitFlagsEventStart fromDate:event.startDate];
+
+	cell.eventStartTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
+	cell.eventStartDay.text   = [NSString stringWithFormat:@"%02d", components.day];
+	cell.eventStartYear.text  = [NSString stringWithFormat:@"%04d", components.year];
+	cell.eventStartMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
+
+	// EventTime
+	NSDate *stopDate                     = event.stopDate ? event.stopDate : [NSDate date];
+	static NSUInteger unitFlagsEventTime = NSHourCalendarUnit | NSMinuteCalendarUnit;
+	components                 = [[NSDate calendar] components:unitFlagsEventTime fromDate:event.startDate toDate:stopDate options:0];
+
+	cell.eventTimeHours.text   = [NSString stringWithFormat:@"%02d", components.hour];
+	cell.eventTimeMinutes.text = [NSString stringWithFormat:@"%02d", components.minute];
+
+	// StopTime
+	if (event.stopDate) {
+		static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
+		components               = [[NSDate calendar] components:unitFlags fromDate:event.stopDate];
+
+		cell.eventStopTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
+		cell.eventStopDay.text   = [NSString stringWithFormat:@"%02d", components.day];
+		cell.eventStopYear.text  = [NSString stringWithFormat:@"%04d", components.year];
+		cell.eventStopMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
+	} else {
+		cell.eventStopTime.text  = @"";
+		cell.eventStopDay.text   = @"";
+		cell.eventStopYear.text  = @"";
+		cell.eventStopMonth.text = @"";
+	}
+
+	BOOL marked = [[State instance].selectedEvent isEqual:event] ? YES : NO;
+	[cell marked:marked withAnimation:YES];
+
+	__weak typeof(self) weakSelf = self;
+
+	__weak Event *weakEvent = event;
+	[cell setTagPressHandler: ^{
+	    [weakSelf performSegueWithIdentifier:@"segueToTagsFromEvents" sender:weakEvent];
+	}];
 }
 
 #pragma mark -
@@ -317,7 +385,7 @@
 - (void)initFilterView {
     self.filterView = UIScrollView.new;
 	self.filterView.showsHorizontalScrollIndicator = NO;
-	self.filterView.backgroundColor                = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:0.90];
+	self.filterView.backgroundColor                = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:1];
 
     [self.view addSubview:self.filterView];
 

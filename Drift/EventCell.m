@@ -6,16 +6,16 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "EventsGroupedByStartDateTableViewCell.h"
+#import "EventCell.h"
 #import <FontAwesomeKit.h>
 
-@interface EventsGroupedByStartDateTableViewCell ()
+@interface EventCell ()
 
 @property (nonatomic) CALayer *selectLayer;
 
 @end
 
-@implementation EventsGroupedByStartDateTableViewCell
+@implementation EventCell
 
 - (void)awakeFromNib {
 	self.selectLayer                 = [CALayer layer];
