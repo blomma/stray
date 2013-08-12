@@ -32,7 +32,6 @@ static NSString *const RepositoryName = @"dropbox";
 
 @property (nonatomic) BOOL isSyncing;
 
-@property (nonatomic) dispatch_queue_t backgroundQueue;
 @property (nonatomic) Canceller *canceller;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
 
@@ -187,9 +186,6 @@ static NSString *const RepositoryName = @"dropbox";
 	if (account) {
 		self.canceller.cancel = NO;
 
-		if (!self.backgroundQueue)
-			self.backgroundQueue = dispatch_queue_create("com.artsoftheinsane.stray.bgqueue", NULL);
-
 		DBFilesystem *filesystem = [[DBFilesystem alloc] initWithAccount:account];
 		[DBFilesystem setSharedFilesystem:filesystem];
 
@@ -294,20 +290,29 @@ static NSString *const RepositoryName = @"dropbox";
 	DBError *fileInfoError;
 	DBPath *dbPath = [[DBPath root] childPath:previousPath];
 	DBFileInfo *fileInfo = [[DBFilesystem sharedFilesystem] fileInfoForPath:dbPath error:&fileInfoError];
-	DLog(@"%@", fileInfoError);
+
+    if (fileInfoError) {
+        DLog(@"%@", fileInfoError);
+    }
 
 	// Remove the file if it exists
 	if (fileInfo) {
 		DBError *deleteError;
 		[[DBFilesystem sharedFilesystem] deletePath:dbPath error:&deleteError];
-		DLog(@"%@", deleteError);
+
+        if (deleteError) {
+            DLog(@"%@", deleteError);
+        }
 	}
 
 	// Create a new one
 	DBError *createError;
 	dbPath = [[DBPath root] childPath:path];
 	DBFile *dbFile = [[DBFilesystem sharedFilesystem] createFile:dbPath error:&createError];
-	DLog(@"%@", createError);
+
+    if (createError) {
+        DLog(@"%@", createError);
+    }
 
 	if (dbFile) {
 		CSVRow *row = [[CSVRow alloc] initWithValues:
@@ -324,7 +329,10 @@ static NSString *const RepositoryName = @"dropbox";
 
 		DBError *writeError;
 		[dbFile writeString:output error:&writeError];
-		DLog(@"%@", writeError);
+
+        if (writeError) {
+            DLog(@"%@", writeError);
+        }
 
 		[dbFile close];
 
