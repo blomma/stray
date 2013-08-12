@@ -224,7 +224,7 @@
 
 - (IBAction)onDropboxSyncSwitch:(id)sender forEvent:(UIEvent *)event {
 	if ([sender isOn])
-		[[DropboxRepository instance] link];
+		[[DropboxRepository instance] linkFromController:self];
 	else
 		[[DropboxRepository instance] unLink];
 }

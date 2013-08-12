@@ -239,8 +239,8 @@ static NSString *const RepositoryName = @"dropbox";
 	}
 }
 
-- (void)link {
-	[[DBAccountManager sharedManager] linkFromController:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
+- (void)linkFromController:(id)controller {
+	[[DBAccountManager sharedManager] linkFromController:controller];
 }
 
 - (void)unLink {

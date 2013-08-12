@@ -18,7 +18,7 @@
 - (void)setupWithAccount:(DBAccount *)account;
 - (BOOL)handleOpenURL:(NSURL *)url;
 - (void)sync;
-- (void)link;
+- (void)linkFromController:(id)controller;
 - (void)unLink;
 
 @end
