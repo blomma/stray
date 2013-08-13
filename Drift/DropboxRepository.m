@@ -13,26 +13,15 @@
 #import "Repository.h"
 #import "State.h"
 #import "Tag.h"
-#import <dispatch/dispatch.h>
 #import <Dropbox/Dropbox.h>
 #import <THObserversAndBinders.h>
 
 static NSString *const RepositoryName = @"dropbox";
 
-@interface Canceller : NSObject
-
-@property (nonatomic) BOOL cancel;
-
-@end
-
-@implementation Canceller
-@end
-
 @interface DropboxRepository ()
 
 @property (nonatomic) BOOL isSyncing;
 
-@property (nonatomic) Canceller *canceller;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
 
 @property (nonatomic) id contextObserver;
@@ -45,8 +34,6 @@ static NSString *const RepositoryName = @"dropbox";
 - (id)init {
 	self = [super init];
 	if (self) {
-		self.canceller = [[Canceller alloc] init];
-
 		DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"70tdvqrgpzmzc6k"
 		                                                                     secret:@"4k12ncc57avo9fe"];
 		[DBAccountManager setSharedManager:accountManager];
@@ -184,8 +171,6 @@ static NSString *const RepositoryName = @"dropbox";
 
 - (void)setupWithAccount:(DBAccount *)account {
 	if (account) {
-		self.canceller.cancel = NO;
-
 		DBFilesystem *filesystem = [[DBFilesystem alloc] initWithAccount:account];
 		[DBFilesystem setSharedFilesystem:filesystem];
 
@@ -203,7 +188,6 @@ static NSString *const RepositoryName = @"dropbox";
 		}];
 	} else {
 		[[DBFilesystem sharedFilesystem] removeObserver:self.dbSyncStatusObserver];
-		self.canceller.cancel = YES;
 	}
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"changeAccount"
@@ -246,19 +230,6 @@ static NSString *const RepositoryName = @"dropbox";
 
 #pragma mark -
 #pragma mark Private methods
-
-//- (void)beginBackgroundTask {
-//	__weak typeof(self) weakSelf = self;
-//
-//	self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler: ^{
-//	    [weakSelf endBackgroundTask];
-//	}];
-//}
-//
-//- (void)endBackgroundTask {
-//	[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
-//	self.backgroundTask = UIBackgroundTaskInvalid;
-//}
 
 - (void)deleteEvent:(Event *)event withRepo:(Repository *)repo {
 	// To maintain backwards compat we try and delete the old name first if no repo exists
