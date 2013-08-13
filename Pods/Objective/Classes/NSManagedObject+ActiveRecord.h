@@ -7,7 +7,6 @@
 // 
 
 #import <CoreData/CoreData.h>
-#import "NSManagedObject+Mappings.h"
 #import "CoreDataManager.h"
 
 @interface NSManagedObjectContext (ActiveRecord)
@@ -26,8 +25,6 @@
 + (void)deleteAll;
 
 + (id)create;
-+ (id)create:(NSDictionary *)attributes;
-- (void)update:(NSDictionary *)attributes;
 
 + (NSArray *)all;
 + (NSArray *)allSortedBy:(id)sortCondition;
@@ -43,7 +40,6 @@
 #pragma mark - Custom Context
 
 + (id)createInContext:(NSManagedObjectContext *)context;
-+ (id)create:(NSDictionary *)attributes inContext:(NSManagedObjectContext *)context;
 
 + (void)deleteAllInContext:(NSManagedObjectContext *)context;
 

@@ -7,20 +7,11 @@
 // 
 
 #import "NSManagedObject+ActiveRecord.h"
-#import "ObjectiveSugar.h"
 
 @implementation NSManagedObjectContext (ActiveRecord)
 
 + (NSManagedObjectContext *)defaultContext {
 	return [[CoreDataManager instance] managedObjectContext];
-}
-
-@end
-
-@implementation NSObject (null)
-
-- (BOOL)exists {
-	return self && self != [NSNull null];
 }
 
 @end
@@ -92,35 +83,9 @@
 	return [self createInContext:[NSManagedObjectContext defaultContext]];
 }
 
-+ (id)create:(NSDictionary *)attributes {
-	return [self create:attributes inContext:[NSManagedObjectContext defaultContext]];
-}
-
-+ (id)create:(NSDictionary *)attributes inContext:(NSManagedObjectContext *)context {
-	unless([attributes exists]) return nil;
-
-	NSManagedObject *newEntity = [self createInContext:context];
-	[newEntity update:attributes];
-
-	return newEntity;
-}
-
 + (id)createInContext:(NSManagedObjectContext *)context {
 	return [NSEntityDescription insertNewObjectForEntityForName:[self entityName]
 	                                     inManagedObjectContext:context];
-}
-
-- (void)update:(NSDictionary *)attributes {
-	unless([attributes exists]) return;
-
-	[attributes each: ^(id key, id value) {
-	    id remoteKey = [self keyForRemoteKey:key];
-
-	    if ([remoteKey isKindOfClass:[NSString class]])
-			[self setSafeValue:value forKey:remoteKey];
-	    else
-			[self hydrateObject:value ofClass:remoteKey[@"class"] forKey:remoteKey[@"key"] ? :key];
-	}];
 }
 
 - (BOOL)save {
@@ -136,9 +101,9 @@
 }
 
 + (void)deleteAllInContext:(NSManagedObjectContext *)context {
-	[[self allInContext:context] each: ^(id object) {
-	    [object delete];
-	}];
+    [[self allInContext:context] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [obj delete];
+    }];
 }
 
 #pragma mark - Naming
@@ -149,18 +114,20 @@
 
 #pragma mark - Private
 
-+ (NSString *)queryStringFromDictionary:(NSDictionary *)conditions {
++ (NSString *)queryStringFromDictionary:(NSDictionary *)condition {
 	NSMutableString *queryString = [NSMutableString new];
 
-	[conditions each: ^(id attribute, id value) {
-	    if ([value isKindOfClass:[NSString class]])
-			[queryString appendFormat:@"%@ == %%@", attribute, value];
+    [condition enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+	    if ([obj isKindOfClass:[NSString class]])
+			[queryString appendFormat:@"%@ == %%@", key, obj];
 	    else
-			[queryString appendFormat:@"%@ == %@", attribute, value];
+			[queryString appendFormat:@"%@ == %@", key, obj];
 
-	    if (attribute == conditions.allKeys.last) return;
+	    if (key == [condition.allKeys lastObject])
+            return;
+
 	    [queryString appendString:@" AND "];
-	}];
+    }];
 
 	return queryString;
 }
@@ -177,10 +144,10 @@
 + (NSArray *)sortDescriptorsFromDict:(NSDictionary *)condition {
 	NSMutableArray *sortDescriptors = [NSMutableArray array];
 
-	[condition each: ^(id attribute, id value) {
-	    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:attribute ascending:value];
+    [condition enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+	    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:key ascending:obj];
 	    [sortDescriptors addObject:sortDescriptor];
-	}];
+    }];
 
 	return sortDescriptors;
 }
@@ -231,62 +198,6 @@
 	}
 
 	return YES;
-}
-
-- (void)hydrateObject:(id)properties ofClass:(Class)class forKey:(NSString *)key {
-	[self setSafeValue:[self objectOrSetOfObjectsFromValue:properties ofClass:class]
-	            forKey:key];
-}
-
-- (id)objectOrSetOfObjectsFromValue:(id)value ofClass:(Class)class {
-	if ([value isKindOfClass:[NSArray class]])
-		return [NSSet setWithArray:[value map: ^id (NSDictionary *dict) {
-		    return [class create:dict inContext:self.managedObjectContext];
-		}]];
-
-	else return [class create:value inContext:self.managedObjectContext];
-}
-
-- (void)setSafeValue:(id)value forKey:(id)key {
-	if (value == nil || value == [NSNull null]) return;
-
-	NSDictionary *attributes = [[self entity] attributesByName];
-	NSAttributeType attributeType = [[attributes objectForKey:key] attributeType];
-
-	if ((attributeType == NSStringAttributeType) && ([value isKindOfClass:[NSNumber class]])) {
-		value = [value stringValue];
-	} else if ([value isKindOfClass:[NSString class]]) {
-		if ([self isIntegerAttributeType:attributeType])
-			value = [NSNumber numberWithInteger:[value integerValue]];
-
-		else if (attributeType == NSFloatAttributeType)
-			value = [NSNumber numberWithDouble:[value doubleValue]];
-
-		else if (attributeType == NSDateAttributeType)
-			value = [self.defaultFormatter dateFromString:value];
-	}
-
-	[self setValue:value forKey:key];
-}
-
-- (BOOL)isIntegerAttributeType:(NSAttributeType)attributeType {
-	return (attributeType == NSInteger16AttributeType) ||
-    (attributeType == NSInteger32AttributeType) ||
-    (attributeType == NSInteger64AttributeType) ||
-    (attributeType == NSBooleanAttributeType);
-}
-
-#pragma mark - Date Formatting
-
-- (NSDateFormatter *)defaultFormatter {
-	static NSDateFormatter *sharedFormatter;
-	static dispatch_once_t singletonToken;
-	dispatch_once(&singletonToken, ^{
-	    sharedFormatter = [[NSDateFormatter alloc] init];
-	    [sharedFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss z"];
-	});
-
-	return sharedFormatter;
 }
 
 @end

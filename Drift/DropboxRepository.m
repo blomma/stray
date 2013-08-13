@@ -277,7 +277,9 @@ static NSString *const RepositoryName = @"dropbox";
 
 	// If no repo then create one
 	if (!repo) {
-		repo = [Repository create:@{ @"name": RepositoryName }];
+		repo = [Repository create];
+        repo.name = RepositoryName;
+
 		[event addInRepositoriesObject:repo];
 	}
 

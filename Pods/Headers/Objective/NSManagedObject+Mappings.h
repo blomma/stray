@@ -1,1 +1,0 @@
-../../Objective/Classes/NSManagedObject+Mappings.h
