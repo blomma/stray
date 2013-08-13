@@ -58,7 +58,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 			<string>Copyright 2009 - 2012 Google, Inc. All rights reserved.
 </string>
 			<key>Title</key>
-			<string>GoogleAnalytics-iOS-SDK</string>
+			<string>GoogleAnalytics-iOS-SDK-nodebug</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>

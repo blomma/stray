@@ -18,8 +18,8 @@
 #define COCOAPODS_VERSION_MINOR_FontAwesomeKit 1
 #define COCOAPODS_VERSION_PATCH_FontAwesomeKit 3
 
-// GoogleAnalytics-iOS-SDK
-#define COCOAPODS_POD_AVAILABLE_GoogleAnalytics_iOS_SDK
+// GoogleAnalytics-iOS-SDK-nodebug
+#define COCOAPODS_POD_AVAILABLE_GoogleAnalytics_iOS_SDK_nodebug
 // This library does not follow semantic-versioning,
 // so we were not able to define version macros.
 // Please contact the author.
