@@ -1,10 +1,10 @@
-// 
+//
 //  NSManagedObject+ActiveRecord.m
 //  Objective
-//  
+//
 //  Created by Mikael Hultgren on 2013-07-22.
 //  Copyright 2013 Mikael Hultgren. All rights reserved.
-// 
+//
 
 #import "NSManagedObject+ActiveRecord.h"
 
@@ -101,9 +101,9 @@
 }
 
 + (void)deleteAllInContext:(NSManagedObjectContext *)context {
-    [[self allInContext:context] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [obj delete];
-    }];
+	[[self allInContext:context] enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
+	    [obj delete];
+	}];
 }
 
 #pragma mark - Naming
@@ -117,17 +117,17 @@
 + (NSString *)queryStringFromDictionary:(NSDictionary *)condition {
 	NSMutableString *queryString = [NSMutableString new];
 
-    [condition enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+	[condition enumerateKeysAndObjectsUsingBlock: ^(id key, id obj, BOOL *stop) {
 	    if ([obj isKindOfClass:[NSString class]])
 			[queryString appendFormat:@"%@ == %%@", key, obj];
 	    else
 			[queryString appendFormat:@"%@ == %@", key, obj];
 
 	    if (key == [condition.allKeys lastObject])
-            return;
+			return;
 
 	    [queryString appendString:@" AND "];
-    }];
+	}];
 
 	return queryString;
 }
@@ -144,10 +144,10 @@
 + (NSArray *)sortDescriptorsFromDict:(NSDictionary *)condition {
 	NSMutableArray *sortDescriptors = [NSMutableArray array];
 
-    [condition enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+	[condition enumerateKeysAndObjectsUsingBlock: ^(id key, id obj, BOOL *stop) {
 	    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:key ascending:obj];
 	    [sortDescriptors addObject:sortDescriptor];
-    }];
+	}];
 
 	return sortDescriptors;
 }
