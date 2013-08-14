@@ -6,8 +6,6 @@
 //  Copyright 2013 Artsoftheinsane. All rights reserved.
 // 
 
-@import QuartzCore;
-
 @interface CAAnimation (BlocksAddition)
 
 @property (nonatomic, copy) void (^completion) (BOOL finished);
