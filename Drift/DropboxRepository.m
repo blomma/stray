@@ -257,7 +257,11 @@ static NSString *const RepositoryName = @"dropbox";
 	NSString *tag = event.inTag.name ? event.inTag.name : @"";
 	NSString *startDate = event.startDate ? [event.startDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
 	NSString *stopDate = event.stopDate ? [event.stopDate stringByFormat:@"yyyy-MM-dd HH:mm:ss"] : @"";
-	NSString *path = [NSString stringWithFormat:@"%@-%@.csv", [event.startDate stringByFormat:@"yyyy-MM-dd HHmmss"], event.guid];
+	NSString *path = [event.startDate stringByFormat:@"yyyy-MM-dd HH-mm-ss"];
+    if (event.inTag.name) {
+        path = [path stringByAppendingFormat:@"-%@", tag];
+    }
+    path = [path stringByAppendingString:@".csv"];
 
 	// Check if file exist
 	DBError *fileInfoError;
@@ -265,7 +269,7 @@ static NSString *const RepositoryName = @"dropbox";
 	DBFileInfo *fileInfo = [[DBFilesystem sharedFilesystem] fileInfoForPath:dbPath error:&fileInfoError];
 
     if (fileInfoError) {
-        DLog(@"%@", fileInfoError);
+        DLog(@"%@ - %@", dbPath, fileInfoError);
     }
 
 	// Remove the file if it exists
@@ -274,7 +278,7 @@ static NSString *const RepositoryName = @"dropbox";
 		[[DBFilesystem sharedFilesystem] deletePath:dbPath error:&deleteError];
 
         if (deleteError) {
-            DLog(@"%@", deleteError);
+            DLog(@"%@ - %@", dbPath, deleteError);
         }
 	}
 
@@ -284,7 +288,7 @@ static NSString *const RepositoryName = @"dropbox";
 	DBFile *dbFile = [[DBFilesystem sharedFilesystem] createFile:dbPath error:&createError];
 
     if (createError) {
-        DLog(@"%@", createError);
+        DLog(@"%@ - %@", dbPath, createError);
     }
 
 	if (dbFile) {
@@ -304,7 +308,7 @@ static NSString *const RepositoryName = @"dropbox";
 		[dbFile writeString:output error:&writeError];
 
         if (writeError) {
-            DLog(@"%@", writeError);
+            DLog(@"%@ - %@", dbPath, writeError);
         }
 
 		[dbFile close];
