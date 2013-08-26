@@ -10,19 +10,26 @@
 
 @implementation EventSection
 
-- (void)awakeFromNib {
-//    [self.hours mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(self.contentView.mas_top);
-//        make.left.equalTo(self.contentView.mas_left).with.offset(130);
-//        make.bottom.equalTo(self.contentView.mas_bottom);
-//		make.height.equalTo(self.contentView.mas_height);
-//		make.width.greaterThanOrEqualTo(@52);
-//    }];
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self setup];
+    }
 
-    // [self.minutes mas_makeConstraints:^(MASConstraintMaker *make) {
-    //     make.top.equalTo(self.contentView.mas_top);
-    //     make.left.equalTo(self.contentView.mas_left);
-    // }];
+    return self;
+}
+
+- (void)setup {
+    self.hour = [[UILabel alloc] init];
+    self.hour.font = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:40];
+    [self.contentView addSubview:self.hour];
+    [self.hour mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.contentView.mas_top);
+        make.left.equalTo(self.contentView.mas_left);
+        make.bottom.equalTo(self.contentView.mas_bottom);
+        make.height.equalTo(self.contentView.mas_height);
+        make.width.greaterThanOrEqualTo(@52);
+    }];
 }
 
 @end

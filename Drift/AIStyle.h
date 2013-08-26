@@ -8,6 +8,7 @@
 
 @interface AIStyle : NSObject
 
++ (NSString *)textFontName;
 + (void)applyStyle;
 
 @end

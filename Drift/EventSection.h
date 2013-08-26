@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-@interface EventSection : UITableViewCell
+@interface EventSection : UITableViewHeaderFooterView
 
-@property (nonatomic, weak) IBOutlet UILabel *hours;
-@property (nonatomic, weak) IBOutlet UILabel *minutes;
-@property (nonatomic, weak) IBOutlet UILabel *day;
-@property (nonatomic, weak) IBOutlet UILabel *weekDay;
-@property (nonatomic, weak) IBOutlet UILabel *month;
-@property (nonatomic, weak) IBOutlet UILabel *year;
+@property (nonatomic) UILabel *hour;
+@property (nonatomic) UILabel *minute;
+@property (nonatomic) UILabel *day;
+@property (nonatomic) UILabel *weekDay;
+@property (nonatomic) UILabel *month;
+@property (nonatomic) UILabel *year;
 
 @end

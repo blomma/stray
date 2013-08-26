@@ -71,6 +71,7 @@
 		9ECF3B7A16EAF4D40097FF37 /* _Compatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7716EAF4D40097FF37 /* _Compatibility.m */; };
 		9ECF3B7B16EAF4D40097FF37 /* Compatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7916EAF4D40097FF37 /* Compatibility.m */; };
 		9ECF3B7E16EAF6290097FF37 /* CompatibilityMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7D16EAF6290097FF37 /* CompatibilityMigration.m */; };
+		9ED0597A17CA77B1005933B8 /* PreferenceAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ED0597917CA77B1005933B8 /* PreferenceAnimationController.m */; };
 		9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCC5CA160DBFA1003CB2BB /* Tag.m */; };
 		9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */; };
 		9EF3311F166569DB005CFEF2 /* TagTableViewCellBackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EF3311E166569DB005CFEF2 /* TagTableViewCellBackView.m */; };
@@ -171,6 +172,8 @@
 		9ECF3B7916EAF4D40097FF37 /* Compatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Compatibility.m; sourceTree = "<group>"; };
 		9ECF3B7C16EAF6290097FF37 /* CompatibilityMigration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompatibilityMigration.h; sourceTree = "<group>"; };
 		9ECF3B7D16EAF6290097FF37 /* CompatibilityMigration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompatibilityMigration.m; sourceTree = "<group>"; };
+		9ED0597817CA77B1005933B8 /* PreferenceAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferenceAnimationController.h; sourceTree = "<group>"; };
+		9ED0597917CA77B1005933B8 /* PreferenceAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferenceAnimationController.m; sourceTree = "<group>"; };
 		9EDCC5C9160DBFA1003CB2BB /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tag.h; sourceTree = "<group>"; };
 		9EDCC5CA160DBFA1003CB2BB /* Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tag.m; sourceTree = "<group>"; };
 		9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EventTimerControl.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -401,6 +404,8 @@
 				9E5DECD3167899B200E21B8E /* InfoHintViewController.m */,
 				9EC7253B173D8A160090B1D5 /* PreferencesViewController.h */,
 				9EC7253C173D8A160090B1D5 /* PreferencesViewController.m */,
+				9ED0597817CA77B1005933B8 /* PreferenceAnimationController.h */,
+				9ED0597917CA77B1005933B8 /* PreferenceAnimationController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -583,6 +588,7 @@
 				9E92637115EF350D00393946 /* _Tag.m in Sources */,
 				9E9C237815F3617200572FB7 /* EventsGroupedByStartDateViewController.m in Sources */,
 				9E561DDB15FA08FB008D3895 /* EventCell.m in Sources */,
+				9ED0597A17CA77B1005933B8 /* PreferenceAnimationController.m in Sources */,
 				9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */,
 				9E2CFDE9162190E8004D9D8D /* TagsTableViewController.m in Sources */,
 				9E14D452162B3D3F008D9E43 /* TagFilterButton.m in Sources */,

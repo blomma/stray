@@ -8,6 +8,7 @@
 
 #import "NSLayoutConstraint+MASDebugAdditions.h"
 #import "MASConstraint.h"
+#import "MASLayoutConstraint.h"
 
 @implementation NSLayoutConstraint (MASDebugAdditions)
 
@@ -43,6 +44,7 @@
             @(NSLayoutAttributeCenterY)  : @"centerY",
             @(NSLayoutAttributeBaseline) : @"baseline",
         };
+    
     });
     return descriptionMap;
 }
@@ -52,6 +54,7 @@
     static dispatch_once_t once;
     static NSDictionary *descriptionMap;
     dispatch_once(&once, ^{
+#if TARGET_OS_IPHONE
         descriptionMap = @{
             @(MASLayoutPriorityDefaultHigh)      : @"high",
             @(MASLayoutPriorityDefaultLow)       : @"low",
@@ -59,6 +62,18 @@
             @(MASLayoutPriorityRequired)         : @"required",
             @(MASLayoutPriorityFittingSizeLevel) : @"fitting size",
         };
+#elif TARGET_OS_MAC
+        descriptionMap = @{
+            @(MASLayoutPriorityDefaultHigh)                 : @"high",
+            @(MASLayoutPriorityDragThatCanResizeWindow)     : @"drag can resize window",
+            @(MASLayoutPriorityDefaultMedium)               : @"medium",
+            @(MASLayoutPriorityWindowSizeStayPut)           : @"window size stay put",
+            @(MASLayoutPriorityDragThatCannotResizeWindow)  : @"drag cannot resize window",
+            @(MASLayoutPriorityDefaultLow)                  : @"low",
+            @(MASLayoutPriorityFittingSizeCompression)      : @"fitting size",
+            @(MASLayoutPriorityRequired)                    : @"required",
+        };
+#endif
     });
     return descriptionMap;
 }
@@ -66,7 +81,7 @@
 #pragma mark - description override
 
 + (NSString *)descriptionForObject:(id)obj {
-    if ([obj mas_key]) {
+    if ([obj respondsToSelector:@selector(mas_key)] && [obj mas_key]) {
         return [NSString stringWithFormat:@"%@:%@", [obj class], [obj mas_key]];
     }
     return [NSString stringWithFormat:@"%@:%p", [obj class], obj];
@@ -79,16 +94,16 @@
 
     [description appendFormat:@" %@", [self.class descriptionForObject:self.firstItem]];
     if (self.firstAttribute != NSLayoutAttributeNotAnAttribute) {
-        [description appendFormat:@".%@", self.class.layoutAttributeDescriptionsByValue[@(self.firstAttribute)]];
+        [description appendFormat:@".%@", [self.class.layoutAttributeDescriptionsByValue objectForKey:@(self.firstAttribute)]];
     }
 
-    [description appendFormat:@" %@", self.class.layoutRelationDescriptionsByValue[@(self.relation)]];
+    [description appendFormat:@" %@", [self.class.layoutRelationDescriptionsByValue objectForKey:@(self.relation)]];
 
     if (self.secondItem) {
         [description appendFormat:@" %@", [self.class descriptionForObject:self.secondItem]];
     }
     if (self.secondAttribute != NSLayoutAttributeNotAnAttribute) {
-        [description appendFormat:@".%@", self.class.layoutAttributeDescriptionsByValue[@(self.secondAttribute)]];
+        [description appendFormat:@".%@", [self.class.layoutAttributeDescriptionsByValue objectForKey:@(self.secondAttribute)]];
     }
     
     if (self.multiplier != 1) {
@@ -103,8 +118,8 @@
         }
     }
 
-    if (self.priority != UILayoutPriorityRequired) {
-        [description appendFormat:@" ^%@", self.class.layoutPriorityDescriptionsByValue[@(self.priority)] ?: [NSNumber numberWithDouble:self.priority]];
+    if (self.priority != MASLayoutPriorityRequired) {
+        [description appendFormat:@" ^%@", [self.class.layoutPriorityDescriptionsByValue objectForKey:@(self.priority)] ?: [NSNumber numberWithDouble:self.priority]];
     }
 
     [description appendString:@">"];

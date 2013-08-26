@@ -7,19 +7,21 @@
 //
 
 #import "MASCompositeConstraint.h"
-#import "UIView+MASAdditions.h"
+#import "View+MASAdditions.h"
 #import "MASViewConstraint.h"
-#import "NSObject+MASKeyAdditions.h"
 
 @interface MASCompositeConstraint () <MASConstraintDelegate>
 
+@property (nonatomic, strong) id mas_key;
 @property (nonatomic, strong) NSMutableArray *childConstraints;
 
 @end
 
 @implementation MASCompositeConstraint
 
-- (id)initWithView:(UIView *)view type:(MASCompositeConstraintType)type {
+@synthesize delegate = _delegate;
+
+- (id)initWithView:(MAS_VIEW *)view type:(MASCompositeConstraintType)type {
     self = [super init];
     if (!self) return nil;
     
@@ -31,13 +33,16 @@
     return self;
 }
 
-- (id)initWithView:(UIView *)view children:(NSArray *)children {
+- (id)initWithView:(MAS_VIEW *)view children:(NSArray *)children {
     self = [super init];
     if (!self) return nil;
 
     _type = MASCompositeConstraintTypeUnknown;
     _view = view;
     _childConstraints = [children mutableCopy];
+    for (id<MASConstraint> constraint in _childConstraints) {
+        constraint.delegate = self;
+    }
 
     return self;
 }
@@ -76,14 +81,16 @@
 
 #pragma mark - MASConstraintDelegate
 
-- (void)addConstraint:(id<MASConstraint>)constraint {
-    [self.delegate addConstraint:constraint];
+- (void)constraint:(id<MASConstraint>)constraint shouldBeReplacedWithConstraint:(id<MASConstraint>)replacementConstraint {
+    NSUInteger index = [self.childConstraints indexOfObject:constraint];
+    NSAssert(index != NSNotFound, @"Could not find constraint %@", constraint);
+    [self.childConstraints replaceObjectAtIndex:index withObject:replacementConstraint];
 }
 
 #pragma mark - NSLayoutConstraint constant proxies
 
-- (id<MASConstraint> (^)(UIEdgeInsets))insets {
-    return ^id(UIEdgeInsets insets) {
+- (id<MASConstraint> (^)(MASEdgeInsets))insets {
+    return ^id(MASEdgeInsets insets) {
         for (id<MASConstraint> constraint in self.childConstraints) {
             constraint.insets(insets);
         }
@@ -120,10 +127,19 @@
 
 #pragma mark - NSLayoutConstraint multiplier proxies 
 
-- (id<MASConstraint> (^)(CGFloat))percent {
-    return ^id(CGFloat percent) {
+- (id<MASConstraint> (^)(CGFloat))multipliedBy {
+    return ^id(CGFloat multiplier) {
         for (id<MASConstraint> constraint in self.childConstraints) {
-            constraint.percent(percent);
+            constraint.multipliedBy(multiplier);
+        }
+        return self;
+    };
+}
+
+- (id<MASConstraint> (^)(CGFloat))dividedBy {
+    return ^id(CGFloat divider) {
+        for (id<MASConstraint> constraint in self.childConstraints) {
+            constraint.dividedBy(divider);
         }
         return self;
     };
@@ -165,7 +181,7 @@
 
 - (id<MASConstraint> (^)(id))equalTo {
     return ^id(id attr) {
-        for (id<MASConstraint> constraint in self.childConstraints) {
+        for (id<MASConstraint> constraint in self.childConstraints.copy) {
             constraint.equalTo(attr);
         }
         return self;
@@ -174,7 +190,7 @@
 
 - (id<MASConstraint> (^)(id))greaterThanOrEqualTo {
     return ^id(id attr) {
-        for (id<MASConstraint> constraint in self.childConstraints) {
+        for (id<MASConstraint> constraint in self.childConstraints.copy) {
             constraint.greaterThanOrEqualTo(attr);
         }
         return self;
@@ -183,7 +199,7 @@
 
 - (id<MASConstraint> (^)(id))lessThanOrEqualTo {
     return ^id(id attr) {
-        for (id<MASConstraint> constraint in self.childConstraints) {
+        for (id<MASConstraint> constraint in self.childConstraints.copy) {
             constraint.lessThanOrEqualTo(attr);
         }
         return self;
@@ -211,7 +227,16 @@
 
 #pragma mark - MASConstraint
 
-- (void)commit {
+- (void)install {
+    for (id<MASConstraint> constraint in self.childConstraints) {
+        [constraint install];
+    }
+}
+
+- (void)uninstall {
+    for (id<MASConstraint> constraint in self.childConstraints) {
+        [constraint uninstall];
+    }
 }
 
 @end

@@ -13,14 +13,14 @@
 
 @interface MASConstraintMaker () <MASConstraintDelegate>
 
-@property (nonatomic, weak) UIView *view;
+@property (nonatomic, weak) MAS_VIEW *view;
 @property (nonatomic, strong) NSMutableArray *constraints;
 
 @end
 
 @implementation MASConstraintMaker
 
-- (id)initWithView:(UIView *)view {
+- (id)initWithView:(MAS_VIEW *)view {
     self = [super init];
     if (!self) return nil;
     
@@ -32,15 +32,17 @@
 
 - (void)commit {
     for (id<MASConstraint> constraint in self.constraints) {
-        [constraint commit];
+        [constraint install];
     }
     [self.constraints removeAllObjects];
 }
 
 #pragma mark - MASConstraintDelegate
 
-- (void)addConstraint:(id<MASConstraint>)constraint {
-    [self.constraints addObject:constraint];
+- (void)constraint:(id<MASConstraint>)constraint shouldBeReplacedWithConstraint:(id<MASConstraint>)replacementConstraint {
+    NSUInteger index = [self.constraints indexOfObject:constraint];
+    NSAssert(index != NSNotFound, @"Could not find constraint %@", constraint);
+    [self.constraints replaceObjectAtIndex:index withObject:replacementConstraint];
 }
 
 #pragma mark - constraint properties
@@ -49,6 +51,7 @@
     MASViewAttribute *viewAttribute = [[MASViewAttribute alloc] initWithView:self.view layoutAttribute:layoutAttribute];
     MASViewConstraint *constraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:viewAttribute];
     constraint.delegate = self;
+    [self.constraints addObject:constraint];
     return constraint;
 }
 
@@ -104,18 +107,21 @@
 - (id<MASConstraint>)edges {
     MASCompositeConstraint *constraint = [[MASCompositeConstraint alloc] initWithView:self.view type:MASCompositeConstraintTypeEdges];
     constraint.delegate = self;
+    [self.constraints addObject:constraint];
     return constraint;
 }
 
 - (id<MASConstraint>)size {
     MASCompositeConstraint *constraint = [[MASCompositeConstraint alloc] initWithView:self.view type:MASCompositeConstraintTypeSize];
     constraint.delegate = self;
+    [self.constraints addObject:constraint];
     return constraint;
 }
 
 - (id<MASConstraint>)center {
     MASCompositeConstraint *constraint = [[MASCompositeConstraint alloc] initWithView:self.view type:MASCompositeConstraintTypeCenter];
     constraint.delegate = self;
+    [self.constraints addObject:constraint];
     return constraint;
 }
 @end

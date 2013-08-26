@@ -6,9 +6,10 @@
 //  Copyright (c) 2013 cloudling. All rights reserved.
 //
 
-#import "UIView+MASAdditions.h"
+#import "View+MASAdditions.h"
+#import <objc/runtime.h>
 
-@implementation UIView (MASAdditions)
+@implementation MAS_VIEW (MASAdditions)
 
 - (void)mas_makeConstraints:(void(^)(MASConstraintMaker *))block {
     self.translatesAutoresizingMaskIntoConstraints = NO;
@@ -61,6 +62,35 @@
 
 - (MASViewAttribute *)mas_baseline {
     return [[MASViewAttribute alloc] initWithView:self layoutAttribute:NSLayoutAttributeBaseline];
+}
+
+#pragma mark - key
+
+- (id)mas_key {
+    return objc_getAssociatedObject(self, @selector(mas_key));
+}
+
+- (void)setMas_key:(id)key {
+    objc_setAssociatedObject(self, @selector(mas_key), key, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+#pragma mark - heirachy
+
+- (instancetype)mas_closestCommonSuperview:(MAS_VIEW *)view {
+    MAS_VIEW *closestCommonSuperview = nil;
+
+    MAS_VIEW *secondViewSuperview = view;
+    while (!closestCommonSuperview && secondViewSuperview) {
+        MAS_VIEW *firstViewSuperview = self;
+        while (!closestCommonSuperview && firstViewSuperview) {
+            if (secondViewSuperview == firstViewSuperview) {
+                closestCommonSuperview = secondViewSuperview;
+            }
+            firstViewSuperview = firstViewSuperview.superview;
+        }
+        secondViewSuperview = secondViewSuperview.superview;
+    }
+    return closestCommonSuperview;
 }
 
 @end

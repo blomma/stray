@@ -8,7 +8,7 @@
 
 #import <MGScrollView.h>
 
-@interface PreferencesViewController : UIViewController
+@interface PreferencesViewController : UIViewController <UIViewControllerTransitioningDelegate>
 
 @property (weak, nonatomic) IBOutlet MGScrollView *scroller;
 @property (weak, nonatomic) IBOutlet UIButton *close;

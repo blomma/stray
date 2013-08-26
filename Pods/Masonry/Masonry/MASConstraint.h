@@ -6,16 +6,9 @@
 //  Copyright (c) 2013 cloudling. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "MASUtilities.h"
 
-enum {
-    MASLayoutPriorityRequired = UILayoutPriorityRequired,
-    MASLayoutPriorityDefaultHigh = UILayoutPriorityDefaultHigh,
-    MASLayoutPriorityDefaultMedium = 500,
-    MASLayoutPriorityDefaultLow = UILayoutPriorityDefaultLow,
-    MASLayoutPriorityFittingSizeLevel = UILayoutPriorityFittingSizeLevel,
-};
-typedef float MASLayoutPriority;
+@protocol MASConstraintDelegate;
 
 /**
  *	Enables Constraints to be created with chainable syntax
@@ -25,11 +18,16 @@ typedef float MASLayoutPriority;
 @protocol MASConstraint <NSObject>
 
 /**
+ *	Usually MASConstraintMaker but could be a parent MASConstraint
+ */
+@property (nonatomic, weak) id<MASConstraintDelegate> delegate;
+
+/**
  *	Modifies the NSLayoutConstraint constant,
  *  only affects MASConstraints in which the first item's NSLayoutAttribute is one of the following 
  *  NSLayoutAttributeTop, NSLayoutAttributeLeft, NSLayoutAttributeBottom, NSLayoutAttributeRight
  */
-@property (nonatomic, copy, readonly) id<MASConstraint> (^insets)(UIEdgeInsets insets);
+@property (nonatomic, copy, readonly) id<MASConstraint> (^insets)(MASEdgeInsets insets);
 
 /**
  *	Modifies the NSLayoutConstraint constant,
@@ -54,7 +52,12 @@ typedef float MASLayoutPriority;
 /**
  *	Sets the NSLayoutConstraint multiplier property
  */
-@property (nonatomic, copy, readonly) id<MASConstraint> (^percent)(CGFloat percent);
+@property (nonatomic, copy, readonly) id<MASConstraint> (^multipliedBy)(CGFloat multiplier);
+
+/**
+ *	Sets the NSLayoutConstraint multiplier to 1.0/dividedBy
+ */
+@property (nonatomic, copy, readonly) id<MASConstraint> (^dividedBy)(CGFloat divider);
 
 /**
  *	Sets the NSLayoutConstraint priority to a float or MASLayoutPriority
@@ -111,19 +114,23 @@ typedef float MASLayoutPriority;
 @property (nonatomic, copy, readonly) id<MASConstraint> (^key)(id key);
 
 /**
- *	Creates a NSLayoutConstraint. The constraint is added to the first view or the or the closest common superview of the first and second view. 
+ *	Creates a NSLayoutConstraint. The constraint is installed to the first view or the or the closest common superview of the first and second view. 
  */
-- (void)commit;
+- (void)install;
+
+/**
+ *	Removes previously installed NSLayoutConstraint
+ */
+- (void)uninstall;
 
 @end
 
 @protocol MASConstraintDelegate <NSObject>
 
 /**
- *	Notifies the delegate when the constraint is has the minimum set of properties.
- *
- *	@param	constraint	a constraint that has at least a NSLayoutRelation and view
+ *	Notifies the delegate when the constraint needs to be replaced with another constraint. For example 
+ *  A MASViewConstraint may turn into a MASCompositeConstraint when an array is passed to one of the equality blocks
  */
-- (void)addConstraint:(id<MASConstraint>)constraint;
+- (void)constraint:(id<MASConstraint>)constraint shouldBeReplacedWithConstraint:(id<MASConstraint>)replacementConstraint;
 
 @end

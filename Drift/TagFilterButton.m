@@ -29,7 +29,6 @@
         [self.selectView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.height.equalTo(@6);
             make.left.equalTo(self.mas_left).offset(30);
-            make.right.equalTo(self.mas_right).offset(-30);
             make.bottom.equalTo(self.mas_bottom);
         }];
     }

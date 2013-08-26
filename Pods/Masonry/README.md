@@ -2,12 +2,11 @@ Masonry
 =======
 
 Masonary is a light-weight layout framework which wraps AutoLayout with a nicer syntax. Masonary has its own layout DSL which provides a chainable way of describing your NSLayoutConstraints which results in layout code that is more concise and readable.
+Masonry supports iOS and Mac OSX.
 
-For examples take a look at the **MasonryExamples** project in the Masonry workspace.
+For examples take a look at the **Masonry iOS Examples** project in the Masonry workspace.
 
 [![Build Status](https://travis-ci.org/cloudkite/Masonry.png?branch=master)](https://travis-ci.org/cloudkite/Masonry)
-[![Version](http://cocoapod-badges.herokuapp.com/v/Masonry/badge.png)](http://cocoadocs.org/docsets/Masonry)
-[![Platform](http://cocoapod-badges.herokuapp.com/p/Masonry/badge.png)](http://cocoadocs.org/docsets/Masonry)
 
 ## Whats wrong with NSLayoutConstraints?
 
@@ -120,7 +119,7 @@ view.mas_centerX           |  NSLayoutAttributeCenterX
 view.mas_centerY           |  NSLayoutAttributeCenterY     
 view.mas_baseline          |  NSLayoutAttributeBaseline  
 
-#### 2. UIView
+#### 2. UIView/NSView
 
 if you want view.left to be greater than or equal to label.left :
 ```obj-c
@@ -205,6 +204,30 @@ make.center.equalTo(button1)
 // make centerX = superview.centerX - 5, centerY = superview.centerY + 10
 make.center.equalTo(superview).centerOffset(CGPointMake(-5, 10))
 ```
+
+## Hold on for dear life
+
+Sometimes you need to reference constraints so you can modify them at a later stage. This lets you animate or remove/replace constraints.
+You can hold on to a reference of a particular constraint by assigning the result of a constraint make expression to a local variable or a class property.
+You could also reference multiple constraints by storing them away in an array. You can see a demo of this in the animation example in **Masonry iOS Examples** project.
+
+```obj-c
+// in public/private interface
+@property (nonatomic, strong) id<MASConstraint> topConstraint;
+
+...
+
+// when making constraints
+[view1 mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.topConstraint = make.top.equalTo(superview.mas_top).with.offset(padding.top);
+    make.left.equalTo(superview.mas_left).with.offset(padding.left);
+}];
+
+...
+// then later you can call
+[self.topConstraint uninstall];
+```
+
 ## When the ^&*!@ hits the fan!
 
 Laying out your views doesn't always goto plan. So when things literally go pear shaped, you don't want to be looking at console output like this:
@@ -240,7 +263,7 @@ Will attempt to recover by breaking constraint
 <MASLayoutConstraint:ConstantConstraint UILabel:messageLabel.height >= 5000>
 ```
 
-For an example of how to set this up take a look at the **MasonryExamples** project in the Masonry workspace.
+For an example of how to set this up take a look at the **Masonry iOS Examples** project in the Masonry workspace.
 
 ## Installation
 Use the [orsome](http://www.youtube.com/watch?v=YaIZF8uUTtk) [CocoaPods](http://github.com/CocoaPods/CocoaPods).
@@ -263,5 +286,5 @@ Get busy Masoning
 
 ## TODO
 * Eye candy
-* Mac support
+* Mac example project
 * More tests and examples

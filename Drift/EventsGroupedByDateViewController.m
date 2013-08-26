@@ -43,6 +43,8 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
+    [self.tableView registerClass:[EventSection class] forHeaderFooterViewReuseIdentifier:@"EventSection"];
+
 	self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
 	self.standaloneWeekdaySymbols    = [[NSDateFormatter new] standaloneWeekdaySymbols];
 
@@ -258,25 +260,29 @@
         return UITableViewCellEditingStyleDelete;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-	EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)section];
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 50;
+}
 
-	EventSection *cell = (EventSection *)[tableView dequeueReusableCellWithIdentifier:@"EventSection"];
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    EventSection *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"EventSection"];
+
+	EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)section];
 
 	NSDateComponents *components = eventGroup.filteredEventsDateComponents;
 
-	cell.hours.text   = [NSString stringWithFormat:@"%02d", components.hour];
-	cell.minutes.text = [NSString stringWithFormat:@"%02d", components.minute];
+	header.hour.text   = [NSString stringWithFormat:@"%02d", components.hour];
+//	cell.minutes.text = [NSString stringWithFormat:@"%02d", components.minute];
+//
+//	static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
+//	components = [[NSDate calendar] components:unitFlags fromDate:eventGroup.groupDate];
+//
+//	cell.day.text     = [NSString stringWithFormat:@"%02d", components.day];
+//	cell.year.text    = [NSString stringWithFormat:@"%04d", components.year];
+//	cell.month.text   = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
+//	cell.weekDay.text = [[self.standaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString];
 
-	static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
-	components = [[NSDate calendar] components:unitFlags fromDate:eventGroup.groupDate];
-
-	cell.day.text     = [NSString stringWithFormat:@"%02d", components.day];
-	cell.year.text    = [NSString stringWithFormat:@"%04d", components.year];
-	cell.month.text   = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
-	cell.weekDay.text = [[self.standaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString];
-    
-	return cell;
+	return header;
 }
 
 #pragma mark -
