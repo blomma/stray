@@ -25,12 +25,6 @@
 // Please contact the author.
 // Version: 2.0beta4.
 
-// HMSideMenu
-#define COCOAPODS_POD_AVAILABLE_HMSideMenu
-#define COCOAPODS_VERSION_MAJOR_HMSideMenu 1
-#define COCOAPODS_VERSION_MINOR_HMSideMenu 1
-#define COCOAPODS_VERSION_PATCH_HMSideMenu 0
-
 // MGBox2
 #define COCOAPODS_POD_AVAILABLE_MGBox2
 #define COCOAPODS_VERSION_MAJOR_MGBox2 2
