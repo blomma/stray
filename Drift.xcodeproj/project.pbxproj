@@ -58,7 +58,6 @@
 		9E9239DC162D4F9B00E265E6 /* TagTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239DA162D4F9B00E265E6 /* TagTableViewCell.m */; };
 		9E92637115EF350D00393946 /* _Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E92637015EF350D00393946 /* _Tag.m */; };
 		9E954D84164419F50022D5BE /* UIScrollView+AIPulling.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E954D83164419F50022D5BE /* UIScrollView+AIPulling.m */; };
-		9E96A907163981B600164D76 /* CAAnimation+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E96A90616397DB400164D76 /* CAAnimation+Blocks.m */; };
 		9E9C237815F3617200572FB7 /* EventsGroupedByStartDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C237715F3617100572FB7 /* EventsGroupedByStartDateViewController.m */; };
 		9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB520E15C9553C008952FB /* NSDate+Utilities.m */; };
 		9EB15F6F165D6A7F0054AEA2 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB15F6E165D6A7F0054AEA2 /* TagButton.m */; };
@@ -149,8 +148,6 @@
 		9E92637015EF350D00393946 /* _Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Tag.m; sourceTree = "<group>"; };
 		9E954D82164419F50022D5BE /* UIScrollView+AIPulling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+AIPulling.h"; sourceTree = "<group>"; };
 		9E954D83164419F50022D5BE /* UIScrollView+AIPulling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+AIPulling.m"; sourceTree = "<group>"; };
-		9E96A90516397DB400164D76 /* CAAnimation+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CAAnimation+Blocks.h"; sourceTree = "<group>"; };
-		9E96A90616397DB400164D76 /* CAAnimation+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CAAnimation+Blocks.m"; sourceTree = "<group>"; };
 		9E9C237615F3617100572FB7 /* EventsGroupedByStartDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsGroupedByStartDateViewController.h; sourceTree = "<group>"; };
 		9E9C237715F3617100572FB7 /* EventsGroupedByStartDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventsGroupedByStartDateViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9EAB520D15C9553C008952FB /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
@@ -415,8 +412,6 @@
 			children = (
 				9E954D82164419F50022D5BE /* UIScrollView+AIPulling.h */,
 				9E954D83164419F50022D5BE /* UIScrollView+AIPulling.m */,
-				9E96A90516397DB400164D76 /* CAAnimation+Blocks.h */,
-				9E96A90616397DB400164D76 /* CAAnimation+Blocks.m */,
 				9EAB520D15C9553C008952FB /* NSDate+Utilities.h */,
 				9EAB520E15C9553C008952FB /* NSDate+Utilities.m */,
 			);
@@ -570,7 +565,6 @@
 				9E03424B1779DFFF00D87564 /* _Repository.m in Sources */,
 				9E03424C1779DFFF00D87564 /* Repository.m in Sources */,
 				9E7636661778A31D005C755F /* AIStyle.m in Sources */,
-				9E96A907163981B600164D76 /* CAAnimation+Blocks.m in Sources */,
 				9E42F1FB15570FD60087F602 /* main.m in Sources */,
 				9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */,
 				9E42F22915571E9C0087F602 /* RootViewController.m in Sources */,

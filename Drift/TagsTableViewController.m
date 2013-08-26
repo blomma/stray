@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "CAAnimation+Blocks.h"
-#import "SKBounceAnimation.h"
 #import "State.h"
 #import "TagsTableViewController.h"
 #import "TagTableViewCell.h"
@@ -158,14 +156,9 @@
 	__weak TagTableViewCell *weakCell = cell;
 
 	[cell setDidDeleteHandler: ^{
-	    CGPoint fromValue = weakCell.frontView.layer.position;
-	    CGPoint toValue   = CGPointMake(CGRectGetMidX(weakCell.frontView.layer.bounds), fromValue.y);
+	    CGPoint toValue   = CGPointMake(CGRectGetMidX(weakCell.frontView.layer.bounds), weakCell.frontView.layer.position.y);
 
-	    [weakSelf animateBounceOnLayer:weakCell.frontView.layer
-	                         fromPoint:fromValue
-	                           toPoint:toValue
-	                      withDuration:1.5f
-	                        completion:nil];
+        [weakSelf animateBounceOnView:weakCell.frontView toCenter:toValue];
 
 	    weakSelf.tagInEditState = nil;
 
@@ -184,14 +177,9 @@
 				weakSelf.didEditTagHandler(weakTag);
 		}
 
-	    CGPoint fromValue = weakCell.frontView.layer.position;
-	    CGPoint toValue   = CGPointMake(CGRectGetMidX(weakCell.frontView.layer.bounds), fromValue.y);
+	    CGPoint toValue   = CGPointMake(CGRectGetMidX(weakCell.frontView.layer.bounds), weakCell.frontView.layer.position.y);
 
-	    [self animateBounceOnLayer:weakCell.frontView.layer
-	                     fromPoint:fromValue
-	                       toPoint:toValue
-	                  withDuration:1.5f
-	                    completion:nil];
+        [weakSelf animateBounceOnView:weakCell.frontView toCenter:toValue];
 
 	    self.tagInEditState = nil;
 	}];
@@ -219,10 +207,9 @@
 		NSIndexPath *editStateIndexPath = [self.fetchedResultsController indexPathForObject:self.tagInEditState];
 
 		TagTableViewCell *cell = (TagTableViewCell *)[self.tableView cellForRowAtIndexPath:editStateIndexPath];
-		CGPoint fromValue      = cell.frontView.layer.position;
-		CGPoint toValue        = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
+		CGPoint toValue        = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), cell.frontView.layer.position.y);
 
-		[self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
+        [self animateBounceOnView:cell.frontView toCenter:toValue];
 	}
 
 	TagTableViewCell *cell = (TagTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
@@ -279,19 +266,18 @@
 	TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
 	if (state == TransformableTableViewCellEditingStateRight && !self.tagInEditState) {
-		CGPoint fromValue = cell.frontView.layer.position;
-		CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + self.editingStateRightOffset, fromValue.y);
+		CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + self.editingStateRightOffset, cell.frontView.layer.position.y);
 
-		[self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
+        [self animateBounceOnView:cell.frontView toCenter:toValue];
 
 		self.tagInEditState = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	} else {
-		CGPoint fromValue = cell.frontView.layer.position;
-		CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
+		CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), cell.frontView.layer.position.y);
 
 		// Dimiss if we are showing it
 		[cell.tagNameTextField resignFirstResponder];
-		[self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
+
+        [self animateBounceOnView:cell.frontView toCenter:toValue];
 
 		self.tagInEditState = nil;
 	}
@@ -301,12 +287,11 @@
 	TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 	[cell.tagNameTextField resignFirstResponder];
 
-	CGPoint fromValue = cell.frontView.layer.position;
-	CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
+	CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), cell.frontView.layer.position.y);
 
 	self.tagInEditState = nil;
 
-	[self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
+    [self animateBounceOnView:cell.frontView toCenter:toValue];
 }
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -408,18 +393,15 @@
 #pragma mark -
 #pragma mark Private methods
 
-- (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration completion:(void (^)(BOOL finished))completion {
-	static NSString *keyPath = @"position";
-
-	SKBounceAnimation *positionAnimation = [SKBounceAnimation animationWithKeyPath:keyPath];
-	positionAnimation.fromValue       = [NSValue valueWithCGPoint:from];
-	positionAnimation.toValue         = [NSValue valueWithCGPoint:to];
-	positionAnimation.duration        = duration;
-	positionAnimation.numberOfBounces = 4;
-	positionAnimation.completion      = completion;
-
-	[layer addAnimation:positionAnimation forKey:keyPath];
-	[layer setValue:[NSValue valueWithCGPoint:to] forKeyPath:keyPath];
+- (void)animateBounceOnView:(UIView *)view toCenter:(CGPoint)to {
+    [UIView animateWithDuration:1.5
+                          delay:0
+         usingSpringWithDamping:0.3f
+          initialSpringVelocity:2.5f
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         view.center = to;
+                     } completion:nil];
 }
 
 @end

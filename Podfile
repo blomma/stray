@@ -7,5 +7,4 @@ pod 'CSV', :head
 pod 'FontAwesomeKit', :head
 pod 'MGBox2', :head
 pod 'THObserversAndBinders', :head
-pod 'SKBounceAnimation', :head
 pod 'Masonry', :head

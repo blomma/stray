@@ -1,1 +1,0 @@
-../../SKBounceAnimation/SKBounceAnimation/SKBounceAnimation.h

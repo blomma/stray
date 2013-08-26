@@ -5,7 +5,6 @@ PODS:
   - Masonry (HEAD based on 0.2.2)
   - MGBox2 (HEAD based on 2.0.0)
   - Objective (HEAD based on 0.9)
-  - SKBounceAnimation (HEAD based on 1.0.03)
   - THObserversAndBinders (HEAD based on 1.0.0)
 
 DEPENDENCIES:
@@ -15,7 +14,6 @@ DEPENDENCIES:
   - Masonry (HEAD)
   - MGBox2 (HEAD)
   - Objective (HEAD)
-  - SKBounceAnimation (HEAD)
   - THObserversAndBinders (HEAD)
 
 SPEC CHECKSUMS:
@@ -25,7 +23,6 @@ SPEC CHECKSUMS:
   Masonry: 49bcb141e826b082d43abe819e678b5832faea21
   MGBox2: 7c09e36c2271f9af16fdb5141a0ca554ecee4d8d
   Objective: 9a3d701308b3fb10a3efeefac65385bf90dfba51
-  SKBounceAnimation: 116cdcda440d52f2f6d176032678ffd526ec652a
   THObserversAndBinders: 5f0e709e8b704a8646ffdee9beb01a8aefc1dcb2
 
 COCOAPODS: 0.23.0
