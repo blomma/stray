@@ -39,20 +39,6 @@
             [fromView removeFromSuperview];
             [transitionContext completeTransition:YES];
         }];
-
-//        [UIView animateWithDuration:1
-//                              delay:0
-//             usingSpringWithDamping:0.7f
-//              initialSpringVelocity:2.3f
-//                            options:UIViewAnimationOptionCurveEaseOut
-//                         animations:^{
-//                             fromView.center = CGPointMake(-CGRectGetMidX(inView.frame), CGRectGetMidY(inView.frame));
-//                             preferenceOverlay.alpha = 0;
-//                         } completion:^(BOOL finished) {
-//                             [preferenceOverlay removeFromSuperview];
-//                             [fromView removeFromSuperview];
-//                             [transitionContext completeTransition:YES];
-//                         }];
     } else {
         UIView *preferenceOverlay = [self createOverlayViewWithFrame:inView.frame];
         [inView addSubview:preferenceOverlay];
