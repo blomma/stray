@@ -6,10 +6,6 @@
 //  Copyright (c) 2013 Artsoftheinsane. All rights reserved.
 //
 
-#import <MGScrollView.h>
-
 @interface PreferencesViewController : UIViewController <UIViewControllerTransitioningDelegate>
-
-@property (weak, nonatomic) IBOutlet MGScrollView *scroller;
 
 @end

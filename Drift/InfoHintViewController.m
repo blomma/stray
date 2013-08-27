@@ -8,7 +8,6 @@
 
 #import "InfoHintViewController.h"
 #import <FontAwesomeKit.h>
-#import <UIColor+MGExpanded.h>
 
 @interface InfoHintViewController ()
 
@@ -55,8 +54,9 @@
 	self.closeInfoHintView.backgroundColor = [UIColor clearColor];
 
 	UIColor *color = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:1.000];
+	UIColor *colorHighlighted = [UIColor colorWithRed:0.781f green:0.773f blue:0.765f alpha:1.000];
 	[self.closeInfoHintView setTitleColor:color forState:UIControlStateNormal];
-	[self.closeInfoHintView setTitleColor:[color colorByAdding:-0.16f alpha:0] forState:UIControlStateHighlighted];
+	[self.closeInfoHintView setTitleColor:colorHighlighted forState:UIControlStateHighlighted];
 
 	[self.closeInfoHintView setTitle:FAKIconRemoveSign forState:UIControlStateNormal];
 }

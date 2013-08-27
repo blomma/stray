@@ -25,12 +25,6 @@
 // Please contact the author.
 // Version: 2.0beta4.
 
-// MGBox2
-#define COCOAPODS_POD_AVAILABLE_MGBox2
-#define COCOAPODS_VERSION_MAJOR_MGBox2 2
-#define COCOAPODS_VERSION_MINOR_MGBox2 0
-#define COCOAPODS_VERSION_PATCH_MGBox2 0
-
 // Masonry
 #define COCOAPODS_POD_AVAILABLE_Masonry
 #define COCOAPODS_VERSION_MAJOR_Masonry 0

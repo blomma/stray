@@ -8,12 +8,7 @@
         <!--RootViewController-->
         <scene sceneID="KvM-gm-lw9">
             <objects>
-                <pageViewController storyboardIdentifier="RootViewController" autoresizesArchivedViewToFullSize="NO" title="Root View" extendedLayoutIncludesOpaqueBars="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="ftN-u6-d28" userLabel="RootViewController" customClass="RootViewController" sceneMemberID="viewController">
-                    <connections>
-                        <segue destination="BUI-Lx-VWJ" kind="modal" identifier="segueToInfoHintView" id="vjV-x8-epP"/>
-                        <segue destination="0ON-iK-eBY" kind="modal" identifier="segueToPreferences" id="qgz-YQ-lEQ"/>
-                    </connections>
-                </pageViewController>
+                <pageViewController storyboardIdentifier="RootViewController" autoresizesArchivedViewToFullSize="NO" title="Root View" extendedLayoutIncludesOpaqueBars="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="ftN-u6-d28" userLabel="RootViewController" customClass="RootViewController" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m8r-Is-cfE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-219" y="-245"/>
@@ -30,22 +25,62 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s4f-Cp-Mv8" customClass="MGScrollView">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Go-q9-5ph">
                                 <rect key="frame" x="120" y="0.0" width="200" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            </scrollView>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Dropbox" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pSf-Pt-IMk">
+                                        <rect key="frame" x="20" y="26" width="66" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ra5-zV-gRN">
+                                        <rect key="frame" x="131" y="20" width="51" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="onDropboxSwitch:forEvent:" destination="0ON-iK-eBY" eventType="valueChanged" id="kCa-kQ-lZ7"/>
+                                        </connections>
+                                    </switch>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bCl-BE-dBa">
+                                        <rect key="frame" x="20" y="97" width="107" height="32"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <state key="normal" title="Dropbox sync">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onDropboxSync:forEvent:" destination="0ON-iK-eBY" eventType="touchUpInside" id="Nyr-b6-T17"/>
+                                        </connections>
+                                    </button>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Hkn-w0-bDB">
+                                        <rect key="frame" x="143" y="94" width="37" height="37"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </activityIndicatorView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gtf-jw-Gfv">
+                                        <rect key="frame" x="20" y="179" width="160" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
-                        <outlet property="scroller" destination="s4f-Cp-Mv8" id="7sp-Qs-55h"/>
+                        <outlet property="dropboxSwitch" destination="Ra5-zV-gRN" id="frz-DS-1hN"/>
+                        <outlet property="dropboxSync" destination="bCl-BE-dBa" id="s8i-CJ-i7C"/>
+                        <outlet property="dropboxSyncActivity" destination="Hkn-w0-bDB" id="phX-i1-SGY"/>
+                        <outlet property="dropboxSyncStatus" destination="Gtf-jw-Gfv" id="7If-mj-0yA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="agt-sn-6iJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="146" y="-825"/>
+            <point key="canvasLocation" x="-219" y="453"/>
         </scene>
         <!--EventViewController-->
         <scene sceneID="HBC-Pb-M3Y">
@@ -205,7 +240,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9TD-yZ-86c" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="484" y="-281"/>
+            <point key="canvasLocation" x="158" y="-245"/>
         </scene>
         <!--TagsTableViewController-->
         <scene sceneID="zQ2-00-SiN">
@@ -291,7 +326,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wuN-Iu-I2O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="876" y="-839"/>
+            <point key="canvasLocation" x="158" y="-929"/>
         </scene>
         <!--InfoHintViewController-->
         <scene sceneID="ntc-rR-qma">
@@ -349,7 +384,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q6i-so-y2d" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="OXd-mb-aW3" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-219" y="-825"/>
+            <point key="canvasLocation" x="-219" y="-929"/>
         </scene>
         <!--EventsGroupedByDateViewController-->
         <scene sceneID="aWJ-lh-tEK">
@@ -519,7 +554,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W9f-Gb-0ky" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="876" y="-245"/>
+            <point key="canvasLocation" x="534" y="-245"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

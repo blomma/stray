@@ -9,7 +9,6 @@
 #import "NoHitCAShapeLayer.h"
 #import "TagTableViewCell.h"
 #import <FontAwesomeKit.h>
-#import <UIColor+MGExpanded.h>
 
 @interface TagTableViewCell ()
 
@@ -51,8 +50,9 @@
 	self.deleteButton.backgroundColor = [UIColor clearColor];
 
 	UIColor *color = [UIColor colorWithRed:0.318f green:0.318f blue:0.318f alpha:1];
+	UIColor *colorHighlighted = [UIColor colorWithRed:0.158f green:0.158f blue:0.158f alpha:1];
 	[self.deleteButton setTitleColor:color forState:UIControlStateNormal];
-	[self.deleteButton setTitleColor:[color colorByAdding:-0.16f alpha:0] forState:UIControlStateHighlighted];
+	[self.deleteButton setTitleColor:colorHighlighted forState:UIControlStateHighlighted];
 
 	[self.deleteButton setTitle:FAKIconRemoveSign forState:UIControlStateNormal];
 
