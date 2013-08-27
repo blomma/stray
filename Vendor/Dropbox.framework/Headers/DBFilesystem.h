@@ -4,7 +4,16 @@
 #import "DBFile.h"
 #import "DBFileInfo.h"
 #import "DBPath.h"
-#import "DBUtil.h"
+
+enum DBSyncStatusFlags {
+	DBSyncStatusDownloading = (1 << 0),
+	DBSyncStatusUploading = (1 << 1),
+	DBSyncStatusSyncing = (1 << 2),
+	DBSyncStatusActive = (1 << 3),
+};
+
+/** A set of various fields indicating the current status of syncing. */
+typedef NSUInteger DBSyncStatus;
 
 /** Possible values for thumbnail size when opening a thumbnail.  Thumbnails are scaled
  (not cropped) in a way which preserves the original images aspect ratio, to a
