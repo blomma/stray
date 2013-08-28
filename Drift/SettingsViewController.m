@@ -1,5 +1,5 @@
 //
-//  PreferenceViewController.m
+//  SettingsViewController.m
 //  Drift
 //
 //  Created by Mikael Hultgren on 2013-05-10.
@@ -7,11 +7,11 @@
 //
 
 #import "DropboxRepository.h"
-#import "PreferencesViewController.h"
+#import "SettingsViewController.h"
 #import <THObserversAndBinders.h>
-#import "PreferenceAnimationController.h"
+#import "SettingsAnimationController.h"
 
-@interface PreferencesViewController ()
+@interface SettingsViewController ()
 
 @property (nonatomic) id dropboxChangeObserver;
 @property (nonatomic) id dropboxSyncObserver;
@@ -24,7 +24,7 @@
 
 @end
 
-@implementation PreferencesViewController
+@implementation SettingsViewController
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
@@ -62,11 +62,11 @@
 
 	if ([DropboxRepository instance].isSyncing) {
 		weakSelf.dropboxSync.enabled = NO;
-		self.dropboxSyncStatus.text = @"Syncing to dropbox";
+		self.dropboxSyncStatus.text = @"Syncing";
 		[self.dropboxSyncActivity startAnimating];
 	} else {
 		weakSelf.dropboxSync.enabled = YES;
-		self.dropboxSyncStatus.text = @"Dropbox is synced";
+		self.dropboxSyncStatus.text = @"Synced";
 		[self.dropboxSyncActivity stopAnimating];
 	}
 
@@ -78,11 +78,11 @@
 
                                                       if ([newValue boolValue]) {
                                                           weakSelf.dropboxSync.enabled = NO;
-                                                          self.dropboxSyncStatus.text = @"Syncing to dropbox";
+                                                          self.dropboxSyncStatus.text = @"Syncing";
                                                           [weakSelf.dropboxSyncActivity startAnimating];
                                                       } else {
                                                           weakSelf.dropboxSync.enabled = YES;
-                                                          self.dropboxSyncStatus.text = @"Dropbox is synced";
+                                                          self.dropboxSyncStatus.text = @"Synced";
                                                           [weakSelf.dropboxSyncActivity stopAnimating];
                                                       }
                                                   }];
@@ -115,11 +115,11 @@
 #pragma mark UIViewControllerTransitioningDelegate
 
 - (id <UIViewControllerAnimatedTransitioning> )animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
-	return [[PreferenceAnimationController alloc] init];
+	return [[SettingsAnimationController alloc] init];
 }
 
 - (id <UIViewControllerAnimatedTransitioning> )animationControllerForDismissedController:(UIViewController *)dismissed {
-	PreferenceAnimationController *controller = [[PreferenceAnimationController alloc] init];
+	SettingsAnimationController *controller = [[SettingsAnimationController alloc] init];
 	controller.isDismissed = YES;
 
 	return controller;

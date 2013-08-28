@@ -24,8 +24,8 @@
 @property (nonatomic) THObserver *nowDateObserver;
 @property (nonatomic) THObserver *transformingObserver;
 
-@property (nonatomic) id<MASConstraint> preferenceTouchRightConstraint;
-@property (nonatomic) UIView *preferenceTouch;
+@property (nonatomic) id<MASConstraint> settingsTouchRightConstraint;
+@property (nonatomic) UIView *settingsTouch;
 
 @end
 
@@ -43,54 +43,54 @@
 
 - (void)setupLayout {
     //-------------------------------------
-    /// preference touch area
+    /// settings touch area
     //-------------------------------------
-    self.preferenceTouch = [[UIView alloc] init];
-    self.preferenceTouch.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:self.preferenceTouch];
+    self.settingsTouch = [[UIView alloc] init];
+    self.settingsTouch.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.settingsTouch];
 
-    [self.preferenceTouch mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.settingsTouch mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top);
         make.bottom.equalTo(self.view.mas_bottom);
         make.width.equalTo(self.view.mas_width);
-        self.preferenceTouchRightConstraint = make.right.equalTo(self.view.mas_left).offset(100);
+        self.settingsTouchRightConstraint = make.right.equalTo(self.view.mas_left).offset(100);
     }];
 
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                                           action:@selector(pan:)];
     pan.minimumNumberOfTouches = 1;
     pan.maximumNumberOfTouches = 1;
-    [self.preferenceTouch addGestureRecognizer:pan];
+    [self.settingsTouch addGestureRecognizer:pan];
 
     UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
     swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
     swipeLeft.numberOfTouchesRequired = 1;
-    [self.preferenceTouch addGestureRecognizer:swipeLeft];
+    [self.settingsTouch addGestureRecognizer:swipeLeft];
 
     UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
     swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
     swipeRight.numberOfTouchesRequired = 1;
-    [self.preferenceTouch addGestureRecognizer:swipeRight];
+    [self.settingsTouch addGestureRecognizer:swipeRight];
 }
 
 - (void)swipe:(UISwipeGestureRecognizer *)recognizer {
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         if (recognizer.direction == UISwipeGestureRecognizerDirectionRight) {
-            [self.preferenceTouchRightConstraint uninstall];
-            [self.preferenceTouch mas_makeConstraints:^(MASConstraintMaker *make) {
-                self.preferenceTouchRightConstraint = make.right.equalTo(self.view.mas_right);
+            [self.settingsTouchRightConstraint uninstall];
+            [self.settingsTouch mas_makeConstraints:^(MASConstraintMaker *make) {
+                self.settingsTouchRightConstraint = make.right.equalTo(self.view.mas_right);
             }];
-            [self.preferenceTouch layoutIfNeeded];
+            [self.settingsTouch layoutIfNeeded];
 
-            [self presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"PreferencesViewController"]
+            [self presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"SettingsViewController"]
                                animated:YES
                              completion:nil];
         } else if (recognizer.direction == UISwipeGestureRecognizerDirectionLeft) {
-            [self.preferenceTouchRightConstraint uninstall];
-            [self.preferenceTouch mas_makeConstraints:^(MASConstraintMaker *make) {
-                self.preferenceTouchRightConstraint = make.right.equalTo(self.view.mas_left).offset(100);
+            [self.settingsTouchRightConstraint uninstall];
+            [self.settingsTouch mas_makeConstraints:^(MASConstraintMaker *make) {
+                self.settingsTouchRightConstraint = make.right.equalTo(self.view.mas_left).offset(100);
             }];
-            [self.preferenceTouch layoutIfNeeded];
+            [self.settingsTouch layoutIfNeeded];
 
             [self dismissViewControllerAnimated:YES
                                      completion:nil];
@@ -102,21 +102,21 @@
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         CGPoint velocity = [recognizer velocityInView:self.view];
         if (velocity.x > 0) {
-            [self.preferenceTouchRightConstraint uninstall];
-            [self.preferenceTouch mas_makeConstraints:^(MASConstraintMaker *make) {
-                self.preferenceTouchRightConstraint = make.right.equalTo(self.view.mas_right);
+            [self.settingsTouchRightConstraint uninstall];
+            [self.settingsTouch mas_makeConstraints:^(MASConstraintMaker *make) {
+                self.settingsTouchRightConstraint = make.right.equalTo(self.view.mas_right);
             }];
-            [self.preferenceTouch layoutIfNeeded];
+            [self.settingsTouch layoutIfNeeded];
 
-            [self presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"PreferencesViewController"]
+            [self presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"SettingsViewController"]
                                animated:YES
                              completion:nil];
         } else if (velocity.x < 0) {
-            [self.preferenceTouchRightConstraint uninstall];
-            [self.preferenceTouch mas_makeConstraints:^(MASConstraintMaker *make) {
-                self.preferenceTouchRightConstraint = make.right.equalTo(self.view.mas_left).offset(100);
+            [self.settingsTouchRightConstraint uninstall];
+            [self.settingsTouch mas_makeConstraints:^(MASConstraintMaker *make) {
+                self.settingsTouchRightConstraint = make.right.equalTo(self.view.mas_left).offset(100);
             }];
-            [self.preferenceTouch layoutIfNeeded];
+            [self.settingsTouch layoutIfNeeded];
 
             [self dismissViewControllerAnimated:YES
                                      completion:nil];

@@ -1,5 +1,5 @@
 //
-//  PreferenceAnimationController.h
+//  SettingsAnimationController.h
 //  Drift
 //
 //  Created by Mikael Hultgren on 2013-08-25.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PreferenceAnimationController : NSObject <UIViewControllerAnimatedTransitioning>
+@interface SettingsAnimationController : NSObject <UIViewControllerAnimatedTransitioning>
 
 @property (nonatomic) BOOL isDismissed;
 
