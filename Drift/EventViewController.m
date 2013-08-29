@@ -24,7 +24,7 @@
 @property (nonatomic) THObserver *nowDateObserver;
 @property (nonatomic) THObserver *transformingObserver;
 
-@property (nonatomic) id<MASConstraint> settingsTouchRightConstraint;
+@property (nonatomic) id <MASConstraint> settingsTouchRightConstraint;
 @property (nonatomic) UIView *settingsTouch;
 
 @end
@@ -34,94 +34,93 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-    [self setupLayout];
+	[self setupLayout];
 
-//    [self.view setTranslatesAutoresizingMaskIntoConstraints:NO];
+    //    [self.view setTranslatesAutoresizingMaskIntoConstraints:NO];
 	self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
-
 }
 
 - (void)setupLayout {
-    //-------------------------------------
-    /// settings touch area
-    //-------------------------------------
-    self.settingsTouch = [[UIView alloc] init];
-    self.settingsTouch.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:self.settingsTouch];
+	//-------------------------------------
+	/// settings touch area
+	//-------------------------------------
+	self.settingsTouch = [[UIView alloc] init];
+	self.settingsTouch.backgroundColor = [UIColor clearColor];
+	[self.view addSubview:self.settingsTouch];
 
-    [self.settingsTouch mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_top);
-        make.bottom.equalTo(self.view.mas_bottom);
-        make.width.equalTo(self.view.mas_width);
-        self.settingsTouchRightConstraint = make.right.equalTo(self.view.mas_left).offset(100);
-    }];
+	[self.settingsTouch mas_makeConstraints: ^(MASConstraintMaker *make) {
+	    make.top.equalTo(self.view.mas_top);
+	    make.bottom.equalTo(self.view.mas_bottom);
+	    make.width.equalTo(self.view.mas_width);
+	    self.settingsTouchRightConstraint = make.right.equalTo(self.view.mas_left).offset(20);
+	}];
 
-    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                          action:@selector(pan:)];
-    pan.minimumNumberOfTouches = 1;
-    pan.maximumNumberOfTouches = 1;
-    [self.settingsTouch addGestureRecognizer:pan];
+	UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self
+	                                                                      action:@selector(pan:)];
+	pan.minimumNumberOfTouches = 1;
+	pan.maximumNumberOfTouches = 1;
+	[self.settingsTouch addGestureRecognizer:pan];
 
-    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
-    swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
-    swipeLeft.numberOfTouchesRequired = 1;
-    [self.settingsTouch addGestureRecognizer:swipeLeft];
+	UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
+	swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
+	swipeLeft.numberOfTouchesRequired = 1;
+	[self.settingsTouch addGestureRecognizer:swipeLeft];
 
-    UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
-    swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
-    swipeRight.numberOfTouchesRequired = 1;
-    [self.settingsTouch addGestureRecognizer:swipeRight];
+	UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
+	swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
+	swipeRight.numberOfTouchesRequired = 1;
+	[self.settingsTouch addGestureRecognizer:swipeRight];
 }
 
 - (void)swipe:(UISwipeGestureRecognizer *)recognizer {
-    if (recognizer.state == UIGestureRecognizerStateBegan) {
-        if (recognizer.direction == UISwipeGestureRecognizerDirectionRight) {
-            [self.settingsTouchRightConstraint uninstall];
-            [self.settingsTouch mas_makeConstraints:^(MASConstraintMaker *make) {
-                self.settingsTouchRightConstraint = make.right.equalTo(self.view.mas_right);
-            }];
-            [self.settingsTouch layoutIfNeeded];
+	if (recognizer.state == UIGestureRecognizerStateBegan) {
+		if (recognizer.direction == UISwipeGestureRecognizerDirectionRight) {
+			[self.settingsTouchRightConstraint uninstall];
+			[self.settingsTouch mas_makeConstraints: ^(MASConstraintMaker *make) {
+			    self.settingsTouchRightConstraint = make.right.equalTo(self.view.mas_right);
+			}];
+			[self.settingsTouch layoutIfNeeded];
 
-            [self presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"SettingsViewController"]
-                               animated:YES
-                             completion:nil];
-        } else if (recognizer.direction == UISwipeGestureRecognizerDirectionLeft) {
-            [self.settingsTouchRightConstraint uninstall];
-            [self.settingsTouch mas_makeConstraints:^(MASConstraintMaker *make) {
-                self.settingsTouchRightConstraint = make.right.equalTo(self.view.mas_left).offset(100);
-            }];
-            [self.settingsTouch layoutIfNeeded];
+			[self presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"SettingsViewController"]
+			                   animated:YES
+			                 completion:nil];
+		} else if (recognizer.direction == UISwipeGestureRecognizerDirectionLeft) {
+			[self.settingsTouchRightConstraint uninstall];
+			[self.settingsTouch mas_makeConstraints: ^(MASConstraintMaker *make) {
+			    self.settingsTouchRightConstraint = make.right.equalTo(self.view.mas_left).offset(20);
+			}];
+			[self.settingsTouch layoutIfNeeded];
 
-            [self dismissViewControllerAnimated:YES
-                                     completion:nil];
-        }
-    }
+			[self dismissViewControllerAnimated:YES
+			                         completion:nil];
+		}
+	}
 }
 
 - (void)pan:(UIPanGestureRecognizer *)recognizer {
-    if (recognizer.state == UIGestureRecognizerStateBegan) {
-        CGPoint velocity = [recognizer velocityInView:self.view];
-        if (velocity.x > 0) {
-            [self.settingsTouchRightConstraint uninstall];
-            [self.settingsTouch mas_makeConstraints:^(MASConstraintMaker *make) {
-                self.settingsTouchRightConstraint = make.right.equalTo(self.view.mas_right);
-            }];
-            [self.settingsTouch layoutIfNeeded];
+	if (recognizer.state == UIGestureRecognizerStateBegan) {
+		CGPoint velocity = [recognizer velocityInView:self.view];
+		if (velocity.x > 0) {
+			[self.settingsTouchRightConstraint uninstall];
+			[self.settingsTouch mas_makeConstraints: ^(MASConstraintMaker *make) {
+			    self.settingsTouchRightConstraint = make.right.equalTo(self.view.mas_right);
+			}];
+			[self.settingsTouch layoutIfNeeded];
 
-            [self presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"SettingsViewController"]
-                               animated:YES
-                             completion:nil];
-        } else if (velocity.x < 0) {
-            [self.settingsTouchRightConstraint uninstall];
-            [self.settingsTouch mas_makeConstraints:^(MASConstraintMaker *make) {
-                self.settingsTouchRightConstraint = make.right.equalTo(self.view.mas_left).offset(100);
-            }];
-            [self.settingsTouch layoutIfNeeded];
+			[self presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"SettingsViewController"]
+			                   animated:YES
+			                 completion:nil];
+		} else if (velocity.x < 0) {
+			[self.settingsTouchRightConstraint uninstall];
+			[self.settingsTouch mas_makeConstraints: ^(MASConstraintMaker *make) {
+			    self.settingsTouchRightConstraint = make.right.equalTo(self.view.mas_left).offset(20);
+			}];
+			[self.settingsTouch layoutIfNeeded];
 
-            [self dismissViewControllerAnimated:YES
-                                     completion:nil];
-        }
-    }
+			[self dismissViewControllerAnimated:YES
+			                         completion:nil];
+		}
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -141,9 +140,6 @@
 
 	self.transformingObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"transforming" oldAndNewBlock: ^(id oldValue, id newValue) {
 	    EventTimerTransformingEnum transforming = [newValue integerValue];
-	    if (transforming != EventTimerNotTransforming)
-			[weakSelf animateEventTransforming:transforming];
-
 	    switch (transforming) {
 			case EventTimerNowDateTransformingStop:
 				[State instance].selectedEvent.stopDate = self.eventTimerControl.nowDate;
@@ -164,11 +160,9 @@
 		if ([[State instance].selectedEvent isActive]) {
 			[self.toggleStartStopButton setTitle:@"STOP"
 			                            forState:UIControlStateNormal];
-			[self animateStartEvent];
 		} else {
 			[self.toggleStartStopButton setTitle:@"START"
 			                            forState:UIControlStateNormal];
-			[self animateStopEvent];
 		}
 	} else {
 		[self reset];
@@ -225,7 +219,6 @@
 
 		[self.toggleStartStopButton setTitle:@"START"
 		                            forState:UIControlStateNormal];
-		[self animateStopEvent];
 	} else {
 		[self reset];
 
@@ -236,7 +229,6 @@
 
 		[self.toggleStartStopButton setTitle:@"STOP"
 		                            forState:UIControlStateNormal];
-		[self animateStartEvent];
 	}
 
 	[self.tag setTitle:[State instance].selectedEvent.inTag.name
@@ -251,27 +243,19 @@
 	                            forState:UIControlStateNormal];
 
 	self.eventStartTime.text    = @"--:--";
-	self.eventStartDay.text     = @"";
-	self.eventStartYear.text    = @"";
-	self.eventStartMonth.text   = @"";
+	self.eventStartDate.text     = @"";
 
 	self.eventTimeHours.text    = @"00";
 	self.eventTimeMinutes.text  = @"00";
 
 	self.eventStopTime.text     = @"--:--";
-	self.eventStopDay.text      = @"";
-	self.eventStopYear.text     = @"";
-	self.eventStopMonth.text    = @"";
+	self.eventStopDate.text      = @"";
 
-	self.eventStartDay.alpha    = 1;
-	self.eventStartMonth.alpha  = 1;
+	self.eventStartDate.alpha    = 1;
 	self.eventStartTime.alpha   = 1;
-	self.eventStartYear.alpha   = 1;
 
-	self.eventStopDay.alpha     = 1;
-	self.eventStopMonth.alpha   = 1;
+	self.eventStopDate.alpha     = 1;
 	self.eventStopTime.alpha    = 1;
-	self.eventStopYear.alpha    = 1;
 
 	self.eventTimeHours.alpha   = 1;
 	self.eventTimeMinutes.alpha = 1;
@@ -284,16 +268,13 @@
 		                                                    fromDate:date];
 
 		self.eventStartTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
-		self.eventStartDay.text   = [NSString stringWithFormat:@"%02d", components.day];
-		self.eventStartYear.text  = [NSString stringWithFormat:@"%04d", components.year];
-		self.eventStartMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
+		self.eventStartDate.text  = [NSString stringWithFormat:@"%02d%@", components.day, [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString]];
 	}
 }
 
 - (void)updateEventTimeFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate {
 	if (fromDate && toDate) {
 		static NSUInteger unitFlags  = NSHourCalendarUnit | NSMinuteCalendarUnit;
-
 		NSDateComponents *components = [[NSDate calendar] components:unitFlags
 		                                                    fromDate:fromDate
 		                                                      toDate:toDate options:0];
@@ -310,111 +291,8 @@
 		                                                    fromDate:date];
 
 		self.eventStopTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
-		self.eventStopDay.text   = [NSString stringWithFormat:@"%02d", components.day];
-		self.eventStopYear.text  = [NSString stringWithFormat:@"%04d", components.year];
-		self.eventStopMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
+		self.eventStopDate.text  = [NSString stringWithFormat:@"%02d%@", components.day, [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString]];
 	}
-}
-
-- (void)animateStartEvent {
-	[UIView animateWithDuration:0.3
-	                      delay:0.0
-	                    options:UIViewAnimationOptionCurveEaseIn
-	                 animations: ^{
-                         self.eventStartTime.alpha = 1;
-                         self.eventStartDay.alpha = 1;
-                         self.eventStartMonth.alpha = 1;
-                         self.eventStartYear.alpha = 1;
-
-                         self.eventStopTime.alpha = 0.2;
-                         self.eventStopDay.alpha = 0.2;
-                         self.eventStopMonth.alpha = 1;
-                         self.eventStopYear.alpha = 1;
-                     } completion:nil];
-}
-
-- (void)animateStopEvent {
-	[UIView animateWithDuration:0.3
-	                      delay:0.0
-	                    options:UIViewAnimationOptionCurveEaseIn
-	                 animations: ^{
-                         self.eventStartTime.alpha = 0.2;
-                         self.eventStartDay.alpha = 0.2;
-                         self.eventStartMonth.alpha = 1;
-                         self.eventStartYear.alpha = 1;
-
-                         self.eventStopTime.alpha = 1;
-                         self.eventStopDay.alpha = 1;
-                         self.eventStopMonth.alpha = 1;
-                         self.eventStopYear.alpha = 1;
-                     } completion:nil];
-}
-
-- (void)animateEventTransforming:(EventTimerTransformingEnum)transforming {
-	[UIView animateWithDuration:0.3
-	                      delay:0.0
-	                    options:UIViewAnimationOptionCurveEaseIn
-	                 animations: ^{
-                         CGFloat eventStartAlpha = 1, eventStopAlpha = 1, eventTimeAlpha = 1, eventStartMonthYearAlpha = 1, eventStopMonthYearAlpha = 1;
-                         switch (transforming) {
-                             case EventTimerStartDateTransformingStart:
-                                 eventStartAlpha = 1;
-                                 eventStartMonthYearAlpha = 1;
-
-                                 eventStopAlpha = 0.2f;
-                                 eventStopMonthYearAlpha = 0.2f;
-
-                                 eventTimeAlpha = 0.2f;
-                                 break;
-
-                             case EventTimerStartDateTransformingStop:
-                                 eventStartAlpha = [State instance].selectedEvent.isActive ? 1 : 0.2f;
-                                 eventStartMonthYearAlpha = 1;
-
-                                 eventStopAlpha = [State instance].selectedEvent.isActive ? 0.2f : 1;
-                                 eventStopMonthYearAlpha = 1;
-
-                                 eventTimeAlpha = 1;
-                                 break;
-
-                             case EventTimerNowDateTransformingStart:
-                                 eventStartAlpha = 0.2f;
-                                 eventStartMonthYearAlpha = 0.2f;
-
-                                 eventStopAlpha = 1;
-                                 eventStopMonthYearAlpha = 1;
-
-                                 eventTimeAlpha = 0.2f;
-
-                                 break;
-
-                             case EventTimerNowDateTransformingStop:
-                                 eventStartAlpha = [State instance].selectedEvent.isActive ? 1 : 0.2f;
-                                 eventStartMonthYearAlpha = 1;
-
-                                 eventStopAlpha = [State instance].selectedEvent.isActive ? 0.2f : 1;
-                                 eventStopMonthYearAlpha = 1;
-
-                                 eventTimeAlpha = 1;
-                                 break;
-
-                             default:
-                                 break;
-                         }
-
-                         self.eventStartDay.alpha = eventStartAlpha;
-                         self.eventStartMonth.alpha = eventStartMonthYearAlpha;
-                         self.eventStartTime.alpha = eventStartAlpha;
-                         self.eventStartYear.alpha = eventStartMonthYearAlpha;
-
-                         self.eventStopDay.alpha = eventStopAlpha;
-                         self.eventStopMonth.alpha = eventStopMonthYearAlpha;
-                         self.eventStopTime.alpha = eventStopAlpha;
-                         self.eventStopYear.alpha = eventStopMonthYearAlpha;
-
-                         self.eventTimeHours.alpha = eventTimeAlpha;
-                         self.eventTimeMinutes.alpha = eventTimeAlpha;
-                     } completion:nil];
 }
 
 @end

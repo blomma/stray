@@ -18,10 +18,11 @@
 @property (nonatomic) CAShapeLayer *startLayer;
 @property (nonatomic) CAShapeLayer *startPathLayer;
 
+@property (nonatomic) NoHitCAShapeLayer *nowTouchPathLayer;
 @property (nonatomic) CAShapeLayer *nowLayer;
 @property (nonatomic) CAShapeLayer *nowPathLayer;
 
-@property (nonatomic) NoHitCAShapeLayer *touchPathLayer;
+@property (nonatomic) NoHitCAShapeLayer *startTouchPathLayer;
 @property (nonatomic) NoHitCAShapeLayer *secondLayer;
 @property (nonatomic) NoHitCAShapeLayer *secondProgressTicksLayer;
 @property (nonatomic) Event *event;
@@ -142,20 +143,6 @@
 
 	CGFloat a = (CGFloat)(M_PI * 2 * (secondsIntoMinute / 60));
 
-//    // Calculate the angle in radians
-//    CGFloat cx = self.secondLayer.position.x;
-//    CGFloat cy = self.secondLayer.position.y;
-//
-//    CGFloat currentAngle  = (CGFloat)atan2(cy, cx);
-//    DLog(@"a %f", a);
-//    CGFloat da = [self deltaBetweenAngleA:currentAngle AngleB:a];
-//    DLog(@"deltaAngle %f", da);
-
-//    CATransform3D secondTransform = CATransform3DMakeTranslation(center.x, center.y, 1);
-//    secondTransform = CATransform3DRotate(secondTransform, a, 0, 0, 1);
-//    secondTransform = CATransform3DTranslate(secondTransform, -center.x, -center.y, 1);
-//	self.secondLayer.transform = secondTransform;
-
 	self.secondLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
 
 	// Update the tick marks for the seconds
@@ -194,20 +181,6 @@
 	// =====================
 	// = Ticks initializer =
 	// =====================
-//    UIBezierPath *smallTickPath = [UIBezierPath bezierPath];
-//	[smallTickPath moveToPoint:CGPointMake(0, 0)];   // Start at the top left
-//	[smallTickPath addLineToPoint:CGPointMake(5, 0)];  // Move to top right
-//	[smallTickPath addLineToPoint:CGPointMake(4, 11)]; // Move to bottom right
-//	[smallTickPath addLineToPoint:CGPointMake(1, 11)]; // Move to bottom left
-//    [smallTickPath closePath];
-//
-//    UIBezierPath *largeTickPath = [UIBezierPath bezierPath];
-//	[largeTickPath moveToPoint:CGPointMake(0, 0)];   // Start at the top left
-//	[largeTickPath addLineToPoint:CGPointMake(7, 0)];  // Move to top right
-//	[largeTickPath addLineToPoint:CGPointMake(6, 14)]; // Move to bottom right
-//	[largeTickPath addLineToPoint:CGPointMake(1, 14)]; // Move to bottom left
-//    [largeTickPath closePath];
-
 	UIBezierPath *largeTickPath = [UIBezierPath bezierPathWithRect:CGRectMake(0.0, 0.0, 5.0, 14)];
 	UIBezierPath *smallTickPath = [UIBezierPath bezierPathWithRect:CGRectMake(0.0, 0.0, 3.0, 11.0)];
 
@@ -246,33 +219,6 @@
 	}
 
 	// ==========================
-	// = Touch initializer =
-	// ==========================
-//
-//    CGRect frame = CGRectMake(0, 0, 60, 60);
-//    self.touchLayer.bounds = frame;
-//	self.touchLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-//	self.touchLayer.anchorPoint = CGPointMake(0.5, 2.5);
-//
-//    UIBezierPath *touchPath = [UIBezierPath bezierPathWithOvalInRect:frame];
-////    UIBezierPath *touchPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds))
-////                                                             radius:30
-////                                                         startAngle:RADIANS(0)
-////                                                           endAngle:RADIANS(360)
-////                                                          clockwise:NO];
-////    self.touchLayer.path = touchPath.CGPath;
-//
-//    // drawing
-//    self.touchLayer.transform = CATransform3DMakeScale(0, 0, 1);
-//	self.touchLayer.fillColor = [[UIColor clearColor] CGColor];
-//    self.touchLayer.strokeColor = [[UIColor colorWithRed:0.427 green:0.784 blue:0.992 alpha:1] CGColor];
-//    self.touchLayer.strokeEnd   = 1.0;
-//	self.touchLayer.lineWidth = 6.0;
-//    self.touchLayer.path = touchPath.CGPath;
-//
-//	[self.layer addSublayer:self.touchLayer];
-
-	// ==========================
 	// = Now initializer =
 	// ==========================
 	self.nowLayer = [CAShapeLayer layer];
@@ -286,7 +232,7 @@
 	[nowPath addLineToPoint:CGPointMake(10, 0)];  // Move to top left
 	[nowPath addLineToPoint:CGPointMake(20, 0)]; // Move to top right
 
-    self.nowPathLayer = [CAShapeLayer layer];
+	self.nowPathLayer = [CAShapeLayer layer];
 	if ([self.nowPathLayer respondsToSelector:@selector(setContentsScale:)])
 		[self.nowPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
 	self.nowPathLayer.frame = CGRectMake(0, 0, 30, 30);
@@ -296,13 +242,28 @@
 	self.nowPathLayer.lineWidth = 1.0;
 	self.nowPathLayer.path      = nowPath.CGPath;
 
+    // touch path
+	UIBezierPath *nowTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-15, -15, 60, 60)];
+
+	self.nowTouchPathLayer = [NoHitCAShapeLayer layer];
+	if ([self.nowTouchPathLayer respondsToSelector:@selector(setContentsScale:)])
+		[self.nowTouchPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
+	self.nowTouchPathLayer.frame = CGRectMake(0, 0, 30, 30);
+
+	self.nowTouchPathLayer.fillColor = [[UIColor clearColor] CGColor];
+	self.nowTouchPathLayer.strokeColor = [[UIColor colorWithRed:0.427 green:0.784 blue:0.992 alpha:0.5f] CGColor];
+	self.nowTouchPathLayer.strokeEnd   = 0.0;
+	self.nowTouchPathLayer.lineWidth = 6.0;
+	self.nowTouchPathLayer.path = nowTouchPath.CGPath;
+
 	// position
-	self.nowLayer.bounds      = CGRectMake(0.0, 0.0, 30, self.bounds.size.width / 2.0 - 40);
+	self.nowLayer.bounds      = CGRectMake(0.0, 0.0, 30, self.bounds.size.width / 2.0 - 10);
 	self.nowLayer.anchorPoint = CGPointMake(0.5, 1.0);
 	self.nowLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.nowLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
 
-    [self.nowLayer addSublayer:self.nowPathLayer];
+	[self.nowLayer addSublayer:self.nowPathLayer];
+	[self.nowLayer addSublayer:self.nowTouchPathLayer];
 	[self.layer addSublayer:self.nowLayer];
 
 	// =========================
@@ -319,7 +280,7 @@
 	[startPath addLineToPoint:CGPointMake(10, 0)];  // Move to top left
 	[startPath addLineToPoint:CGPointMake(20, 0)]; // Move to top right
 
-    self.startPathLayer = [CAShapeLayer layer];
+	self.startPathLayer = [CAShapeLayer layer];
 	if ([self.startPathLayer respondsToSelector:@selector(setContentsScale:)])
 		[self.startPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
 	self.startPathLayer.frame = CGRectMake(0, 0, 30, 30);
@@ -329,30 +290,28 @@
 	self.startPathLayer.lineWidth = 1.0;
 	self.startPathLayer.path      = startPath.CGPath;
 
+    // touch path
+	UIBezierPath *startTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-15, -15, 60, 60)];
 
-    UIBezierPath *touchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-15, -15, 60, 60)];
+	self.startTouchPathLayer = [NoHitCAShapeLayer layer];
+	if ([self.startTouchPathLayer respondsToSelector:@selector(setContentsScale:)])
+		[self.startTouchPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
+	self.startTouchPathLayer.frame = CGRectMake(0, 0, 30, 30);
 
-    self.touchPathLayer = [NoHitCAShapeLayer layer];
-	if ([self.touchPathLayer respondsToSelector:@selector(setContentsScale:)])
-		[self.touchPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
-	self.touchPathLayer.frame = CGRectMake(0, 0, 30, 30);
-
-    self.touchPathLayer.fillColor = [[UIColor clearColor] CGColor];
-    self.touchPathLayer.strokeColor = [[UIColor colorWithRed:0.941 green:0.686 blue:0.314 alpha:1] CGColor];
-    self.touchPathLayer.strokeEnd   = 0.0;
-    self.touchPathLayer.lineWidth = 6.0;
-    self.touchPathLayer.path = touchPath.CGPath;
-
-//    self.touchPathLayer.transform = CATransform3DMakeScale(0, 0, 1);
+	self.startTouchPathLayer.fillColor = [[UIColor clearColor] CGColor];
+	self.startTouchPathLayer.strokeColor = [[UIColor colorWithRed:0.941 green:0.686 blue:0.314 alpha:0.5f] CGColor];
+	self.startTouchPathLayer.strokeEnd   = 0.0;
+	self.startTouchPathLayer.lineWidth = 6.0;
+	self.startTouchPathLayer.path = startTouchPath.CGPath;
 
 	// position
-	self.startLayer.bounds      = CGRectMake(0.0, 0.0, 30, self.bounds.size.width / 2.0 - 30);
+	self.startLayer.bounds      = CGRectMake(0.0, 0.0, 30, self.bounds.size.width / 2.0 - 10);
 	self.startLayer.anchorPoint = CGPointMake(0.5, 1.0);
 	self.startLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.startLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
 
-    [self.startLayer addSublayer:self.startPathLayer];
-    [self.startLayer addSublayer:self.touchPathLayer];
+	[self.startLayer addSublayer:self.startPathLayer];
+	[self.startLayer addSublayer:self.startTouchPathLayer];
 	[self.layer addSublayer:self.startLayer];
 
 	// ==========================
@@ -370,7 +329,7 @@
 	// position
 	self.secondLayer.bounds      = CGRectMake(0.0, 0.0, 7.0, self.bounds.size.width / 2.0 - 62);
 	self.secondLayer.anchorPoint = CGPointMake(0.5, 1.0);
-    self.secondLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+	self.secondLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 
 	// drawing
 	self.secondLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
@@ -437,11 +396,13 @@
 		self.transforming = EventTimerStartDateTransformingStart;
 
 		[self.updateTimer invalidate];
+		self.startTouchPathLayer.strokeEnd   = 1;
 	} else if ([self.nowPathLayer.presentationLayer hitTest:[self.nowPathLayer convertPoint:point fromLayer:self.layer]] && ![self.event isActive]) {
 		self.deltaLayer = self.nowLayer;
 		self.deltaDate  = self.nowDate;
 
 		self.transforming = EventTimerNowDateTransformingStart;
+		self.nowTouchPathLayer.strokeEnd   = 1;
 	}
 
 	if (self.deltaLayer != nil) {
@@ -457,17 +418,6 @@
 		// Save them away for future iteration
 		self.deltaAngle     = a;
 		self.deltaTransform = self.deltaLayer.transform;
-
-        self.touchPathLayer.strokeEnd   = 1;
-//        self.touchPathLayer.transform = CATransform3DMakeScale(1, 1, 1);
-//        CABasicAnimation *theAnimation;
-//        theAnimation=[CABasicAnimation animationWithKeyPath:@"transform.scale"];
-//        theAnimation.duration=1.0;
-//        theAnimation.repeatCount=0;
-//        theAnimation.autoreverses=NO;
-//        theAnimation.fromValue=[NSNumber numberWithFloat:0.0];
-//        theAnimation.toValue=[NSNumber numberWithFloat:1.0];
-//        [self.touchPathLayer addAnimation:theAnimation forKey:@"animateScale"];
 	}
 
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
@@ -541,28 +491,26 @@
 
 - (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
 	if (self.deltaLayer != nil) {
-		// If we are tracking the start then
-		// we want to move the start to it's start position
 		if (self.deltaLayer == self.startLayer) {
 			[self drawStart];
 
 			self.transforming = EventTimerStartDateTransformingStop;
 
-			// Resume the passing of time
 			if (![self.updateTimer isValid] && [self.event isActive])
 				self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
 				                                                    target:self
 				                                                  selector:@selector(timerUpdate)
 				                                                  userInfo:nil
 				                                                   repeats:YES];
+            self.startTouchPathLayer.strokeEnd = 0;
 		} else if (self.deltaLayer == self.nowLayer) {
 			[self drawNow];
 
 			self.transforming = EventTimerNowDateTransformingStop;
+            self.nowTouchPathLayer.strokeEnd = 0;
 		}
 
 		self.deltaLayer = nil;
-        self.touchPathLayer.strokeEnd = 0;
 	}
 
 	self.transforming = EventTimerNotTransforming;

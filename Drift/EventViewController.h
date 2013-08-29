@@ -15,17 +15,13 @@
 @property (nonatomic, weak) IBOutlet UIButton *toggleStartStopButton;
 
 @property (nonatomic, weak) IBOutlet UILabel *eventStartTime;
-@property (nonatomic, weak) IBOutlet UILabel *eventStartDay;
-@property (nonatomic, weak) IBOutlet UILabel *eventStartMonth;
-@property (nonatomic, weak) IBOutlet UILabel *eventStartYear;
+@property (nonatomic, weak) IBOutlet UILabel *eventStartDate;
 
 @property (nonatomic, weak) IBOutlet UILabel *eventTimeHours;
 @property (nonatomic, weak) IBOutlet UILabel *eventTimeMinutes;
 
 @property (nonatomic, weak) IBOutlet UILabel *eventStopTime;
-@property (nonatomic, weak) IBOutlet UILabel *eventStopDay;
-@property (nonatomic, weak) IBOutlet UILabel *eventStopMonth;
-@property (nonatomic, weak) IBOutlet UILabel *eventStopYear;
+@property (nonatomic, weak) IBOutlet UILabel *eventStopDate;
 
 @property (nonatomic, weak) IBOutlet TagButton *tag;
 
