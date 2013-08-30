@@ -95,8 +95,103 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                         <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="99" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n39-IM-ZTu" userLabel="EventTimeHours">
+                                <rect key="frame" x="10" y="8" width="97" height="102"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="80"/>
+                                <color key="textColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="99" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P8f-E3-qf4" userLabel="EventTimeMinutes">
+                                <rect key="frame" x="107" y="57" width="38" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="31"/>
+                                <color key="textColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vPz-UB-oGt" userLabel="timeContainer">
+                                <rect key="frame" x="0.0" y="100" width="320" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="20:13" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="E3V-qB-jgM" userLabel="EventStartTime">
+                                        <rect key="frame" x="88" y="3" width="44" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="20"/>
+                                        <color key="textColor" red="0.50980392159999999" green="0.50980392159999999" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="18" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xRk-W2-bMK" userLabel="EventStartDate">
+                                        <rect key="frame" x="135" y="3" width="20" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="20"/>
+                                        <color key="textColor" red="0.94117647059999998" green="0.68627450980000004" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="20:13" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8Ic-Ed-DlP" userLabel="EventStopTime">
+                                        <rect key="frame" x="166" y="3" width="44" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="20"/>
+                                        <color key="textColor" red="0.50980392159999999" green="0.50980392159999999" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="18" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="umb-06-ZUE" userLabel="EventStopDate">
+                                        <rect key="frame" x="213" y="3" width="20" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="20"/>
+                                        <color key="textColor" red="0.42745098040000001" green="0.7843137255" blue="0.99215686270000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2dB-Ed-JLP" userLabel="Separator">
+                                        <rect key="frame" x="160" y="5" width="1" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.642282197" green="0.642282197" blue="0.642282197" alpha="0.33000000000000002" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="1" id="bHb-02-ibY"/>
+                                            <constraint firstAttribute="height" constant="20" id="hEj-oh-KuU"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.97647058823529409" green="0.96862745098039216" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerY" secondItem="xRk-W2-bMK" secondAttribute="centerY" id="3KS-rf-CXr"/>
+                                    <constraint firstItem="umb-06-ZUE" firstAttribute="baseline" secondItem="xRk-W2-bMK" secondAttribute="baseline" id="BXI-eP-npv"/>
+                                    <constraint firstItem="umb-06-ZUE" firstAttribute="baseline" secondItem="E3V-qB-jgM" secondAttribute="baseline" id="DC7-TX-z2a"/>
+                                    <constraint firstItem="umb-06-ZUE" firstAttribute="leading" secondItem="8Ic-Ed-DlP" secondAttribute="trailing" constant="3" id="Jl4-h7-PWt"/>
+                                    <constraint firstAttribute="height" constant="30" id="Lj6-Ro-2Vx"/>
+                                    <constraint firstItem="xRk-W2-bMK" firstAttribute="leading" secondItem="E3V-qB-jgM" secondAttribute="trailing" constant="3" id="Ts5-qy-QBo"/>
+                                    <constraint firstItem="2dB-Ed-JLP" firstAttribute="leading" secondItem="xRk-W2-bMK" secondAttribute="trailing" constant="5" id="X0I-oB-2EC"/>
+                                    <constraint firstAttribute="centerX" secondItem="2dB-Ed-JLP" secondAttribute="centerX" id="Xj9-ub-6S4"/>
+                                    <constraint firstAttribute="centerY" secondItem="E3V-qB-jgM" secondAttribute="centerY" id="ehh-GF-Njx"/>
+                                    <constraint firstAttribute="centerY" secondItem="8Ic-Ed-DlP" secondAttribute="centerY" id="oYE-cR-LZq"/>
+                                    <constraint firstAttribute="centerY" secondItem="2dB-Ed-JLP" secondAttribute="centerY" id="vyH-Gz-BoR"/>
+                                    <constraint firstItem="umb-06-ZUE" firstAttribute="baseline" secondItem="8Ic-Ed-DlP" secondAttribute="baseline" id="xKw-fi-0Ax"/>
+                                    <constraint firstAttribute="centerY" secondItem="umb-06-ZUE" secondAttribute="centerY" id="y5a-Da-8RI"/>
+                                    <constraint firstItem="8Ic-Ed-DlP" firstAttribute="leading" secondItem="2dB-Ed-JLP" secondAttribute="trailing" constant="5" id="zlR-GV-ALf"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rr2-a2-RVX" userLabel="tagContainer">
+                                <rect key="frame" x="0.0" y="130" width="320" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gZy-kP-gXw" userLabel="Tag" customClass="TagButton">
+                                        <rect key="frame" x="145" y="-4" width="30" height="28"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
+                                        <state key="normal" title="Tag"/>
+                                        <connections>
+                                            <action selector="showTags:" destination="pW2-Iw-5Bg" eventType="touchUpInside" id="CYF-mC-mcF"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.97647058819999999" green="0.96862745100000003" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="AXj-YY-pQx"/>
+                                    <constraint firstAttribute="centerY" secondItem="gZy-kP-gXw" secondAttribute="centerY" id="J4M-4w-3jv"/>
+                                    <constraint firstAttribute="centerX" secondItem="gZy-kP-gXw" secondAttribute="centerX" id="fh1-yo-0Xv"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IgW-Dr-4Bj" userLabel="EventTimerControl" customClass="EventTimerControl">
-                                <rect key="frame" x="0.0" y="124" width="320" height="320"/>
+                                <rect key="frame" x="0.0" y="140" width="320" height="320"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dP9-OE-O85" userLabel="Start/Stop">
@@ -122,102 +217,28 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="320" id="CYJ-Ay-mP5"/>
-                                </constraints>
-                            </view>
-                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="99" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n39-IM-ZTu" userLabel="EventTimeHours">
-                                <rect key="frame" x="10" y="20" width="97" height="96"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="80"/>
-                                <color key="textColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="99" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P8f-E3-qf4" userLabel="EventTimeMinutes">
-                                <rect key="frame" x="107" y="63" width="38" height="40"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="31"/>
-                                <color key="textColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="18" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xRk-W2-bMK" userLabel="EventStartDate">
-                                <rect key="frame" x="129" y="106" width="20" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="20"/>
-                                <color key="textColor" red="0.94117647059999998" green="0.68627450980000004" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="20:13" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="E3V-qB-jgM" userLabel="EventStartTime">
-                                <rect key="frame" x="80" y="106" width="44" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="20"/>
-                                <color key="textColor" red="0.50980392159999999" green="0.50980392159999999" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="18" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="umb-06-ZUE" userLabel="EventStopDate">
-                                <rect key="frame" x="219" y="106" width="20" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="20"/>
-                                <color key="textColor" red="0.42745098040000001" green="0.7843137255" blue="0.99215686270000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="20:13" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8Ic-Ed-DlP" userLabel="EventStopTime">
-                                <rect key="frame" x="170" y="106" width="44" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="20"/>
-                                <color key="textColor" red="0.50980392159999999" green="0.50980392159999999" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </label>
-                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gZy-kP-gXw" userLabel="Tag" customClass="TagButton">
-                                <rect key="frame" x="266" y="65" width="34" height="41"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="24"/>
-                                <state key="normal" title="Tag">
-                                    <color key="titleColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="showTags:" destination="pW2-Iw-5Bg" eventType="touchUpInside" id="CYF-mC-mcF"/>
-                                </connections>
-                            </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2dB-Ed-JLP" userLabel="Separator">
-                                <rect key="frame" x="159" y="108" width="1" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.642282197" green="0.642282197" blue="0.642282197" alpha="0.33000000000000002" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="1" id="bHb-02-ibY"/>
-                                    <constraint firstAttribute="height" constant="20" id="hEj-oh-KuU"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="n39-IM-ZTu" firstAttribute="top" secondItem="8Qo-UI-s2h" secondAttribute="top" constant="20" symbolic="YES" id="0cv-XQ-hiF"/>
-                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="XjY-SS-Mwv" secondAttribute="bottom" constant="104" id="2hD-R2-kzi"/>
-                            <constraint firstItem="E3V-qB-jgM" firstAttribute="baseline" secondItem="xRk-W2-bMK" secondAttribute="baseline" id="2lt-2z-Erf"/>
-                            <constraint firstItem="8Ic-Ed-DlP" firstAttribute="leading" secondItem="2dB-Ed-JLP" secondAttribute="trailing" constant="10" id="5dC-hr-GtG"/>
-                            <constraint firstItem="2dB-Ed-JLP" firstAttribute="leading" secondItem="xRk-W2-bMK" secondAttribute="trailing" constant="10" id="6F4-ia-L6C"/>
-                            <constraint firstItem="umb-06-ZUE" firstAttribute="leading" secondItem="8Ic-Ed-DlP" secondAttribute="trailing" constant="5" id="7m9-my-e81"/>
-                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="n39-IM-ZTu" secondAttribute="bottom" constant="8" symbolic="YES" id="8V5-Ub-A0z"/>
-                            <constraint firstItem="xRk-W2-bMK" firstAttribute="baseline" secondItem="8Ic-Ed-DlP" secondAttribute="baseline" id="ABo-rd-ks0"/>
+                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="XjY-SS-Mwv" secondAttribute="bottom" constant="120" id="2hD-R2-kzi"/>
+                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="n39-IM-ZTu" secondAttribute="bottom" constant="30" id="8V5-Ub-A0z"/>
+                            <constraint firstItem="vPz-UB-oGt" firstAttribute="leading" secondItem="8Qo-UI-s2h" secondAttribute="leading" id="AB4-MH-6sJ"/>
+                            <constraint firstItem="Rr2-a2-RVX" firstAttribute="top" secondItem="vPz-UB-oGt" secondAttribute="bottom" id="B7T-KO-WaO"/>
                             <constraint firstItem="P8f-E3-qf4" firstAttribute="leading" secondItem="n39-IM-ZTu" secondAttribute="trailing" id="BUb-qP-AIV"/>
                             <constraint firstItem="IgW-Dr-4Bj" firstAttribute="leading" secondItem="8Qo-UI-s2h" secondAttribute="leading" id="BqT-Qc-z5g"/>
+                            <constraint firstItem="vPz-UB-oGt" firstAttribute="top" secondItem="XjY-SS-Mwv" secondAttribute="bottom" constant="80" id="QDO-hw-k65"/>
                             <constraint firstItem="mf5-bN-aSE" firstAttribute="top" relation="lessThanOrEqual" secondItem="IgW-Dr-4Bj" secondAttribute="bottom" constant="124" id="R9e-Zx-faJ"/>
-                            <constraint firstItem="umb-06-ZUE" firstAttribute="baseline" secondItem="8Ic-Ed-DlP" secondAttribute="baseline" id="UNG-5T-ZGo"/>
+                            <constraint firstItem="Rr2-a2-RVX" firstAttribute="leading" secondItem="8Qo-UI-s2h" secondAttribute="leading" id="RQr-E3-31i"/>
                             <constraint firstItem="n39-IM-ZTu" firstAttribute="leading" secondItem="8Qo-UI-s2h" secondAttribute="leading" constant="10" id="WUs-N8-1O4"/>
                             <constraint firstItem="P8f-E3-qf4" firstAttribute="baseline" secondItem="n39-IM-ZTu" secondAttribute="baseline" id="YFg-Kk-Ptq"/>
-                            <constraint firstItem="gZy-kP-gXw" firstAttribute="baseline" secondItem="P8f-E3-qf4" secondAttribute="baseline" id="bLI-HL-aV0"/>
                             <constraint firstAttribute="trailing" secondItem="IgW-Dr-4Bj" secondAttribute="trailing" id="dBD-Sm-iKt"/>
-                            <constraint firstAttribute="trailing" secondItem="gZy-kP-gXw" secondAttribute="trailing" constant="20" symbolic="YES" id="f2k-Og-qLU"/>
-                            <constraint firstItem="E3V-qB-jgM" firstAttribute="top" secondItem="n39-IM-ZTu" secondAttribute="bottom" constant="-10" id="py1-1l-gFB"/>
-                            <constraint firstItem="xRk-W2-bMK" firstAttribute="leading" secondItem="E3V-qB-jgM" secondAttribute="trailing" constant="5" id="uGC-dn-LF1"/>
-                            <constraint firstItem="2dB-Ed-JLP" firstAttribute="top" secondItem="8Qo-UI-s2h" secondAttribute="top" constant="108" id="y7k-XA-QnJ"/>
-                            <constraint firstAttribute="centerX" secondItem="2dB-Ed-JLP" secondAttribute="centerX" id="zTV-lt-E6a"/>
+                            <constraint firstAttribute="trailing" secondItem="vPz-UB-oGt" secondAttribute="trailing" id="dXE-MF-xhP"/>
+                            <constraint firstAttribute="trailing" secondItem="Rr2-a2-RVX" secondAttribute="trailing" id="pCd-V3-kCO"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
@@ -230,6 +251,8 @@
                         <outlet property="eventTimeMinutes" destination="P8f-E3-qf4" id="yse-mx-A6s"/>
                         <outlet property="eventTimerControl" destination="IgW-Dr-4Bj" id="Zds-ja-YxN"/>
                         <outlet property="tag" destination="gZy-kP-gXw" id="lcQ-12-LHh"/>
+                        <outlet property="tagContainer" destination="Rr2-a2-RVX" id="c5o-w3-ETa"/>
+                        <outlet property="timeContainer" destination="vPz-UB-oGt" id="go4-zP-oQb"/>
                         <outlet property="toggleStartStopButton" destination="dP9-OE-O85" id="ZPS-ao-uD9"/>
                         <segue destination="rGB-yR-mDw" kind="modal" identifier="segueToTagsFromEvent" id="9uM-fu-hMr"/>
                     </connections>

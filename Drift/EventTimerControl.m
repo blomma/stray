@@ -243,7 +243,7 @@
 	self.nowPathLayer.path      = nowPath.CGPath;
 
     // touch path
-	UIBezierPath *nowTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-15, -15, 60, 60)];
+	UIBezierPath *nowTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-45, -45, 120, 120)];
 
 	self.nowTouchPathLayer = [NoHitCAShapeLayer layer];
 	if ([self.nowTouchPathLayer respondsToSelector:@selector(setContentsScale:)])
@@ -291,7 +291,7 @@
 	self.startPathLayer.path      = startPath.CGPath;
 
     // touch path
-	UIBezierPath *startTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-15, -15, 60, 60)];
+	UIBezierPath *startTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-45, -45, 120, 120)];
 
 	self.startTouchPathLayer = [NoHitCAShapeLayer layer];
 	if ([self.startTouchPathLayer respondsToSelector:@selector(setContentsScale:)])
