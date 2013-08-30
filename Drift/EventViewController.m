@@ -233,6 +233,35 @@
 
 	[self.tag setTitle:[State instance].selectedEvent.inTag.name
 	          forState:UIControlStateNormal];
+
+    CGRect pathFrame = CGRectMake(-CGRectGetMidY(self.toggleStartStopButton.bounds), -CGRectGetMidY(self.toggleStartStopButton.bounds), self.toggleStartStopButton.bounds.size.height, self.toggleStartStopButton.bounds.size.height);
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:pathFrame cornerRadius:pathFrame.size.height/2];
+
+    CGPoint shapePosition = [self.view convertPoint:self.toggleStartStopButton.center fromView:self.eventTimerControl];
+
+    CAShapeLayer *circleShape = [CAShapeLayer layer];
+    circleShape.path = path.CGPath;
+    circleShape.position = shapePosition;
+    circleShape.fillColor = [UIColor clearColor].CGColor;
+    circleShape.opacity = 0;
+    circleShape.strokeColor = self.toggleStartStopButton.titleLabel.textColor.CGColor;
+    circleShape.lineWidth = 2;
+
+    [self.view.layer addSublayer:circleShape];
+
+    CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+    scaleAnimation.fromValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
+    scaleAnimation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(3, 3, 1)];
+
+    CABasicAnimation *alphaAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+    alphaAnimation.fromValue = @1;
+    alphaAnimation.toValue = @0;
+
+    CAAnimationGroup *animation = [CAAnimationGroup animation];
+    animation.animations = @[scaleAnimation, alphaAnimation];
+    animation.duration = 0.5f;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+    [circleShape addAnimation:animation forKey:nil];
 }
 
 #pragma mark -
