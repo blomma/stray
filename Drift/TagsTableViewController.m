@@ -95,12 +95,6 @@
 			NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 			exit(-1);
 		}
-        //
-        //        _fetchedResultsController = [Tag MR_fetchAllSortedBy:@"sortIndex"
-        //                                                   ascending:YES
-        //                                               withPredicate:nil
-        //                                                     groupBy:nil
-        //                                                    delegate:self];
 	}
 
 	return _fetchedResultsController;
@@ -114,7 +108,7 @@
 		NSIndexPath *indexPath = [self.fetchedResultsController indexPathForObject:self.tagInEditState];
 
 		[self gestureRecognizer:self.tableViewRecognizer
-		     cancelEditingState:TransformableTableViewCellEditingStateRight
+		     cancelEditingState:Right
 		      forRowAtIndexPath:indexPath];
 	}
 }
@@ -229,10 +223,10 @@
 	return YES;
 }
 
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didEnterEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didEnterEditingState:(TransformableTableViewCellEditingDirection)state forRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSIndexPath *editStateIndexPath = [self.fetchedResultsController indexPathForObject:self.tagInEditState];
 
-	if (state == TransformableTableViewCellEditingStateLeft && ![editStateIndexPath isEqual:indexPath])
+	if (state == Left && ![editStateIndexPath isEqual:indexPath])
 		return;
 
 	TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
@@ -243,9 +237,9 @@
 		[self gestureRecognizer:gestureRecognizer cancelEditingState:state forRowAtIndexPath:editStateIndexPath];
 }
 
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didChangeEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didChangeEditingState:(TransformableTableViewCellEditingDirection)state forRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSIndexPath *editStateIndexPath = [self.fetchedResultsController indexPathForObject:self.tagInEditState];
-	if (state == TransformableTableViewCellEditingStateLeft && ![editStateIndexPath isEqual:indexPath])
+	if (state == Left && ![editStateIndexPath isEqual:indexPath])
 		return;
 
 	TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
@@ -258,14 +252,14 @@
 	cell.frontView.layer.position = point;
 }
 
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer commitEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer commitEditingState:(TransformableTableViewCellEditingDirection)state forRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSIndexPath *editStateIndexPath = [self.fetchedResultsController indexPathForObject:self.tagInEditState];
-	if (state == TransformableTableViewCellEditingStateLeft && ![editStateIndexPath isEqual:indexPath])
+	if (state == Left && ![editStateIndexPath isEqual:indexPath])
 		return;
 
 	TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
-	if (state == TransformableTableViewCellEditingStateRight && !self.tagInEditState) {
+	if (state == Right && !self.tagInEditState) {
 		CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + self.editingStateRightOffset, cell.frontView.layer.position.y);
 
         [self animateBounceOnView:cell.frontView toCenter:toValue];
@@ -283,7 +277,7 @@
 	}
 }
 
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingDirection)state forRowAtIndexPath:(NSIndexPath *)indexPath {
 	TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 	[cell.tagNameTextField resignFirstResponder];
 

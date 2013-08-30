@@ -28,7 +28,7 @@ static CGFloat kAddingAnimationDuration       = 0.25;
 
 // Editing
 @property (nonatomic) UIPanGestureRecognizer *panRecognizer;
-@property (nonatomic) TransformableTableViewCellEditingState editingCellState;
+@property (nonatomic) TransformableTableViewCellEditingDirection editingCellState;
 
 // Moving
 @property (nonatomic) UILongPressGestureRecognizer *longPressRecognizer;
@@ -57,7 +57,6 @@ static NSInteger kCellSnapShotTag = 100000;
 		newOffset = currentOffset;
 	} else if (newOffset.y > self.tableView.contentSize.height - self.tableView.frame.size.height) {
 		newOffset.y = self.tableView.contentSize.height - self.tableView.frame.size.height;
-	} else {
 	}
 
 	if (fabs(currentOffset.y) != fabs(newOffset.y)) {
@@ -78,12 +77,11 @@ static NSInteger kCellSnapShotTag = 100000;
 		NSIndexPath *indexPath = self.transformIndexPath;
 		if (!indexPath) {
 			CGPoint location = [recognizer locationOfTouch:0 inView:self.tableView];
-
 			indexPath               = [self.tableView indexPathForRowAtPoint:location];
 			self.transformIndexPath = indexPath;
 		}
 
-		self.editingCellState = translation.x >= 0 ? TransformableTableViewCellEditingStateRight : TransformableTableViewCellEditingStateLeft;
+		self.editingCellState = translation.x >= 0 ? Right : Left;
 		self.state            = TableViewGestureRecognizerStatePanning;
 
 		if ([self.delegate respondsToSelector:@selector(gestureRecognizer:didEnterEditingState:forRowAtIndexPath:)])
@@ -93,7 +91,7 @@ static NSInteger kCellSnapShotTag = 100000;
 		CGPoint translation    = [recognizer translationInView:self.tableView];
 		self.translationInTableView = translation;
 
-		self.editingCellState = translation.x > 0 ? TransformableTableViewCellEditingStateRight : TransformableTableViewCellEditingStateLeft;
+		self.editingCellState = translation.x > 0 ? Right : Left;
 
 		if ([self.delegate respondsToSelector:@selector(gestureRecognizer:didChangeEditingState:forRowAtIndexPath:)])
 			[self.delegate gestureRecognizer:self didChangeEditingState:self.editingCellState forRowAtIndexPath:indexPath];
@@ -116,7 +114,7 @@ static NSInteger kCellSnapShotTag = 100000;
 				[self.delegate gestureRecognizer:self cancelEditingState:self.editingCellState forRowAtIndexPath:indexPath];
 		}
 
-		self.editingCellState = TransformableTableViewCellEditingStateNone;
+		self.editingCellState = None;
 		self.state            = TableViewGestureRecognizerStateNone;
 	}
 }

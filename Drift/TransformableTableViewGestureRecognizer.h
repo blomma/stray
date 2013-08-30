@@ -6,10 +6,10 @@
 //  Copyright 2013 Artsoftheinsane. All rights reserved.
 // 
 
-typedef NS_ENUM (uint16_t, TransformableTableViewCellEditingState) {
-	TransformableTableViewCellEditingStateNone,
-	TransformableTableViewCellEditingStateLeft,
-	TransformableTableViewCellEditingStateRight
+typedef NS_ENUM (uint16_t, TransformableTableViewCellEditingDirection) {
+	None,
+	Left,
+	Right
 };
 
 @protocol TransformableTableViewGestureEditingRowDelegate;
@@ -29,10 +29,10 @@ typedef NS_ENUM (uint16_t, TransformableTableViewCellEditingState) {
 @protocol TransformableTableViewGestureEditingRowDelegate <NSObject>
 
 - (BOOL)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer canEditRowAtIndexPath:(NSIndexPath *)indexPath;
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didEnterEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath;
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didChangeEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath;
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer commitEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath;
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didEnterEditingState:(TransformableTableViewCellEditingDirection)state forRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didChangeEditingState:(TransformableTableViewCellEditingDirection)state forRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer commitEditingState:(TransformableTableViewCellEditingDirection)state forRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingDirection)state forRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @optional
 

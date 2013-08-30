@@ -194,8 +194,8 @@
 	return YES;
 }
 
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didEnterEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (state == TransformableTableViewCellEditingStateLeft)
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didEnterEditingState:(TransformableTableViewCellEditingDirection)state forRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (state == Left)
 		return;
 
 	EventCell *cell = (EventCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
@@ -204,8 +204,8 @@
 	cell.willDelete.hidden = YES;
 }
 
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didChangeEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (state == TransformableTableViewCellEditingStateLeft)
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer didChangeEditingState:(TransformableTableViewCellEditingDirection)state forRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (state == Left)
 		return;
 
 	EventCell *cell = (EventCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
@@ -226,8 +226,8 @@
 	}
 }
 
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer commitEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (state == TransformableTableViewCellEditingStateLeft)
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer commitEditingState:(TransformableTableViewCellEditingDirection)state forRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (state == Left)
 		return;
 
 	Event *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
@@ -239,7 +239,7 @@
 	[event delete];
 }
 
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingDirection)state forRowAtIndexPath:(NSIndexPath *)indexPath {
 	EventCell *cell = (EventCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 	CGPoint toValue                             = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), cell.frontView.layer.position.y);
 
