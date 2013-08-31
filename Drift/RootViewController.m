@@ -37,6 +37,14 @@
 	[super didReceiveMemoryWarning];
 }
 
+- (NSUInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown;
+}
+
+- (BOOL)shouldAutorotate {
+    return YES;
+}
+
 #pragma mark -
 #pragma mark UIPageViewControllerDataSource
 
