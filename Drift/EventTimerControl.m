@@ -228,14 +228,14 @@
 	// We make the bounds larger for the hit test, otherwise the target is
 	// to damn small for human hands, martians not included
 	UIBezierPath *nowPath = [UIBezierPath bezierPath];
-	[nowPath moveToPoint:CGPointMake(15, 17)];   // Start at the bottom
-	[nowPath addLineToPoint:CGPointMake(10, 0)];  // Move to top left
-	[nowPath addLineToPoint:CGPointMake(20, 0)]; // Move to top right
+	[nowPath moveToPoint:CGPointMake(25, 17)];   // Start at the bottom
+	[nowPath addLineToPoint:CGPointMake(20, 0)];  // Move to top left
+	[nowPath addLineToPoint:CGPointMake(30, 0)]; // Move to top right
 
 	self.nowPathLayer = [CAShapeLayer layer];
 	if ([self.nowPathLayer respondsToSelector:@selector(setContentsScale:)])
 		[self.nowPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
-	self.nowPathLayer.frame = CGRectMake(0, 0, 30, 30);
+	self.nowPathLayer.frame = CGRectMake(0, 0, 50, 50);
 
 	// drawing
 	self.nowPathLayer.fillColor = [[UIColor colorWithRed:0.427 green:0.784 blue:0.992 alpha:1] CGColor];
@@ -243,12 +243,12 @@
 	self.nowPathLayer.path      = nowPath.CGPath;
 
     // touch path
-	UIBezierPath *nowTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-45, -45, 120, 120)];
+	UIBezierPath *nowTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-50, -50, 150, 150)];
 
 	self.nowTouchPathLayer = [NoHitCAShapeLayer layer];
 	if ([self.nowTouchPathLayer respondsToSelector:@selector(setContentsScale:)])
 		[self.nowTouchPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
-	self.nowTouchPathLayer.frame = CGRectMake(0, 0, 30, 30);
+	self.nowTouchPathLayer.frame = CGRectMake(0, 0, 50, 50);
 
 	self.nowTouchPathLayer.fillColor = [[UIColor clearColor] CGColor];
 	self.nowTouchPathLayer.strokeColor = [[UIColor colorWithRed:0.427 green:0.784 blue:0.992 alpha:0.5f] CGColor];
@@ -257,7 +257,7 @@
 	self.nowTouchPathLayer.path = nowTouchPath.CGPath;
 
 	// position
-	self.nowLayer.bounds      = CGRectMake(0.0, 0.0, 30, self.bounds.size.width / 2.0 - 10);
+	self.nowLayer.bounds      = CGRectMake(0.0, 0.0, 50, self.bounds.size.width / 2.0 - 10);
 	self.nowLayer.anchorPoint = CGPointMake(0.5, 1.0);
 	self.nowLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.nowLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
@@ -276,14 +276,14 @@
 	// We make the bounds larger for the hit test, otherwise the target is
 	// to damn small for human hands, martians not included
 	UIBezierPath *startPath = [UIBezierPath bezierPath];
-	[startPath moveToPoint:CGPointMake(15, 17)];   // Start at the bottom
-	[startPath addLineToPoint:CGPointMake(10, 0)];  // Move to top left
-	[startPath addLineToPoint:CGPointMake(20, 0)]; // Move to top right
+	[startPath moveToPoint:CGPointMake(25, 17)];   // Start at the bottom
+	[startPath addLineToPoint:CGPointMake(20, 0)];  // Move to top left
+	[startPath addLineToPoint:CGPointMake(30, 0)]; // Move to top right
 
 	self.startPathLayer = [CAShapeLayer layer];
 	if ([self.startPathLayer respondsToSelector:@selector(setContentsScale:)])
 		[self.startPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
-	self.startPathLayer.frame = CGRectMake(0, 0, 30, 30);
+	self.startPathLayer.frame = CGRectMake(0, 0, 50, 50);
 
 	// drawing
 	self.startPathLayer.fillColor = [[UIColor colorWithRed:0.941 green:0.686 blue:0.314 alpha:1] CGColor];
@@ -291,12 +291,12 @@
 	self.startPathLayer.path      = startPath.CGPath;
 
     // touch path
-	UIBezierPath *startTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-45, -45, 120, 120)];
+	UIBezierPath *startTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-50, -50, 150, 150)];
 
 	self.startTouchPathLayer = [NoHitCAShapeLayer layer];
 	if ([self.startTouchPathLayer respondsToSelector:@selector(setContentsScale:)])
 		[self.startTouchPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
-	self.startTouchPathLayer.frame = CGRectMake(0, 0, 30, 30);
+	self.startTouchPathLayer.frame = CGRectMake(0, 0, 50, 50);
 
 	self.startTouchPathLayer.fillColor = [[UIColor clearColor] CGColor];
 	self.startTouchPathLayer.strokeColor = [[UIColor colorWithRed:0.941 green:0.686 blue:0.314 alpha:0.5f] CGColor];
@@ -305,7 +305,7 @@
 	self.startTouchPathLayer.path = startTouchPath.CGPath;
 
 	// position
-	self.startLayer.bounds      = CGRectMake(0.0, 0.0, 30, self.bounds.size.width / 2.0 - 10);
+	self.startLayer.bounds      = CGRectMake(0.0, 0.0, 50, self.bounds.size.width / 2.0 - 10);
 	self.startLayer.anchorPoint = CGPointMake(0.5, 1.0);
 	self.startLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 	self.startLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
