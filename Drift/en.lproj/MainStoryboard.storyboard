@@ -170,11 +170,11 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rr2-a2-RVX" userLabel="tagContainer">
-                                <rect key="frame" x="0.0" y="130" width="320" height="20"/>
+                                <rect key="frame" x="0.0" y="130" width="320" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gZy-kP-gXw" userLabel="Tag" customClass="TagButton">
-                                        <rect key="frame" x="145" y="-4" width="30" height="28"/>
+                                        <rect key="frame" x="145" y="-2" width="30" height="28"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
                                         <state key="normal" title="Tag">
@@ -187,13 +187,13 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.97647058819999999" green="0.96862745100000003" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="AXj-YY-pQx"/>
+                                    <constraint firstAttribute="height" constant="25" id="AXj-YY-pQx"/>
                                     <constraint firstAttribute="centerY" secondItem="gZy-kP-gXw" secondAttribute="centerY" id="J4M-4w-3jv"/>
                                     <constraint firstAttribute="centerX" secondItem="gZy-kP-gXw" secondAttribute="centerX" id="fh1-yo-0Xv"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IgW-Dr-4Bj" userLabel="EventTimerControl" customClass="EventTimerControl">
-                                <rect key="frame" x="0.0" y="150" width="320" height="310"/>
+                                <rect key="frame" x="0.0" y="155" width="320" height="310"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dP9-OE-O85" userLabel="Start/Stop">
@@ -229,8 +229,8 @@
                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="XjY-SS-Mwv" secondAttribute="bottom" constant="130" id="2hD-R2-kzi"/>
-                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="n39-IM-ZTu" secondAttribute="bottom" constant="40" id="8V5-Ub-A0z"/>
+                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="XjY-SS-Mwv" secondAttribute="bottom" constant="135" id="2hD-R2-kzi"/>
+                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="n39-IM-ZTu" secondAttribute="bottom" constant="45" id="8V5-Ub-A0z"/>
                             <constraint firstItem="vPz-UB-oGt" firstAttribute="leading" secondItem="8Qo-UI-s2h" secondAttribute="leading" id="AB4-MH-6sJ"/>
                             <constraint firstItem="Rr2-a2-RVX" firstAttribute="top" secondItem="vPz-UB-oGt" secondAttribute="bottom" id="B7T-KO-WaO"/>
                             <constraint firstItem="P8f-E3-qf4" firstAttribute="leading" secondItem="n39-IM-ZTu" secondAttribute="trailing" id="BUb-qP-AIV"/>
