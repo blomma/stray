@@ -65,7 +65,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.97647058819999999" green="0.96862745100000003" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
@@ -173,11 +173,13 @@
                                 <rect key="frame" x="0.0" y="130" width="320" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gZy-kP-gXw" userLabel="Tag" customClass="TagButton">
+                                    <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gZy-kP-gXw" userLabel="Tag" customClass="TagButton">
                                         <rect key="frame" x="145" y="-4" width="30" height="28"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
-                                        <state key="normal" title="Tag"/>
+                                        <state key="normal" title="Tag">
+                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
                                         <connections>
                                             <action selector="showTags:" destination="pW2-Iw-5Bg" eventType="touchUpInside" id="CYF-mC-mcF"/>
                                         </connections>
@@ -191,11 +193,11 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IgW-Dr-4Bj" userLabel="EventTimerControl" customClass="EventTimerControl">
-                                <rect key="frame" x="0.0" y="140" width="320" height="320"/>
+                                <rect key="frame" x="0.0" y="150" width="320" height="310"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dP9-OE-O85" userLabel="Start/Stop">
-                                        <rect key="frame" x="103" y="127" width="114" height="66"/>
+                                    <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dP9-OE-O85" userLabel="Start/Stop">
+                                        <rect key="frame" x="103" y="122" width="114" height="66"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="45"/>
@@ -218,15 +220,17 @@
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="320" id="CYJ-Ay-mP5"/>
+                                    <constraint firstAttribute="height" constant="310" id="CYJ-Ay-mP5"/>
+                                    <constraint firstAttribute="centerX" secondItem="dP9-OE-O85" secondAttribute="centerX" id="cxc-uy-TZ3"/>
+                                    <constraint firstAttribute="centerY" secondItem="dP9-OE-O85" secondAttribute="centerY" id="eSs-ya-9Yg"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="XjY-SS-Mwv" secondAttribute="bottom" constant="120" id="2hD-R2-kzi"/>
-                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="n39-IM-ZTu" secondAttribute="bottom" constant="30" id="8V5-Ub-A0z"/>
+                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="XjY-SS-Mwv" secondAttribute="bottom" constant="130" id="2hD-R2-kzi"/>
+                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="n39-IM-ZTu" secondAttribute="bottom" constant="40" id="8V5-Ub-A0z"/>
                             <constraint firstItem="vPz-UB-oGt" firstAttribute="leading" secondItem="8Qo-UI-s2h" secondAttribute="leading" id="AB4-MH-6sJ"/>
                             <constraint firstItem="Rr2-a2-RVX" firstAttribute="top" secondItem="vPz-UB-oGt" secondAttribute="bottom" id="B7T-KO-WaO"/>
                             <constraint firstItem="P8f-E3-qf4" firstAttribute="leading" secondItem="n39-IM-ZTu" secondAttribute="trailing" id="BUb-qP-AIV"/>
