@@ -2,7 +2,7 @@ PODS:
   - CSV (HEAD based on 0.0.2)
   - FontAwesomeKit (HEAD based on 1.1.3)
   - GoogleAnalytics-iOS-SDK-nodebug (2.0beta4)
-  - Masonry (HEAD based on 0.2.2)
+  - Masonry (HEAD based on 0.2.3)
   - Objective (HEAD based on 0.9)
   - THObserversAndBinders (HEAD based on 1.0.0)
 
@@ -18,7 +18,7 @@ SPEC CHECKSUMS:
   CSV: 4f8a296423af082c17e3b987cb6a924431601874
   FontAwesomeKit: 4c839de6549fabe8dd50db00fc7e3dd177ac98a9
   GoogleAnalytics-iOS-SDK-nodebug: f1a5da828114a4496b9aaaf04c43cfc86d0fe207
-  Masonry: 49bcb141e826b082d43abe819e678b5832faea21
+  Masonry: 6ab455cddc0a29be3eebdca923d75207efe99664
   Objective: 9a3d701308b3fb10a3efeefac65385bf90dfba51
   THObserversAndBinders: 5f0e709e8b704a8646ffdee9beb01a8aefc1dcb2
 
