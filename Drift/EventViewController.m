@@ -89,7 +89,7 @@
 	barrier.startPoint = CGPointMake(0, 0.5);
 	barrier.endPoint   = CGPointMake(1.0, 0.5);
 
-	barrier.bounds = CGRectMake(0, 0, self.timeContainer.bounds.size.width, 1);
+	barrier.bounds = CGRectMake(0, 0, self.timeContainer.bounds.size.width, 0.5);
 	barrier.position    = CGPointMake(self.timeContainer.layer.position.x, 0);
 	barrier.anchorPoint = self.timeContainer.layer.anchorPoint;
 
@@ -104,7 +104,7 @@
 	barrier.startPoint = CGPointMake(0, 0.5);
 	barrier.endPoint   = CGPointMake(1.0, 0.5);
 
-	barrier.bounds = CGRectMake(0, 0, self.tagContainer.bounds.size.width, 1);
+	barrier.bounds = CGRectMake(0, 0, self.tagContainer.bounds.size.width, 0.5);
 	barrier.position    = CGPointMake(self.tagContainer.layer.position.x, self.tagContainer.bounds.size.height);
 	barrier.anchorPoint = self.tagContainer.layer.anchorPoint;
 
