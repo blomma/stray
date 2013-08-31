@@ -92,7 +92,7 @@
 		CABasicAnimation *backgroundAnimation = [CABasicAnimation animationWithKeyPath:@"backgroundColor"];
 		backgroundAnimation.fromValue = (id)self.selectLayer.backgroundColor;
 		backgroundAnimation.toValue   = (id)backgroundColor.CGColor;
-		backgroundAnimation.duration  = 0.4;
+		backgroundAnimation.duration  = 0.3;
 		[self.selectLayer addAnimation:backgroundAnimation forKey:@"backgroundColor"];
 	}
 
