@@ -10,31 +10,23 @@
 
 @interface EventCell : UITableViewCell
 
-@property (nonatomic, copy) void (^tagPressHandler)();
+@property (weak, nonatomic) IBOutlet UILabel *hours;
+@property (weak, nonatomic) IBOutlet UILabel *minutes;
 
-@property (nonatomic, weak) IBOutlet UIView *backView;
-@property (nonatomic, weak) IBOutlet UIView *frontView;
+@property (weak, nonatomic) IBOutlet UIView *timeContainer;
+@property (weak, nonatomic) IBOutlet UILabel *startTime;
+@property (weak, nonatomic) IBOutlet UILabel *startDate;
+@property (weak, nonatomic) IBOutlet UILabel *stopTime;
+@property (weak, nonatomic) IBOutlet UILabel *stopDate;
 
-@property (nonatomic, weak) IBOutlet UILabel *eventStartTime;
-@property (nonatomic, weak) IBOutlet UILabel *eventStartDay;
-@property (nonatomic, weak) IBOutlet UILabel *eventStartMonth;
-@property (nonatomic, weak) IBOutlet UILabel *eventStartYear;
+@property (weak, nonatomic) IBOutlet UIView *tagContainer;
+@property (weak, nonatomic) IBOutlet TagButton *tagButton;
 
-@property (nonatomic, weak) IBOutlet UILabel *eventTimeHours;
-@property (nonatomic, weak) IBOutlet UILabel *eventTimeMinutes;
-
-@property (nonatomic, weak) IBOutlet UILabel *eventStopTime;
-@property (nonatomic, weak) IBOutlet UILabel *eventStopDay;
-@property (nonatomic, weak) IBOutlet UILabel *eventStopMonth;
-@property (nonatomic, weak) IBOutlet UILabel *eventStopYear;
-
-@property (nonatomic, weak) IBOutlet TagButton *tagName;
-@property (nonatomic, weak) IBOutlet UILabel *willDelete;
+@property (nonatomic, copy) void (^didSelectTagHandler)(void);
 
 @property (nonatomic) BOOL marked;
 
 - (void)marked:(BOOL)marked withAnimation:(BOOL)animation;
-
 - (IBAction)touchUpInsideTagButton:(UIButton *)sender forEvent:(UIEvent *)event;
 
 @end

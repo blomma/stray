@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-@interface EventsGroupedByDateViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface EventsGroupedByDateViewController : UIViewController <NSFetchedResultsControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 

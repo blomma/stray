@@ -13,10 +13,10 @@
 
 @interface TagsTableViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, copy) void (^didDismissHandler)();
+@property (nonatomic, copy) void (^didDismissHandler)(void);
 @property (nonatomic, copy) void (^didEditTagHandler)(Tag *tag);
 @property (nonatomic, copy) void (^didDeleteTagHandler)(Tag *tag);
-
-@property (nonatomic, weak) Event *event;
+@property (nonatomic, copy) void (^didSelectTagHandler)(Tag *tag);
+@property (nonatomic, copy) BOOL (^isTagSelectedHandler)(Tag *tag);
 
 @end

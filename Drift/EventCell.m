@@ -7,42 +7,55 @@
 //
 
 #import "EventCell.h"
-#import <FontAwesomeKit.h>
 
 @interface EventCell ()
 
-@property (nonatomic) CALayer *selectLayer;
+@property (weak, nonatomic) IBOutlet UIView *selection;
 
 @end
 
 @implementation EventCell
 
 - (void)awakeFromNib {
-	self.selectLayer                 = [CALayer layer];
-	self.selectLayer.frame           = CGRectMake(self.frontView.layer.bounds.size.width - 10, 0, 10, self.frontView.layer.bounds.size.height);
-	self.selectLayer.backgroundColor = [UIColor clearColor].CGColor;
+	//-------------------------------------
+	/// time container
+	//-------------------------------------
+    UIColor *colorOne = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:0.3f];
+	UIColor *colorTwo = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:1];
 
-	[self.frontView.layer addSublayer:self.selectLayer];
+	NSArray *colors = @[(id)colorOne.CGColor, (id)colorTwo.CGColor, (id)colorTwo.CGColor, (id)colorOne.CGColor];
+	NSArray *locations = @[@0.0, @0.4, @0.6, @1.0];
 
-	CALayer *separatorLayer = [CALayer layer];
-	separatorLayer.backgroundColor = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:0.8].CGColor;
-	separatorLayer.frame           = CGRectMake(221, 45, 1, 60);
+	CAGradientLayer *barrier = [CAGradientLayer layer];
+	barrier.colors     = colors;
+	barrier.locations  = locations;
+	barrier.startPoint = CGPointMake(0, 0.5);
+	barrier.endPoint   = CGPointMake(1.0, 0.5);
 
-	[self.frontView.layer addSublayer:separatorLayer];
+	barrier.bounds = CGRectMake(0, 0, self.timeContainer.bounds.size.width, 0.5);
+	barrier.position    = CGPointMake(self.timeContainer.layer.position.x, 0);
+	barrier.anchorPoint = self.timeContainer.layer.anchorPoint;
 
-	self.willDelete.font = [FontAwesomeKit fontWithSize:30];
-	self.willDelete.text = FAKIconRemove;
-}
+	[self.timeContainer.layer addSublayer:barrier];
 
-- (IBAction)touchUpInsideTagButton:(UIButton *)sender forEvent:(UIEvent *)event {
-	if (self.tagPressHandler)
-		self.tagPressHandler();
+	//-------------------------------------
+	/// tag container
+	//-------------------------------------
+	barrier = [CAGradientLayer layer];
+	barrier.colors     = colors;
+	barrier.locations  = locations;
+	barrier.startPoint = CGPointMake(0, 0.5);
+	barrier.endPoint   = CGPointMake(1.0, 0.5);
+
+	barrier.bounds = CGRectMake(0, 0, self.tagContainer.bounds.size.width, 0.5);
+	barrier.position    = CGPointMake(self.tagContainer.layer.position.x, self.tagContainer.bounds.size.height);
+	barrier.anchorPoint = self.tagContainer.layer.anchorPoint;
+
+	[self.tagContainer.layer addSublayer:barrier];
 }
 
 - (void)prepareForReuse {
-	[self.frontView.layer removeAllAnimations];
-
-	self.frontView.layer.position = self.backView.layer.position;
+    self.selection.backgroundColor = [UIColor clearColor];
 }
 
 - (void)marked:(BOOL)marked withAnimation:(BOOL)animation {
@@ -53,15 +66,19 @@
 
 	UIColor *backgroundColor = marked ? [UIColor colorWithWhite:0.251f alpha:1.000] : [UIColor clearColor];
 
-	if (animation) {
-		CABasicAnimation *backgroundAnimation = [CABasicAnimation animationWithKeyPath:@"backgroundColor"];
-		backgroundAnimation.fromValue = (id)self.selectLayer.backgroundColor;
-		backgroundAnimation.toValue   = (id)backgroundColor.CGColor;
-		backgroundAnimation.duration  = 0.4;
-		[self.selectLayer addAnimation:backgroundAnimation forKey:@"backgroundColor"];
-	}
+    if (animation) {
+        [UIView animateWithDuration:0.4f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.selection.backgroundColor = backgroundColor;
+        } completion:nil];
+    } else {
+        self.selection.backgroundColor = backgroundColor;
+    }
+}
 
-	self.selectLayer.backgroundColor = backgroundColor.CGColor;
+- (IBAction)touchUpInsideTagButton:(UIButton *)sender forEvent:(UIEvent *)event {
+    if (self.didSelectTagHandler) {
+        self.didSelectTagHandler();
+    }
 }
 
 @end

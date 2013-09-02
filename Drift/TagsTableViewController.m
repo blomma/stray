@@ -140,13 +140,11 @@
 
 - (void)configureCell:(TagTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
 	Tag *tag = [self.fetchedResultsController objectAtIndexPath:indexPath];
-	cell.tagTitle = [tag.name copy];
-	BOOL selected = [self.event.inTag isEqual:tag] ? YES : NO;
-	[cell marked:selected withAnimation:NO];
+	cell.tagTitle = tag.name;
+
+	[cell marked:self.isTagSelectedHandler(tag) withAnimation:NO];
 
 	__weak typeof(self) weakSelf = self;
-
-	__weak Tag *weakTag = tag;
 	__weak TagTableViewCell *weakCell = cell;
 
 	[cell setDidDeleteHandler: ^{
@@ -156,19 +154,19 @@
 
 	    weakSelf.tagInEditState = nil;
 
-	    [weakTag delete];
+	    [tag delete];
 
 	    if (self.didDeleteTagHandler)
-			self.didDeleteTagHandler(weakTag);
+			self.didDeleteTagHandler(tag);
 	}];
 
 	[cell setDidEditHandler: ^(NSString *name) {
 	    if (name && ![name isEqualToString:@""]) {
-	        weakTag.name = [name copy];
-	        weakCell.tagTitle = [name copy];
+	        tag.name = name;
+	        weakCell.tagTitle = name;
 
 	        if (weakSelf.didEditTagHandler)
-				weakSelf.didEditTagHandler(weakTag);
+				weakSelf.didEditTagHandler(tag);
 		}
 
 	    CGPoint toValue   = CGPointMake(CGRectGetMidX(weakCell.frontView.layer.bounds), weakCell.frontView.layer.position.y);
@@ -210,7 +208,9 @@
 
 	[cell marked:!cell.marked withAnimation:YES];
 
-	self.event.inTag = [self.event.inTag isEqual:tag] ? nil : tag;
+    if (self.didSelectTagHandler) {
+        self.didSelectTagHandler(tag);
+    }
 
 	if (self.didDismissHandler)
 		self.didDismissHandler();

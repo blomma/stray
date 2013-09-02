@@ -39,7 +39,6 @@
 
 	[self setupLayout];
 
-    //    [self.view setTranslatesAutoresizingMaskIntoConstraints:NO];
 	self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
 }
 
@@ -208,7 +207,7 @@
 		[self.eventTimerControl reset];
 	}
 
-	[self.tag setTitle:[[State instance].selectedEvent.inTag.name copy]
+	[self.tag setTitle:[State instance].selectedEvent.inTag.name
 	          forState:UIControlStateNormal];
 }
 
@@ -223,17 +222,25 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-	__weak typeof(self) weakSelf = self;
+	if ([segue.identifier isEqualToString:@"segueToTagsFromEvent"]) {
+        __weak typeof(self) weakSelf = self;
+        
+        TagsTableViewController *controller = (TagsTableViewController *)segue.destinationViewController;
+        [controller setDidDismissHandler: ^{
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+            });
+        }];
 
-	[[segue destinationViewController] setDidDismissHandler: ^{
-	    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
-	    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-	        [weakSelf dismissViewControllerAnimated:YES completion:nil];
-		});
-	}];
+        [controller setDidSelectTagHandler:^(Tag *tag) {
+            [State instance].selectedEvent.inTag = [[State instance].selectedEvent.inTag isEqual:tag] ? nil : tag;
+        }];
 
-	if ([segue.identifier isEqualToString:@"segueToTagsFromEvent"])
-		[[segue destinationViewController] setEvent:[State instance].selectedEvent];
+        [controller setIsTagSelectedHandler:^BOOL(Tag *tag) {
+            return [[State instance].selectedEvent.inTag isEqual:tag];
+        }];
+    }
 }
 
 - (IBAction)unwindFromSegue:(UIStoryboardSegue *)segue {

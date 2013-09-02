@@ -15,7 +15,7 @@
 - (IBAction)touchUpInsideDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event;
 
 @property (nonatomic, copy) void (^didEditHandler)(NSString *name);
-@property (nonatomic, copy) void (^didDeleteHandler)();
+@property (nonatomic, copy) void (^didDeleteHandler)(void);
 
 @property (nonatomic, weak) IBOutlet UILabel *tagName;
 @property (nonatomic, weak) IBOutlet UITextField *tagNameTextField;
