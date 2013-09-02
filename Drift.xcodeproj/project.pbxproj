@@ -622,7 +622,7 @@
 		9E42F21B15570FD70087F602 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 287;
+				CURRENT_PROJECT_VERSION = 288;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -634,7 +634,7 @@
 		9E42F21C15570FD70087F602 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 287;
+				CURRENT_PROJECT_VERSION = 288;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -752,7 +752,7 @@
 		9E8B8AE21594DA5100C8413E /* Ad Hoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 287;
+				CURRENT_PROJECT_VERSION = 288;
 				GCC_PREPROCESSOR_DEFINITIONS = "ADHOC=1";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
