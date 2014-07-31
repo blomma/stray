@@ -897,6 +897,19 @@
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-framework",
+					CFNetwork,
+					"-framework",
+					CoreData,
+					"-framework",
+					CoreText,
+					"-framework",
+					QuartzCore,
+					"-framework",
+					SystemConfiguration,
+				);
 				PRODUCT_NAME = Stray;
 				PROVISIONING_PROFILE = "6E2383A7-F796-4286-BC40-FA4CDBAD8E4C";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -921,6 +934,19 @@
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-framework",
+					CFNetwork,
+					"-framework",
+					CoreData,
+					"-framework",
+					CoreText,
+					"-framework",
+					QuartzCore,
+					"-framework",
+					SystemConfiguration,
+				);
 				PRODUCT_NAME = Stray;
 				PROVISIONING_PROFILE = "690CFDFB-51DD-4931-8B19-FD1675E78261";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -995,6 +1021,19 @@
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-framework",
+					CFNetwork,
+					"-framework",
+					CoreData,
+					"-framework",
+					CoreText,
+					"-framework",
+					QuartzCore,
+					"-framework",
+					SystemConfiguration,
+				);
 				PRODUCT_NAME = Stray;
 				PROVISIONING_PROFILE = "C9A89C05-4895-4FA0-BABD-C2FE5A578B90";
 				TARGETED_DEVICE_FAMILY = 1;

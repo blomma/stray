@@ -15,7 +15,7 @@
 #import "UIImage+Retina4.h"
 #import "PopoverView.h"
 #import "State.h"
-#import "GAI.h"
+//#import "GAI.h"
 #import "NSDate+Utilities.h"
 #import "UnwindSegueSlideDown.h"
 #import <THObserversAndBinders.h>
@@ -150,7 +150,7 @@
 - (IBAction)toggleEventTouchUpInside:(id)sender forEvent:(UIEvent *)event {
     NSDate *now = [NSDate date];
 
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+//    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
     if ([[State instance].selectedEvent isActive]) {
         [State instance].selectedEvent.stopDate = now;
@@ -161,11 +161,11 @@
                                     forState:UIControlStateNormal];
         [self animateStopEvent];
     } else {
-        tracker.sessionStart = YES;
-        [tracker sendEventWithCategory:@"app_flow"
-                            withAction:@"event_start"
-                             withLabel:nil
-                             withValue:nil];
+//        tracker.sessionStart = YES;
+//        [tracker sendEventWithCategory:@"app_flow"
+//                            withAction:@"event_start"
+//                             withLabel:nil
+//                             withValue:nil];
         [self reset];
 
         [State instance].selectedEvent           = [Event MR_createEntity];
