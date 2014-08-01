@@ -238,13 +238,14 @@
     [nowHandPath addLineToPoint:CGPointMake(20, 0)]; // Move to bottom right
 
     // position
+    // TODO: Is there a way to rotate around a centerpoint than doesnt use anchorpoint
     self.nowLayer.bounds      = CGRectMake(0.0, 0.0, 30, 30);
     self.nowLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-    self.nowLayer.anchorPoint = CGPointMake(0.5, 5.2);
+    self.nowLayer.anchorPoint = CGPointMake(0.5, 4.6f);
 
     // drawing
     self.nowLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
-    self.nowLayer.fillColor = [[UIColor colorWithRed:0.427 green:0.784 blue:0.992 alpha:1] CGColor];
+    self.nowLayer.fillColor = [[UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1] CGColor];
     self.nowLayer.lineWidth = 1.0;
     self.nowLayer.path      = nowHandPath.CGPath;
 
@@ -267,11 +268,11 @@
     // position
     self.startLayer.bounds      = CGRectMake(0.0, 0.0, 30, 30);
     self.startLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-    self.startLayer.anchorPoint = CGPointMake(0.5, 5.2);
+    self.startLayer.anchorPoint = CGPointMake(0.5, 4.6f);
 
     // drawing
     self.startLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
-    self.startLayer.fillColor = [[UIColor colorWithRed:0.941 green:0.686 blue:0.314 alpha:1] CGColor];
+    self.startLayer.fillColor = [[UIColor colorWithRed:0.941f green:0.686f blue:0.314f alpha:1] CGColor];
     self.startLayer.lineWidth = 1.0;
     self.startLayer.path      = startHandPath.CGPath;
 
