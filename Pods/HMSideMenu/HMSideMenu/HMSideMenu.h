@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HMSideMenuItem.h"
 
 typedef enum {
     HMSideMenuPositionLeft,
@@ -18,12 +19,17 @@ typedef enum {
 @interface HMSideMenu : UIView
 
 /**
- Current state of the side menu.
+ An array of `HMSideMenuItem` objects. Read only property, hence should be set using the constructor `initWithItems:`.
+ */
+@property (nonatomic, strong, readonly) NSArray *items;
+
+/**
+ Side menu is open/closed.
  */
 @property (nonatomic, assign, readonly) BOOL isOpen;
 
 /**
- Spacing between each menu item and the next. This will be the horizontal spacing between items in case the menu is added on the top/bottom, or vertical spacing in case the menu is added on the left/right.
+ Vertical spacing between each menu item and the next.
  */
 @property (nonatomic, assign) CGFloat itemSpacing;
 
@@ -37,37 +43,8 @@ typedef enum {
  */
 @property (nonatomic, assign) HMSideMenuPosition menuPosition;
 
-/**
- Initialize the menu with an array of items.
- 
- @param items An array of `UIView` objects.
- */
 - (id)initWithItems:(NSArray *)items;
-
-/**
- Show all menu items with animation.
- */
 - (void)open;
-
-/**
- Hide all menu items with animation.
- */
 - (void)close;
-
-@end
-
-///--------------------------------
-/// @name UIView+MenuActionHandlers
-///--------------------------------
-
-/**
- A category on UIView to attach a given block as an action for a single tap gesture.
- Credit: http://www.cocoanetics.com/2012/06/associated-objects/
- 
- @param block The block to execute.
- */
-@interface UIView (MenuActionHandlers)
-
-- (void)setMenuActionWithBlock:(void (^)(void))block;
 
 @end

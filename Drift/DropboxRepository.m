@@ -11,9 +11,7 @@
 #import "Tag.h"
 #import <dispatch/dispatch.h>
 #import <Dropbox/Dropbox.h>
-#import "CSV.h"
 #import "NSDate+Utilities.h"
-#import <THObserversAndBinders.h>
 #import "State.h"
 
 @interface Canceller : NSObject
@@ -130,16 +128,16 @@
             self.backgroundQueue = dispatch_queue_create("com.artsoftheinsane.stray.bgqueue", NULL);
         }
 
-        DBFilesystem *filesystem = [[DBFilesystem alloc] initWithAccount:account];
-        [DBFilesystem setSharedFilesystem:filesystem];
+        DBFilesystem *fileSystem = [[DBFilesystem alloc] initWithAccount:account];
+        [DBFilesystem setSharedFilesystem:fileSystem];
 
-        self.isSyncing = (filesystem.status & DBSyncStatusUploading) ==  DBSyncStatusUploading ? YES : NO;
+        self.isSyncing = fileSystem.status.upload.inProgress;
 
         __weak typeof(self) weakSelf = self;
-        [filesystem addObserver:self.dbSyncStatusObserver forPathAndChildren:[DBPath root] block:^{
-            DBSyncStatus status = [DBFilesystem sharedFilesystem].status;
+        [fileSystem addObserver:self.dbSyncStatusObserver forPathAndChildren:[DBPath root] block:^{
+            DBFilesystem *localFileSystem = [DBFilesystem sharedFilesystem];
 
-            if ((status & DBSyncStatusUploading) ==  DBSyncStatusUploading) {
+            if (localFileSystem.status.upload.inProgress) {
                 weakSelf.isSyncing = YES;
             } else {
                 weakSelf.isSyncing = NO;
@@ -237,18 +235,8 @@
         DBFile *file = [[DBFilesystem sharedFilesystem] createFile:path error:&createError];
 
         if (file) {
-            CSVRow *row = [[CSVRow alloc] initWithValues:@[
-                               tag,
-                               startDate,
-                               stopDate
-                           ]];
-
-            CSVTable *table = [[CSVTable alloc] initWithRows:@[row]];
-            NSMutableString *output = [[NSMutableString alloc] init];
-            CSVSerializer *serializer = [[CSVSerializer alloc] initWithOutput:output];
-            [serializer serialize:table];
-
-            [file writeString:output error:nil];
+            NSString *row = [NSString stringWithFormat: @"%@,%@,%@", tag, startDate, stopDate];
+            [file writeString:row error:nil];
         }
     });
 

@@ -15,21 +15,15 @@
 #import "UIImage+Retina4.h"
 #import "PopoverView.h"
 #import "State.h"
-//#import "GAI.h"
 #import "NSDate+Utilities.h"
 #import "UnwindSegueSlideDown.h"
-#import <THObserversAndBinders.h>
+
+static void *EventViewControllerContext = &EventViewControllerContext;
 
 @interface EventViewController ()
 
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) dispatch_queue_t backgroundQueue;
-
-// Observer
-@property (nonatomic) THObserver *startDateObserver;
-@property (nonatomic) THObserver *nowDateObserver;
-@property (nonatomic) THObserver *stopDateObserver;
-@property (nonatomic) THObserver *isTransformingObserver;
 
 @end
 
@@ -45,40 +39,25 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    __weak typeof(self) weakSelf = self;
-    self.startDateObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"startDate" oldAndNewBlock:^(id oldValue, id newValue) {
-        [State instance].selectedEvent.startDate = newValue;
-        [weakSelf updateStartLabelWithDate:newValue];
+    [self.eventTimerControl addObserver:self
+                             forKeyPath:NSStringFromSelector(@selector(startDate))
+                                options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld)
+                                context:EventViewControllerContext];
 
-        if (self.eventTimerControl.isTransforming == EventTimerNotTransforming && oldValue != [NSNull null]) {
-            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
-        }
-    }];
+    [self.eventTimerControl addObserver:self
+                             forKeyPath:NSStringFromSelector(@selector(nowDate))
+                                options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld)
+                                context:EventViewControllerContext];
 
-    self.nowDateObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"nowDate" oldAndNewBlock:^(id oldValue, id newValue) {
-        [weakSelf updateEventTimeWithDate:newValue];
-        [weakSelf updateStopLabelWithDate:newValue];
-    }];
+    [self.eventTimerControl addObserver:self
+                             forKeyPath:NSStringFromSelector(@selector(stopDate))
+                                options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld)
+                                context:EventViewControllerContext];
 
-    self.stopDateObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"stopDate" oldAndNewBlock:^(id oldValue, id newValue) {
-        [State instance].selectedEvent.stopDate = newValue;
-        [weakSelf updateStopLabelWithDate:newValue];
-
-        if (self.eventTimerControl.isTransforming == EventTimerNotTransforming && oldValue != [NSNull null]) {
-            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
-        }
-    }];
-
-    self.isTransformingObserver = [THObserver observerForObject:self.eventTimerControl keyPath:@"isTransforming" oldAndNewBlock:^(id oldValue, id newValue) {
-        EventTimerTransformingEnum isTransforming = [newValue integerValue];
-        if (isTransforming != EventTimerNotTransforming) {
-            [weakSelf animateEventTransforming:isTransforming];
-        }
-
-        if (self.eventTimerControl.isTransforming == EventTimerNotTransforming) {
-            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
-        }
-    }];
+    [self.eventTimerControl addObserver:self
+                             forKeyPath:NSStringFromSelector(@selector(isTransforming))
+                                options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld)
+                                context:EventViewControllerContext];
 
     if ([State instance].selectedEvent) {
         [self.eventTimerControl startWithEvent:[State instance].selectedEvent];
@@ -106,10 +85,14 @@
 
     [self.eventTimerControl paus];
 
-    [self.startDateObserver stopObserving];
-    [self.nowDateObserver stopObserving];
-    [self.stopDateObserver stopObserving];
-    [self.isTransformingObserver stopObserving];
+    [self.eventTimerControl removeObserver:self
+                                forKeyPath:NSStringFromSelector(@selector(startDate))];
+    [self.eventTimerControl removeObserver:self
+                                forKeyPath:NSStringFromSelector(@selector(nowDate))];
+    [self.eventTimerControl removeObserver:self
+                                forKeyPath:NSStringFromSelector(@selector(stopDate))];
+    [self.eventTimerControl removeObserver:self
+                                forKeyPath:NSStringFromSelector(@selector(isTransforming))];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -150,8 +133,6 @@
 - (IBAction)toggleEventTouchUpInside:(id)sender forEvent:(UIEvent *)event {
     NSDate *now = [NSDate date];
 
-//    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-
     if ([[State instance].selectedEvent isActive]) {
         [State instance].selectedEvent.stopDate = now;
 
@@ -161,11 +142,6 @@
                                     forState:UIControlStateNormal];
         [self animateStopEvent];
     } else {
-//        tracker.sessionStart = YES;
-//        [tracker sendEventWithCategory:@"app_flow"
-//                            withAction:@"event_start"
-//                             withLabel:nil
-//                             withValue:nil];
         [self reset];
 
         [State instance].selectedEvent           = [Event MR_createEntity];
@@ -352,6 +328,62 @@
         self.eventTimeHours.alpha = eventTimeAlpha;
         self.eventTimeMinutes.alpha = eventTimeAlpha;
     } completion:nil];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    if (context == EventViewControllerContext) {
+        int changeKindKey = [[change objectForKey:NSKeyValueChangeKindKey] intValue];
+
+        if ([keyPath isEqualToString:NSStringFromSelector(@selector(startDate))]) {
+            if (changeKindKey == NSKeyValueChangeSetting) {
+                id newValue = [change objectForKey:NSKeyValueChangeNewKey];
+                id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
+
+                [State instance].selectedEvent.startDate = newValue;
+                [self updateStartLabelWithDate:newValue];
+
+                if (self.eventTimerControl.isTransforming == EventTimerNotTransforming && oldValue != [NSNull null]) {
+                    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
+                }
+            }
+        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(nowDate))]) {
+            if (changeKindKey == NSKeyValueChangeSetting) {
+                id newValue = [change objectForKey:NSKeyValueChangeNewKey];
+
+                [self updateEventTimeWithDate:newValue];
+                [self updateStopLabelWithDate:newValue];
+            }
+        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(stopDate))]) {
+            if (changeKindKey == NSKeyValueChangeSetting) {
+                id newValue = [change objectForKey:NSKeyValueChangeNewKey];
+                id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
+
+                [State instance].selectedEvent.stopDate = newValue;
+                [self updateStopLabelWithDate:newValue];
+
+                if (self.eventTimerControl.isTransforming == EventTimerNotTransforming && oldValue != [NSNull null]) {
+                    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
+                }
+            }
+        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(isTransforming))]) {
+            if (changeKindKey == NSKeyValueChangeSetting) {
+                id newValue = [change objectForKey:NSKeyValueChangeNewKey];
+                id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
+
+                EventTimerTransformingEnum isTransforming = [newValue integerValue];
+                if (isTransforming != EventTimerNotTransforming) {
+                    [self animateEventTransforming:isTransforming];
+                }
+
+                if (self.eventTimerControl.isTransforming == EventTimerNotTransforming) {
+                    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
+                }
+            }
+        }
+    }
 }
 
 @end

@@ -15,7 +15,8 @@
 #import <MGLineStyled.h>
 #import <UIColor+MGExpanded.h>
 #import <FontAwesomeKit.h>
-#import <THObserversAndBinders.h>
+
+static void *PreferencesViewControllerContext = &PreferencesViewControllerContext;
 
 @interface PreferencesViewController ()
 
@@ -24,7 +25,6 @@
 @property (nonatomic) UIButton *dropboxResync;
 @property (nonatomic) id dropboxChangeObserver;
 @property (nonatomic) id dropboxSyncObserver;
-@property (nonatomic) THObserver *dropboxActivityObserver;
 @property (nonatomic) UIActivityIndicatorView *dropboxActivity;
 @property (nonatomic) MGLine *dropboxActivityStatus;
 
@@ -191,22 +191,11 @@
         [self.dropboxActivity stopAnimating];
     }
     [self.dropboxActivityStatus layout];
-    
-    self.dropboxActivityObserver = [THObserver observerForObject:[DropboxRepository instance] keyPath:@"isSyncing" oldAndNewBlock:^(id oldValue, id newValue) {
-        if ([newValue boolValue] == [oldValue boolValue])
-            return;
 
-        if ([newValue boolValue]) {
-            weakSelf.dropboxResync.enabled = NO;
-            weakSelf.dropboxActivityStatus.leftItems = @[[@"Syncing to dropbox" uppercaseString]].copy;
-            [weakSelf.dropboxActivity startAnimating];
-        } else {
-            weakSelf.dropboxResync.enabled = YES;
-            weakSelf.dropboxActivityStatus.leftItems = @[[@"Dropbox is synced" uppercaseString]].copy;
-            [weakSelf.dropboxActivity stopAnimating];
-        }
-        [weakSelf.dropboxActivityStatus layout];
-    }];
+    [[DropboxRepository instance] addObserver:self
+                                   forKeyPath:NSStringFromSelector(@selector(isSyncing))
+                                      options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld)
+                                      context:PreferencesViewControllerContext];
 }
 
 - (void)refresh {
@@ -218,6 +207,9 @@
 
     [[NSNotificationCenter defaultCenter] removeObserver:self.dropboxChangeObserver];
     [[NSNotificationCenter defaultCenter] removeObserver:self.dropboxSyncObserver];
+
+    [[DropboxRepository instance] removeObserver:self
+                                      forKeyPath:NSStringFromSelector(@selector(isSyncing))];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -235,6 +227,33 @@
 - (IBAction)onDropboxSync:(id)sender forEvent:(UIEvent *)event {
     self.dropboxResync.enabled = NO;
     [[DropboxRepository instance] sync];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    if (context == PreferencesViewControllerContext) {
+        int changeKindKey = [[change objectForKey:NSKeyValueChangeKindKey] intValue];
+
+        if ([keyPath isEqualToString:NSStringFromSelector(@selector(isSyncing))]) {
+            if (changeKindKey == NSKeyValueChangeSetting) {
+                id newValue = [change objectForKey:NSKeyValueChangeNewKey];
+
+                if ([newValue boolValue]) {
+                    self.dropboxResync.enabled = NO;
+                    self.dropboxActivityStatus.leftItems = @[[@"Syncing to dropbox" uppercaseString]].copy;
+                    [self.dropboxActivity startAnimating];
+                } else {
+                    self.dropboxResync.enabled = YES;
+                    self.dropboxActivityStatus.leftItems = @[[@"Dropbox is synced" uppercaseString]].copy;
+                    [self.dropboxActivity stopAnimating];
+                }
+
+                [self.dropboxActivityStatus layout];
+            }
+        }
+    }
 }
 
 @end

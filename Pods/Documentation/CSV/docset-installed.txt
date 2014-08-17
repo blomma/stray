@@ -1,4 +1,0 @@
-Documentation set was installed to Xcode!
-
-Path: /Users/blomma/Library/Developer/Shared/Documentation/DocSets/org.cocoapods.csv.CSV-HEAD-based-on-0.0.1.docset
-Time: 2013-05-24 11:16:07 +0000

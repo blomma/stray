@@ -68,27 +68,34 @@
         [self.view addSubview:self.sideMenuButton];
 
         __weak typeof(self) weakSelf = self;
-        IconView *settingsItem = [[IconView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
-        settingsItem.backgroundColor = [UIColor clearColor];
-        settingsItem.font = [FontAwesomeKit fontWithSize:40];
-        settingsItem.text = FAKIconCogs;
-        settingsItem.editable = NO;
-        [settingsItem setMenuActionWithBlock:^{
-                [weakSelf toggleSideMenu];
-                [weakSelf performSegueWithIdentifier:@"segueToPreferences"
-                                              sender:self];
-            }];
+        UIImageView *settingsItemImageView = [[UIImageView alloc]
+                                          initWithImage:[FontAwesomeKit
+                                                         imageForIcon:FAKIconCog
+                                                         imageSize:CGSizeMake(60, 60)
+                                                         fontSize:40 attributes:nil]];
 
-        IconView *infoItem = [[IconView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
+        HMSideMenuItem *settingsItem = [[HMSideMenuItem alloc] initWithSize:CGSizeMake(60, 60) action:^{
+            [weakSelf toggleSideMenu];
+            [weakSelf performSegueWithIdentifier:@"segueToPreferences"
+                                          sender:self];
+        }];
+        settingsItem.backgroundColor = [UIColor clearColor];
+        [settingsItem addSubview:settingsItemImageView];
+
+
+        UIImageView *infoItemImageView = [[UIImageView alloc]
+                                          initWithImage:[FontAwesomeKit
+                                                         imageForIcon:FAKIconInfoSign
+                                                         imageSize:CGSizeMake(60, 60)
+                                                         fontSize:40 attributes:nil]];
+
+        HMSideMenuItem *infoItem = [[HMSideMenuItem alloc] initWithSize:CGSizeMake(60, 60) action:^{
+            [weakSelf toggleSideMenu];
+            [weakSelf performSegueWithIdentifier:@"segueToInfoHintView"
+                                          sender:self];
+        }];
         infoItem.backgroundColor = [UIColor clearColor];
-        infoItem.font = [FontAwesomeKit fontWithSize:40];
-        infoItem.text = FAKIconInfoSign;
-        infoItem.editable = NO;
-        [infoItem setMenuActionWithBlock:^{
-                [weakSelf toggleSideMenu];
-                [weakSelf performSegueWithIdentifier:@"segueToInfoHintView"
-                                              sender:self];
-            }];
+        [infoItem addSubview:infoItemImageView];
 
         self.sideMenu = [[HMSideMenu alloc] initWithItems:@[settingsItem, infoItem]];
         [self.sideMenu setItemSpacing:18.0f];

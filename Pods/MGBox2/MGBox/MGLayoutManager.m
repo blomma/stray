@@ -4,7 +4,6 @@
 
 #import "MGLayoutManager.h"
 #import "MGScrollView.h"
-#import "MGLayoutBox.h"
 
 @interface MGLayoutManager ()
 
@@ -38,7 +37,7 @@
   }
 
   // children layout first
-  for (id <MGLayoutBox> box in container.boxes) {
+  for (id box in container.boxes) {
     [box layout];
   }
 
@@ -102,7 +101,7 @@
   }
 
   // children layout first
-  for (id <MGLayoutBox> box in container.boxes) {
+  for (id box in container.boxes) {
     [box layout];
   }
 

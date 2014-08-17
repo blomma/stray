@@ -3,9 +3,9 @@ HMSideMenu
 
 HMSideMenu allows you to display a menu of items that show from the left, right, top or bottom of a view controller with a delightful animation.
 
-Check [this video](http://www.youtube.com/watch?v=2dswvXSdDzM) to see it in action.
+Check [this video](http://www.youtube.com/watch?v=2dswvXSdDzM) to see how exactly it works.
 
-[![screenshot](https://raw.github.com/HeshamMegid/HMSideMenu/master/screenshot.gif)](http://www.youtube.com/watch?v=2dswvXSdDzM)
+[![screenshot](screenshot.gif)](http://www.youtube.com/watch?v=2dswvXSdDzM)
 
 # Features
 - Menu items are UIView subclasses, so they are fully customizable.
@@ -21,8 +21,7 @@ Check [this video](http://www.youtube.com/watch?v=2dswvXSdDzM) to see it in acti
 # Usage
 
 ```  objective-c
-UIView *twitterItem = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-[twitterItem setMenuActionWithBlock:^{
+HMSideMenuItem *twitterItem = [[HMSideMenuItem alloc] initWithSize:CGSizeMake(40, 40) action:^{
     NSLog(@"tapped twitter item");
 }];
 
@@ -39,8 +38,6 @@ Please check the included demo project for more options.
 
 
 # Change log
-* v1.1.1
-	* Removed HMSideMenuItem. Control is now initialized with an array of UIView objects. To set action block use `[UIView setMenuActionWithBlock:]`
 * v1.1.0
 	* Added left, top and bottom menu positions
 	* Code refactoring	

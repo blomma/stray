@@ -8,20 +8,12 @@
 
 #import "HMSideMenu.h"
 #import <QuartzCore/QuartzCore.h>
-#import <objc/runtime.h>
 
 #define kAnimationDelay 0.08
 
 typedef CGFloat (^EasingFunction)(CGFloat, CGFloat, CGFloat, CGFloat);
-static char kActionHandlerTapBlockKey;
-static char kActionHandlerTapGestureKey;
 
 @interface HMSideMenu ()
-
-/**
- An array of `UIView` objects. Read only property, hence should be set using `initWithItems:`.
- */
-@property (nonatomic, strong, readonly) NSArray *items;
 
 @property (nonatomic, assign) CGFloat menuWidth;
 @property (nonatomic, assign) CGFloat menuHeight;
@@ -46,14 +38,13 @@ static char kActionHandlerTapGestureKey;
 
 - (void)setItems:(NSArray *)items {
     // Remove all current items in case we are changing the menu items.
-    for (UIView *item in items) {
-        item.layer.opacity = 0;
+    for (HMSideMenuItem *item in items) {
         [item removeFromSuperview];
     }
     
     _items = items;
     
-    for (UIView *item in items) {
+    for (HMSideMenuItem *item in items) {
         [self addSubview:item];
     }
 }
@@ -61,7 +52,7 @@ static char kActionHandlerTapGestureKey;
 - (void)open {
     _isOpen = YES;
     
-    for (UIView *item in self.items) {
+    for (HMSideMenuItem *item in self.items) {
         [self performSelector:@selector(showItem:) withObject:item afterDelay:kAnimationDelay * [self.items indexOfObject:item]];
     }
 }
@@ -69,15 +60,12 @@ static char kActionHandlerTapGestureKey;
 - (void)close {
     _isOpen = NO;
     
-    for (UIView *item in self.items) {
+    for (HMSideMenuItem *item in self.items) {
         [self performSelector:@selector(hideItem:) withObject:item afterDelay:kAnimationDelay * [self.items indexOfObject:item]];
     }
 }
 
-- (void)showItem:(UIView *)item {
-   [NSObject cancelPreviousPerformRequestsWithTarget:item.layer];
-    item.layer.opacity = 1.0f;
-    
+- (void)showItem:(HMSideMenuItem *)item {
     CGPoint position = item.layer.position;
     
     if (self.menuIsVertical) {
@@ -97,7 +85,7 @@ static char kActionHandlerTapGestureKey;
     item.layer.position = position;
 }
 
-- (void)hideItem:(UIView *)item {
+- (void)hideItem:(HMSideMenuItem *)item {
     CGPoint position = item.layer.position;
     
     if (self.menuIsVertical) {
@@ -115,8 +103,6 @@ static char kActionHandlerTapGestureKey;
     }
     
     item.layer.position = position;
-    
-    [item.layer performSelector:@selector(setOpacity:) withObject:[NSNumber numberWithFloat:0.0f] afterDelay:0.5]; 
 }
 
 - (BOOL)menuIsVertical {
@@ -128,8 +114,9 @@ static char kActionHandlerTapGestureKey;
 
 #pragma mark - UIView
 
-- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-    for (UIView *item in self.items) {
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+{
+    for (HMSideMenuItem *item in self.items) {
         if (CGRectContainsPoint(item.frame, point))
             return YES;
     }
@@ -147,14 +134,14 @@ static char kActionHandlerTapGestureKey;
     
    // Calculate the menu size
     if (self.menuIsVertical) {
-        [self.items enumerateObjectsUsingBlock:^(UIView *item, NSUInteger idx, BOOL *stop) {
+        [self.items enumerateObjectsUsingBlock:^(HMSideMenuItem *item, NSUInteger idx, BOOL *stop) {
             self.menuWidth = MAX(item.frame.size.width, self.menuWidth);
             biggestHeight = MAX(item.frame.size.height, biggestHeight);
         }];
         
         self.menuHeight = (biggestHeight * self.items.count) + (self.itemSpacing * (self.items.count - 1));
     } else { //if (self.position == HMSideMenuPositionTop || self.position == HMSideMenuPositionBottom) {
-        [self.items enumerateObjectsUsingBlock:^(UIView *item, NSUInteger idx, BOOL *stop) {
+        [self.items enumerateObjectsUsingBlock:^(HMSideMenuItem *item, NSUInteger idx, BOOL *stop) {
             self.menuHeight = MAX(item.frame.size.height, self.menuHeight);
             biggestWidth = MAX(item.frame.size.width, biggestWidth);
         }];
@@ -178,7 +165,7 @@ static char kActionHandlerTapGestureKey;
     self.frame = CGRectMake(x, y, self.menuWidth, self.menuHeight);;
     
     // Layout the items
-    [self.items enumerateObjectsUsingBlock:^(UIView *item, NSUInteger idx, BOOL *stop) {
+    [self.items enumerateObjectsUsingBlock:^(HMSideMenuItem *item, NSUInteger idx, BOOL *stop) {
         if (self.menuIsVertical)
             [item setCenter:CGPointMake(itemInitialX, (idx * biggestHeight) + (idx * self.itemSpacing) + (biggestHeight / 2))];
         else
@@ -237,33 +224,5 @@ static EasingFunction easeOutElastic = ^CGFloat(CGFloat t, CGFloat b, CGFloat c,
     
     return (amplitude * pow(2, -10 * t) * sin((t * d - s) * (2 * M_PI) / period) + c + b);
 };
-
-@end
-
-#pragma mark - UIView+MenuActionHandlers
-
-@implementation UIView (MenuActionHandlers)
-
-- (void)setMenuActionWithBlock:(void (^)(void))block {
-	UITapGestureRecognizer *gesture = objc_getAssociatedObject(self, &kActionHandlerTapGestureKey);
-	
-	if (!gesture) {
-		gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleActionForTapGesture:)];
-		[self addGestureRecognizer:gesture];
-		objc_setAssociatedObject(self, &kActionHandlerTapGestureKey, gesture, OBJC_ASSOCIATION_RETAIN);
-	}
-    
-	objc_setAssociatedObject(self, &kActionHandlerTapBlockKey, block, OBJC_ASSOCIATION_COPY);
-}
-
-- (void)handleActionForTapGesture:(UITapGestureRecognizer *)gesture {
-	if (gesture.state == UIGestureRecognizerStateRecognized) {
-		void(^action)(void) = objc_getAssociatedObject(self, &kActionHandlerTapBlockKey);
-		
-		if (action) {
-			action();
-		}
-	}
-}
 
 @end
