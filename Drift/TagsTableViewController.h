@@ -16,9 +16,10 @@
 
 @end
 
-@interface TagsTableViewController : UITableViewController
+@interface TagsTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, weak) id<TagsTableViewControllerDelegate> delegate;
 @property (nonatomic, weak) Event *event;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end

@@ -11,8 +11,6 @@
 #import "Tags.h"
 #import "TransformableTableViewGestureRecognizer.h"
 #import "TagTableViewCell.h"
-#import "SKBounceAnimation.h"
-#import "CAAnimation+Blocks.h"
 #import "UIScrollView+AIPulling.h"
 #import "State.h"
 
@@ -25,7 +23,6 @@
 
 @property (nonatomic) NSIndexPath *transformingMovingIndexPath;
 
-@property (nonatomic) NSInteger editingStateRightOffset;
 @property (nonatomic) NSInteger editingCommitLength;
 
 @end
@@ -35,13 +32,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.editingStateRightOffset = 260;
     self.editingCommitLength     = 60;
 
     self.tags = [[Tags alloc] initWithTags:[Tag MR_findAll]];
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"grabbedTableViewCellIdentifier"];
+    [self.tableView registerClass:[UITableViewCell class]
+           forCellReuseIdentifier:@"grabbedTableViewCellIdentifier"];
 
     __weak typeof(self) weakSelf = self;
 
@@ -129,12 +126,6 @@
 #pragma mark -
 #pragma mark UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    TagTableViewCell *cell = (TagTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-
-    [cell marked:NO withAnimation:YES];
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
 
@@ -143,49 +134,30 @@
         return;
     }
 
-    // Now we check if we have any cells in editstate,
-    // if so we animate them back to normal state
-    if (self.tagInEditState) {
-        NSUInteger editStateIndex       = [self.tags indexOfObject:self.tagInEditState];
-        NSIndexPath *editStateIndexPath = [NSIndexPath indexPathForRow:(NSInteger)editStateIndex inSection:0];
-
-        TagTableViewCell *cell = (TagTableViewCell *)[self.tableView cellForRowAtIndexPath:editStateIndexPath];
-        CGPoint fromValue      = cell.frontView.layer.position;
-        CGPoint toValue        = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
-
-        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
-    }
-
     TagTableViewCell *cell = (TagTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 
     [cell marked:!cell.marked withAnimation:YES];
 
     self.event.inTag = [self.event.inTag isEqual:tag] ? nil : tag;
     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
-
-    if ([self.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss)]) {
-        [self.delegate tagsTableViewControllerDidDimiss];
-    }
 }
 
 #pragma mark -
 #pragma mark TagTableViewCellDelegate
 
 - (void)cell:(TagTableViewCell *)cell tappedDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event {
+    [cell.tagNameTextField resignFirstResponder];
+
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
     Tag *tag = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
     [tag MR_deleteEntity];
 
-    CGPoint fromValue = cell.frontView.layer.position;
-    CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
-
-    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
-
     self.tagInEditState = nil;
 
     [self.tags removeObjectAtIndex:(NSUInteger)indexPath.row];
-    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath]
+                          withRowAnimation:UITableViewRowAnimationLeft];
 
     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
 }
@@ -200,10 +172,16 @@
         cell.tagTitle = [name copy];
     }
 
-    CGPoint fromValue = cell.frontView.layer.position;
-    CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
-
-    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
+    [UIView animateWithDuration:1
+                          delay:0
+         usingSpringWithDamping:0.6
+          initialSpringVelocity:0
+                        options:0
+                     animations:^{
+                         cell.leading.constant = 0;
+                         [cell.frontView layoutIfNeeded];
+                     }
+                     completion:nil];
 
     self.tagInEditState = nil;
 }
@@ -226,8 +204,11 @@
 
     // If we have a cell in editstate and it is not this cell then cancel it
     if (self.tagInEditState && indexOfTagInEditState != (NSUInteger)indexPath.row) {
-        NSIndexPath *indexPathInEditState = [NSIndexPath indexPathForRow:(NSInteger)indexOfTagInEditState inSection:0];
-        [self gestureRecognizer:gestureRecognizer cancelEditingState:state forRowAtIndexPath:indexPathInEditState];
+        NSIndexPath *indexPathInEditState = [NSIndexPath indexPathForRow:(NSInteger)indexOfTagInEditState
+                                                               inSection:0];
+        [self gestureRecognizer:gestureRecognizer
+             cancelEditingState:state
+              forRowAtIndexPath:indexPathInEditState];
     }
 }
 
@@ -239,10 +220,12 @@
 
     TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
-    NSInteger xOffset = indexOfTagInEditState == (NSUInteger)indexPath.row ? self.editingStateRightOffset : 0;
+    CGFloat rightConstant = cell.frame.size.width - cell.backViewToEdit.constant - cell.leftSeparator.constant;
+    CGFloat xOffset = indexOfTagInEditState == (NSUInteger)indexPath.row ? rightConstant : 0;
 
-    CGPoint point = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + gestureRecognizer.translationInTableView.x + xOffset, cell.frontView.layer.position.y);
-    cell.frontView.layer.position = point;
+    cell.leading.constant = gestureRecognizer.translationInTableView.x + xOffset;
+
+    [cell.frontView layoutIfNeeded];
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer commitEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -254,19 +237,34 @@
     TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
     if (state == TransformableTableViewCellEditingStateRight && !self.tagInEditState) {
-        CGPoint fromValue = cell.frontView.layer.position;
-        CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds) + self.editingStateRightOffset, fromValue.y);
+        CGFloat rightConstant = cell.frame.size.width - cell.backViewToEdit.constant - cell.leftSeparator.constant;
+        CGFloat velocity = fabs(gestureRecognizer.velocity.x) / (rightConstant - cell.leading.constant);
 
-        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
+        [UIView animateWithDuration:1
+                              delay:0
+             usingSpringWithDamping:0.6
+              initialSpringVelocity:velocity
+                            options:0
+                         animations:^{
+                             cell.leading.constant = rightConstant;
+                             [cell.frontView layoutIfNeeded];
+                         }
+                         completion:nil];
 
-        self.tagInEditState = [self.tags objectAtIndex:indexPath.row];
+        self.tagInEditState = [self.tags objectAtIndex:(NSUInteger)indexPath.row];
     } else {
-        CGPoint fromValue = cell.frontView.layer.position;
-        CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
+        CGFloat velocity = fabs(gestureRecognizer.velocity.x) / (cell.leading.constant);
 
-        // Dimiss if we are showing it
-        [cell.tagNameTextField resignFirstResponder];
-        [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
+        [UIView animateWithDuration:1
+                              delay:0
+             usingSpringWithDamping:0.6
+              initialSpringVelocity:velocity
+                            options:0
+                         animations:^{
+                             cell.leading.constant = 0;
+                             [cell.frontView layoutIfNeeded];
+                         }
+                         completion:nil];
 
         self.tagInEditState = nil;
     }
@@ -276,12 +274,20 @@
     TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     [cell.tagNameTextField resignFirstResponder];
 
-    CGPoint fromValue = cell.frontView.layer.position;
-    CGPoint toValue   = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
+    CGFloat velocity = fabs(gestureRecognizer.velocity.x) / cell.leading.constant;
 
-    self.tagInEditState = nil;
-
-    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
+    [UIView animateWithDuration:1
+                          delay:0
+         usingSpringWithDamping:0.5
+          initialSpringVelocity:velocity
+                        options:0
+                     animations:^{
+                         cell.leading.constant = 0;
+                         [cell.frontView layoutIfNeeded];
+                     }
+                     completion:^(BOOL finished) {
+                         self.tagInEditState = nil;
+                     }];
 }
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -320,23 +326,6 @@
     self.transformingMovingIndexPath = nil;
 
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-}
-
-#pragma mark -
-#pragma mark Private methods
-
-- (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration completion:(void (^)(BOOL finished))completion {
-    static NSString *keyPath = @"position";
-
-    SKBounceAnimation *positionAnimation = [SKBounceAnimation animationWithKeyPath:keyPath];
-    positionAnimation.fromValue       = [NSValue valueWithCGPoint:from];
-    positionAnimation.toValue         = [NSValue valueWithCGPoint:to];
-    positionAnimation.duration        = duration;
-    positionAnimation.numberOfBounces = 4;
-    positionAnimation.completion      = completion;
-
-    [layer addAnimation:positionAnimation forKey:keyPath];
-    [layer setValue:[NSValue valueWithCGPoint:to] forKeyPath:keyPath];
 }
 
 @end

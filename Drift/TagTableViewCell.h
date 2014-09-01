@@ -29,6 +29,11 @@
 @property (nonatomic, weak) IBOutlet TagTableViewCellBackView *backView;
 
 @property (nonatomic, weak) IBOutlet UIView *frontView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *leading;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *backViewToEdit;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftSeparator;
+@property (weak, nonatomic) IBOutlet UIView *rightSelected;
+
 @property (nonatomic) NSString *tagTitle;
 
 @property (nonatomic, weak) IBOutlet UIButton *deleteButton;

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.11" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ftN-u6-d28">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6206.8" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ftN-u6-d28">
     <dependencies>
-        <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6190.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7026.1"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="FontAwesome.otf">
+            <string>FontAwesome</string>
+            <string>FontAwesome</string>
+        </mutableArray>
+    </customFonts>
     <scenes>
         <!--RootViewController-->
         <scene sceneID="KvM-gm-lw9">
@@ -181,10 +186,10 @@
                                 <color key="textColor" red="0.50980392159999999" green="0.50980392159999999" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
-                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gZy-kP-gXw" userLabel="Tag" customClass="TagButton">
+                            <button contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gZy-kP-gXw" userLabel="Tag" customClass="TagButton">
                                 <rect key="frame" x="554" y="120" width="30" height="28"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="13"/>
+                                <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="13"/>
                                 <state key="normal" title="Button">
                                     <color key="titleColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -242,7 +247,7 @@
                         <outlet property="eventTimerControl" destination="IgW-Dr-4Bj" id="Zds-ja-YxN"/>
                         <outlet property="tag" destination="gZy-kP-gXw" id="lcQ-12-LHh"/>
                         <outlet property="toggleStartStopButton" destination="dP9-OE-O85" id="ZPS-ao-uD9"/>
-                        <segue destination="rGB-yR-mDw" kind="presentation" identifier="segueToTagsFromEvent" id="9uM-fu-hMr"/>
+                        <segue destination="OEB-QV-TsG" kind="presentation" identifier="segueToTagsFromEvent" id="rGs-Kp-XER"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9TD-yZ-86c" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -255,85 +260,142 @@
             <point key="canvasLocation" x="893" y="-312"/>
         </scene>
         <!--TagsTableViewController-->
-        <scene sceneID="zQ2-00-SiN">
+        <scene sceneID="prA-Mw-27C">
             <objects>
-                <tableViewController id="rGB-yR-mDw" userLabel="TagsTableViewController" customClass="TagsTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="74" sectionHeaderHeight="22" sectionFooterHeight="22" id="Drg-ei-boB">
+                <viewController extendedLayoutIncludesOpaqueBars="YES" id="OEB-QV-TsG" userLabel="TagsTableViewController" customClass="TagsTableViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="mCL-rm-LtH"/>
+                        <viewControllerLayoutGuide type="bottom" id="RiX-BK-OM9"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="2pB-Jf-Mbs">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TagsTableViewCellIdentifier" id="7lp-Vw-Iv0" userLabel="TagsTableViewCell" customClass="TagTableViewCell">
-                                <rect key="frame" x="0.0" y="22" width="320" height="74"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7lp-Vw-Iv0" id="WM4-8R-m0b">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="73"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <view opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GBL-8y-p6I" userLabel="backView" customClass="TagTableViewCellBackView">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="74"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RYh-i0-qYA" userLabel="Delete">
-                                                    <rect key="frame" x="7" y="22" width="30" height="30"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                    <state key="normal">
-                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <state key="highlighted">
-                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="touchUpInsideDeleteButton:forEvent:" destination="7lp-Vw-Iv0" eventType="touchUpInside" id="W4W-S3-ApY"/>
-                                                    </connections>
-                                                </button>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oLT-tc-FcA" userLabel="TagNameEdit">
-                                                    <rect key="frame" x="70" y="17" width="165" height="40"/>
-                                                    <color key="textColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="24"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
-                                                    <connections>
-                                                        <outlet property="delegate" destination="7lp-Vw-Iv0" id="dFC-gL-o6U"/>
-                                                    </connections>
-                                                </textField>
-                                            </subviews>
-                                            <color key="backgroundColor" red="0.87843137979507446" green="0.87843137979507446" blue="0.87843137979507446" alpha="1" colorSpace="calibratedRGB"/>
-                                        </view>
-                                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YqV-FT-yHV" userLabel="frontView">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="74"/>
-                                            <subviews>
-                                                <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbd-ZN-Ygm" userLabel="TagName">
-                                                    <rect key="frame" x="44" y="14" width="233" height="46"/>
-                                                    <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="25"/>
-                                                    <color key="textColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                        </view>
-                                    </subviews>
-                                </tableViewCellContentView>
+                        <subviews>
+                            <tableView clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="75" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Drg-ei-boB">
+                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="TagsTableViewCellIdentifier" id="Oaa-Px-UGc" userLabel="TagsTableViewCellIdentifier" customClass="TagTableViewCell">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Oaa-Px-UGc" id="u6E-Th-EVp">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GBL-8y-p6I" userLabel="backView" customClass="TagTableViewCellBackView">
+                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="75"/>
+                                                    <subviews>
+                                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Tag name" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oLT-tc-FcA" userLabel="TagNameEdit">
+                                                            <rect key="frame" x="64" y="21" width="496" height="32"/>
+                                                            <color key="textColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="24"/>
+                                                            <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                                            <connections>
+                                                                <outlet property="delegate" destination="Oaa-Px-UGc" id="X7O-yK-Vzc"/>
+                                                            </connections>
+                                                        </textField>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RYh-i0-qYA" userLabel="Delete">
+                                                            <rect key="frame" x="12" y="17" width="30" height="42"/>
+                                                            <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="30"/>
+                                                            <state key="normal" title=""/>
+                                                            <connections>
+                                                                <action selector="touchUpInsideDeleteButton:forEvent:" destination="Oaa-Px-UGc" eventType="touchUpInside" id="IB3-ze-eFE"/>
+                                                            </connections>
+                                                        </button>
+                                                    </subviews>
+                                                    <color key="backgroundColor" red="0.87843137979507446" green="0.87843137979507446" blue="0.87843137979507446" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="centerY" secondItem="oLT-tc-FcA" secondAttribute="centerY" id="DLs-bP-MfD"/>
+                                                        <constraint firstItem="RYh-i0-qYA" firstAttribute="leading" secondItem="GBL-8y-p6I" secondAttribute="leading" constant="12" id="Q8S-Oc-C2I"/>
+                                                        <constraint firstAttribute="centerY" secondItem="RYh-i0-qYA" secondAttribute="centerY" id="eX9-CC-oJu"/>
+                                                        <constraint firstItem="oLT-tc-FcA" firstAttribute="leading" secondItem="RYh-i0-qYA" secondAttribute="trailing" constant="22" id="hWp-QE-wTm"/>
+                                                        <constraint firstAttribute="trailing" secondItem="oLT-tc-FcA" secondAttribute="trailing" constant="40" id="lDL-pO-22M"/>
+                                                    </constraints>
+                                                </view>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YqV-FT-yHV" userLabel="frontView">
+                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="75"/>
+                                                    <subviews>
+                                                        <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tqG-Ah-0hl" userLabel="LeftSeparator">
+                                                            <rect key="frame" x="-10" y="0.0" width="10" height="75"/>
+                                                            <color key="backgroundColor" red="0.42745098040000001" green="0.7843137255" blue="0.99215686270000003" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="10" id="4b4-en-xh2"/>
+                                                            </constraints>
+                                                        </view>
+                                                        <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbd-ZN-Ygm" userLabel="TagName">
+                                                            <rect key="frame" x="269" y="21" width="62" height="33"/>
+                                                            <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="25"/>
+                                                            <color key="textColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </label>
+                                                        <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Ta-j5-qZe" userLabel="rightSelected">
+                                                            <rect key="frame" x="580" y="0.0" width="20" height="75"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="20" id="QhE-fd-fBJ"/>
+                                                            </constraints>
+                                                        </view>
+                                                    </subviews>
+                                                    <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstItem="7Ta-j5-qZe" firstAttribute="top" secondItem="YqV-FT-yHV" secondAttribute="top" id="A1L-Te-aNb"/>
+                                                        <constraint firstAttribute="centerY" secondItem="kbd-ZN-Ygm" secondAttribute="centerY" id="Ci5-2Z-dnW"/>
+                                                        <constraint firstAttribute="centerX" secondItem="kbd-ZN-Ygm" secondAttribute="centerX" id="Dwg-h6-oIl"/>
+                                                        <constraint firstAttribute="bottom" secondItem="tqG-Ah-0hl" secondAttribute="bottom" id="Gaw-2E-WaG"/>
+                                                        <constraint firstItem="tqG-Ah-0hl" firstAttribute="top" secondItem="YqV-FT-yHV" secondAttribute="top" id="HLW-mI-ezi"/>
+                                                        <constraint firstAttribute="leading" secondItem="tqG-Ah-0hl" secondAttribute="trailing" id="fvb-u0-IRM"/>
+                                                        <constraint firstAttribute="trailing" secondItem="7Ta-j5-qZe" secondAttribute="trailing" id="gNg-vA-cdd"/>
+                                                        <constraint firstAttribute="bottom" secondItem="7Ta-j5-qZe" secondAttribute="bottom" id="vsd-ff-q0k"/>
+                                                    </constraints>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="GBL-8y-p6I" secondAttribute="bottom" id="Ynx-i1-oW1"/>
+                                                <constraint firstItem="YqV-FT-yHV" firstAttribute="leading" secondItem="u6E-Th-EVp" secondAttribute="leading" id="a96-OK-wBR"/>
+                                                <constraint firstItem="YqV-FT-yHV" firstAttribute="top" secondItem="u6E-Th-EVp" secondAttribute="top" id="lmM-ZV-f4Z"/>
+                                                <constraint firstItem="GBL-8y-p6I" firstAttribute="top" secondItem="u6E-Th-EVp" secondAttribute="top" id="qXb-2S-San"/>
+                                                <constraint firstAttribute="trailing" secondItem="GBL-8y-p6I" secondAttribute="trailing" id="se9-zw-4zv"/>
+                                                <constraint firstItem="GBL-8y-p6I" firstAttribute="leading" secondItem="u6E-Th-EVp" secondAttribute="leading" id="uAl-qb-Ye4"/>
+                                                <constraint firstAttribute="bottom" secondItem="YqV-FT-yHV" secondAttribute="bottom" id="uOl-Gj-xQJ"/>
+                                                <constraint firstAttribute="trailing" secondItem="YqV-FT-yHV" secondAttribute="trailing" id="v98-tP-z6z"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="backView" destination="GBL-8y-p6I" id="IQ9-WQ-70M"/>
+                                            <outlet property="backViewToEdit" destination="lDL-pO-22M" id="Cdj-dd-tPK"/>
+                                            <outlet property="deleteButton" destination="RYh-i0-qYA" id="nNS-mS-cFQ"/>
+                                            <outlet property="frontView" destination="YqV-FT-yHV" id="2Em-rd-Trk"/>
+                                            <outlet property="leading" destination="a96-OK-wBR" id="xlj-YN-Bpw"/>
+                                            <outlet property="leftSeparator" destination="4b4-en-xh2" id="hMF-fW-asE"/>
+                                            <outlet property="rightSelected" destination="7Ta-j5-qZe" id="vbk-9O-jGg"/>
+                                            <outlet property="tagName" destination="kbd-ZN-Ygm" id="qv8-VM-q2R"/>
+                                            <outlet property="tagNameTextField" destination="oLT-tc-FcA" id="eO3-LP-qae"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
                                 <connections>
-                                    <outlet property="backView" destination="GBL-8y-p6I" id="Ttn-rl-pRJ"/>
-                                    <outlet property="deleteButton" destination="RYh-i0-qYA" id="aWg-Js-ihZ"/>
-                                    <outlet property="frontView" destination="YqV-FT-yHV" id="ww5-tS-KUj"/>
-                                    <outlet property="tagName" destination="kbd-ZN-Ygm" id="K3T-on-6RL"/>
-                                    <outlet property="tagNameTextField" destination="oLT-tc-FcA" id="k17-ce-ORQ"/>
+                                    <outlet property="dataSource" destination="OEB-QV-TsG" id="mFj-mw-oBw"/>
+                                    <outlet property="delegate" destination="OEB-QV-TsG" id="Bab-dH-I2g"/>
                                 </connections>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="rGB-yR-mDw" id="g5q-MZ-xLa"/>
-                            <outlet property="delegate" destination="rGB-yR-mDw" id="si1-YW-02P"/>
-                        </connections>
-                    </tableView>
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="wuN-Iu-I2O" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                        <rect key="contentStretch" x="0.050000000000000003" y="0.0" width="1" height="1"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="Drg-ei-boB" secondAttribute="bottom" id="F2a-E9-eEo"/>
+                            <constraint firstAttribute="trailing" secondItem="Drg-ei-boB" secondAttribute="trailing" id="kef-lg-VtM"/>
+                            <constraint firstItem="Drg-ei-boB" firstAttribute="top" secondItem="mCL-rm-LtH" secondAttribute="bottom" id="qyv-Vg-ccs"/>
+                            <constraint firstItem="Drg-ei-boB" firstAttribute="leading" secondItem="2pB-Jf-Mbs" secondAttribute="leading" id="svA-1D-GIg"/>
+                        </constraints>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
+                    <connections>
+                        <outlet property="tableView" destination="Drg-ei-boB" id="4H1-vL-gJA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ibM-ul-gcy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="978.75" y="-1031.25"/>
+            <point key="canvasLocation" x="1508" y="-1008"/>
         </scene>
         <!--InfoHintViewController-->
         <scene sceneID="ntc-rR-qma">
@@ -648,7 +710,6 @@
                     <connections>
                         <outlet property="filterView" destination="OEb-AI-qv9" id="B5f-v9-xt1"/>
                         <outlet property="tableView" destination="eEg-yt-w1f" id="yXd-dQ-fPa"/>
-                        <segue destination="rGB-yR-mDw" kind="presentation" identifier="segueToTagsFromEvents" id="tQF-pe-67W"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5d9-Ya-5JT" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -656,7 +717,4 @@
             <point key="canvasLocation" x="965.625" y="405"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="9uM-fu-hMr"/>
-    </inferredMetricsTieBreakers>
 </document>

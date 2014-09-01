@@ -16,6 +16,7 @@ static CGFloat kAddingAnimationDuration       = 0.25;
 // public properties
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic) CGPoint translationInTableView;
+@property (nonatomic) CGPoint velocity;
 
 // private properties
 @property (nonatomic, weak) id <TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureMovingRowDelegate> delegate;
@@ -79,6 +80,7 @@ static NSInteger kCellSnapShotTag = 100000;
     if (recognizer.state == UIGestureRecognizerStateBegan && [recognizer numberOfTouches] > 0) {
         CGPoint translation = [recognizer translationInView:self.tableView];
         self.translationInTableView = translation;
+        self.velocity = [recognizer velocityInView:self.tableView];
 
         NSIndexPath *indexPath = self.transformIndexPath;
         if (!indexPath) {
@@ -92,12 +94,15 @@ static NSInteger kCellSnapShotTag = 100000;
         self.state            = TableViewGestureRecognizerStatePanning;
 
         if ([self.delegate respondsToSelector:@selector(gestureRecognizer:didEnterEditingState:forRowAtIndexPath:)]) {
-            [self.delegate gestureRecognizer:self didEnterEditingState:self.editingCellState forRowAtIndexPath:indexPath];
+            [self.delegate gestureRecognizer:self
+                        didEnterEditingState:self.editingCellState
+                           forRowAtIndexPath:indexPath];
         }
     } else if (recognizer.state == UIGestureRecognizerStateChanged) {
         NSIndexPath *indexPath = self.transformIndexPath;
         CGPoint translation    = [recognizer translationInView:self.tableView];
         self.translationInTableView = translation;
+        self.velocity = [recognizer velocityInView:self.tableView];
 
         self.editingCellState = translation.x > 0 ? TransformableTableViewCellEditingStateRight : TransformableTableViewCellEditingStateLeft;
 
@@ -110,6 +115,8 @@ static NSInteger kCellSnapShotTag = 100000;
         self.transformIndexPath = nil;
 
         CGPoint translation = [recognizer translationInView:self.tableView];
+        self.translationInTableView = translation;
+        self.velocity = [recognizer velocityInView:self.tableView];
 
         CGFloat commitEditingLength = kCommitEditingRowDefaultLength;
         if ([self.delegate respondsToSelector:@selector(gestureRecognizer:lengthForCommitEditingRowAtIndexPath:)]) {
@@ -167,8 +174,12 @@ static NSInteger kCellSnapShotTag = 100000;
         [self.delegate gestureRecognizer:self needsCreatePlaceholderForRowAtIndexPath:indexPath];
         self.transformIndexPath = indexPath;
 
-        // Start timer to prep	are for auto scrolling
-        self.movingTimer = [NSTimer timerWithTimeInterval:1 / 8 target:self selector:@selector(scrollTable) userInfo:nil repeats:YES];
+        // Start timer for auto scrolling
+        self.movingTimer = [NSTimer timerWithTimeInterval:1 / 8
+                                                   target:self
+                                                 selector:@selector(scrollTable)
+                                                 userInfo:nil
+                                                  repeats:YES];
         [[NSRunLoop mainRunLoop] addTimer:self.movingTimer forMode:NSDefaultRunLoopMode];
     } else if (recognizer.state == UIGestureRecognizerStateEnded) {
         // While long press ends, we remove the snapshot imageView

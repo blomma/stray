@@ -11,6 +11,7 @@ typedef NS_ENUM (uint16_t, TransformableTableViewCellEditingState) {
 
 @property (nonatomic, weak, readonly) UITableView *tableView;
 @property (nonatomic, readonly) CGPoint translationInTableView;
+@property (nonatomic, readonly) CGPoint velocity;
 
 + (TransformableTableViewGestureRecognizer *)gestureRecognizerWithTableView:(UITableView *)tableView delegate:(id)delegate;
 
