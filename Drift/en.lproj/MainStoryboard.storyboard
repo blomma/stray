@@ -130,7 +130,7 @@
                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IgW-Dr-4Bj" userLabel="EventTimerControl" customClass="EventTimerControl">
-                                <rect key="frame" x="160" y="276" width="280" height="280"/>
+                                <rect key="frame" x="160" y="150" width="280" height="280"/>
                                 <subviews>
                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dP9-OE-O85" userLabel="Start/Stop">
                                         <rect key="frame" x="83" y="105" width="114" height="70"/>
@@ -215,10 +215,10 @@
                             <constraint firstItem="umb-06-ZUE" firstAttribute="baseline" secondItem="ROP-Lr-uwF" secondAttribute="baseline" id="KWp-hK-V9C"/>
                             <constraint firstItem="4mi-p0-fxw" firstAttribute="leading" secondItem="xRk-W2-bMK" secondAttribute="trailing" id="Ks0-1q-Hx6"/>
                             <constraint firstItem="n39-IM-ZTu" firstAttribute="leading" secondItem="8Qo-UI-s2h" secondAttribute="leading" constant="20" id="NoF-2P-oCf"/>
-                            <constraint firstItem="sU9-lB-8ZV" firstAttribute="top" secondItem="IgW-Dr-4Bj" secondAttribute="bottom" id="TWB-9O-ss0"/>
                             <constraint firstItem="G96-uj-epw" firstAttribute="top" secondItem="4mi-p0-fxw" secondAttribute="bottom" id="VKn-f9-vCN"/>
                             <constraint firstAttribute="trailing" secondItem="G96-uj-epw" secondAttribute="trailing" constant="20" id="WEv-qh-1wu"/>
                             <constraint firstItem="ROP-Lr-uwF" firstAttribute="leading" secondItem="umb-06-ZUE" secondAttribute="trailing" id="bFB-nB-skW"/>
+                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="b69-WY-Ku9" secondAttribute="bottom" constant="130" id="bOP-yh-3Sn"/>
                             <constraint firstItem="gZy-kP-gXw" firstAttribute="top" secondItem="b69-WY-Ku9" secondAttribute="bottom" constant="100" id="bhM-Cw-lQU"/>
                             <constraint firstItem="umb-06-ZUE" firstAttribute="bottom" secondItem="8Ic-Ed-DlP" secondAttribute="top" constant="8" id="gY6-pM-tpX"/>
                             <constraint firstItem="umb-06-ZUE" firstAttribute="leading" secondItem="8Ic-Ed-DlP" secondAttribute="leading" constant="20" id="kvf-mJ-BwM"/>
