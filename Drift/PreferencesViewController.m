@@ -14,7 +14,6 @@
 #import <MGLine.h>
 #import <MGLineStyled.h>
 #import <UIColor+MGExpanded.h>
-#import <FontAwesomeKit.h>
 
 static void *PreferencesViewControllerContext = &PreferencesViewControllerContext;
 
@@ -51,7 +50,7 @@ static void *PreferencesViewControllerContext = &PreferencesViewControllerContex
     [self.close setTitleColor:color forState:UIControlStateNormal];
     [self.close setTitleColor:[color colorByAdding:-0.16f alpha:0] forState:UIControlStateHighlighted];
 
-    [self.close setTitle:FAKIconRemoveSign forState:UIControlStateNormal];
+    [self.close setTitle:@"\uf057" forState:UIControlStateNormal];
 
     // setup the main scroller (using a grid layout)
     self.scroller.contentLayoutMode = MGLayoutGridStyle;
@@ -107,9 +106,9 @@ static void *PreferencesViewControllerContext = &PreferencesViewControllerContex
 
     self.dropboxResync = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     self.dropboxResync.frame = CGRectMake(0, 0, 30, 30);
-    self.dropboxResync.titleLabel.font = [FontAwesomeKit fontWithSize:18];
+    self.dropboxResync.titleLabel.font = [UIFont fontWithName:@"FontAwesome" size:18];
     self.dropboxResync.titleLabel.textAlignment = NSTextAlignmentCenter;
-    [self.dropboxResync setTitle:FAKIconRetweet forState:UIControlStateNormal];
+    [self.dropboxResync setTitle:@"\uf079" forState:UIControlStateNormal];
     [self.dropboxResync setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [self.dropboxResync setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
 

@@ -7,10 +7,7 @@
 //
 
 #import "EventsGroupedByStartDateTableViewCell.h"
-
 #import <QuartzCore/QuartzCore.h>
-
-#import <FontAwesomeKit.h>
 
 @interface EventsGroupedByStartDateTableViewCell ()
 
@@ -33,8 +30,8 @@
 
     [self.frontView.layer addSublayer:separatorLayer];
 
-    self.willDelete.font = [FontAwesomeKit fontWithSize:30];
-    self.willDelete.text = FAKIconRemove;
+    self.willDelete.font = [UIFont fontWithName:@"FontAwesome" size:30];
+    self.willDelete.text = @"\uf00d";
 }
 
 - (IBAction)touchUpInsideTagButton:(UIButton *)sender forEvent:(UIEvent *)event {

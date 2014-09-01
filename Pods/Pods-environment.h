@@ -6,12 +6,6 @@
 // project.
 
 
-// FontAwesomeKit
-#define COCOAPODS_POD_AVAILABLE_FontAwesomeKit
-#define COCOAPODS_VERSION_MAJOR_FontAwesomeKit 1
-#define COCOAPODS_VERSION_MINOR_FontAwesomeKit 1
-#define COCOAPODS_VERSION_PATCH_FontAwesomeKit 4
-
 // HMSideMenu
 #define COCOAPODS_POD_AVAILABLE_HMSideMenu
 #define COCOAPODS_VERSION_MAJOR_HMSideMenu 1

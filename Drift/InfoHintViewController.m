@@ -7,7 +7,6 @@
 //
 
 #import "InfoHintViewController.h"
-#import <FontAwesomeKit.h>
 #import <UIColor+MGExpanded.h>
 
 @interface InfoHintViewController ()
@@ -58,7 +57,7 @@
     [self.closeInfoHintView setTitleColor:color forState:UIControlStateNormal];
     [self.closeInfoHintView setTitleColor:[color colorByAdding:-0.16f alpha:0] forState:UIControlStateHighlighted];
 
-    [self.closeInfoHintView setTitle:FAKIconRemoveSign forState:UIControlStateNormal];
+    [self.closeInfoHintView setTitle:@"\uf057" forState:UIControlStateNormal];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender {

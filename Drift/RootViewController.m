@@ -8,7 +8,6 @@
 
 #import "RootViewController.h"
 
-#import <FontAwesomeKit.h>
 #import <HMSideMenu.h>
 #import "IconView.h"
 
@@ -52,7 +51,7 @@
                                 action:@selector(touchUpInsideInfoButton:forEvent:)
                       forControlEvents:UIControlEventTouchUpInside];
 
-        self.sideMenuButton.titleLabel.font = [FontAwesomeKit fontWithSize:25];
+        self.sideMenuButton.titleLabel.font = [UIFont fontWithName:@"FontAwesome" size:25];
         self.sideMenuButton.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.sideMenuButton.titleLabel.backgroundColor = [UIColor clearColor];
 
@@ -60,7 +59,7 @@
 
         [self.sideMenuButton setTitleColor:[UIColor colorWithWhite:0.510f alpha:1.000]
                                   forState:UIControlStateNormal];
-        [self.sideMenuButton setTitle:FAKIconChevronSignUp
+        [self.sideMenuButton setTitle:@"\uf139"
                              forState:UIControlStateNormal];
 
         self.sideMenuButton.frame = CGRectMake(self.view.bounds.size.width - 30, self.view.bounds.size.height - 30, 30, 30);
@@ -68,11 +67,6 @@
         [self.view addSubview:self.sideMenuButton];
 
         __weak typeof(self) weakSelf = self;
-        UIImageView *settingsItemImageView = [[UIImageView alloc]
-                                          initWithImage:[FontAwesomeKit
-                                                         imageForIcon:FAKIconCog
-                                                         imageSize:CGSizeMake(60, 60)
-                                                         fontSize:40 attributes:nil]];
 
         HMSideMenuItem *settingsItem = [[HMSideMenuItem alloc] initWithSize:CGSizeMake(60, 60) action:^{
             [weakSelf toggleSideMenu];
@@ -80,14 +74,8 @@
                                           sender:self];
         }];
         settingsItem.backgroundColor = [UIColor clearColor];
-        [settingsItem addSubview:settingsItemImageView];
 
 
-        UIImageView *infoItemImageView = [[UIImageView alloc]
-                                          initWithImage:[FontAwesomeKit
-                                                         imageForIcon:FAKIconInfoSign
-                                                         imageSize:CGSizeMake(60, 60)
-                                                         fontSize:40 attributes:nil]];
 
         HMSideMenuItem *infoItem = [[HMSideMenuItem alloc] initWithSize:CGSizeMake(60, 60) action:^{
             [weakSelf toggleSideMenu];
@@ -95,7 +83,6 @@
                                           sender:self];
         }];
         infoItem.backgroundColor = [UIColor clearColor];
-        [infoItem addSubview:infoItemImageView];
 
         self.sideMenu = [[HMSideMenu alloc] initWithItems:@[settingsItem, infoItem]];
         [self.sideMenu setItemSpacing:18.0f];

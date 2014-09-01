@@ -8,8 +8,6 @@
 
 #import "TagButton.h"
 
-#import <FontAwesomeKit.h>
-
 @implementation TagButton
 
 - (void)setTitle:(NSString *)title forState:(UIControlState)state {
@@ -17,8 +15,8 @@
         self.titleLabel.font = [UIFont fontWithName:@"Futura-Medium" size:12];
         title = [title uppercaseString];
     } else {
-        self.titleLabel.font = [FontAwesomeKit fontWithSize:20];
-        title = FAKIconTag;
+        self.titleLabel.font = [UIFont fontWithName:@"FontAwesome" size:20];
+        title = @"\uf02b";
     }
 
     [super setTitle:title forState:state];
