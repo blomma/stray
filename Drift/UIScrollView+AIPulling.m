@@ -9,7 +9,6 @@
 #import "UIScrollView+AIPulling.h"
 
 #import <objc/runtime.h>
-#import <FontAwesomeKit.h>
 
 @interface AIPullingView ()
 
@@ -47,7 +46,7 @@
         self.backgroundColorForAddState   = [UIColor colorWithRed:0.510f green:0.784f blue:0.431f alpha:1];
         self.backgroundColorForCloseState = [UIColor colorWithRed:0.745 green:0.106 blue:0.169 alpha:1.000];
 
-        self.titleLabel                 = [[UILabel alloc] initWithFrame:CGRectMake(0, 25, self.bounds.size.width, 50)];
+        self.titleLabel                 = [[UILabel alloc] init];
         self.titleLabel.font            = [UIFont fontWithName:@"Futura-CondensedMedium" size:17];
         self.titleLabel.backgroundColor = [UIColor clearColor];
         self.titleLabel.textColor       = self.textColor;
@@ -56,7 +55,7 @@
         [self addSubview:self.titleLabel];
 
         self.stateIcon                 = [[UILabel alloc] initWithFrame:CGRectMake(60, 10, 50, 50)];
-        self.stateIcon.font            = [FontAwesomeKit fontWithSize:30];
+        self.stateIcon.font            = [UIFont fontWithName:@"FontAwesome" size:30];
         self.stateIcon.backgroundColor = [UIColor clearColor];
         self.stateIcon.textColor       = self.textColor;
         self.stateIcon.textAlignment   = NSTextAlignmentCenter;
@@ -77,7 +76,7 @@
     CGRect frame = CGRectMake(0, y, self.bounds.size.width, height);
     self.frame = frame;
 
-    CGRect titleLabelFrame = self.titleLabel.frame;
+    CGRect titleLabelFrame = CGRectMake(0, 25, self.bounds.size.width, 50);
     titleLabelFrame.origin.y = height / 2 - (self.titleLabel.frame.size.height / 2);
     self.titleLabel.frame    = titleLabelFrame;
 
@@ -88,12 +87,12 @@
     if (self.state == AIPullingStatePullingClose) {
         self.backgroundColor = self.backgroundColorForCloseState;
         self.titleLabel.text = @"Release to Close...";
-        self.stateIcon.text  = FAKIconRemove;
+        self.stateIcon.text  = @"\uf00d";
 
     } else if (self.state == AIPullingStatePullingAdd) {
         self.backgroundColor = self.backgroundColorForAddState;
         self.titleLabel.text = @"Release to Add...";
-        self.stateIcon.text  = FAKIconOk;
+        self.stateIcon.text  = @"\uf00c";
 
     } else if (self.state == AIPullingStatePulling) {
         CGFloat alphaHeight = self.addingHeight == 0 ? self.closingHeight : self.addingHeight;
