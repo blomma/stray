@@ -62,7 +62,7 @@ static void *PreferencesViewControllerContext = &PreferencesViewControllerContex
     [self.scroller.boxes addObject:self.grid];
 
     /// Dropbox sync
-    float width = self.view.bounds.size.width - 20.0f;
+    CGFloat width = self.view.bounds.size.width - 20.0f;
     MGBox *box = [MGBox boxWithSize:(CGSize) {width, 180 }];
     box.backgroundColor = [UIColor colorWithRed:0.94 green:0.94 blue:0.95 alpha:1];
     box.leftMargin = box.topMargin = 10;

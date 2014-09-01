@@ -50,7 +50,7 @@ static NSMutableDictionary * __dateFormatters = nil;
 }
 
 - (NSDate *)startOfCurrentDay {
-    static NSUInteger units = (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit);
+    static NSUInteger units = (NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay);
     // Get the weekday component of the current date
 
     NSDateComponents *components = [[NSDate calendar] components:units

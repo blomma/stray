@@ -11,6 +11,7 @@
 #import "Event.h"
 #import "Tag.h"
 #import "TagsTableViewController.h"
+#import "EventsGroupedByStartDate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIImage+Retina4.h"
 #import "State.h"
@@ -96,10 +97,13 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToTagsFromEvent"]) {
-        [[segue destinationViewController] setDelegate:self];
-        [[segue destinationViewController] setEvent:[State instance].selectedEvent];
+        TagsTableViewController *controller = (TagsTableViewController *)[segue destinationViewController];
+
+        controller.delegate = self;
+        controller.event = [State instance].selectedEvent;
     } else if ([segue.identifier isEqualToString:@"segueToEventsFromEvent"]) {
-        [[segue destinationViewController] setDelegate:self];
+        EventsGroupedByStartDateViewController *controller = (EventsGroupedByStartDateViewController *)[segue destinationViewController];
+        controller.delegate = self;
     }
 }
 
@@ -195,40 +199,40 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 
 - (void)updateStartLabelWithDate:(NSDate *)date {
     if (date) {
-        static NSUInteger unitFlags  = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
+        static NSUInteger unitFlags  = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitWeekday | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
         NSDateComponents *components = [[NSDate calendar] components:unitFlags
                                                             fromDate:date];
 
-        self.eventStartTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
-        self.eventStartDay.text   = [NSString stringWithFormat:@"%02d", components.day];
-        self.eventStartYear.text  = [NSString stringWithFormat:@"%04d", components.year];
-        self.eventStartMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
+        self.eventStartTime.text  = [NSString stringWithFormat:@"%02ld:%02ld", (long)components.hour, (long)components.minute];
+        self.eventStartDay.text   = [NSString stringWithFormat:@"%02ld", (long)components.day];
+        self.eventStartYear.text  = [NSString stringWithFormat:@"%04ld", (long)components.year];
+        self.eventStartMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:(NSUInteger)(components.month - 1)];
     }
 }
 
 - (void)updateEventTimeWithDate:(NSDate *)date {
     if (date && [State instance].selectedEvent.startDate) {
-        static NSUInteger unitFlags  = NSHourCalendarUnit | NSMinuteCalendarUnit;
+        static NSUInteger unitFlags  = NSCalendarUnitHour | NSCalendarUnitMinute;
 
         NSDateComponents *components = [[NSDate calendar] components:unitFlags
                                                             fromDate:[State instance].selectedEvent.startDate
                                                               toDate:date options:0];
 
-        self.eventTimeHours.text   = [NSString stringWithFormat:@"%02d", components.hour];
-        self.eventTimeMinutes.text = [NSString stringWithFormat:@"%02d", components.minute];
+        self.eventTimeHours.text   = [NSString stringWithFormat:@"%02ld", (long)components.hour];
+        self.eventTimeMinutes.text = [NSString stringWithFormat:@"%02ld", (long)components.minute];
     }
 }
 
 - (void)updateStopLabelWithDate:(NSDate *)date {
     if (date) {
-        static NSUInteger unitFlags  = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
+        static NSUInteger unitFlags  = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitWeekday | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
         NSDateComponents *components = [[NSDate calendar] components:unitFlags
                                                             fromDate:date];
 
-        self.eventStopTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
-        self.eventStopDay.text   = [NSString stringWithFormat:@"%02d", components.day];
-        self.eventStopYear.text  = [NSString stringWithFormat:@"%04d", components.year];
-        self.eventStopMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
+        self.eventStopTime.text  = [NSString stringWithFormat:@"%02ld:%02ld", (long)components.hour, (long)components.minute];
+        self.eventStopDay.text   = [NSString stringWithFormat:@"%02ld", (long)components.day];
+        self.eventStopYear.text  = [NSString stringWithFormat:@"%04ld", (long)components.year];
+        self.eventStopMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:(NSUInteger)(components.month - 1)];
     }
 }
 
@@ -370,7 +374,6 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(isTransforming))]) {
             if (changeKindKey == NSKeyValueChangeSetting) {
                 id newValue = [change objectForKey:NSKeyValueChangeNewKey];
-                id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
 
                 EventTimerTransformingEnum isTransforming = [newValue integerValue];
                 if (isTransforming != EventTimerNotTransforming) {

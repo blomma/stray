@@ -36,7 +36,7 @@
 - (CAAnimation *)srcTranslation:(CGRect)bounds {
     // Move from current position to the final position.
     CABasicAnimation *translation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
-    translation.toValue = [NSNumber numberWithFloat:bounds.size.width];
+    translation.toValue = [NSNumber numberWithFloat:(float)bounds.size.width];
 
     return translation;
 }

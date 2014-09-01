@@ -17,7 +17,7 @@
 @implementation DataRepository
 
 - (int)getRandomNumber:(int)from to:(int)to {
-    return (int)from + arc4random() % (to - from + 1);
+    return from + (int)arc4random() % (to - from + 1);
 }
 
 - (void)populateRandomData {
@@ -47,7 +47,7 @@
         event.startDate = nowDate;
         nowDate         = [NSDate dateWithTimeIntervalSinceReferenceDate:interval];
         event.stopDate  = nowDate;
-        event.inTag     = [tags objectAtIndex:[self getRandomNumber:0 to:3]];
+        event.inTag     = [tags objectAtIndex:(NSUInteger)[self getRandomNumber:0 to:3]];
     }
 }
 

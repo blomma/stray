@@ -147,7 +147,7 @@
 #pragma mark Private methods
 
 - (void)updateFilteredEventsDateComponents {
-    static NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+    static NSUInteger unitFlags = NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
 
     NSDate *endOfDay = [self.groupDate endOfCurrentDay];
 
@@ -163,7 +163,7 @@
         NSDateComponents *components = [[NSDate calendar] components:unitFlags
                                                             fromDate:startDate
                                                               toDate:stopDate
-                                                             options:NSWrapCalendarComponents];
+                                                             options:NSCalendarWrapComponents];
 
         deltaEnd = [[NSDate calendar] dateByAddingComponents:components
                                                       toDate:deltaEnd

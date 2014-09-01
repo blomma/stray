@@ -46,7 +46,7 @@
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width * infoImages.count, self.scrollView.frame.size.height);
 
     self.pageControl.currentPage   = 0;
-    self.pageControl.numberOfPages = infoImages.count;
+    self.pageControl.numberOfPages = (NSInteger)infoImages.count;
 
     self.closeInfoHintView.titleLabel.font = [UIFont fontWithName:@"FontAwesome" size:30];
     self.closeInfoHintView.titleLabel.textAlignment = NSTextAlignmentCenter;

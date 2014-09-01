@@ -85,7 +85,7 @@
     }
 
     // Calculate how many seconds this event spans
-    unsigned int unitFlags                  = NSSecondCalendarUnit;
+    unsigned int unitFlags                  = NSCalendarUnitSecond;
     NSDateComponents *eventSecondsComponent = [[NSDate calendar] components:unitFlags
                                                                    fromDate:startDate
                                                                      toDate:stopDate

@@ -70,8 +70,8 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
 
-    CGFloat yDelta = MIN(fabsf(self.scrollView.contentOffset.y), self.scrollView.frame.origin.y);
-    CGFloat height = fabsf(self.scrollView.contentOffset.y) + yDelta;
+    CGFloat yDelta = MIN(fabs(self.scrollView.contentOffset.y), self.scrollView.frame.origin.y);
+    CGFloat height = fabs(self.scrollView.contentOffset.y) + yDelta;
     CGFloat y      = -height;
 
     CGRect frame = CGRectMake(0, y, self.bounds.size.width, height);
@@ -99,7 +99,7 @@
         CGFloat alphaHeight = self.addingHeight == 0 ? self.closingHeight : self.addingHeight;
         alphaHeight += self.scrollView.contentInset.top;
 
-        CGFloat alpha = (fabsf(self.scrollView.contentOffset.y) / alphaHeight);
+        CGFloat alpha = (fabs(self.scrollView.contentOffset.y) / alphaHeight);
 
         self.backgroundColor = self.addingHeight == 0 ? [self.backgroundColorForCloseState colorWithAlphaComponent:alpha] : [self.backgroundColorForAddState colorWithAlphaComponent:alpha];
         self.titleLabel.text = self.addingHeight == 0 ? @"Pull to Close..." : @"Pull to Add...";
@@ -127,7 +127,7 @@
 
 - (void)scrollViewDidScroll:(CGPoint)contentOffset {
     if (self.scrollView.decelerating) {
-        if (self.state == AIPullingStateAction && self.state != AIPullingStateInitial && fabsf(contentOffset.y) <= fabsf(self.scrollView.contentInset.top)) {
+        if (self.state == AIPullingStateAction && self.state != AIPullingStateInitial && fabs(contentOffset.y) <= fabs(self.scrollView.contentInset.top)) {
             self.state = AIPullingStateInitial;
         } else if (self.state != AIPullingStateInitial) {
             self.state = AIPullingStateAction;
@@ -148,11 +148,11 @@
     CGFloat heightForAddState    = self.addingHeight + self.scrollView.contentInset.top;
     CGFloat heightForCancelState = self.addingHeight == 0 ? heightForCloseState : heightForAddState;
 
-    if (fabsf(contentOffset.y) < heightForCancelState) {
+    if (fabs(contentOffset.y) < heightForCancelState) {
         self.state = AIPullingStatePulling;
-    } else if (fabsf(contentOffset.y) > heightForCloseState) {
+    } else if (fabs(contentOffset.y) > heightForCloseState) {
         self.state = AIPullingStatePullingClose;
-    } else if (fabsf(contentOffset.y) >= heightForAddState && self.addingHeight != 0) {
+    } else if (fabs(contentOffset.y) >= heightForAddState && self.addingHeight != 0) {
         self.state = AIPullingStatePullingAdd;
     }
 }

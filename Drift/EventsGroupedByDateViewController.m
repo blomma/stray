@@ -177,16 +177,16 @@
 
     NSDateComponents *components = eventGroup.filteredEventsDateComponents;
 
-    cell.hours.text   = [NSString stringWithFormat:@"%02d", components.hour];
-    cell.minutes.text = [NSString stringWithFormat:@"%02d", components.minute];
+    cell.hours.text   = [NSString stringWithFormat:@"%02ld", (long)components.hour];
+    cell.minutes.text = [NSString stringWithFormat:@"%02ld", (long)components.minute];
 
-    static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
+    static NSUInteger unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitWeekday | NSCalendarUnitDay;
     components = [[NSDate calendar] components:unitFlags fromDate:eventGroup.groupDate];
 
-    cell.day.text     = [NSString stringWithFormat:@"%02d", components.day];
-    cell.year.text    = [NSString stringWithFormat:@"%04d", components.year];
-    cell.month.text   = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
-    cell.weekDay.text = [[self.standaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString];
+    cell.day.text     = [NSString stringWithFormat:@"%02ld", (long)components.day];
+    cell.year.text    = [NSString stringWithFormat:@"%04ld", (long)components.year];
+    cell.month.text   = [self.shortStandaloneMonthSymbols objectAtIndex:(NSUInteger)(components.month - 1)];
+    cell.weekDay.text = [[self.standaloneWeekdaySymbols objectAtIndex:(NSUInteger)(components.weekday - 1)] uppercaseString];
 
     return cell;
 }

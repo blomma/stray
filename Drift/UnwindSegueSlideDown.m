@@ -12,7 +12,7 @@
 
 - (CAAnimation *)srcTranslation:(CGRect)bounds {
     CABasicAnimation *translation = [CABasicAnimation animationWithKeyPath:@"transform.translation.y"];
-    translation.toValue = [NSNumber numberWithFloat:bounds.size.height];
+    translation.toValue = [NSNumber numberWithFloat:(float)bounds.size.height];
 
     return translation;
 }

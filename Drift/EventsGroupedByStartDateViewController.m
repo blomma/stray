@@ -143,7 +143,8 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToTagsFromEvents"]) {
-        [[segue destinationViewController] setDelegate:self];
+        TagsTableViewController *controller = (TagsTableViewController *)[segue destinationViewController];
+        controller.delegate = self;
 
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)indexPath.section];
@@ -282,10 +283,10 @@
     headerLabel.font            = [UIFont fontWithName:@"Futura-CondensedMedium" size:16];
     headerLabel.textAlignment   = NSTextAlignmentCenter;
 
-    static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit;
+    static NSUInteger unitFlagsEventStart = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitWeekday | NSCalendarUnitDay;
     NSDateComponents *components          = [[NSDate calendar] components:unitFlagsEventStart fromDate:eventGroup.groupDate];
 
-    headerLabel.text = [NSString stringWithFormat:@"%@  ·  %02d %@ %04d", [[self.shortStandaloneWeekdaySymbols objectAtIndex:components.weekday - 1] uppercaseString], components.day, [[self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1] uppercaseString], components.year];
+    headerLabel.text = [NSString stringWithFormat:@"%@  ·  %02ld %@ %04ld", [[self.shortStandaloneWeekdaySymbols objectAtIndex:(NSUInteger)components.weekday - 1] uppercaseString], components.day, [[self.shortStandaloneMonthSymbols objectAtIndex:(NSUInteger)components.month - 1] uppercaseString], (long)components.year];
 
     return headerLabel;
 }
@@ -333,31 +334,31 @@
     [cell.tagName setTitle:[event.inTag.name copy] forState:UIControlStateNormal];
 
     // StartTime
-    static NSUInteger unitFlagsEventStart = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
+    static NSUInteger unitFlagsEventStart = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitWeekday | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
     NSDateComponents *components          = [[NSDate calendar] components:unitFlagsEventStart fromDate:event.startDate];
 
-    cell.eventStartTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
-    cell.eventStartDay.text   = [NSString stringWithFormat:@"%02d", components.day];
-    cell.eventStartYear.text  = [NSString stringWithFormat:@"%04d", components.year];
-    cell.eventStartMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
+    cell.eventStartTime.text  = [NSString stringWithFormat:@"%02ld:%02ld", (long)components.hour, (long)components.minute];
+    cell.eventStartDay.text   = [NSString stringWithFormat:@"%02ld", (long)components.day];
+    cell.eventStartYear.text  = [NSString stringWithFormat:@"%04ld", (long)components.year];
+    cell.eventStartMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:(NSUInteger)components.month - 1];
 
     // EventTime
     NSDate *stopDate                     = event.stopDate ? event.stopDate : [NSDate date];
-    static NSUInteger unitFlagsEventTime = NSHourCalendarUnit | NSMinuteCalendarUnit;
+    static NSUInteger unitFlagsEventTime = NSCalendarUnitHour | NSCalendarUnitMinute;
     components                 = [[NSDate calendar] components:unitFlagsEventTime fromDate:event.startDate toDate:stopDate options:0];
 
-    cell.eventTimeHours.text   = [NSString stringWithFormat:@"%02d", components.hour];
-    cell.eventTimeMinutes.text = [NSString stringWithFormat:@"%02d", components.minute];
+    cell.eventTimeHours.text   = [NSString stringWithFormat:@"%02ld", (long)components.hour];
+    cell.eventTimeMinutes.text = [NSString stringWithFormat:@"%02ld", (long)components.minute];
 
     // StopTime
     if (event.stopDate) {
-        static NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekdayCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
+        static NSUInteger unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitWeekday | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
         components               = [[NSDate calendar] components:unitFlags fromDate:event.stopDate];
 
-        cell.eventStopTime.text  = [NSString stringWithFormat:@"%02d:%02d", components.hour, components.minute];
-        cell.eventStopDay.text   = [NSString stringWithFormat:@"%02d", components.day];
-        cell.eventStopYear.text  = [NSString stringWithFormat:@"%04d", components.year];
-        cell.eventStopMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:components.month - 1];
+        cell.eventStopTime.text  = [NSString stringWithFormat:@"%02ld:%02ld", (long)components.hour, (long)components.minute];
+        cell.eventStopDay.text   = [NSString stringWithFormat:@"%02ld", (long)components.day];
+        cell.eventStopYear.text  = [NSString stringWithFormat:@"%04ld", (long)components.year];
+        cell.eventStopMonth.text = [self.shortStandaloneMonthSymbols objectAtIndex:(NSUInteger)components.month - 1];
     } else {
         cell.eventStopTime.text  = @"";
         cell.eventStopDay.text   = @"";
