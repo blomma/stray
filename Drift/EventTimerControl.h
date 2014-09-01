@@ -9,20 +9,19 @@
 #import "Event.h"
 
 typedef enum : NSInteger {
+    EventTimerNotTransforming,
     EventTimerStartDateTransformingStart,
     EventTimerStartDateTransformingStop,
-    EventTimerStopDateTransformingStart,
-    EventTimerStopDateTransformingStop,
-    EventTimerNotTransforming
+    EventTimerNowDateTransformingStart,
+    EventTimerNowDateTransformingStop
 } EventTimerTransformingEnum;
 
 @interface EventTimerControl : UIControl
 
 @property (nonatomic) NSDate *startDate;
 @property (nonatomic) NSDate *nowDate;
-@property (nonatomic) NSDate *stopDate;
 
-@property (nonatomic) EventTimerTransformingEnum isTransforming;
+@property (nonatomic) EventTimerTransformingEnum transforming;
 
 - (void)startWithEvent:(Event *)event;
 - (void)paus;

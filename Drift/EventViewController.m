@@ -16,6 +16,7 @@
 #import "State.h"
 #import "NSDate+Utilities.h"
 #import "UnwindSegueSlideDown.h"
+#import "CAAnimation+Blocks.h"
 
 static void *EventViewControllerContext = &EventViewControllerContext;
 
@@ -54,7 +55,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                                 context:EventViewControllerContext];
 
     [self.eventTimerControl addObserver:self
-                             forKeyPath:NSStringFromSelector(@selector(isTransforming))
+                             forKeyPath:NSStringFromSelector(@selector(transforming))
                                 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld)
                                 context:EventViewControllerContext];
 
@@ -91,7 +92,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     [self.eventTimerControl removeObserver:self
                                 forKeyPath:NSStringFromSelector(@selector(stopDate))];
     [self.eventTimerControl removeObserver:self
-                                forKeyPath:NSStringFromSelector(@selector(isTransforming))];
+                                forKeyPath:NSStringFromSelector(@selector(transforming))];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -127,6 +128,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 
 - (IBAction)showTags:(id)sender {
     if ([State instance].selectedEvent) {
+        [self animateButton:sender];
         [self performSegueWithIdentifier:@"segueToTagsFromEvent"
                                   sender:self];
     }
@@ -159,12 +161,48 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     [self.tag setTitle:[State instance].selectedEvent.inTag.name
               forState:UIControlStateNormal];
 
+    [self animateButton:sender];
+
     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
 }
 
 #pragma mark -
 #pragma mark Private methods
 
+- (void)animateButton:(UIButton *)button {
+    CGRect       pathFrame = CGRectMake(-CGRectGetMidY(button.bounds), -CGRectGetMidY(button.bounds), button.bounds.size.height, button.bounds.size.height);
+    UIBezierPath *path     = [UIBezierPath bezierPathWithRoundedRect:pathFrame cornerRadius:pathFrame.size.height / 2];
+
+    CGPoint shapePosition = [self.view convertPoint:button.center fromView:button.superview];
+
+    CAShapeLayer *circleShape = [CAShapeLayer layer];
+    circleShape.path        = path.CGPath;
+    circleShape.position    = shapePosition;
+    circleShape.fillColor   = [UIColor clearColor].CGColor;
+    circleShape.opacity     = 0;
+    circleShape.strokeColor = button.titleLabel.textColor.CGColor;
+    circleShape.lineWidth   = 2;
+
+    [self.view.layer addSublayer:circleShape];
+
+    CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+    scaleAnimation.fromValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
+    scaleAnimation.toValue   = [NSValue valueWithCATransform3D:CATransform3DMakeScale(3, 3, 1)];
+
+    CABasicAnimation *alphaAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+    alphaAnimation.fromValue = @1;
+    alphaAnimation.toValue   = @0;
+
+    CAAnimationGroup *animation = [CAAnimationGroup animation];
+    animation.animations     = @[scaleAnimation, alphaAnimation];
+    animation.duration       = 0.5f;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+    [animation setCompletion: ^(BOOL finished) {
+        [circleShape removeFromSuperlayer];
+    }];
+
+    [circleShape addAnimation:animation forKey:nil];
+}
 - (void)reset {
     [self.toggleStartStopButton setTitle:@"START"
                                 forState:UIControlStateNormal];
@@ -294,7 +332,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 
                 eventTimeAlpha = 1;
                 break;
-            case EventTimerStopDateTransformingStart:
+            case EventTimerNowDateTransformingStart:
                 eventStartAlpha = 0.2f;
                 eventStartMonthYearAlpha = 0.2f;
 
@@ -304,7 +342,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                 eventTimeAlpha = 0.2f;
 
                 break;
-            case EventTimerStopDateTransformingStop:
+            case EventTimerNowDateTransformingStop:
                 eventStartAlpha = [State instance].selectedEvent.isActive ? 1 : 0.2f;
                 eventStartMonthYearAlpha = 1;
 
@@ -347,7 +385,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                 [State instance].selectedEvent.startDate = newValue;
                 [self updateStartLabelWithDate:newValue];
 
-                if (self.eventTimerControl.isTransforming == EventTimerNotTransforming && oldValue != [NSNull null]) {
+                if (self.eventTimerControl.transforming == EventTimerNotTransforming && oldValue != [NSNull null]) {
                     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
                 }
             }
@@ -366,11 +404,11 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                 [State instance].selectedEvent.stopDate = newValue;
                 [self updateStopLabelWithDate:newValue];
 
-                if (self.eventTimerControl.isTransforming == EventTimerNotTransforming && oldValue != [NSNull null]) {
+                if (self.eventTimerControl.transforming == EventTimerNotTransforming && oldValue != [NSNull null]) {
                     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
                 }
             }
-        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(isTransforming))]) {
+        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(transforming))]) {
             if (changeKindKey == NSKeyValueChangeSetting) {
                 id newValue = [change objectForKey:NSKeyValueChangeNewKey];
 
@@ -379,7 +417,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                     [self animateEventTransforming:isTransforming];
                 }
 
-                if (self.eventTimerControl.isTransforming == EventTimerNotTransforming) {
+                if (self.eventTimerControl.transforming == EventTimerNotTransforming) {
                     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
                 }
             }
