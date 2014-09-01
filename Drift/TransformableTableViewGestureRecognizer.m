@@ -40,6 +40,10 @@ static NSInteger kCellSnapShotTag = 100000;
 @implementation TransformableTableViewGestureRecognizer
 
 - (void)scrollTable {
+    if (self.scrollingRate == 0) {
+        return;
+    }
+
     // Scroll tableview while touch point is on top or bottom part
     CGPoint location = [self.longPressRecognizer locationInView:self.tableView];
 
@@ -51,7 +55,6 @@ static NSInteger kCellSnapShotTag = 100000;
         newOffset = currentOffset;
     } else if (newOffset.y > self.tableView.contentSize.height - self.tableView.frame.size.height) {
         newOffset.y = self.tableView.contentSize.height - self.tableView.frame.size.height;
-    } else {
     }
 
     if (fabs(currentOffset.y) != fabs(newOffset.y)) {
@@ -59,6 +62,14 @@ static NSInteger kCellSnapShotTag = 100000;
 
         UIImageView *cellSnapshotView = (id)[self.tableView viewWithTag : kCellSnapShotTag];
         cellSnapshotView.center = CGPointMake(self.tableView.center.x, location.y);
+
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:location];
+
+        // Refresh the indexPath since it may change while we use a new offset
+        if (indexPath && ![indexPath isEqual:self.transformIndexPath]) {
+            [self.delegate gestureRecognizer:self needsMoveRowAtIndexPath:self.transformIndexPath toIndexPath:indexPath];
+            self.transformIndexPath = indexPath;
+        }
     }
 }
 
@@ -105,7 +116,7 @@ static NSInteger kCellSnapShotTag = 100000;
             commitEditingLength = [self.delegate gestureRecognizer:self lengthForCommitEditingRowAtIndexPath:indexPath];
         }
 
-        if (fabsf(translation.x) >= commitEditingLength) {
+        if (fabs(translation.x) >= commitEditingLength) {
             if ([self.delegate respondsToSelector:@selector(gestureRecognizer:commitEditingState:forRowAtIndexPath:)]) {
                 [self.delegate gestureRecognizer:self commitEditingState:self.editingCellState forRowAtIndexPath:indexPath];
             }
@@ -166,9 +177,8 @@ static NSInteger kCellSnapShotTag = 100000;
         __weak typeof(self) weakSelf = self;
 
         // Stop timer
-        [self.movingTimer invalidate];
-        self.movingTimer   = nil;
         self.scrollingRate = 0;
+        [self.movingTimer invalidate];
 
         [UIView animateWithDuration:kAddingAnimationDuration
                          animations:^{
@@ -227,7 +237,7 @@ static NSInteger kCellSnapShotTag = 100000;
         // The pan gesture recognizer will fail the original scrollView scroll
         // gesture, we wants to ensure we are panning left/right to enable the
         // pan gesture.
-        if (fabsf(point.y) > fabsf(point.x)) {
+        if (fabs(point.y) > fabs(point.x)) {
             return NO;
         } else if (indexPath == nil) {
             return NO;
