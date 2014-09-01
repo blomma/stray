@@ -85,7 +85,6 @@
 		9EC837F916DA0C7500087997 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EC837F816DA0C7500087997 /* SystemConfiguration.framework */; };
 		9ECB5A0B173D287C006E86F1 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */; };
 		9ECB5A0F173D288B006E86F1 /* SDCloudUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB5A0E173D288B006E86F1 /* SDCloudUserDefaults.m */; };
-		9ECB5A13173D28A2006E86F1 /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB5A12173D28A2006E86F1 /* PopoverView.m */; };
 		9ECB5A17173D28A8006E86F1 /* SKBounceAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB5A16173D28A8006E86F1 /* SKBounceAnimation.m */; };
 		9ECB5A19173D29A9006E86F1 /* Dropbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A18173D29A8006E86F1 /* Dropbox.framework */; };
 		9ECB5A1B173D29BA006E86F1 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A1A173D29BA006E86F1 /* CFNetwork.framework */; };
@@ -216,8 +215,6 @@
 		9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Vendor/Crashlytics.framework; sourceTree = "<group>"; };
 		9ECB5A0D173D288B006E86F1 /* SDCloudUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDCloudUserDefaults.h; sourceTree = "<group>"; };
 		9ECB5A0E173D288B006E86F1 /* SDCloudUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDCloudUserDefaults.m; sourceTree = "<group>"; };
-		9ECB5A11173D28A2006E86F1 /* PopoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverView.h; sourceTree = "<group>"; };
-		9ECB5A12173D28A2006E86F1 /* PopoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverView.m; sourceTree = "<group>"; };
 		9ECB5A15173D28A8006E86F1 /* SKBounceAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKBounceAnimation.h; sourceTree = "<group>"; };
 		9ECB5A16173D28A8006E86F1 /* SKBounceAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKBounceAnimation.m; sourceTree = "<group>"; };
 		9ECB5A18173D29A8006E86F1 /* Dropbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Dropbox.framework; path = Vendor/Dropbox.framework; sourceTree = "<group>"; };
@@ -309,7 +306,6 @@
 			isa = PBXGroup;
 			children = (
 				9ECB5A14173D28A8006E86F1 /* SKBounceAnimation */,
-				9ECB5A10173D28A2006E86F1 /* PopoverView */,
 				9ECB5A0C173D288B006E86F1 /* SDCloudUserDefaults */,
 			);
 			name = Vendor;
@@ -537,16 +533,6 @@
 			);
 			name = SDCloudUserDefaults;
 			path = Vendor/SDCloudUserDefaults;
-			sourceTree = "<group>";
-		};
-		9ECB5A10173D28A2006E86F1 /* PopoverView */ = {
-			isa = PBXGroup;
-			children = (
-				9ECB5A11173D28A2006E86F1 /* PopoverView.h */,
-				9ECB5A12173D28A2006E86F1 /* PopoverView.m */,
-			);
-			name = PopoverView;
-			path = Vendor/PopoverView;
 			sourceTree = "<group>";
 		};
 		9ECB5A14173D28A8006E86F1 /* SKBounceAnimation */ = {
@@ -791,7 +777,6 @@
 				9ECF3B7B16EAF4D40097FF37 /* Compatibility.m in Sources */,
 				9ECF3B7E16EAF6290097FF37 /* CompatibilityMigration.m in Sources */,
 				9ECB5A0F173D288B006E86F1 /* SDCloudUserDefaults.m in Sources */,
-				9ECB5A13173D28A2006E86F1 /* PopoverView.m in Sources */,
 				9ECB5A17173D28A8006E86F1 /* SKBounceAnimation.m in Sources */,
 				9EC7253D173D8A160090B1D5 /* PreferencesViewController.m in Sources */,
 				9ECF0B1C173D962B008DF575 /* SegueSlide.m in Sources */,
