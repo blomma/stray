@@ -349,7 +349,6 @@
 			isa = PBXGroup;
 			children = (
 				9EAD25D7198E3140006A2779 /* Fonts */,
-				9E472ABD167614AB00D32DEB /* Protocols */,
 				9E42F1F515570FD60087F602 /* Supporting Files */,
 				9EAB520B15C95523008952FB /* Categories */,
 				9E9FFF9215925CAE00BA5200 /* Resources */,
@@ -373,13 +372,6 @@
 				9E42F1FC15570FD60087F602 /* Drift-Prefix.pch */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		9E472ABD167614AB00D32DEB /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Protocols;
 			sourceTree = "<group>";
 		};
 		9E561DE415FBB04D008D3895 /* Controls */ = {
