@@ -23,7 +23,6 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 @interface EventViewController ()
 
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
-@property (nonatomic) dispatch_queue_t backgroundQueue;
 
 @end
 
@@ -33,7 +32,6 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     [super viewDidLoad];
 
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
-    self.backgroundQueue = dispatch_queue_create("com.artsoftheinsane.Stray.bgqueue", NULL);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
