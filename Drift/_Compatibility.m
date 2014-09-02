@@ -7,12 +7,6 @@ const struct CompatibilityAttributes CompatibilityAttributes = {
 	.level = @"level",
 };
 
-const struct CompatibilityRelationships CompatibilityRelationships = {
-};
-
-const struct CompatibilityFetchedProperties CompatibilityFetchedProperties = {
-};
-
 @implementation CompatibilityID
 @end
 
@@ -38,7 +32,7 @@ const struct CompatibilityFetchedProperties CompatibilityFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"levelValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"level"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -48,12 +42,7 @@ const struct CompatibilityFetchedProperties CompatibilityFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic level;
-
-
 
 - (int64_t)levelValue {
 	NSNumber *result = [self level];
@@ -61,7 +50,7 @@ const struct CompatibilityFetchedProperties CompatibilityFetchedProperties = {
 }
 
 - (void)setLevelValue:(int64_t)value_ {
-	[self setLevel:[NSNumber numberWithLongLong:value_]];
+	[self setLevel:@(value_)];
 }
 
 - (int64_t)primitiveLevelValue {
@@ -70,16 +59,8 @@ const struct CompatibilityFetchedProperties CompatibilityFetchedProperties = {
 }
 
 - (void)setPrimitiveLevelValue:(int64_t)value_ {
-	[self setPrimitiveLevel:[NSNumber numberWithLongLong:value_]];
+	[self setPrimitiveLevel:@(value_)];
 }
 
-
-
-
-
-
-
-
-
-
 @end
+

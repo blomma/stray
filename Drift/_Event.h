@@ -1,8 +1,7 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
 // Make changes to Event.h instead.
 
-#import <CoreData/CoreData.h>
-
+@import CoreData;
 
 extern const struct EventAttributes {
 	__unsafe_unretained NSString *exported;
@@ -15,15 +14,7 @@ extern const struct EventRelationships {
 	__unsafe_unretained NSString *inTag;
 } EventRelationships;
 
-extern const struct EventFetchedProperties {
-} EventFetchedProperties;
-
 @class Tag;
-
-
-
-
-
 
 @interface EventID : NSManagedObjectID {}
 @end
@@ -32,72 +23,35 @@ extern const struct EventFetchedProperties {
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
-- (EventID*)objectID;
-
-
-
-
+@property (nonatomic, readonly, strong) EventID* objectID;
 
 @property (nonatomic, strong) NSNumber* exported;
 
-
-
-@property BOOL exportedValue;
+@property (atomic) BOOL exportedValue;
 - (BOOL)exportedValue;
 - (void)setExportedValue:(BOOL)value_;
 
 //- (BOOL)validateExported:(id*)value_ error:(NSError**)error_;
 
-
-
-
-
 @property (nonatomic, strong) NSString* guid;
-
-
 
 //- (BOOL)validateGuid:(id*)value_ error:(NSError**)error_;
 
-
-
-
-
 @property (nonatomic, strong) NSDate* startDate;
-
-
 
 //- (BOOL)validateStartDate:(id*)value_ error:(NSError**)error_;
 
-
-
-
-
 @property (nonatomic, strong) NSDate* stopDate;
 
-
-
 //- (BOOL)validateStopDate:(id*)value_ error:(NSError**)error_;
-
-
-
-
 
 @property (nonatomic, strong) Tag *inTag;
 
 //- (BOOL)validateInTag:(id*)value_ error:(NSError**)error_;
 
-
-
-
-
-@end
-
-@interface _Event (CoreDataGeneratedAccessors)
-
 @end
 
 @interface _Event (CoreDataGeneratedPrimitiveAccessors)
-
 
 - (NSNumber*)primitiveExported;
 - (void)setPrimitiveExported:(NSNumber*)value;
@@ -105,30 +59,16 @@ extern const struct EventFetchedProperties {
 - (BOOL)primitiveExportedValue;
 - (void)setPrimitiveExportedValue:(BOOL)value_;
 
-
-
-
 - (NSString*)primitiveGuid;
 - (void)setPrimitiveGuid:(NSString*)value;
-
-
-
 
 - (NSDate*)primitiveStartDate;
 - (void)setPrimitiveStartDate:(NSDate*)value;
 
-
-
-
 - (NSDate*)primitiveStopDate;
 - (void)setPrimitiveStopDate:(NSDate*)value;
 
-
-
-
-
 - (Tag*)primitiveInTag;
 - (void)setPrimitiveInTag:(Tag*)value;
-
 
 @end

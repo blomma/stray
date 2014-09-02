@@ -14,9 +14,6 @@ const struct EventRelationships EventRelationships = {
 	.inTag = @"inTag",
 };
 
-const struct EventFetchedProperties EventFetchedProperties = {
-};
-
 @implementation EventID
 @end
 
@@ -42,7 +39,7 @@ const struct EventFetchedProperties EventFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"exportedValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"exported"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -52,12 +49,7 @@ const struct EventFetchedProperties EventFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic exported;
-
-
 
 - (BOOL)exportedValue {
 	NSNumber *result = [self exported];
@@ -65,7 +57,7 @@ const struct EventFetchedProperties EventFetchedProperties = {
 }
 
 - (void)setExportedValue:(BOOL)value_ {
-	[self setExported:[NSNumber numberWithBool:value_]];
+	[self setExported:@(value_)];
 }
 
 - (BOOL)primitiveExportedValue {
@@ -74,41 +66,16 @@ const struct EventFetchedProperties EventFetchedProperties = {
 }
 
 - (void)setPrimitiveExportedValue:(BOOL)value_ {
-	[self setPrimitiveExported:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveExported:@(value_)];
 }
-
-
-
-
 
 @dynamic guid;
 
-
-
-
-
-
 @dynamic startDate;
-
-
-
-
-
 
 @dynamic stopDate;
 
-
-
-
-
-
 @dynamic inTag;
 
-	
-
-
-
-
-
-
 @end
+

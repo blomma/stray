@@ -13,9 +13,6 @@ const struct TagRelationships TagRelationships = {
 	.heldByEvents = @"heldByEvents",
 };
 
-const struct TagFetchedProperties TagFetchedProperties = {
-};
-
 @implementation TagID
 @end
 
@@ -41,7 +38,7 @@ const struct TagFetchedProperties TagFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"sortIndexValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"sortIndex"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -51,26 +48,11 @@ const struct TagFetchedProperties TagFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic guid;
-
-
-
-
-
 
 @dynamic name;
 
-
-
-
-
-
 @dynamic sortIndex;
-
-
 
 - (int64_t)sortIndexValue {
 	NSNumber *result = [self sortIndex];
@@ -78,7 +60,7 @@ const struct TagFetchedProperties TagFetchedProperties = {
 }
 
 - (void)setSortIndexValue:(int64_t)value_ {
-	[self setSortIndex:[NSNumber numberWithLongLong:value_]];
+	[self setSortIndex:@(value_)];
 }
 
 - (int64_t)primitiveSortIndexValue {
@@ -87,29 +69,19 @@ const struct TagFetchedProperties TagFetchedProperties = {
 }
 
 - (void)setPrimitiveSortIndexValue:(int64_t)value_ {
-	[self setPrimitiveSortIndex:[NSNumber numberWithLongLong:value_]];
+	[self setPrimitiveSortIndex:@(value_)];
 }
-
-
-
-
 
 @dynamic heldByEvents;
 
-	
 - (NSMutableSet*)heldByEventsSet {
 	[self willAccessValueForKey:@"heldByEvents"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"heldByEvents"];
-  
+
 	[self didAccessValueForKey:@"heldByEvents"];
 	return result;
 }
-	
-
-
-
-
-
 
 @end
+
