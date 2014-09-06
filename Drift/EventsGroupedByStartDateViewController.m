@@ -11,7 +11,6 @@
 #import "CAAnimation+Blocks.h"
 #import "Event.h"
 #import "EventsGroupedByStartDateTableViewCell.h"
-#import "SKBounceAnimation.h"
 #import "TagFilterButton.h"
 #import "Tags.h"
 #import "TagsTableViewController.h"
@@ -261,7 +260,16 @@
     CGPoint fromValue                           = cell.frontView.layer.position;
     CGPoint toValue                             = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
 
-    [self animateBounceOnLayer:cell.frontView.layer fromPoint:fromValue toPoint:toValue withDuration:1.5f completion:nil];
+    CGFloat velocity = fabs(gestureRecognizer.velocity.x) / fromValue.x;
+
+    [UIView animateWithDuration:1
+                          delay:0
+         usingSpringWithDamping:0.5
+          initialSpringVelocity:velocity
+                        options:0
+                     animations:^{
+                         cell.frontView.layer.position = toValue;
+                     } completion:nil];
 }
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -480,20 +488,6 @@
 
     // set the size of the scrollview's content
     self.filterView.contentSize = CGSizeMake(numElements * elementSize.width, elementSize.height);
-}
-
-- (void)animateBounceOnLayer:(CALayer *)layer fromPoint:(CGPoint)from toPoint:(CGPoint)to withDuration:(CFTimeInterval)duration completion:(void (^)(BOOL finished))completion {
-    static NSString *keyPath = @"position";
-
-    SKBounceAnimation *positionAnimation = [SKBounceAnimation animationWithKeyPath:keyPath];
-    positionAnimation.fromValue       = [NSValue valueWithCGPoint:from];
-    positionAnimation.toValue         = [NSValue valueWithCGPoint:to];
-    positionAnimation.duration        = duration;
-    positionAnimation.numberOfBounces = 4;
-    positionAnimation.completion      = completion;
-
-    [layer addAnimation:positionAnimation forKey:keyPath];
-    [layer setValue:[NSValue valueWithCGPoint:to] forKeyPath:keyPath];
 }
 
 @end
