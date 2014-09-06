@@ -13,15 +13,17 @@
 #import "TagTableViewCell.h"
 #import "UIScrollView+AIPulling.h"
 #import "State.h"
+#import "Stray-Swift.h"
 
-@interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TransformableTableViewGestureMovingRowDelegate, TagTableViewCellDelegate>
+@interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TagTableViewCellDelegate, ReorderTableViewControllerDelegate>
 
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
+@property (nonatomic, strong) ReorderTableViewController *reorderTableViewController;
 
 @property (nonatomic) Tags *tags;
 @property (nonatomic) Tag *tagInEditState;
 
-@property (nonatomic) NSIndexPath *transformingMovingIndexPath;
+@property (nonatomic) NSIndexPath *reorderIndexPath;
 
 @property (nonatomic) NSInteger editingCommitLength;
 
@@ -32,14 +34,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.editingCommitLength     = 60;
+    self.editingCommitLength = 60;
 
     self.tags = [[Tags alloc] initWithTags:[Tag MR_findAll]];
-    self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
+    //self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
     [self.tableView registerClass:[UITableViewCell class]
            forCellReuseIdentifier:@"grabbedTableViewCellIdentifier"];
 
+    self.reorderTableViewController = [[ReorderTableViewController alloc] initWithTableView:self.tableView];
+    self.reorderTableViewController.delegate = self;
+    
     __weak typeof(self) weakSelf = self;
 
     [self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
@@ -101,7 +106,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.transformingMovingIndexPath && self.transformingMovingIndexPath.row == indexPath.row) {
+    if (self.reorderIndexPath && self.reorderIndexPath.row == indexPath.row) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"grabbedTableViewCellIdentifier"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -297,35 +302,35 @@
 }
 
 #pragma mark -
-#pragma mark TransformableTableViewGestureMovingRowDelegate
+#pragma mark ReorderTableViewControllerDelegate
 
-- (BOOL)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL)canMoveCellAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
 
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsCreatePlaceholderForRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.transformingMovingIndexPath = indexPath;
-
+- (void)willBeginMovingCellAtIndexPath:(NSIndexPath *)indexPath {
+    self.reorderIndexPath = indexPath;
+    
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsMoveRowAtIndexPath:(NSIndexPath *)atIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-    self.transformingMovingIndexPath = toIndexPath;
-
-    [self.tags moveObjectAtIndex:(NSUInteger)atIndexPath.row toIndex:(NSUInteger)toIndexPath.row];
-
+- (void)movedCellFromIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+    self.reorderIndexPath = toIndexPath;
+    
+    [self.tags moveObjectAtIndex:(NSUInteger)fromIndexPath.row toIndex:(NSUInteger)toIndexPath.row];
+    
     [self.tableView beginUpdates];
-
-    [self.tableView deleteRowsAtIndexPaths:@[atIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+    
+    [self.tableView deleteRowsAtIndexPaths:@[fromIndexPath] withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView insertRowsAtIndexPaths:@[toIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-
+    
     [self.tableView endUpdates];
 }
 
-- (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer needsReplacePlaceholderForRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.transformingMovingIndexPath = nil;
-
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+- (void)didMoveCellToIndexPath:(NSIndexPath *)toIndexPath {
+    self.reorderIndexPath = nil;
+    
+    [self.tableView reloadRowsAtIndexPaths:@[toIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 @end

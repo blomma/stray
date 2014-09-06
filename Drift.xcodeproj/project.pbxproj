@@ -79,6 +79,7 @@
 		9EAE7DF91603D006007F32EC /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DF81603D006007F32EC /* Default@2x.png */; };
 		9EAE7DFB1603D038007F32EC /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DFA1603D038007F32EC /* Default.png */; };
 		9EB15F6F165D6A7F0054AEA2 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB15F6E165D6A7F0054AEA2 /* TagButton.m */; };
+		9EBF34F319BA3ED70046A464 /* ReorderTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBF34F219BA3ED70046A464 /* ReorderTableViewController.swift */; };
 		9EC7253D173D8A160090B1D5 /* PreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EC7253C173D8A160090B1D5 /* PreferencesViewController.m */; };
 		9EC837F916DA0C7500087997 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EC837F816DA0C7500087997 /* SystemConfiguration.framework */; };
 		9ECB5A0B173D287C006E86F1 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */; };
@@ -203,6 +204,8 @@
 		9EAE7DFA1603D038007F32EC /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
 		9EB15F6D165D6A7F0054AEA2 /* TagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagButton.h; sourceTree = "<group>"; };
 		9EB15F6E165D6A7F0054AEA2 /* TagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagButton.m; sourceTree = "<group>"; };
+		9EBF34F119BA3ED60046A464 /* Drift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Drift-Bridging-Header.h"; sourceTree = "<group>"; };
+		9EBF34F219BA3ED70046A464 /* ReorderTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReorderTableViewController.swift; sourceTree = "<group>"; };
 		9EC7253B173D8A160090B1D5 /* PreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesViewController.h; sourceTree = "<group>"; };
 		9EC7253C173D8A160090B1D5 /* PreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesViewController.m; sourceTree = "<group>"; };
 		9EC837F816DA0C7500087997 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -359,6 +362,7 @@
 				9E9C232F15F2895000572FB7 /* Classes */,
 				9E42F1FD15570FD60087F602 /* DriftAppDelegate.h */,
 				9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */,
+				9EBF34F119BA3ED60046A464 /* Drift-Bridging-Header.h */,
 				9E42F1FA15570FD60087F602 /* main.m */,
 			);
 			path = Drift;
@@ -458,6 +462,7 @@
 				9E02A6E9174A7B8900C1ED21 /* IconView.m */,
 				9E7636641778A1A4005C755F /* AIStyle.h */,
 				9E7636651778A1A4005C755F /* AIStyle.m */,
+				9EBF34F219BA3ED70046A464 /* ReorderTableViewController.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -723,6 +728,7 @@
 			files = (
 				9E7636661778A31D005C755F /* AIStyle.m in Sources */,
 				9E96A907163981B600164D76 /* CAAnimation+Blocks.m in Sources */,
+				9EBF34F319BA3ED70046A464 /* ReorderTableViewController.swift in Sources */,
 				9E42F1FB15570FD60087F602 /* main.m in Sources */,
 				9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */,
 				9E42F22915571E9C0087F602 /* RootViewController.m in Sources */,
@@ -830,7 +836,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
@@ -869,7 +875,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
 				TEST_AFTER_BUILD = YES;
@@ -895,6 +901,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -911,6 +918,8 @@
 				);
 				PRODUCT_NAME = Stray;
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Drift/Drift-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -933,6 +942,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -949,6 +959,7 @@
 				);
 				PRODUCT_NAME = Stray;
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Drift/Drift-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -999,7 +1010,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
 				TEST_AFTER_BUILD = YES;
@@ -1025,6 +1036,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1041,6 +1053,7 @@
 				);
 				PRODUCT_NAME = Stray;
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Drift/Drift-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
