@@ -15,7 +15,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "State.h"
 #import "NSDate+Utilities.h"
-#import "UnwindSegueSlideDown.h"
 #import "CAAnimation+Blocks.h"
 
 static void *EventViewControllerContext = &EventViewControllerContext;
