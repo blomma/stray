@@ -11,7 +11,6 @@
 #import "Compatibility.h"
 #import "Event.h"
 #import "Tag.h"
-#import "SDCloudUserDefaults.h"
 
 #define STRAY_COMPATIBILITY_LEVEL_KEY @"StrayCompatibilityLevel"
 #define STATE_COMPATIBILITY_LEVEL_KEY @"stateCompatibilityLevel"
@@ -61,13 +60,13 @@
 }
 
 - (NSNumber *)stateCompatibilityLevel {
-    NSNumber *stateCompatibilityLevel = [SDCloudUserDefaults objectForKey:STATE_COMPATIBILITY_LEVEL_KEY];
+    NSNumber *stateCompatibilityLevel = [[NSUserDefaults standardUserDefaults] objectForKey:STATE_COMPATIBILITY_LEVEL_KEY];
     return stateCompatibilityLevel ? stateCompatibilityLevel : @0;
 }
 
 - (void)setStateCompatibilityLevel:(NSNumber *)level {
-    [SDCloudUserDefaults setObject:level forKey:STATE_COMPATIBILITY_LEVEL_KEY];
-    [SDCloudUserDefaults synchronize];
+    [[NSUserDefaults standardUserDefaults] setObject:level forKey:STATE_COMPATIBILITY_LEVEL_KEY];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)migrateState {
@@ -77,30 +76,30 @@
         //==================================================================================//
         // ACTIVE EVENT
         //==================================================================================//
-        [SDCloudUserDefaults removeObjectForKey:@"activeEvent"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"activeEvent"];
 
         //==================================================================================//
         // SELECTED EVENT
         //==================================================================================//
-        NSData *uriData = [SDCloudUserDefaults objectForKey:@"selectedEvent"];
+        NSData *uriData = [[NSUserDefaults standardUserDefaults] objectForKey:@"selectedEvent"];
         if (uriData) {
             NSURL *uri                  = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
             NSManagedObjectID *objectID = [context.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
             if (objectID) {
                 Event *event = (Event *)[context objectWithID:objectID];
-                [SDCloudUserDefaults setString:event.guid forKey:@"selectedEventGUID"];
+                [[NSUserDefaults standardUserDefaults] setObject:event.guid forKey:@"selectedEventGUID"];
             }
         }
 
-        [SDCloudUserDefaults removeObjectForKey:@"selectedEvent"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"selectedEvent"];
 
         //==================================================================================//
         // EVENTSGROUPEDBYDATE FILTER
         //==================================================================================//
-        NSArray *objects = [SDCloudUserDefaults objectForKey:@"eventGroupsFilter"];
+        NSArray *objects = [[NSUserDefaults standardUserDefaults] objectForKey:@"eventGroupsFilter"];
 
         if (!objects) {
-            objects = [SDCloudUserDefaults objectForKey:@"eventsGroupedByDateFilter"];
+            objects = [[NSUserDefaults standardUserDefaults] objectForKey:@"eventsGroupedByDateFilter"];
         }
 
         if (objects) {
@@ -117,20 +116,20 @@
             }
 
             // And resave them
-            [SDCloudUserDefaults setObject:[eventsGroupedByDateFilter allObjects] forKey:@"eventGUIDSGroupedByDateFilter"];
+            [[NSUserDefaults standardUserDefaults] setObject:[eventsGroupedByDateFilter allObjects] forKey:@"eventGUIDSGroupedByDateFilter"];
         }
 
-        [SDCloudUserDefaults removeObjectForKey:@"eventGroupsFilter"];
-        [SDCloudUserDefaults removeObjectForKey:@"eventsGroupedByDateFilter"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"eventGroupsFilter"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"eventsGroupedByDateFilter"];
 
 
         //==================================================================================//
         // EVENTSGROUPEDBYSTARTDATE FILTER
         //==================================================================================//
-        objects = [SDCloudUserDefaults objectForKey:@"eventsFilter"];
+        objects = [[NSUserDefaults standardUserDefaults] objectForKey:@"eventsFilter"];
 
         if (!objects) {
-            objects = [SDCloudUserDefaults objectForKey:@"eventsGroupedByStartDateFilter"];
+            objects = [[NSUserDefaults standardUserDefaults] objectForKey:@"eventsGroupedByStartDateFilter"];
         }
 
         if (objects) {
@@ -147,11 +146,11 @@
             }
             
             // And resave them
-            [SDCloudUserDefaults setObject:[eventsGroupedByStartDateFilter allObjects] forKey:@"eventGUIDSGroupedByStartDateFilter"];
+            [[NSUserDefaults standardUserDefaults] setObject:[eventsGroupedByStartDateFilter allObjects] forKey:@"eventGUIDSGroupedByStartDateFilter"];
         }
         
-        [SDCloudUserDefaults removeObjectForKey:@"eventsFilter"];
-        [SDCloudUserDefaults removeObjectForKey:@"eventsGroupedByStartDateFilter"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"eventsFilter"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"eventsGroupedByStartDateFilter"];
 
         [self setStateCompatibilityLevel:@1];
     }];
