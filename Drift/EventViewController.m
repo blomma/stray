@@ -100,7 +100,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         Event *selectedEvent = [Event MR_findFirstByAttribute:@"guid"
                                                     withValue:[State instance].selectedEventGUID];
         controller.delegate = self;
-        controller.event = selectedEvent;
+        controller.eventGUID = selectedEvent.guid;
     } else if ([segue.identifier isEqualToString:@"segueToEventsFromEvent"]) {
         EventsGroupedByStartDateViewController *controller = (EventsGroupedByStartDateViewController *)[segue destinationViewController];
         controller.delegate = self;

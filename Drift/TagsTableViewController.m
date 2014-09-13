@@ -121,7 +121,10 @@
 
         cell.delegate = self;
 
-        BOOL selected = [self.event.inTag isEqual:tag] ? YES : NO;
+        Event *event = [Event MR_findFirstByAttribute:@"guid"
+                                            withValue:self.eventGUID];
+
+        BOOL selected = [event.inTag isEqual:tag] ? YES : NO;
         [cell marked:selected withAnimation:NO];
 
         return cell;
@@ -143,9 +146,12 @@
 
     [cell marked:!cell.marked withAnimation:YES];
 
-    self.event.inTag = [self.event.inTag isEqual:tag] ? nil : tag;
+    Event *event = [Event MR_findFirstByAttribute:@"guid"
+                                        withValue:self.eventGUID];
+    
+    event.inTag = [event.inTag isEqual:tag] ? nil : tag;
     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
-
+    
     [self.delegate tagsTableViewControllerDidDimiss];
 }
 

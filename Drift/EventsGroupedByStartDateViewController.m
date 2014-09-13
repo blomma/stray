@@ -113,11 +113,11 @@
     __weak typeof(self) weakSelf = self;
     self.foregroundObserver = [[NSNotificationCenter defaultCenter]
                                addObserverForName:UIApplicationWillEnterForegroundNotification
-                                           object:nil
-                                            queue:nil
-                                       usingBlock:^(NSNotification *note) {
-        [weakSelf.tableView reloadData];
-    }];
+                               object:nil
+                               queue:nil
+                               usingBlock:^(NSNotification *note) {
+                                   [weakSelf.tableView reloadData];
+                               }];
 
     [self setupFilterView];
 
@@ -149,7 +149,7 @@
         EventGroup *eventGroup = [self.eventGroups filteredEventGroupAtIndex:(NSUInteger)indexPath.section];
         Event *event           = [eventGroup.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
 
-        [[segue destinationViewController] setEvent:event];
+        [[segue destinationViewController] setEventGUID:event.guid];
     }
 }
 
