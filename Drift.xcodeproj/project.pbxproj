@@ -34,6 +34,7 @@
 		9E2433A119A0C334004074D2 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E2433A019A0C334004074D2 /* libz.dylib */; };
 		9E2CFDE9162190E8004D9D8D /* TagsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E2CFDE8162190E8004D9D8D /* TagsTableViewController.m */; };
 		9E2F076E161745B400F1C24D /* DataRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E2F076D161745B400F1C24D /* DataRepository.m */; };
+		9E338A7519C493FB004C4FA6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E338A7419C493FB004C4FA6 /* Images.xcassets */; };
 		9E42F1EF15570FD60087F602 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1EE15570FD60087F602 /* UIKit.framework */; };
 		9E42F1F115570FD60087F602 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F015570FD60087F602 /* Foundation.framework */; };
 		9E42F1F915570FD60087F602 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F1F715570FD60087F602 /* InfoPlist.strings */; };
@@ -41,8 +42,6 @@
 		9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */; };
 		9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F20015570FD60087F602 /* MainStoryboard.storyboard */; };
 		9E42F22915571E9C0087F602 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F22815571E9C0087F602 /* RootViewController.m */; };
-		9E513DFB163430E90080313A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E513DFA163430E90080313A /* Icon@2x.png */; };
-		9E513DFE163433C70080313A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E513DFD163433C70080313A /* Icon.png */; };
 		9E51511615C7CEF100901655 /* EventGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511315C7CEF100901655 /* EventGroup.m */; };
 		9E51511715C7CEF100901655 /* EventsGroupedByDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511515C7CEF100901655 /* EventsGroupedByDate.m */; };
 		9E561DDB15FA08FB008D3895 /* EventsGroupedByStartDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E561DDA15FA08FB008D3895 /* EventsGroupedByStartDateTableViewCell.m */; };
@@ -75,9 +74,6 @@
 		9E9C237815F3617200572FB7 /* EventsGroupedByStartDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C237715F3617100572FB7 /* EventsGroupedByStartDateViewController.m */; };
 		9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB520E15C9553C008952FB /* NSDate+Utilities.m */; };
 		9EAD25D9198E314F006A2779 /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9EAD25D8198E314F006A2779 /* FontAwesome.otf */; };
-		9EAE7DEE1603C1C5007F32EC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DED1603C1C5007F32EC /* Default-568h@2x.png */; };
-		9EAE7DF91603D006007F32EC /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DF81603D006007F32EC /* Default@2x.png */; };
-		9EAE7DFB1603D038007F32EC /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EAE7DFA1603D038007F32EC /* Default.png */; };
 		9EB15F6F165D6A7F0054AEA2 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB15F6E165D6A7F0054AEA2 /* TagButton.m */; };
 		9EBF34F319BA3ED70046A464 /* ReorderTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBF34F219BA3ED70046A464 /* ReorderTableViewController.swift */; };
 		9EC7253D173D8A160090B1D5 /* PreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EC7253C173D8A160090B1D5 /* PreferencesViewController.m */; };
@@ -121,6 +117,7 @@
 		9E2CFDE8162190E8004D9D8D /* TagsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagsTableViewController.m; sourceTree = "<group>"; };
 		9E2F076C161745B400F1C24D /* DataRepository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataRepository.h; sourceTree = "<group>"; };
 		9E2F076D161745B400F1C24D /* DataRepository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataRepository.m; sourceTree = "<group>"; };
+		9E338A7419C493FB004C4FA6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9E42F1EA15570FD60087F602 /* Stray.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stray.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E42F1EE15570FD60087F602 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		9E42F1F015570FD60087F602 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -266,17 +263,9 @@
 			name = TableViewCells;
 			sourceTree = "<group>";
 		};
-		9E15DDA116023FE4007146CE /* Vendor */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Vendor;
-			sourceTree = "<group>";
-		};
 		9E42F1DF15570FD60087F602 = {
 			isa = PBXGroup;
 			children = (
-				9E15DDA116023FE4007146CE /* Vendor */,
 				9E42F1F415570FD60087F602 /* Drift */,
 				9E42F1ED15570FD60087F602 /* Frameworks */,
 				9E42F1EB15570FD60087F602 /* Products */,
@@ -329,6 +318,7 @@
 				9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */,
 				9EBF34F119BA3ED60046A464 /* Drift-Bridging-Header.h */,
 				9E42F1FA15570FD60087F602 /* main.m */,
+				9E338A7419C493FB004C4FA6 /* Images.xcassets */,
 			);
 			path = Drift;
 			sourceTree = "<group>";
@@ -561,13 +551,9 @@
 			files = (
 				9E42F1F915570FD60087F602 /* InfoPlist.strings in Resources */,
 				9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */,
-				9EAE7DEE1603C1C5007F32EC /* Default-568h@2x.png in Resources */,
-				9EAE7DF91603D006007F32EC /* Default@2x.png in Resources */,
-				9EAE7DFB1603D038007F32EC /* Default.png in Resources */,
-				9E513DFB163430E90080313A /* Icon@2x.png in Resources */,
 				9EAD25D9198E314F006A2779 /* FontAwesome.otf in Resources */,
-				9E513DFE163433C70080313A /* Icon.png in Resources */,
 				9E810ED11676288200CA2009 /* Info-Event-568h@2x.png in Resources */,
+				9E338A7519C493FB004C4FA6 /* Images.xcassets in Resources */,
 				9E810ED21676288200CA2009 /* Info-Event.png in Resources */,
 				9E810ED31676288200CA2009 /* Info-Event@2x.png in Resources */,
 				9E5DECA416788F8200E21B8E /* Info-Tags-568h@2x.png in Resources */,
@@ -796,6 +782,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5EB57372691447A9B39384E9 /* Pods.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -837,6 +825,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5EB57372691447A9B39384E9 /* Pods.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -931,6 +921,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5EB57372691447A9B39384E9 /* Pods.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
