@@ -35,6 +35,8 @@
 
 - (void)prepareForReuse {
     [self marked:NO withAnimation:NO];
+    
+    self.leading.constant = 0;
 }
 
 #pragma mark -
