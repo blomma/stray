@@ -38,22 +38,17 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 
     [self.eventTimerControl addObserver:self
                              forKeyPath:NSStringFromSelector(@selector(startDate))
-                                options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld)
+                                options:(NSKeyValueObservingOptionNew)
                                 context:EventViewControllerContext];
 
     [self.eventTimerControl addObserver:self
                              forKeyPath:NSStringFromSelector(@selector(nowDate))
-                                options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld)
-                                context:EventViewControllerContext];
-
-    [self.eventTimerControl addObserver:self
-                             forKeyPath:NSStringFromSelector(@selector(stopDate))
-                                options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld)
+                                options:(NSKeyValueObservingOptionNew)
                                 context:EventViewControllerContext];
 
     [self.eventTimerControl addObserver:self
                              forKeyPath:NSStringFromSelector(@selector(transforming))
-                                options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld)
+                                options:(NSKeyValueObservingOptionNew)
                                 context:EventViewControllerContext];
 
     if ([State instance].selectedEvent) {
@@ -87,8 +82,6 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     [self.eventTimerControl removeObserver:self
                                 forKeyPath:NSStringFromSelector(@selector(nowDate))];
     [self.eventTimerControl removeObserver:self
-                                forKeyPath:NSStringFromSelector(@selector(stopDate))];
-    [self.eventTimerControl removeObserver:self
                                 forKeyPath:NSStringFromSelector(@selector(transforming))];
 }
 
@@ -102,9 +95,6 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         EventsGroupedByStartDateViewController *controller = (EventsGroupedByStartDateViewController *)[segue destinationViewController];
         controller.delegate = self;
     }
-}
-
-- (IBAction)unwindFromSegue:(UIStoryboardSegue *)segue {
 }
 
 #pragma mark -
@@ -132,13 +122,10 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 }
 
 - (IBAction)toggleEventTouchUpInside:(id)sender forEvent:(UIEvent *)event {
-    NSDate *now = [NSDate date];
-
     if ([[State instance].selectedEvent isActive]) {
-        [State instance].selectedEvent.stopDate = now;
-
         [self.eventTimerControl stop];
-
+        [State instance].selectedEvent.stopDate = self.eventTimerControl.nowDate;
+        
         [self.toggleStartStopButton setTitle:@"START"
                                     forState:UIControlStateNormal];
         [self animateStopEvent];
@@ -146,7 +133,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         [self reset];
 
         [State instance].selectedEvent           = [Event MR_createEntity];
-        [State instance].selectedEvent.startDate = now;
+        [State instance].selectedEvent.startDate = [NSDate date];
 
         [self.eventTimerControl startWithEvent:[State instance].selectedEvent];
 
@@ -244,14 +231,13 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     }
 }
 
-- (void)updateEventTimeWithDate:(NSDate *)date {
-    if (date && [State instance].selectedEvent.startDate) {
+- (void)updateEventTimeFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate {
+    if (fromDate && toDate) {
         static NSUInteger unitFlags  = NSCalendarUnitHour | NSCalendarUnitMinute;
-
-        NSDateComponents *components = [[NSDate calendar] components:unitFlags
-                                                            fromDate:[State instance].selectedEvent.startDate
-                                                              toDate:date options:0];
-
+        NSDateComponents  *components = [[NSDate calendar] components:unitFlags
+                                                             fromDate:fromDate
+                                                               toDate:toDate options:0];
+        
         self.eventTimeHours.text   = [NSString stringWithFormat:@"%02ld", (long)components.hour];
         self.eventTimeMinutes.text = [NSString stringWithFormat:@"%02ld", (long)components.minute];
     }
@@ -377,45 +363,41 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         if ([keyPath isEqualToString:NSStringFromSelector(@selector(startDate))]) {
             if (changeKindKey == NSKeyValueChangeSetting) {
                 id newValue = [change objectForKey:NSKeyValueChangeNewKey];
-                id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
 
-                [State instance].selectedEvent.startDate = newValue;
+                NSDate *toDate = self.eventTimerControl.nowDate;
                 [self updateStartLabelWithDate:newValue];
-
-                if (self.eventTimerControl.transforming == EventTimerNotTransforming && oldValue != [NSNull null]) {
-                    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
-                }
+                [self updateEventTimeFromDate:newValue toDate:toDate];
             }
         } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(nowDate))]) {
             if (changeKindKey == NSKeyValueChangeSetting) {
                 id newValue = [change objectForKey:NSKeyValueChangeNewKey];
 
-                [self updateEventTimeWithDate:newValue];
+                NSDate *fromDate = self.eventTimerControl.startDate;
                 [self updateStopLabelWithDate:newValue];
-            }
-        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(stopDate))]) {
-            if (changeKindKey == NSKeyValueChangeSetting) {
-                id newValue = [change objectForKey:NSKeyValueChangeNewKey];
-                id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
-
-                [State instance].selectedEvent.stopDate = newValue;
-                [self updateStopLabelWithDate:newValue];
-
-                if (self.eventTimerControl.transforming == EventTimerNotTransforming && oldValue != [NSNull null]) {
-                    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
-                }
+                [self updateEventTimeFromDate:fromDate toDate:newValue];
             }
         } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(transforming))]) {
             if (changeKindKey == NSKeyValueChangeSetting) {
                 id newValue = [change objectForKey:NSKeyValueChangeNewKey];
 
-                EventTimerTransformingEnum isTransforming = [newValue integerValue];
-                if (isTransforming != EventTimerNotTransforming) {
-                    [self animateEventTransforming:isTransforming];
+                EventTimerTransformingEnum transforming = [newValue integerValue];
+                
+                if (transforming != EventTimerNotTransforming) {
+                    [self animateEventTransforming:transforming];
                 }
-
-                if (self.eventTimerControl.transforming == EventTimerNotTransforming) {
-                    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
+                
+                switch (transforming) {
+                    case EventTimerNowDateTransformingStop:
+                        [State instance].selectedEvent.stopDate = self.eventTimerControl.nowDate;
+                        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
+                        break;
+                    case EventTimerStartDateTransformingStop:
+                        [State instance].selectedEvent.startDate = self.eventTimerControl.startDate;
+                        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
+                        break;
+                        
+                    default:
+                        break;
                 }
             }
         }
