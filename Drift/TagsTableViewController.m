@@ -145,6 +145,8 @@
 
     self.event.inTag = [self.event.inTag isEqual:tag] ? nil : tag;
     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
+
+    [self.delegate tagsTableViewControllerDidDimiss];
 }
 
 #pragma mark -
