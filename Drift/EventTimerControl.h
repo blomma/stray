@@ -23,7 +23,7 @@ typedef enum : NSInteger {
 
 @property (nonatomic) EventTimerTransformingEnum transforming;
 
-- (void)startWithEvent:(Event *)event;
+- (void)initWithStartDate:(NSDate *)startDate andStopDate:(NSDate *)stopDate;
 - (void)paus;
 - (void)stop;
 - (void)reset;

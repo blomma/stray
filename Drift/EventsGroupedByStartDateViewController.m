@@ -236,8 +236,11 @@
     Event *event           = [eventGroup.filteredEvents objectAtIndex:(NSUInteger)indexPath.row];
 
     // Are we about to remove the selected event
-    if ([[State instance].selectedEvent isEqual:event]) {
-        [State instance].selectedEvent = nil;
+    Event *selectedEvent = [Event MR_findFirstByAttribute:@"guid"
+                                         withValue:[State instance].selectedEventGUID];
+    
+    if ([selectedEvent isEqual:event]) {
+        [State instance].selectedEventGUID = nil;
     }
 
     [event MR_deleteEntity];
@@ -309,7 +312,7 @@
     EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
     [cell marked:YES withAnimation:YES];
 
-    [State instance].selectedEvent = event;
+    [State instance].selectedEventGUID = event.guid;
 
     if ([self.delegate respondsToSelector:@selector(eventsGroupedByStartDateViewControllerDidDimiss)]) {
         [self.delegate eventsGroupedByStartDateViewControllerDidDimiss];
@@ -374,7 +377,10 @@
         cell.eventStopMonth.text = @"";
     }
 
-    BOOL marked = [[State instance].selectedEvent isEqual:event] ? YES : NO;
+    Event *selectedEvent = [Event MR_findFirstByAttribute:@"guid"
+                                         withValue:[State instance].selectedEventGUID];
+    
+    BOOL marked = [selectedEvent isEqual:event] ? YES : NO;
     [cell marked:marked withAnimation:YES];
 
     cell.delegate = self;
@@ -400,7 +406,9 @@
 
     [self.tableView reloadData];
 
-    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:[State instance].selectedEvent];
+    Event *selectedEvent = [Event MR_findFirstByAttribute:@"guid"
+                                         withValue:[State instance].selectedEventGUID];
+    NSIndexPath *indexPath = [self.eventGroups indexPathOfFilteredEvent:selectedEvent];
     if (indexPath) {
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     }

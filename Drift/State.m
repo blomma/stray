@@ -47,10 +47,7 @@
     //==================================================================================//
     // SELECTED EVENT
     //==================================================================================//
-    NSString *selectedEventGUID = [[NSUserDefaults standardUserDefaults] objectForKey:@"selectedEventGUID"];
-    if (selectedEventGUID) {
-        self.selectedEvent = [Event MR_findFirstByAttribute:@"guid" withValue:selectedEventGUID];
-    }
+    self.selectedEventGUID = [[NSUserDefaults standardUserDefaults] objectForKey:@"selectedEventGUID"];
 
     //==================================================================================//
     // EVENTSGROUPEDBYDATE FILTER
@@ -80,7 +77,7 @@
     //==================================================================================//
     // SELECTED EVENT
     //==================================================================================//
-    [[NSUserDefaults standardUserDefaults] setObject:self.selectedEvent.guid forKey:@"selectedEventGUID"];
+    [[NSUserDefaults standardUserDefaults] setObject:self.selectedEventGUID forKey:@"selectedEventGUID"];
 
     //==================================================================================//
     // EVENTSGROUPEDBYDATE FILTER

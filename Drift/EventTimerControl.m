@@ -10,11 +10,11 @@
 #import "EventTimerControl.h"
 #import "NoHitCAShapeLayer.h"
 
-#define RADIANS(degrees) ((degrees) / (180.0 / M_PI))
-
 @interface EventTimerControl ()
 
 @property (nonatomic) NSTimer      *updateTimer;
+@property (nonatomic) BOOL isStopped;
+@property (nonatomic) BOOL isStarted;
 
 @property (nonatomic) NoHitCAShapeLayer *startTouchPathLayer;
 @property (nonatomic) CAShapeLayer *startLayer;
@@ -26,7 +26,6 @@
 
 @property (nonatomic) NoHitCAShapeLayer *secondLayer;
 @property (nonatomic) NoHitCAShapeLayer *secondProgressTicksLayer;
-@property (nonatomic) Event             *event;
 
 // Touch transforming
 @property (nonatomic) NSDate        *deltaDate;
@@ -54,31 +53,24 @@
 #pragma mark -
 #pragma mark Public methods
 
-- (void)startWithEvent:(Event *)event {
-    self.transforming = EventTimerNotTransforming;
+- (void)initWithStartDate:(NSDate *)startDate andStopDate:(NSDate *)stopDate {
+    [self reset];
 
-    self.startTouchPathLayer.strokeEnd = 0;
-    self.nowTouchPathLayer.strokeEnd   = 0;
-
-    self.previousSecondTick = -1;
-    self.previousNow        = -1;
-
-    [self.updateTimer invalidate];
-
-    self.event = event;
-
-    self.startDate = event.startDate;
+    self.startDate = startDate;
     [self drawStart];
 
-    if ([event isActive]) {
+    self.isStarted = YES;
+    self.isStopped = !stopDate;
+    
+    if (self.isStopped) {
         self.nowDate = [NSDate date];
     } else {
-        self.nowDate = event.stopDate;
+        self.nowDate = stopDate;
     }
 
     [self drawNow];
 
-    if ([event isActive]) {
+    if (self.isStopped) {
         self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
                                                             target:self
                                                           selector:@selector(timerUpdate)
@@ -93,13 +85,21 @@
 
 - (void)stop {
     [self.updateTimer invalidate];
+
+    self.isStopped = NO;
 }
 
 - (void)reset {
     [self.updateTimer invalidate];
+    
+    self.isStarted = NO;
+    self.isStopped = NO;
 
-    self.event = nil;
-
+    self.transforming = EventTimerNotTransforming;
+    
+    self.previousSecondTick = -1;
+    self.previousNow        = -1;
+    
     self.secondLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
     self.startLayer.transform  = CATransform3DMakeRotation(0, 0, 0, 1);
     self.nowLayer.transform    = CATransform3DMakeRotation(0, 0, 0, 1);
@@ -135,6 +135,7 @@
 
 - (void)timerUpdate {
     self.nowDate = [NSDate date];
+
     [self drawNow];
 }
 
@@ -401,10 +402,10 @@
 #pragma mark UIControl
 
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-    if (!self.event) {
+    if (!self.isStarted) {
         return NO;
     }
-
+    
     CGPoint point = [touch locationInView:self];
 
     CGFloat cx, cy, dx, dy, a;
@@ -419,11 +420,12 @@
 
         [self.updateTimer invalidate];
         self.startTouchPathLayer.strokeEnd = 1;
-    } else if ([self.nowPathLayer.presentationLayer hitTest:[self.nowPathLayer convertPoint:point fromLayer:self.layer]] && ![self.event isActive]) {
+    } else if ([self.nowPathLayer.presentationLayer hitTest:[self.nowPathLayer convertPoint:point fromLayer:self.layer]] && self.isStopped) {
         self.deltaLayer = self.nowLayer;
         self.deltaDate  = self.nowDate;
 
-        self.transforming                = EventTimerNowDateTransformingStart;
+        self.transforming = EventTimerNowDateTransformingStart;
+        
         self.nowTouchPathLayer.strokeEnd = 1;
     }
 
@@ -518,7 +520,7 @@
 
             self.transforming = EventTimerStartDateTransformingStop;
 
-            if (![self.updateTimer isValid] && [self.event isActive]) {
+            if (![self.updateTimer isValid] && self.isStopped) {
                 self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
                                                                     target:self
                                                                   selector:@selector(timerUpdate)

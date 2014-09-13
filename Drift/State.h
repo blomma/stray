@@ -14,10 +14,9 @@
 
 + (State *)instance;
 
-@property (nonatomic, weak) Event *selectedEvent;
-
 @property (nonatomic, readonly) NSMutableSet *eventsGroupedByDateFilter;
 @property (nonatomic, readonly) NSMutableSet *eventsGroupedByStartDateFilter;
+@property (nonatomic) NSString *selectedEventGUID;
 
 - (void)persistState;
 

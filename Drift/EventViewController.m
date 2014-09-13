@@ -51,10 +51,14 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                                 options:(NSKeyValueObservingOptionNew)
                                 context:EventViewControllerContext];
 
-    if ([State instance].selectedEvent) {
-        [self.eventTimerControl startWithEvent:[State instance].selectedEvent];
+    if ([State instance].selectedEventGUID) {
+        Event *selectedEvent = [Event MR_findFirstByAttribute:@"guid"
+                                            withValue:[State instance].selectedEventGUID];
 
-        if ([[State instance].selectedEvent isActive]) {
+        [self.eventTimerControl initWithStartDate:selectedEvent.startDate
+                                      andStopDate:selectedEvent.stopDate];
+
+        if (selectedEvent.isActive) {
             [self.toggleStartStopButton setTitle:@"STOP"
                                         forState:UIControlStateNormal];
             [self animateStartEvent];
@@ -63,13 +67,17 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                                         forState:UIControlStateNormal];
             [self animateStopEvent];
         }
+        
+        [self.tag setTitle:selectedEvent.inTag.name
+                  forState:UIControlStateNormal];
     } else {
         [self reset];
         [self.eventTimerControl reset];
+        
+        [self.tag setTitle:nil
+                  forState:UIControlStateNormal];
     }
 
-    [self.tag setTitle:[[State instance].selectedEvent.inTag.name copy]
-              forState:UIControlStateNormal];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -89,8 +97,10 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     if ([segue.identifier isEqualToString:@"segueToTagsFromEvent"]) {
         TagsTableViewController *controller = (TagsTableViewController *)[segue destinationViewController];
 
+        Event *selectedEvent = [Event MR_findFirstByAttribute:@"guid"
+                                                    withValue:[State instance].selectedEventGUID];
         controller.delegate = self;
-        controller.event = [State instance].selectedEvent;
+        controller.event = selectedEvent;
     } else if ([segue.identifier isEqualToString:@"segueToEventsFromEvent"]) {
         EventsGroupedByStartDateViewController *controller = (EventsGroupedByStartDateViewController *)[segue destinationViewController];
         controller.delegate = self;
@@ -114,17 +124,23 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 #pragma mark Public methods
 
 - (IBAction)showTags:(id)sender {
-    if ([State instance].selectedEvent) {
+    Event *selectedEvent = [Event MR_findFirstByAttribute:@"guid"
+                                                withValue:[State instance].selectedEventGUID];
+    if (selectedEvent) {
         [self animateButton:sender];
+        
         [self performSegueWithIdentifier:@"segueToTagsFromEvent"
                                   sender:self];
     }
 }
 
 - (IBAction)toggleEventTouchUpInside:(id)sender forEvent:(UIEvent *)event {
-    if ([[State instance].selectedEvent isActive]) {
+    Event *selectedEvent = [Event MR_findFirstByAttribute:@"guid"
+                                                withValue:[State instance].selectedEventGUID];
+    
+    if (selectedEvent.isActive) {
         [self.eventTimerControl stop];
-        [State instance].selectedEvent.stopDate = self.eventTimerControl.nowDate;
+        selectedEvent.stopDate = self.eventTimerControl.nowDate;
         
         [self.toggleStartStopButton setTitle:@"START"
                                     forState:UIControlStateNormal];
@@ -132,17 +148,20 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     } else {
         [self reset];
 
-        [State instance].selectedEvent           = [Event MR_createEntity];
-        [State instance].selectedEvent.startDate = [NSDate date];
+        selectedEvent = [Event MR_createEntity];
+        selectedEvent.startDate = [NSDate date];
 
-        [self.eventTimerControl startWithEvent:[State instance].selectedEvent];
+        [State instance].selectedEventGUID = selectedEvent.guid;
+        
+        [self.eventTimerControl initWithStartDate:selectedEvent.startDate
+                                      andStopDate:selectedEvent.stopDate];
 
         [self.toggleStartStopButton setTitle:@"STOP"
                                     forState:UIControlStateNormal];
         [self animateStartEvent];
     }
 
-    [self.tag setTitle:[State instance].selectedEvent.inTag.name
+    [self.tag setTitle:selectedEvent.inTag.name
               forState:UIControlStateNormal];
 
     [self animateButton:sender];
@@ -294,63 +313,72 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseIn
-                     animations:^{
-        CGFloat eventStartAlpha = 1, eventStopAlpha = 1, eventTimeAlpha = 1, eventStartMonthYearAlpha = 1, eventStopMonthYearAlpha = 1;
-        switch (eventTimerTransformingEnum) {
-            case EventTimerStartDateTransformingStart:
-                eventStartAlpha = 1;
-                eventStartMonthYearAlpha = 1;
+                     animations:
+     ^{
+         CGFloat eventStartAlpha = 1, eventStopAlpha = 1, eventTimeAlpha = 1, eventStartMonthYearAlpha = 1, eventStopMonthYearAlpha = 1;
+         Event *selectedEvent = nil;
+                         
+         switch (eventTimerTransformingEnum) {
+             case EventTimerStartDateTransformingStart:
+                 eventStartAlpha = 1;
+                 eventStartMonthYearAlpha = 1;
+                                 
+                 eventStopAlpha = 0.2f;
+                 eventStopMonthYearAlpha = 0.2f;
+                                 
+                 eventTimeAlpha = 0.2f;
+                 break;
+             case EventTimerStartDateTransformingStop:
+                 selectedEvent = [Event MR_findFirstByAttribute:@"guid"
+                                                             withValue:[State instance].selectedEventGUID];
+                 
+                 eventStartAlpha = selectedEvent.isActive ? 1 : 0.2f;
+                 eventStartMonthYearAlpha = 1;
+                 
+                 eventStopAlpha = selectedEvent.isActive ? 0.2f : 1;
+                 eventStopMonthYearAlpha = 1;
 
-                eventStopAlpha = 0.2f;
-                eventStopMonthYearAlpha = 0.2f;
+                 eventTimeAlpha = 1;
+                 break;
+             case EventTimerNowDateTransformingStart:
+                 eventStartAlpha = 0.2f;
+                 eventStartMonthYearAlpha = 0.2f;
+                 
+                 eventStopAlpha = 1;
+                 eventStopMonthYearAlpha = 1;
 
-                eventTimeAlpha = 0.2f;
-                break;
-            case EventTimerStartDateTransformingStop:
-                eventStartAlpha = [State instance].selectedEvent.isActive ? 1 : 0.2f;
-                eventStartMonthYearAlpha = 1;
+                 eventTimeAlpha = 0.2f;
 
-                eventStopAlpha = [State instance].selectedEvent.isActive ? 0.2f : 1;
-                eventStopMonthYearAlpha = 1;
+                 break;
+             case EventTimerNowDateTransformingStop:
+                 selectedEvent = [Event MR_findFirstByAttribute:@"guid"
+                                                      withValue:[State instance].selectedEventGUID];
+                 
+                 eventStartAlpha = selectedEvent.isActive ? 1 : 0.2f;
+                 eventStartMonthYearAlpha = 1;
 
-                eventTimeAlpha = 1;
-                break;
-            case EventTimerNowDateTransformingStart:
-                eventStartAlpha = 0.2f;
-                eventStartMonthYearAlpha = 0.2f;
+                 eventStopAlpha = selectedEvent.isActive ? 0.2f : 1;
+                 eventStopMonthYearAlpha = 1;
 
-                eventStopAlpha = 1;
-                eventStopMonthYearAlpha = 1;
+                 eventTimeAlpha = 1;
+                 break;
+             default:
+                 break;
+         }
 
-                eventTimeAlpha = 0.2f;
+         self.eventStartDay.alpha = eventStartAlpha;
+         self.eventStartMonth.alpha = eventStartMonthYearAlpha;
+         self.eventStartTime.alpha = eventStartAlpha;
+         self.eventStartYear.alpha = eventStartMonthYearAlpha;
 
-                break;
-            case EventTimerNowDateTransformingStop:
-                eventStartAlpha = [State instance].selectedEvent.isActive ? 1 : 0.2f;
-                eventStartMonthYearAlpha = 1;
+         self.eventStopDay.alpha = eventStopAlpha;
+         self.eventStopMonth.alpha = eventStopMonthYearAlpha;
+         self.eventStopTime.alpha = eventStopAlpha;
+         self.eventStopYear.alpha = eventStopMonthYearAlpha;
 
-                eventStopAlpha = [State instance].selectedEvent.isActive ? 0.2f : 1;
-                eventStopMonthYearAlpha = 1;
-
-                eventTimeAlpha = 1;
-                break;
-            default:
-                break;
-        }
-
-        self.eventStartDay.alpha = eventStartAlpha;
-        self.eventStartMonth.alpha = eventStartMonthYearAlpha;
-        self.eventStartTime.alpha = eventStartAlpha;
-        self.eventStartYear.alpha = eventStartMonthYearAlpha;
-
-        self.eventStopDay.alpha = eventStopAlpha;
-        self.eventStopMonth.alpha = eventStopMonthYearAlpha;
-        self.eventStopTime.alpha = eventStopAlpha;
-        self.eventStopYear.alpha = eventStopMonthYearAlpha;
-
-        self.eventTimeHours.alpha = eventTimeAlpha;
-        self.eventTimeMinutes.alpha = eventTimeAlpha;
-    } completion:nil];
+         self.eventTimeHours.alpha = eventTimeAlpha;
+         self.eventTimeMinutes.alpha = eventTimeAlpha;
+     } completion:nil];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -386,13 +414,20 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                     [self animateEventTransforming:transforming];
                 }
                 
+                Event *selectedEvent = nil;
                 switch (transforming) {
                     case EventTimerNowDateTransformingStop:
-                        [State instance].selectedEvent.stopDate = self.eventTimerControl.nowDate;
+                        selectedEvent = [Event MR_findFirstByAttribute:@"guid"
+                                                             withValue:[State instance].selectedEventGUID];
+                        
+                        selectedEvent.stopDate = self.eventTimerControl.nowDate;
                         [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
                         break;
                     case EventTimerStartDateTransformingStop:
-                        [State instance].selectedEvent.startDate = self.eventTimerControl.startDate;
+                        selectedEvent = [Event MR_findFirstByAttribute:@"guid"
+                                                             withValue:[State instance].selectedEventGUID];
+                        
+                        selectedEvent.startDate = self.eventTimerControl.startDate;
                         [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
                         break;
                         
