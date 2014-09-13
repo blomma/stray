@@ -37,7 +37,7 @@
     self.editingCommitLength = 60;
 
     self.tags = [[Tags alloc] initWithTags:[Tag MR_findAll]];
-    //self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
+    self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
     [self.tableView registerClass:[UITableViewCell class]
            forCellReuseIdentifier:@"grabbedTableViewCellIdentifier"];
