@@ -121,6 +121,7 @@
 
     [self setupFilterView];
 
+    // TODO: Dont reload all of the table, just the affected rows
     [self.tableView reloadData];
 }
 
