@@ -60,17 +60,13 @@
     [self drawStart];
 
     self.isStarted = YES;
-    self.isStopped = !stopDate;
+    self.isStopped = stopDate != nil ? YES : NO;
     
-    if (self.isStopped) {
-        self.nowDate = [NSDate date];
-    } else {
-        self.nowDate = stopDate;
-    }
+    self.nowDate = self.isStopped ? stopDate : [NSDate date];
 
     [self drawNow];
 
-    if (self.isStopped) {
+    if (!self.isStopped) {
         self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
                                                             target:self
                                                           selector:@selector(timerUpdate)
@@ -86,7 +82,7 @@
 - (void)stop {
     [self.updateTimer invalidate];
 
-    self.isStopped = NO;
+    self.isStopped = YES;
 }
 
 - (void)reset {
@@ -520,7 +516,7 @@
 
             self.transforming = EventTimerStartDateTransformingStop;
 
-            if (![self.updateTimer isValid] && self.isStopped) {
+            if (![self.updateTimer isValid] && !self.isStopped) {
                 self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
                                                                     target:self
                                                                   selector:@selector(timerUpdate)
