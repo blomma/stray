@@ -16,7 +16,7 @@
 
 @end
 
-@interface TagsTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface TagsTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, weak) id<TagsTableViewControllerDelegate> delegate;
 @property (nonatomic) NSString *eventGUID;

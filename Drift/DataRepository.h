@@ -7,7 +7,6 @@
 //
 
 #import "Tag.h"
-#import "Tags.h"
 #import "State.h"
 #import "Event.h"
 

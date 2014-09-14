@@ -14,7 +14,6 @@
 #import "EventsGroupedByDate.h"
 #import "TagFilterButton.h"
 #import "EventsGroupedByDateTableViewCell.h"
-#import "Tags.h"
 #import "State.h"
 #import "Tag.h"
 #import "NSDate+Utilities.h"
@@ -251,7 +250,17 @@
     CGSize elementSize      = CGSizeMake(120, self.filterView.frame.size.height);
     UIEdgeInsets titleInset = UIEdgeInsetsMake(0, 5, 0, 5);
 
-    Tags *tags = [[Tags alloc] initWithTags:[Tag MR_findAll]];
+    NSArray *tags = [[Tag MR_findAll]
+                     sortedArrayWithOptions:NSSortConcurrent
+                     usingComparator:^NSComparisonResult (id obj1, id obj2) {
+                         if ([obj1 sortIndex].integerValue < [obj2 sortIndex].integerValue) {
+                             return NSOrderedAscending;
+                         } else if ([obj1 sortIndex].integerValue > [obj2 sortIndex].integerValue) {
+                             return NSOrderedDescending;
+                         } else {
+                             return NSOrderedSame;
+                         }
+                     }];
 
     // add elements
     for (NSUInteger i = 0; i < tags.count; i++) {
