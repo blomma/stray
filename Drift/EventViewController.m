@@ -206,11 +206,12 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 
     [circleShape addAnimation:animation forKey:nil];
 }
+
 - (void)reset {
     [self.toggleStartStopButton setTitle:@"START"
                                 forState:UIControlStateNormal];
 
-    self.eventStartTime.text    = @"--:--";
+    self.eventStartTime.text    = @"";
     self.eventStartDay.text     = @"";
     self.eventStartYear.text    = @"";
     self.eventStartMonth.text   = @"";
@@ -218,7 +219,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     self.eventTimeHours.text    = @"00";
     self.eventTimeMinutes.text  = @"00";
 
-    self.eventStopTime.text     = @"--:--";
+    self.eventStopTime.text     = @"";
     self.eventStopDay.text      = @"";
     self.eventStopYear.text     = @"";
     self.eventStopMonth.text    = @"";
