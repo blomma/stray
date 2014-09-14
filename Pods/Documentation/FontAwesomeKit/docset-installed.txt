@@ -1,4 +1,0 @@
-Documentation set was installed to Xcode!
-
-Path: /Users/blomma/Library/Developer/Shared/Documentation/DocSets/org.cocoapods.fontawesomekit.FontAwesomeKit-HEAD-based-on-1.1.2.docset
-Time: 2013-05-19 18:40:44 +0000

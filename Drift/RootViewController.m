@@ -8,14 +8,9 @@
 
 #import "RootViewController.h"
 
-#import <HMSideMenu.h>
-#import "IconView.h"
-
 @interface RootViewController ()
 
 @property (nonatomic) NSArray *dataModel;
-@property (nonatomic) HMSideMenu *sideMenu;
-@property (nonatomic) UIButton *sideMenuButton;
 
 @end
 
@@ -42,54 +37,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-
-    static dispatch_once_t once;
-    dispatch_once(&once, ^{
-
-        self.sideMenuButton = [[UIButton alloc] init];
-        [self.sideMenuButton addTarget:self
-                                action:@selector(touchUpInsideInfoButton:forEvent:)
-                      forControlEvents:UIControlEventTouchUpInside];
-
-        self.sideMenuButton.titleLabel.font = [UIFont fontWithName:@"FontAwesome" size:25];
-        self.sideMenuButton.titleLabel.textAlignment = NSTextAlignmentCenter;
-        self.sideMenuButton.titleLabel.backgroundColor = [UIColor clearColor];
-
-        self.sideMenuButton.backgroundColor = [UIColor clearColor];
-
-        [self.sideMenuButton setTitleColor:[UIColor colorWithWhite:0.510f alpha:1.000]
-                                  forState:UIControlStateNormal];
-        [self.sideMenuButton setTitle:@"\uf139"
-                             forState:UIControlStateNormal];
-
-        self.sideMenuButton.frame = CGRectMake(self.view.bounds.size.width - 30, self.view.bounds.size.height - 30, 30, 30);
-
-        [self.view addSubview:self.sideMenuButton];
-
-        __weak typeof(self) weakSelf = self;
-
-        HMSideMenuItem *settingsItem = [[HMSideMenuItem alloc] initWithSize:CGSizeMake(60, 60) action:^{
-            [weakSelf toggleSideMenu];
-            [weakSelf performSegueWithIdentifier:@"segueToPreferences"
-                                          sender:self];
-        }];
-        settingsItem.backgroundColor = [UIColor clearColor];
-
-
-
-        HMSideMenuItem *infoItem = [[HMSideMenuItem alloc] initWithSize:CGSizeMake(60, 60) action:^{
-            [weakSelf toggleSideMenu];
-            [weakSelf performSegueWithIdentifier:@"segueToInfoHintView"
-                                          sender:self];
-        }];
-        infoItem.backgroundColor = [UIColor clearColor];
-
-        self.sideMenu = [[HMSideMenu alloc] initWithItems:@[settingsItem, infoItem]];
-        [self.sideMenu setItemSpacing:18.0f];
-        self.sideMenu.menuPosition = HMSideMenuPositionBottom;
-
-        [self.view addSubview:self.sideMenu];
-    });
 }
 
 - (void)didReceiveMemoryWarning {
@@ -123,27 +70,6 @@
 
 - (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController {
     return 0;
-}
-
-#pragma mark -
-#pragma mark Private methods
-
-- (void)toggleSideMenu {
-    if (self.sideMenu.isOpen) {
-        [self.sideMenu close];
-        [UIView animateWithDuration:0.4f animations:^{
-            self.sideMenuButton.transform = CGAffineTransformMakeRotation(0);
-        }];
-    } else {
-        [self.sideMenu open];
-        [UIView animateWithDuration:0.4f animations:^{
-            self.sideMenuButton.transform = CGAffineTransformMakeRotation(M_PI);
-        }];
-    }
-}
-
-- (void)touchUpInsideInfoButton:(UIButton *)sender forEvent:(UIEvent *)event {
-    [self toggleSideMenu];
 }
 
 @end

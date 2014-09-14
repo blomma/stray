@@ -1,18 +1,12 @@
 PODS:
-  - HMSideMenu (1.1.0)
   - MagicalRecord (2.2):
     - MagicalRecord/Core
   - MagicalRecord/Core (2.2)
-  - MGBox2 (2.0.0)
 
 DEPENDENCIES:
-  - HMSideMenu (~> 1.1.0)
   - MagicalRecord (~> 2.2)
-  - MGBox2 (~> 2.0.0)
 
 SPEC CHECKSUMS:
-  HMSideMenu: 92a2b2cf545df3e0bfd147d16dda4ada548a42ea
   MagicalRecord: 2b471584fc9e3137f3d0a56967917baa4979e224
-  MGBox2: a2f792d85b1ff5cf54b25a5369a8e2ecc23e9186
 
 COCOAPODS: 0.33.1
