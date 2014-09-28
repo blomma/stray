@@ -39,7 +39,9 @@ public class ReorderTableViewController : NSObject, UIGestureRecognizerDelegate 
         self.tableView = tableView;
         
         self.longPressRecognizer = UILongPressGestureRecognizer(target:self, action:"didRecognizeLongPress:")
-        self.longPressRecognizer!.minimumPressDuration = MinLongPressDuration
+        self.longPressRecognizer?.minimumPressDuration = MinLongPressDuration
+        self.longPressRecognizer?.delegate = self;
+
         self.tableView?.addGestureRecognizer(self.longPressRecognizer!)
     }
     

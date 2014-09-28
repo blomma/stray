@@ -342,7 +342,9 @@
 #pragma mark ReorderTableViewControllerDelegate
 
 - (BOOL)canMoveCellAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
+    NSIndexPath *editStateIndexPath = [self.fetchedResultsController indexPathForObject:self.tagInEditState];
+
+    return ![editStateIndexPath isEqual:indexPath];
 }
 
 - (void)willBeginMovingCellAtIndexPath:(NSIndexPath *)indexPath {
