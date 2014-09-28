@@ -258,8 +258,16 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                                                              fromDate:fromDate
                                                                toDate:toDate options:0];
         
-        self.eventTimeHours.text   = [NSString stringWithFormat:@"%02ld", (long)components.hour];
-        self.eventTimeMinutes.text = [NSString stringWithFormat:@"%02ld", (long)components.minute];
+        NSInteger hour = ABS(components.hour);
+        NSInteger minute = ABS(components.minute);
+
+        NSString *eventTimeHours = [NSString stringWithFormat:@"%02ld", hour];
+        if (components.hour < 0 || components.minute < 0) {
+            eventTimeHours = [NSString stringWithFormat:@"-%@", eventTimeHours];
+        }
+        
+        self.eventTimeHours.text   = eventTimeHours;
+        self.eventTimeMinutes.text = [NSString stringWithFormat:@"%02ld", minute];
     }
 }
 

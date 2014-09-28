@@ -61,7 +61,7 @@
 
     self.isStarted = YES;
     self.isStopped = stopDate != nil ? YES : NO;
-    
+
     self.nowDate = self.isStopped ? stopDate : [NSDate date];
 
     [self drawNow];
@@ -87,15 +87,15 @@
 
 - (void)reset {
     [self.updateTimer invalidate];
-    
+
     self.isStarted = NO;
     self.isStopped = NO;
 
     self.transforming = EventTimerNotTransforming;
-    
+
     self.previousSecondTick = -1;
     self.previousNow        = -1;
-    
+
     self.secondLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
     self.startLayer.transform  = CATransform3DMakeRotation(0, 0, 0, 1);
     self.nowLayer.transform    = CATransform3DMakeRotation(0, 0, 0, 1);
@@ -401,7 +401,7 @@
     if (!self.isStarted) {
         return NO;
     }
-    
+
     CGPoint point = [touch locationInView:self];
 
     CGFloat cx, cy, dx, dy, a;
@@ -421,7 +421,7 @@
         self.deltaDate  = self.nowDate;
 
         self.transforming = EventTimerNowDateTransformingStart;
-        
+
         self.nowTouchPathLayer.strokeEnd = 1;
     }
 
@@ -468,19 +468,11 @@
         self.deltaAngle     = a;
         self.deltaTransform = transform;
 
-        // If we are tracking the start  then
-        // we cant move past the now
         if (self.deltaLayer == self.startLayer) {
             CGFloat seconds = (CGFloat)[self angleToTimeInterval : da];
 
             NSDate *startDate = [self.deltaDate dateByAddingTimeInterval:seconds];
             self.deltaDate = startDate;
-
-            if ([[startDate laterDate:self.nowDate] isEqualToDate:startDate]) {
-                startDate = self.nowDate;
-                transform = self.nowLayer.transform;
-            }
-
             self.startDate = startDate;
         } else if (self.deltaLayer == self.nowLayer) {
             CGFloat seconds = (CGFloat)[self angleToTimeInterval : da];
@@ -523,19 +515,20 @@
                                                                   userInfo:nil
                                                                    repeats:YES];
             }
+
             self.startTouchPathLayer.strokeEnd = 0;
         } else if (self.deltaLayer == self.nowLayer) {
             [self drawNow];
-            
+
             self.transforming                = EventTimerNowDateTransformingStop;
             self.nowTouchPathLayer.strokeEnd = 0;
         }
-        
+
         self.deltaLayer = nil;
     }
-    
+
     self.transforming = EventTimerNotTransforming;
-    
+
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
