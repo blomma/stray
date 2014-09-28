@@ -264,7 +264,7 @@
     CGPoint fromValue                           = cell.frontView.layer.position;
     CGPoint toValue                             = CGPointMake(CGRectGetMidX(cell.frontView.layer.bounds), fromValue.y);
 
-    CGFloat velocity = fabs(gestureRecognizer.velocity.x) / fromValue.x;
+    CGFloat velocity = ABS(gestureRecognizer.velocity.x) / fromValue.x;
 
     [UIView animateWithDuration:1
                           delay:0
@@ -289,7 +289,7 @@
     CGRect frame = CGRectMake(0, 0.0, tableView.bounds.size.width, 36.0);
 
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:frame];
-    headerLabel.backgroundColor = [UIColor colorWithRed:0.745 green:0.106 blue:0.169 alpha:0.8];
+    headerLabel.backgroundColor = [UIColor colorWithRed:0.745f green:0.106f blue:0.169f alpha:0.8f];
     headerLabel.opaque          = YES;
     headerLabel.textColor       = [UIColor whiteColor];
     headerLabel.font            = [UIFont fontWithName:@"Futura-CondensedMedium" size:16];
@@ -298,7 +298,7 @@
     static NSUInteger unitFlagsEventStart = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitWeekday | NSCalendarUnitDay;
     NSDateComponents *components          = [[NSDate calendar] components:unitFlagsEventStart fromDate:eventGroup.groupDate];
 
-    headerLabel.text = [NSString stringWithFormat:@"%@  ·  %02ld %@ %04ld", [[self.shortStandaloneWeekdaySymbols objectAtIndex:(NSUInteger)components.weekday - 1] uppercaseString], components.day, [[self.shortStandaloneMonthSymbols objectAtIndex:(NSUInteger)components.month - 1] uppercaseString], (long)components.year];
+    headerLabel.text = [NSString stringWithFormat:@"%@  ·  %02ld %@ %04ld", [[self.shortStandaloneWeekdaySymbols objectAtIndex:(NSUInteger)components.weekday - 1] uppercaseString], (long)components.day, [[self.shortStandaloneMonthSymbols objectAtIndex:(NSUInteger)components.month - 1] uppercaseString], (long)components.year];
 
     return headerLabel;
 }
@@ -419,7 +419,7 @@
     self.filterViewButtons = [NSMutableArray array];
 
     self.filterView.showsHorizontalScrollIndicator = NO;
-    self.filterView.backgroundColor                = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:0.9];
+    self.filterView.backgroundColor                = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:0.9f];
 
     UIColor *colorOne = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:0.3f];
     UIColor *colorTwo = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:1];

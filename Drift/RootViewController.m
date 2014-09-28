@@ -32,7 +32,7 @@
                     animated:YES
                   completion:nil];
 
-    self.view.backgroundColor = [UIColor colorWithRed:0.941 green:0.933 blue:0.925 alpha:1.000];
+    self.view.backgroundColor = [UIColor colorWithRed:0.941f green:0.933f blue:0.925f alpha:1];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

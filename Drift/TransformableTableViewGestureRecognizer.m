@@ -72,7 +72,7 @@ static CGFloat kCommitEditingRowDefaultLength = 80;
             commitEditingLength = [self.delegate gestureRecognizer:self lengthForCommitEditingRowAtIndexPath:indexPath];
         }
 
-        if (fabs(translation.x) >= commitEditingLength) {
+        if (ABS(translation.x) >= commitEditingLength) {
             if ([self.delegate respondsToSelector:@selector(gestureRecognizer:commitEditingState:forRowAtIndexPath:)]) {
                 [self.delegate gestureRecognizer:self commitEditingState:self.editingCellState forRowAtIndexPath:indexPath];
             }
@@ -99,7 +99,7 @@ static CGFloat kCommitEditingRowDefaultLength = 80;
         // The pan gesture recognizer will fail the original scrollView scroll
         // gesture, we wants to ensure we are panning left/right to enable the
         // pan gesture.
-        if (fabs(point.y) > fabs(point.x)) {
+        if (ABS(point.y) > ABS(point.x)) {
             return NO;
         } else if (indexPath == nil) {
             return NO;

@@ -25,7 +25,7 @@
     [self.frontView.layer addSublayer:self.selectLayer];
 
     CALayer *separatorLayer = [CALayer layer];
-    separatorLayer.backgroundColor = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:0.8].CGColor;
+    separatorLayer.backgroundColor = [UIColor colorWithRed:0.851f green:0.851f blue:0.835f alpha:0.8f].CGColor;
     separatorLayer.frame           = CGRectMake(221, 45, 1, 60);
 
     [self.frontView.layer addSublayer:separatorLayer];

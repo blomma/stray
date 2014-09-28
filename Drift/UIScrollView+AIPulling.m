@@ -44,7 +44,7 @@
 
         // Default colors
         self.backgroundColorForAddState   = [UIColor colorWithRed:0.510f green:0.784f blue:0.431f alpha:1];
-        self.backgroundColorForCloseState = [UIColor colorWithRed:0.745 green:0.106 blue:0.169 alpha:1.000];
+        self.backgroundColorForCloseState = [UIColor colorWithRed:0.745f green:0.106f blue:0.169f alpha:1];
 
         self.titleLabel                 = [[UILabel alloc] init];
         self.titleLabel.font            = [UIFont fontWithName:@"Futura-CondensedMedium" size:17];
@@ -69,8 +69,8 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
 
-    CGFloat yDelta = MIN(fabs(self.scrollView.contentOffset.y), self.scrollView.frame.origin.y);
-    CGFloat height = fabs(self.scrollView.contentOffset.y) + yDelta;
+    CGFloat yDelta = MIN(ABS(self.scrollView.contentOffset.y), self.scrollView.frame.origin.y);
+    CGFloat height = ABS(self.scrollView.contentOffset.y) + yDelta;
     CGFloat y      = -height;
 
     CGRect frame = CGRectMake(0, y, self.bounds.size.width, height);
@@ -98,7 +98,7 @@
         CGFloat alphaHeight = self.addingHeight == 0 ? self.closingHeight : self.addingHeight;
         alphaHeight += self.scrollView.contentInset.top;
 
-        CGFloat alpha = (fabs(self.scrollView.contentOffset.y) / alphaHeight);
+        CGFloat alpha = ABS(self.scrollView.contentOffset.y) / alphaHeight;
 
         self.backgroundColor = self.addingHeight == 0 ? [self.backgroundColorForCloseState colorWithAlphaComponent:alpha] : [self.backgroundColorForAddState colorWithAlphaComponent:alpha];
         self.titleLabel.text = self.addingHeight == 0 ? @"Pull to Close..." : @"Pull to Add...";
@@ -126,7 +126,7 @@
 
 - (void)scrollViewDidScroll:(CGPoint)contentOffset {
     if (self.scrollView.decelerating) {
-        if (self.state == AIPullingStateAction && self.state != AIPullingStateInitial && fabs(contentOffset.y) <= fabs(self.scrollView.contentInset.top)) {
+        if (self.state == AIPullingStateAction && self.state != AIPullingStateInitial && ABS(contentOffset.y) <= ABS(self.scrollView.contentInset.top)) {
             self.state = AIPullingStateInitial;
         } else if (self.state != AIPullingStateInitial) {
             self.state = AIPullingStateAction;
@@ -147,11 +147,11 @@
     CGFloat heightForAddState    = self.addingHeight + self.scrollView.contentInset.top;
     CGFloat heightForCancelState = self.addingHeight == 0 ? heightForCloseState : heightForAddState;
 
-    if (fabs(contentOffset.y) < heightForCancelState) {
+    if (ABS(contentOffset.y) < heightForCancelState) {
         self.state = AIPullingStatePulling;
-    } else if (fabs(contentOffset.y) > heightForCloseState) {
+    } else if (ABS(contentOffset.y) > heightForCloseState) {
         self.state = AIPullingStatePullingClose;
-    } else if (fabs(contentOffset.y) >= heightForAddState && self.addingHeight != 0) {
+    } else if (ABS(contentOffset.y) >= heightForAddState && self.addingHeight != 0) {
         self.state = AIPullingStatePullingAdd;
     }
 }

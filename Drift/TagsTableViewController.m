@@ -279,7 +279,7 @@
 
     if (state == TransformableTableViewCellEditingStateRight && !self.tagInEditState) {
         CGFloat rightConstant = cell.frame.size.width - cell.backViewToEdit.constant - cell.leftSeparator.constant;
-        CGFloat velocity = (CGFloat)fabs(gestureRecognizer.velocity.x) / (rightConstant - cell.leading.constant);
+        CGFloat velocity = ABS(gestureRecognizer.velocity.x) / (rightConstant - cell.leading.constant);
 
         [UIView animateWithDuration:1
                               delay:0
@@ -294,7 +294,7 @@
 
         self.tagInEditState = [self.fetchedResultsController objectAtIndexPath:indexPath];
     } else {
-        CGFloat velocity = (CGFloat)fabs(gestureRecognizer.velocity.x) / (cell.leading.constant);
+        CGFloat velocity = ABS(gestureRecognizer.velocity.x) / cell.leading.constant;
 
         [UIView animateWithDuration:1
                               delay:0
@@ -315,7 +315,7 @@
     TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     [cell.tagNameTextField resignFirstResponder];
 
-    CGFloat velocity = (CGFloat)fabs(gestureRecognizer.velocity.x) / cell.leading.constant;
+    CGFloat velocity = ABS(gestureRecognizer.velocity.x) / cell.leading.constant;
 
     [UIView animateWithDuration:1
                           delay:0

@@ -261,13 +261,13 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         NSInteger hour = ABS(components.hour);
         NSInteger minute = ABS(components.minute);
 
-        NSString *eventTimeHours = [NSString stringWithFormat:@"%02ld", hour];
+        NSString *eventTimeHours = [NSString stringWithFormat:@"%02ld", (long)hour];
         if (components.hour < 0 || components.minute < 0) {
             eventTimeHours = [NSString stringWithFormat:@"-%@", eventTimeHours];
         }
         
         self.eventTimeHours.text   = eventTimeHours;
-        self.eventTimeMinutes.text = [NSString stringWithFormat:@"%02ld", minute];
+        self.eventTimeMinutes.text = [NSString stringWithFormat:@"%02ld", (long)minute];
     }
 }
 
@@ -294,8 +294,8 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         self.eventStartMonth.alpha = 1;
         self.eventStartYear.alpha = 1;
 
-        self.eventStopTime.alpha = 0.2;
-        self.eventStopDay.alpha = 0.2;
+        self.eventStopTime.alpha = 0.2f;
+        self.eventStopDay.alpha = 0.2f;
         self.eventStopMonth.alpha = 1;
         self.eventStopYear.alpha = 1;
     } completion:nil];
@@ -306,8 +306,8 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseIn
                      animations:^{
-        self.eventStartTime.alpha = 0.2;
-        self.eventStartDay.alpha = 0.2;
+        self.eventStartTime.alpha = 0.2f;
+        self.eventStartDay.alpha = 0.2f;
         self.eventStartMonth.alpha = 1;
         self.eventStartYear.alpha = 1;
 

@@ -208,18 +208,18 @@
 
             // drawing
             tick.transform = CATransform3DMakeRotation(angle, 0, 0, 1);
-            tick.fillColor = [[UIColor colorWithWhite:0.167 alpha:1.000] CGColor];
+            tick.fillColor = [[UIColor colorWithWhite:0.167f alpha:1] CGColor];
             tick.lineWidth = 1;
             tick.path      = largeTickPath.CGPath;
         } else {
             // position
-            tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.bounds.size.width / 2.0 - 31.5);
+            tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.bounds.size.width / 2.0f - 31.5f);
             tick.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
             tick.anchorPoint = CGPointMake(0.5, 1.0);
 
             // drawing
             tick.transform = CATransform3DMakeRotation(angle, 0, 0, 1);
-            tick.fillColor = [[UIColor colorWithWhite:0.292 alpha:1.000] CGColor];
+            tick.fillColor = [[UIColor colorWithWhite:0.292f alpha:1] CGColor];
             tick.lineWidth = 1;
             tick.path      = smallTickPath.CGPath;
         }
@@ -249,7 +249,7 @@
     self.nowPathLayer.frame = CGRectMake(0, 0, 50, 50);
 
     // drawing
-    self.nowPathLayer.fillColor = [[UIColor colorWithRed:0.427 green:0.784 blue:0.992 alpha:1] CGColor];
+    self.nowPathLayer.fillColor = [[UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:1] CGColor];
     self.nowPathLayer.lineWidth = 1.0;
     self.nowPathLayer.path      = nowPath.CGPath;
 
@@ -263,13 +263,13 @@
     self.nowTouchPathLayer.frame = CGRectMake(-10, -30, 70, 70);
 
     self.nowTouchPathLayer.fillColor   = [[UIColor clearColor] CGColor];
-    self.nowTouchPathLayer.strokeColor = [[UIColor colorWithRed:0.427 green:0.784 blue:0.992 alpha:0.5f] CGColor];
+    self.nowTouchPathLayer.strokeColor = [[UIColor colorWithRed:0.427f green:0.784f blue:0.992f alpha:0.5f] CGColor];
     self.nowTouchPathLayer.strokeEnd   = 0.0;
     self.nowTouchPathLayer.lineWidth   = 6.0;
     self.nowTouchPathLayer.path        = nowTouchPath.CGPath;
 
     // position
-    self.nowLayer.bounds      = CGRectMake(0.0, 0.0, 50, self.bounds.size.width / 2.0 - 10);
+    self.nowLayer.bounds      = CGRectMake(0.0, 0.0, 50, self.bounds.size.width / 2.0f - 10);
     self.nowLayer.anchorPoint = CGPointMake(0.5, 1.0);
     self.nowLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
     self.nowLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
@@ -300,7 +300,7 @@
     self.startPathLayer.frame = CGRectMake(0, 0, 50, 50);
 
     // drawing
-    self.startPathLayer.fillColor = [[UIColor colorWithRed:0.941 green:0.686 blue:0.314 alpha:1] CGColor];
+    self.startPathLayer.fillColor = [[UIColor colorWithRed:0.941f green:0.686f blue:0.314f alpha:1] CGColor];
     self.startPathLayer.lineWidth = 1.0;
     self.startPathLayer.path      = startPath.CGPath;
 
@@ -314,13 +314,13 @@
     self.startTouchPathLayer.frame = CGRectMake(-10, -30, 70, 70);
 
     self.startTouchPathLayer.fillColor   = [[UIColor clearColor] CGColor];
-    self.startTouchPathLayer.strokeColor = [[UIColor colorWithRed:0.941 green:0.686 blue:0.314 alpha:0.5f] CGColor];
+    self.startTouchPathLayer.strokeColor = [[UIColor colorWithRed:0.941f green:0.686f blue:0.314f alpha:0.5f] CGColor];
     self.startTouchPathLayer.strokeEnd   = 0.0;
     self.startTouchPathLayer.lineWidth   = 6.0;
     self.startTouchPathLayer.path        = startTouchPath.CGPath;
 
     // position
-    self.startLayer.bounds      = CGRectMake(0.0, 0.0, 50, self.bounds.size.width / 2.0 - 10);
+    self.startLayer.bounds      = CGRectMake(0.0, 0.0, 50, self.bounds.size.width / 2.0f - 10);
     self.startLayer.anchorPoint = CGPointMake(0.5, 1.0);
     self.startLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
     self.startLayer.transform   = CATransform3DMakeRotation(0, 0, 0, 1);
@@ -343,13 +343,13 @@
     [secondHandPath addLineToPoint:CGPointMake(7, 7)]; // Move to bottom right
 
     // position
-    self.secondLayer.bounds      = CGRectMake(0.0, 0.0, 7.0, self.bounds.size.width / 2.0 - 62);
+    self.secondLayer.bounds      = CGRectMake(0.0, 0.0, 7.0, self.bounds.size.width / 2.0f - 62);
     self.secondLayer.anchorPoint = CGPointMake(0.5, 1.0);
     self.secondLayer.position    = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 
     // drawing
     self.secondLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
-    self.secondLayer.fillColor = [[UIColor colorWithRed:0.843 green:0.306 blue:0.314 alpha:1] CGColor];
+    self.secondLayer.fillColor = [[UIColor colorWithRed:0.843f green:0.306f blue:0.314f alpha:1] CGColor];
     self.secondLayer.lineWidth = 1.0;
     self.secondLayer.path      = secondHandPath.CGPath;
 
@@ -386,7 +386,7 @@
 
         // drawing
         tick.transform = CATransform3DMakeRotation(angle, 0, 0, 1);
-        tick.fillColor = [[UIColor colorWithRed:0.843 green:0.306 blue:0.314 alpha:1] CGColor];
+        tick.fillColor = [[UIColor colorWithRed:0.843f green:0.306f blue:0.314f alpha:1] CGColor];
         tick.lineWidth = 1;
         tick.path      = secondHandTickPath.CGPath;
 
