@@ -218,9 +218,10 @@
                           delay:0
          usingSpringWithDamping:0.6f
           initialSpringVelocity:0
-                        options:0
+                        options:UIViewAnimationOptionCurveLinear
                      animations:^{
                          cell.leading.constant = 0;
+                         cell.trailing.constant = 0;
                          [cell.frontView layoutIfNeeded];
                      }
                      completion:nil];
@@ -265,6 +266,7 @@
     CGFloat xOffset = [editStateIndexPath isEqual:indexPath] ? rightConstant : 0;
 
     cell.leading.constant = gestureRecognizer.translationInTableView.x + xOffset;
+    cell.trailing.constant = gestureRecognizer.translationInTableView.x + xOffset;
 
     [cell.frontView layoutIfNeeded];
 }
@@ -285,9 +287,10 @@
                               delay:0
              usingSpringWithDamping:0.6f
               initialSpringVelocity:velocity
-                            options:0
+                            options:UIViewAnimationOptionCurveLinear
                          animations:^{
                              cell.leading.constant = rightConstant;
+                             cell.trailing.constant = rightConstant;
                              [cell.frontView layoutIfNeeded];
                          }
                          completion:nil];
@@ -300,9 +303,10 @@
                               delay:0
              usingSpringWithDamping:0.6f
               initialSpringVelocity:velocity
-                            options:0
+                            options:UIViewAnimationOptionCurveLinear
                          animations:^{
                              cell.leading.constant = 0;
+                             cell.trailing.constant = 0;
                              [cell.frontView layoutIfNeeded];
                          }
                          completion:nil];
@@ -321,9 +325,10 @@
                           delay:0
          usingSpringWithDamping:0.5
           initialSpringVelocity:velocity
-                        options:0
+                        options:UIViewAnimationOptionCurveLinear
                      animations:^{
                          cell.leading.constant = 0;
+                         cell.trailing.constant = 0;
                          [cell.frontView layoutIfNeeded];
                      }
                      completion:^(BOOL finished) {

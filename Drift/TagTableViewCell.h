@@ -30,6 +30,8 @@
 
 @property (nonatomic, weak) IBOutlet UIView *frontView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *leading;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *trailing;
+
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *backViewToEdit;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftSeparator;
 @property (weak, nonatomic) IBOutlet UIView *rightSelected;

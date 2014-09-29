@@ -356,7 +356,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="GBL-8y-p6I" secondAttribute="trailing" id="se9-zw-4zv"/>
                                                 <constraint firstItem="GBL-8y-p6I" firstAttribute="leading" secondItem="u6E-Th-EVp" secondAttribute="leading" id="uAl-qb-Ye4"/>
                                                 <constraint firstAttribute="bottom" secondItem="YqV-FT-yHV" secondAttribute="bottom" id="uOl-Gj-xQJ"/>
-                                                <constraint firstAttribute="trailing" secondItem="YqV-FT-yHV" secondAttribute="trailing" id="v98-tP-z6z"/>
+                                                <constraint firstItem="YqV-FT-yHV" firstAttribute="trailing" secondItem="u6E-Th-EVp" secondAttribute="trailing" id="v98-tP-z6z"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -369,6 +369,7 @@
                                             <outlet property="rightSelected" destination="7Ta-j5-qZe" id="vbk-9O-jGg"/>
                                             <outlet property="tagName" destination="kbd-ZN-Ygm" id="qv8-VM-q2R"/>
                                             <outlet property="tagNameTextField" destination="oLT-tc-FcA" id="eO3-LP-qae"/>
+                                            <outlet property="trailing" destination="v98-tP-z6z" id="5LK-bw-c1e"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
