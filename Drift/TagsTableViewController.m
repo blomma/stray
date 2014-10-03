@@ -331,9 +331,9 @@
                          cell.trailing.constant = 0;
                          [cell.frontView layoutIfNeeded];
                      }
-                     completion:^(BOOL finished) {
-                         self.tagInEditState = nil;
-                     }];
+                     completion:nil];
+
+    self.tagInEditState = nil;
 }
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {

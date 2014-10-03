@@ -9,7 +9,6 @@
 #import "EventsGroupedByStartDateViewController.h"
 
 #import "Tag.h"
-#import "CAAnimation+Blocks.h"
 #import "Event.h"
 #import "EventsGroupedByStartDateTableViewCell.h"
 #import "TagsTableViewController.h"
@@ -220,9 +219,9 @@
                          cell.frontViewTrailing.constant = 0;
                          [cell.frontView layoutIfNeeded];
                      }
-                     completion:^(BOOL finished) {
-                         self.eventInEditState = nil;
-                     }];
+                     completion:nil];
+
+    self.eventInEditState = nil;
 }
 
 - (CGFloat)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer lengthForCommitEditingRowAtIndexPath:(NSIndexPath *)indexPath {
