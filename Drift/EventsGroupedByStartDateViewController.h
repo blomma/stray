@@ -11,7 +11,7 @@
 
 @class EventsGroupedByStartDateViewController;
 
-@interface EventsGroupedByStartDateViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, TagsTableViewControllerDelegate>
+@interface EventsGroupedByStartDateViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, copy) void (^didDismissHandler)(void);
 @property (nonatomic, weak) IBOutlet UITableView *tableView;

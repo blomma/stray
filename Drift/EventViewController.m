@@ -105,10 +105,14 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToTagsFromEvent"]) {
         TagsTableViewController *controller = (TagsTableViewController *)[segue destinationViewController];
+        __weak __typeof__(self) _self = self;
+        [controller setDidDismissHandler: ^{
+            [_self dismissViewControllerAnimated:YES
+                                      completion:nil];
+        }];
 
         Event *selectedEvent = [Event MR_findFirstByAttribute:@"guid"
                                                     withValue:[State instance].selectedEventGUID];
-        controller.delegate = self;
         controller.eventGUID = selectedEvent.guid;
     } else if ([segue.identifier isEqualToString:@"segueToEventsFromEvent"]) {
         EventsGroupedByStartDateViewController *controller = (EventsGroupedByStartDateViewController *)[segue destinationViewController];
@@ -118,19 +122,6 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                                      completion:nil];
         }];
     }
-}
-
-#pragma mark -
-#pragma mark TagsTableViewControllerDelegate, EventsGroupedByStartDateViewControllerDelegate
-
-- (void)tagsTableViewControllerDidDimiss {
-    [self dismissViewControllerAnimated:YES
-                             completion:nil];
-}
-
-- (void)eventsGroupedByStartDateViewControllerDidDimiss {
-    [self dismissViewControllerAnimated:YES
-                             completion:nil];
 }
 
 #pragma mark -

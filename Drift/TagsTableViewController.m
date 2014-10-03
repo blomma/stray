@@ -52,12 +52,10 @@
                 [Tag MR_createEntity];
             });
         } else if (state == AIPullingStateAction && previousState == AIPullingStatePullingClose) {
-            if ([_self.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss)]) {
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                    [_self.delegate tagsTableViewControllerDidDimiss];
+                    _self.didDismissHandler();
                 });
-            }
         }
     }];
 
@@ -186,7 +184,7 @@
     event.inTag = [event.inTag isEqual:tag] ? nil : tag;
     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
     
-    [self.delegate tagsTableViewControllerDidDimiss];
+    self.didDismissHandler();
 }
 
 #pragma mark -

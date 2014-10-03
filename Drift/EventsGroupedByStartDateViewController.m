@@ -78,8 +78,12 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToTagsFromEvents"]) {
         TagsTableViewController *controller = (TagsTableViewController *)[segue destinationViewController];
-        controller.delegate = self;
 
+        __weak __typeof__(self) _self = self;
+        [controller setDidDismissHandler:^{
+            [_self dismissViewControllerAnimated:YES completion:nil];
+        }];
+        
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         Event *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
@@ -112,14 +116,6 @@
     }
     
     return _fetchedResultsController;
-}
-
-
-#pragma mark -
-#pragma mark TagsTableViewControllerDelegate
-
-- (void)tagsTableViewControllerDidDimiss {
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -

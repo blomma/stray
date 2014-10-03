@@ -10,15 +10,9 @@
 
 @class TagsTableViewController;
 
-@protocol TagsTableViewControllerDelegate <NSObject>
-
-- (void)tagsTableViewControllerDidDimiss;
-
-@end
-
 @interface TagsTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, weak) id<TagsTableViewControllerDelegate> delegate;
+@property (nonatomic, copy) void (^didDismissHandler)(void);
 @property (nonatomic) NSString *eventGUID;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
