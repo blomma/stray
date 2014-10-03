@@ -81,6 +81,9 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 
+    self.fetchedResultsController.delegate = nil;
+    self.fetchedResultsController = nil;
+    
     [self.tableView disablePulling];
     [self.tableView disableGestureTableViewWithRecognizer:self.tableViewRecognizer];
 }

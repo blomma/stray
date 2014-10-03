@@ -65,6 +65,9 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 
+    self.fetchedResultsController.delegate = nil;
+    self.fetchedResultsController = nil;
+
     // Check if we disapeared because of presenting a controller
     if (!self.presentedViewController) {
         [self.tableView disablePulling];
