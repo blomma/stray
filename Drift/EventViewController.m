@@ -21,7 +21,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 @interface EventViewController ()
 
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
-
+@property (nonatomic) Event *selectedEvent;
 @end
 
 @implementation EventViewController
@@ -50,24 +50,17 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                                 options:(NSKeyValueObservingOptionNew)
                                 context:EventViewControllerContext];
 
-    Event *selectedEvent = nil;
     NSString *guid = [State instance].selectedEventGUID;
     if (guid) {
-        selectedEvent = [Event MR_findFirstByAttribute:@"guid"
+        self.selectedEvent = [Event MR_findFirstByAttribute:@"guid"
                                              withValue:guid];
-        
-        if (!selectedEvent) {
-            // Something went wrong, we have a guid but no event for it
-            // lets just reset the guid and save it
-            [State instance].selectedEventGUID = nil;
-        }
     }
     
-    if (selectedEvent) {
-        [self.eventTimerControl initWithStartDate:selectedEvent.startDate
-                                      andStopDate:selectedEvent.stopDate];
+    if (self.selectedEvent) {
+        [self.eventTimerControl initWithStartDate:self.selectedEvent.startDate
+                                      andStopDate:self.selectedEvent.stopDate];
 
-        if (selectedEvent.isActive) {
+        if (self.selectedEvent.isActive) {
             [self.toggleStartStopButton setTitle:@"STOP"
                                         forState:UIControlStateNormal];
             [self animateStartEvent];
@@ -77,9 +70,11 @@ static void *EventViewControllerContext = &EventViewControllerContext;
             [self animateStopEvent];
         }
         
-        [self.tag setTitle:selectedEvent.inTag.name
+        [self.tag setTitle:self.selectedEvent.inTag.name
                   forState:UIControlStateNormal];
     } else {
+        [State instance].selectedEventGUID = nil;
+        
         [self reset];
         [self.eventTimerControl reset];
         
@@ -112,9 +107,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
             });
         }];
 
-        Event *selectedEvent = [Event MR_findFirstByAttribute:@"guid"
-                                                    withValue:[State instance].selectedEventGUID];
-        controller.eventGUID = selectedEvent.guid;
+        controller.eventGUID = self.selectedEvent.guid;
     } else if ([segue.identifier isEqualToString:@"segueToEventsFromEvent"]) {
         EventsGroupedByStartDateViewController *controller = (EventsGroupedByStartDateViewController *)[segue destinationViewController];
         __weak __typeof__(self) _self = self;
@@ -130,9 +123,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 #pragma mark Public methods
 
 - (IBAction)showTags:(id)sender {
-    Event *selectedEvent = [Event MR_findFirstByAttribute:@"guid"
-                                                withValue:[State instance].selectedEventGUID];
-    if (selectedEvent) {
+    if (self.selectedEvent) {
         [self animateButton:sender];
         
         [self performSegueWithIdentifier:@"segueToTagsFromEvent"
@@ -141,12 +132,9 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 }
 
 - (IBAction)toggleEventTouchUpInside:(id)sender forEvent:(UIEvent *)event {
-    Event *selectedEvent = [Event MR_findFirstByAttribute:@"guid"
-                                                withValue:[State instance].selectedEventGUID];
-    
-    if (selectedEvent.isActive) {
+    if (self.selectedEvent.isActive) {
         [self.eventTimerControl stop];
-        selectedEvent.stopDate = self.eventTimerControl.nowDate;
+        self.selectedEvent.stopDate = self.eventTimerControl.nowDate;
         
         [self.toggleStartStopButton setTitle:@"START"
                                     forState:UIControlStateNormal];
@@ -154,20 +142,20 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     } else {
         [self reset];
 
-        selectedEvent = [Event MR_createEntity];
-        selectedEvent.startDate = [NSDate date];
+        self.selectedEvent = [Event MR_createEntity];
+        self.selectedEvent.startDate = [NSDate date];
 
-        [State instance].selectedEventGUID = selectedEvent.guid;
+        [State instance].selectedEventGUID = self.selectedEvent.guid;
         
-        [self.eventTimerControl initWithStartDate:selectedEvent.startDate
-                                      andStopDate:selectedEvent.stopDate];
+        [self.eventTimerControl initWithStartDate:self.selectedEvent.startDate
+                                      andStopDate:self.selectedEvent.stopDate];
 
         [self.toggleStartStopButton setTitle:@"STOP"
                                     forState:UIControlStateNormal];
         [self animateStartEvent];
     }
 
-    [self.tag setTitle:selectedEvent.inTag.name
+    [self.tag setTitle:self.selectedEvent.inTag.name
               forState:UIControlStateNormal];
 
     [self animateButton:sender];
@@ -331,8 +319,6 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                      animations:
      ^{
          CGFloat eventStartAlpha = 1, eventStopAlpha = 1, eventTimeAlpha = 1, eventStartMonthYearAlpha = 1, eventStopMonthYearAlpha = 1;
-         Event *selectedEvent = nil;
-                         
          switch (eventTimerTransformingEnum) {
              case EventTimerStartDateTransformingStart:
                  eventStartAlpha = 1;
@@ -344,13 +330,10 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                  eventTimeAlpha = 0.2f;
                  break;
              case EventTimerStartDateTransformingStop:
-                 selectedEvent = [Event MR_findFirstByAttribute:@"guid"
-                                                             withValue:[State instance].selectedEventGUID];
-                 
-                 eventStartAlpha = selectedEvent.isActive ? 1 : 0.2f;
+                 eventStartAlpha = self.selectedEvent.isActive ? 1 : 0.2f;
                  eventStartMonthYearAlpha = 1;
                  
-                 eventStopAlpha = selectedEvent.isActive ? 0.2f : 1;
+                 eventStopAlpha = self.selectedEvent.isActive ? 0.2f : 1;
                  eventStopMonthYearAlpha = 1;
 
                  eventTimeAlpha = 1;
@@ -366,13 +349,10 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 
                  break;
              case EventTimerNowDateTransformingStop:
-                 selectedEvent = [Event MR_findFirstByAttribute:@"guid"
-                                                      withValue:[State instance].selectedEventGUID];
-                 
-                 eventStartAlpha = selectedEvent.isActive ? 1 : 0.2f;
+                 eventStartAlpha = self.selectedEvent.isActive ? 1 : 0.2f;
                  eventStartMonthYearAlpha = 1;
 
-                 eventStopAlpha = selectedEvent.isActive ? 0.2f : 1;
+                 eventStopAlpha = self.selectedEvent.isActive ? 0.2f : 1;
                  eventStopMonthYearAlpha = 1;
 
                  eventTimeAlpha = 1;
@@ -429,20 +409,13 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                     [self animateEventTransforming:transforming];
                 }
                 
-                Event *selectedEvent = nil;
                 switch (transforming) {
                     case EventTimerNowDateTransformingStop:
-                        selectedEvent = [Event MR_findFirstByAttribute:@"guid"
-                                                             withValue:[State instance].selectedEventGUID];
-                        
-                        selectedEvent.stopDate = self.eventTimerControl.nowDate;
+                        self.selectedEvent.stopDate = self.eventTimerControl.nowDate;
                         [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
                         break;
                     case EventTimerStartDateTransformingStop:
-                        selectedEvent = [Event MR_findFirstByAttribute:@"guid"
-                                                             withValue:[State instance].selectedEventGUID];
-                        
-                        selectedEvent.startDate = self.eventTimerControl.startDate;
+                        self.selectedEvent.startDate = self.eventTimerControl.startDate;
                         [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
                         break;
                         
