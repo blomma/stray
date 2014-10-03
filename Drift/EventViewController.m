@@ -11,7 +11,6 @@
 #import "Event.h"
 #import "Tag.h"
 #import "TagsTableViewController.h"
-#import "EventsGroupedByStartDate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "State.h"
 #import "NSDate+Utilities.h"
@@ -103,7 +102,11 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         controller.eventGUID = selectedEvent.guid;
     } else if ([segue.identifier isEqualToString:@"segueToEventsFromEvent"]) {
         EventsGroupedByStartDateViewController *controller = (EventsGroupedByStartDateViewController *)[segue destinationViewController];
-        controller.delegate = self;
+        __weak typeof(self) weakSelf = self;
+        [controller setDidDismissHandler: ^{
+            [weakSelf dismissViewControllerAnimated:YES
+                                     completion:nil];
+        }];
     }
 }
 

@@ -11,17 +11,9 @@
 
 @class EventsGroupedByStartDateViewController;
 
-@protocol EventsGroupedByStartDateViewControllerDelegate <NSObject>
-
-- (void)eventsGroupedByStartDateViewControllerDidDimiss;
-
-@end
-
 @interface EventsGroupedByStartDateViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, TagsTableViewControllerDelegate>
 
-@property (nonatomic, weak) id<EventsGroupedByStartDateViewControllerDelegate> delegate;
-
+@property (nonatomic, copy) void (^didDismissHandler)(void);
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
-@property (nonatomic, weak) IBOutlet UIScrollView *filterView;
 
 @end
