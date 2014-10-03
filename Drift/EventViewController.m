@@ -50,10 +50,20 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                                 options:(NSKeyValueObservingOptionNew)
                                 context:EventViewControllerContext];
 
-    if ([State instance].selectedEventGUID) {
-        Event *selectedEvent = [Event MR_findFirstByAttribute:@"guid"
-                                            withValue:[State instance].selectedEventGUID];
-
+    Event *selectedEvent = nil;
+    NSString *guid = [State instance].selectedEventGUID;
+    if (guid) {
+        selectedEvent = [Event MR_findFirstByAttribute:@"guid"
+                                             withValue:guid];
+        
+        if (!selectedEvent) {
+            // Something went wrong, we have a guid but no event for it
+            // lets just reset the guid and save it
+            [State instance].selectedEventGUID = nil;
+        }
+    }
+    
+    if (selectedEvent) {
         [self.eventTimerControl initWithStartDate:selectedEvent.startDate
                                       andStopDate:selectedEvent.stopDate];
 

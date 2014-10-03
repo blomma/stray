@@ -316,6 +316,11 @@
         NSIndexPath *i = [self.tableView indexPathForCell:c];
         
         Event *e = [self.fetchedResultsController objectAtIndexPath:i];
+        
+        if ([e.guid isEqualToString:[State instance].selectedEventGUID]) {
+            [State instance].selectedEventGUID = nil;
+        }
+        
         [e MR_deleteEntity];
         
         weakSelf.eventInEditState = nil;
