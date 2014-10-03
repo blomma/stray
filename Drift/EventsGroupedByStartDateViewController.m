@@ -47,8 +47,7 @@
     __weak __typeof__(self) _self = self;
     [self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
         if (state == AIPullingStateAction && (previousState == AIPullingStatePullingAdd || previousState == AIPullingStatePullingClose)) {
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 200000000);
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+            dispatch_async(dispatch_get_main_queue(), ^{
                 _self.didDismissHandler();
             });
         }
@@ -81,7 +80,9 @@
 
         __weak __typeof__(self) _self = self;
         [controller setDidDismissHandler:^{
-            [_self dismissViewControllerAnimated:YES completion:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_self dismissViewControllerAnimated:YES completion:nil];
+            });
         }];
         
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
@@ -330,7 +331,9 @@
     }];
     
     [cell setDidEditTagHandler:^(UITableViewCell *c) {
-        [_self performSegueWithIdentifier:@"segueToTagsFromEvents" sender:c];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_self performSegueWithIdentifier:@"segueToTagsFromEvents" sender:c];
+        });
     }];
 }
 

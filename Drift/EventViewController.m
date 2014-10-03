@@ -107,8 +107,9 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         TagsTableViewController *controller = (TagsTableViewController *)[segue destinationViewController];
         __weak __typeof__(self) _self = self;
         [controller setDidDismissHandler: ^{
-            [_self dismissViewControllerAnimated:YES
-                                      completion:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_self dismissViewControllerAnimated:YES completion:nil];
+            });
         }];
 
         Event *selectedEvent = [Event MR_findFirstByAttribute:@"guid"
@@ -118,8 +119,9 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         EventsGroupedByStartDateViewController *controller = (EventsGroupedByStartDateViewController *)[segue destinationViewController];
         __weak __typeof__(self) _self = self;
         [controller setDidDismissHandler: ^{
-            [_self dismissViewControllerAnimated:YES
-                                     completion:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_self dismissViewControllerAnimated:YES completion:nil];
+            });
         }];
     }
 }

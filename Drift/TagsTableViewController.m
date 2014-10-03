@@ -52,10 +52,9 @@
                 [Tag MR_createEntity];
             });
         } else if (state == AIPullingStateAction && previousState == AIPullingStatePullingClose) {
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                    _self.didDismissHandler();
-                });
+            dispatch_async(dispatch_get_main_queue(), ^{
+                _self.didDismissHandler();
+            });
         }
     }];
 
