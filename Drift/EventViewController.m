@@ -54,6 +54,8 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     if (guid) {
         self.selectedEvent = [Event MR_findFirstByAttribute:@"guid"
                                              withValue:guid];
+    } else {
+        self.selectedEvent = nil;
     }
     
     if (self.selectedEvent) {
