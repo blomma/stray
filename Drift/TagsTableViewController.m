@@ -113,19 +113,6 @@
 }
 
 #pragma mark -
-#pragma mark UIScrollViewDelegate
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if (self.tagInEditState) {
-        NSIndexPath *indexPath = [self.fetchedResultsController indexPathForObject:self.tagInEditState];
-        
-        [self gestureRecognizer:self.tableViewRecognizer
-             cancelEditingState:TransformableTableViewCellEditingStateRight
-              forRowAtIndexPath:indexPath];
-    }
-}
-
-#pragma mark -
 #pragma mark UITableViewDatasource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
