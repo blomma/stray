@@ -112,9 +112,9 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         controller.eventGUID = selectedEvent.guid;
     } else if ([segue.identifier isEqualToString:@"segueToEventsFromEvent"]) {
         EventsGroupedByStartDateViewController *controller = (EventsGroupedByStartDateViewController *)[segue destinationViewController];
-        __weak typeof(self) weakSelf = self;
+        __weak __typeof__(self) _self = self;
         [controller setDidDismissHandler: ^{
-            [weakSelf dismissViewControllerAnimated:YES
+            [_self dismissViewControllerAnimated:YES
                                      completion:nil];
         }];
     }

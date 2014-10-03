@@ -46,7 +46,7 @@
     self.eventGroups = [[EventsGroupedByDate alloc] initWithEvents:events
                                                        withFilters:[State instance].eventsGroupedByDateFilter];
 
-    __weak typeof(self) weakSelf = self;
+    __weak __typeof__(self) _self = self;
     self.managedContextObserver = [[NSNotificationCenter defaultCenter]
                      addObserverForName:NSManagedObjectContextDidSaveNotification
                      object:[NSManagedObjectContext MR_defaultContext]
@@ -75,19 +75,19 @@
                          }];
 
                          for (Event *event in updatedEvents) {
-                             [weakSelf.eventGroups updateEvent:event];
+                             [_self.eventGroups updateEvent:event];
                          }
 
                          for (Event *event in insertedEvents) {
-                             [weakSelf.eventGroups addEvent:event];
+                             [_self.eventGroups addEvent:event];
                          }
 
                          for (Event *event in deletedEvents) {
-                             [weakSelf.eventGroups removeEvent:event];
+                             [_self.eventGroups removeEvent:event];
                          }
 
                          if (updatedEvents.count > 0 || insertedEvents.count > 0 || deletedEvents.count > 0) {
-                             weakSelf.isEventGroupsInvalid = YES;
+                             _self.isEventGroupsInvalid = YES;
                          }
 
                          // ========
@@ -98,7 +98,7 @@
                          }];
                          
                          for (Tag *tag in deletedTags) {
-                             NSUInteger index = [weakSelf.filterViewButtons indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
+                             NSUInteger index = [_self.filterViewButtons indexOfObjectPassingTest:^BOOL (id obj, NSUInteger idx, BOOL *stop) {
                                  NSString *guid = ((TagFilterButton *)obj).eventGUID;
                                  if ([guid isEqualToString:tag.guid]) {
                                      *stop = YES;
@@ -109,7 +109,7 @@
                              }];
                              
                              if (index != NSNotFound) {
-                                 weakSelf.isEventGroupsInvalid = YES;
+                                 _self.isEventGroupsInvalid = YES;
                                  
                                  [[State instance].eventsGroupedByStartDateFilter removeObject:tag.guid];
                              }
@@ -120,13 +120,13 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    __weak typeof(self) weakSelf = self;
+    __weak __typeof__(self) _self = self;
     self.foregroundObserver = [[NSNotificationCenter defaultCenter]
                                addObserverForName:UIApplicationWillEnterForegroundNotification
                                object:nil
                                queue:nil
                                usingBlock:^(NSNotification *note) {
-                                   [weakSelf.tableView reloadData];
+                                   [_self.tableView reloadData];
                                }];
     
     [self setupFilterView];

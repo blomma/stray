@@ -44,7 +44,7 @@
     self.reorderTableViewController = [[ReorderTableViewController alloc] initWithTableView:self.tableView];
     self.reorderTableViewController.delegate = self;
     
-    __weak typeof(self) weakSelf = self;
+    __weak __typeof__(self) _self = self;
     [self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
         if (state == AIPullingStateAction && previousState == AIPullingStatePullingAdd) {
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
@@ -52,10 +52,10 @@
                 [Tag MR_createEntity];
             });
         } else if (state == AIPullingStateAction && previousState == AIPullingStatePullingClose) {
-            if ([weakSelf.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss)]) {
+            if ([_self.delegate respondsToSelector:@selector(tagsTableViewControllerDidDimiss)]) {
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000);
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                    [weakSelf.delegate tagsTableViewControllerDidDimiss];
+                    [_self.delegate tagsTableViewControllerDidDimiss];
                 });
             }
         }

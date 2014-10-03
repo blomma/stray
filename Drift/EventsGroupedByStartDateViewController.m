@@ -44,12 +44,12 @@
 
     self.tableViewRecognizer = [self.tableView enableGestureTableViewWithDelegate:self];
 
-    __weak typeof(self) weakSelf = self;
+    __weak __typeof__(self) _self = self;
     [self.tableView addPullingWithActionHandler:^(AIPullingState state, AIPullingState previousState, CGFloat height) {
         if (state == AIPullingStateAction && (previousState == AIPullingStatePullingAdd || previousState == AIPullingStatePullingClose)) {
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 200000000);
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                weakSelf.didDismissHandler();
+                _self.didDismissHandler();
             });
         }
     }];
@@ -110,6 +110,7 @@
     
     return _fetchedResultsController;
 }
+
 
 #pragma mark -
 #pragma mark TagsTableViewControllerDelegate
@@ -241,6 +242,7 @@
     [cell marked:YES withAnimation:YES];
 
     [State instance].selectedEventGUID = event.guid;
+
     self.didDismissHandler();
 }
 
@@ -311,11 +313,11 @@
         [cell marked:YES withAnimation:YES];
     }
     
-    __weak typeof(self) weakSelf = self;
+    __weak __typeof__(self) _self = self;
     [cell setDidDeleteEventHandler:^(UITableViewCell *c) {
-        NSIndexPath *i = [self.tableView indexPathForCell:c];
+        NSIndexPath *i = [_self.tableView indexPathForCell:c];
         
-        Event *e = [self.fetchedResultsController objectAtIndexPath:i];
+        Event *e = [_self.fetchedResultsController objectAtIndexPath:i];
         
         if ([e.guid isEqualToString:[State instance].selectedEventGUID]) {
             [State instance].selectedEventGUID = nil;
@@ -323,13 +325,13 @@
         
         [e MR_deleteEntity];
         
-        weakSelf.eventInEditState = nil;
+        _self.eventInEditState = nil;
         
         [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
     }];
     
     [cell setDidEditTagHandler:^(UITableViewCell *c) {
-        [weakSelf performSegueWithIdentifier:@"segueToTagsFromEvents" sender:c];
+        [_self performSegueWithIdentifier:@"segueToTagsFromEvents" sender:c];
     }];
 }
 
