@@ -7,7 +7,6 @@
 //
 
 #import "EventTimerControl.h"
-#import "NoHitCAShapeLayer.h"
 
 @interface EventTimerControl ()
 
@@ -15,16 +14,16 @@
 @property (nonatomic) BOOL isStopped;
 @property (nonatomic) BOOL isStarted;
 
-@property (nonatomic) NoHitCAShapeLayer *startTouchPathLayer;
+@property (nonatomic) CAShapeLayer *startTouchPathLayer;
 @property (nonatomic) CAShapeLayer *startLayer;
 @property (nonatomic) CAShapeLayer *startPathLayer;
 
-@property (nonatomic) NoHitCAShapeLayer *nowTouchPathLayer;
+@property (nonatomic) CAShapeLayer *nowTouchPathLayer;
 @property (nonatomic) CAShapeLayer      *nowLayer;
 @property (nonatomic) CAShapeLayer      *nowPathLayer;
 
-@property (nonatomic) NoHitCAShapeLayer *secondLayer;
-@property (nonatomic) NoHitCAShapeLayer *secondProgressTicksLayer;
+@property (nonatomic) CAShapeLayer *secondLayer;
+@property (nonatomic) CAShapeLayer *secondProgressTicksLayer;
 
 // Touch transforming
 @property (nonatomic) NSDate        *deltaDate;
@@ -103,7 +102,7 @@
     self.nowTouchPathLayer.strokeEnd   = 0;
 
     for (NSUInteger i = 0; i < self.secondProgressTicksLayer.sublayers.count; i++) {
-        NoHitCAShapeLayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
+        CAShapeLayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
         layer.hidden = NO;
     }
 }
@@ -156,7 +155,7 @@
 
     if (secondTick != self.previousSecondTick) {
         for (NSUInteger i = 0; i < self.secondProgressTicksLayer.sublayers.count; i++) {
-            NoHitCAShapeLayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
+            CAShapeLayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
 
             if (i < secondTick) {
                 layer.hidden = NO;
@@ -192,7 +191,7 @@
     UIBezierPath *smallTickPath = [UIBezierPath bezierPathWithRect:CGRectMake(0.0, 0.0, 3.0, 11.0)];
 
     for (NSInteger i = 1; i <= 60; ++i) {
-        NoHitCAShapeLayer *tick = [NoHitCAShapeLayer layer];
+        CAShapeLayer *tick = [CAShapeLayer layer];
         if ([tick respondsToSelector:@selector(setContentsScale:)]) {
             [tick setContentsScale:[[UIScreen mainScreen] scale]];
         }
@@ -255,7 +254,7 @@
     // touch path
     UIBezierPath *nowTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-50, -50, 150, 150)];
 
-    self.nowTouchPathLayer = [NoHitCAShapeLayer layer];
+    self.nowTouchPathLayer = [CAShapeLayer layer];
     if ([self.nowTouchPathLayer respondsToSelector:@selector(setContentsScale:)]) {
         [self.nowTouchPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
     }
@@ -306,7 +305,7 @@
     // touch path
     UIBezierPath *startTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-50, -50, 150, 150)];
 
-    self.startTouchPathLayer = [NoHitCAShapeLayer layer];
+    self.startTouchPathLayer = [CAShapeLayer layer];
     if ([self.startTouchPathLayer respondsToSelector:@selector(setContentsScale:)]) {
         [self.startTouchPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
     }
@@ -331,7 +330,7 @@
     // ==========================
     // = Second initializer =
     // ==========================
-    self.secondLayer = [NoHitCAShapeLayer layer];
+    self.secondLayer = [CAShapeLayer layer];
     if ([self.secondLayer respondsToSelector:@selector(setContentsScale:)]) {
         [self.secondLayer setContentsScale:[[UIScreen mainScreen] scale]];
     }
@@ -357,7 +356,7 @@
     // =========================================
     // = Second progress ticks initializer =
     // =========================================
-    self.secondProgressTicksLayer = [NoHitCAShapeLayer layer];
+    self.secondProgressTicksLayer = [CAShapeLayer layer];
     if ([self.secondProgressTicksLayer respondsToSelector:@selector(setContentsScale:)]) {
         [self.secondProgressTicksLayer setContentsScale:[[UIScreen mainScreen] scale]];
     }
@@ -373,7 +372,7 @@
     for (NSInteger i = 1; i <= 60; ++i) {
         angle = (CGFloat)((M_PI * 2) / 60.0 * i);
 
-        NoHitCAShapeLayer *tick = [NoHitCAShapeLayer layer];
+        CAShapeLayer *tick = [CAShapeLayer layer];
         if ([tick respondsToSelector:@selector(setContentsScale:)]) {
             [tick setContentsScale:[[UIScreen mainScreen] scale]];
         }
