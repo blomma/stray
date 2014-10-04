@@ -48,13 +48,13 @@
 		9E7EB52D15E8F8C100604B79 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F215570FD60087F602 /* CoreGraphics.framework */; };
 		9E89816F15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89816E15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m */; };
 		9E9239DB162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239D8162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m */; };
-		9E9239DC162D4F9B00E265E6 /* TagTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239DA162D4F9B00E265E6 /* TagTableViewCell.m */; };
 		9E92637115EF350D00393946 /* _Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E92637015EF350D00393946 /* _Tag.m */; };
 		9E954D84164419F50022D5BE /* UIScrollView+AIPulling.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E954D83164419F50022D5BE /* UIScrollView+AIPulling.m */; };
 		9E96A907163981B600164D76 /* CAAnimation+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E96A90616397DB400164D76 /* CAAnimation+Blocks.m */; };
 		9E9C237815F3617200572FB7 /* EventsGroupedByStartDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C237715F3617100572FB7 /* EventsGroupedByStartDateViewController.m */; };
 		9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB520E15C9553C008952FB /* NSDate+Utilities.m */; };
 		9EAD25D9198E314F006A2779 /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9EAD25D8198E314F006A2779 /* FontAwesome.otf */; };
+		9EB08FDE19E00C4800D20EE5 /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB08FDD19E00C4800D20EE5 /* TagCell.swift */; };
 		9EB15F6F165D6A7F0054AEA2 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB15F6E165D6A7F0054AEA2 /* TagButton.m */; };
 		9EBF34F319BA3ED70046A464 /* ReorderTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBF34F219BA3ED70046A464 /* ReorderTableViewController.swift */; };
 		9ECB5A0B173D287C006E86F1 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */; };
@@ -63,7 +63,6 @@
 		9ECF3B7E16EAF6290097FF37 /* CompatibilityMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7D16EAF6290097FF37 /* CompatibilityMigration.m */; };
 		9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCC5CA160DBFA1003CB2BB /* Tag.m */; };
 		9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */; };
-		9EF3311F166569DB005CFEF2 /* TagTableViewCellBackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EF3311E166569DB005CFEF2 /* TagTableViewCellBackView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -122,8 +121,6 @@
 		9E916E14163197A40058C777 /* CoreDataModel-4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-4.xcdatamodel"; sourceTree = "<group>"; };
 		9E9239D7162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransformableTableViewGestureRecognizer.h; sourceTree = "<group>"; };
 		9E9239D8162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransformableTableViewGestureRecognizer.m; sourceTree = "<group>"; };
-		9E9239D9162D4F9B00E265E6 /* TagTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagTableViewCell.h; sourceTree = "<group>"; };
-		9E9239DA162D4F9B00E265E6 /* TagTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagTableViewCell.m; sourceTree = "<group>"; };
 		9E9239E2162DA56900E265E6 /* CoreDataModel-3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-3.xcdatamodel"; sourceTree = "<group>"; };
 		9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-2.xcdatamodel"; sourceTree = "<group>"; };
 		9E92636F15EF350D00393946 /* _Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Tag.h; sourceTree = "<group>"; };
@@ -137,6 +134,7 @@
 		9EAB520D15C9553C008952FB /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
 		9EAB520E15C9553C008952FB /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utilities.m"; sourceTree = "<group>"; };
 		9EAD25D8198E314F006A2779 /* FontAwesome.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.otf; sourceTree = "<group>"; };
+		9EB08FDD19E00C4800D20EE5 /* TagCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
 		9EB15F6D165D6A7F0054AEA2 /* TagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagButton.h; sourceTree = "<group>"; };
 		9EB15F6E165D6A7F0054AEA2 /* TagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagButton.m; sourceTree = "<group>"; };
 		9EBF34F119BA3ED60046A464 /* Drift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Drift-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -157,8 +155,6 @@
 		9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EventTimerControl.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventTimerControl.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9EE6EC5F158CF7B40063E666 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		9EF3311D166569DB005CFEF2 /* TagTableViewCellBackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagTableViewCellBackView.h; sourceTree = "<group>"; };
-		9EF3311E166569DB005CFEF2 /* TagTableViewCellBackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagTableViewCellBackView.m; sourceTree = "<group>"; };
 		E6D140F0ED2BC3F9861A705A /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		FB8DC4F2F1A269D643B5D8A4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		FBD01BA2FFF4ECE122BB11EE /* Pods.ad hoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods.ad hoc.xcconfig"; path = "Pods/Target Support Files/Pods/Pods.ad hoc.xcconfig"; sourceTree = "<group>"; };
@@ -196,10 +192,7 @@
 				9E561DDA15FA08FB008D3895 /* EventsGroupedByStartDateTableViewCell.m */,
 				9E89816D15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.h */,
 				9E89816E15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m */,
-				9E9239D9162D4F9B00E265E6 /* TagTableViewCell.h */,
-				9E9239DA162D4F9B00E265E6 /* TagTableViewCell.m */,
-				9EF3311D166569DB005CFEF2 /* TagTableViewCellBackView.h */,
-				9EF3311E166569DB005CFEF2 /* TagTableViewCellBackView.m */,
+				9EB08FDD19E00C4800D20EE5 /* TagCell.swift */,
 			);
 			name = TableViewCells;
 			sourceTree = "<group>";
@@ -558,11 +551,10 @@
 				9E2CFDE9162190E8004D9D8D /* TagsTableViewController.m in Sources */,
 				9E14D452162B3D3F008D9E43 /* TagFilterButton.m in Sources */,
 				9E9239DB162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m in Sources */,
-				9E9239DC162D4F9B00E265E6 /* TagTableViewCell.m in Sources */,
 				9E954D84164419F50022D5BE /* UIScrollView+AIPulling.m in Sources */,
 				9E66D0DD16553D6700339E99 /* State.m in Sources */,
+				9EB08FDE19E00C4800D20EE5 /* TagCell.swift in Sources */,
 				9EB15F6F165D6A7F0054AEA2 /* TagButton.m in Sources */,
-				9EF3311F166569DB005CFEF2 /* TagTableViewCellBackView.m in Sources */,
 				9ECF3B7A16EAF4D40097FF37 /* _Compatibility.m in Sources */,
 				9ECF3B7B16EAF4D40097FF37 /* Compatibility.m in Sources */,
 				9ECF3B7E16EAF6290097FF37 /* CompatibilityMigration.m in Sources */,

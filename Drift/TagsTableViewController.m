@@ -10,12 +10,11 @@
 
 #import "Tag.h"
 #import "TransformableTableViewGestureRecognizer.h"
-#import "TagTableViewCell.h"
 #import "UIScrollView+AIPulling.h"
 #import "State.h"
 #import "Stray-Swift.h"
 
-@interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TagTableViewCellDelegate, ReorderTableViewControllerDelegate>
+@interface TagsTableViewController ()<TransformableTableViewGestureEditingRowDelegate, TagCellDelegate, ReorderTableViewControllerDelegate>
 
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
 @property (nonatomic, strong) ReorderTableViewController *reorderTableViewController;
@@ -130,23 +129,23 @@
 
         return cell;
     } else {
-        TagTableViewCell *cell = (TagTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"TagsTableViewCellIdentifier"];
+        TagCell *cell = (TagCell *)[tableView dequeueReusableCellWithIdentifier:@"TagCellIdentifier"];
         [self configureCell:cell atIndexPath:indexPath];
         
         return cell;
     }
 }
 
-- (void)configureCell:(TagTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+- (void)configureCell:(TagCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Tag *tag = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
-    cell.tagTitle = tag.name;
+    [cell setTitle:tag.name];
     cell.delegate = self;
     Event *event = [Event MR_findFirstByAttribute:@"guid"
                                         withValue:self.eventGUID];
     
     BOOL selected = [event.inTag isEqual:tag] ? YES : NO;
-    [cell marked:selected withAnimation:NO];
+    [cell setSelected:selected animated:NO];
 }
 
 #pragma mark -
@@ -160,9 +159,8 @@
         return;
     }
 
-    TagTableViewCell *cell = (TagTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-
-    [cell marked:!cell.marked withAnimation:YES];
+    TagCell *cell = (TagCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [cell setSelected:!cell.selected animated:YES];
 
     Event *event = [Event MR_findFirstByAttribute:@"guid"
                                         withValue:self.eventGUID];
@@ -174,45 +172,45 @@
 }
 
 #pragma mark -
-#pragma mark TagTableViewCellDelegate
+#pragma mark TagCellDelegate
 
-- (void)cell:(TagTableViewCell *)cell tappedDeleteButton:(UIButton *)sender forEvent:(UIEvent *)event {
-    [cell.tagNameTextField resignFirstResponder];
-
+- (void)didDeleteTagCell:(TagCell *)cell {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-
+    
     Tag *tag = [self.fetchedResultsController objectAtIndexPath:indexPath];
-
     [tag MR_deleteEntity];
-
+    
     self.tagInEditState = nil;
-
+    
     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
 }
 
-- (void)cell:(TagTableViewCell *)cell didChangeTagName:(NSString *)name {
+- (void)didEditTagCell:(TagCell *)cell {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-
+    
+    NSString *name = cell.tagNameTextField.text;
+    
     if (name && ![name isEqualToString:@""]) {
         Tag *tag = [self.fetchedResultsController objectAtIndexPath:indexPath];
         tag.name = name;
-        cell.tagTitle = name;
+
+        [cell setTitle:name];
         
         [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
     }
-
+    
     [UIView animateWithDuration:1
                           delay:0
          usingSpringWithDamping:0.6f
           initialSpringVelocity:0
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
-                         cell.leading.constant = 0;
-                         cell.trailing.constant = 0;
+                         cell.frontViewLeadingConstraint.constant = 0;
+                         cell.frontViewTrailingConstraint.constant = 0;
                          [cell.frontView layoutIfNeeded];
                      }
                      completion:nil];
-
+    
     self.tagInEditState = nil;
 }
 
@@ -230,7 +228,7 @@
         return;
     }
 
-    TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    TagCell *cell = (TagCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     [cell.frontView.layer removeAllAnimations];
 
     // If we have a cell in editstate and it is not this cell then cancel it
@@ -247,13 +245,13 @@
         return;
     }
 
-    TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    TagCell *cell = (TagCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
     CGFloat rightConstant = cell.frame.size.width - cell.backViewToEdit.constant - cell.leftSeparator.constant;
     CGFloat xOffset = [editStateIndexPath isEqual:indexPath] ? rightConstant : 0;
 
-    cell.leading.constant = gestureRecognizer.translationInTableView.x + xOffset;
-    cell.trailing.constant = gestureRecognizer.translationInTableView.x + xOffset;
+    cell.frontViewLeadingConstraint.constant = gestureRecognizer.translationInTableView.x + xOffset;
+    cell.frontViewTrailingConstraint.constant = gestureRecognizer.translationInTableView.x + xOffset;
 
     [cell.frontView layoutIfNeeded];
 }
@@ -264,11 +262,11 @@
         return;
     }
 
-    TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    TagCell *cell = (TagCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
     if (state == TransformableTableViewCellEditingStateRight && !self.tagInEditState) {
         CGFloat rightConstant = cell.frame.size.width - cell.backViewToEdit.constant - cell.leftSeparator.constant;
-        CGFloat velocity = ABS(gestureRecognizer.velocity.x) / (rightConstant - cell.leading.constant);
+        CGFloat velocity = ABS(gestureRecognizer.velocity.x) / (rightConstant - cell.frontViewLeadingConstraint.constant);
 
         [UIView animateWithDuration:1
                               delay:0
@@ -276,15 +274,15 @@
               initialSpringVelocity:velocity
                             options:UIViewAnimationOptionCurveLinear
                          animations:^{
-                             cell.leading.constant = rightConstant;
-                             cell.trailing.constant = rightConstant;
+                             cell.frontViewLeadingConstraint.constant = rightConstant;
+                             cell.frontViewTrailingConstraint.constant = rightConstant;
                              [cell.frontView layoutIfNeeded];
                          }
                          completion:nil];
 
         self.tagInEditState = [self.fetchedResultsController objectAtIndexPath:indexPath];
     } else {
-        CGFloat velocity = ABS(gestureRecognizer.velocity.x) / cell.leading.constant;
+        CGFloat velocity = ABS(gestureRecognizer.velocity.x) / cell.frontViewLeadingConstraint.constant;
 
         [UIView animateWithDuration:1
                               delay:0
@@ -292,8 +290,8 @@
               initialSpringVelocity:velocity
                             options:UIViewAnimationOptionCurveLinear
                          animations:^{
-                             cell.leading.constant = 0;
-                             cell.trailing.constant = 0;
+                             cell.frontViewLeadingConstraint.constant = 0;
+                             cell.frontViewTrailingConstraint.constant = 0;
                              [cell.frontView layoutIfNeeded];
                          }
                          completion:nil];
@@ -303,10 +301,10 @@
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-    TagTableViewCell *cell = (TagTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    TagCell *cell = (TagCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     [cell.tagNameTextField resignFirstResponder];
 
-    CGFloat velocity = ABS(gestureRecognizer.velocity.x) / cell.leading.constant;
+    CGFloat velocity = ABS(gestureRecognizer.velocity.x) / cell.frontViewLeadingConstraint.constant;
 
     [UIView animateWithDuration:1
                           delay:0
@@ -314,8 +312,8 @@
           initialSpringVelocity:velocity
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
-                         cell.leading.constant = 0;
-                         cell.trailing.constant = 0;
+                         cell.frontViewLeadingConstraint.constant = 0;
+                         cell.frontViewTrailingConstraint.constant = 0;
                          [cell.frontView layoutIfNeeded];
                      }
                      completion:nil];
@@ -395,7 +393,7 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self configureCell:(TagTableViewCell *)[tableView cellForRowAtIndexPath:indexPath]
+            [self configureCell:(TagCell *)[tableView cellForRowAtIndexPath:indexPath]
                     atIndexPath:indexPath];
             break;
             
