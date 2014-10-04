@@ -465,7 +465,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd Drift\n/usr/local/bin/mogenerator --template-var arc=true -m \"CoreDataModel.xcdatamodeld/\"";
+			shellScript = "cd Drift\n/usr/local/bin/mogenerator --v2 -m CoreDataModel.xcdatamodeld";
 		};
 		9EF331311666A019005CFEF2 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
