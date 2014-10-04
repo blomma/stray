@@ -185,18 +185,6 @@
 			name = Storyboard;
 			sourceTree = "<group>";
 		};
-		9E15AB76163C6D1C006D16B3 /* TableViewCells */ = {
-			isa = PBXGroup;
-			children = (
-				9E561DD915FA08FB008D3895 /* EventsGroupedByStartDateTableViewCell.h */,
-				9E561DDA15FA08FB008D3895 /* EventsGroupedByStartDateTableViewCell.m */,
-				9E89816D15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.h */,
-				9E89816E15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m */,
-				9EB08FDD19E00C4800D20EE5 /* TagCell.swift */,
-			);
-			name = TableViewCells;
-			sourceTree = "<group>";
-		};
 		9E42F1DF15570FD60087F602 = {
 			isa = PBXGroup;
 			children = (
@@ -245,6 +233,7 @@
 				9E63BBF6156EAAA80006FEFC /* Repository */,
 				9E01309215E39D20005C8765 /* Storyboard */,
 				9E9C232D15F288D400572FB7 /* Controllers */,
+				9EB08FDF19E03C4F00D20EE5 /* Views */,
 				9E561DE415FBB04D008D3895 /* Controls */,
 				9E9C232F15F2895000572FB7 /* Classes */,
 				9E42F1FD15570FD60087F602 /* DriftAppDelegate.h */,
@@ -331,7 +320,6 @@
 		9E9C232F15F2895000572FB7 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				9E15AB76163C6D1C006D16B3 /* TableViewCells */,
 				9E96FCE016359F8600AB5B0A /* TransformableTableView */,
 				9E63E1D515EA3338009C0A2D /* NoHitCAShapeLayer.h */,
 				9E63E1D615EA3338009C0A2D /* NoHitCAShapeLayer.m */,
@@ -365,6 +353,18 @@
 				9EAD25D8198E314F006A2779 /* FontAwesome.otf */,
 			);
 			name = Fonts;
+			sourceTree = "<group>";
+		};
+		9EB08FDF19E03C4F00D20EE5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9E561DD915FA08FB008D3895 /* EventsGroupedByStartDateTableViewCell.h */,
+				9E561DDA15FA08FB008D3895 /* EventsGroupedByStartDateTableViewCell.m */,
+				9E89816D15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.h */,
+				9E89816E15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m */,
+				9EB08FDD19E00C4800D20EE5 /* TagCell.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		9EF99092164BDCC000AF6EC4 /* Models */ = {
