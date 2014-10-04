@@ -10,14 +10,14 @@
 
 #import "Tag.h"
 #import "Event.h"
-#import "EventsGroupedByStartDateTableViewCell.h"
 #import "TagsTableViewController.h"
 #import "TransformableTableViewGestureRecognizer.h"
 #import "UIScrollView+AIPulling.h"
 #import "State.h"
 #import "NSDate+Utilities.h"
+#import "Stray-Swift.h"
 
-@interface EventsGroupedByStartDateViewController ()<TransformableTableViewGestureEditingRowDelegate, NSFetchedResultsControllerDelegate>
+@interface EventsGroupedByStartDateViewController ()<TransformableTableViewGestureEditingRowDelegate, EventCellDelegate, NSFetchedResultsControllerDelegate>
 
 @property (nonatomic) TransformableTableViewGestureRecognizer *tableViewRecognizer;
 
@@ -132,7 +132,7 @@
         return;
     }
     
-    EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    EventCell *cell = (EventCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     [cell.frontView.layer removeAllAnimations];
     
     // If we have a cell in editstate and it is not this cell then cancel it
@@ -149,7 +149,7 @@
         return;
     }
     
-    EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    EventCell *cell = (EventCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     
     CGFloat rightConstant = cell.frame.size.width - 200;
     CGFloat xOffset = [editStateIndexPath isEqual:indexPath] ? rightConstant : 0;
@@ -166,7 +166,7 @@
         return;
     }
     
-    EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    EventCell *cell = (EventCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     
     if (state == TransformableTableViewCellEditingStateRight && !self.eventInEditState) {
         CGFloat rightConstant = cell.frame.size.width - 200;
@@ -205,7 +205,7 @@
 }
 
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
-    EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
+    EventCell *cell = (EventCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     
     CGFloat velocity = ABS(gestureRecognizer.velocity.x) / cell.frontViewLeading.constant;
     
@@ -237,8 +237,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Event *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
-    EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    [cell marked:YES withAnimation:YES];
+    EventCell *cell = (EventCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [cell setSelected:YES animated:YES];
 
     [State instance].selectedEventGUID = event.guid;
 
@@ -246,8 +246,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    [cell marked:NO withAnimation:YES];
+    EventCell *cell = (EventCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [cell setSelected:NO animated:YES];
 }
 
 #pragma mark -
@@ -262,17 +262,24 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    EventsGroupedByStartDateTableViewCell *cell = (EventsGroupedByStartDateTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"EventsGroupedByStartDateTableViewCell"];
+    EventCell *cell = (EventCell *)[tableView dequeueReusableCellWithIdentifier:@"EventsGroupedByStartDateTableViewCell"];
 
     [self configureCell:cell atIndexPath:indexPath];
     
     return cell;
 }
 
-- (void)configureCell:(EventsGroupedByStartDateTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+- (void)configureCell:(EventCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Event *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    [cell.tagButton setTitle:[event.inTag.name copy] forState:UIControlStateNormal];
+    NSAttributedString *attributeString = nil;
+    if (event.inTag.name) {
+        attributeString = [[NSAttributedString alloc] initWithString:event.inTag.name attributes:@{NSFontAttributeName:[UIFont fontWithName:@"Futura-Medium" size:12]}];
+    } else {
+        attributeString = [[NSAttributedString alloc] initWithString:@"\uf02b" attributes:@{NSFontAttributeName:[UIFont fontWithName:@"FontAwesome" size:20]}];
+    }
+
+    [cell.tagButton setAttributedTitle:attributeString forState:UIControlStateNormal];
     
     // StartTime
     static NSUInteger unitFlagsEventStart = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitWeekday | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
@@ -307,33 +314,36 @@
         cell.eventStopMonth.text = @"";
     }
     
-    
     if ([event.guid isEqual:[State instance].selectedEventGUID]) {
-        [cell marked:YES withAnimation:YES];
+        [cell setSelected:YES animated:YES];
     }
     
-    __weak __typeof__(self) _self = self;
-    [cell setDidDeleteEventHandler:^(UITableViewCell *c) {
-        NSIndexPath *i = [_self.tableView indexPathForCell:c];
-        
-        Event *e = [_self.fetchedResultsController objectAtIndexPath:i];
-        
-        if ([e.guid isEqualToString:[State instance].selectedEventGUID]) {
-            [State instance].selectedEventGUID = nil;
-        }
-        
-        [e MR_deleteEntity];
-        
-        _self.eventInEditState = nil;
-        
-        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
-    }];
+    cell.delegate = self;
+}
+
+#pragma mark -
+#pragma mark EventCellDelegate
+
+- (void)didDeleteEventCell:(EventCell *)cell {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    [cell setDidEditTagHandler:^(UITableViewCell *c) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_self performSegueWithIdentifier:@"segueToTagsFromEvents" sender:c];
-        });
-    }];
+    Event *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    if ([event.guid isEqualToString:[State instance].selectedEventGUID]) {
+        [State instance].selectedEventGUID = nil;
+    }
+    
+    [event MR_deleteEntity];
+    
+    self.eventInEditState = nil;
+    
+    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
+}
+
+- (void)didPressTag:(EventCell *)cell {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self performSegueWithIdentifier:@"segueToTagsFromEvents" sender:cell];
+    });
 }
 
 #pragma mark -
@@ -358,7 +368,7 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self configureCell:(EventsGroupedByStartDateTableViewCell *)[tableView cellForRowAtIndexPath:indexPath]
+            [self configureCell:(EventCell *)[tableView cellForRowAtIndexPath:indexPath]
                     atIndexPath:indexPath];
             break;
             
