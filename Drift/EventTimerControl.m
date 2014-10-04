@@ -39,16 +39,8 @@
 
 @end
 
+IB_DESIGNABLE
 @implementation EventTimerControl
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        [self drawClockFace];
-    }
-
-    return self;
-}
 
 #pragma mark -
 #pragma mark Public methods
@@ -177,6 +169,11 @@
         self.nowLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
         self.previousNow        = a;
     }
+}
+
+- (void)layoutSubviews {
+    DLog(@"");
+    [self drawClockFace];
 }
 
 - (void)drawClockFace {
