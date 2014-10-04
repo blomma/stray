@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "Event.h"
 #import "EventTimerControl.h"
 #import "NoHitCAShapeLayer.h"
 

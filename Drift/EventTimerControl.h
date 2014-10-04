@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-#import "Event.h"
-
 typedef enum : NSInteger {
     EventTimerNotTransforming,
     EventTimerStartDateTransformingStart,
