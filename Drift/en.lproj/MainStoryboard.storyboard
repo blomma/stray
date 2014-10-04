@@ -334,12 +334,12 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="backViewToEdit" destination="lDL-pO-22M" id="Cdj-dd-tPK"/>
+                                            <outlet property="backViewToTagNameTextFieldConstraint" destination="lDL-pO-22M" id="REV-6G-8aU"/>
                                             <outlet property="deleteButton" destination="RYh-i0-qYA" id="nNS-mS-cFQ"/>
                                             <outlet property="frontView" destination="YqV-FT-yHV" id="2Em-rd-Trk"/>
                                             <outlet property="frontViewLeadingConstraint" destination="a96-OK-wBR" id="69F-1N-LUL"/>
+                                            <outlet property="frontViewLeftSeparatorConstraint" destination="4b4-en-xh2" id="VgD-aw-Qnc"/>
                                             <outlet property="frontViewTrailingConstraint" destination="v98-tP-z6z" id="yjB-SE-COz"/>
-                                            <outlet property="leftSeparator" destination="4b4-en-xh2" id="hMF-fW-asE"/>
                                             <outlet property="rightSelected" destination="7Ta-j5-qZe" id="vbk-9O-jGg"/>
                                             <outlet property="tagName" destination="kbd-ZN-Ygm" id="qv8-VM-q2R"/>
                                             <outlet property="tagNameTextField" destination="oLT-tc-FcA" id="eO3-LP-qae"/>
@@ -485,7 +485,7 @@
                                 <rect key="frame" x="0.0" y="20" width="600" height="580"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="EventsGroupedByStartDateTableViewCell" id="qyp-c4-X1Y" userLabel="EventsGroupedByStartDateTableViewCell" customClass="EventCell" customModule="Stray" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="EventCellIdentifier" id="qyp-c4-X1Y" customClass="EventCell" customModule="Stray" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="22" width="320" height="120"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qyp-c4-X1Y" id="qBV-lq-E4n">
@@ -689,9 +689,8 @@
                                             <outlet property="eventTimeHours" destination="DHb-gW-YbL" id="8HV-md-NMo"/>
                                             <outlet property="eventTimeMinutes" destination="uo8-E1-pre" id="jry-nA-Kh2"/>
                                             <outlet property="frontView" destination="Daf-GT-Fi9" id="DJp-aB-BIY"/>
-                                            <outlet property="frontViewLeading" destination="xOV-ZG-clx" id="JjX-hh-aVz"/>
-                                            <outlet property="frontViewTrailing" destination="kEP-sn-veu" id="Om1-MH-svT"/>
-                                            <outlet property="leftSeparator" destination="lgF-Ma-wMe" id="Stc-9b-sME"/>
+                                            <outlet property="frontViewLeadingConstraint" destination="xOV-ZG-clx" id="4Oi-ZG-ixA"/>
+                                            <outlet property="frontViewTrailingConstraint" destination="kEP-sn-veu" id="uz1-QZ-rru"/>
                                             <outlet property="rightSelected" destination="ksM-Om-8DG" id="KzP-sJ-YIh"/>
                                             <outlet property="tagButton" destination="cwy-Pi-cdr" id="Xqg-k1-k1M"/>
                                         </connections>

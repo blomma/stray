@@ -154,8 +154,8 @@
     CGFloat rightConstant = cell.frame.size.width - 200;
     CGFloat xOffset = [editStateIndexPath isEqual:indexPath] ? rightConstant : 0;
     
-    cell.frontViewLeading.constant = gestureRecognizer.translationInTableView.x + xOffset;
-    cell.frontViewTrailing.constant = gestureRecognizer.translationInTableView.x + xOffset;
+    cell.frontViewLeadingConstraint.constant = gestureRecognizer.translationInTableView.x + xOffset;
+    cell.frontViewTrailingConstraint.constant = gestureRecognizer.translationInTableView.x + xOffset;
     
     [cell.frontView layoutIfNeeded];
 }
@@ -170,7 +170,7 @@
     
     if (state == TransformableTableViewCellEditingStateRight && !self.eventInEditState) {
         CGFloat rightConstant = cell.frame.size.width - 200;
-        CGFloat velocity = ABS(gestureRecognizer.velocity.x) / (rightConstant - cell.frontViewLeading.constant);
+        CGFloat velocity = ABS(gestureRecognizer.velocity.x) / (rightConstant - cell.frontViewLeadingConstraint.constant);
         
         [UIView animateWithDuration:1
                               delay:0
@@ -178,15 +178,15 @@
               initialSpringVelocity:velocity
                             options:UIViewAnimationOptionCurveLinear
                          animations:^{
-                             cell.frontViewLeading.constant = rightConstant;
-                             cell.frontViewTrailing.constant = rightConstant;
+                             cell.frontViewLeadingConstraint.constant = rightConstant;
+                             cell.frontViewTrailingConstraint.constant = rightConstant;
                              [cell.frontView layoutIfNeeded];
                          }
                          completion:nil];
         
         self.eventInEditState = [self.fetchedResultsController objectAtIndexPath:indexPath];
     } else {
-        CGFloat velocity = ABS(gestureRecognizer.velocity.x) / cell.frontViewLeading.constant;
+        CGFloat velocity = ABS(gestureRecognizer.velocity.x) / cell.frontViewLeadingConstraint.constant;
         
         [UIView animateWithDuration:1
                               delay:0
@@ -194,8 +194,8 @@
               initialSpringVelocity:velocity
                             options:UIViewAnimationOptionCurveLinear
                          animations:^{
-                             cell.frontViewLeading.constant = 0;
-                             cell.frontViewTrailing.constant = 0;
+                             cell.frontViewLeadingConstraint.constant = 0;
+                             cell.frontViewTrailingConstraint.constant = 0;
                              [cell.frontView layoutIfNeeded];
                          }
                          completion:nil];
@@ -207,7 +207,7 @@
 - (void)gestureRecognizer:(TransformableTableViewGestureRecognizer *)gestureRecognizer cancelEditingState:(TransformableTableViewCellEditingState)state forRowAtIndexPath:(NSIndexPath *)indexPath {
     EventCell *cell = (EventCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
     
-    CGFloat velocity = ABS(gestureRecognizer.velocity.x) / cell.frontViewLeading.constant;
+    CGFloat velocity = ABS(gestureRecognizer.velocity.x) / cell.frontViewLeadingConstraint.constant;
     
     [UIView animateWithDuration:1
                           delay:0
@@ -215,8 +215,8 @@
           initialSpringVelocity:velocity
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
-                         cell.frontViewLeading.constant = 0;
-                         cell.frontViewTrailing.constant = 0;
+                         cell.frontViewLeadingConstraint.constant = 0;
+                         cell.frontViewTrailingConstraint.constant = 0;
                          [cell.frontView layoutIfNeeded];
                      }
                      completion:nil];
@@ -262,7 +262,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    EventCell *cell = (EventCell *)[tableView dequeueReusableCellWithIdentifier:@"EventsGroupedByStartDateTableViewCell"];
+    EventCell *cell = (EventCell *)[tableView dequeueReusableCellWithIdentifier:@"EventCellIdentifier"];
 
     [self configureCell:cell atIndexPath:indexPath];
     

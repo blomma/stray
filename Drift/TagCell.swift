@@ -20,8 +20,8 @@ public class TagCell: UITableViewCell, UITextFieldDelegate {
     @IBOutlet var frontViewLeadingConstraint: NSLayoutConstraint?
     @IBOutlet var frontViewTrailingConstraint: NSLayoutConstraint?
     
-    @IBOutlet var backViewToEdit: NSLayoutConstraint?
-    @IBOutlet var leftSeparator: NSLayoutConstraint?
+    @IBOutlet var backViewToTagNameTextFieldConstraint: NSLayoutConstraint?
+    @IBOutlet var frontViewLeftSeparatorConstraint: NSLayoutConstraint?
     @IBOutlet var rightSelected: UIView?
     @IBOutlet var deleteButton: UIButton?
 

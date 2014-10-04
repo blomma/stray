@@ -17,8 +17,8 @@ public class EventCell: UITableViewCell {
     @IBOutlet var backView: UIView?
     
     @IBOutlet var frontView: UIView?
-    @IBOutlet var frontViewLeading: NSLayoutConstraint?
-    @IBOutlet var frontViewTrailing: NSLayoutConstraint?
+    @IBOutlet var frontViewLeadingConstraint: NSLayoutConstraint?
+    @IBOutlet var frontViewTrailingConstraint: NSLayoutConstraint?
     
     @IBOutlet var eventStartTime: UILabel?
     @IBOutlet var eventStartDay: UILabel?
@@ -36,7 +36,6 @@ public class EventCell: UITableViewCell {
     @IBOutlet var deleteButton: UIButton?
     
     @IBOutlet var rightSelected: UIView?
-    @IBOutlet var leftSeparator: NSLayoutConstraint?
     @IBOutlet var tagButton: UIButton?
     
     public weak var delegate:EventCellDelegate?
@@ -62,8 +61,8 @@ public class EventCell: UITableViewCell {
     }
 
     override public func prepareForReuse() {
-        self.frontViewLeading?.constant = 0
-        self.frontViewTrailing?.constant = 0
+        self.frontViewLeadingConstraint?.constant = 0
+        self.frontViewTrailingConstraint?.constant = 0
     }
     
     // IBActions

@@ -247,7 +247,7 @@
 
     TagCell *cell = (TagCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
-    CGFloat rightConstant = cell.frame.size.width - cell.backViewToEdit.constant - cell.leftSeparator.constant;
+    CGFloat rightConstant = cell.frame.size.width - cell.backViewToTagNameTextFieldConstraint.constant - cell.frontViewLeftSeparatorConstraint.constant;
     CGFloat xOffset = [editStateIndexPath isEqual:indexPath] ? rightConstant : 0;
 
     cell.frontViewLeadingConstraint.constant = gestureRecognizer.translationInTableView.x + xOffset;
@@ -265,7 +265,7 @@
     TagCell *cell = (TagCell *)[gestureRecognizer.tableView cellForRowAtIndexPath:indexPath];
 
     if (state == TransformableTableViewCellEditingStateRight && !self.tagInEditState) {
-        CGFloat rightConstant = cell.frame.size.width - cell.backViewToEdit.constant - cell.leftSeparator.constant;
+        CGFloat rightConstant = cell.frame.size.width - cell.backViewToTagNameTextFieldConstraint.constant - cell.frontViewLeftSeparatorConstraint.constant;
         CGFloat velocity = ABS(gestureRecognizer.velocity.x) / (rightConstant - cell.frontViewLeadingConstraint.constant);
 
         [UIView animateWithDuration:1
