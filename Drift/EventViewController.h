@@ -10,7 +10,6 @@
 
 #import "TagsTableViewController.h"
 #import "EventsGroupedByStartDateViewController.h"
-#import "TagButton.h"
 
 @interface EventViewController : UIViewController
 
@@ -30,7 +29,7 @@
 @property (nonatomic, weak) IBOutlet UILabel *eventStopMonth;
 @property (nonatomic, weak) IBOutlet UILabel *eventStopYear;
 
-@property (nonatomic, weak) IBOutlet TagButton *tag;
+@property (nonatomic, weak) IBOutlet UIButton *tag;
 
 - (IBAction)showTags:(id)sender;
 - (IBAction)toggleEventTouchUpInside:(id)sender forEvent:(UIEvent *)event;

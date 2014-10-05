@@ -58,6 +58,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         self.selectedEvent = nil;
     }
     
+    NSString *name = nil;
     if (self.selectedEvent) {
         [self.eventTimerControl initWithStartDate:self.selectedEvent.startDate
                                       andStopDate:self.selectedEvent.stopDate];
@@ -72,17 +73,24 @@ static void *EventViewControllerContext = &EventViewControllerContext;
             [self animateStopEvent];
         }
         
-        [self.tag setTitle:self.selectedEvent.inTag.name
-                  forState:UIControlStateNormal];
+        name = self.selectedEvent.inTag.name;
     } else {
         [State instance].selectedEventGUID = nil;
         
         [self reset];
         [self.eventTimerControl reset];
-        
-        [self.tag setTitle:nil
-                  forState:UIControlStateNormal];
     }
+
+    NSAttributedString *attributeString = nil;
+    if (name) {
+        attributeString = [[NSAttributedString alloc] initWithString:name
+                                                          attributes:@{NSFontAttributeName:[UIFont fontWithName:@"Futura-Medium" size:12]}];
+    } else {
+        attributeString = [[NSAttributedString alloc] initWithString:@"\uf02b"
+                                                          attributes:@{NSFontAttributeName:[UIFont fontWithName:@"FontAwesome" size:20]}];
+    }
+    
+    [self.tag setAttributedTitle:attributeString forState:UIControlStateNormal];
 
 }
 
@@ -155,10 +163,11 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         [self.toggleStartStopButton setTitle:@"STOP"
                                     forState:UIControlStateNormal];
         [self animateStartEvent];
-    }
 
-    [self.tag setTitle:self.selectedEvent.inTag.name
-              forState:UIControlStateNormal];
+        NSAttributedString *attributeString = [[NSAttributedString alloc] initWithString:@"\uf02b"
+                                                              attributes:@{NSFontAttributeName:[UIFont fontWithName:@"FontAwesome" size:20]}];
+        [self.tag setAttributedTitle:attributeString forState:UIControlStateNormal];
+    }
 
     [self animateButton:sender];
 

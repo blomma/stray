@@ -54,7 +54,6 @@
 		9EAD25D9198E314F006A2779 /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9EAD25D8198E314F006A2779 /* FontAwesome.otf */; };
 		9EB08FDE19E00C4800D20EE5 /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB08FDD19E00C4800D20EE5 /* TagCell.swift */; };
 		9EB08FE119E03E1200D20EE5 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB08FE019E03E1200D20EE5 /* EventCell.swift */; };
-		9EB15F6F165D6A7F0054AEA2 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB15F6E165D6A7F0054AEA2 /* TagButton.m */; };
 		9EBF34F319BA3ED70046A464 /* ReorderTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBF34F219BA3ED70046A464 /* ReorderTableViewController.swift */; };
 		9ECB5A0B173D287C006E86F1 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */; };
 		9ECF3B7A16EAF4D40097FF37 /* _Compatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7716EAF4D40097FF37 /* _Compatibility.m */; };
@@ -128,8 +127,6 @@
 		9EAD25D8198E314F006A2779 /* FontAwesome.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.otf; sourceTree = "<group>"; };
 		9EB08FDD19E00C4800D20EE5 /* TagCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
 		9EB08FE019E03E1200D20EE5 /* EventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
-		9EB15F6D165D6A7F0054AEA2 /* TagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagButton.h; sourceTree = "<group>"; };
-		9EB15F6E165D6A7F0054AEA2 /* TagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagButton.m; sourceTree = "<group>"; };
 		9EBF34F119BA3ED60046A464 /* Drift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Drift-Bridging-Header.h"; sourceTree = "<group>"; };
 		9EBF34F219BA3ED70046A464 /* ReorderTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReorderTableViewController.swift; sourceTree = "<group>"; };
 		9ECB5A0A173D287C006E86F1 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Vendor/Crashlytics.framework; sourceTree = "<group>"; };
@@ -302,8 +299,6 @@
 				9E96FCE016359F8600AB5B0A /* TransformableTableView */,
 				9E14D450162B3D3F008D9E43 /* TagFilterButton.h */,
 				9E14D451162B3D3F008D9E43 /* TagFilterButton.m */,
-				9EB15F6D165D6A7F0054AEA2 /* TagButton.h */,
-				9EB15F6E165D6A7F0054AEA2 /* TagButton.m */,
 				9E7636641778A1A4005C755F /* AIStyle.h */,
 				9E7636651778A1A4005C755F /* AIStyle.m */,
 				9EBF34F219BA3ED70046A464 /* ReorderTableViewController.swift */,
@@ -528,7 +523,6 @@
 				9E66D0DD16553D6700339E99 /* State.m in Sources */,
 				9EB08FDE19E00C4800D20EE5 /* TagCell.swift in Sources */,
 				9EB08FE119E03E1200D20EE5 /* EventCell.swift in Sources */,
-				9EB15F6F165D6A7F0054AEA2 /* TagButton.m in Sources */,
 				9ECF3B7A16EAF4D40097FF37 /* _Compatibility.m in Sources */,
 				9ECF3B7B16EAF4D40097FF37 /* Compatibility.m in Sources */,
 				9ECF3B7E16EAF6290097FF37 /* CompatibilityMigration.m in Sources */,
