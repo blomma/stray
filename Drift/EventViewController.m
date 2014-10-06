@@ -33,7 +33,19 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     [super viewDidLoad];
 
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
+    
     self.slideUpTransitioning = [SlideUpTransitioning new];
+    self.slideUpTransitioning.delegate = self;
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserverForName:@"rootViewDidAppear"
+     object:nil
+     queue:nil
+     usingBlock:^(NSNotification *note) {
+         if (![self.view.window.gestureRecognizers containsObject:self.slideUpTransitioning.gestureRecogniser]) {
+             [self.view.window addGestureRecognizer:self.slideUpTransitioning.gestureRecogniser];
+         }
+     }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -97,16 +109,6 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     [self.tag setAttributedTitle:attributeString
                         forState:UIControlStateNormal];
 
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    self.slideUpTransitioning.delegate = self;
-
-    if (![self.view.gestureRecognizers containsObject:self.slideUpTransitioning.gestureRecogniser]) {
-        [self.view addGestureRecognizer:self.slideUpTransitioning.gestureRecogniser];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -448,24 +450,18 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                 switch (transforming) {
                     case EventTimerNowDateTransformingStart:
                     case EventTimerStartDateTransformingStart:
-                        if ([self.view.gestureRecognizers containsObject:self.slideUpTransitioning.gestureRecogniser]) {
-                            [self.view removeGestureRecognizer:self.slideUpTransitioning.gestureRecogniser];
-                        }
+                        self.slideUpTransitioning.gestureRecogniser.enabled = NO;
                         
                         break;
                     case EventTimerNowDateTransformingStop:
-                        if (![self.view.gestureRecognizers containsObject:self.slideUpTransitioning.gestureRecogniser]) {
-                            [self.view addGestureRecognizer:self.slideUpTransitioning.gestureRecogniser];
-                        }
+                        self.slideUpTransitioning.gestureRecogniser.enabled = YES;
                         
                         self.selectedEvent.stopDate = self.eventTimerControl.nowDate;
                         [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
 
                         break;
                     case EventTimerStartDateTransformingStop:
-                        if (![self.view.gestureRecognizers containsObject:self.slideUpTransitioning.gestureRecogniser]) {
-                            [self.view addGestureRecognizer:self.slideUpTransitioning.gestureRecogniser];
-                        }
+                        self.slideUpTransitioning.gestureRecogniser.enabled = YES;
                         
                         self.selectedEvent.startDate = self.eventTimerControl.startDate;
                         [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];

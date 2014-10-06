@@ -37,6 +37,9 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"rootViewDidAppear"
+                                                        object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
