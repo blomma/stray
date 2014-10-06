@@ -22,7 +22,8 @@ class SlideUpTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
     var interactionInProgress: Bool = false
     
     weak var delegate:SlideUpTransitioningDelegate?
-    
+    var dimmingView: UIView!
+
     func handleGesture(recognizer: UIPanGestureRecognizer) {
         let translation = recognizer.translationInView(recognizer.view!)
         let velocity = recognizer.velocityInView(recognizer.view)
@@ -88,6 +89,13 @@ extension SlideUpUIViewControllerAnimatedTransitioning {
         var fromViewController = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!
         var containerView = transitionContext.containerView()
         
+        dimmingView = UIView()
+        dimmingView.backgroundColor = UIColor(white: 0, alpha: 0.4)
+        dimmingView.alpha = 0
+        dimmingView.frame = containerView.bounds
+        
+        containerView.addSubview(dimmingView)
+        
         if isPresentation {
             containerView.addSubview(toViewController.view)
         }
@@ -112,6 +120,7 @@ extension SlideUpUIViewControllerAnimatedTransitioning {
         layer.shadowPath = UIBezierPath(rect: layer.bounds).CGPath
         
         UIView.animateWithDuration(transitionDuration(transitionContext), delay: 0, options: .CurveLinear, animations: { () -> Void in
+            self.dimmingView.alpha = 1
             animatingView.frame = finalFrame
             }) { (Bool) -> Void in
                 if !self.isPresentation {
