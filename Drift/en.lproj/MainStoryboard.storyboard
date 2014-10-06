@@ -179,9 +179,6 @@
                             <constraint firstItem="n39-IM-ZTu" firstAttribute="baseline" secondItem="P8f-E3-qf4" secondAttribute="baseline" id="zGb-61-HSS"/>
                             <constraint firstItem="gZy-kP-gXw" firstAttribute="top" secondItem="P8f-E3-qf4" secondAttribute="bottom" id="zqz-Ky-1Yc"/>
                         </constraints>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="wKd-F6-UDR" appends="YES" id="C5f-qc-NP6"/>
-                        </connections>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
@@ -200,14 +197,10 @@
                         <outlet property="tag" destination="gZy-kP-gXw" id="lcQ-12-LHh"/>
                         <outlet property="toggleStartStopButton" destination="dP9-OE-O85" id="ZPS-ao-uD9"/>
                         <segue destination="OEB-QV-TsG" kind="presentation" identifier="segueToTagsFromEvent" id="rGs-Kp-XER"/>
+                        <segue destination="MkX-Cq-2XK" kind="presentation" identifier="segueToEventsFromEvent" id="WfO-eV-QCG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9TD-yZ-86c" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer cancelsTouchesInView="NO" direction="up" id="wKd-F6-UDR" userLabel="SwipeUp">
-                    <connections>
-                        <segue destination="MkX-Cq-2XK" kind="presentation" identifier="segueToEventsFromEvent" id="eOR-jt-riL"/>
-                    </connections>
-                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="893" y="-312"/>
         </scene>
@@ -722,6 +715,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="r8c-zd-wI8"/>
+        <segue reference="rGs-Kp-XER"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -10,6 +10,7 @@
 
 #import "TagsTableViewController.h"
 #import "EventsGroupedByStartDateViewController.h"
+#import "Stray-Swift.h"
 
 @interface EventViewController : UIViewController
 

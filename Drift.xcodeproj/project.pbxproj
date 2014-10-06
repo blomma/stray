@@ -24,6 +24,7 @@
 		125790D47091430EA9A63B06 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DAF25AC4BF244CD84717515 /* libPods.a */; };
 		9E00A75F157734AE002FC707 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E00A75E157734AE002FC707 /* EventViewController.m */; };
 		9E00A76315773859002FC707 /* EventsGroupedByDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E00A76215773859002FC707 /* EventsGroupedByDateViewController.m */; };
+		9E021D1F19E15AD400442B2C /* SlideUpTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E021D1E19E15AD400442B2C /* SlideUpTransitioning.swift */; };
 		9E14D452162B3D3F008D9E43 /* TagFilterButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E14D451162B3D3F008D9E43 /* TagFilterButton.m */; };
 		9E21F926156EA9510075EAAC /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */; };
 		9E21F929156EAA2F0075EAAC /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F928156EAA2F0075EAAC /* Event.m */; };
@@ -69,6 +70,7 @@
 		9E00A75E157734AE002FC707 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9E00A76115773859002FC707 /* EventsGroupedByDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EventsGroupedByDateViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9E00A76215773859002FC707 /* EventsGroupedByDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventsGroupedByDateViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		9E021D1E19E15AD400442B2C /* SlideUpTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideUpTransitioning.swift; sourceTree = "<group>"; };
 		9E14D450162B3D3F008D9E43 /* TagFilterButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagFilterButton.h; sourceTree = "<group>"; };
 		9E14D451162B3D3F008D9E43 /* TagFilterButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagFilterButton.m; sourceTree = "<group>"; };
 		9E15323F173FDE3800605B65 /* CoreDataModel- 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel- 8.xcdatamodel"; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 				9E00A76215773859002FC707 /* EventsGroupedByDateViewController.m */,
 				9E2CFDE7162190E8004D9D8D /* TagsTableViewController.h */,
 				9E2CFDE8162190E8004D9D8D /* TagsTableViewController.m */,
+				9E021D1E19E15AD400442B2C /* SlideUpTransitioning.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -496,6 +499,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E021D1F19E15AD400442B2C /* SlideUpTransitioning.swift in Sources */,
 				9E7636661778A31D005C755F /* AIStyle.m in Sources */,
 				9E96A907163981B600164D76 /* CAAnimation+Blocks.m in Sources */,
 				9EBF34F319BA3ED70046A464 /* ReorderTableViewController.swift in Sources */,
