@@ -28,11 +28,6 @@ class SlideUpTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
         let translation = recognizer.translationInView(recognizer.view!)
         let velocity = recognizer.velocityInView(recognizer.view)
         
-        
-        if translation.y > 0 {
-            return
-        }
-        
         let percentage = abs(translation.y / CGRectGetHeight(recognizer.view!.bounds))
         
         switch recognizer.state {
@@ -45,6 +40,13 @@ class SlideUpTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
             interactionInProgress = true
             delegate?.proceedToNextViewController()
         case .Changed:
+            // We have gone beyond the bottom barrier of the view where we started
+            // stop updating, this happens when we are inside a navigationcontroller
+            // that has a bottom component
+            if translation.y > 0 {
+                return
+            }
+            
             updateInteractiveTransition(percentage)
         case .Ended:
             if percentage < 0.5 {
