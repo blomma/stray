@@ -100,7 +100,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     NSAttributedString *attributeString = nil;
     if (name) {
         attributeString = [[NSAttributedString alloc] initWithString:name
-                                                          attributes:@{NSFontAttributeName:[UIFont fontWithName:@"Futura-Medium" size:12]}];
+                                                          attributes:@{NSFontAttributeName:[UIFont fontWithName:@"Futura-Medium" size:18]}];
     } else {
         attributeString = [[NSAttributedString alloc] initWithString:@"\uf02b"
                                                           attributes:@{NSFontAttributeName:[UIFont fontWithName:@"FontAwesome" size:20]}];
