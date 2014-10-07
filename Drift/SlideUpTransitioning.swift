@@ -75,7 +75,7 @@ extension SlideUpUIViewControllerTransitioningDelegate {
     }
     
     func interactionControllerForPresentation(animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return self
+        return interactionInProgress ? self : nil
     }
 }
 
