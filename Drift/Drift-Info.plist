@@ -37,6 +37,8 @@
 	<true/>
 	<key>StrayCompatibilityLevel</key>
 	<integer>1</integer>
+	<key>UILaunchStoryboardName</key>
+	<string>Launch Screen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>MainStoryboard</string>
 	<key>UIPrerenderedIcon</key>

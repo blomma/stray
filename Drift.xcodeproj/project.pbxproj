@@ -40,6 +40,7 @@
 		9E42F22915571E9C0087F602 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F22815571E9C0087F602 /* RootViewController.m */; };
 		9E51511615C7CEF100901655 /* EventGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511315C7CEF100901655 /* EventGroup.m */; };
 		9E51511715C7CEF100901655 /* EventsGroupedByDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511515C7CEF100901655 /* EventsGroupedByDate.m */; };
+		9E51708219E44F6900BEF39B /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E51708119E44F6900BEF39B /* Launch Screen.xib */; };
 		9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E63BBF3156EAA710006FEFC /* CoreData.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9E66D0DD16553D6700339E99 /* State.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E66D0DC16553D6700339E99 /* State.m */; };
 		9E7636661778A31D005C755F /* AIStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7636651778A1A4005C755F /* AIStyle.m */; };
@@ -100,6 +101,7 @@
 		9E51511315C7CEF100901655 /* EventGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroup.m; sourceTree = "<group>"; };
 		9E51511415C7CEF100901655 /* EventsGroupedByDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsGroupedByDate.h; sourceTree = "<group>"; };
 		9E51511515C7CEF100901655 /* EventsGroupedByDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsGroupedByDate.m; sourceTree = "<group>"; };
+		9E51708119E44F6900BEF39B /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		9E63BBF3156EAA710006FEFC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		9E66D0DA16553B3700339E99 /* CoreDataModel-6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-6.xcdatamodel"; sourceTree = "<group>"; };
 		9E66D0DB16553D6700339E99 /* State.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = State.h; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				9E42F20015570FD60087F602 /* MainStoryboard.storyboard */,
+				9E51708119E44F6900BEF39B /* Launch Screen.xib */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";
@@ -433,6 +436,7 @@
 				9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */,
 				9EAD25D9198E314F006A2779 /* FontAwesome.otf in Resources */,
 				9E338A7519C493FB004C4FA6 /* Images.xcassets in Resources */,
+				9E51708219E44F6900BEF39B /* Launch Screen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -655,7 +659,6 @@
 			baseConfigurationReference = E6D140F0ED2BC3F9861A705A /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -685,7 +688,6 @@
 			baseConfigurationReference = FB8DC4F2F1A269D643B5D8A4 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
