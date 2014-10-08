@@ -21,7 +21,7 @@
 
     self.dataModel = @[
         [self.storyboard instantiateViewControllerWithIdentifier:@"EventViewController"],
-        [self.storyboard instantiateViewControllerWithIdentifier:@"EventsGroupedByDateViewController"]
+        [self.storyboard instantiateViewControllerWithIdentifier:@"EventStatisticsViewController"]
                      ];
 
     self.dataSource = self;
