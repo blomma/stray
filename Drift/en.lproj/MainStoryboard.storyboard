@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A386a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ftN-u6-d28">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A386a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="bhD-vz-YYS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -11,20 +11,28 @@
         </mutableArray>
     </customFonts>
     <scenes>
-        <!--RootViewController-->
-        <scene sceneID="KvM-gm-lw9">
+        <!--Root View Controller-->
+        <scene sceneID="E9f-gv-B9F">
             <objects>
-                <pageViewController storyboardIdentifier="RootViewController" autoresizesArchivedViewToFullSize="NO" title="Root View" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="ftN-u6-d28" userLabel="RootViewController" customClass="RootViewController" sceneMemberID="viewController">
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                </pageViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="m8r-Is-cfE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="bhD-vz-YYS" customClass="RootViewController" customModule="Stray" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Vzh-Sa-eKp"/>
+                        <viewControllerLayoutGuide type="bottom" id="ndu-KU-MBJ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="MiN-fA-MOa">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OPY-cV-evH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-410.625" y="-306.25"/>
+            <point key="canvasLocation" x="88" y="334"/>
         </scene>
         <!--EventViewController-->
         <scene sceneID="HBC-Pb-M3Y">
             <objects>
-                <viewController storyboardIdentifier="EventViewController" id="pW2-Iw-5Bg" userLabel="EventViewController" customClass="EventViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="pW2-Iw-5Bg" userLabel="EventViewController" customClass="EventViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="b69-WY-Ku9"/>
                         <viewControllerLayoutGuide type="bottom" id="sU9-lB-8ZV"/>
@@ -367,7 +375,7 @@
         <!--EventStatisticsViewController-->
         <scene sceneID="bUD-3F-oKo">
             <objects>
-                <viewController storyboardIdentifier="EventStatisticsViewController" id="LMd-bh-FlA" userLabel="EventStatisticsViewController" customClass="EventStatisticsViewController" customModule="Stray" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventStatisticsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="LMd-bh-FlA" userLabel="EventStatisticsViewController" customClass="EventStatisticsViewController" customModule="Stray" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="hIz-ex-onh"/>
                         <viewControllerLayoutGuide type="bottom" id="sT5-w2-oSg"/>
@@ -377,7 +385,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wR1-pn-aHR" userLabel="StartDateContainer">
-                                <rect key="frame" x="16" y="20" width="568" height="34"/>
+                                <rect key="frame" x="16" y="40" width="568" height="34"/>
                                 <subviews>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="hFj-ao-s1U">
                                         <rect key="frame" x="0.0" y="-47" width="568" height="162"/>
@@ -410,7 +418,7 @@
                                 </constraints>
                             </view>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zNE-hF-vSi" userLabel="EndDateContainer">
-                                <rect key="frame" x="16" y="54" width="568" height="34"/>
+                                <rect key="frame" x="16" y="74" width="568" height="34"/>
                                 <subviews>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="Q5s-Ay-3oF">
                                         <rect key="frame" x="0.0" y="-47" width="568" height="162"/>
@@ -447,7 +455,7 @@
                             <constraint firstItem="zNE-hF-vSi" firstAttribute="trailing" secondItem="sfV-zq-7jq" secondAttribute="trailingMargin" id="PSd-ba-FBc"/>
                             <constraint firstItem="wR1-pn-aHR" firstAttribute="leading" secondItem="sfV-zq-7jq" secondAttribute="leadingMargin" id="XWh-CL-emu"/>
                             <constraint firstItem="zNE-hF-vSi" firstAttribute="top" secondItem="wR1-pn-aHR" secondAttribute="bottom" id="hRt-v3-CQi"/>
-                            <constraint firstItem="wR1-pn-aHR" firstAttribute="top" secondItem="hIz-ex-onh" secondAttribute="bottom" id="n4i-Yd-Ffc"/>
+                            <constraint firstItem="wR1-pn-aHR" firstAttribute="top" secondItem="hIz-ex-onh" secondAttribute="top" constant="20" id="n4i-Yd-Ffc"/>
                         </constraints>
                     </view>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
