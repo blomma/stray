@@ -61,14 +61,13 @@
     self.tableView.pullingView.closingHeight = 90;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     
     Event *event = [Event MR_findFirstByAttribute:@"guid"
                                         withValue:self.eventGUID];
     
     NSIndexPath *indexPath = [self.fetchedResultsController indexPathForObject:event.inTag];
-    
     [self.tableView selectRowAtIndexPath:indexPath
                                 animated:NO
                           scrollPosition:UITableViewScrollPositionNone];
@@ -141,11 +140,6 @@
 
     [cell setTitle:tag.name];
     cell.delegate = self;
-    Event *event = [Event MR_findFirstByAttribute:@"guid"
-                                        withValue:self.eventGUID];
-    
-    BOOL selected = [event.inTag isEqual:tag] ? YES : NO;
-    [cell setSelected:selected animated:NO];
 }
 
 #pragma mark -
