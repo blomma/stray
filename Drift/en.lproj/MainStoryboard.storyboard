@@ -510,7 +510,9 @@
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J3m-L2-8UP" userLabel="Delete">
                                                             <rect key="frame" x="12" y="39" width="30" height="42"/>
                                                             <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="30"/>
-                                                            <state key="normal" title=""/>
+                                                            <state key="normal" title="">
+                                                                <color key="titleColor" red="1" green="0.33127462460000001" blue="0.2803869651" alpha="1" colorSpace="calibratedRGB"/>
+                                                            </state>
                                                             <connections>
                                                                 <action selector="deleteEvent:forEvent:" destination="qyp-c4-X1Y" eventType="touchUpInside" id="Cx6-iN-di7"/>
                                                             </connections>
