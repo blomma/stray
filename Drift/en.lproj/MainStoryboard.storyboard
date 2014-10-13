@@ -396,9 +396,9 @@
                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6iZ-gp-BXs">
                                         <rect key="frame" x="0.0" y="0.0" width="568" height="34"/>
                                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" title="Button">
+                                        <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="18"/>
+                                        <state key="normal" title="StartDate 2014-01-01">
                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="chooseStartDate:forEvent:" destination="LMd-bh-FlA" eventType="touchUpInside" id="mll-wy-SoU"/>
@@ -429,10 +429,14 @@
                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zKM-k7-AcP">
                                         <rect key="frame" x="0.0" y="0.0" width="568" height="34"/>
                                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" title="Button">
+                                        <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="18"/>
+                                        <state key="normal" title="EndDate 2014-02-03">
                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="chooseEndDate:forEvent:" destination="LMd-bh-FlA" eventType="touchUpInside" id="njn-IQ-h6a"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
@@ -460,9 +464,10 @@
                     </view>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="datePickerBottomConstraint" destination="Xpa-hU-bWJ" id="smG-xs-YPA"/>
                         <outlet property="endDateContainer" destination="zNE-hF-vSi" id="mDn-Tc-RaA"/>
+                        <outlet property="endDatePickerBottomConstraint" destination="rHc-kg-dqv" id="i4w-aS-R0c"/>
                         <outlet property="startDateContainer" destination="wR1-pn-aHR" id="cxy-XP-BD6"/>
+                        <outlet property="startDatePickerBottomConstraint" destination="Xpa-hU-bWJ" id="DDf-m3-owU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bgq-m4-iHr" userLabel="First Responder" sceneMemberID="firstResponder"/>

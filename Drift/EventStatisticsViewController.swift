@@ -9,12 +9,14 @@
 import UIKit
 
 class EventStatisticsViewController: UIViewController {
-    @IBOutlet var datePickerBottomConstraint: NSLayoutConstraint!
-    
+    @IBOutlet var startDatePickerBottomConstraint: NSLayoutConstraint!
+    @IBOutlet var endDatePickerBottomConstraint: NSLayoutConstraint!
+
     @IBOutlet weak var startDateContainer: UIView!
     @IBOutlet weak var endDateContainer: UIView!
 
     var startDateShown: Bool = false
+    var endDateShow: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,20 +30,31 @@ class EventStatisticsViewController: UIViewController {
     
     @IBAction func chooseStartDate(sender: UIButton, forEvent event: UIEvent) {
         if startDateShown {
-            startDateContainer.addConstraint(datePickerBottomConstraint)
+            startDateContainer.addConstraint(startDatePickerBottomConstraint)
         } else {
-            startDateContainer.removeConstraint(datePickerBottomConstraint)
+            startDateContainer.removeConstraint(startDatePickerBottomConstraint)
         }
         
         startDateShown = !startDateShown
         
         UIView.animateWithDuration(0.7, animations: { () -> Void in
             self.view.layoutIfNeeded()
-//            self.startDateContainer.layoutIfNeeded()
-//            self.endDateContainer.layoutIfNeeded()
         })
     }
     
+    @IBAction func chooseEndDate(sender: UIButton, forEvent event: UIEvent) {
+        if endDateShow {
+            endDateContainer.addConstraint(endDatePickerBottomConstraint)
+        } else {
+            endDateContainer.removeConstraint(endDatePickerBottomConstraint)
+        }
+        
+        endDateShow = !endDateShow
+        
+        UIView.animateWithDuration(0.7, animations: { () -> Void in
+            self.view.layoutIfNeeded()
+        })
+    }
     /*
     // MARK: - Navigation
 
