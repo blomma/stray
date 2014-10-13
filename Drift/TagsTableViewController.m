@@ -59,11 +59,7 @@
 
     self.tableView.pullingView.addingHeight  = 60;
     self.tableView.pullingView.closingHeight = 90;
-}
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
     Event *event = [Event MR_findFirstByAttribute:@"guid"
                                         withValue:self.eventGUID];
     

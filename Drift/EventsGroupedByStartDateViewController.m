@@ -54,11 +54,7 @@
 
     self.tableView.pullingView.addingHeight  = 0;
     self.tableView.pullingView.closingHeight = 60;
-}
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
     NSString *guid = [State instance].selectedEventGUID;
     Event *event = [Event MR_findFirstByAttribute:@"guid"
                                         withValue:guid];
