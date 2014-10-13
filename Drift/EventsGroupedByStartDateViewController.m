@@ -56,6 +56,19 @@
     self.tableView.pullingView.closingHeight = 60;
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    NSString *guid = [State instance].selectedEventGUID;
+    Event *event = [Event MR_findFirstByAttribute:@"guid"
+                                        withValue:guid];
+    
+    NSIndexPath *indexPath = [self.fetchedResultsController indexPathForObject:event];
+    [self.tableView selectRowAtIndexPath:indexPath
+                                animated:NO
+                          scrollPosition:UITableViewScrollPositionNone];
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 
@@ -308,10 +321,6 @@
         cell.eventStopDay.text   = @"";
         cell.eventStopYear.text  = @"";
         cell.eventStopMonth.text = @"";
-    }
-    
-    if ([event.guid isEqual:[State instance].selectedEventGUID]) {
-        [cell setSelected:YES animated:YES];
     }
     
     cell.delegate = self;
