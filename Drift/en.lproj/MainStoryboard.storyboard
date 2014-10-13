@@ -41,86 +41,92 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                         <subviews>
-                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="99" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n39-IM-ZTu" userLabel="EventTimeHours">
-                                <rect key="frame" x="10" y="20" width="73" height="77"/>
+                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="99" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T6v-e0-PDz" userLabel="EventTimeHours">
+                                <rect key="frame" x="0.0" y="20" width="73" height="77"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="60"/>
                                 <color key="textColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="60" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P8f-E3-qf4" userLabel="EventTimeMinutes">
-                                <rect key="frame" x="83" y="49" width="38" height="40"/>
+                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="60" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fda-f0-9h2" userLabel="EventTimeMinutes">
+                                <rect key="frame" x="73" y="49" width="38" height="40"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="31"/>
                                 <color key="textColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="18" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xRk-W2-bMK" userLabel="EventStartDay">
-                                <rect key="frame" x="523" y="20" width="33" height="36"/>
+                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="2012" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mQD-9K-Yje" userLabel="EventStartYear">
+                                <rect key="frame" x="439" y="45" width="23" height="12"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="28"/>
-                                <color key="textColor" red="0.3921568627" green="0.3921568627" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </label>
-                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="2012" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G96-uj-epw" userLabel="EventStartYear">
-                                <rect key="frame" x="557" y="38" width="23" height="13"/>
-                                <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="10"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
                                 <color key="textColor" red="0.94117647059999998" green="0.68627450980000004" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
-                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="20:13" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E3V-qB-jgM" userLabel="EventStartTime">
-                                <rect key="frame" x="468" y="28" width="53" height="26"/>
+                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Sep" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RG4-WB-RmJ" userLabel="EventStartMonth">
+                                <rect key="frame" x="444" y="33" width="18" height="12"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="20"/>
-                                <color key="textColor" red="0.50980392159999999" green="0.50980392159999999" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </label>
-                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Sep" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LhY-1c-v0s" userLabel="EventStopMonth">
-                                <rect key="frame" x="527" y="61" width="16" height="13"/>
-                                <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="10"/>
-                                <color key="textColor" red="0.42745098040000001" green="0.7843137255" blue="0.99215686270000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </label>
-                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="2012" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ROP-Lr-uwF" userLabel="EventStopYear">
-                                <rect key="frame" x="527" y="74" width="23" height="13"/>
-                                <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="10"/>
-                                <color key="textColor" red="0.42745098040000001" green="0.7843137255" blue="0.99215686270000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </label>
-                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Sep" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4mi-p0-fxw" userLabel="EventStartMonth">
-                                <rect key="frame" x="557" y="25" width="16" height="13"/>
-                                <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="10"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
                                 <color key="textColor" red="0.94117647059999998" green="0.68627450980000004" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
-                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="18" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="umb-06-ZUE" userLabel="EventStopDay">
-                                <rect key="frame" x="493" y="56" width="33" height="36"/>
+                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="18" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pfx-uQ-0OF" userLabel="EventStartDay">
+                                <rect key="frame" x="464" y="28" width="32" height="33"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="28"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="28"/>
                                 <color key="textColor" red="0.3921568627" green="0.3921568627" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
-                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="20:13" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8Ic-Ed-DlP" userLabel="EventStopTime">
-                                <rect key="frame" x="438" y="64" width="53" height="26"/>
+                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="20:13" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d9a-bg-sgr" userLabel="EventStartTime">
+                                <rect key="frame" x="445" y="61" width="51" height="24"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="20"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
                                 <color key="textColor" red="0.50980392159999999" green="0.50980392159999999" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
-                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gZy-kP-gXw" userLabel="Tag">
-                                <rect key="frame" x="168" y="89" width="264" height="36"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ebw-fH-af8" userLabel="Separator">
+                                <rect key="frame" x="500" y="28" width="1" height="57"/>
+                                <color key="backgroundColor" white="0.26700000000000002" alpha="0.10000000000000001" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="1" id="tOh-5Z-EgB"/>
+                                </constraints>
+                            </view>
+                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="2012" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kDP-kd-qe8" userLabel="EventStopYear">
+                                <rect key="frame" x="539" y="45" width="23" height="12"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
+                                <color key="textColor" red="0.42745098040000001" green="0.7843137255" blue="0.99215686270000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </label>
+                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Sep" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NKF-pl-TGd" userLabel="EventStopMonth">
+                                <rect key="frame" x="539" y="33" width="18" height="12"/>
+                                <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
+                                <color key="textColor" red="0.42745098040000001" green="0.7843137255" blue="0.99215686270000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </label>
+                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="18" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f4I-GS-DXr" userLabel="EventStopDay">
+                                <rect key="frame" x="505" y="28" width="32" height="33"/>
+                                <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="28"/>
+                                <color key="textColor" red="0.3921568627" green="0.3921568627" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </label>
+                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="20:13" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="5mL-xl-tvC" userLabel="EventStopTime">
+                                <rect key="frame" x="505" y="61" width="51" height="24"/>
+                                <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                <color key="textColor" red="0.50980392159999999" green="0.50980392159999999" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u4G-Rl-FJl" userLabel="Tag">
+                                <rect key="frame" x="16" y="86" width="568" height="29"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                 <state key="normal" title="Work that is super long and that">
-                                    <color key="titleColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" red="0.3921568627" green="0.3921568627" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="showTags:" destination="pW2-Iw-5Bg" eventType="touchUpInside" id="CYF-mC-mcF"/>
+                                    <action selector="showTags:" destination="pW2-Iw-5Bg" eventType="touchUpInside" id="DJa-pH-7cF"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IgW-Dr-4Bj" userLabel="EventTimerControl" customClass="EventTimerControl">
@@ -163,47 +169,51 @@
                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="G96-uj-epw" firstAttribute="leading" secondItem="xRk-W2-bMK" secondAttribute="trailing" constant="1" id="3Kc-5B-OcR"/>
-                            <constraint firstItem="umb-06-ZUE" firstAttribute="leading" secondItem="8Ic-Ed-DlP" secondAttribute="trailing" constant="2" id="42C-Py-NdH"/>
+                            <constraint firstItem="f4I-GS-DXr" firstAttribute="baseline" secondItem="kDP-kd-qe8" secondAttribute="baseline" id="30W-MD-Nz1"/>
+                            <constraint firstItem="mQD-9K-Yje" firstAttribute="top" secondItem="RG4-WB-RmJ" secondAttribute="bottom" id="4LM-su-4iP"/>
+                            <constraint firstItem="Pfx-uQ-0OF" firstAttribute="top" secondItem="ebw-fH-af8" secondAttribute="top" id="5HQ-Cb-HEJ"/>
                             <constraint firstAttribute="centerX" secondItem="IgW-Dr-4Bj" secondAttribute="centerX" id="8ry-yJ-aLa"/>
-                            <constraint firstAttribute="trailing" secondItem="ROP-Lr-uwF" secondAttribute="trailing" constant="50" id="Ddv-wk-h6n"/>
-                            <constraint firstItem="ROP-Lr-uwF" firstAttribute="top" secondItem="LhY-1c-v0s" secondAttribute="bottom" id="Dsk-Nj-cuO"/>
-                            <constraint firstItem="xRk-W2-bMK" firstAttribute="leading" secondItem="E3V-qB-jgM" secondAttribute="trailing" constant="2" id="EsX-kV-9sE"/>
-                            <constraint firstItem="n39-IM-ZTu" firstAttribute="top" secondItem="b69-WY-Ku9" secondAttribute="bottom" id="Ga7-R4-iR2"/>
-                            <constraint firstItem="P8f-E3-qf4" firstAttribute="leading" secondItem="n39-IM-ZTu" secondAttribute="trailing" id="K8s-BW-6pM"/>
-                            <constraint firstItem="umb-06-ZUE" firstAttribute="baseline" secondItem="ROP-Lr-uwF" secondAttribute="baseline" id="KWp-hK-V9C"/>
-                            <constraint firstItem="E3V-qB-jgM" firstAttribute="baseline" secondItem="xRk-W2-bMK" secondAttribute="baseline" id="LyS-Yn-LlE"/>
-                            <constraint firstItem="n39-IM-ZTu" firstAttribute="leading" secondItem="8Qo-UI-s2h" secondAttribute="leading" constant="10" id="NoF-2P-oCf"/>
-                            <constraint firstItem="G96-uj-epw" firstAttribute="top" secondItem="4mi-p0-fxw" secondAttribute="bottom" id="VKn-f9-vCN"/>
-                            <constraint firstAttribute="trailing" secondItem="G96-uj-epw" secondAttribute="trailing" constant="20" id="WEv-qh-1wu"/>
-                            <constraint firstItem="ROP-Lr-uwF" firstAttribute="leading" secondItem="umb-06-ZUE" secondAttribute="trailing" constant="1" id="bFB-nB-skW"/>
+                            <constraint firstItem="f4I-GS-DXr" firstAttribute="leading" secondItem="5mL-xl-tvC" secondAttribute="leading" id="DFL-lv-6dY"/>
+                            <constraint firstItem="T6v-e0-PDz" firstAttribute="top" secondItem="b69-WY-Ku9" secondAttribute="bottom" id="Ebf-jC-zrS"/>
+                            <constraint firstItem="Pfx-uQ-0OF" firstAttribute="baseline" secondItem="mQD-9K-Yje" secondAttribute="baseline" id="GV5-df-Fk0"/>
+                            <constraint firstItem="kDP-kd-qe8" firstAttribute="top" secondItem="NKF-pl-TGd" secondAttribute="bottom" id="Qn6-6o-7nB"/>
+                            <constraint firstItem="u4G-Rl-FJl" firstAttribute="leading" secondItem="8Qo-UI-s2h" secondAttribute="leadingMargin" id="Qv8-2S-QoY"/>
+                            <constraint firstItem="d9a-bg-sgr" firstAttribute="bottom" secondItem="ebw-fH-af8" secondAttribute="bottom" id="RCk-t4-Yiv"/>
+                            <constraint firstItem="kDP-kd-qe8" firstAttribute="leading" secondItem="f4I-GS-DXr" secondAttribute="trailing" constant="2" id="SSP-CV-zWp"/>
+                            <constraint firstItem="Pfx-uQ-0OF" firstAttribute="leading" secondItem="mQD-9K-Yje" secondAttribute="trailing" constant="2" id="Sil-im-NyF"/>
+                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="u4G-Rl-FJl" secondAttribute="bottom" id="WGz-dI-hRy"/>
+                            <constraint firstItem="Pfx-uQ-0OF" firstAttribute="trailing" secondItem="d9a-bg-sgr" secondAttribute="trailing" id="XJS-Zd-AFy"/>
+                            <constraint firstItem="5mL-xl-tvC" firstAttribute="baseline" secondItem="T6v-e0-PDz" secondAttribute="baseline" id="XOS-Xy-mKF"/>
+                            <constraint firstAttribute="trailing" secondItem="d9a-bg-sgr" secondAttribute="trailing" constant="104" id="Z1L-aE-1hB"/>
+                            <constraint firstItem="T6v-e0-PDz" firstAttribute="leading" secondItem="8Qo-UI-s2h" secondAttribute="leading" id="aJl-XE-tkM"/>
                             <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="b69-WY-Ku9" secondAttribute="bottom" constant="95" id="bOP-yh-3Sn"/>
-                            <constraint firstItem="8Ic-Ed-DlP" firstAttribute="baseline" secondItem="umb-06-ZUE" secondAttribute="baseline" id="efu-tq-ZPl"/>
-                            <constraint firstItem="LhY-1c-v0s" firstAttribute="leading" secondItem="ROP-Lr-uwF" secondAttribute="leading" id="fsh-LB-YbX"/>
-                            <constraint firstItem="umb-06-ZUE" firstAttribute="top" secondItem="xRk-W2-bMK" secondAttribute="bottom" id="jX9-yO-D5w"/>
-                            <constraint firstItem="xRk-W2-bMK" firstAttribute="top" secondItem="b69-WY-Ku9" secondAttribute="bottom" id="nne-bR-IYJ"/>
-                            <constraint firstItem="G96-uj-epw" firstAttribute="baseline" secondItem="xRk-W2-bMK" secondAttribute="baseline" id="oz8-KX-3Bw"/>
-                            <constraint firstAttribute="centerX" secondItem="gZy-kP-gXw" secondAttribute="centerX" id="rMY-kG-JYl"/>
-                            <constraint firstItem="4mi-p0-fxw" firstAttribute="leading" secondItem="G96-uj-epw" secondAttribute="leading" id="wrD-3O-pB4"/>
-                            <constraint firstItem="n39-IM-ZTu" firstAttribute="baseline" secondItem="P8f-E3-qf4" secondAttribute="baseline" id="zGb-61-HSS"/>
-                            <constraint firstItem="gZy-kP-gXw" firstAttribute="top" secondItem="P8f-E3-qf4" secondAttribute="bottom" id="zqz-Ky-1Yc"/>
+                            <constraint firstItem="5mL-xl-tvC" firstAttribute="top" secondItem="f4I-GS-DXr" secondAttribute="bottom" id="ch7-W3-vB2"/>
+                            <constraint firstItem="Fda-f0-9h2" firstAttribute="leading" secondItem="T6v-e0-PDz" secondAttribute="trailing" id="dJf-dj-7gu"/>
+                            <constraint firstItem="RG4-WB-RmJ" firstAttribute="trailing" secondItem="mQD-9K-Yje" secondAttribute="trailing" id="dbs-aH-IcC"/>
+                            <constraint firstItem="ebw-fH-af8" firstAttribute="leading" secondItem="Pfx-uQ-0OF" secondAttribute="trailing" constant="4" id="fri-Fb-BZg"/>
+                            <constraint firstItem="T6v-e0-PDz" firstAttribute="baseline" secondItem="Fda-f0-9h2" secondAttribute="baseline" id="gl5-TU-4qI"/>
+                            <constraint firstItem="f4I-GS-DXr" firstAttribute="leading" secondItem="ebw-fH-af8" secondAttribute="trailing" constant="4" id="jHV-4I-hLE"/>
+                            <constraint firstItem="NKF-pl-TGd" firstAttribute="leading" secondItem="kDP-kd-qe8" secondAttribute="leading" id="nS6-nh-IWp"/>
+                            <constraint firstItem="d9a-bg-sgr" firstAttribute="top" secondItem="Pfx-uQ-0OF" secondAttribute="bottom" id="qM2-GR-o2V"/>
+                            <constraint firstItem="T6v-e0-PDz" firstAttribute="baseline" secondItem="d9a-bg-sgr" secondAttribute="baseline" id="tYX-ye-80H"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="u4G-Rl-FJl" secondAttribute="trailing" id="wGk-O5-JrU"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
-                        <outlet property="eventStartDay" destination="xRk-W2-bMK" id="o2D-s6-ecT"/>
-                        <outlet property="eventStartMonth" destination="4mi-p0-fxw" id="qiG-Ja-cRj"/>
-                        <outlet property="eventStartTime" destination="E3V-qB-jgM" id="SBK-l9-ntO"/>
-                        <outlet property="eventStartYear" destination="G96-uj-epw" id="8Ws-Uo-Q5n"/>
-                        <outlet property="eventStopDay" destination="umb-06-ZUE" id="9Oa-Ku-B7o"/>
-                        <outlet property="eventStopMonth" destination="LhY-1c-v0s" id="1cb-FB-Uow"/>
-                        <outlet property="eventStopTime" destination="8Ic-Ed-DlP" id="u2M-IE-Qmm"/>
-                        <outlet property="eventStopYear" destination="ROP-Lr-uwF" id="SM3-ZX-YJL"/>
-                        <outlet property="eventTimeHours" destination="n39-IM-ZTu" id="0cx-L9-M2d"/>
-                        <outlet property="eventTimeMinutes" destination="P8f-E3-qf4" id="yse-mx-A6s"/>
+                        <outlet property="eventStartDay" destination="Pfx-uQ-0OF" id="ECd-hx-OQP"/>
+                        <outlet property="eventStartMonth" destination="RG4-WB-RmJ" id="4Fo-rp-5py"/>
+                        <outlet property="eventStartTime" destination="d9a-bg-sgr" id="iVm-mz-GK8"/>
+                        <outlet property="eventStartYear" destination="mQD-9K-Yje" id="f0M-HC-C23"/>
+                        <outlet property="eventStopDay" destination="f4I-GS-DXr" id="Pli-GR-w88"/>
+                        <outlet property="eventStopMonth" destination="NKF-pl-TGd" id="gT8-AH-bcG"/>
+                        <outlet property="eventStopTime" destination="5mL-xl-tvC" id="CpX-Uu-4bz"/>
+                        <outlet property="eventStopYear" destination="kDP-kd-qe8" id="HEb-U8-Sl5"/>
+                        <outlet property="eventTimeHours" destination="T6v-e0-PDz" id="hrO-mm-rZ0"/>
+                        <outlet property="eventTimeMinutes" destination="Fda-f0-9h2" id="ET7-k4-PhO"/>
                         <outlet property="eventTimerControl" destination="IgW-Dr-4Bj" id="Zds-ja-YxN"/>
-                        <outlet property="tag" destination="gZy-kP-gXw" id="lcQ-12-LHh"/>
+                        <outlet property="tag" destination="u4G-Rl-FJl" id="bUB-rY-YKg"/>
                         <outlet property="toggleStartStopButton" destination="dP9-OE-O85" id="ZPS-ao-uD9"/>
                         <segue destination="OEB-QV-TsG" kind="presentation" identifier="segueToTagsFromEvent" id="rGs-Kp-XER"/>
                         <segue destination="MkX-Cq-2XK" kind="presentation" identifier="segueToEventsFromEvent" id="WfO-eV-QCG"/>
