@@ -283,7 +283,7 @@
     
     NSAttributedString *attributeString = nil;
     if (event.inTag.name) {
-        attributeString = [[NSAttributedString alloc] initWithString:event.inTag.name attributes:@{NSFontAttributeName:[UIFont fontWithName:@"Futura-Medium" size:18]}];
+        attributeString = [[NSAttributedString alloc] initWithString:event.inTag.name attributes:@{NSFontAttributeName:[UIFont fontWithName:@"Helvetica Neue" size:14]}];
     } else {
         attributeString = [[NSAttributedString alloc] initWithString:@"\uf02b" attributes:@{NSFontAttributeName:[UIFont fontWithName:@"FontAwesome" size:20]}];
     }
