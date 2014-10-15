@@ -14,29 +14,29 @@ import UIKit
 }
 
 public class EventCell: UITableViewCell {
-    @IBOutlet var backView: UIView?
+    @IBOutlet var backView: UIView!
     
-    @IBOutlet var frontView: UIView?
-    @IBOutlet var frontViewLeadingConstraint: NSLayoutConstraint?
-    @IBOutlet var frontViewTrailingConstraint: NSLayoutConstraint?
+    @IBOutlet var frontView: UIView!
+    @IBOutlet var frontViewLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet var frontViewTrailingConstraint: NSLayoutConstraint!
     
-    @IBOutlet var eventStartTime: UILabel?
-    @IBOutlet var eventStartDay: UILabel?
-    @IBOutlet var eventStartMonth: UILabel?
-    @IBOutlet var eventStartYear: UILabel?
+    @IBOutlet var eventStartTime: UILabel!
+    @IBOutlet var eventStartDay: UILabel!
+    @IBOutlet var eventStartMonth: UILabel!
+    @IBOutlet var eventStartYear: UILabel!
     
-    @IBOutlet var eventTimeHours: UILabel?
-    @IBOutlet var eventTimeMinutes: UILabel?
+    @IBOutlet var eventTimeHours: UILabel!
+    @IBOutlet var eventTimeMinutes: UILabel!
     
-    @IBOutlet var eventStopTime: UILabel?
-    @IBOutlet var eventStopDay: UILabel?
-    @IBOutlet var eventStopMonth: UILabel?
-    @IBOutlet var eventStopYear: UILabel?
+    @IBOutlet var eventStopTime: UILabel!
+    @IBOutlet var eventStopDay: UILabel!
+    @IBOutlet var eventStopMonth: UILabel!
+    @IBOutlet var eventStopYear: UILabel!
     
-    @IBOutlet var deleteButton: UIButton?
+    @IBOutlet var deleteButton: UIButton!
     
-    @IBOutlet var rightSelected: UIView?
-    @IBOutlet var tagButton: UIButton?
+    @IBOutlet var rightSelected: UIView!
+    @IBOutlet var tagButton: UIButton!
     
     public weak var delegate:EventCellDelegate?
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A388a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="bhD-vz-YYS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6249" systemVersion="14A388a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="bhD-vz-YYS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6243"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -485,10 +485,10 @@
             </objects>
             <point key="canvasLocation" x="1596" y="-353"/>
         </scene>
-        <!--EventsGroupedByStartDateViewController-->
+        <!--Events View Controller-->
         <scene sceneID="maY-e6-1tb">
             <objects>
-                <viewController storyboardIdentifier="EventsGroupedByStartDateViewController" id="MkX-Cq-2XK" userLabel="EventsGroupedByStartDateViewController" customClass="EventsGroupedByStartDateViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventsViewController" id="MkX-Cq-2XK" customClass="EventsViewController" customModule="Stray" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Whe-56-X4F"/>
                         <viewControllerLayoutGuide type="bottom" id="CaW-42-4UM"/>

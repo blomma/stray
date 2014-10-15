@@ -18,7 +18,7 @@
 
 static void *EventViewControllerContext = &EventViewControllerContext;
 
-@interface EventViewController () <SlideUpTransitioningDelegate>
+@interface EventViewController () <SlideUpTransitioningDelegate, DismissProtocol>
 
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) Event *selectedEvent;
@@ -33,10 +33,10 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     [super viewDidLoad];
 
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
-    
+
     self.slideUpTransitioning = [SlideUpTransitioning new];
     self.slideUpTransitioning.delegate = self;
-    
+
     [[NSNotificationCenter defaultCenter]
      addObserverForName:@"rootViewDidAppear"
      object:nil
@@ -73,7 +73,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     } else {
         self.selectedEvent = nil;
     }
-    
+
     NSString *name = nil;
     if (self.selectedEvent) {
         [self.eventTimerControl initWithStartDate:self.selectedEvent.startDate
@@ -88,11 +88,11 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                                         forState:UIControlStateNormal];
             [self animateStopEvent];
         }
-        
+
         name = self.selectedEvent.inTag.name;
     } else {
         [State instance].selectedEventGUID = nil;
-        
+
         [self reset];
         [self.eventTimerControl reset];
     }
@@ -105,7 +105,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         attributeString = [[NSAttributedString alloc] initWithString:@"\uf02b"
                                                           attributes:@{NSFontAttributeName:[UIFont fontWithName:@"FontAwesome" size:20]}];
     }
-    
+
     [self.tag setAttributedTitle:attributeString
                         forState:UIControlStateNormal];
 
@@ -136,16 +136,18 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 
         controller.eventGUID = self.selectedEvent.guid;
     } else if ([segue.identifier isEqualToString:@"segueToEventsFromEvent"]) {
-        EventsGroupedByStartDateViewController *controller = (EventsGroupedByStartDateViewController *)[segue destinationViewController];
+        EventsViewController *controller = (EventsViewController *)[segue destinationViewController];
         controller.transitioningDelegate = self.slideUpTransitioning;
-        
-        __weak __typeof__(self) _self = self;
-        [controller setDidDismissHandler: ^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [_self dismissViewControllerAnimated:YES completion:nil];
-            });
-        }];
+        controller.dismissDelegate = self;
     }
+}
+
+
+#pragma mark -
+#pragma mark DismissProtocol
+
+- (void)didDismiss {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -
@@ -162,7 +164,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 - (IBAction)showTags:(id)sender {
     if (self.selectedEvent) {
         [self animateButton:sender];
-        
+
         [self performSegueWithIdentifier:@"segueToTagsFromEvent"
                                   sender:self];
     }
@@ -172,7 +174,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
     if (self.selectedEvent.isActive) {
         [self.eventTimerControl stop];
         self.selectedEvent.stopDate = self.eventTimerControl.nowDate;
-        
+
         [self.toggleStartStopButton setTitle:@"START"
                                     forState:UIControlStateNormal];
         [self animateStopEvent];
@@ -183,7 +185,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         self.selectedEvent.startDate = [NSDate date];
 
         [State instance].selectedEventGUID = self.selectedEvent.guid;
-        
+
         [self.eventTimerControl initWithStartDate:self.selectedEvent.startDate
                                       andStopDate:self.selectedEvent.stopDate];
 
@@ -289,7 +291,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         NSDateComponents  *components = [[NSDate calendar] components:unitFlags
                                                              fromDate:fromDate
                                                                toDate:toDate options:0];
-        
+
         NSInteger hour = ABS(components.hour);
         NSInteger minute = ABS(components.minute);
 
@@ -297,7 +299,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         if (components.hour < 0 || components.minute < 0) {
             eventTimeHours = [NSString stringWithFormat:@"-%@", eventTimeHours];
         }
-        
+
         self.eventTimeHours.text   = eventTimeHours;
         self.eventTimeMinutes.text = [NSString stringWithFormat:@"%02ld", (long)minute];
     }
@@ -361,16 +363,16 @@ static void *EventViewControllerContext = &EventViewControllerContext;
              case EventTimerStartDateTransformingStart:
                  eventStartAlpha = 1;
                  eventStartMonthYearAlpha = 1;
-                                 
+
                  eventStopAlpha = 0.2f;
                  eventStopMonthYearAlpha = 0.2f;
-                                 
+
                  eventTimeAlpha = 0.2f;
                  break;
              case EventTimerStartDateTransformingStop:
                  eventStartAlpha = self.selectedEvent.isActive ? 1 : 0.2f;
                  eventStartMonthYearAlpha = 1;
-                 
+
                  eventStopAlpha = self.selectedEvent.isActive ? 0.2f : 1;
                  eventStopMonthYearAlpha = 1;
 
@@ -379,7 +381,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
              case EventTimerNowDateTransformingStart:
                  eventStartAlpha = 0.2f;
                  eventStartMonthYearAlpha = 0.2f;
-                 
+
                  eventStopAlpha = 1;
                  eventStopMonthYearAlpha = 1;
 
@@ -442,32 +444,32 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                 id newValue = [change objectForKey:NSKeyValueChangeNewKey];
 
                 EventTimerTransformingEnum transforming = [newValue integerValue];
-                
+
                 if (transforming != EventTimerNotTransforming) {
                     [self animateEventTransforming:transforming];
                 }
-                
+
                 switch (transforming) {
                     case EventTimerNowDateTransformingStart:
                     case EventTimerStartDateTransformingStart:
                         self.slideUpTransitioning.gestureRecogniser.enabled = NO;
-                        
+
                         break;
                     case EventTimerNowDateTransformingStop:
                         self.slideUpTransitioning.gestureRecogniser.enabled = YES;
-                        
+
                         self.selectedEvent.stopDate = self.eventTimerControl.nowDate;
                         [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
 
                         break;
                     case EventTimerStartDateTransformingStop:
                         self.slideUpTransitioning.gestureRecogniser.enabled = YES;
-                        
+
                         self.selectedEvent.startDate = self.eventTimerControl.startDate;
                         [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
-                        
+
                         break;
-                        
+
                     default:
                         break;
                 }
