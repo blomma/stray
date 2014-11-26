@@ -23,7 +23,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 @property (nonatomic) NSArray *shortStandaloneMonthSymbols;
 @property (nonatomic) Event *selectedEvent;
 
-@property (nonatomic) SlideUpTransitioning *slideUpTransitioning;
+//@property (nonatomic) SlideUpTransitioning *slideUpTransitioning;
 
 @end
 
@@ -34,18 +34,8 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 
     self.shortStandaloneMonthSymbols = [[NSDateFormatter new] shortStandaloneMonthSymbols];
 
-    self.slideUpTransitioning = [SlideUpTransitioning new];
-    self.slideUpTransitioning.delegate = self;
-
-    [[NSNotificationCenter defaultCenter]
-     addObserverForName:@"rootViewDidAppear"
-     object:nil
-     queue:nil
-     usingBlock:^(NSNotification *note) {
-         if (![self.view.window.gestureRecognizers containsObject:self.slideUpTransitioning.gestureRecogniser]) {
-             [self.view.window addGestureRecognizer:self.slideUpTransitioning.gestureRecogniser];
-         }
-     }];
+//    self.slideUpTransitioning = [SlideUpTransitioning new];
+//    self.slideUpTransitioning.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -111,6 +101,14 @@ static void *EventViewControllerContext = &EventViewControllerContext;
 
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
+//    if (![self.view.window.gestureRecognizers containsObject:self.slideUpTransitioning.gestureRecogniser]) {
+//        [self.view.window addGestureRecognizer:self.slideUpTransitioning.gestureRecogniser];
+//    }
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 
@@ -137,7 +135,7 @@ static void *EventViewControllerContext = &EventViewControllerContext;
         controller.eventGUID = self.selectedEvent.guid;
     } else if ([segue.identifier isEqualToString:@"segueToEventsFromEvent"]) {
         EventsViewController *controller = (EventsViewController *)[segue destinationViewController];
-        controller.transitioningDelegate = self.slideUpTransitioning;
+//        controller.transitioningDelegate = self.slideUpTransitioning;
         controller.dismissDelegate = self;
     }
 }
@@ -452,18 +450,18 @@ static void *EventViewControllerContext = &EventViewControllerContext;
                 switch (transforming) {
                     case EventTimerNowDateTransformingStart:
                     case EventTimerStartDateTransformingStart:
-                        self.slideUpTransitioning.gestureRecogniser.enabled = NO;
+//                        self.slideUpTransitioning.gestureRecogniser.enabled = NO;
 
                         break;
                     case EventTimerNowDateTransformingStop:
-                        self.slideUpTransitioning.gestureRecogniser.enabled = YES;
+//                        self.slideUpTransitioning.gestureRecogniser.enabled = YES;
 
                         self.selectedEvent.stopDate = self.eventTimerControl.nowDate;
                         [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];
 
                         break;
                     case EventTimerStartDateTransformingStop:
-                        self.slideUpTransitioning.gestureRecogniser.enabled = YES;
+//                        self.slideUpTransitioning.gestureRecogniser.enabled = YES;
 
                         self.selectedEvent.startDate = self.eventTimerControl.startDate;
                         [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:nil];

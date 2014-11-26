@@ -14,6 +14,7 @@ class PageViewModelController: NSObject, UIPageViewControllerDataSource {
     override init() {
         pageData = [
             "EventViewController",
+            "EventsViewController",
             "EventStatisticsViewController"
         ]
         

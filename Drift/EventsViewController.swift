@@ -9,10 +9,8 @@
 import UIKit
 import CoreData
 
-class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCellDelegate, TransformableTableViewGestureEditingRowDelegate {
+class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCellDelegate {
     @IBOutlet var tableView: UITableView!
-
-    private var tableViewRecognizer: TransformableTableViewGestureRecognizer!
 
     private lazy var shortStandaloneMonthSymbols: [AnyObject] = {
         return NSDateFormatter().shortStandaloneMonthSymbols
@@ -48,8 +46,6 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableViewRecognizer = tableView.enableGestureTableViewWithDelegate(self)
-
         tableView.addPullingWithActionHandler { (state: AIPullingState, previousState: AIPullingState, height: CGFloat) -> Void in
             if state == AIPullingState.Action && (previousState == AIPullingState.PullingAdd || previousState == AIPullingState.PullingClose) {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -68,17 +64,15 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
             }
         }
+        
+        modalPresentationStyle = .Custom
     }
 
+    override func viewDidAppear(animated: Bool) {
+    }
+    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        if presentedViewController == nil {
-            fetchedResultsController.delegate = nil
-            
-            tableView.disablePulling()
-            tableView.disableGestureTableViewWithRecognizer(tableViewRecognizer)
-        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -153,120 +147,6 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         cell.delegate = self
     }
 
-}
-
-// MARK: - TransformableTableViewGestureEditingRowDelegate
-typealias T_TransformableTableViewGestureEditingRowDelegate = EventsViewController
-extension T_TransformableTableViewGestureEditingRowDelegate {
-    func gestureRecognizer(gestureRecognizer: TransformableTableViewGestureRecognizer!, canEditRowAtIndexPath indexPath: NSIndexPath!) -> Bool {
-        return true
-    }
-    
-    func gestureRecognizer(gestureRecognizer: TransformableTableViewGestureRecognizer!, didEnterEditingState state: TransformableTableViewCellEditingState, forRowAtIndexPath indexPath: NSIndexPath!) {
-        if state == .Right {
-            if let event = eventInEditState {
-                if let eventInEditIndexPath = fetchedResultsController.indexPathForObject(event) {
-                    if !eventInEditIndexPath.isEqual(indexPath) {
-                        var cell: EventCell = tableView.cellForRowAtIndexPath(indexPath) as EventCell
-                        var velocity = abs(gestureRecognizer.velocity.x) / cell.frontViewLeadingConstraint.constant
-                        
-                        UIView.animateWithDuration(1, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: velocity, options: .CurveLinear, animations: { () -> Void in
-                            cell.frontViewLeadingConstraint.constant = 0
-                            cell.frontViewTrailingConstraint.constant = 0
-                            }, completion: nil)
-                        
-                        eventInEditState = nil
-                    }
-                }
-            }
-        }
-    }
-    
-    func gestureRecognizer(gestureRecognizer: TransformableTableViewGestureRecognizer!, didChangeEditingState state: TransformableTableViewCellEditingState, forRowAtIndexPath indexPath: NSIndexPath!) {
-        // If is left swipe and it is not on the cell
-        // that is begin edited then do nothing
-        if state == .Left {
-            if let event = eventInEditState {
-                if let eventInEditIndexPath = fetchedResultsController.indexPathForObject(event) {
-                    if !eventInEditIndexPath.isEqual(indexPath) {
-                        return
-                    }
-                }
-            }
-        }
-        
-        var cell: EventCell = tableView.cellForRowAtIndexPath(indexPath) as EventCell
-        
-        var rightConstant = cell.frame.size.width - 200
-        var xOffset = state == .Left ? rightConstant : 0
-
-        var constant = gestureRecognizer.translationInTableView.x + xOffset
-        cell.frontViewLeadingConstraint.constant = constant
-        cell.frontViewTrailingConstraint.constant = constant
-        
-        cell.frontView?.layoutIfNeeded()
-    }
-    
-    func gestureRecognizer(gestureRecognizer: TransformableTableViewGestureRecognizer!, commitEditingState state: TransformableTableViewCellEditingState, forRowAtIndexPath indexPath: NSIndexPath!) {
-        // If is left swipe and it is not on the cell
-        // that is begin edited then do nothing
-        if state == .Left {
-            if let event = eventInEditState {
-                if let eventInEditIndexPath = fetchedResultsController.indexPathForObject(event) {
-                    if !eventInEditIndexPath.isEqual(indexPath) {
-                        return
-                    }
-                }
-            }
-        }
-        
-        var cell: EventCell = tableView.cellForRowAtIndexPath(indexPath) as EventCell
-        
-        if state == .Right && eventInEditState == nil {
-            var rightConstant = cell.frame.size.width - 200
-            var velocity = abs(gestureRecognizer.velocity.x) / (rightConstant - cell.frontViewLeadingConstraint.constant)
-            
-            UIView.animateWithDuration(1, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: velocity, options: .CurveLinear, animations: { () -> Void in
-                cell.frontViewLeadingConstraint.constant = rightConstant
-                cell.frontViewTrailingConstraint.constant = rightConstant
-            }, completion: nil)
-            
-            eventInEditState = fetchedResultsController.objectAtIndexPath(indexPath) as? Event
-        } else {
-            var velocity = abs(gestureRecognizer.velocity.x) / cell.frontViewLeadingConstraint.constant
-            
-            UIView.animateWithDuration(1, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: velocity, options: .CurveLinear, animations: { () -> Void in
-                cell.frontViewLeadingConstraint.constant = 0
-                cell.frontViewTrailingConstraint.constant = 0
-                }, completion: nil)
-            
-            eventInEditState = nil
-        }
-    }
-    
-    func gestureRecognizer(gestureRecognizer: TransformableTableViewGestureRecognizer!, cancelEditingState state: TransformableTableViewCellEditingState, forRowAtIndexPath indexPath: NSIndexPath!) {
-        var cell: EventCell = tableView.cellForRowAtIndexPath(indexPath) as EventCell
-        var velocity = abs(gestureRecognizer.velocity.x) / cell.frontViewLeadingConstraint.constant
-        
-        UIView.animateWithDuration(1, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: velocity, options: .CurveLinear, animations: { () -> Void in
-            cell.frontViewLeadingConstraint.constant = 0
-            cell.frontViewTrailingConstraint.constant = 0
-            }, completion: nil)
-        
-        eventInEditState = nil
-    }
-    
-    func gestureRecognizer(gestureRecognizer: TransformableTableViewGestureRecognizer!, lengthForCommitEditingRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
-        if let event = eventInEditState {
-            if let eventInEditIndexPath = fetchedResultsController.indexPathForObject(event) {
-                if eventInEditIndexPath.isEqual(indexPath) {
-                    return 0
-                }
-            }
-        }
-        
-        return editingCommitLength
-    }
 }
 
 // MARK: - UITableViewDelegate

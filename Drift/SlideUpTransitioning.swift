@@ -28,24 +28,22 @@ class SlideUpTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
         let translation = recognizer.translationInView(recognizer.view!)
         let velocity = recognizer.velocityInView(recognizer.view)
         
-        let percentage = abs(translation.y / CGRectGetHeight(recognizer.view!.bounds))
+        let percentage = abs(translation.x / CGRectGetWidth(recognizer.view!.bounds))
         
         switch recognizer.state {
         case .Began:
-            // Panning down
-            if velocity.y > 0 {
-                return
+            // Panning right
+            if velocity.x < 0 {
+                interactionInProgress = true
+                delegate?.proceedToNextViewController()
             }
-            
-            interactionInProgress = true
-            delegate?.proceedToNextViewController()
         case .Changed:
             // We have gone beyond the bottom barrier of the view where we started
             // stop updating, this happens when we are inside a navigationcontroller
             // that has a bottom component
-            if translation.y > 0 {
-                return
-            }
+//            if translation.y > 0 {
+//                return
+//            }
             
             updateInteractiveTransition(percentage)
         case .Ended:
@@ -91,43 +89,35 @@ extension SlideUpUIViewControllerAnimatedTransitioning {
         var fromViewController = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!
         var containerView = transitionContext.containerView()
         
-        dimmingView = UIView()
-        dimmingView.backgroundColor = UIColor(white: 0, alpha: 0.4)
-        dimmingView.alpha = 0
-        dimmingView.frame = containerView.bounds
-        
-        containerView.addSubview(dimmingView)
-        
         if isPresentation {
             containerView.addSubview(toViewController.view)
         }
         
-        var animatingController = isPresentation ? toViewController : fromViewController
-        var animatingView = animatingController.view
+        var presentedController = isPresentation ? toViewController : fromViewController
+        var presentedView = presentedController.view
+
+        var presentingController = isPresentation ? fromViewController : toViewController
+        var presentingView = presentingController.view
         
-        var appearedFrame = transitionContext.finalFrameForViewController(animatingController)
+        var appearedFrame = transitionContext.finalFrameForViewController(presentedController)
         var dismissedFrame = appearedFrame
-        dismissedFrame.origin.y += dismissedFrame.size.height
+        dismissedFrame.origin.x += dismissedFrame.size.width
         
-        var initialFrame = isPresentation ? dismissedFrame : appearedFrame
-        var finalFrame = isPresentation ? appearedFrame : dismissedFrame
+        var initialFrame = dismissedFrame
+        var finalFrame = appearedFrame
         
-        animatingView.frame = initialFrame
+        var presentingViewFinalFrame = appearedFrame
+        presentingViewFinalFrame.origin.x -= appearedFrame.size.width
         
-        var layer = toViewController.view.layer
-        layer.shadowOffset = CGSizeMake(1, 1)
-        layer.shadowColor = UIColor.blackColor().CGColor
-        layer.shadowRadius = 4.0
-        layer.shadowOpacity = 0.80
-        layer.shadowPath = UIBezierPath(rect: layer.bounds).CGPath
+        presentedView.frame = initialFrame
         
         UIView.animateWithDuration(transitionDuration(transitionContext), delay: 0, options: .CurveLinear, animations: { () -> Void in
-            self.dimmingView.alpha = 1
-            animatingView.frame = finalFrame
+            presentedView.frame = finalFrame
+            presentingView.frame = presentingViewFinalFrame
             }) { (Bool) -> Void in
-                if !self.isPresentation {
-                    fromViewController.view.removeFromSuperview()
-                }
+//                if !self.isPresentation {
+//                    fromViewController.view.removeFromSuperview()
+//                }
                 
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
         }

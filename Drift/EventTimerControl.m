@@ -477,12 +477,6 @@
 
             NSDate *nowDate = [self.deltaDate dateByAddingTimeInterval:seconds];
             self.deltaDate = nowDate;
-
-            if ([[nowDate earlierDate:self.startDate] isEqualToDate:nowDate]) {
-                nowDate   = self.startDate;
-                transform = self.startLayer.transform;
-            }
-
             self.nowDate = nowDate;
         }
 
