@@ -8,6 +8,7 @@
 
 import UIKit
 
-@objc public protocol DismissProtocol : class {
-    func didDismiss()
+public typealias Dismiss = () -> ()
+public protocol DismissProtocol : class {
+    var didDismiss: Dismiss? { get set }
 }

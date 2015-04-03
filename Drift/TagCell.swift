@@ -54,14 +54,13 @@ public class TagCell: UITableViewCell, UITextFieldDelegate {
 
     // Public methods
     public func setTitle(title: String?) {
-        if let t = title? {
-            self.tagNameTextField?.text = t.uppercaseString
-            self.tagName?.text = t.uppercaseString
-            self.tagName?.textColor = UIColor(white: 0.267, alpha: 1)
-        } else {
-            self.tagNameTextField?.text = ""
-            self.tagName?.text = "Swipe ⇢ to name"
+        self.tagNameTextField?.text = title?.uppercaseString ?? ""
+        self.tagName?.text = title?.uppercaseString ?? "Swipe ⇢ to name"
+        
+        if title != nil {
             self.tagName?.textColor = UIColor(white: 0.267, alpha: 0.4)
+        } else {
+            self.tagName?.textColor = UIColor(white: 0.267, alpha: 1)
         }
     }
 

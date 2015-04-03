@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
-typedef enum : NSInteger {
+typedef NS_ENUM(NSInteger, EventTimerTransformingEnum) {
     EventTimerNotTransforming,
     EventTimerStartDateTransformingStart,
     EventTimerStartDateTransformingStop,
     EventTimerNowDateTransformingStart,
     EventTimerNowDateTransformingStop
-} EventTimerTransformingEnum;
+};
 
 @interface EventTimerControl : UIControl
 

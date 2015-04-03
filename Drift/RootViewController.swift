@@ -20,8 +20,7 @@ class RootViewController: UIViewController, UIPageViewControllerDelegate {
         self.pageViewController.delegate = self
         
         if let startingViewController = modelController.viewControllerAtIndex(0, storyboard: self.storyboard!) {
-            let viewControllers: NSArray = [startingViewController]
-            self.pageViewController.setViewControllers(viewControllers, direction: .Forward, animated: false, completion: {done in })
+            self.pageViewController.setViewControllers([startingViewController], direction: .Forward, animated: false, completion: {done in })
         }
         
         self.pageViewController.dataSource = self.modelController

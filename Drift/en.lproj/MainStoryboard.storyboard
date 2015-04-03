@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="bhD-vz-YYS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7528.3" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="bhD-vz-YYS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7518.3"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -31,7 +31,7 @@
         <!--EventViewController-->
         <scene sceneID="HBC-Pb-M3Y">
             <objects>
-                <viewController storyboardIdentifier="EventViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="pW2-Iw-5Bg" userLabel="EventViewController" customClass="EventViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="pW2-Iw-5Bg" userLabel="EventViewController" customClass="EventViewController" customModule="Stray" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="b69-WY-Ku9"/>
                         <viewControllerLayoutGuide type="bottom" id="sU9-lB-8ZV"/>
@@ -125,7 +125,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="showTags:" destination="pW2-Iw-5Bg" eventType="touchUpInside" id="DJa-pH-7cF"/>
+                                    <action selector="showTags:" destination="pW2-Iw-5Bg" eventType="touchUpInside" id="piD-8n-oKG"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IgW-Dr-4Bj" userLabel="EventTimerControl" customClass="EventTimerControl">
@@ -149,7 +149,7 @@
                                             <color key="titleColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="toggleEventTouchUpInside:forEvent:" destination="pW2-Iw-5Bg" eventType="touchUpInside" id="BDc-mC-lH9"/>
+                                            <action selector="toggleEventTouchUpInside:" destination="pW2-Iw-5Bg" eventType="touchUpInside" id="sWO-Ga-N4G"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -201,31 +201,30 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
-                        <outlet property="eventStartDay" destination="Pfx-uQ-0OF" id="ECd-hx-OQP"/>
-                        <outlet property="eventStartMonth" destination="RG4-WB-RmJ" id="4Fo-rp-5py"/>
-                        <outlet property="eventStartTime" destination="d9a-bg-sgr" id="iVm-mz-GK8"/>
-                        <outlet property="eventStartYear" destination="mQD-9K-Yje" id="f0M-HC-C23"/>
-                        <outlet property="eventStopDay" destination="f4I-GS-DXr" id="Pli-GR-w88"/>
-                        <outlet property="eventStopMonth" destination="NKF-pl-TGd" id="gT8-AH-bcG"/>
-                        <outlet property="eventStopTime" destination="5mL-xl-tvC" id="CpX-Uu-4bz"/>
-                        <outlet property="eventStopYear" destination="kDP-kd-qe8" id="HEb-U8-Sl5"/>
-                        <outlet property="eventTimeHours" destination="T6v-e0-PDz" id="hrO-mm-rZ0"/>
-                        <outlet property="eventTimeMinutes" destination="Fda-f0-9h2" id="ET7-k4-PhO"/>
-                        <outlet property="eventTimerControl" destination="IgW-Dr-4Bj" id="Zds-ja-YxN"/>
-                        <outlet property="tag" destination="u4G-Rl-FJl" id="bUB-rY-YKg"/>
-                        <outlet property="toggleStartStopButton" destination="dP9-OE-O85" id="ZPS-ao-uD9"/>
+                        <outlet property="eventStartDay" destination="Pfx-uQ-0OF" id="cNA-Ql-Nzv"/>
+                        <outlet property="eventStartMonth" destination="RG4-WB-RmJ" id="eRd-Mk-YyL"/>
+                        <outlet property="eventStartTime" destination="d9a-bg-sgr" id="wop-kQ-ggY"/>
+                        <outlet property="eventStartYear" destination="mQD-9K-Yje" id="EVe-ud-ZPE"/>
+                        <outlet property="eventStopDay" destination="f4I-GS-DXr" id="8CF-9S-HLA"/>
+                        <outlet property="eventStopMonth" destination="NKF-pl-TGd" id="yhx-gQ-kmj"/>
+                        <outlet property="eventStopTime" destination="5mL-xl-tvC" id="Tpx-Ij-Flt"/>
+                        <outlet property="eventStopYear" destination="kDP-kd-qe8" id="47k-vy-5cK"/>
+                        <outlet property="eventTimeHours" destination="T6v-e0-PDz" id="DxZ-HV-S7e"/>
+                        <outlet property="eventTimeMinutes" destination="Fda-f0-9h2" id="jeQ-KA-Jtf"/>
+                        <outlet property="eventTimerControl" destination="IgW-Dr-4Bj" id="Xfi-Nf-0AR"/>
+                        <outlet property="tag" destination="u4G-Rl-FJl" id="RrZ-cL-sMc"/>
+                        <outlet property="toggleStartStopButton" destination="dP9-OE-O85" id="Rdb-6w-ObM"/>
                         <segue destination="OEB-QV-TsG" kind="presentation" identifier="segueToTagsFromEvent" id="rGs-Kp-XER"/>
-                        <segue destination="MkX-Cq-2XK" kind="presentation" identifier="segueToEventsFromEvent" id="WfO-eV-QCG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9TD-yZ-86c" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="893" y="-312"/>
         </scene>
-        <!--TagsTableViewController-->
+        <!--TagsViewController-->
         <scene sceneID="prA-Mw-27C">
             <objects>
-                <viewController extendedLayoutIncludesOpaqueBars="YES" id="OEB-QV-TsG" userLabel="TagsTableViewController" customClass="TagsTableViewController" sceneMemberID="viewController">
+                <viewController extendedLayoutIncludesOpaqueBars="YES" id="OEB-QV-TsG" userLabel="TagsViewController" customClass="TagsViewController" customModule="Stray" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="mCL-rm-LtH"/>
                         <viewControllerLayoutGuide type="bottom" id="RiX-BK-OM9"/>
@@ -408,7 +407,7 @@
                                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="18"/>
                                         <state key="normal" title="StartDate 2014-01-01">
-                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="chooseStartDate:forEvent:" destination="LMd-bh-FlA" eventType="touchUpInside" id="mll-wy-SoU"/>
@@ -441,7 +440,7 @@
                                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="18"/>
                                         <state key="normal" title="EndDate 2014-02-03">
-                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -484,10 +483,10 @@
             </objects>
             <point key="canvasLocation" x="1596" y="-353"/>
         </scene>
-        <!--Events View Controller-->
+        <!--EventsViewController-->
         <scene sceneID="maY-e6-1tb">
             <objects>
-                <viewController storyboardIdentifier="EventsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="MkX-Cq-2XK" customClass="EventsViewController" customModule="Stray" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="MkX-Cq-2XK" userLabel="EventsViewController" customClass="EventsViewController" customModule="Stray" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Whe-56-X4F"/>
                         <viewControllerLayoutGuide type="bottom" id="CaW-42-4UM"/>

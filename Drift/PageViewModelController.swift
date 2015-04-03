@@ -22,19 +22,17 @@ class PageViewModelController: NSObject, UIPageViewControllerDataSource {
     }
     
     func viewControllerAtIndex(index: Int, storyboard: UIStoryboard) -> UIViewController? {
-        if (pageData.count == 0) || (index >= pageData.count) {
+        if pageData.count == 0 || index >= pageData.count {
             return nil
         }
         
-        let controller = storyboard.instantiateViewControllerWithIdentifier(pageData[index]) as UIViewController
-        return controller
+        return storyboard.instantiateViewControllerWithIdentifier(pageData[index]) as? UIViewController
     }
     
     func indexOfViewController(viewController: UIViewController) -> Int? {
-        if let identifier: String = viewController.restorationIdentifier {
-            if let i = find(pageData, identifier) {
+        if let identifier: String = viewController.restorationIdentifier,
+            let i = find(pageData, identifier) {
                 return i
-            }
         }
         
         return nil
@@ -45,7 +43,6 @@ class PageViewModelController: NSObject, UIPageViewControllerDataSource {
         if let index = indexOfViewController(viewController) {
             if index > 0 {
                 var beforeIndex = index - 1
-                
                 return viewControllerAtIndex(beforeIndex, storyboard: viewController.storyboard!)
             }
         }
