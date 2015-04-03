@@ -22,7 +22,6 @@
 
 /* Begin PBXBuildFile section */
 		9E021D1F19E15AD400442B2C /* SlideUpTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E021D1E19E15AD400442B2C /* SlideUpTransitioning.swift */; };
-		9E14D452162B3D3F008D9E43 /* TagFilterButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E14D451162B3D3F008D9E43 /* TagFilterButton.m */; };
 		9E216E491ACC6B0900BD1967 /* NSManagedObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E216E481ACC6B0900BD1967 /* NSManagedObjectExtension.swift */; };
 		9E21F926156EA9510075EAAC /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */; };
 		9E21F929156EAA2F0075EAAC /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F928156EAA2F0075EAAC /* Event.m */; };
@@ -34,8 +33,6 @@
 		9E42F1FB15570FD60087F602 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F1FA15570FD60087F602 /* main.m */; };
 		9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */; };
 		9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F20015570FD60087F602 /* MainStoryboard.storyboard */; };
-		9E51511615C7CEF100901655 /* EventGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511315C7CEF100901655 /* EventGroup.m */; };
-		9E51511715C7CEF100901655 /* EventsGroupedByDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E51511515C7CEF100901655 /* EventsGroupedByDate.m */; };
 		9E51708219E44F6900BEF39B /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E51708119E44F6900BEF39B /* Launch Screen.xib */; };
 		9E51708419E5196100BEF39B /* EventStatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E51708319E5196100BEF39B /* EventStatisticsViewController.swift */; };
 		9E62E17C1A28D0DB0011EDC0 /* TagsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E62E17B1A28D0DB0011EDC0 /* TagsViewController.swift */; };
@@ -44,7 +41,6 @@
 		9E7636661778A31D005C755F /* AIStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7636651778A1A4005C755F /* AIStyle.m */; };
 		9E7CEDF4157B778300718FA6 /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEDF3157B778300718FA6 /* _Event.m */; };
 		9E7EB52D15E8F8C100604B79 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F215570FD60087F602 /* CoreGraphics.framework */; };
-		9E89816F15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E89816E15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m */; };
 		9E9239DB162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239D8162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m */; };
 		9E92637115EF350D00393946 /* _Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E92637015EF350D00393946 /* _Tag.m */; };
 		9E954D84164419F50022D5BE /* UIScrollView+AIPulling.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E954D83164419F50022D5BE /* UIScrollView+AIPulling.m */; };
@@ -98,8 +94,6 @@
 
 /* Begin PBXFileReference section */
 		9E021D1E19E15AD400442B2C /* SlideUpTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideUpTransitioning.swift; sourceTree = "<group>"; };
-		9E14D450162B3D3F008D9E43 /* TagFilterButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagFilterButton.h; sourceTree = "<group>"; };
-		9E14D451162B3D3F008D9E43 /* TagFilterButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagFilterButton.m; sourceTree = "<group>"; };
 		9E15323F173FDE3800605B65 /* CoreDataModel- 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel- 8.xcdatamodel"; sourceTree = "<group>"; };
 		9E15AB7A163D0C45006D16B3 /* CoreDataModel-5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-5.xcdatamodel"; sourceTree = "<group>"; };
 		9E216E481ACC6B0900BD1967 /* NSManagedObjectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSManagedObjectExtension.swift; sourceTree = "<group>"; };
@@ -119,10 +113,6 @@
 		9E42F1FD15570FD60087F602 /* DriftAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DriftAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DriftAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9E42F20115570FD60087F602 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		9E51511215C7CEF100901655 /* EventGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroup.h; sourceTree = "<group>"; };
-		9E51511315C7CEF100901655 /* EventGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroup.m; sourceTree = "<group>"; };
-		9E51511415C7CEF100901655 /* EventsGroupedByDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsGroupedByDate.h; sourceTree = "<group>"; };
-		9E51511515C7CEF100901655 /* EventsGroupedByDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsGroupedByDate.m; sourceTree = "<group>"; };
 		9E51708119E44F6900BEF39B /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		9E51708319E5196100BEF39B /* EventStatisticsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatisticsViewController.swift; sourceTree = "<group>"; };
 		9E62E17B1A28D0DB0011EDC0 /* TagsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsViewController.swift; sourceTree = "<group>"; };
@@ -135,8 +125,6 @@
 		9E7636651778A1A4005C755F /* AIStyle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AIStyle.m; sourceTree = "<group>"; };
 		9E7CEDF2157B778300718FA6 /* _Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Event.h; sourceTree = "<group>"; };
 		9E7CEDF3157B778300718FA6 /* _Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Event.m; sourceTree = "<group>"; };
-		9E89816D15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsGroupedByDateTableViewCell.h; sourceTree = "<group>"; };
-		9E89816E15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsGroupedByDateTableViewCell.m; sourceTree = "<group>"; };
 		9E916E14163197A40058C777 /* CoreDataModel-4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-4.xcdatamodel"; sourceTree = "<group>"; };
 		9E9239D7162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransformableTableViewGestureRecognizer.h; sourceTree = "<group>"; };
 		9E9239D8162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransformableTableViewGestureRecognizer.m; sourceTree = "<group>"; };
@@ -299,7 +287,6 @@
 		9E9C232D15F288D400572FB7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				9EF99092164BDCC000AF6EC4 /* Models */,
 				9EC2399019E59FBB008AC0A9 /* RootViewController.swift */,
 				9EC2399219E5A295008AC0A9 /* PageViewModelController.swift */,
 				9E021D1E19E15AD400442B2C /* SlideUpTransitioning.swift */,
@@ -316,8 +303,6 @@
 			isa = PBXGroup;
 			children = (
 				9E96FCE016359F8600AB5B0A /* TransformableTableView */,
-				9E14D450162B3D3F008D9E43 /* TagFilterButton.h */,
-				9E14D451162B3D3F008D9E43 /* TagFilterButton.m */,
 				9E7636641778A1A4005C755F /* AIStyle.h */,
 				9E7636651778A1A4005C755F /* AIStyle.m */,
 				9EBF34F219BA3ED70046A464 /* ReorderTableViewController.swift */,
@@ -347,8 +332,6 @@
 		9EB08FDF19E03C4F00D20EE5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				9E89816D15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.h */,
-				9E89816E15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m */,
 				9EB08FDD19E00C4800D20EE5 /* TagCell.swift */,
 				9EB08FE019E03E1200D20EE5 /* EventCell.swift */,
 			);
@@ -362,17 +345,6 @@
 				9EB445801ACC44B40042E8F7 /* JSQCoreDataKitTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		9EF99092164BDCC000AF6EC4 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				9E51511215C7CEF100901655 /* EventGroup.h */,
-				9E51511315C7CEF100901655 /* EventGroup.m */,
-				9E51511415C7CEF100901655 /* EventsGroupedByDate.h */,
-				9E51511515C7CEF100901655 /* EventsGroupedByDate.m */,
-			);
-			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -519,18 +491,14 @@
 				9E21F929156EAA2F0075EAAC /* Event.m in Sources */,
 				9E7CEDF4157B778300718FA6 /* _Event.m in Sources */,
 				9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */,
-				9E89816F15A0BC2900E22EA7 /* EventsGroupedByDateTableViewCell.m in Sources */,
 				9EA21B8F1ACE7E0F001CD33A /* CompatibilityMigration.swift in Sources */,
 				9ED3051D19EEF3BD00D7E0CA /* DismissProtocol.swift in Sources */,
 				9EC2399119E59FBB008AC0A9 /* RootViewController.swift in Sources */,
 				9E216E491ACC6B0900BD1967 /* NSManagedObjectExtension.swift in Sources */,
-				9E51511615C7CEF100901655 /* EventGroup.m in Sources */,
-				9E51511715C7CEF100901655 /* EventsGroupedByDate.m in Sources */,
 				9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */,
 				9E92637115EF350D00393946 /* _Tag.m in Sources */,
 				9EC2399319E5A295008AC0A9 /* PageViewModelController.swift in Sources */,
 				9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */,
-				9E14D452162B3D3F008D9E43 /* TagFilterButton.m in Sources */,
 				9E9239DB162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m in Sources */,
 				9E62E17C1A28D0DB0011EDC0 /* TagsViewController.swift in Sources */,
 				9E954D84164419F50022D5BE /* UIScrollView+AIPulling.m in Sources */,
