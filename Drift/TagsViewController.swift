@@ -10,20 +10,13 @@ import UIKit
 import CoreData
 import JSQCoreDataKit
 
-class TagsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, TagCellDelegate, DismissProtocol
+class TagsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, DismissProtocol
 {
     @IBOutlet var tableView: UITableView!
 
     var didDismiss: Dismiss?
 
-//    var tableViewRecognizer: TransformableTableViewGestureRecognizer?
-//    var reorderTableViewController: ReorderTableViewController?
-    var tagInEditState: Tag?
-
-    var reOrderIndexPath: NSIndexPath?
-
-    let editingCommitLength: NSInteger = 60
-
+    var userReorderingCells: Bool = false
     var stack: CoreDataStack?
 
     private lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -55,14 +48,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         let model = CoreDataModel(name: "CoreDataModel", bundle: bundle!)
         self.stack = CoreDataStack(model: model)
 
-//        self.tableViewRecognizer = self.tableView.enableGestureTableViewWithDelegate(self)
-
-//        self.tableView.registerClass(UITableViewCell.self, forHeaderFooterViewReuseIdentifier: "reorderTableViewCellIdentifier")
-
-//        self.reorderTableViewController = ReorderTableViewController(tableView: self.tableView)
-
         tableView.addPullingWithActionHandler { (state: AIPullingState, previousState: AIPullingState, height: CGFloat) -> Void in
-
             if state == AIPullingState.Action {
                 if previousState == AIPullingState.PullingAdd {
                     var popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000)
@@ -75,7 +61,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
 
-        tableView.pullingView.addingHeight = 0
+        tableView.pullingView.addingHeight = 30
         tableView.pullingView.closingHeight = 60
 
         if let guid = State.instance().selectedEventGUID,
@@ -91,17 +77,21 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         self.fetchedResultsController.delegate = nil
         self.tableView.disablePulling()
-        
-//        self.tableView.disableGestureTableViewWithRecognizer(self.tableViewRecognizer)
     }
 
     func configureCell(cell: TagCell, atIndexPath: NSIndexPath) -> Void {
         if let tag = fetchedResultsController.objectAtIndexPath(atIndexPath) as? Tag {
             cell.setTitle(tag.name)
-            cell.delegate = self
         }
     }
 
+    @IBAction func toggleEdit(sender: UIButton) {
+        if self.tableView.editing {
+            self.tableView.setEditing(false, animated: true)
+        } else {
+            self.tableView.setEditing(true, animated: true)
+        }
+    }
 }
 
 // MARK: - UITableViewDelegate
@@ -124,7 +114,43 @@ extension TagsViewController_UITableViewDelegate {
                     saveContextAndWait(moc)
             }
             
-            self.didDismiss?()
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.Delete {
+            if let tag = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Tag,
+                let moc = self.stack?.managedObjectContext {
+                    moc.deleteObject(tag)
+                    saveContextAndWait(moc)
+            }
+        }
+    }
+    
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        if !self.tableView.editing {
+            return UITableViewCellEditingStyle.None;
+        }
+        
+        return UITableViewCellEditingStyle.Delete;
+    }
+    
+    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+        if sourceIndexPath == destinationIndexPath {
+            return
+        }
+        
+        if let tag = self.fetchedResultsController.objectAtIndexPath(sourceIndexPath) as? Tag,
+            let moc = self.stack?.managedObjectContext {
+                self.userReorderingCells = true
+                tag.sortIndex = destinationIndexPath.row
+                saveContextAndWait(moc)
+                self.userReorderingCells = false
         }
     }
 }
@@ -145,14 +171,6 @@ extension TagsViewController_UITableViewDataSource {
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-//        if let cell = tableView.dequeueReusableCellWithIdentifier("reorderTableViewCellIdentifier") as? UITableViewCell,
-//            let reOrderIndexPath = self.reOrderIndexPath where reOrderIndexPath.isEqual(indexPath) {
-//
-//            cell.selectionStyle = .None
-//            return cell
-//        }
-
-        
         let cell = tableView.dequeueReusableCellWithIdentifier("TagCellIdentifier") as! TagCell
         self.configureCell(cell, atIndexPath:indexPath)
             
@@ -161,99 +179,67 @@ extension TagsViewController_UITableViewDataSource {
 }
 
 // MARK: - TagCellDelegate
-typealias TagsViewController_TagCellDelegate = TagsViewController
-extension TagsViewController_TagCellDelegate {
-    func didDeleteTagCell(cell: TagCell) {
-        if let indexPath = tableView.indexPathForCell(cell),
-            let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag,
-            let moc = self.stack?.managedObjectContext {
-            
-                moc.deleteObject(tag)
-                tagInEditState = nil
-                saveContextAndWait(moc)
-        }
-    }
-
-    func didEditTagCell(cell: TagCell) {
-        if let indexPath = tableView.indexPathForCell(cell),
-            let name = cell.tagNameTextField?.text {
-                if !name.isEmpty,
-                    let moc = self.stack?.managedObjectContext,
-                    let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
-                        
-                        tag.name = name
-                        cell.setTitle(name)
-                        saveContextAndWait(moc)
-                }
-
-                UIView.animateWithDuration(1, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .CurveLinear, animations: { () -> Void in
-                    cell.frontViewLeadingConstraint?.constant = 0
-                    cell.frontViewTrailingConstraint?.constant = 0
-                    cell.frontView?.layoutIfNeeded()
-                    }, completion: nil)
-
-                self.tagInEditState = nil
-        }
-    }
-}
+//typealias TagsViewController_TagCellDelegate = TagsViewController
+//extension TagsViewController_TagCellDelegate {
+//    func didEditTagCell(cell: TagCell) {
+//        if let indexPath = tableView.indexPathForCell(cell),
+//            let name = cell.tagNameTextField?.text {
+//                if !name.isEmpty,
+//                    let moc = self.stack?.managedObjectContext,
+//                    let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
+//                        
+//                        tag.name = name
+//                        cell.setTitle(name)
+//                        saveContextAndWait(moc)
+//                }
+//
+//                UIView.animateWithDuration(1, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .CurveLinear, animations: { () -> Void in
+//                    cell.frontViewLeadingConstraint?.constant = 0
+//                    cell.frontViewTrailingConstraint?.constant = 0
+//                    cell.frontView?.layoutIfNeeded()
+//                    }, completion: nil)
+//
+//                self.tagInEditState = nil
+//        }
+//    }
+//}
 
 // MARK: - NSFetchedResultsControllerDelegate
 typealias TagsViewController_NSFetchedResultsControllerDelegate = TagsViewController
 extension TagsViewController_NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        if self.userReorderingCells {
+            return
+        }
+        
         tableView.beginUpdates()
     }
 
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+
+        if self.userReorderingCells {
+            return
+        }
+
         switch type {
         case .Insert:
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
         case .Delete:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
         case .Update:
             if let cell = tableView.cellForRowAtIndexPath(indexPath!) as? TagCell {
                 self.configureCell(cell, atIndexPath: indexPath!)
             }
         case .Move:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+            self.tableView.moveRowAtIndexPath(indexPath!, toIndexPath: newIndexPath!)
         }
     }
 
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        if self.userReorderingCells {
+            return
+        }
+        
         tableView.endUpdates()
     }
 }
-
-// MARK - TransformableTableViewGestureEditingRowDelegate
-//typealias TagsViewController_TransformableTableViewGestureEditingRowDelegate = TagsViewController
-//extension TagsViewController_TransformableTableViewGestureEditingRowDelegate {
-//    func gestureRecognizer(gestureRecognizer: TransformableTableViewGestureRecognizer, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-//        return true
-//    }
-//
-//    func gestureRecognizer(gestureRecognizer: TransformableTableViewGestureRecognizer, didEnterEditingState state: TransformableTableViewCellEditingState, forRowAtIndexPath indexPath: NSIndexPath) {
-//        
-//        if let tagInEditState = self.tagInEditState,
-//            let editStateIndexPath = self.fetchedResultsController.indexPathForObject(tagInEditState)
-//            where !editStateIndexPath.isEqual(indexPath) {
-//                // TODO
-//                // [self gestureRecognizer:gestureRecognizer
-//                // cancelEditingState:state
-//                // forRowAtIndexPath:editStateIndexPath];
-//        }
-//    }
-//
-//    func gestureRecognizer(gestureRecognizer: TransformableTableViewGestureRecognizer, didChangeEditingState state: TransformableTableViewCellEditingState, forRowAtIndexPath indexPath: NSIndexPath) {
-//        
-//        if let tagInEditState = self.tagInEditState,
-//            let editStateIndexPath = self.fetchedResultsController.indexPathForObject(tagInEditState)
-//            where editStateIndexPath.isEqual(indexPath) {
-//                // TODO
-//                // [self gestureRecognizer:gestureRecognizer
-//                // cancelEditingState:state
-//                // forRowAtIndexPath:editStateIndexPath];
-//        }
-//        
-//    }
-//}
