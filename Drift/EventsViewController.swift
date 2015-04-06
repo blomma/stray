@@ -10,8 +10,8 @@ import UIKit
 import CoreData
 import JSQCoreDataKit
 
-class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCellDelegate, DismissProtocol {
-    @IBOutlet var tableView: UITableView!
+class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCellDelegate {
+    @IBOutlet var tableView: UITableView?
 
     private lazy var shortStandaloneMonthSymbols: [AnyObject] = {
         return NSDateFormatter().shortStandaloneMonthSymbols
@@ -23,16 +23,28 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     private let editingCommitLength: CGFloat = 60
     
-    private var eventInEditState: Event?
-
-    var didDismiss: Dismiss?
-
     var stack: CoreDataStack?
     
-    private lazy var fetchedResultsController: NSFetchedResultsController = {
+    private var fetchedResultsController: NSFetchedResultsController?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let bundle = NSBundle(identifier: "com.artsoftheinsane.Drift")
+        let model = CoreDataModel(name: "CoreDataModel", bundle: bundle!)
+        self.stack = CoreDataStack(model: model)
+
+        if let guid = State.instance().selectedEventGUID,
+            let event = Event.findFirstByAttribute(self.stack?.managedObjectContext, property: "guid", value: State.instance().selectedEventGUID),
+            let indexPath = self.fetchedResultsController?.indexPathForObject(event) {
+                self.tableView?.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
+        }
+    }
+
+    override func viewWillAppear(animated: Bool) {
         if let moc = self.stack?.managedObjectContext {
             var fetchRequest = NSFetchRequest(entityName: "Event")
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
             fetchRequest.fetchBatchSize = 20
             
             var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
@@ -44,44 +56,16 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 exit(-1)
             }
             
-            return controller
+            self.fetchedResultsController =  controller
         }
-        
-        println("No moc")
-        exit(-1)
-    }()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        let bundle = NSBundle(identifier: "com.artsoftheinsane.Drift")
-        let model = CoreDataModel(name: "CoreDataModel", bundle: bundle!)
-        self.stack = CoreDataStack(model: model)
-        
-        tableView.addPullingWithActionHandler { (state: AIPullingState, previousState: AIPullingState, height: CGFloat) -> Void in
-            if state == AIPullingState.Action && (previousState == AIPullingState.PullingAdd || previousState == AIPullingState.PullingClose) {
-                let _ = self.didDismiss?()
-            }
-        }
-        
-        tableView.pullingView.addingHeight = 0
-        tableView.pullingView.closingHeight = 60
-        
-        if let guid = State.instance().selectedEventGUID,
-            let event = Event.findFirstByAttribute(self.stack?.managedObjectContext, property: "guid", value: State.instance().selectedEventGUID),
-            let indexPath = fetchedResultsController.indexPathForObject(event) {
-                tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
-        }
-        
-        modalPresentationStyle = .Custom
     }
-
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "segueToTagsFromEvents",
             let controller = segue.destinationViewController as? TagsViewController,
             let cell = sender as? UITableViewCell,
-            let indexPath = tableView.indexPathForCell(cell),
-            let event = fetchedResultsController.objectAtIndexPath(indexPath) as? Event {
+            let indexPath = self.tableView?.indexPathForCell(cell),
+            let event = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? Event {
 
                 controller.didDismiss = {
                     dispatch_async(dispatch_get_main_queue(), { [unowned self] in
@@ -92,7 +76,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func configureCell(cell: EventCell, atIndexPath: NSIndexPath) -> Void {
-        if let event = fetchedResultsController.objectAtIndexPath(atIndexPath) as? Event {
+        if let event = self.fetchedResultsController?.objectAtIndexPath(atIndexPath) as? Event {
             if event.inTag != nil {
                 let attributedString = NSAttributedString(string: event.inTag.name, attributes:
                     [NSFontAttributeName: UIFont(name: "Helvetica Neue", size: 14.0)!])
@@ -151,13 +135,10 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 typealias EventsViewController_UITableViewDelegate = EventsViewController
 extension EventsViewController_UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if let event = fetchedResultsController.objectAtIndexPath(indexPath) as? Event,
+        if let event = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? Event,
             let cell = tableView.cellForRowAtIndexPath(indexPath) as? EventCell {
                 cell.setSelected(true, animated: true)
-                
                 State.instance().selectedEventGUID = event.guid
-                
-                self.didDismiss?()
         }
     }
     
@@ -166,13 +147,27 @@ extension EventsViewController_UITableViewDelegate {
             cell.setSelected(false, animated: true)
         }
     }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.Delete {
+            if let event = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? Event,
+            let moc = self.stack?.managedObjectContext {
+                if let selectedEventGUID = State.instance().selectedEventGUID where event.guid == selectedEventGUID {
+                    State.instance().selectedEventGUID = nil
+                }
+                
+                moc.deleteObject(event)
+                saveContextAndWait(moc)
+            }
+        }
+    }
 }
 
 // MARK: - UITableViewDataSource
 typealias EventsViewController_UITableViewDataSource = EventsViewController
 extension EventsViewController_UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let sectionInfo = self.fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo {
+        if let sectionInfo = self.fetchedResultsController?.sections?[section] as? NSFetchedResultsSectionInfo {
             return sectionInfo.numberOfObjects
         }
         
@@ -180,7 +175,7 @@ extension EventsViewController_UITableViewDataSource {
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return self.fetchedResultsController.sections?.count ?? 0
+        return self.fetchedResultsController?.sections?.count ?? 0
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -195,18 +190,14 @@ extension EventsViewController_UITableViewDataSource {
 typealias EventsViewController_EventCellDelegate = EventsViewController
 extension EventsViewController_EventCellDelegate {
     func didDeleteEventCell(cell: EventCell) {
-        if let indexPath = tableView.indexPathForCell(cell),
-            let event = fetchedResultsController.objectAtIndexPath(indexPath) as? Event,
+        if let indexPath = self.tableView?.indexPathForCell(cell),
+            let event = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? Event,
             let moc = self.stack?.managedObjectContext {
-            
                 if event.guid == State.instance().selectedEventGUID {
                     State.instance().selectedEventGUID = nil
                 }
             
                 moc.deleteObject(event)
-            
-                eventInEditState = nil
-                
                 saveContextAndWait(moc)
         }
     }
@@ -222,26 +213,26 @@ extension EventsViewController_EventCellDelegate {
 typealias EventsViewController_NSFetchedResultsControllerDelegate = EventsViewController
 extension EventsViewController_NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        tableView.beginUpdates()
+        self.tableView?.beginUpdates()
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         switch type {
         case .Insert:
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+            self.tableView?.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
         case .Delete:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+            self.tableView?.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
         case .Update:
-            if let cell = tableView.cellForRowAtIndexPath(indexPath!) as? EventCell {
+            if let cell = self.tableView?.cellForRowAtIndexPath(indexPath!) as? EventCell {
                 configureCell(cell, atIndexPath: indexPath!)
             }
         case .Move:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+            self.tableView?.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+            self.tableView?.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
         }
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        tableView.endUpdates()
+        self.tableView?.endUpdates()
     }
 }

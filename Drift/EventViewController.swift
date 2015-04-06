@@ -37,6 +37,8 @@ class EventViewController: UIViewController {
     var selectedEvent: Event?
     var stack: CoreDataStack?
     
+    let transitionOperator = TransitionOperator()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -96,16 +98,21 @@ class EventViewController: UIViewController {
         self.eventTimerControl?.removeObserver(self, forKeyPath: "transforming", context: eventViewControllerContext)
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "segueToTagsFromEvent",
-            let controller = segue.destinationViewController as? TagsViewController {
-                controller.didDismiss = {
-                    dispatch_async(dispatch_get_main_queue(), { [unowned self] in
-                        self.dismissViewControllerAnimated(true, completion: nil)
-                        })
-                }
-        }
-    }
+//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+//        super.prepareForSegue(segue, sender: sender)
+//        if segue.identifier == "segueToTagsFromEvent",
+//            let controller = segue.destinationViewController as? TagsViewController {
+//                controller.didDismiss = {
+//                    dispatch_async(dispatch_get_main_queue(), { [unowned self] in
+//                        self.dismissViewControllerAnimated(true, completion: nil)
+//                        })
+//                }
+//        } else
+//    if segue.identifier == "segueToMenuFromEvent",
+//            let controller = segue.destinationViewController as? UIViewController {
+//                controller.transitioningDelegate = self.transitionOperator
+//        }
+//    }
     
     private func animateButton(button: UIButton) {
         var pathFrame: CGRect = CGRectMake(-CGRectGetMidY(button.bounds), -CGRectGetMidY(button.bounds), button.bounds.size.height, button.bounds.size.height)
@@ -284,7 +291,6 @@ class EventViewController: UIViewController {
     }
     
     override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        
         if context == eventViewControllerContext,
             let rawValue = change[NSKeyValueChangeKindKey] as? UInt,
             let changeKindKey = NSKeyValueChange(rawValue: rawValue) where changeKindKey == .Setting {

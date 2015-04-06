@@ -33,8 +33,10 @@
 		9E42F1FB15570FD60087F602 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F1FA15570FD60087F602 /* main.m */; };
 		9E42F1FF15570FD60087F602 /* DriftAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */; };
 		9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F20015570FD60087F602 /* MainStoryboard.storyboard */; };
+		9E4DFB8C1AD17CBB008C0123 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4DFB8B1AD17CBB008C0123 /* MenuController.swift */; };
 		9E51708219E44F6900BEF39B /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E51708119E44F6900BEF39B /* Launch Screen.xib */; };
 		9E51708419E5196100BEF39B /* EventStatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E51708319E5196100BEF39B /* EventStatisticsViewController.swift */; };
+		9E622B701AD06D370062A9FD /* TransitionOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E622B6F1AD06D370062A9FD /* TransitionOperator.swift */; };
 		9E62E17C1A28D0DB0011EDC0 /* TagsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E62E17B1A28D0DB0011EDC0 /* TagsViewController.swift */; };
 		9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E63BBF3156EAA710006FEFC /* CoreData.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9E66D0DD16553D6700339E99 /* State.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E66D0DC16553D6700339E99 /* State.m */; };
@@ -53,8 +55,6 @@
 		9EB445811ACC44DB0042E8F7 /* JSQCoreDataKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EB4457E1ACC44B40042E8F7 /* JSQCoreDataKit.framework */; };
 		9EB445831ACC45140042E8F7 /* JSQCoreDataKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9EB4457E1ACC44B40042E8F7 /* JSQCoreDataKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9EBF34F319BA3ED70046A464 /* ReorderTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBF34F219BA3ED70046A464 /* ReorderTableViewController.swift */; };
-		9EC2399119E59FBB008AC0A9 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC2399019E59FBB008AC0A9 /* RootViewController.swift */; };
-		9EC2399319E5A295008AC0A9 /* PageViewModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC2399219E5A295008AC0A9 /* PageViewModelController.swift */; };
 		9ECF3B7A16EAF4D40097FF37 /* _Compatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7716EAF4D40097FF37 /* _Compatibility.m */; };
 		9ECF3B7B16EAF4D40097FF37 /* Compatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF3B7916EAF4D40097FF37 /* Compatibility.m */; };
 		9ED3051D19EEF3BD00D7E0CA /* DismissProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED3051C19EEF3BD00D7E0CA /* DismissProtocol.swift */; };
@@ -113,8 +113,10 @@
 		9E42F1FD15570FD60087F602 /* DriftAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DriftAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9E42F1FE15570FD60087F602 /* DriftAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DriftAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9E42F20115570FD60087F602 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		9E4DFB8B1AD17CBB008C0123 /* MenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
 		9E51708119E44F6900BEF39B /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		9E51708319E5196100BEF39B /* EventStatisticsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatisticsViewController.swift; sourceTree = "<group>"; };
+		9E622B6F1AD06D370062A9FD /* TransitionOperator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionOperator.swift; sourceTree = "<group>"; };
 		9E62E17B1A28D0DB0011EDC0 /* TagsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsViewController.swift; sourceTree = "<group>"; };
 		9E63BBF3156EAA710006FEFC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		9E66D0DA16553B3700339E99 /* CoreDataModel-6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-6.xcdatamodel"; sourceTree = "<group>"; };
@@ -144,8 +146,6 @@
 		9EB445781ACC44B40042E8F7 /* JSQCoreDataKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JSQCoreDataKit.xcodeproj; path = ../JSQCoreDataKit/JSQCoreDataKit/JSQCoreDataKit.xcodeproj; sourceTree = "<group>"; };
 		9EBF34F119BA3ED60046A464 /* Drift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Drift-Bridging-Header.h"; sourceTree = "<group>"; };
 		9EBF34F219BA3ED70046A464 /* ReorderTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReorderTableViewController.swift; sourceTree = "<group>"; };
-		9EC2399019E59FBB008AC0A9 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
-		9EC2399219E5A295008AC0A9 /* PageViewModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewModelController.swift; sourceTree = "<group>"; };
 		9ECF3B7616EAF4D40097FF37 /* _Compatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Compatibility.h; sourceTree = "<group>"; };
 		9ECF3B7716EAF4D40097FF37 /* _Compatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Compatibility.m; sourceTree = "<group>"; };
 		9ECF3B7816EAF4D40097FF37 /* Compatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Compatibility.h; sourceTree = "<group>"; };
@@ -287,14 +287,14 @@
 		9E9C232D15F288D400572FB7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				9EC2399019E59FBB008AC0A9 /* RootViewController.swift */,
-				9EC2399219E5A295008AC0A9 /* PageViewModelController.swift */,
 				9E021D1E19E15AD400442B2C /* SlideUpTransitioning.swift */,
 				9E51708319E5196100BEF39B /* EventStatisticsViewController.swift */,
 				9E378E7019EC35C3004DED67 /* EventsViewController.swift */,
 				9ED3051C19EEF3BD00D7E0CA /* DismissProtocol.swift */,
 				9E62E17B1A28D0DB0011EDC0 /* TagsViewController.swift */,
 				9EB160001ACD153600E041B9 /* EventViewController.swift */,
+				9E622B6F1AD06D370062A9FD /* TransitionOperator.swift */,
+				9E4DFB8B1AD17CBB008C0123 /* MenuController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -491,13 +491,12 @@
 				9E21F929156EAA2F0075EAAC /* Event.m in Sources */,
 				9E7CEDF4157B778300718FA6 /* _Event.m in Sources */,
 				9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */,
+				9E4DFB8C1AD17CBB008C0123 /* MenuController.swift in Sources */,
 				9EA21B8F1ACE7E0F001CD33A /* CompatibilityMigration.swift in Sources */,
 				9ED3051D19EEF3BD00D7E0CA /* DismissProtocol.swift in Sources */,
-				9EC2399119E59FBB008AC0A9 /* RootViewController.swift in Sources */,
 				9E216E491ACC6B0900BD1967 /* NSManagedObjectExtension.swift in Sources */,
 				9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */,
 				9E92637115EF350D00393946 /* _Tag.m in Sources */,
-				9EC2399319E5A295008AC0A9 /* PageViewModelController.swift in Sources */,
 				9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */,
 				9E9239DB162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m in Sources */,
 				9E62E17C1A28D0DB0011EDC0 /* TagsViewController.swift in Sources */,
@@ -509,6 +508,7 @@
 				9EB08FE119E03E1200D20EE5 /* EventCell.swift in Sources */,
 				9ECF3B7A16EAF4D40097FF37 /* _Compatibility.m in Sources */,
 				9ECF3B7B16EAF4D40097FF37 /* Compatibility.m in Sources */,
+				9E622B701AD06D370062A9FD /* TransitionOperator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,7 +639,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
-					"\"$(SRCROOT)/Vendor\"",
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -668,7 +667,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
-					"\"$(SRCROOT)/Vendor\"",
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
