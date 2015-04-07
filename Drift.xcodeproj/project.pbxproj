@@ -40,10 +40,8 @@
 		9E62E17C1A28D0DB0011EDC0 /* TagsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E62E17B1A28D0DB0011EDC0 /* TagsViewController.swift */; };
 		9E63BBF4156EAA710006FEFC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E63BBF3156EAA710006FEFC /* CoreData.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9E66D0DD16553D6700339E99 /* State.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E66D0DC16553D6700339E99 /* State.m */; };
-		9E7636661778A31D005C755F /* AIStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7636651778A1A4005C755F /* AIStyle.m */; };
 		9E7CEDF4157B778300718FA6 /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7CEDF3157B778300718FA6 /* _Event.m */; };
 		9E7EB52D15E8F8C100604B79 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E42F1F215570FD60087F602 /* CoreGraphics.framework */; };
-		9E9239DB162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9239D8162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m */; };
 		9E92637115EF350D00393946 /* _Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E92637015EF350D00393946 /* _Tag.m */; };
 		9E954D84164419F50022D5BE /* UIScrollView+AIPulling.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E954D83164419F50022D5BE /* UIScrollView+AIPulling.m */; };
 		9EA21B8F1ACE7E0F001CD33A /* CompatibilityMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA21B8E1ACE7E0F001CD33A /* CompatibilityMigration.swift */; };
@@ -123,13 +121,9 @@
 		9E66D0DB16553D6700339E99 /* State.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = State.h; sourceTree = "<group>"; };
 		9E66D0DC16553D6700339E99 /* State.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = State.m; sourceTree = "<group>"; };
 		9E6C6C8716BABD5400613E86 /* CoreDataModel-7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-7.xcdatamodel"; sourceTree = "<group>"; };
-		9E7636641778A1A4005C755F /* AIStyle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AIStyle.h; sourceTree = "<group>"; };
-		9E7636651778A1A4005C755F /* AIStyle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AIStyle.m; sourceTree = "<group>"; };
 		9E7CEDF2157B778300718FA6 /* _Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Event.h; sourceTree = "<group>"; };
 		9E7CEDF3157B778300718FA6 /* _Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Event.m; sourceTree = "<group>"; };
 		9E916E14163197A40058C777 /* CoreDataModel-4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-4.xcdatamodel"; sourceTree = "<group>"; };
-		9E9239D7162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransformableTableViewGestureRecognizer.h; sourceTree = "<group>"; };
-		9E9239D8162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransformableTableViewGestureRecognizer.m; sourceTree = "<group>"; };
 		9E9239E2162DA56900E265E6 /* CoreDataModel-3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-3.xcdatamodel"; sourceTree = "<group>"; };
 		9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-2.xcdatamodel"; sourceTree = "<group>"; };
 		9E92636F15EF350D00393946 /* _Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Tag.h; sourceTree = "<group>"; };
@@ -275,15 +269,6 @@
 			name = Repository;
 			sourceTree = "<group>";
 		};
-		9E96FCE016359F8600AB5B0A /* TransformableTableView */ = {
-			isa = PBXGroup;
-			children = (
-				9E9239D7162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.h */,
-				9E9239D8162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m */,
-			);
-			name = TransformableTableView;
-			sourceTree = "<group>";
-		};
 		9E9C232D15F288D400572FB7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -302,9 +287,6 @@
 		9E9C232F15F2895000572FB7 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				9E96FCE016359F8600AB5B0A /* TransformableTableView */,
-				9E7636641778A1A4005C755F /* AIStyle.h */,
-				9E7636651778A1A4005C755F /* AIStyle.m */,
 				9EBF34F219BA3ED70046A464 /* ReorderTableViewController.swift */,
 			);
 			name = Classes;
@@ -482,7 +464,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E021D1F19E15AD400442B2C /* SlideUpTransitioning.swift in Sources */,
-				9E7636661778A31D005C755F /* AIStyle.m in Sources */,
 				9EBF34F319BA3ED70046A464 /* ReorderTableViewController.swift in Sources */,
 				9E42F1FB15570FD60087F602 /* main.m in Sources */,
 				9EB160011ACD153600E041B9 /* EventViewController.swift in Sources */,
@@ -498,7 +479,6 @@
 				9EAB520F15C9553C008952FB /* NSDate+Utilities.m in Sources */,
 				9E92637115EF350D00393946 /* _Tag.m in Sources */,
 				9EDCC5CB160DBFA1003CB2BB /* Tag.m in Sources */,
-				9E9239DB162D4F9B00E265E6 /* TransformableTableViewGestureRecognizer.m in Sources */,
 				9E62E17C1A28D0DB0011EDC0 /* TagsViewController.swift in Sources */,
 				9E954D84164419F50022D5BE /* UIScrollView+AIPulling.m in Sources */,
 				9E66D0DD16553D6700339E99 /* State.m in Sources */,
