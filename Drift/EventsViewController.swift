@@ -24,6 +24,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     private let editingCommitLength: CGFloat = 60
     
     var stack: CoreDataStack?
+    let state: State = State()
     
     private var fetchedResultsController: NSFetchedResultsController?
     
@@ -36,8 +37,9 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let model = CoreDataModel(name: "CoreDataModel", bundle: bundle!)
         self.stack = CoreDataStack(model: model)
 
-        if let guid = State.instance().selectedEventGUID,
-            let event = Event.findFirstByAttribute(self.stack?.managedObjectContext, property: "guid", value: State.instance().selectedEventGUID),
+        if let guid = self.state.selectedEventGUID,
+            let selectedEventGUID = self.state.selectedEventGUID,
+            let event = Event.findFirstByAttribute(self.stack?.managedObjectContext, property: "guid", value: selectedEventGUID),
             let indexPath = self.fetchedResultsController?.indexPathForObject(event) {
                 self.tableView?.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
         }
@@ -141,7 +143,7 @@ extension EventsViewController_UITableViewDelegate {
         if let event = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? Event,
             let cell = tableView.cellForRowAtIndexPath(indexPath) as? EventCell {
                 cell.setSelected(true, animated: true)
-                State.instance().selectedEventGUID = event.guid
+                self.state.selectedEventGUID = event.guid
         }
     }
     
@@ -155,8 +157,8 @@ extension EventsViewController_UITableViewDelegate {
         if editingStyle == UITableViewCellEditingStyle.Delete {
             if let event = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? Event,
             let moc = self.stack?.managedObjectContext {
-                if let selectedEventGUID = State.instance().selectedEventGUID where event.guid == selectedEventGUID {
-                    State.instance().selectedEventGUID = nil
+                if let selectedEventGUID = self.state.selectedEventGUID where event.guid == selectedEventGUID {
+                    self.state.selectedEventGUID = nil
                 }
                 
                 moc.deleteObject(event)
@@ -196,8 +198,8 @@ extension EventsViewController_EventCellDelegate {
         if let indexPath = self.tableView?.indexPathForCell(cell),
             let event = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? Event,
             let moc = self.stack?.managedObjectContext {
-                if event.guid == State.instance().selectedEventGUID {
-                    State.instance().selectedEventGUID = nil
+                if event.guid == self.state.selectedEventGUID {
+                    self.state.selectedEventGUID = nil
                 }
             
                 moc.deleteObject(event)

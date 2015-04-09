@@ -36,6 +36,7 @@ class EventViewController: UIViewController {
     var shortStandaloneMonthSymbols: NSArray?
     var selectedEvent: Event?
     var stack: CoreDataStack?
+    let state: State = State()
     
     let transitionOperator = TransitionOperator()
     
@@ -58,7 +59,7 @@ class EventViewController: UIViewController {
         self.eventTimerControl?.addObserver(self, forKeyPath: "nowDate", options: .New, context: eventViewControllerContext)
         self.eventTimerControl?.addObserver(self, forKeyPath: "transforming", options: .New, context: eventViewControllerContext)
 
-        if let guid = State.instance().selectedEventGUID,
+        if let guid = self.state.selectedEventGUID,
             let event = Event.findFirstByAttribute(self.stack?.managedObjectContext, property: "guid", value: guid) as? Event {
                 self.selectedEvent = event
                 
@@ -365,7 +366,7 @@ class EventViewController: UIViewController {
                 self.selectedEvent = event
                 event.startDate = NSDate()
                     
-                State.instance().selectedEventGUID = event.guid
+                self.state.selectedEventGUID = event.guid
                     
                 self.eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
                     

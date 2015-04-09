@@ -18,7 +18,8 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     var userReorderingCells: Bool = false
     var stack: CoreDataStack?
-
+    let state: State = State()
+    
     private lazy var fetchedResultsController: NSFetchedResultsController = {
         if let moc = self.stack?.managedObjectContext {
             var fetchRequest = NSFetchRequest(entityName: "Tag")
@@ -64,7 +65,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.pullingView.addingHeight = 30
         tableView.pullingView.closingHeight = 60
 
-        if let guid = State.instance().selectedEventGUID,
+        if let guid = self.state.selectedEventGUID,
             let moc = self.stack?.managedObjectContext,
             let event = Event.findFirstByAttribute(moc, property: "guid", value: guid) as? Event,
             let indexPath = fetchedResultsController.indexPathForObject(event) {
@@ -107,7 +108,7 @@ extension TagsViewController_UITableViewDelegate {
                 cell.setSelected(cell.selected, animated: true)
             }
             
-            if let guid = State.instance().selectedEventGUID,
+            if let guid = self.state.selectedEventGUID,
                 let moc = self.stack?.managedObjectContext,
                 let event = Event.findFirstByAttribute(moc, property: "guid", value: guid) as? Event {
                     if let inTag = event.inTag where inTag.isEqual(tag) {
