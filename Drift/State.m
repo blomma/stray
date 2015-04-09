@@ -7,7 +7,6 @@
 //
 
 #import "State.h"
-#import "Tag.h"
 
 @interface State ()
 

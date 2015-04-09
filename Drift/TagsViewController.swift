@@ -110,7 +110,11 @@ extension TagsViewController_UITableViewDelegate {
             if let guid = State.instance().selectedEventGUID,
                 let moc = self.stack?.managedObjectContext,
                 let event = Event.findFirstByAttribute(moc, property: "guid", value: guid) as? Event {
-                    event.inTag = event.inTag.isEqual(Tag) ? nil : tag
+                    if let inTag = event.inTag where inTag.isEqual(tag) {
+                        event.inTag = nil
+                    } else {
+                        event.inTag = tag
+                    }
                     saveContextAndWait(moc)
             }
             

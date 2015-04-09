@@ -27,6 +27,8 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     private var fetchedResultsController: NSFetchedResultsController?
     
+    let calendar = NSCalendar.autoupdatingCurrentCalendar()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -77,8 +79,9 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func configureCell(cell: EventCell, atIndexPath: NSIndexPath) -> Void {
         if let event = self.fetchedResultsController?.objectAtIndexPath(atIndexPath) as? Event {
-            if event.inTag != nil {
-                let attributedString = NSAttributedString(string: event.inTag.name, attributes:
+            if let inTag = event.inTag,
+                let name = inTag.name {
+                let attributedString = NSAttributedString(string: name, attributes:
                     [NSFontAttributeName: UIFont(name: "Helvetica Neue", size: 14.0)!])
                 cell.tagButton.setAttributedTitle(attributedString, forState: .Normal)
             } else {
@@ -89,7 +92,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             // StartTime
             let startTimeFlags: NSCalendarUnit = .CalendarUnitMinute | .CalendarUnitHour | .CalendarUnitDay | .CalendarUnitMonth | .CalendarUnitYear
-            let startTimeComponents = NSDate.calendar().components(startTimeFlags, fromDate: event.startDate)
+            let startTimeComponents = self.calendar.components(startTimeFlags, fromDate: event.startDate)
             
             cell.eventStartTime.text = String(format: "%02ld:%02ld", startTimeComponents.hour, startTimeComponents.minute)
             cell.eventStartDay.text = String(format: "%02ld", startTimeComponents.day)
@@ -100,17 +103,17 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             
             // EventTime
-            let stopDate = event.stopDate != nil ? event.stopDate : NSDate()
+            let stopDate = event.stopDate != nil ? event.stopDate! : NSDate()
             let eventTimeFlags: NSCalendarUnit = .CalendarUnitMinute | .CalendarUnitHour
-            let eventTimeComponents = NSDate.calendar().components(eventTimeFlags, fromDate: event.startDate, toDate: stopDate, options: NSCalendarOptions(0))
+            let eventTimeComponents = self.calendar.components(eventTimeFlags, fromDate: event.startDate, toDate: stopDate, options: NSCalendarOptions(0))
             
             cell.eventTimeHours.text = String(format: "%02ld", eventTimeComponents.hour)
             cell.eventTimeMinutes.text = String(format: "%02ld", eventTimeComponents.minute)
             
             // StopTime
-            if event.stopDate != nil {
+            if let stopDate = event.stopDate {
                 let stopTimeFlags: NSCalendarUnit = .CalendarUnitMinute | .CalendarUnitHour | .CalendarUnitDay | .CalendarUnitMonth | .CalendarUnitYear
-                let stopTimeComponents = NSDate.calendar().components(stopTimeFlags, fromDate: event.stopDate)
+                let stopTimeComponents = self.calendar.components(stopTimeFlags, fromDate: stopDate)
                 
                 cell.eventStopTime.text = String(format: "%02ld:%02ld", stopTimeComponents.hour, stopTimeComponents.minute)
                 cell.eventStopDay.text = String(format: "%02ld", stopTimeComponents.day)

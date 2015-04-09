@@ -63,11 +63,6 @@ public class TagCell: UITableViewCell, UITextFieldDelegate {
             self.tagName?.textColor = UIColor(white: 0.267, alpha: 1)
         }
     }
-
-    // IBActions
-    @IBAction func deleteTag(sender: UIButton, forEvent event: UIEvent) {
-        self.delegate?.didDeleteTagCell(self)
-    }
 }
 
 typealias TextFieldDelegate = TagCell

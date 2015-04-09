@@ -39,6 +39,8 @@ class EventViewController: UIViewController {
     
     let transitionOperator = TransitionOperator()
     
+    let calendar = NSCalendar.autoupdatingCurrentCalendar()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -150,7 +152,7 @@ class EventViewController: UIViewController {
     private func updateStartLabelWithDate(date: NSDate) {
         let unitFlags: NSCalendarUnit = .CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitHour | .CalendarUnitMinute
 
-        let components: NSDateComponents = NSDate.calendar().components(unitFlags, fromDate: date)
+        let components: NSDateComponents = self.calendar.components(unitFlags, fromDate: date)
         
         self.eventStartTime?.text  = String(format: "%02ld:%02ld", components.hour, components.minute)
         self.eventStartDay?.text  = String(format: "%02ld", components.day)
@@ -163,7 +165,7 @@ class EventViewController: UIViewController {
     
     private func updateEventTimeFromDate(fromDate: NSDate, toDate: NSDate) {
         let unitFlags: NSCalendarUnit = .CalendarUnitHour | .CalendarUnitMinute
-        let components: NSDateComponents = NSDate.calendar().components(unitFlags, fromDate: fromDate, toDate: toDate, options: nil)
+        let components: NSDateComponents = self.calendar.components(unitFlags, fromDate: fromDate, toDate: toDate, options: nil)
         
         let hour: Int = abs(components.hour)
         let minute: Int = abs(components.minute)
@@ -180,7 +182,7 @@ class EventViewController: UIViewController {
     private func updateStopLabelWithDate(date: NSDate) {
         let unitFlags: NSCalendarUnit = .CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitHour | .CalendarUnitMinute
         
-        let components: NSDateComponents = NSDate.calendar().components(unitFlags, fromDate: date)
+        let components: NSDateComponents = self.calendar.components(unitFlags, fromDate: date)
         
         self.eventStopTime?.text  = String(format: "%02ld:%02ld", components.hour, components.minute)
         self.eventStopDay?.text  = String(format: "%02ld", components.day)
@@ -327,10 +329,12 @@ class EventViewController: UIViewController {
                             }
                         case .StartDateTransformingStop:
                             self.animateEventTransforming(transforming)
-                            self.selectedEvent?.startDate = self.eventTimerControl?.startDate
-                            
-                            if let moc = self.stack?.managedObjectContext {
-                                saveContextAndWait(moc)
+                            if let startDate = self.eventTimerControl?.startDate {
+                                self.selectedEvent?.startDate = startDate
+                                
+                                if let moc = self.stack?.managedObjectContext {
+                                    saveContextAndWait(moc)
+                                }
                             }
                         default:
                             break

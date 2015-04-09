@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 extension NSManagedObject {
     class func findFirstByAttribute(moc: NSManagedObjectContext?, property: String, value: AnyObject) -> NSManagedObject? {

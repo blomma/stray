@@ -92,9 +92,9 @@ public class CompatibilityMigration : NSObject {
                     if let uri = NSKeyedUnarchiver.unarchiveObjectWithData(uriData) as? NSURL,
                         let moc = self.stack?.managedObjectContext,
                         let objectID = moc.persistentStoreCoordinator?.managedObjectIDForURIRepresentation(uri),
-                        let tag = moc.objectWithID(objectID) as? Tag
-                    {
-                        eventsGroupedByDateFilter.insert(tag.guid)
+                        let tag = moc.objectWithID(objectID) as? Tag,
+                        let guid = tag.guid {
+                            eventsGroupedByDateFilter.insert(guid)
                     }
                 }
                 
@@ -119,9 +119,9 @@ public class CompatibilityMigration : NSObject {
                     if let uri = NSKeyedUnarchiver.unarchiveObjectWithData(uriData) as? NSURL,
                         let moc = self.stack?.managedObjectContext,
                         let objectID = moc.persistentStoreCoordinator?.managedObjectIDForURIRepresentation(uri),
-                        let tag = moc.objectWithID(objectID) as? Tag
-                    {
-                        eventsGroupedByStartDateFilter.insert(tag.guid)
+                        let tag = moc.objectWithID(objectID) as? Tag,
+                        let guid = tag.guid {
+                            eventsGroupedByStartDateFilter.insert(guid)
                     }
                 }
                 

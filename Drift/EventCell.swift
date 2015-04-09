@@ -14,8 +14,6 @@ import UIKit
 }
 
 public class EventCell: UITableViewCell {
-    @IBOutlet var backView: UIView!
-    
     @IBOutlet var frontView: UIView!
     @IBOutlet var frontViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet var frontViewTrailingConstraint: NSLayoutConstraint!
@@ -32,8 +30,6 @@ public class EventCell: UITableViewCell {
     @IBOutlet var eventStopDay: UILabel!
     @IBOutlet var eventStopMonth: UILabel!
     @IBOutlet var eventStopYear: UILabel!
-    
-    @IBOutlet var deleteButton: UIButton!
     
     @IBOutlet var rightSelected: UIView!
     @IBOutlet var tagButton: UIButton!
@@ -68,9 +64,5 @@ public class EventCell: UITableViewCell {
     // IBActions
     @IBAction func editTag(sender: UIButton, forEvent event: UIEvent) {
         self.delegate?.didPressTag(self)
-    }
-    
-    @IBAction func deleteEvent(sender: UIButton, forEvent event: UIEvent) {
-        self.delegate?.didDeleteEventCell(self)
     }
 }

@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "Event.h"
-
 @interface State : NSObject
 
 + (State *)instance;
