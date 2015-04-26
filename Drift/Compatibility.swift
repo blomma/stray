@@ -9,6 +9,6 @@
 import Foundation
 import CoreData
 
-class Compatibility: NSManagedObject {
+final class Compatibility: NSManagedObject {
     @NSManaged var level: NSNumber?
 }

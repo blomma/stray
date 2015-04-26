@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import JSQCoreDataKit
 
-public class CompatibilityMigration : NSObject {
+public class CompatibilityMigration  {
     var stack: CoreDataStack?
     
     let STRAY_COMPATIBILITY_LEVEL_KEY = "StrayCompatibilityLevel"
@@ -42,8 +42,7 @@ public class CompatibilityMigration : NSObject {
         }
     }
     
-    override init() {
-        super.init()
+    init() {
         
         let bundle = NSBundle(identifier: "com.artsoftheinsane.Drift")
         let model = CoreDataModel(name: "CoreDataModel", bundle: bundle!)
