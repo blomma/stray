@@ -137,16 +137,28 @@ public class CompatibilityMigration  {
     private func migrateCoreData() {
         self.migrateToCompatibilityLevel(1, fromLevel: self.coreDataCompatibilityLevel) { () -> () in
             if let moc = self.stack?.managedObjectContext,
-                let events = Event.findAll(moc) as? [Event] {
-                    for event in events {
-                        event.guid = NSProcessInfo.processInfo().globallyUniqueString
+                let entity = NSEntityDescription.entityForName(Event.entityName(), inManagedObjectContext: moc) {
+                    
+                    let request = FetchRequest<Event>(entity: entity)
+                    let result = fetch(request: request, inContext: moc)
+
+                    if result.success {
+                        for event in result.objects {
+                            event.guid = NSProcessInfo.processInfo().globallyUniqueString
+                        }
                     }
             }
             
             if let moc = self.stack?.managedObjectContext,
-                let tags = Tag.findAll(moc) as? [Tag] {
-                    for tag in tags {
-                        tag.guid = NSProcessInfo.processInfo().globallyUniqueString
+                let entity = NSEntityDescription.entityForName(Tag.entityName(), inManagedObjectContext: moc) {
+                    
+                    let request = FetchRequest<Tag>(entity: entity)
+                    let result = fetch(request: request, inContext: moc)
+
+                    if result.success {
+                        for tag in result.objects {
+                            tag.guid = NSProcessInfo.processInfo().globallyUniqueString
+                        }
                     }
             }
         }

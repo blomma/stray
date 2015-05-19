@@ -8,46 +8,36 @@
 
 import Foundation
 import CoreData
+import JSQCoreDataKit
+
+public struct FindResult <T: NSManagedObject> {
+    public let success: Bool
+    public let objects: [T]
+    public let error: NSError?
+}
+
+public func findByAttribute<T: NSManagedObject>(attribute: String, withValue value: AnyObject, inContext context: NSManagedObjectContext, withRequest request: FetchRequest<T>) -> FindResult<T> {
+    
+    var error: NSError?
+    var results: [AnyObject]?
+    
+    request.predicate = NSPredicate(format: "%K = %@", attribute, value as! NSObject)
+    context.performBlockAndWait { () -> Void in
+        results = context.executeFetchRequest(request, error: &error)
+    }
+    
+    if let results = results {
+        return FindResult(success: true, objects: results as! [T], error: error)
+    }
+    
+    return FindResult(success: false, objects: [], error: error)
+}
 
 extension NSManagedObject {
-    class func findFirstByAttribute(moc: NSManagedObjectContext?, property: String, value: AnyObject) -> NSManagedObject? {
-        if let entityName = self.description().componentsSeparatedByString(".").last {
-            var fetchRequest = NSFetchRequest(entityName: entityName)
-            fetchRequest.predicate = NSPredicate(format: "%K = %@", property, value as! NSObject)
-            
-            var error: NSError?
-            if let result = moc?.executeFetchRequest(fetchRequest, error: &error) {
-                if result.count == 0 {
-                    return nil
-                }
-                
-                return result[0] as? NSManagedObject
-            }
-        }
+    class func entityName() -> String {
+        let fullClassName = NSStringFromClass(object_getClass(self))
+        let nameComponents = split(fullClassName) { $0 == "." }
         
-        return  nil
+        return last(nameComponents)!
     }
-    
-    class func findAll(moc: NSManagedObjectContext?) -> [NSManagedObject]? {
-        
-        if let entityName = self.description().componentsSeparatedByString(".").last {
-            var fetchRequest = NSFetchRequest(entityName: entityName)
-            
-            var error: NSError?
-            if let result = moc?.executeFetchRequest(fetchRequest, error: &error) {
-                
-                return result as? [NSManagedObject]
-            }
-        }
-        
-        return  nil
-    }
-    
-    class func createEntity(moc: NSManagedObjectContext?) -> NSManagedObject? {
-        if let entityName = self.description().componentsSeparatedByString(".").last {
-            return NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: moc!) as? NSManagedObject
-        }
-        
-        return nil
-    }    
 }

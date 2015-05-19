@@ -9,6 +9,16 @@
 import Foundation
 import CoreData
 
-final class Compatibility: NSManagedObject {
+public final class Compatibility: NSManagedObject {
     @NSManaged var level: NSNumber?
+    
+    convenience init(_ context: NSManagedObjectContext,
+        level: NSNumber? = nil) {
+            let name = self.dynamicType.entityName()
+            let entity = NSEntityDescription.entityForName(name, inManagedObjectContext: context)!
+            
+            self.init(entity: entity, insertIntoManagedObjectContext: context)
+            
+            self.level = level
+    }
 }

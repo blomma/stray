@@ -38,10 +38,16 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.stack = CoreDataStack(model: model)
 
         if let guid = self.state.selectedEventGUID,
-            let selectedEventGUID = self.state.selectedEventGUID,
-            let event = Event.findFirstByAttribute(self.stack?.managedObjectContext, property: "guid", value: selectedEventGUID),
-            let indexPath = self.fetchedResultsController?.indexPathForObject(event) {
-                self.tableView?.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
+            let moc = self.stack?.managedObjectContext,
+            let entity = NSEntityDescription.entityForName(Event.entityName(), inManagedObjectContext: moc) {
+                
+                let request = FetchRequest<Event>(entity: entity)
+                let result = findByAttribute("guid", withValue: guid, inContext: moc, withRequest: request)
+                
+                if result.success,
+                    let indexPath = self.fetchedResultsController?.indexPathForObject(result.objects[0]) {
+                        self.tableView?.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
+                }
         }
     }
 

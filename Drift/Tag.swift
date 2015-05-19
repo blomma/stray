@@ -9,13 +9,25 @@
 import Foundation
 import CoreData
 
-final class Tag: NSManagedObject {
+public final class Tag: NSManagedObject {
     @NSManaged var guid: String?
     @NSManaged var name: String?
     @NSManaged var sortIndex: NSNumber?
     @NSManaged var heldByEvents: NSSet?
 
-    override func awakeFromInsert() {
-        self.guid = NSUUID().UUIDString
+    convenience init(_ context: NSManagedObjectContext,
+        guid: String? = NSUUID().UUIDString,
+        name: String? = nil,
+        sortIndex: NSNumber? = nil,
+        heldByEvents: NSSet? = nil) {
+            let name = self.dynamicType.entityName()
+            let entity = NSEntityDescription.entityForName(name, inManagedObjectContext: context)!
+            
+            self.init(entity: entity, insertIntoManagedObjectContext: context)
+            
+            self.guid = guid
+            self.name = name
+            self.sortIndex = sortIndex
+            self.heldByEvents = heldByEvents
     }
 }

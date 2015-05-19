@@ -22,7 +22,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     private lazy var fetchedResultsController: NSFetchedResultsController = {
         if let moc = self.stack?.managedObjectContext {
-            var fetchRequest = NSFetchRequest(entityName: "Tag")
+            var fetchRequest = NSFetchRequest(entityName: Tag.entityName())
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: true)]
             fetchRequest.fetchBatchSize = 20
             
@@ -54,7 +54,9 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
                 if previousState == AIPullingState.PullingAdd {
                     var popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000)
                     dispatch_after(popTime, dispatch_get_main_queue(), { () -> Void in
-                        let _ = Tag.createEntity(self.stack?.managedObjectContext)
+                        if let moc = self.stack?.managedObjectContext {
+                            let _ = Tag(moc)
+                        }
                     })
                 } else if (previousState == AIPullingState.PullingAdd || previousState == AIPullingState.PullingClose) {
                     let _ = self.didDismiss?()
@@ -67,9 +69,14 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         if let guid = self.state.selectedEventGUID,
             let moc = self.stack?.managedObjectContext,
-            let event = Event.findFirstByAttribute(moc, property: "guid", value: guid) as? Event,
-            let indexPath = fetchedResultsController.indexPathForObject(event) {
-                tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
+            let entity = NSEntityDescription.entityForName(Event.entityName(), inManagedObjectContext: moc) {
+                let request = FetchRequest<Event>(entity: entity)
+                let result = findByAttribute("guid", withValue: guid, inContext: moc, withRequest: request)
+                
+                if result.success,
+                    let indexPath = fetchedResultsController.indexPathForObject(result.objects[0]) {
+                        tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
+                }
         }
     }
 
@@ -110,13 +117,20 @@ extension TagsViewController_UITableViewDelegate {
             
             if let guid = self.state.selectedEventGUID,
                 let moc = self.stack?.managedObjectContext,
-                let event = Event.findFirstByAttribute(moc, property: "guid", value: guid) as? Event {
-                    if let inTag = event.inTag where inTag.isEqual(tag) {
-                        event.inTag = nil
-                    } else {
-                        event.inTag = tag
+                let entity = NSEntityDescription.entityForName(Event.entityName(), inManagedObjectContext: moc) {
+            
+                    let request = FetchRequest<Event>(entity: entity)
+                    let result = findByAttribute("guid", withValue: guid, inContext: moc, withRequest: request)
+            
+                    if result.success {
+                        let event = result.objects[0]
+                        if let inTag = event.inTag where inTag.isEqual(tag) {
+                            event.inTag = nil
+                        } else {
+                            event.inTag = tag
+                        }
+                        saveContextAndWait(moc)
                     }
-                    saveContextAndWait(moc)
             }
             
             self.dismissViewControllerAnimated(true, completion: nil)

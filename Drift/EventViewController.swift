@@ -60,20 +60,27 @@ class EventViewController: UIViewController {
         self.eventTimerControl?.addObserver(self, forKeyPath: "transforming", options: .New, context: eventViewControllerContext)
 
         if let guid = self.state.selectedEventGUID,
-            let event = Event.findFirstByAttribute(self.stack?.managedObjectContext, property: "guid", value: guid) as? Event {
-                self.selectedEvent = event
-                
-                self.eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
-                
-                if event.isActive() {
-                    self.toggleStartStopButton?.setTitle("STOP", forState: .Normal)
-                    self.animateStartEvent()
+            let moc = self.stack?.managedObjectContext,
+            let entity = NSEntityDescription.entityForName(Event.entityName(), inManagedObjectContext: moc) {
+                let request = FetchRequest<Event>(entity: entity)
+                let result = findByAttribute("guid", withValue: guid, inContext: moc, withRequest: request)
+            
+                if result.success {
+                    let event = result.objects[0]
+                    selectedEvent = event
+                        
+                    self.eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
+                        
+                    if event.isActive() {
+                        self.toggleStartStopButton?.setTitle("STOP", forState: .Normal)
+                        self.animateStartEvent()
+                    } else {
+                        self.toggleStartStopButton?.setTitle("START", forState: .Normal)
+                        self.animateStopEvent()
+                    }
                 } else {
-                    self.toggleStartStopButton?.setTitle("START", forState: .Normal)
-                    self.animateStopEvent()
+                    println("*** ERROR: [\(__LINE__)] \(__FUNCTION__) Error while executing fetch request: \(result.error)")
                 }
-                
-                self.selectedEvent = event
         } else {
             self.selectedEvent = nil
         }
@@ -361,10 +368,9 @@ class EventViewController: UIViewController {
             
             self.toggleStartStopButton?.setTitle("START", forState: .Normal)
             self.animateStopEvent()
-        } else if let moc = self.stack?.managedObjectContext,
-            let event = Event.createEntity(moc) as? Event {
+        } else if let moc = self.stack?.managedObjectContext {
+                let event = Event(moc, startDate: NSDate())
                 self.selectedEvent = event
-                event.startDate = NSDate()
                     
                 self.state.selectedEventGUID = event.guid
                     
