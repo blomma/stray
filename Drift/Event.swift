@@ -33,8 +33,4 @@ public final class Event: NSManagedObject {
             self.stopDate = stopDate
             self.inTag = inTag
     }
-
-    func isActive() -> Bool {
-        return self.stopDate != nil
-    }
 }

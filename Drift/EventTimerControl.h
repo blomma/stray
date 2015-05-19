@@ -17,7 +17,17 @@ typedef NS_ENUM(NSInteger, EventTimerTransformingEnum) {
     EventTimerNowDateTransformingStop
 };
 
+@protocol EventTimerControlDelegate <NSObject>
+
+- (void)startDateDidUpdate:(NSDate *)startDate;
+- (void)nowDateDidUpdate:(NSDate *)nowDate;
+- (void)transformingDidUpdate:(EventTimerTransformingEnum)transform;
+
+@end
+
 @interface EventTimerControl : UIControl
+
+@property (weak, nonatomic) id <EventTimerControlDelegate> delegate;
 
 @property (nonatomic) NSDate *startDate;
 @property (nonatomic) NSDate *nowDate;

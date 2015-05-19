@@ -10,9 +10,7 @@ import UIKit
 import CoreData
 import JSQCoreDataKit
 
-let eventViewControllerContext = UnsafeMutablePointer<()>()
-
-class EventViewController: UIViewController {
+class EventViewController: UIViewController, EventTimerControlDelegate {
     // MARK: IBOutlet
     @IBOutlet var eventTimerControl: EventTimerControl?
     @IBOutlet var toggleStartStopButton: UIButton?
@@ -47,20 +45,18 @@ class EventViewController: UIViewController {
         
         let bundle = NSBundle(identifier: "com.artsoftheinsane.Drift")
         let model = CoreDataModel(name: "CoreDataModel", bundle: bundle!)
-        self.stack = CoreDataStack(model: model)
+        stack = CoreDataStack(model: model)
 
-        self.shortStandaloneMonthSymbols = NSDateFormatter().shortStandaloneMonthSymbols
+        shortStandaloneMonthSymbols = NSDateFormatter().shortStandaloneMonthSymbols
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.eventTimerControl?.addObserver(self, forKeyPath: "startDate", options: .New, context: eventViewControllerContext)
-        self.eventTimerControl?.addObserver(self, forKeyPath: "nowDate", options: .New, context: eventViewControllerContext)
-        self.eventTimerControl?.addObserver(self, forKeyPath: "transforming", options: .New, context: eventViewControllerContext)
-
-        if let guid = self.state.selectedEventGUID,
-            let moc = self.stack?.managedObjectContext,
+        eventTimerControl?.delegate = self
+        
+        if let guid = state.selectedEventGUID,
+            let moc = stack?.managedObjectContext,
             let entity = NSEntityDescription.entityForName(Event.entityName(), inManagedObjectContext: moc) {
                 let request = FetchRequest<Event>(entity: entity)
                 let result = findByAttribute("guid", withValue: guid, inContext: moc, withRequest: request)
@@ -69,43 +65,41 @@ class EventViewController: UIViewController {
                     let event = result.objects[0]
                     selectedEvent = event
                         
-                    self.eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
+                    eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
                         
-                    if event.isActive() {
-                        self.toggleStartStopButton?.setTitle("STOP", forState: .Normal)
-                        self.animateStartEvent()
+                    if let _ = event.stopDate {
+                        toggleStartStopButton?.setTitle("START", forState: .Normal)
+                        animateStopEvent()
                     } else {
-                        self.toggleStartStopButton?.setTitle("START", forState: .Normal)
-                        self.animateStopEvent()
+                        toggleStartStopButton?.setTitle("STOP", forState: .Normal)
+                        animateStartEvent()
                     }
                 } else {
                     println("*** ERROR: [\(__LINE__)] \(__FUNCTION__) Error while executing fetch request: \(result.error)")
                 }
         } else {
-            self.selectedEvent = nil
+            selectedEvent = nil
         }
         
-        if let name = self.selectedEvent?.inTag?.name,
+        if let name = selectedEvent?.inTag?.name,
             let font = UIFont(name: "Helvetica Neue", size: 14) {
                 let attriString = NSAttributedString(string:name, attributes:
                     [NSFontAttributeName: font])
             
-                self.tag?.setAttributedTitle(attriString, forState: .Normal)
+                tag?.setAttributedTitle(attriString, forState: .Normal)
         } else if let font = UIFont(name: "FontAwesome", size: 20) {
             let attriString = NSAttributedString(string:"\u{f02b}", attributes:
                 [NSFontAttributeName: font])
             
-            self.tag?.setAttributedTitle(attriString, forState: .Normal)
+            tag?.setAttributedTitle(attriString, forState: .Normal)
         }
     }
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        self.eventTimerControl?.paus()
-        self.eventTimerControl?.removeObserver(self, forKeyPath: "startDate", context: eventViewControllerContext)
-        self.eventTimerControl?.removeObserver(self, forKeyPath: "nowDate", context: eventViewControllerContext)
-        self.eventTimerControl?.removeObserver(self, forKeyPath: "transforming", context: eventViewControllerContext)
+        eventTimerControl?.delegate = nil
+        eventTimerControl?.stop()
     }
     
 //    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -114,13 +108,13 @@ class EventViewController: UIViewController {
 //            let controller = segue.destinationViewController as? TagsViewController {
 //                controller.didDismiss = {
 //                    dispatch_async(dispatch_get_main_queue(), { [unowned self] in
-//                        self.dismissViewControllerAnimated(true, completion: nil)
+//                        dismissViewControllerAnimated(true, completion: nil)
 //                        })
 //                }
 //        } else
 //    if segue.identifier == "segueToMenuFromEvent",
 //            let controller = segue.destinationViewController as? UIViewController {
-//                controller.transitioningDelegate = self.transitionOperator
+//                controller.transitioningDelegate = transitionOperator
 //        }
 //    }
     
@@ -128,7 +122,7 @@ class EventViewController: UIViewController {
         var pathFrame: CGRect = CGRectMake(-CGRectGetMidY(button.bounds), -CGRectGetMidY(button.bounds), button.bounds.size.height, button.bounds.size.height)
         var path: UIBezierPath = UIBezierPath(roundedRect: pathFrame, cornerRadius:pathFrame.size.height / 2)
         
-        var shapePosition: CGPoint = self.view.convertPoint(button.center, fromView:button.superview)
+        var shapePosition: CGPoint = view.convertPoint(button.center, fromView:button.superview)
         
         var circleShape: CAShapeLayer = CAShapeLayer.new()
         circleShape.path        = path.CGPath;
@@ -138,7 +132,7 @@ class EventViewController: UIViewController {
         circleShape.strokeColor = button.titleLabel?.textColor.CGColor;
         circleShape.lineWidth   = 2;
         
-        self.view.layer.addSublayer(circleShape)
+        view.layer.addSublayer(circleShape)
         
         var scaleAnimation: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
         scaleAnimation.fromValue = NSValue(CATransform3D: CATransform3DIdentity)
@@ -160,20 +154,20 @@ class EventViewController: UIViewController {
     private func updateStartLabelWithDate(date: NSDate) {
         let unitFlags: NSCalendarUnit = .CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitHour | .CalendarUnitMinute
 
-        let components: NSDateComponents = self.calendar.components(unitFlags, fromDate: date)
+        let components: NSDateComponents = calendar.components(unitFlags, fromDate: date)
         
-        self.eventStartTime?.text  = String(format: "%02ld:%02ld", components.hour, components.minute)
-        self.eventStartDay?.text  = String(format: "%02ld", components.day)
-        self.eventStartYear?.text  = String(format: "%04ld", components.year)
+        eventStartTime?.text  = String(format: "%02ld:%02ld", components.hour, components.minute)
+        eventStartDay?.text  = String(format: "%02ld", components.day)
+        eventStartYear?.text  = String(format: "%04ld", components.year)
         let index = components.month - 1
-        if let month = self.shortStandaloneMonthSymbols?.objectAtIndex(index) as? String {
-            self.eventStartMonth?.text  = month
+        if let month = shortStandaloneMonthSymbols?.objectAtIndex(index) as? String {
+            eventStartMonth?.text  = month
         }
     }
     
     private func updateEventTimeFromDate(fromDate: NSDate, toDate: NSDate) {
         let unitFlags: NSCalendarUnit = .CalendarUnitHour | .CalendarUnitMinute
-        let components: NSDateComponents = self.calendar.components(unitFlags, fromDate: fromDate, toDate: toDate, options: nil)
+        let components: NSDateComponents = calendar.components(unitFlags, fromDate: fromDate, toDate: toDate, options: nil)
         
         let hour: Int = abs(components.hour)
         let minute: Int = abs(components.minute)
@@ -184,20 +178,20 @@ class EventViewController: UIViewController {
         }
         
         self.eventTimeHours?.text   = eventTimeHours
-        self.eventTimeMinutes?.text = String(format:"%02ld", minute)
+        eventTimeMinutes?.text = String(format:"%02ld", minute)
     }
     
     private func updateStopLabelWithDate(date: NSDate) {
         let unitFlags: NSCalendarUnit = .CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitHour | .CalendarUnitMinute
         
-        let components: NSDateComponents = self.calendar.components(unitFlags, fromDate: date)
+        let components: NSDateComponents = calendar.components(unitFlags, fromDate: date)
         
-        self.eventStopTime?.text  = String(format: "%02ld:%02ld", components.hour, components.minute)
-        self.eventStopDay?.text  = String(format: "%02ld", components.day)
-        self.eventStopYear?.text  = String(format: "%04ld", components.year)
+        eventStopTime?.text  = String(format: "%02ld:%02ld", components.hour, components.minute)
+        eventStopDay?.text  = String(format: "%02ld", components.day)
+        eventStopYear?.text  = String(format: "%04ld", components.year)
         let index = components.month - 1
-        if let month = self.shortStandaloneMonthSymbols?.objectAtIndex(index) as? String {
-            self.eventStopMonth?.text  = month
+        if let month = shortStandaloneMonthSymbols?.objectAtIndex(index) as? String {
+            eventStopMonth?.text  = month
         }
     }
     
@@ -231,7 +225,6 @@ class EventViewController: UIViewController {
     
     private func animateEventTransforming(eventTimerTransformingEnum: EventTimerTransformingEnum) {
         UIView.animateWithDuration(0.3, delay: 0.3, options: .CurveEaseIn, animations: { () -> Void in
-            
             var eventStartAlpha: CGFloat = 1
             var eventStopAlpha: CGFloat = 1
             var eventTimeAlpha: CGFloat = 1
@@ -248,12 +241,12 @@ class EventViewController: UIViewController {
                 
                 eventTimeAlpha = 0.2
             case .StartDateTransformingStop:
-                if let active = self.selectedEvent?.isActive() {
-                    eventStartAlpha = 1
-                    eventStopAlpha = 0.2
-                } else {
+                if let _ = self.selectedEvent?.stopDate {
                     eventStartAlpha = 0.2
                     eventStopAlpha = 1
+                } else {
+                    eventStartAlpha = 1
+                    eventStopAlpha = 0.2
                 }
                 eventStartMonthYearAlpha = 1
                 eventStopMonthYearAlpha = 1
@@ -268,12 +261,12 @@ class EventViewController: UIViewController {
                 
                 eventTimeAlpha = 0.2
             case .NowDateTransformingStop:
-                if let active = self.selectedEvent?.isActive() {
-                    eventStartAlpha = 1
-                    eventStopAlpha = 0.2
-                } else {
+                if let _ = self.selectedEvent?.stopDate {
                     eventStartAlpha = 0.2
                     eventStopAlpha = 1
+                } else {
+                    eventStartAlpha = 1
+                    eventStopAlpha = 0.2
                 }
                 
                 eventStartMonthYearAlpha = 1
@@ -300,98 +293,91 @@ class EventViewController: UIViewController {
             }, completion: nil)
     }
     
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        if context == eventViewControllerContext,
-            let rawValue = change[NSKeyValueChangeKindKey] as? UInt,
-            let changeKindKey = NSKeyValueChange(rawValue: rawValue) where changeKindKey == .Setting {
-                
-                switch keyPath {
-                case "startDate":
-                    if let newValue = change[NSKeyValueChangeNewKey] as? NSDate {
-                        self.updateStartLabelWithDate(newValue)
-                        
-                        if let toDate = self.eventTimerControl?.nowDate {
-                            self.updateEventTimeFromDate(newValue, toDate: toDate)
-                        }
-                    }
-                case "nowDate":
-                    if let newValue = change[NSKeyValueChangeNewKey] as? NSDate {
-                        self.updateStopLabelWithDate(newValue)
-                        
-                        if let fromDate = self.eventTimerControl?.startDate {
-                            self.updateEventTimeFromDate(fromDate, toDate: newValue)
-                        }
-                    }
-                case "transforming":
-                    if let transforming = change[NSKeyValueChangeNewKey] as? EventTimerTransformingEnum {
-                        
-                        switch transforming {
-                        case .NowDateTransformingStart, .StartDateTransformingStart:
-                            self.animateEventTransforming(transforming)
-                        case .NowDateTransformingStop:
-                            self.animateEventTransforming(transforming)
-                            self.selectedEvent?.stopDate = self.eventTimerControl?.nowDate
-                            
-                            if let moc = self.stack?.managedObjectContext {
-                                saveContextAndWait(moc)
-                            }
-                        case .StartDateTransformingStop:
-                            self.animateEventTransforming(transforming)
-                            if let startDate = self.eventTimerControl?.startDate {
-                                self.selectedEvent?.startDate = startDate
-                                
-                                if let moc = self.stack?.managedObjectContext {
-                                    saveContextAndWait(moc)
-                                }
-                            }
-                        default:
-                            break
-                        }
-                    }
-                default:
-                    break
-                }
-        }
-    }
-    
     @IBAction func showTags(sender: UIButton) {
-        if self.selectedEvent != nil {
-            self.animateButton(sender)
-            self.performSegueWithIdentifier("segueToTagsFromEvent", sender: self)
+        if selectedEvent != nil {
+            animateButton(sender)
+            performSegueWithIdentifier("segueToTagsFromEvent", sender: self)
         }
     }
     
     @IBAction func toggleEventTouchUpInside(sender: UIButton) {
-        if let isActive = self.selectedEvent?.isActive() where isActive == true {
-            self.eventTimerControl?.stop()
-            self.selectedEvent?.stopDate = self.eventTimerControl?.nowDate
-            
-            self.toggleStartStopButton?.setTitle("START", forState: .Normal)
-            self.animateStopEvent()
-        } else if let moc = self.stack?.managedObjectContext {
+        if let _ = selectedEvent?.stopDate {
+            if let moc = stack?.managedObjectContext {
                 let event = Event(moc, startDate: NSDate())
-                self.selectedEvent = event
-                    
-                self.state.selectedEventGUID = event.guid
-                    
-                self.eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
-                    
-                self.toggleStartStopButton?.setTitle("STOP", forState: .Normal)
-                    
-                self.animateStartEvent()
-                    
+                selectedEvent = event
+                
+                state.selectedEventGUID = event.guid
+                
+                eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
+                
+                toggleStartStopButton?.setTitle("STOP", forState: .Normal)
+                
+                animateStartEvent()
+                
                 if let font = UIFont(name: "FontAwesome", size: 20) {
                     let attriString = NSAttributedString(string:"\u{f02b}", attributes:
                         [NSFontAttributeName: font])
-                        
-                    self.tag?.setAttributedTitle(attriString, forState: .Normal)
+                    
+                    tag?.setAttributedTitle(attriString, forState: .Normal)
                 }
+            }
+        } else {
+            eventTimerControl?.stop()
+            selectedEvent?.stopDate = eventTimerControl?.nowDate
+            
+            toggleStartStopButton?.setTitle("START", forState: .Normal)
+            animateStopEvent()
         }
         
-        self.animateButton(sender)
+        animateButton(sender)
         
-        if let moc = self.stack?.managedObjectContext {
+        if let moc = stack?.managedObjectContext {
             saveContextAndWait(moc)
+        }
+    }
+}
+
+// MARK: - EventTimerControlDelegate
+typealias EventViewController_EventTimerControlDelegate = EventViewController
+extension EventViewController_EventTimerControlDelegate {
+    func startDateDidUpdate(startDate: NSDate!) {
+            updateStartLabelWithDate(startDate)
+            
+            if let toDate = eventTimerControl?.nowDate {
+                updateEventTimeFromDate(startDate, toDate: toDate)
+            }
+    }
+    
+    func nowDateDidUpdate(nowDate: NSDate!) {
+        updateStopLabelWithDate(nowDate)
+            
+        if let fromDate = eventTimerControl?.startDate {
+            updateEventTimeFromDate(fromDate, toDate: nowDate)
+        }
+    }
+    
+    func transformingDidUpdate(transform: EventTimerTransformingEnum) {
+        switch transform {
+        case .NowDateTransformingStart, .StartDateTransformingStart:
+            animateEventTransforming(transform)
+        case .NowDateTransformingStop:
+            animateEventTransforming(transform)
+            selectedEvent?.stopDate = eventTimerControl?.nowDate
+            
+            if let moc = stack?.managedObjectContext {
+                saveContextAndWait(moc)
+            }
+        case .StartDateTransformingStop:
+            animateEventTransforming(transform)
+            if let startDate = eventTimerControl?.startDate {
+                selectedEvent?.startDate = startDate
+                
+                if let moc = stack?.managedObjectContext {
+                    saveContextAndWait(moc)
+                }
+            }
+        default:
+            break
         }
     }
 }
