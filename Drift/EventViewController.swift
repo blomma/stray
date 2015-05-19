@@ -31,7 +31,6 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
     @IBOutlet var tag: UIButton?
     
     // MARK: Private properties
-    var shortStandaloneMonthSymbols: NSArray?
     var selectedEvent: Event?
     var stack: CoreDataStack?
     let state: State = State()
@@ -39,15 +38,13 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
     let transitionOperator = TransitionOperator()
     
     let calendar = NSCalendar.autoupdatingCurrentCalendar()
+    let shortStandaloneMonthSymbols: NSArray = NSDateFormatter().shortStandaloneMonthSymbols
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let bundle = NSBundle(identifier: "com.artsoftheinsane.Drift")
-        let model = CoreDataModel(name: "CoreDataModel", bundle: bundle!)
+        let model = CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle())
         stack = CoreDataStack(model: model)
-
-        shortStandaloneMonthSymbols = NSDateFormatter().shortStandaloneMonthSymbols
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -160,7 +157,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
         eventStartDay?.text  = String(format: "%02ld", components.day)
         eventStartYear?.text  = String(format: "%04ld", components.year)
         let index = components.month - 1
-        if let month = shortStandaloneMonthSymbols?.objectAtIndex(index) as? String {
+        if let month = shortStandaloneMonthSymbols.objectAtIndex(index) as? String {
             eventStartMonth?.text  = month
         }
     }
@@ -190,7 +187,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
         eventStopDay?.text  = String(format: "%02ld", components.day)
         eventStopYear?.text  = String(format: "%04ld", components.year)
         let index = components.month - 1
-        if let month = shortStandaloneMonthSymbols?.objectAtIndex(index) as? String {
+        if let month = shortStandaloneMonthSymbols.objectAtIndex(index) as? String {
             eventStopMonth?.text  = month
         }
     }

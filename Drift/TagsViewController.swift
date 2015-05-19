@@ -45,8 +45,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let bundle = NSBundle(identifier: "com.artsoftheinsane.Drift")
-        let model = CoreDataModel(name: "CoreDataModel", bundle: bundle!)
+        let model = CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle())
         self.stack = CoreDataStack(model: model)
 
         tableView.addPullingWithActionHandler { (state: AIPullingState, previousState: AIPullingState, height: CGFloat) -> Void in

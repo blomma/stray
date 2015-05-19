@@ -33,8 +33,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let bundle = NSBundle(identifier: "com.artsoftheinsane.Drift")
-        let model = CoreDataModel(name: "CoreDataModel", bundle: bundle!)
+        let model = CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle())
         self.stack = CoreDataStack(model: model)
 
         if let guid = self.state.selectedEventGUID,
