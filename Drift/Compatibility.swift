@@ -14,7 +14,7 @@ public final class Compatibility: NSManagedObject {
     
     convenience init(_ context: NSManagedObjectContext,
         level: NSNumber? = nil) {
-            let name = self.dynamicType.entityName()
+            let name = self.dynamicType.entityName
             let entity = NSEntityDescription.entityForName(name, inManagedObjectContext: context)!
             
             self.init(entity: entity, insertIntoManagedObjectContext: context)

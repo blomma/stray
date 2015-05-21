@@ -22,7 +22,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     private lazy var fetchedResultsController: NSFetchedResultsController = {
         if let moc = self.stack?.managedObjectContext {
-            var fetchRequest = NSFetchRequest(entityName: Tag.entityName())
+            var fetchRequest = NSFetchRequest(entityName: Tag.entityName)
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: true)]
             fetchRequest.fetchBatchSize = 20
             
@@ -68,9 +68,9 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         if let guid = self.state.selectedEventGUID,
             let moc = self.stack?.managedObjectContext,
-            let entity = NSEntityDescription.entityForName(Event.entityName(), inManagedObjectContext: moc) {
-                let request = FetchRequest<Event>(entity: entity)
-                let result = findByAttribute("guid", withValue: guid, inContext: moc, withRequest: request)
+            let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: moc) {
+                let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
+                let result = fetch(request)
                 
                 if result.success,
                     let indexPath = fetchedResultsController.indexPathForObject(result.objects[0]) {
@@ -116,10 +116,10 @@ extension TagsViewController_UITableViewDelegate {
             
             if let guid = self.state.selectedEventGUID,
                 let moc = self.stack?.managedObjectContext,
-                let entity = NSEntityDescription.entityForName(Event.entityName(), inManagedObjectContext: moc) {
+                let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: moc) {
             
-                    let request = FetchRequest<Event>(entity: entity)
-                    let result = findByAttribute("guid", withValue: guid, inContext: moc, withRequest: request)
+                    let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
+                    let result = fetch(request)
             
                     if result.success {
                         let event = result.objects[0]

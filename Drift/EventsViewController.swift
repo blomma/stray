@@ -38,10 +38,10 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         if let guid = self.state.selectedEventGUID,
             let moc = self.stack?.managedObjectContext,
-            let entity = NSEntityDescription.entityForName(Event.entityName(), inManagedObjectContext: moc) {
+            let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: moc) {
                 
-                let request = FetchRequest<Event>(entity: entity)
-                let result = findByAttribute("guid", withValue: guid, inContext: moc, withRequest: request)
+                let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
+                let result = fetch(request)
                 
                 if result.success,
                     let indexPath = self.fetchedResultsController?.indexPathForObject(result.objects[0]) {

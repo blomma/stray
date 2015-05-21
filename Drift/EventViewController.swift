@@ -53,10 +53,9 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
         eventTimerControl?.delegate = self
         
         if let guid = state.selectedEventGUID,
-            let moc = stack?.managedObjectContext,
-            let entity = NSEntityDescription.entityForName(Event.entityName(), inManagedObjectContext: moc) {
-                let request = FetchRequest<Event>(entity: entity)
-                let result = findByAttribute("guid", withValue: guid, inContext: moc, withRequest: request)
+            let moc = stack?.managedObjectContext {
+                let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
+                let result = fetch(request)
             
                 if result.success {
                     let event = result.objects[0]

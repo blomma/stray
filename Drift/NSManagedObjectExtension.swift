@@ -8,36 +8,53 @@
 
 import Foundation
 import CoreData
-import JSQCoreDataKit
 
-public struct FindResult <T: NSManagedObject> {
+public struct FetchResult <T: NSManagedObject> {
     public let success: Bool
     public let objects: [T]
     public let error: NSError?
 }
 
-public func findByAttribute<T: NSManagedObject>(attribute: String, withValue value: AnyObject, inContext context: NSManagedObjectContext, withRequest request: FetchRequest<T>) -> FindResult<T> {
+public class FetchRequest <T: NSManagedObject>: NSFetchRequest {
+    var moc: NSManagedObjectContext
     
+    public init(moc: NSManagedObjectContext) {
+        self.moc = moc
+        
+        super.init()
+        self.entity = NSEntityDescription.entityForName(T.entityName, inManagedObjectContext: moc)
+    }
+    
+    convenience public init(moc: NSManagedObjectContext, attribute: String, value: AnyObject) {
+        self.init(moc: moc)
+        predicate = NSPredicate(format: "%K = %@", attribute, value as! NSObject)
+    }
+}
+
+public func fetch<T: NSManagedObject>(request: FetchRequest<T>) -> FetchResult<T> {
     var error: NSError?
     var results: [AnyObject]?
     
-    request.predicate = NSPredicate(format: "%K = %@", attribute, value as! NSObject)
-    context.performBlockAndWait { () -> Void in
-        results = context.executeFetchRequest(request, error: &error)
+    request.moc.performBlockAndWait { () -> Void in
+        results = request.moc.executeFetchRequest(request, error: &error)
     }
     
     if let results = results {
-        return FindResult(success: true, objects: results as! [T], error: error)
+        return FetchResult(success: true, objects: results as! [T], error: error)
     }
     
-    return FindResult(success: false, objects: [], error: error)
+    return FetchResult(success: false, objects: [], error: error)
 }
 
 extension NSManagedObject {
-    class func entityName() -> String {
+    class var entityName: String {
         let fullClassName = NSStringFromClass(object_getClass(self))
         let nameComponents = split(fullClassName) { $0 == "." }
         
         return last(nameComponents)!
     }
+//    
+//    class func fetchRequest() -> NSFetchRequest {
+//        return NSFetchRequest(entityName:self.entityName)
+//    }
 }

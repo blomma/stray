@@ -22,7 +22,7 @@ public final class Event: NSManagedObject {
         exported: NSNumber? = nil,
         stopDate: NSDate? = nil,
         inTag: Tag? = nil) {
-            let name = self.dynamicType.entityName()
+            let name = self.dynamicType.entityName
             let entity = NSEntityDescription.entityForName(name, inManagedObjectContext: context)!
             
             self.init(entity: entity, insertIntoManagedObjectContext: context)
