@@ -10,16 +10,14 @@ import Foundation
 import CoreData
 
 public final class Event: NSManagedObject {
-    @NSManaged var exported: NSNumber?
+	@NSManaged var startDate: NSDate
     @NSManaged var guid: String?
-    @NSManaged var startDate: NSDate
     @NSManaged var stopDate: NSDate?
     @NSManaged var inTag: Tag?
 
     convenience init(_ context: NSManagedObjectContext,
         startDate: NSDate,
         guid: String? = NSUUID().UUIDString,
-        exported: NSNumber? = nil,
         stopDate: NSDate? = nil,
         inTag: Tag? = nil) {
             let name = self.dynamicType.entityName
@@ -29,7 +27,6 @@ public final class Event: NSManagedObject {
 
             self.startDate = startDate
             self.guid = guid
-            self.exported = exported
             self.stopDate = stopDate
             self.inTag = inTag
     }
