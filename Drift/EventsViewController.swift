@@ -51,6 +51,8 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     override func viewWillAppear(animated: Bool) {
+		super.viewWillAppear(animated)
+		
         if let moc = self.stack?.managedObjectContext {
             var fetchRequest = NSFetchRequest(entityName: "Event")
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
@@ -75,7 +77,6 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let cell = sender as? UITableViewCell,
             let indexPath = self.tableView?.indexPathForCell(cell),
             let event = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? Event {
-
                 controller.didDismiss = {
                     dispatch_async(dispatch_get_main_queue(), { [unowned self] in
                         self.dismissViewControllerAnimated(true, completion: nil)

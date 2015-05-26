@@ -22,7 +22,7 @@ class MenuController: UIViewController {
 
         // Only replace controller if it is a new one
         if let navigation = UIApplication.sharedApplication().keyWindow?.rootViewController as? UINavigationController
-            where (navigation.viewControllers.first as? EventViewController == nil),
+            where (navigation.viewControllers.last as? EventViewController == nil),
             let controller = self.storyboard?.instantiateViewControllerWithIdentifier("EventViewController") as? UIViewController {
                 self.dismissViewControllerAnimated(true, completion: nil)
                 navigation.setViewControllers([controller], animated: true)
@@ -34,7 +34,7 @@ class MenuController: UIViewController {
 
         // Only replace controller if it is a new one
         if let navigation = UIApplication.sharedApplication().keyWindow?.rootViewController as? UINavigationController
-            where (navigation.viewControllers.first as? EventsViewController == nil),
+            where (navigation.viewControllers.last as? EventsViewController == nil),
             let controller = self.storyboard?.instantiateViewControllerWithIdentifier("EventsViewController") as? UIViewController {
                 self.dismissViewControllerAnimated(true, completion: nil)
                 navigation.setViewControllers([controller], animated: true)

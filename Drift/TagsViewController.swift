@@ -10,9 +10,10 @@ import UIKit
 import CoreData
 import JSQCoreDataKit
 
-class TagsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, DismissProtocol
-{
-    @IBOutlet var tableView: UITableView!
+class TagsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, DismissProtocol {
+	@IBOutlet weak var tableView: UITableView!
+	@IBOutlet weak var editBarButtonItem: UIBarButtonItem!
+	@IBOutlet weak var addBarButtonItem: UIBarButtonItem!
 
     var didDismiss: Dismiss?
 
@@ -46,10 +47,10 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
 
         let model = CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle())
-        self.stack = CoreDataStack(model: model)
+        stack = CoreDataStack(model: model)
 
-        if let guid = self.state.selectedEventGUID,
-            let moc = self.stack?.managedObjectContext,
+        if let guid = state.selectedEventGUID,
+            let moc = stack?.managedObjectContext,
             let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: moc) {
                 let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
                 let result = fetch(request)
@@ -59,27 +60,40 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
                         tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
                 }
         }
+
+		editBarButtonItem?.target = self
+		editBarButtonItem?.action = "toggleEdit"
+
+		addBarButtonItem?.target = self
+		addBarButtonItem?.action = "addTagRow"
     }
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
 
-        self.fetchedResultsController.delegate = nil
+        fetchedResultsController.delegate = nil
     }
 
-    func configureCell(cell: TagCell, atIndexPath: NSIndexPath) -> Void {
+    func configureCell(cell: UITableViewCell, atIndexPath: NSIndexPath) -> Void {
         if let tag = fetchedResultsController.objectAtIndexPath(atIndexPath) as? Tag {
-            cell.setTitle(tag.name)
+			cell.textLabel?.text = tag.name
         }
     }
 
-    @IBAction func toggleEdit(sender: UIButton) {
-        if self.tableView.editing {
-            self.tableView.setEditing(false, animated: true)
+    func toggleEdit() {
+        if tableView.editing {
+            tableView.setEditing(false, animated: true)
         } else {
-            self.tableView.setEditing(true, animated: true)
+            tableView.setEditing(true, animated: true)
         }
     }
+
+	func addTagRow() {
+		if let moc = self.stack?.managedObjectContext {
+			let _ = Tag(moc)
+			saveContextAndWait(moc)
+		}
+	}
 }
 
 // MARK: - UITableViewDelegate
@@ -95,8 +109,8 @@ extension TagsViewController_UITableViewDelegate {
                 cell.setSelected(cell.selected, animated: true)
             }
 
-            if let guid = self.state.selectedEventGUID,
-                let moc = self.stack?.managedObjectContext,
+            if let guid = state.selectedEventGUID,
+                let moc = stack?.managedObjectContext,
                 let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: moc) {
 
                     let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
@@ -113,43 +127,35 @@ extension TagsViewController_UITableViewDelegate {
                     }
             }
 
-            self.dismissViewControllerAnimated(true, completion: nil)
+            dismissViewControllerAnimated(true, completion: nil)
         }
     }
 
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+	func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            if let tag = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Tag,
-                let moc = self.stack?.managedObjectContext {
+            if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag,
+                let moc = stack?.managedObjectContext {
                     moc.deleteObject(tag)
                     saveContextAndWait(moc)
             }
         }
     }
 
-    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-        if !self.tableView.editing {
-            return UITableViewCellEditingStyle.None;
-        }
-
-        return UITableViewCellEditingStyle.Delete;
-    }
-
-    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+	func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
     }
 
-    func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+	func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
         if sourceIndexPath == destinationIndexPath {
             return
         }
 
-        if let tag = self.fetchedResultsController.objectAtIndexPath(sourceIndexPath) as? Tag,
-            let moc = self.stack?.managedObjectContext {
-                self.userReorderingCells = true
+        if let tag = fetchedResultsController.objectAtIndexPath(sourceIndexPath) as? Tag,
+            let moc = stack?.managedObjectContext {
+                userReorderingCells = true
                 tag.sortIndex = destinationIndexPath.row
                 saveContextAndWait(moc)
-                self.userReorderingCells = false
+                userReorderingCells = false
         }
     }
 }
@@ -157,57 +163,31 @@ extension TagsViewController_UITableViewDelegate {
 // MARK: - UITableViewDataSource
 typealias TagsViewController_UITableViewDataSource = TagsViewController
 extension TagsViewController_UITableViewDataSource {
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let sectionInfo = self.fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo {
+	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let sectionInfo = fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo {
             return sectionInfo.numberOfObjects
         }
 
         return 0
     }
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return self.fetchedResultsController.sections?.count ?? 0
+	func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return fetchedResultsController.sections?.count ?? 0
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("TagCellIdentifier") as! TagCell
-        self.configureCell(cell, atIndexPath:indexPath)
+	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("TagCellIdentifier") as! UITableViewCell
+        configureCell(cell, atIndexPath:indexPath)
 
         return cell
     }
 }
 
-// MARK: - TagCellDelegate
-//typealias TagsViewController_TagCellDelegate = TagsViewController
-//extension TagsViewController_TagCellDelegate {
-//    func didEditTagCell(cell: TagCell) {
-//        if let indexPath = tableView.indexPathForCell(cell),
-//            let name = cell.tagNameTextField?.text {
-//                if !name.isEmpty,
-//                    let moc = self.stack?.managedObjectContext,
-//                    let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
-//
-//                        tag.name = name
-//                        cell.setTitle(name)
-//                        saveContextAndWait(moc)
-//                }
-//
-//                UIView.animateWithDuration(1, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .CurveLinear, animations: { () -> Void in
-//                    cell.frontViewLeadingConstraint?.constant = 0
-//                    cell.frontViewTrailingConstraint?.constant = 0
-//                    cell.frontView?.layoutIfNeeded()
-//                    }, completion: nil)
-//
-//                self.tagInEditState = nil
-//        }
-//    }
-//}
-
 // MARK: - NSFetchedResultsControllerDelegate
 typealias TagsViewController_NSFetchedResultsControllerDelegate = TagsViewController
 extension TagsViewController_NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        if self.userReorderingCells {
+        if userReorderingCells {
             return
         }
 
@@ -215,27 +195,26 @@ extension TagsViewController_NSFetchedResultsControllerDelegate {
     }
 
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-
-        if self.userReorderingCells {
+        if userReorderingCells {
             return
         }
 
         switch type {
         case .Insert:
-            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
         case .Delete:
-            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
         case .Update:
             if let cell = tableView.cellForRowAtIndexPath(indexPath!) as? TagCell {
-                self.configureCell(cell, atIndexPath: indexPath!)
+                configureCell(cell, atIndexPath: indexPath!)
             }
         case .Move:
-            self.tableView.moveRowAtIndexPath(indexPath!, toIndexPath: newIndexPath!)
+            tableView.moveRowAtIndexPath(indexPath!, toIndexPath: newIndexPath!)
         }
     }
 
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        if self.userReorderingCells {
+        if userReorderingCells {
             return
         }
 

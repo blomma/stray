@@ -98,21 +98,16 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
         eventTimerControl?.stop()
     }
 
-//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//        super.prepareForSegue(segue, sender: sender)
-//        if segue.identifier == "segueToTagsFromEvent",
-//            let controller = segue.destinationViewController as? TagsViewController {
-//                controller.didDismiss = {
-//                    dispatch_async(dispatch_get_main_queue(), { [unowned self] in
-//                        dismissViewControllerAnimated(true, completion: nil)
-//                        })
-//                }
-//        } else
-//    if segue.identifier == "segueToMenuFromEvent",
-//            let controller = segue.destinationViewController as? UIViewController {
-//                controller.transitioningDelegate = transitionOperator
-//        }
-//    }
+	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+		if segue.identifier == "segueToTagsFromEvent",
+			let controller = segue.destinationViewController as? TagsViewController {
+				controller.didDismiss = {
+					dispatch_async(dispatch_get_main_queue(), { [unowned self] in
+						self.dismissViewControllerAnimated(true, completion: nil)
+						})
+				}
+		}
+	}
 
     private func animateButton(button: UIButton) {
         var pathFrame: CGRect = CGRectMake(-CGRectGetMidY(button.bounds), -CGRectGetMidY(button.bounds), button.bounds.size.height, button.bounds.size.height)
