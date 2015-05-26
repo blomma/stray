@@ -48,24 +48,6 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         let model = CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle())
         self.stack = CoreDataStack(model: model)
 
-        tableView.addPullingWithActionHandler { (state: AIPullingState, previousState: AIPullingState, height: CGFloat) -> Void in
-            if state == AIPullingState.Action {
-                if previousState == AIPullingState.PullingAdd {
-                    var popTime = dispatch_time(DISPATCH_TIME_NOW, 400000000)
-                    dispatch_after(popTime, dispatch_get_main_queue(), { () -> Void in
-                        if let moc = self.stack?.managedObjectContext {
-                            let _ = Tag(moc)
-                        }
-                    })
-                } else if (previousState == AIPullingState.PullingAdd || previousState == AIPullingState.PullingClose) {
-                    let _ = self.didDismiss?()
-                }
-            }
-        }
-
-        tableView.pullingView.addingHeight = 30
-        tableView.pullingView.closingHeight = 60
-
         if let guid = self.state.selectedEventGUID,
             let moc = self.stack?.managedObjectContext,
             let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: moc) {
@@ -83,7 +65,6 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewWillDisappear(animated)
 
         self.fetchedResultsController.delegate = nil
-        self.tableView.disablePulling()
     }
 
     func configureCell(cell: TagCell, atIndexPath: NSIndexPath) -> Void {

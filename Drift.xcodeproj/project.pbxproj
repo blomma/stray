@@ -20,7 +20,6 @@
 		9E51708419E5196100BEF39B /* EventStatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E51708319E5196100BEF39B /* EventStatisticsViewController.swift */; };
 		9E622B701AD06D370062A9FD /* TransitionOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E622B6F1AD06D370062A9FD /* TransitionOperator.swift */; };
 		9E62E17C1A28D0DB0011EDC0 /* TagsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E62E17B1A28D0DB0011EDC0 /* TagsViewController.swift */; };
-		9E954D84164419F50022D5BE /* UIScrollView+AIPulling.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E954D83164419F50022D5BE /* UIScrollView+AIPulling.m */; };
 		9E96DD101B072F9000B2CA4D /* JSQCoreDataKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E96DD0C1B072F4D00B2CA4D /* JSQCoreDataKit.framework */; };
 		9E96DD111B072FB500B2CA4D /* JSQCoreDataKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9E96DD0C1B072F4D00B2CA4D /* JSQCoreDataKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9EA21B8F1ACE7E0F001CD33A /* CompatibilityMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA21B8E1ACE7E0F001CD33A /* CompatibilityMigration.swift */; };
@@ -89,8 +88,6 @@
 		9E916E14163197A40058C777 /* CoreDataModel-4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-4.xcdatamodel"; sourceTree = "<group>"; };
 		9E9239E2162DA56900E265E6 /* CoreDataModel-3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-3.xcdatamodel"; sourceTree = "<group>"; };
 		9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-2.xcdatamodel"; sourceTree = "<group>"; };
-		9E954D82164419F50022D5BE /* UIScrollView+AIPulling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+AIPulling.h"; sourceTree = "<group>"; };
-		9E954D83164419F50022D5BE /* UIScrollView+AIPulling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+AIPulling.m"; sourceTree = "<group>"; };
 		9E96DD061B072F4D00B2CA4D /* JSQCoreDataKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JSQCoreDataKit.xcodeproj; path = ../JSQCoreDataKit/JSQCoreDataKit/JSQCoreDataKit.xcodeproj; sourceTree = "<group>"; };
 		9EA21B8E1ACE7E0F001CD33A /* CompatibilityMigration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompatibilityMigration.swift; sourceTree = "<group>"; };
 		9EA8140B1AD455F700BCC956 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
@@ -238,8 +235,6 @@
 		9EAB520B15C95523008952FB /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				9E954D82164419F50022D5BE /* UIScrollView+AIPulling.h */,
-				9E954D83164419F50022D5BE /* UIScrollView+AIPulling.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -393,7 +388,6 @@
 				9ED3051D19EEF3BD00D7E0CA /* DismissProtocol.swift in Sources */,
 				9E216E491ACC6B0900BD1967 /* NSManagedObjectExtension.swift in Sources */,
 				9E62E17C1A28D0DB0011EDC0 /* TagsViewController.swift in Sources */,
-				9E954D84164419F50022D5BE /* UIScrollView+AIPulling.m in Sources */,
 				9EA8140E1AD45ED500BCC956 /* Compatibility.swift in Sources */,
 				9E378E7119EC35C3004DED67 /* EventsViewController.swift in Sources */,
 				9E51708419E5196100BEF39B /* EventStatisticsViewController.swift in Sources */,
