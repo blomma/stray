@@ -18,18 +18,18 @@ class SlideUpTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
     lazy var gestureRecogniser: UIPanGestureRecognizer = {
         return UIPanGestureRecognizer(target: self, action: "handleGesture:")
         }()
-    
+
     var interactionInProgress: Bool = false
-    
+
     weak var delegate:SlideUpTransitioningDelegate?
     var dimmingView: UIView!
 
     func handleGesture(recognizer: UIPanGestureRecognizer) {
         let translation = recognizer.translationInView(recognizer.view!)
         let velocity = recognizer.velocityInView(recognizer.view)
-        
+
         let percentage = abs(translation.x / CGRectGetWidth(recognizer.view!.bounds))
-        
+
         switch recognizer.state {
         case .Began:
             // Panning right
@@ -44,7 +44,7 @@ class SlideUpTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
 //            if translation.y > 0 {
 //                return
 //            }
-            
+
             updateInteractiveTransition(percentage)
         case .Ended:
             if percentage < 0.5 {
@@ -52,11 +52,11 @@ class SlideUpTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
             } else {
                 finishInteractiveTransition()
             }
-            
+
             interactionInProgress = false
         case .Cancelled:
             cancelInteractiveTransition()
-            
+
             interactionInProgress = false
         default:
             break
@@ -71,7 +71,7 @@ extension SlideUpUIViewControllerTransitioningDelegate {
         isPresentation = true
         return self
     }
-    
+
     func interactionControllerForPresentation(animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         return interactionInProgress ? self : nil
     }
@@ -83,34 +83,34 @@ extension SlideUpUIViewControllerAnimatedTransitioning {
     func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
         return 1
     }
-    
+
     func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
         var toViewController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!
         var fromViewController = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!
         var containerView = transitionContext.containerView()
-        
+
         if isPresentation {
             containerView.addSubview(toViewController.view)
         }
-        
+
         var presentedController = isPresentation ? toViewController : fromViewController
         var presentedView = presentedController.view
 
         var presentingController = isPresentation ? fromViewController : toViewController
         var presentingView = presentingController.view
-        
+
         var appearedFrame = transitionContext.finalFrameForViewController(presentedController)
         var dismissedFrame = appearedFrame
         dismissedFrame.origin.x += dismissedFrame.size.width
-        
+
         var initialFrame = dismissedFrame
         var finalFrame = appearedFrame
-        
+
         var presentingViewFinalFrame = appearedFrame
         presentingViewFinalFrame.origin.x -= appearedFrame.size.width
-        
+
         presentedView.frame = initialFrame
-        
+
         UIView.animateWithDuration(transitionDuration(transitionContext), delay: 0, options: .CurveLinear, animations: { () -> Void in
             presentedView.frame = finalFrame
             presentingView.frame = presentingViewFinalFrame
@@ -118,7 +118,7 @@ extension SlideUpUIViewControllerAnimatedTransitioning {
 //                if !self.isPresentation {
 //                    fromViewController.view.removeFromSuperview()
 //                }
-                
+
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
         }
     }

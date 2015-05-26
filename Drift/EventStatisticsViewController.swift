@@ -27,30 +27,30 @@ class EventStatisticsViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     @IBAction func chooseStartDate(sender: UIButton, forEvent event: UIEvent) {
         if startDateShown {
             startDateContainer.addConstraint(startDatePickerBottomConstraint)
         } else {
             startDateContainer.removeConstraint(startDatePickerBottomConstraint)
         }
-        
+
         startDateShown = !startDateShown
-        
+
         UIView.animateWithDuration(0.7, animations: { () -> Void in
             self.view.layoutIfNeeded()
         })
     }
-    
+
     @IBAction func chooseEndDate(sender: UIButton, forEvent event: UIEvent) {
         if endDateShow {
             endDateContainer.addConstraint(endDatePickerBottomConstraint)
         } else {
             endDateContainer.removeConstraint(endDatePickerBottomConstraint)
         }
-        
+
         endDateShow = !endDateShow
-        
+
         UIView.animateWithDuration(0.7, animations: { () -> Void in
             self.view.layoutIfNeeded()
         })

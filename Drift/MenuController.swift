@@ -10,13 +10,13 @@ import UIKit
 
 class MenuController: UIViewController {
     let transitionManager = TransitionOperator()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.transitioningDelegate = self.transitionManager
     }
-    
+
     @IBAction func presentEvent(sender: UIButton) {
         self.dismissViewControllerAnimated(true, completion: nil)
 
@@ -28,10 +28,10 @@ class MenuController: UIViewController {
                 navigation.setViewControllers([controller], animated: true)
         }
     }
-    
+
     @IBAction func presentEvents(sender: UIButton) {
         self.dismissViewControllerAnimated(true, completion: nil)
-        
+
         // Only replace controller if it is a new one
         if let navigation = UIApplication.sharedApplication().keyWindow?.rootViewController as? UINavigationController
             where (navigation.viewControllers.first as? EventsViewController == nil),

@@ -15,7 +15,7 @@ public final class Event: NSManagedObject {
     @NSManaged var startDate: NSDate
     @NSManaged var stopDate: NSDate?
     @NSManaged var inTag: Tag?
-    
+
     convenience init(_ context: NSManagedObjectContext,
         startDate: NSDate,
         guid: String? = NSUUID().UUIDString,
@@ -24,9 +24,9 @@ public final class Event: NSManagedObject {
         inTag: Tag? = nil) {
             let name = self.dynamicType.entityName
             let entity = NSEntityDescription.entityForName(name, inManagedObjectContext: context)!
-            
+
             self.init(entity: entity, insertIntoManagedObjectContext: context)
-            
+
             self.startDate = startDate
             self.guid = guid
             self.exported = exported

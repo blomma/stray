@@ -19,25 +19,25 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
     var userReorderingCells: Bool = false
     var stack: CoreDataStack?
     let state: State = State()
-    
+
     private lazy var fetchedResultsController: NSFetchedResultsController = {
         if let moc = self.stack?.managedObjectContext {
             var fetchRequest = NSFetchRequest(entityName: Tag.entityName)
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: true)]
             fetchRequest.fetchBatchSize = 20
-            
+
             var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
             controller.delegate = self
-            
+
             var error: NSErrorPointer = NSErrorPointer()
             if !controller.performFetch(error) {
                 println("Unresolved error \(error)")
                 exit(-1)
             }
-            
+
             return controller
         }
-        
+
         println("No moc")
         exit(-1)
         }()
@@ -71,7 +71,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
             let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: moc) {
                 let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
                 let result = fetch(request)
-                
+
                 if result.success,
                     let indexPath = fetchedResultsController.indexPathForObject(result.objects[0]) {
                         tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
@@ -109,18 +109,18 @@ extension TagsViewController_UITableViewDelegate {
             if tag.name == nil {
                 return
             }
-            
+
             if let cell = tableView.cellForRowAtIndexPath(indexPath) as? TagCell {
                 cell.setSelected(cell.selected, animated: true)
             }
-            
+
             if let guid = self.state.selectedEventGUID,
                 let moc = self.stack?.managedObjectContext,
                 let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: moc) {
-            
+
                     let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
                     let result = fetch(request)
-            
+
                     if result.success {
                         let event = result.objects[0]
                         if let inTag = event.inTag where inTag.isEqual(tag) {
@@ -131,11 +131,11 @@ extension TagsViewController_UITableViewDelegate {
                         saveContextAndWait(moc)
                     }
             }
-            
+
             self.dismissViewControllerAnimated(true, completion: nil)
         }
     }
-    
+
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
             if let tag = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Tag,
@@ -145,24 +145,24 @@ extension TagsViewController_UITableViewDelegate {
             }
         }
     }
-    
+
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
         if !self.tableView.editing {
             return UITableViewCellEditingStyle.None;
         }
-        
+
         return UITableViewCellEditingStyle.Delete;
     }
-    
+
     func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
     }
-    
+
     func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
         if sourceIndexPath == destinationIndexPath {
             return
         }
-        
+
         if let tag = self.fetchedResultsController.objectAtIndexPath(sourceIndexPath) as? Tag,
             let moc = self.stack?.managedObjectContext {
                 self.userReorderingCells = true
@@ -180,7 +180,7 @@ extension TagsViewController_UITableViewDataSource {
         if let sectionInfo = self.fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo {
             return sectionInfo.numberOfObjects
         }
-        
+
         return 0
     }
 
@@ -191,7 +191,7 @@ extension TagsViewController_UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("TagCellIdentifier") as! TagCell
         self.configureCell(cell, atIndexPath:indexPath)
-            
+
         return cell
     }
 }
@@ -205,7 +205,7 @@ extension TagsViewController_UITableViewDataSource {
 //                if !name.isEmpty,
 //                    let moc = self.stack?.managedObjectContext,
 //                    let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
-//                        
+//
 //                        tag.name = name
 //                        cell.setTitle(name)
 //                        saveContextAndWait(moc)
@@ -229,7 +229,7 @@ extension TagsViewController_NSFetchedResultsControllerDelegate {
         if self.userReorderingCells {
             return
         }
-        
+
         tableView.beginUpdates()
     }
 
@@ -257,7 +257,7 @@ extension TagsViewController_NSFetchedResultsControllerDelegate {
         if self.userReorderingCells {
             return
         }
-        
+
         tableView.endUpdates()
     }
 }

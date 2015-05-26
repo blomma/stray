@@ -12,57 +12,61 @@ import JSQCoreDataKit
 
 public class CompatibilityMigration  {
     var stack: CoreDataStack?
-    
-    let STRAY_COMPATIBILITY_LEVEL_KEY = "StrayCompatibilityLevel"
-    let STATE_COMPATIBILITY_LEVEL_KEY = "stateCompatibilityLevel"
-    
+
+    let strayCompatibilityLevelKey = "StrayCompatibilityLevel"
+    let stateCompatibilityLevelKey = "stateCompatibilityLevel"
+
     var stateCompatibilityLevel: Int {
         get {
-            if let level = NSUserDefaults.standardUserDefaults().objectForKey(STATE_COMPATIBILITY_LEVEL_KEY) as? Int {
+            if let level = NSUserDefaults.standardUserDefaults()
+				.objectForKey(stateCompatibilityLevelKey) as? Int {
                 return level
             }
-            
+
             return 0
         }
         set (newLevel) {
-            NSUserDefaults.standardUserDefaults().setObject(newLevel, forKey: STATE_COMPATIBILITY_LEVEL_KEY)
+            NSUserDefaults.standardUserDefaults()
+				.setObject(newLevel, forKey: stateCompatibilityLevelKey)
         }
     }
-    
+
     var coreDataCompatibilityLevel: Int {
         get {
-            if let level = NSUserDefaults.standardUserDefaults().objectForKey(STRAY_COMPATIBILITY_LEVEL_KEY) as? Int {
+            if let level = NSUserDefaults.standardUserDefaults()
+				.objectForKey(strayCompatibilityLevelKey) as? Int {
                 return level
             }
-            
+
             return 0
         }
         set (newLevel) {
-            NSUserDefaults.standardUserDefaults().setObject(newLevel, forKey: STRAY_COMPATIBILITY_LEVEL_KEY)
+            NSUserDefaults.standardUserDefaults()
+				.setObject(newLevel, forKey: strayCompatibilityLevelKey)
         }
     }
-    
+
     init() {
-        
+
         let bundle = NSBundle(identifier: "com.artsoftheinsane.Drift")
         let model = CoreDataModel(name: "CoreDataModel", bundle: bundle!)
-        self.stack = CoreDataStack(model: model)        
+        self.stack = CoreDataStack(model: model)
     }
 
     private func migrateToCompatibilityLevel(toLevel: Int, fromLevel: Int, migrationBlock: () -> ()) {
-        if let appCompatibilityLevel = NSBundle.mainBundle().infoDictionary?[STRAY_COMPATIBILITY_LEVEL_KEY] as? Int
+        if let appCompatibilityLevel = NSBundle.mainBundle().infoDictionary?[strayCompatibilityLevelKey] as? Int
             where toLevel > fromLevel {
                 migrationBlock()
         }
     }
-    
+
     private func migrateState() {
         self.migrateToCompatibilityLevel(1, fromLevel: self.stateCompatibilityLevel) { () -> () in
             //==================================================================================//
             // ACTIVE EVENT
             //==================================================================================//
             NSUserDefaults.standardUserDefaults().removeObjectForKey("activeEvent")
-            
+
             //==================================================================================//
             // SELECTED EVENT
             //==================================================================================//
@@ -73,9 +77,9 @@ public class CompatibilityMigration  {
                 let event = moc.objectWithID(objectID) as? Event {
                     NSUserDefaults.standardUserDefaults().setObject(event.guid, forKey: "selectedEventGUID")
             }
-            
+
             NSUserDefaults.standardUserDefaults().removeObjectForKey("selectedEvent")
-            
+
             //==================================================================================//
             // EVENTSGROUPEDBYDATE FILTER
             //==================================================================================//
@@ -83,10 +87,10 @@ public class CompatibilityMigration  {
             if (objects == nil) {
                 objects = NSUserDefaults.standardUserDefaults().objectForKey("eventsGroupedByDateFilter") as? [NSData]
             }
-            
+
             if objects != nil {
                 var eventsGroupedByDateFilter = Set<String>()
-                
+
                 for uriData in objects! {
                     if let uri = NSKeyedUnarchiver.unarchiveObjectWithData(uriData) as? NSURL,
                         let moc = self.stack?.managedObjectContext,
@@ -96,13 +100,13 @@ public class CompatibilityMigration  {
                             eventsGroupedByDateFilter.insert(guid)
                     }
                 }
-                
+
                 NSUserDefaults.standardUserDefaults().setObject(eventsGroupedByDateFilter, forKey: "eventGUIDSGroupedByDateFilter")
             }
-            
+
             NSUserDefaults.standardUserDefaults().removeObjectForKey("eventGroupsFilter")
             NSUserDefaults.standardUserDefaults().removeObjectForKey("eventsGroupedByDateFilter")
-            
+
             //==================================================================================//
             // EVENTSGROUPEDBYSTARTDATE FILTER
             //==================================================================================//
@@ -110,10 +114,10 @@ public class CompatibilityMigration  {
             if (objects == nil) {
                 objects = NSUserDefaults.standardUserDefaults().objectForKey("eventsGroupedByStartDateFilter") as? [NSData]
             }
-            
+
             if objects != nil {
                 var eventsGroupedByStartDateFilter = Set<String>()
-                
+
                 for uriData in objects! {
                     if let uri = NSKeyedUnarchiver.unarchiveObjectWithData(uriData) as? NSURL,
                         let moc = self.stack?.managedObjectContext,
@@ -123,17 +127,17 @@ public class CompatibilityMigration  {
                             eventsGroupedByStartDateFilter.insert(guid)
                     }
                 }
-                
+
                 NSUserDefaults.standardUserDefaults().setObject(eventsGroupedByStartDateFilter, forKey: "eventGUIDSGroupedByStartDateFilter")
             }
 
             NSUserDefaults.standardUserDefaults().removeObjectForKey("eventsFilter")
             NSUserDefaults.standardUserDefaults().removeObjectForKey("eventsGroupedByStartDateFilter")
-            
+
             self.stateCompatibilityLevel = 1
         }
     }
-    
+
     private func migrateCoreData() {
         self.migrateToCompatibilityLevel(1, fromLevel: self.coreDataCompatibilityLevel) { () -> () in
             if let moc = self.stack?.managedObjectContext,
@@ -147,7 +151,7 @@ public class CompatibilityMigration  {
                         }
                     }
             }
-            
+
             if let moc = self.stack?.managedObjectContext,
                 let entity = NSEntityDescription.entityForName(Tag.entityName, inManagedObjectContext: moc) {
                     let request = FetchRequest<Tag>(moc: moc)
@@ -160,10 +164,10 @@ public class CompatibilityMigration  {
                     }
             }
         }
-        
+
         self.coreDataCompatibilityLevel = 1
     }
-    
+
     public func migrate() {
         self.migrateCoreData()
         self.migrateState()

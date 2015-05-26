@@ -53,7 +53,7 @@
 
 - (void)setStartDate:(NSDate *)startDate {
     _startDate = startDate;
-    
+
     if([self.delegate respondsToSelector:@selector(startDateDidUpdate:)]) {
         [self.delegate startDateDidUpdate:startDate];
     }
@@ -61,7 +61,7 @@
 
 - (void)setNowDate:(NSDate *)nowDate {
     _nowDate = nowDate;
-    
+
     if([self.delegate respondsToSelector:@selector(nowDateDidUpdate:)]) {
         [self.delegate nowDateDidUpdate:nowDate];
     }
@@ -69,7 +69,7 @@
 
 - (void)setTransforming:(EventTimerTransformingEnum)transforming {
     _transforming = transforming;
-    
+
     if([self.delegate respondsToSelector:@selector(transformingDidUpdate:)]) {
         [self.delegate transformingDidUpdate:transforming];
     }

@@ -22,9 +22,9 @@ public final class Tag: NSManagedObject {
         heldByEvents: NSSet? = nil) {
             let name = self.dynamicType.entityName
             let entity = NSEntityDescription.entityForName(name, inManagedObjectContext: context)!
-            
+
             self.init(entity: entity, insertIntoManagedObjectContext: context)
-            
+
             self.guid = guid
             self.name = name
             self.sortIndex = sortIndex

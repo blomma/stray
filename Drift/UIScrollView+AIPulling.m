@@ -1,10 +1,10 @@
 // 
 //  UIScrollView+AIPulling.m
 //  stray
-//  
+//
 //  Created by Mikael Hultgren on 2013-03-10.
 //  Copyright 2013 Artsoftheinsane. All rights reserved.
-// 
+//
 
 #import "UIScrollView+AIPulling.h"
 
