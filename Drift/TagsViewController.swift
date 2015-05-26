@@ -21,10 +21,12 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
     var stack: CoreDataStack?
     let state: State = State()
 
+	var maxSortOrderIndex: Int = 0
+
     private lazy var fetchedResultsController: NSFetchedResultsController = {
         if let moc = self.stack?.managedObjectContext {
             var fetchRequest = NSFetchRequest(entityName: Tag.entityName)
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: true)]
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: false)]
             fetchRequest.fetchBatchSize = 20
 
             var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
@@ -49,16 +51,25 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         let model = CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle())
         stack = CoreDataStack(model: model)
 
-        if let guid = state.selectedEventGUID,
-            let moc = stack?.managedObjectContext,
-            let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: moc) {
-                let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
-                let result = fetch(request)
+        if let moc = stack?.managedObjectContext {
+			let request = FetchRequest<Tag>(moc: moc)
+			request.predicate = NSPredicate(format: "sortIndex == max(sortIndex)")
+			let result = fetch(request)
 
-                if result.success,
-                    let indexPath = fetchedResultsController.indexPathForObject(result.objects[0]) {
-                        tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
-                }
+			if result.success,
+				let sortIndex = result.objects[0].sortIndex as? Int {
+					maxSortOrderIndex = sortIndex
+			}
+
+			if let guid = state.selectedEventGUID {
+				let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
+				let result = fetch(request)
+
+				if result.success,
+					let indexPath = fetchedResultsController.indexPathForObject(result.objects[0]) {
+						tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
+				}
+			}
         }
 
 		editBarButtonItem?.target = self
@@ -90,7 +101,8 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 
 	func addTagRow() {
 		if let moc = self.stack?.managedObjectContext {
-			let _ = Tag(moc)
+			let tag = Tag(moc, sortIndex: maxSortOrderIndex)
+			maxSortOrderIndex++
 			saveContextAndWait(moc)
 		}
 	}
