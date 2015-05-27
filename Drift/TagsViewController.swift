@@ -27,7 +27,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         if let moc = self.stack?.managedObjectContext {
             var fetchRequest = NSFetchRequest(entityName: Tag.entityName)
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: false)]
-            fetchRequest.fetchBatchSize = 20
+			fetchRequest.fetchBatchSize = 20
 
             var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
             controller.delegate = self
@@ -66,8 +66,11 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 				let result = fetch(request)
 
 				if result.success,
-					let indexPath = fetchedResultsController.indexPathForObject(result.objects[0]) {
-						tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
+					let event = result.objects.first,
+					let tag = event.inTag,
+					let indexPath = fetchedResultsController.indexPathForObject(tag) {
+						tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
+						tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
 				}
 			}
         }
