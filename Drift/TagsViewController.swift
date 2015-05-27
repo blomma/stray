@@ -1,4 +1,4 @@
-//
+	//
 //  TagsTableViewController.swift
 //  Drift
 //
@@ -85,9 +85,19 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         fetchedResultsController.delegate = nil
     }
 
-    func configureCell(cell: UITableViewCell, atIndexPath: NSIndexPath) -> Void {
+    func configureCell(cell: TagCell, atIndexPath: NSIndexPath) -> Void {
         if let tag = fetchedResultsController.objectAtIndexPath(atIndexPath) as? Tag {
-			cell.textLabel?.text = tag.name
+			cell.name.text = tag.name
+			cell.shouldBeginEdit = { [unowned self] in
+				return self.tableView.editing
+			}
+
+			cell.didEndEditing = { [unowned self] in
+				if let moc = self.stack?.managedObjectContext {
+					tag.name = cell.name.text
+					saveContextAndWait(moc)
+				}
+			}
         }
     }
 
@@ -188,7 +198,7 @@ extension TagsViewController_UITableViewDataSource {
     }
 
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("TagCellIdentifier") as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("TagCellIdentifier") as! TagCell
         configureCell(cell, atIndexPath:indexPath)
 
         return cell
