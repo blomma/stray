@@ -2,10 +2,14 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="owj-PM-1aJ">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="FontAwesome.otf">
+            <string>FontAwesome</string>
+            <string>FontAwesome</string>
+            <string>FontAwesome</string>
             <string>FontAwesome</string>
             <string>FontAwesome</string>
         </mutableArray>
@@ -101,7 +105,7 @@
                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u4G-Rl-FJl" userLabel="Tag">
-                                <rect key="frame" x="16" y="106" width="568" height="29"/>
+                                <rect key="frame" x="16" y="124" width="568" height="29"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                 <state key="normal" title="Work that is super long and that">
                                     <color key="titleColor" red="0.3921568627" green="0.3921568627" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
@@ -112,7 +116,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IgW-Dr-4Bj" userLabel="EventTimerControl" customClass="EventTimerControl">
-                                <rect key="frame" x="140" y="135" width="320" height="320"/>
+                                <rect key="frame" x="140" y="153" width="320" height="320"/>
                                 <subviews>
                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dP9-OE-O85" userLabel="Start/Stop">
                                         <rect key="frame" x="103" y="125" width="114" height="70"/>
@@ -152,6 +156,7 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="f4I-GS-DXr" firstAttribute="baseline" secondItem="kDP-kd-qe8" secondAttribute="baseline" id="30W-MD-Nz1"/>
+                            <constraint firstItem="u4G-Rl-FJl" firstAttribute="top" secondItem="T6v-e0-PDz" secondAttribute="baseline" id="3lo-aM-Cq7"/>
                             <constraint firstItem="mQD-9K-Yje" firstAttribute="top" secondItem="RG4-WB-RmJ" secondAttribute="bottom" id="4LM-su-4iP"/>
                             <constraint firstItem="Pfx-uQ-0OF" firstAttribute="top" secondItem="ebw-fH-af8" secondAttribute="top" id="5HQ-Cb-HEJ"/>
                             <constraint firstAttribute="centerX" secondItem="IgW-Dr-4Bj" secondAttribute="centerX" id="8ry-yJ-aLa"/>
@@ -168,7 +173,6 @@
                             <constraint firstItem="5mL-xl-tvC" firstAttribute="baseline" secondItem="T6v-e0-PDz" secondAttribute="baseline" id="XOS-Xy-mKF"/>
                             <constraint firstAttribute="trailing" secondItem="d9a-bg-sgr" secondAttribute="trailing" constant="104" id="Z1L-aE-1hB"/>
                             <constraint firstItem="T6v-e0-PDz" firstAttribute="leading" secondItem="8Qo-UI-s2h" secondAttribute="leading" id="aJl-XE-tkM"/>
-                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="top" secondItem="b69-WY-Ku9" secondAttribute="bottom" constant="71" id="arb-Mi-XGO"/>
                             <constraint firstItem="5mL-xl-tvC" firstAttribute="top" secondItem="f4I-GS-DXr" secondAttribute="bottom" id="ch7-W3-vB2"/>
                             <constraint firstItem="Fda-f0-9h2" firstAttribute="leading" secondItem="T6v-e0-PDz" secondAttribute="trailing" id="dJf-dj-7gu"/>
                             <constraint firstItem="RG4-WB-RmJ" firstAttribute="trailing" secondItem="mQD-9K-Yje" secondAttribute="trailing" id="dbs-aH-IcC"/>
@@ -182,10 +186,19 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="qwG-vm-3ph">
-                        <barButtonItem key="leftBarButtonItem" title="Item" id="2pd-W1-QIJ">
-                            <connections>
-                                <segue destination="0UU-1U-Ehn" kind="presentation" identifier="segueToMenuFromEvent" modalPresentationStyle="overFullScreen" id="Xee-Mn-Gxa"/>
-                            </connections>
+                        <barButtonItem key="leftBarButtonItem" id="3Ns-5s-i7R">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="uYC-zY-p6t">
+                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="18"/>
+                                <state key="normal" title="">
+                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="0UU-1U-Ehn" kind="presentation" modalPresentationStyle="overFullScreen" id="bZw-7I-RG0"/>
+                                </connections>
+                            </button>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
@@ -272,10 +285,16 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" id="VGq-Yf-Jpu">
-                        <barButtonItem key="leftBarButtonItem" title="Item" id="q9F-AY-67P">
-                            <connections>
-                                <segue destination="0UU-1U-Ehn" kind="presentation" modalPresentationStyle="overFullScreen" id="7Tf-I8-p48"/>
-                            </connections>
+                        <barButtonItem key="leftBarButtonItem" id="9oE-AX-KIO">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="CzW-yi-N68">
+                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="18"/>
+                                <state key="normal" title="">
+                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
                         </barButtonItem>
                         <connections>
                             <outletCollection property="rightBarButtonItemsCollection" destination="g2O-mQ-K5H" collectionClass="NSMutableArray" id="WED-P1-mWj"/>
@@ -644,10 +663,19 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="arv-nY-csE">
-                        <barButtonItem key="leftBarButtonItem" title="Item" id="DgO-wA-6lQ">
-                            <connections>
-                                <segue destination="0UU-1U-Ehn" kind="presentation" modalPresentationStyle="overFullScreen" id="a2b-4M-52P"/>
-                            </connections>
+                        <barButtonItem key="leftBarButtonItem" id="OJX-Cz-Vz7">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="ks1-aO-bYS">
+                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="18"/>
+                                <state key="normal" title="">
+                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="0UU-1U-Ehn" kind="presentation" modalPresentationStyle="overFullScreen" id="ElS-t5-BKa"/>
+                                </connections>
+                            </button>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
@@ -668,6 +696,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="hf3-Gf-nOk">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="A8L-BS-SC1">
@@ -683,7 +712,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="uIL-Q8-1sK"/>
-        <segue reference="7Tf-I8-p48"/>
+        <segue reference="ElS-t5-BKa"/>
+        <segue reference="r8c-zd-wI8"/>
     </inferredMetricsTieBreakers>
 </document>
