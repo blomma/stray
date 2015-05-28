@@ -9,9 +9,14 @@ public protocol TagCellProtocol : class {
 
 public class TagCell: UITableViewCell, UITextFieldDelegate, TagCellProtocol {
 	@IBOutlet weak var name: UITextField!
-	
+    @IBOutlet weak var selectedMark: UIView!
+    
 	public var didEndEditing: EndEdit?
 	public var shouldBeginEdit: BeginEdit?
+    
+    override public func prepareForReuse() {
+        selectedMark.alpha = 0
+    }
 }
 
 typealias TextFieldDelegate = TagCell

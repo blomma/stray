@@ -239,7 +239,7 @@
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexBackgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TagCellIdentifier" id="LER-Fa-fU8" customClass="TagCell" customModule="Stray" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="TagCellIdentifier" id="LER-Fa-fU8" customClass="TagCell" customModule="Stray" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LER-Fa-fU8" id="QaI-Zw-OgH">
@@ -257,8 +257,18 @@
                                                         <outlet property="delegate" destination="LER-Fa-fU8" id="8bV-gG-IMD"/>
                                                     </connections>
                                                 </textField>
+                                                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NLQ-P4-FDk">
+                                                    <rect key="frame" x="580" y="0.0" width="20" height="75"/>
+                                                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="20" id="iVa-SS-iqy"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="NLQ-P4-FDk" firstAttribute="top" secondItem="QaI-Zw-OgH" secondAttribute="top" id="TnB-Vu-9My"/>
+                                                <constraint firstAttribute="bottom" secondItem="NLQ-P4-FDk" secondAttribute="bottom" id="WHI-qw-bRq"/>
+                                                <constraint firstAttribute="trailing" secondItem="NLQ-P4-FDk" secondAttribute="trailing" id="Z2Y-qq-QfJ"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="oxh-sQ-qcN" secondAttribute="bottom" constant="14" id="cMq-CF-o90"/>
                                                 <constraint firstItem="oxh-sQ-qcN" firstAttribute="top" secondItem="QaI-Zw-OgH" secondAttribute="topMargin" constant="15" id="kJE-gd-1Oe"/>
                                                 <constraint firstItem="oxh-sQ-qcN" firstAttribute="centerX" secondItem="QaI-Zw-OgH" secondAttribute="centerX" id="mqG-HN-d94"/>
@@ -267,6 +277,7 @@
                                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <outlet property="name" destination="oxh-sQ-qcN" id="chs-pf-hwz"/>
+                                            <outlet property="selectedMark" destination="NLQ-P4-FDk" id="Pa1-mh-gbE"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
