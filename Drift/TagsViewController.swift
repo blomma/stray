@@ -91,6 +91,8 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
     func configureCell(cell: TagCell, atIndexPath: NSIndexPath) -> Void {
         if let tag = fetchedResultsController.objectAtIndexPath(atIndexPath) as? Tag {
 			cell.name.text = tag.name
+			cell.name.enabled = tableView.editing
+
 			cell.shouldBeginEdit = { [unowned self] in
 				return self.tableView.editing
 			}
@@ -110,6 +112,12 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else {
             tableView.setEditing(true, animated: true)
         }
+
+		for cell in tableView.visibleCells() {
+			if let c = cell as? TagCell {
+				c.name.enabled = tableView.editing
+			}
+		}
     }
 
 	func addTagRow() {
@@ -125,35 +133,38 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 typealias TagsViewController_UITableViewDelegate = TagsViewController
 extension TagsViewController_UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
-            if tag.name == nil {
-                return
-            }
+		if let cell = tableView.cellForRowAtIndexPath(indexPath) as? TagCell {
+			var accessoryView = UIView(frame: CGRectMake(0, 0, 20, 30))
+			accessoryView.backgroundColor = UIColor.blueColor()
+			cell.accessoryView = accessoryView
+		}
 
-            if let cell = tableView.cellForRowAtIndexPath(indexPath) as? TagCell {
-                cell.setSelected(cell.selected, animated: true)
-            }
+		if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag,
+			let guid = state.selectedEventGUID,
+			let moc = stack?.managedObjectContext {
+				let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
+				let result = fetch(request)
 
-            if let guid = state.selectedEventGUID,
-                let moc = stack?.managedObjectContext,
-                let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: moc) {
+				if result.success {
+					let event = result.objects[0]
+					if let inTag = event.inTag where inTag.isEqual(tag) {
+						event.inTag = nil
+					} else {
+						event.inTag = tag
+					}
+					saveContextAndWait(moc)
+				}
+		}
 
-                    let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
-                    let result = fetch(request)
-
-                    if result.success {
-                        let event = result.objects[0]
-                        if let inTag = event.inTag where inTag.isEqual(tag) {
-                            event.inTag = nil
-                        } else {
-                            event.inTag = tag
-                        }
-                        saveContextAndWait(moc)
-                    }
-            }
-
-            dismissViewControllerAnimated(true, completion: nil)
-        }
+//        if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
+//            if tag.name == nil {
+//                return
+//            }
+//
+//
+//
+//            dismissViewControllerAnimated(true, completion: nil)
+//        }
     }
 
 	func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
