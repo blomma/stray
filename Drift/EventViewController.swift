@@ -57,8 +57,8 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
                 let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
                 let result = fetch(request)
 
-                if result.success {
-                    let event = result.objects[0]
+                if result.success,
+                    let event = result.objects.first {
                     selectedEvent = event
 
                     eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)

@@ -57,7 +57,8 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 			let result = fetch(request)
 
 			if result.success,
-				let sortIndex = result.objects[0].sortIndex as? Int {
+                let tag = result.objects.first,
+				let sortIndex = tag.sortIndex as? Int {
 					maxSortOrderIndex = sortIndex
 			}
 
@@ -145,26 +146,16 @@ extension TagsViewController_UITableViewDelegate {
 				let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
 				let result = fetch(request)
 
-				if result.success {
-					let event = result.objects[0]
-					if let inTag = event.inTag where inTag.isEqual(tag) {
-						event.inTag = nil
-					} else {
-						event.inTag = tag
-					}
-					saveContextAndWait(moc)
-				}
-		}
-
-//        if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
-//            if tag.name == nil {
-//                return
-//            }
-//
-//
-//
-//            dismissViewControllerAnimated(true, completion: nil)
-//        }
+                if result.success,
+                    let event = result.objects.first {
+                        if let inTag = event.inTag where inTag.isEqual(tag) {
+                            event.inTag = nil
+                        } else {
+                            event.inTag = tag
+                        }
+                        saveContextAndWait(moc)
+                }
+        }
     }
 
 	func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {

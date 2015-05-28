@@ -44,7 +44,8 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let result = fetch(request)
 
                 if result.success,
-                    let indexPath = self.fetchedResultsController?.indexPathForObject(result.objects[0]) {
+                    let event = result.objects.first,
+                    let indexPath = self.fetchedResultsController?.indexPathForObject(event) {
                         self.tableView?.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
                 }
         }
