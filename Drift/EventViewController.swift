@@ -109,39 +109,6 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 		}
 	}
 
-    private func animateButton(button: UIButton) {
-        var pathFrame: CGRect = CGRectMake(-CGRectGetMidY(button.bounds), -CGRectGetMidY(button.bounds), button.bounds.size.height, button.bounds.size.height)
-        var path: UIBezierPath = UIBezierPath(roundedRect: pathFrame, cornerRadius:pathFrame.size.height / 2)
-
-        var shapePosition: CGPoint = view.convertPoint(button.center, fromView:button.superview)
-
-        var circleShape: CAShapeLayer = CAShapeLayer.new()
-        circleShape.path        = path.CGPath;
-        circleShape.position    = shapePosition;
-        circleShape.fillColor   = UIColor.clearColor().CGColor
-        circleShape.opacity     = 0;
-        circleShape.strokeColor = button.titleLabel?.textColor.CGColor;
-        circleShape.lineWidth   = 2;
-
-        view.layer.addSublayer(circleShape)
-
-        var scaleAnimation: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
-        scaleAnimation.fromValue = NSValue(CATransform3D: CATransform3DIdentity)
-        scaleAnimation.toValue   = NSValue(CATransform3D:CATransform3DMakeScale(3, 3, 1))
-
-        var alphaAnimation: CABasicAnimation = CABasicAnimation(keyPath: "opacity")
-        alphaAnimation.fromValue = 1;
-        alphaAnimation.toValue   = 0;
-
-        var animation: CAAnimationGroup = CAAnimationGroup.new()
-        animation.delegate = self
-        animation.animations     = [scaleAnimation, alphaAnimation]
-        animation.duration       = 0.5
-
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
-        circleShape.addAnimation(animation, forKey: nil)
-    }
-
     private func updateStartLabelWithDate(date: NSDate) {
         let unitFlags: NSCalendarUnit = .CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitHour | .CalendarUnitMinute
 
@@ -286,7 +253,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 
     @IBAction func showTags(sender: UIButton) {
         if selectedEvent != nil {
-            animateButton(sender)
+            sender.animate()
             performSegueWithIdentifier("segueToTagsFromEvent", sender: self)
         }
     }
@@ -346,8 +313,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
             }
         }
         
-        animateButton(sender)
-
+        sender.animate()
         if let moc = stack?.managedObjectContext {
             saveContextAndWait(moc)
         }
