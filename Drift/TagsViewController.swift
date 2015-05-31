@@ -50,9 +50,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let model = CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle())
-        stack = CoreDataStack(model: model)
-
+        stack = defaultCoreDataStack()
         state = State()
         
         if let moc = stack?.managedObjectContext {

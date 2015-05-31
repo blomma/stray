@@ -47,10 +47,7 @@ public class CompatibilityMigration  {
     }
 
     init() {
-
-        let bundle = NSBundle(identifier: "com.artsoftheinsane.Drift")
-        let model = CoreDataModel(name: "CoreDataModel", bundle: bundle!)
-        self.stack = CoreDataStack(model: model)
+        stack = defaultCoreDataStack()
     }
 
     private func migrateToCompatibilityLevel(toLevel: Int, fromLevel: Int, migrationBlock: () -> ()) {

@@ -33,8 +33,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let model = CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle())
-        self.stack = CoreDataStack(model: model)
+        stack = defaultCoreDataStack()
 
         if let guid = self.state.selectedEventGUID,
             let moc = self.stack?.managedObjectContext,

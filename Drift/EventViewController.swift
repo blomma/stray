@@ -43,8 +43,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let model = CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle())
-        stack = CoreDataStack(model: model)
+        stack = defaultCoreDataStack()
     }
 
     override func viewWillAppear(animated: Bool) {
