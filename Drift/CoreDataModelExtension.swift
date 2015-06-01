@@ -15,18 +15,22 @@ public func applicationStorageDirectory() -> NSURL? {
 			return NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(applicationName))
 	}
 
-	return nil
+	return .None
 }
 
-public func coreDataModel() -> CoreDataModel {
+public func coreDataModel() -> CoreDataModel? {
 	if let applicationStorageDirectory = applicationStorageDirectory() {
 		return CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle(), storeDirectoryURL: applicationStorageDirectory)
 	}
 
-	return CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle())
+	return .None
 }
 
-public func defaultCoreDataStack() -> CoreDataStack {
-	return CoreDataStack(model: coreDataModel())
+public func defaultCoreDataStack() -> CoreDataStack? {
+	if let model = coreDataModel() {
+		return CoreDataStack(model: model)
+	}
+
+	return .None
 }
 
