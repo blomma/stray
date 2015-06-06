@@ -185,27 +185,25 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 				}
 		} else if let toView = toView,
 			let fromView = fromView  {
+				DLog("dismiss")
 				container.addSubview(toView)
-				container.addSubview(fromView)
 
-				if interactionInProgress {
-					toView.frame.origin.x = 100
+				toView.frame.origin.x = 100
 
-					var fromEndFrame = fromView.frame
-					fromEndFrame.origin.x = -fromView.frame.size.width
+				var fromEndFrame = fromView.frame
+				fromEndFrame.origin.x = -fromView.frame.size.width
 
-					var toEndFrame = toView.frame
-					toEndFrame.origin.x = 0
+				var toEndFrame = toView.frame
+				toEndFrame.origin.x = 0
 
-					UIView.animateWithDuration(duration, delay: 0, options: nil, animations: {
-						fromView.frame = fromEndFrame
-						toView.frame = toEndFrame
-						}, completion: { [unowned self] finished in
-							self.presented = transitionContext.transitionWasCancelled()
-							transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
-							UIApplication.sharedApplication().keyWindow?.addSubview(toView)
-						})
-				}
+				UIView.animateWithDuration(duration, delay: 0, options: nil, animations: {
+					fromView.frame = fromEndFrame
+					toView.frame = toEndFrame
+					}, completion: { [unowned self] finished in
+						self.presented = transitionContext.transitionWasCancelled()
+						transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+						DLog("keyWindow subviews \(UIApplication.sharedApplication().keyWindow?.subviews)")
+					})
 		}
 	}
 }
