@@ -32,6 +32,7 @@
 		9EB08FDE19E00C4800D20EE5 /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB08FDD19E00C4800D20EE5 /* TagCell.swift */; };
 		9EB08FE119E03E1200D20EE5 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB08FE019E03E1200D20EE5 /* EventCell.swift */; };
 		9EB160011ACD153600E041B9 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB160001ACD153600E041B9 /* EventViewController.swift */; };
+		9EB9F0411B217FAE004032C5 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB9F0401B217FAE004032C5 /* Debug.swift */; };
 		9ED3051D19EEF3BD00D7E0CA /* DismissProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED3051C19EEF3BD00D7E0CA /* DismissProtocol.swift */; };
 		9EDD75381B1B62DA000D0CF9 /* CoreDataModelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDD75371B1B62DA000D0CF9 /* CoreDataModelExtension.swift */; };
 		9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */; };
@@ -103,6 +104,7 @@
 		9EB08FDD19E00C4800D20EE5 /* TagCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
 		9EB08FE019E03E1200D20EE5 /* EventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		9EB160001ACD153600E041B9 /* EventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
+		9EB9F0401B217FAE004032C5 /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		9EBF34F119BA3ED60046A464 /* Drift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Drift-Bridging-Header.h"; sourceTree = "<group>"; };
 		9ED3051C19EEF3BD00D7E0CA /* DismissProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DismissProtocol.swift; sourceTree = "<group>"; };
 		9EDD75371B1B62DA000D0CF9 /* CoreDataModelExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataModelExtension.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				9EAFE8AE1B1471C1003E0E54 /* UINavigationItemExtension.swift */,
 				9E58CDA01B1895A50003CE03 /* AnimationExtension.swift */,
 				9EDD75371B1B62DA000D0CF9 /* CoreDataModelExtension.swift */,
+				9EB9F0401B217FAE004032C5 /* Debug.swift */,
 			);
 			name = Extension;
 			sourceTree = "<group>";
@@ -394,6 +397,7 @@
 				9EAFE8AF1B1471C1003E0E54 /* UINavigationItemExtension.swift in Sources */,
 				9E21F926156EA9510075EAAC /* CoreDataModel.xcdatamodeld in Sources */,
 				9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */,
+				9EB9F0411B217FAE004032C5 /* Debug.swift in Sources */,
 				9E4DFB8C1AD17CBB008C0123 /* MenuController.swift in Sources */,
 				9EA8140C1AD455F700BCC956 /* Event.swift in Sources */,
 				9EA21B8F1ACE7E0F001CD33A /* CompatibilityMigration.swift in Sources */,

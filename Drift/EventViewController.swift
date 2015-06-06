@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import JSQCoreDataKit
 
-class EventViewController: UIViewController, EventTimerControlDelegate {
+class EventViewController: UIViewController, EventTimerControlDelegate, TransitionOperatorDelegate {
     // MARK: IBOutlet
     @IBOutlet var eventTimerControl: EventTimerControl?
     @IBOutlet var toggleStartStopButton: UIButton?
@@ -31,24 +31,26 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
     @IBOutlet var tag: UIButton?
 
     // MARK: Private properties
-    var selectedEvent: Event?
-    var stack: CoreDataStack?
-    let state: State = State()
+    private var selectedEvent: Event?
 
-    let transitionOperator = TransitionOperator()
+	private let stack: CoreDataStack? = defaultCoreDataStack()
+    private let state: State = State()
+	private let transitionOperator: TransitionOperator = TransitionOperator()
 
-    let calendar = NSCalendar.autoupdatingCurrentCalendar()
-    let shortStandaloneMonthSymbols: NSArray = NSDateFormatter().shortStandaloneMonthSymbols
+    private let calendar = NSCalendar.autoupdatingCurrentCalendar()
+    private let shortStandaloneMonthSymbols: NSArray = NSDateFormatter().shortStandaloneMonthSymbols
 
     override func viewDidLoad() {
         super.viewDidLoad()
+		DLog()
 
-        stack = defaultCoreDataStack()
+		transitionOperator.delegate = self
+		view.addGestureRecognizer(self.transitionOperator.gestureRecogniser)
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-
+		DLog()
         eventTimerControl?.delegate = self
 
         if let guid = state.selectedEventGUID,
@@ -92,12 +94,20 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-
-        eventTimerControl?.delegate = nil
-        eventTimerControl?.stop()
+		DLog()
     }
 
+	override func viewDidDisappear(animated: Bool) {
+		super.viewDidDisappear(animated)
+		DLog()
+
+		eventTimerControl?.delegate = nil
+		eventTimerControl?.stop()
+	}
+
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+		super.prepareForSegue(segue, sender: sender)
+		DLog()
 		if segue.identifier == "segueToTagsFromEvent",
 			let controller = segue.destinationViewController as? TagsViewController {
 				controller.didDismiss = {
@@ -317,6 +327,23 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
             saveContextAndWait(moc)
         }
     }
+}
+
+// MARK: - TransitionOperatorDelegate
+typealias EventViewControllerTransitionOperatorDelegate = EventViewController
+extension EventViewControllerTransitionOperatorDelegate {
+	func transitionControllerInteractionDidStart(havePresented: Bool) {
+		DLog()
+		if let navigationController = self.navigationController {
+			navigationController.delegate = self.transitionOperator
+
+			if havePresented {
+				navigationController.popViewControllerAnimated(true)
+			} else if let controller = self.storyboard?.instantiateViewControllerWithIdentifier("MenuController") as? UIViewController {
+				navigationController.pushViewController(controller, animated: true)
+			}
+		}
+	}
 }
 
 // MARK: - EventTimerControlDelegate

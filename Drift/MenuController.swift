@@ -9,35 +9,23 @@
 import UIKit
 
 class MenuController: UIViewController {
-    let transitionManager = TransitionOperator()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.transitioningDelegate = self.transitionManager
-    }
-
     @IBAction func presentEvent(sender: UIButton) {
-        self.dismissViewControllerAnimated(true, completion: nil)
-
-        // Only replace controller if it is a new one
-        if let navigation = UIApplication.sharedApplication().keyWindow?.rootViewController as? UINavigationController
-            where (navigation.viewControllers.last as? EventViewController == nil),
-            let controller = self.storyboard?.instantiateViewControllerWithIdentifier("EventViewController") as? UIViewController {
-                self.dismissViewControllerAnimated(true, completion: nil)
-                navigation.setViewControllers([controller], animated: true)
-        }
+		if let navigationController = self.navigationController {
+			if let _ = navigationController.viewControllers.first as? EventViewController {
+				navigationController.popViewControllerAnimated(true)
+			} else if let controller = self.storyboard?.instantiateViewControllerWithIdentifier("EventViewController") as? UIViewController {
+				navigationController.setViewControllers([controller], animated: true)
+			}
+		}
     }
 
     @IBAction func presentEvents(sender: UIButton) {
-        self.dismissViewControllerAnimated(true, completion: nil)
-
-        // Only replace controller if it is a new one
-        if let navigation = UIApplication.sharedApplication().keyWindow?.rootViewController as? UINavigationController
-            where (navigation.viewControllers.last as? EventsViewController == nil),
-            let controller = self.storyboard?.instantiateViewControllerWithIdentifier("EventsViewController") as? UIViewController {
-                self.dismissViewControllerAnimated(true, completion: nil)
-                navigation.setViewControllers([controller], animated: true)
-        }
+		if let navigationController = self.navigationController {
+			if let _ = navigationController.viewControllers.first as? EventsViewController {
+				navigationController.popViewControllerAnimated(true)
+			} else if let controller = self.storyboard?.instantiateViewControllerWithIdentifier("EventsViewController") as? UIViewController {
+				navigationController.setViewControllers([controller], animated: true)
+			}
+		}
     }
 }
