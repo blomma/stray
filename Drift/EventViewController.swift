@@ -274,19 +274,19 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
                     // Event is stoped, so start a new
                     let event = Event(moc, startDate: NSDate())
                     self.selectedEvent = event
-                    
+
                     state.selectedEventGUID = event.guid
-                    
+
                     eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
-                    
+
                     toggleStartStopButton?.setTitle("STOP", forState: .Normal)
-                    
+
                     animateStartEvent()
-                    
+
                     if let font = UIFont(name: "FontAwesome", size: 20) {
                         let attriString = NSAttributedString(string:"\u{f02b}", attributes:
                             [NSFontAttributeName: font])
-                        
+
                         tag?.setAttributedTitle(attriString, forState: .Normal)
                     }
                 }
@@ -294,7 +294,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
                 // Event is started
                 eventTimerControl?.stop()
                 selectedEvent.stopDate = eventTimerControl?.nowDate
-                
+
                 toggleStartStopButton?.setTitle("START", forState: .Normal)
                 animateStopEvent()
             }
@@ -304,24 +304,24 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
                 // Event is stoped, so start a new
                 let event = Event(moc, startDate: NSDate())
                 self.selectedEvent = event
-                
+
                 state.selectedEventGUID = event.guid
-                
+
                 eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
-                
+
                 toggleStartStopButton?.setTitle("STOP", forState: .Normal)
-                
+
                 animateStartEvent()
-                
+
                 if let font = UIFont(name: "FontAwesome", size: 20) {
                     let attriString = NSAttributedString(string:"\u{f02b}", attributes:
                         [NSFontAttributeName: font])
-                    
+
                     tag?.setAttributedTitle(attriString, forState: .Normal)
                 }
             }
         }
-        
+
         sender.animate()
         if let moc = stack?.managedObjectContext {
             saveContextAndWait(moc)
