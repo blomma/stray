@@ -153,7 +153,7 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 					UIView.animateWithDuration(duration, delay: 0, options: nil, animations: {
 						fromView.frame = fromEndFrame
 						toView.frame = toEndFrame
-						}, completion: { [unowned self] finished in
+						}, completion: { finished in
 							self.presented = !transitionContext.transitionWasCancelled()
 							transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
 							UIApplication.sharedApplication().keyWindow?.addSubview(fromView)
@@ -177,10 +177,9 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 						fromView.frame = fromEndFrame
 						toView.frame = toEndFrame
 						oldFromView.frame = oldFromEndFrame
-						}, completion: { [unowned self] finished in
-							self.presented = !transitionContext.transitionWasCancelled()
+						}, completion: { finished in
 							transitionContext.completeTransition(true)
-							DLog("keyWindow subviews \(UIApplication.sharedApplication().keyWindow?.subviews)")
+							oldFromView.removeFromSuperview()
 						})
 				}
 		} else if let toView = toView,
@@ -199,10 +198,9 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 				UIView.animateWithDuration(duration, delay: 0, options: nil, animations: {
 					fromView.frame = fromEndFrame
 					toView.frame = toEndFrame
-					}, completion: { [unowned self] finished in
+					}, completion: { finished in
 						self.presented = transitionContext.transitionWasCancelled()
 						transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
-						DLog("keyWindow subviews \(UIApplication.sharedApplication().keyWindow?.subviews)")
 					})
 		}
 	}

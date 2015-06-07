@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
 //
 
+#define DLog(...) NSLog(@"FUNC %s[%d][%@]->%@", __PRETTY_FUNCTION__, __LINE__, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], [NSString stringWithFormat:__VA_ARGS__])
+
 #import "EventTimerControl.h"
 
 @interface EventTimerControl ()
@@ -155,9 +157,14 @@
 }
 
 - (void)timerUpdate {
+	//DLog(@"");
     self.nowDate = [NSDate date];
 
     [self drawNow];
+}
+
+- (void)dealloc {
+	DLog(@"DEALLOC");
 }
 
 - (void)drawStart {

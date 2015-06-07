@@ -94,15 +94,16 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+
+		eventTimerControl?.delegate = nil
+		eventTimerControl?.stop()
+
 		DLog()
     }
 
 	override func viewDidDisappear(animated: Bool) {
 		super.viewDidDisappear(animated)
 		DLog()
-
-		eventTimerControl?.delegate = nil
-		eventTimerControl?.stop()
 	}
 
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

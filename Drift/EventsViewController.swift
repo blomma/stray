@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import JSQCoreDataKit
 
-class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCellDelegate {
+class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCellDelegate, TransitionOperatorDelegate {
     @IBOutlet var tableView: UITableView?
 
     private lazy var shortStandaloneMonthSymbols: [AnyObject] = {
@@ -21,19 +21,19 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return NSDateFormatter().shortStandaloneWeekdaySymbols
     }()
 
-    private let editingCommitLength: CGFloat = 60
-
-    var stack: CoreDataStack?
-    let state: State = State()
+	private let stack: CoreDataStack? = defaultCoreDataStack()
+	private let state: State = State()
+	private let transitionOperator: TransitionOperator = TransitionOperator()
 
     private var fetchedResultsController: NSFetchedResultsController?
 
-    let calendar = NSCalendar.autoupdatingCurrentCalendar()
+    private let calendar = NSCalendar.autoupdatingCurrentCalendar()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        stack = defaultCoreDataStack()
+		transitionOperator.delegate = self
+		view.addGestureRecognizer(self.transitionOperator.gestureRecogniser)
 
         if let guid = self.state.selectedEventGUID,
             let moc = self.stack?.managedObjectContext,
@@ -140,6 +140,23 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             cell.delegate = self
         }
     }
+}
+
+// MARK: - TransitionOperatorDelegate
+typealias EventsViewControllerTransitionOperatorDelegate = EventsViewController
+extension EventsViewControllerTransitionOperatorDelegate {
+	func transitionControllerInteractionDidStart(havePresented: Bool) {
+		DLog()
+		if let navigationController = self.navigationController {
+			navigationController.delegate = self.transitionOperator
+
+			if havePresented {
+				navigationController.popViewControllerAnimated(true)
+			} else if let controller = self.storyboard?.instantiateViewControllerWithIdentifier("MenuController") as? UIViewController {
+				navigationController.pushViewController(controller, animated: true)
+			}
+		}
+	}
 }
 
 // MARK: - UITableViewDelegate
