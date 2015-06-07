@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol TransitionOperatorDelegate : class {
-	func transitionControllerInteractionDidStart(havePresented: Bool)
+    func transitionControllerInteractionDidStart(havePresented: Bool)
 }
 
 class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {

@@ -52,7 +52,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
-		
+
         if let moc = self.stack?.managedObjectContext {
             var fetchRequest = NSFetchRequest(entityName: "Event")
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]

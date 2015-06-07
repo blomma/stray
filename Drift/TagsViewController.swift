@@ -1,4 +1,4 @@
-	//
+//
 //  TagsTableViewController.swift
 //  Drift
 //
@@ -22,7 +22,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
     var state: State?
 
     var selectedEvent: Event?
-    
+
 	var maxSortOrderIndex: Int = 0
 
     private lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -52,7 +52,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         stack = defaultCoreDataStack()
         state = State()
-        
+
         if let moc = stack?.managedObjectContext {
 			let request = FetchRequest<Tag>(moc: moc)
 			request.predicate = NSPredicate(format: "sortIndex == max(sortIndex)")
@@ -73,7 +73,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 					let tag = event.inTag,
 					let indexPath = fetchedResultsController.indexPathForObject(tag) {
                         selectedEvent = event
-                        
+
 						tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
 						tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
 				}
@@ -101,7 +101,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
             if selectedEvent?.inTag?.guid == tag.guid {
                 showSelectMark(cell)
             }
-            
+
 			cell.shouldBeginEdit = { [unowned self] in
 				return self.tableView.editing
 			}
@@ -136,13 +136,13 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 			saveContextAndWait(moc)
 		}
 	}
-    
+
     func showSelectMark(cell: TagCell) {
         UIView.animateWithDuration(0.3, animations: { () -> Void in
             cell.selectedMark.alpha = 1
         })
     }
-    
+
     func hideSelectMark(cell: TagCell) {
         UIView.animateWithDuration(0.3, animations: { () -> Void in
             cell.selectedMark.alpha = 0
@@ -155,20 +155,20 @@ typealias TagsViewController_UITableViewDelegate = TagsViewController
 extension TagsViewController_UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
-        
+
         if let selectedTag = selectedEvent?.inTag,
             let indexPath = fetchedResultsController.indexPathForObject(selectedTag),
             let cell = tableView.cellForRowAtIndexPath(indexPath) as? TagCell {
                 hideSelectMark(cell)
         }
-        
+
         if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag,
             let cell = tableView.cellForRowAtIndexPath(indexPath) as? TagCell,
             let guid = state?.selectedEventGUID,
             let moc = stack?.managedObjectContext {
                 let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
                 let result = fetch(request)
-                
+
                 if result.success,
                     let event = result.objects.first {
                         if let inTag = event.inTag where inTag.isEqual(tag) {
@@ -176,14 +176,14 @@ extension TagsViewController_UITableViewDelegate {
                         } else {
                             event.inTag = tag
                         }
-                        
+
                         selectedEvent = event
-                        
+
                         saveContextAndWait(moc)
                 }
         }
     }
-    
+
 	func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
             if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag,
