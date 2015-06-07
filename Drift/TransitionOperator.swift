@@ -159,16 +159,18 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 							UIApplication.sharedApplication().keyWindow?.addSubview(fromView)
 						})
 				} else if let oldFromView = UIApplication.sharedApplication().keyWindow?.subviews.last as? UIView {
+					DLog("oldFromView \(oldFromView)")
+
 					container.addSubview(toView)
-					container.addSubview(oldFromView)
+					//container.addSubview(oldFromView)
 
 					DLog("animation")
 					toView.frame.origin.x = toView.frame.width
 					var toEndFrame = toView.frame
 					toEndFrame.origin.x = 0
 
-					var oldFromEndFrame = oldFromView.frame
-					oldFromEndFrame.origin.x = -oldFromView.frame.width
+//					var oldFromEndFrame = oldFromView.frame
+//					oldFromEndFrame.origin.x = -oldFromView.frame.width
 
 					var fromEndFrame = fromView.frame
 					fromEndFrame.origin.x = -(fromView.frame.width + oldFromView.frame.width)
@@ -176,10 +178,10 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 					UIView.animateWithDuration(duration, delay: 0, options: nil, animations: {
 						fromView.frame = fromEndFrame
 						toView.frame = toEndFrame
-						oldFromView.frame = oldFromEndFrame
+//						oldFromView.frame = oldFromEndFrame
 						}, completion: { finished in
-							transitionContext.completeTransition(true)
 							oldFromView.removeFromSuperview()
+							transitionContext.completeTransition(true)
 						})
 				}
 		} else if let toView = toView,
@@ -199,8 +201,16 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 					fromView.frame = fromEndFrame
 					toView.frame = toEndFrame
 					}, completion: { finished in
+						DLog("cancelled \(transitionContext.transitionWasCancelled())")
+						DLog("container subviews \(container.subviews)")
+						DLog("keyWindow subviews \(UIApplication.sharedApplication().keyWindow?.subviews)")
+
 						self.presented = transitionContext.transitionWasCancelled()
 						transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+
+						if transitionContext.transitionWasCancelled() {
+							UIApplication.sharedApplication().keyWindow?.addSubview(toView)
+						}
 					})
 		}
 	}

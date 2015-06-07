@@ -9,16 +9,13 @@
         <mutableArray key="FontAwesome.otf">
             <string>FontAwesome</string>
             <string>FontAwesome</string>
-            <string>FontAwesome</string>
-            <string>FontAwesome</string>
-            <string>FontAwesome</string>
         </mutableArray>
     </customFonts>
     <scenes>
         <!--EventViewController-->
         <scene sceneID="HBC-Pb-M3Y">
             <objects>
-                <viewController storyboardIdentifier="EventViewController" extendedLayoutIncludesOpaqueBars="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="pW2-Iw-5Bg" userLabel="EventViewController" customClass="EventViewController" customModule="Stray" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventViewController" extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="pW2-Iw-5Bg" userLabel="EventViewController" customClass="EventViewController" customModule="Stray" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="b69-WY-Ku9"/>
                         <viewControllerLayoutGuide type="bottom" id="sU9-lB-8ZV"/>
@@ -185,19 +182,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="u4G-Rl-FJl" secondAttribute="trailing" id="wGk-O5-JrU"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="qwG-vm-3ph">
-                        <barButtonItem key="leftBarButtonItem" id="3Ns-5s-i7R">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="uYC-zY-p6t">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="18"/>
-                                <state key="normal" title="">
-                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="qwG-vm-3ph"/>
                     <connections>
                         <outlet property="eventStartDay" destination="Pfx-uQ-0OF" id="cNA-Ql-Nzv"/>
                         <outlet property="eventStartMonth" destination="RG4-WB-RmJ" id="eRd-Mk-YyL"/>
@@ -232,7 +217,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="75" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Drg-ei-boB">
-                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexBackgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
@@ -294,27 +279,6 @@
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
-                    <navigationItem key="navigationItem" id="VGq-Yf-Jpu">
-                        <barButtonItem key="leftBarButtonItem" id="9oE-AX-KIO">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="CzW-yi-N68">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="18"/>
-                                <state key="normal" title="">
-                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="0UU-1U-Ehn" kind="presentation" modalPresentationStyle="overFullScreen" id="5ug-Tr-QN4"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
-                        <connections>
-                            <outletCollection property="rightBarButtonItemsCollection" destination="g2O-mQ-K5H" collectionClass="NSMutableArray" id="WED-P1-mWj"/>
-                            <outletCollection property="rightBarButtonItemsCollection" destination="0Cv-ho-FHc" collectionClass="NSMutableArray" id="C3K-Vc-yJJ"/>
-                        </connections>
-                    </navigationItem>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="addBarButtonItem" destination="g2O-mQ-K5H" id="niP-zG-iyq"/>
                         <outlet property="editBarButtonItem" destination="0Cv-ho-FHc" id="qlV-PI-hUx"/>
@@ -432,7 +396,7 @@
         <!--MenuController-->
         <scene sceneID="yuB-rH-chT">
             <objects>
-                <viewController storyboardIdentifier="MenuController" id="0UU-1U-Ehn" userLabel="MenuController" customClass="MenuController" customModule="Stray" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MenuController" automaticallyAdjustsScrollViewInsets="NO" id="0UU-1U-Ehn" userLabel="MenuController" customClass="MenuController" customModule="Stray" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="RKW-Vr-fUi"/>
                         <viewControllerLayoutGuide type="bottom" id="9Dq-JX-yHI"/>
@@ -480,7 +444,7 @@
         <!--EventsViewController-->
         <scene sceneID="maY-e6-1tb">
             <objects>
-                <viewController storyboardIdentifier="EventsViewController" extendedLayoutIncludesOpaqueBars="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="MkX-Cq-2XK" userLabel="EventsViewController" customClass="EventsViewController" customModule="Stray" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventsViewController" extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="MkX-Cq-2XK" userLabel="EventsViewController" customClass="EventsViewController" customModule="Stray" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Whe-56-X4F"/>
                         <viewControllerLayoutGuide type="bottom" id="CaW-42-4UM"/>
@@ -671,27 +635,11 @@
                         <constraints>
                             <constraint firstItem="eEg-yt-w1f" firstAttribute="leading" secondItem="0md-r9-gBi" secondAttribute="leading" id="2PQ-iL-k3h"/>
                             <constraint firstItem="CaW-42-4UM" firstAttribute="top" secondItem="eEg-yt-w1f" secondAttribute="bottom" id="Bpf-Bn-Kqs"/>
-                            <constraint firstItem="eEg-yt-w1f" firstAttribute="top" secondItem="0md-r9-gBi" secondAttribute="top" constant="20" id="e90-EN-uVl"/>
+                            <constraint firstItem="eEg-yt-w1f" firstAttribute="top" secondItem="Whe-56-X4F" secondAttribute="bottom" id="KIh-0A-Alo"/>
                             <constraint firstAttribute="trailing" secondItem="eEg-yt-w1f" secondAttribute="trailing" id="vfJ-pN-EeN"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="arv-nY-csE">
-                        <barButtonItem key="leftBarButtonItem" id="OJX-Cz-Vz7">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="ks1-aO-bYS">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="18"/>
-                                <state key="normal" title="">
-                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="0UU-1U-Ehn" kind="presentation" modalPresentationStyle="overFullScreen" id="ElS-t5-BKa"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
-                    </navigationItem>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <connections>
                         <outlet property="tableView" destination="eEg-yt-w1f" id="yXd-dQ-fPa"/>
                         <segue destination="OEB-QV-TsG" kind="show" identifier="segueToTagsFromEvents" id="r8c-zd-wI8"/>
@@ -725,7 +673,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="ElS-t5-BKa"/>
-        <segue reference="uIL-Q8-1sK"/>
+        <segue reference="r8c-zd-wI8"/>
     </inferredMetricsTieBreakers>
 </document>
