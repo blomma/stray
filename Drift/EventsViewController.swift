@@ -21,7 +21,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return NSDateFormatter().shortStandaloneWeekdaySymbols
     }()
 
-	private let stack: CoreDataStack? = defaultCoreDataStack()
+	private let stack: CoreDataStack = defaultCoreDataStack()
 	private let state: State = State()
 	private let transitionOperator: TransitionOperator = TransitionOperator()
 
@@ -36,10 +36,9 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 		view.addGestureRecognizer(self.transitionOperator.gestureRecogniser)
 
         if let guid = self.state.selectedEventGUID,
-            let moc = self.stack?.managedObjectContext,
-            let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: moc) {
+            let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: stack.managedObjectContext) {
 
-                let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
+                let request = FetchRequest<Event>(moc: stack.managedObjectContext, attribute: "guid", value: guid)
                 let result = fetch(request)
 
                 if result.success,
@@ -53,22 +52,20 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
 
-        if let moc = self.stack?.managedObjectContext {
-            var fetchRequest = NSFetchRequest(entityName: "Event")
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
-            fetchRequest.fetchBatchSize = 20
+		var fetchRequest = NSFetchRequest(entityName: "Event")
+		fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
+		fetchRequest.fetchBatchSize = 20
 
-            var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
-            controller.delegate = self
+		var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext:stack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+		controller.delegate = self
 
-            var error: NSErrorPointer = NSErrorPointer()
-            if !controller.performFetch(error) {
-                println("Unresolved error \(error)")
-                exit(-1)
-            }
+		var error: NSErrorPointer = NSErrorPointer()
+		if !controller.performFetch(error) {
+			println("Unresolved error \(error)")
+			exit(-1)
+		}
 
-            self.fetchedResultsController =  controller
-        }
+		self.fetchedResultsController =  controller
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -178,14 +175,13 @@ extension EventsViewController_UITableViewDelegate {
 
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            if let event = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? Event,
-            let moc = self.stack?.managedObjectContext {
+            if let event = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? Event {
                 if let selectedEventGUID = self.state.selectedEventGUID where event.guid == selectedEventGUID {
                     self.state.selectedEventGUID = nil
                 }
 
-                moc.deleteObject(event)
-                saveContextAndWait(moc)
+                stack.managedObjectContext.deleteObject(event)
+                saveContextAndWait(stack.managedObjectContext)
             }
         }
     }
@@ -219,14 +215,13 @@ typealias EventsViewController_EventCellDelegate = EventsViewController
 extension EventsViewController_EventCellDelegate {
     func didDeleteEventCell(cell: EventCell) {
         if let indexPath = self.tableView?.indexPathForCell(cell),
-            let event = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? Event,
-            let moc = self.stack?.managedObjectContext {
+            let event = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? Event {
                 if event.guid == self.state.selectedEventGUID {
                     self.state.selectedEventGUID = nil
                 }
 
-                moc.deleteObject(event)
-                saveContextAndWait(moc)
+                stack.managedObjectContext.deleteObject(event)
+                saveContextAndWait(stack.managedObjectContext)
         }
     }
 

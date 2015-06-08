@@ -33,7 +33,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
     // MARK: Private properties
     private var selectedEvent: Event?
 
-	private let stack: CoreDataStack? = defaultCoreDataStack()
+	private let stack: CoreDataStack = defaultCoreDataStack()
     private let state: State = State()
 	private let transitionOperator: TransitionOperator = TransitionOperator()
 
@@ -53,9 +53,8 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
 		DLog()
         eventTimerControl?.delegate = self
 
-        if let guid = state.selectedEventGUID,
-            let moc = stack?.managedObjectContext {
-                let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
+        if let guid = state.selectedEventGUID {
+                let request = FetchRequest<Event>(moc: stack.managedObjectContext, attribute: "guid", value: guid)
                 let result = fetch(request)
 
                 if result.success,
@@ -271,26 +270,24 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
     @IBAction func toggleEventTouchUpInside(sender: UIButton) {
         if let selectedEvent = selectedEvent {
             if let _ = selectedEvent.stopDate {
-                if let moc = stack?.managedObjectContext {
-                    // Event is stoped, so start a new
-                    let event = Event(moc, startDate: NSDate())
-                    self.selectedEvent = event
+				// Event is stoped, so start a new
+				let event = Event(stack.managedObjectContext, startDate: NSDate())
+				self.selectedEvent = event
 
-                    state.selectedEventGUID = event.guid
+				state.selectedEventGUID = event.guid
 
-                    eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
+				eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
 
-                    toggleStartStopButton?.setTitle("STOP", forState: .Normal)
+				toggleStartStopButton?.setTitle("STOP", forState: .Normal)
 
-                    animateStartEvent()
+				animateStartEvent()
 
-                    if let font = UIFont(name: "FontAwesome", size: 20) {
-                        let attriString = NSAttributedString(string:"\u{f02b}", attributes:
-                            [NSFontAttributeName: font])
+				if let font = UIFont(name: "FontAwesome", size: 20) {
+					let attriString = NSAttributedString(string:"\u{f02b}", attributes:
+						[NSFontAttributeName: font])
 
-                        tag?.setAttributedTitle(attriString, forState: .Normal)
-                    }
-                }
+					tag?.setAttributedTitle(attriString, forState: .Normal)
+				}
             } else {
                 // Event is started
                 eventTimerControl?.stop()
@@ -300,33 +297,29 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
                 animateStopEvent()
             }
         } else {
-            // No event exists, start a new
-            if let moc = stack?.managedObjectContext {
-                // Event is stoped, so start a new
-                let event = Event(moc, startDate: NSDate())
-                self.selectedEvent = event
+			// No event exists, start a new
+			// Event is stoped, so start a new
+			let event = Event(stack.managedObjectContext, startDate: NSDate())
+			self.selectedEvent = event
 
-                state.selectedEventGUID = event.guid
+			state.selectedEventGUID = event.guid
 
-                eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
+			eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
 
-                toggleStartStopButton?.setTitle("STOP", forState: .Normal)
+			toggleStartStopButton?.setTitle("STOP", forState: .Normal)
 
-                animateStartEvent()
+			animateStartEvent()
 
-                if let font = UIFont(name: "FontAwesome", size: 20) {
-                    let attriString = NSAttributedString(string:"\u{f02b}", attributes:
-                        [NSFontAttributeName: font])
+			if let font = UIFont(name: "FontAwesome", size: 20) {
+				let attriString = NSAttributedString(string:"\u{f02b}", attributes:
+					[NSFontAttributeName: font])
 
-                    tag?.setAttributedTitle(attriString, forState: .Normal)
-                }
-            }
-        }
+				tag?.setAttributedTitle(attriString, forState: .Normal)
+			}
+		}
 
         sender.animate()
-        if let moc = stack?.managedObjectContext {
-            saveContextAndWait(moc)
-        }
+		saveContextAndWait(stack.managedObjectContext)
     }
 }
 
@@ -374,18 +367,14 @@ extension EventViewController_EventTimerControlDelegate {
             animateEventTransforming(transform)
             selectedEvent?.stopDate = eventTimerControl?.nowDate
 
-            if let moc = stack?.managedObjectContext {
-                saveContextAndWait(moc)
-            }
+			saveContextAndWait(stack.managedObjectContext)
         case .StartDateTransformingStop:
             animateEventTransforming(transform)
             if let startDate = eventTimerControl?.startDate {
                 selectedEvent?.startDate = startDate
 
-                if let moc = stack?.managedObjectContext {
-                    saveContextAndWait(moc)
-                }
-            }
+				saveContextAndWait(stack.managedObjectContext)
+			}
         default:
             break
         }

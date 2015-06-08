@@ -18,67 +18,57 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
     var didDismiss: Dismiss?
 
     var userReorderingCells: Bool = false
-    var stack: CoreDataStack?
-    var state: State?
+	let stack: CoreDataStack = defaultCoreDataStack()
+    let state: State = State()
 
     var selectedEvent: Event?
 
 	var maxSortOrderIndex: Int = 0
 
     private lazy var fetchedResultsController: NSFetchedResultsController = {
-        if let moc = self.stack?.managedObjectContext {
-            var fetchRequest = NSFetchRequest(entityName: Tag.entityName)
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: false)]
-			fetchRequest.fetchBatchSize = 20
+		var fetchRequest = NSFetchRequest(entityName: Tag.entityName)
+		fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: false)]
+		fetchRequest.fetchBatchSize = 20
 
-            var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
-            controller.delegate = self
+		var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.stack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+		controller.delegate = self
 
-            var error: NSErrorPointer = NSErrorPointer()
-            if !controller.performFetch(error) {
-                println("Unresolved error \(error)")
-                exit(-1)
-            }
+		var error: NSErrorPointer = NSErrorPointer()
+		if !controller.performFetch(error) {
+			println("Unresolved error \(error)")
+			exit(-1)
+		}
 
-            return controller
-        }
-
-        println("No moc")
-        exit(-1)
-        }()
+		return controller
+		}()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        stack = defaultCoreDataStack()
-        state = State()
+		let request = FetchRequest<Tag>(moc: stack.managedObjectContext)
+		request.predicate = NSPredicate(format: "sortIndex == max(sortIndex)")
+		let result = fetch(request)
 
-        if let moc = stack?.managedObjectContext {
-			let request = FetchRequest<Tag>(moc: moc)
-			request.predicate = NSPredicate(format: "sortIndex == max(sortIndex)")
+		if result.success,
+			let tag = result.objects.first,
+			let sortIndex = tag.sortIndex as? Int {
+				maxSortOrderIndex = sortIndex
+		}
+
+		if let guid = state.selectedEventGUID {
+			let request = FetchRequest<Event>(moc: stack.managedObjectContext, attribute: "guid", value: guid)
 			let result = fetch(request)
 
 			if result.success,
-                let tag = result.objects.first,
-				let sortIndex = tag.sortIndex as? Int {
-					maxSortOrderIndex = sortIndex
+				let event = result.objects.first,
+				let tag = event.inTag,
+				let indexPath = fetchedResultsController.indexPathForObject(tag) {
+					selectedEvent = event
+
+					tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
+					tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
 			}
-
-			if let guid = state?.selectedEventGUID {
-				let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
-				let result = fetch(request)
-
-				if result.success,
-					let event = result.objects.first,
-					let tag = event.inTag,
-					let indexPath = fetchedResultsController.indexPathForObject(tag) {
-                        selectedEvent = event
-
-						tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
-						tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
-				}
-			}
-        }
+		}
 
 		editBarButtonItem?.target = self
 		editBarButtonItem?.action = "toggleEdit"
@@ -107,10 +97,8 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 			}
 
 			cell.didEndEditing = { [unowned self] in
-				if let moc = self.stack?.managedObjectContext {
-					tag.name = cell.name.text
-					saveContextAndWait(moc)
-				}
+				tag.name = cell.name.text
+				saveContextAndWait(self.stack.managedObjectContext)
 			}
         }
     }
@@ -130,11 +118,9 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 
 	func addTagRow() {
-		if let moc = self.stack?.managedObjectContext {
-			let tag = Tag(moc, sortIndex: maxSortOrderIndex)
-			maxSortOrderIndex++
-			saveContextAndWait(moc)
-		}
+		let tag = Tag(stack.managedObjectContext, sortIndex: maxSortOrderIndex)
+		maxSortOrderIndex++
+		saveContextAndWait(stack.managedObjectContext)
 	}
 
     func showSelectMark(cell: TagCell) {
@@ -164,9 +150,8 @@ extension TagsViewController_UITableViewDelegate {
 
         if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag,
             let cell = tableView.cellForRowAtIndexPath(indexPath) as? TagCell,
-            let guid = state?.selectedEventGUID,
-            let moc = stack?.managedObjectContext {
-                let request = FetchRequest<Event>(moc: moc, attribute: "guid", value: guid)
+            let guid = state.selectedEventGUID {
+                let request = FetchRequest<Event>(moc: stack.managedObjectContext, attribute: "guid", value: guid)
                 let result = fetch(request)
 
                 if result.success,
@@ -179,17 +164,16 @@ extension TagsViewController_UITableViewDelegate {
 
                         selectedEvent = event
 
-                        saveContextAndWait(moc)
+                        saveContextAndWait(stack.managedObjectContext)
                 }
         }
     }
 
 	func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag,
-                let moc = stack?.managedObjectContext {
-                    moc.deleteObject(tag)
-                    saveContextAndWait(moc)
+            if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
+                    stack.managedObjectContext.deleteObject(tag)
+                    saveContextAndWait(stack.managedObjectContext)
             }
         }
     }
@@ -203,11 +187,10 @@ extension TagsViewController_UITableViewDelegate {
             return
         }
 
-        if let tag = fetchedResultsController.objectAtIndexPath(sourceIndexPath) as? Tag,
-            let moc = stack?.managedObjectContext {
+        if let tag = fetchedResultsController.objectAtIndexPath(sourceIndexPath) as? Tag {
                 userReorderingCells = true
                 tag.sortIndex = destinationIndexPath.row
-                saveContextAndWait(moc)
+                saveContextAndWait(stack.managedObjectContext)
                 userReorderingCells = false
         }
     }

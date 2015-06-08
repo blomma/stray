@@ -18,19 +18,23 @@ public func applicationStorageDirectory() -> NSURL? {
 	return .None
 }
 
-public func coreDataModel() -> CoreDataModel? {
+public func coreDataModel() -> CoreDataModel {
+	let name = "CoreDataModel"
+	let dataBaseFileName = name + ".sqlite"
+
 	if let applicationStorageDirectory = applicationStorageDirectory() {
-		return CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle(), storeDirectoryURL: applicationStorageDirectory)
+		// Check if we have a preexisting database at this location
+		var storeURL: NSURL = applicationStorageDirectory.URLByAppendingPathComponent(dataBaseFileName)
+		var error:NSError?
+		if storeURL.checkResourceIsReachableAndReturnError(&error) {
+			return CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle(), storeDirectoryURL: applicationStorageDirectory)
+		}
 	}
 
-	return .None
+	return CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle())
 }
 
-public func defaultCoreDataStack() -> CoreDataStack? {
-	if let model = coreDataModel() {
-		return CoreDataStack(model: model)
-	}
-
-	return .None
+public func defaultCoreDataStack() -> CoreDataStack {
+	return CoreDataStack(model: coreDataModel())
 }
 
