@@ -169,8 +169,8 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 					var toEndFrame = toView.frame
 					toEndFrame.origin.x = 0
 
-//					var oldFromEndFrame = oldFromView.frame
-//					oldFromEndFrame.origin.x = -oldFromView.frame.width
+					var oldFromEndFrame = oldFromView.frame
+					oldFromEndFrame.origin.x = -oldFromView.frame.width
 
 					var fromEndFrame = fromView.frame
 					fromEndFrame.origin.x = -(fromView.frame.width + oldFromView.frame.width)
@@ -178,7 +178,7 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 					UIView.animateWithDuration(duration, delay: 0, options: nil, animations: {
 						fromView.frame = fromEndFrame
 						toView.frame = toEndFrame
-//						oldFromView.frame = oldFromEndFrame
+						oldFromView.frame = oldFromEndFrame
 						}, completion: { finished in
 							oldFromView.removeFromSuperview()
 							transitionContext.completeTransition(true)

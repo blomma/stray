@@ -159,7 +159,7 @@
                             <constraint firstAttribute="centerX" secondItem="IgW-Dr-4Bj" secondAttribute="centerX" id="8ry-yJ-aLa"/>
                             <constraint firstItem="f4I-GS-DXr" firstAttribute="leading" secondItem="5mL-xl-tvC" secondAttribute="leading" id="DFL-lv-6dY"/>
                             <constraint firstItem="Pfx-uQ-0OF" firstAttribute="baseline" secondItem="mQD-9K-Yje" secondAttribute="baseline" id="GV5-df-Fk0"/>
-                            <constraint firstItem="T6v-e0-PDz" firstAttribute="top" secondItem="b69-WY-Ku9" secondAttribute="bottom" id="MuN-xh-V1V"/>
+                            <constraint firstItem="T6v-e0-PDz" firstAttribute="top" secondItem="8Qo-UI-s2h" secondAttribute="top" constant="20" id="LjF-Ih-Gsp"/>
                             <constraint firstItem="kDP-kd-qe8" firstAttribute="top" secondItem="NKF-pl-TGd" secondAttribute="bottom" id="Qn6-6o-7nB"/>
                             <constraint firstItem="u4G-Rl-FJl" firstAttribute="leading" secondItem="8Qo-UI-s2h" secondAttribute="leadingMargin" id="Qv8-2S-QoY"/>
                             <constraint firstItem="d9a-bg-sgr" firstAttribute="bottom" secondItem="ebw-fH-af8" secondAttribute="bottom" id="RCk-t4-Yiv"/>
@@ -635,7 +635,7 @@
                         <constraints>
                             <constraint firstItem="eEg-yt-w1f" firstAttribute="leading" secondItem="0md-r9-gBi" secondAttribute="leading" id="2PQ-iL-k3h"/>
                             <constraint firstItem="CaW-42-4UM" firstAttribute="top" secondItem="eEg-yt-w1f" secondAttribute="bottom" id="Bpf-Bn-Kqs"/>
-                            <constraint firstItem="eEg-yt-w1f" firstAttribute="top" secondItem="Whe-56-X4F" secondAttribute="bottom" id="KIh-0A-Alo"/>
+                            <constraint firstItem="eEg-yt-w1f" firstAttribute="top" secondItem="0md-r9-gBi" secondAttribute="top" constant="20" id="iGs-SS-7u0"/>
                             <constraint firstAttribute="trailing" secondItem="eEg-yt-w1f" secondAttribute="trailing" id="vfJ-pN-EeN"/>
                         </constraints>
                     </view>
