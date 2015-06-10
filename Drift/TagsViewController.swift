@@ -150,22 +150,15 @@ extension TagsViewController_UITableViewDelegate {
 
         if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag,
             let cell = tableView.cellForRowAtIndexPath(indexPath) as? TagCell,
-            let guid = state.selectedEventGUID {
-                let request = FetchRequest<Event>(moc: stack.managedObjectContext, attribute: "guid", value: guid)
-                let result = fetch(request)
+            let guid = state.selectedEventGUID,
+			let event = selectedEvent {
+				if let inTag = event.inTag where inTag.isEqual(tag) {
+					event.inTag = nil
+				} else {
+					event.inTag = tag
+				}
 
-                if result.success,
-                    let event = result.objects.first {
-                        if let inTag = event.inTag where inTag.isEqual(tag) {
-                            event.inTag = nil
-                        } else {
-                            event.inTag = tag
-                        }
-
-                        selectedEvent = event
-
-                        saveContextAndWait(stack.managedObjectContext)
-                }
+				saveContextAndWait(stack.managedObjectContext)
         }
     }
 
