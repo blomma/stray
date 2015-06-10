@@ -17,13 +17,13 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     var didDismiss: Dismiss?
 
-    var userReorderingCells: Bool = false
-	let stack: CoreDataStack = defaultCoreDataStack()
-    let state: State = State()
+    var userReorderingCells = false
+	let stack = defaultCoreDataStack()
+    let state = State()
 
     var selectedEvent: Event?
 
-	var maxSortOrderIndex: Int = 0
+	var maxSortOrderIndex = 0
 
     private lazy var fetchedResultsController: NSFetchedResultsController = {
 		var fetchRequest = NSFetchRequest(entityName: Tag.entityName)
@@ -64,7 +64,6 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 				let tag = event.inTag,
 				let indexPath = fetchedResultsController.indexPathForObject(tag) {
 					selectedEvent = event
-
 					tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
 					tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
 			}

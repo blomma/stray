@@ -17,13 +17,13 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return NSDateFormatter().shortStandaloneMonthSymbols
     }()
 
-    private lazy var shortStandaloneWeekdaySymbols: [AnyObject]! = {
+    private lazy var shortStandaloneWeekdaySymbols: [AnyObject] = {
         return NSDateFormatter().shortStandaloneWeekdaySymbols
     }()
 
-	private let stack: CoreDataStack = defaultCoreDataStack()
-	private let state: State = State()
-	private let transitionOperator: TransitionOperator = TransitionOperator()
+	private let stack = defaultCoreDataStack()
+	private let state = State()
+	private let transitionOperator = TransitionOperator()
 
     private let calendar = NSCalendar.autoupdatingCurrentCalendar()
 	private var selectedEvent: Event?
@@ -75,7 +75,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if segue.identifier == "segueToTagsFromEvents",
             let controller = segue.destinationViewController as? TagsViewController,
             let cell = sender as? UITableViewCell,
-            let indexPath = self.tableView?.indexPathForCell(cell),
+            let indexPath = tableView?.indexPathForCell(cell),
             let event = fetchedResultsController.objectAtIndexPath(indexPath) as? Event {
                 controller.didDismiss = {
                     dispatch_async(dispatch_get_main_queue(), { [unowned self] in
@@ -104,7 +104,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
             // StartTime
             let startTimeFlags: NSCalendarUnit = .CalendarUnitMinute | .CalendarUnitHour | .CalendarUnitDay | .CalendarUnitMonth | .CalendarUnitYear
-            let startTimeComponents = self.calendar.components(startTimeFlags, fromDate: event.startDate)
+            let startTimeComponents = calendar.components(startTimeFlags, fromDate: event.startDate)
 
             cell.eventStartTime.text = String(format: "%02ld:%02ld", startTimeComponents.hour, startTimeComponents.minute)
             cell.eventStartDay.text = String(format: "%02ld", startTimeComponents.day)
@@ -117,7 +117,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             // EventTime
             let stopDate = event.stopDate != nil ? event.stopDate! : NSDate()
             let eventTimeFlags: NSCalendarUnit = .CalendarUnitMinute | .CalendarUnitHour
-            let eventTimeComponents = self.calendar.components(eventTimeFlags, fromDate: event.startDate, toDate: stopDate, options: NSCalendarOptions(0))
+            let eventTimeComponents = calendar.components(eventTimeFlags, fromDate: event.startDate, toDate: stopDate, options: NSCalendarOptions(0))
 
             cell.eventTimeHours.text = String(format: "%02ld", eventTimeComponents.hour)
             cell.eventTimeMinutes.text = String(format: "%02ld", eventTimeComponents.minute)
@@ -125,7 +125,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             // StopTime
             if let stopDate = event.stopDate {
                 let stopTimeFlags: NSCalendarUnit = .CalendarUnitMinute | .CalendarUnitHour | .CalendarUnitDay | .CalendarUnitMonth | .CalendarUnitYear
-                let stopTimeComponents = self.calendar.components(stopTimeFlags, fromDate: stopDate)
+                let stopTimeComponents = calendar.components(stopTimeFlags, fromDate: stopDate)
 
                 cell.eventStopTime.text = String(format: "%02ld:%02ld", stopTimeComponents.hour, stopTimeComponents.minute)
                 cell.eventStopDay.text = String(format: "%02ld", stopTimeComponents.day)
@@ -162,12 +162,12 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 typealias EventsViewControllerTransitionOperatorDelegate = EventsViewController
 extension EventsViewControllerTransitionOperatorDelegate {
 	func transitionControllerInteractionDidStart(havePresented: Bool) {
-		if let navigationController = self.navigationController {
-			navigationController.delegate = self.transitionOperator
+		if let navigationController = navigationController {
+			navigationController.delegate = transitionOperator
 
 			if havePresented {
 				navigationController.popViewControllerAnimated(true)
-			} else if let controller = self.storyboard?.instantiateViewControllerWithIdentifier("MenuController") as? UIViewController {
+			} else if let controller = storyboard?.instantiateViewControllerWithIdentifier("MenuController") as? UIViewController {
 				navigationController.pushViewController(controller, animated: true)
 			}
 		}
@@ -203,8 +203,8 @@ extension EventsViewController_UITableViewDelegate {
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
             if let event = fetchedResultsController.objectAtIndexPath(indexPath) as? Event {
-                if let selectedEventGUID = self.state.selectedEventGUID where event.guid == selectedEventGUID {
-                    self.state.selectedEventGUID = nil
+                if let selectedEventGUID = state.selectedEventGUID where event.guid == selectedEventGUID {
+                    state.selectedEventGUID = nil
                 }
 
                 stack.managedObjectContext.deleteObject(event)
@@ -241,10 +241,10 @@ extension EventsViewController_UITableViewDataSource {
 typealias EventsViewController_EventCellDelegate = EventsViewController
 extension EventsViewController_EventCellDelegate {
     func didDeleteEventCell(cell: EventCell) {
-        if let indexPath = self.tableView?.indexPathForCell(cell),
+        if let indexPath = tableView?.indexPathForCell(cell),
             let event = fetchedResultsController.objectAtIndexPath(indexPath) as? Event {
-                if event.guid == self.state.selectedEventGUID {
-                    self.state.selectedEventGUID = nil
+                if event.guid == state.selectedEventGUID {
+                    state.selectedEventGUID = nil
                 }
 
                 stack.managedObjectContext.deleteObject(event)
@@ -263,26 +263,26 @@ extension EventsViewController_EventCellDelegate {
 typealias EventsViewController_NSFetchedResultsControllerDelegate = EventsViewController
 extension EventsViewController_NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        self.tableView?.beginUpdates()
+        tableView?.beginUpdates()
     }
 
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         switch type {
         case .Insert:
-            self.tableView?.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+            tableView?.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
         case .Delete:
-            self.tableView?.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+            tableView?.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
         case .Update:
-            if let cell = self.tableView?.cellForRowAtIndexPath(indexPath!) as? EventCell {
+            if let cell = tableView?.cellForRowAtIndexPath(indexPath!) as? EventCell {
                 configureCell(cell, atIndexPath: indexPath!)
             }
         case .Move:
-            self.tableView?.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-            self.tableView?.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+            tableView?.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+            tableView?.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
         }
     }
 
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        self.tableView?.endUpdates()
+        tableView?.endUpdates()
     }
 }
