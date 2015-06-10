@@ -8,12 +8,12 @@
 
 import UIKit
 
-@objc public protocol EventCellDelegate : class {
+protocol EventCellDelegate : class {
     func didDeleteEventCell(cell:EventCell)
     func didPressTag(cell:EventCell)
 }
 
-public class EventCell: UITableViewCell {
+class EventCell: UITableViewCell {
     @IBOutlet var eventStartTime: UILabel!
     @IBOutlet var eventStartDay: UILabel!
     @IBOutlet var eventStartMonth: UILabel!
@@ -30,9 +30,9 @@ public class EventCell: UITableViewCell {
     @IBOutlet var selectedMark: UIView!
     @IBOutlet var tagButton: UIButton!
 
-    public weak var delegate:EventCellDelegate?
+	weak var delegate:EventCellDelegate?
 
-	override public func prepareForReuse() {
+	override func prepareForReuse() {
 		selectedMark.alpha = 0
 	}
 

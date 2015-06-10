@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-public final class Tag: NSManagedObject {
+final class Tag: NSManagedObject {
     @NSManaged var guid: String?
     @NSManaged var name: String?
     @NSManaged var sortIndex: NSNumber?

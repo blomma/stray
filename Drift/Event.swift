@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-public final class Event: NSManagedObject {
+final class Event: NSManagedObject {
 	@NSManaged var startDate: NSDate
     @NSManaged var guid: String?
     @NSManaged var stopDate: NSDate?

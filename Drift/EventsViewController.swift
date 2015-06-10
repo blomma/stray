@@ -49,9 +49,9 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         super.viewDidLoad()
 
 		transitionOperator.delegate = self
-		view.addGestureRecognizer(self.transitionOperator.gestureRecogniser)
+		view.addGestureRecognizer(transitionOperator.gestureRecogniser)
 
-        if let guid = self.state.selectedEventGUID {
+        if let guid = state.selectedEventGUID {
 			let request = FetchRequest<Event>(moc: stack.managedObjectContext, attribute: "guid", value: guid)
 			let result = fetch(request)
 

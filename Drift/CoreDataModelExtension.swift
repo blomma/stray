@@ -9,7 +9,7 @@
 import Foundation
 import JSQCoreDataKit
 
-public func applicationStorageDirectory() -> NSURL? {
+func applicationStorageDirectory() -> NSURL? {
 	if let applicationName = NSBundle.mainBundle().infoDictionary?["CFBundleName" as NSObject] as? String,
 		let directory = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .UserDomainMask, true).last as? String {
 			return NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(applicationName))
@@ -18,7 +18,7 @@ public func applicationStorageDirectory() -> NSURL? {
 	return .None
 }
 
-public func coreDataModel() -> CoreDataModel {
+func coreDataModel() -> CoreDataModel {
 	let name = "CoreDataModel"
 	let dataBaseFileName = name + ".sqlite"
 
@@ -34,7 +34,7 @@ public func coreDataModel() -> CoreDataModel {
 	return CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle())
 }
 
-public func defaultCoreDataStack() -> CoreDataStack {
+func defaultCoreDataStack() -> CoreDataStack {
 	return CoreDataStack(model: coreDataModel())
 }
 

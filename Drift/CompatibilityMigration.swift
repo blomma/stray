@@ -10,8 +10,8 @@ import UIKit
 import CoreData
 import JSQCoreDataKit
 
-public class CompatibilityMigration  {
-    let stack: CoreDataStack = defaultCoreDataStack()
+class CompatibilityMigration  {
+    let stack = defaultCoreDataStack()
 
     let strayCompatibilityLevelKey = "StrayCompatibilityLevel"
     let stateCompatibilityLevelKey = "stateCompatibilityLevel"
@@ -57,7 +57,7 @@ public class CompatibilityMigration  {
     }
 
     private func migrateState() {
-        self.migrateToCompatibilityLevel(1, fromLevel: self.stateCompatibilityLevel) { () -> () in
+        migrateToCompatibilityLevel(1, fromLevel: stateCompatibilityLevel) { () -> () in
             //==================================================================================//
             // ACTIVE EVENT
             //==================================================================================//
@@ -159,7 +159,7 @@ public class CompatibilityMigration  {
         self.coreDataCompatibilityLevel = 1
     }
 
-    public func migrate() {
+	func migrate() {
         self.migrateCoreData()
         self.migrateState()
     }

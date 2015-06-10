@@ -167,7 +167,6 @@
 				9E0D04871AD69DE500E82A13 /* Extension */,
 				9EAD25D7198E3140006A2779 /* Fonts */,
 				9E42F1F515570FD60087F602 /* Supporting Files */,
-				9EAB520B15C95523008952FB /* Categories */,
 				9E63BBF6156EAAA80006FEFC /* Repository */,
 				9E01309215E39D20005C8765 /* Storyboard */,
 				9E9C232D15F288D400572FB7 /* Controllers */,
@@ -240,13 +239,6 @@
 				9E4DFB8B1AD17CBB008C0123 /* MenuController.swift */,
 			);
 			name = Controllers;
-			sourceTree = "<group>";
-		};
-		9EAB520B15C95523008952FB /* Categories */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Categories;
 			sourceTree = "<group>";
 		};
 		9EAD25D7198E3140006A2779 /* Fonts */ = {

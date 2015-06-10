@@ -9,29 +9,29 @@
 import Foundation
 import CoreData
 
-public struct FetchResult <T: NSManagedObject> {
-    public let success: Bool
-    public let objects: [T]
-    public let error: NSError?
+struct FetchResult <T: NSManagedObject> {
+    let success: Bool
+    let objects: [T]
+    let error: NSError?
 }
 
-public class FetchRequest <T: NSManagedObject>: NSFetchRequest {
+class FetchRequest <T: NSManagedObject>: NSFetchRequest {
     var moc: NSManagedObjectContext
 
-    public init(moc: NSManagedObjectContext) {
+    init(moc: NSManagedObjectContext) {
         self.moc = moc
 
         super.init()
         self.entity = NSEntityDescription.entityForName(T.entityName, inManagedObjectContext: moc)
     }
 
-    convenience public init(moc: NSManagedObjectContext, attribute: String, value: AnyObject) {
+    convenience init(moc: NSManagedObjectContext, attribute: String, value: AnyObject) {
         self.init(moc: moc)
         predicate = NSPredicate(format: "%K = %@", attribute, value as! NSObject)
     }
 }
 
-public func fetch<T: NSManagedObject>(request: FetchRequest<T>) -> FetchResult<T> {
+func fetch<T: NSManagedObject>(request: FetchRequest<T>) -> FetchResult<T> {
     var error: NSError?
     var results: [AnyObject]?
 
@@ -53,8 +53,4 @@ extension NSManagedObject {
 
         return last(nameComponents)!
     }
-//
-//    class func fetchRequest() -> NSFetchRequest {
-//        return NSFetchRequest(entityName:self.entityName)
-//    }
 }

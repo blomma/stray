@@ -45,7 +45,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
 		DLog()
 
 		transitionOperator.delegate = self
-		view.addGestureRecognizer(self.transitionOperator.gestureRecogniser)
+		view.addGestureRecognizer(transitionOperator.gestureRecogniser)
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -139,12 +139,12 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
         let hour: Int = abs(components.hour)
         let minute: Int = abs(components.minute)
 
-        var eventTimeHours: String = String(format:"%02ld", hour)
+        var timeHours: String = String(format:"%02ld", hour)
         if components.hour < 0 || components.minute < 0 {
-            eventTimeHours = String(format:"-%@", eventTimeHours)
+            timeHours = String(format:"-%@", timeHours)
         }
 
-        self.eventTimeHours?.text   = eventTimeHours
+        eventTimeHours?.text   = timeHours
         eventTimeMinutes?.text = String(format:"%02ld", minute)
     }
 
@@ -300,7 +300,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
 			// No event exists, start a new
 			// Event is stoped, so start a new
 			let event = Event(stack.managedObjectContext, startDate: NSDate())
-			self.selectedEvent = event
+			selectedEvent = event
 
 			state.selectedEventGUID = event.guid
 
@@ -327,13 +327,12 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
 typealias EventViewControllerTransitionOperatorDelegate = EventViewController
 extension EventViewControllerTransitionOperatorDelegate {
 	func transitionControllerInteractionDidStart(havePresented: Bool) {
-		DLog()
-		if let navigationController = self.navigationController {
-			navigationController.delegate = self.transitionOperator
+		if let navigationController = navigationController {
+			navigationController.delegate = transitionOperator
 
 			if havePresented {
 				navigationController.popViewControllerAnimated(true)
-			} else if let controller = self.storyboard?.instantiateViewControllerWithIdentifier("MenuController") as? UIViewController {
+			} else if let controller = storyboard?.instantiateViewControllerWithIdentifier("MenuController") as? UIViewController {
 				navigationController.pushViewController(controller, animated: true)
 			}
 		}

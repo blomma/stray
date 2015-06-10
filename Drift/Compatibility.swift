@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-public final class Compatibility: NSManagedObject {
+final class Compatibility: NSManagedObject {
     @NSManaged var level: NSNumber?
 
     convenience init(_ context: NSManagedObjectContext,
