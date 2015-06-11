@@ -71,6 +71,15 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 		fetchedResultsController.delegate = nil
 	}
 
+	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+		if segue.identifier == "segueToTagsFromEvents",
+			let controller = segue.destinationViewController as? TagsViewController,
+			let cell = sender as? UITableViewCell,
+			let indexPath = tableView?.indexPathForCell(cell),
+			let event = fetchedResultsController.objectAtIndexPath(indexPath) as? Event {
+				controller.selectedEvent = event
+		}
+	}
 
     func configureCell(cell: EventCell, atIndexPath: NSIndexPath) -> Void {
         if let event = fetchedResultsController.objectAtIndexPath(atIndexPath) as? Event {
@@ -227,18 +236,6 @@ extension EventsViewController_UITableViewDataSource {
 // MARK: - EventCellDelegate
 typealias EventsViewController_EventCellDelegate = EventsViewController
 extension EventsViewController_EventCellDelegate {
-    func didDeleteEventCell(cell: EventCell) {
-        if let indexPath = tableView?.indexPathForCell(cell),
-            let event = fetchedResultsController.objectAtIndexPath(indexPath) as? Event {
-                if event.guid == state.selectedEventGUID {
-                    state.selectedEventGUID = nil
-                }
-
-                stack.managedObjectContext.deleteObject(event)
-                saveContextAndWait(stack.managedObjectContext)
-        }
-    }
-
     func didPressTag(cell: EventCell) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.performSegueWithIdentifier("segueToTagsFromEvents", sender: cell)
