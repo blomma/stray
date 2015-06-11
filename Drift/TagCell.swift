@@ -1,18 +1,15 @@
 import UIKit
 
-typealias EndEdit = () -> ()
-typealias BeginEdit = () -> (Bool)
-protocol TagCellProtocol : class {
-	var didEndEditing: EndEdit? { get set }
-	var shouldBeginEdit: BeginEdit? { get set }
+protocol TagCellDelegate : class {
+	func didEndEditing(cell:TagCell)
+	func shouldBeginEdit() -> Bool
 }
 
-class TagCell: UITableViewCell, UITextFieldDelegate, TagCellProtocol {
+class TagCell: UITableViewCell, UITextFieldDelegate {
 	@IBOutlet weak var name: UITextField!
     @IBOutlet weak var selectedMark: UIView!
 
-	var didEndEditing: EndEdit?
-	var shouldBeginEdit: BeginEdit?
+	weak var delegate: TagCellDelegate?
 
     override func prepareForReuse() {
         selectedMark.alpha = 0
@@ -22,7 +19,7 @@ class TagCell: UITableViewCell, UITextFieldDelegate, TagCellProtocol {
 typealias TextFieldDelegate = TagCell
 extension TextFieldDelegate {
 	func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-		if let shouldBegin = self.shouldBeginEdit?() {
+		if let shouldBegin = delegate?.shouldBeginEdit() {
 			return shouldBegin
 		}
 
@@ -37,6 +34,6 @@ extension TextFieldDelegate {
 
     func textFieldDidEndEditing(textField: UITextField) {
         textField.resignFirstResponder()
-		self.didEndEditing?()
+		delegate?.didEndEditing(self)
     }
 }

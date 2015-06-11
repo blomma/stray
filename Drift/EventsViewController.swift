@@ -71,19 +71,6 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 		fetchedResultsController.delegate = nil
 	}
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "segueToTagsFromEvents",
-            let controller = segue.destinationViewController as? TagsViewController,
-            let cell = sender as? UITableViewCell,
-            let indexPath = tableView?.indexPathForCell(cell),
-            let event = fetchedResultsController.objectAtIndexPath(indexPath) as? Event {
-                controller.didDismiss = {
-                    dispatch_async(dispatch_get_main_queue(), { [unowned self] in
-                        self.dismissViewControllerAnimated(true, completion: nil)
-                        })
-                }
-        }
-    }
 
     func configureCell(cell: EventCell, atIndexPath: NSIndexPath) -> Void {
         if let event = fetchedResultsController.objectAtIndexPath(atIndexPath) as? Event {

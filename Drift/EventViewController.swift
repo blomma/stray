@@ -106,15 +106,9 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
 	}
 
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-		super.prepareForSegue(segue, sender: sender)
-		DLog()
 		if segue.identifier == "segueToTagsFromEvent",
 			let controller = segue.destinationViewController as? TagsViewController {
-				controller.didDismiss = {
-					dispatch_async(dispatch_get_main_queue(), { [unowned self] in
-						self.dismissViewControllerAnimated(true, completion: nil)
-						})
-				}
+				controller.selectedEvent = selectedEvent
 		}
 	}
 

@@ -10,18 +10,17 @@ import UIKit
 import CoreData
 import JSQCoreDataKit
 
-class TagsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, DismissProtocol {
+class TagsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, TagCellDelegate {
 	@IBOutlet weak var tableView: UITableView!
 	@IBOutlet weak var editBarButtonItem: UIBarButtonItem!
 	@IBOutlet weak var addBarButtonItem: UIBarButtonItem!
-
-    var didDismiss: Dismiss?
 
     var userReorderingCells = false
 	let stack = defaultCoreDataStack()
     let state = State()
 
     var selectedEvent: Event?
+	private var selectedTag: Tag?
 
 	var maxSortOrderIndex = 0
 
@@ -55,18 +54,12 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 				maxSortOrderIndex = sortIndex
 		}
 
-		if let guid = state.selectedEventGUID {
-			let request = FetchRequest<Event>(moc: stack.managedObjectContext, attribute: "guid", value: guid)
-			let result = fetch(request)
-
-			if result.success,
-				let event = result.objects.first,
-				let tag = event.inTag,
-				let indexPath = fetchedResultsController.indexPathForObject(tag) {
-					selectedEvent = event
-					tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
-					tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
-			}
+		if let event = selectedEvent,
+			let tag = event.inTag,
+			let indexPath = fetchedResultsController.indexPathForObject(tag) {
+				selectedTag = tag
+				tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
+				tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
 		}
 
 		editBarButtonItem?.target = self
@@ -84,21 +77,14 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     func configureCell(cell: TagCell, atIndexPath: NSIndexPath) -> Void {
         if let tag = fetchedResultsController.objectAtIndexPath(atIndexPath) as? Tag {
+			cell.delegate = self
+
 			cell.name.text = tag.name
 			cell.name.enabled = tableView.editing
 
-            if selectedEvent?.inTag?.guid == tag.guid {
+            if selectedTag?.guid == tag.guid {
                 showSelectMark(cell)
             }
-
-			cell.shouldBeginEdit = { [unowned self] in
-				return self.tableView.editing
-			}
-
-			cell.didEndEditing = { [unowned self] in
-				tag.name = cell.name.text
-				saveContextAndWait(self.stack.managedObjectContext)
-			}
         }
     }
 
@@ -135,13 +121,29 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 }
 
+// MARK: - TagCellDelegate
+typealias TagsViewControllerTagCellDelegate = TagsViewController
+extension TagsViewControllerTagCellDelegate {
+	func didEndEditing(cell: TagCell) {
+		if let indexPath = tableView.indexPathForCell(cell),
+			let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
+				tag.name = cell.name.text
+				saveContextAndWait(stack.managedObjectContext)
+		}
+	}
+
+	func shouldBeginEdit() -> Bool {
+		return tableView.editing
+	}
+}
+
 // MARK: - UITableViewDelegate
 typealias TagsViewController_UITableViewDelegate = TagsViewController
 extension TagsViewController_UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
 
-        if let selectedTag = selectedEvent?.inTag,
+        if let selectedTag = selectedTag,
             let indexPath = fetchedResultsController.indexPathForObject(selectedTag),
             let cell = tableView.cellForRowAtIndexPath(indexPath) as? TagCell {
                 hideSelectMark(cell)
@@ -149,7 +151,6 @@ extension TagsViewController_UITableViewDelegate {
 
         if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag,
             let cell = tableView.cellForRowAtIndexPath(indexPath) as? TagCell,
-            let guid = state.selectedEventGUID,
 			let event = selectedEvent {
 				if let inTag = event.inTag where inTag.isEqual(tag) {
 					event.inTag = nil
@@ -158,6 +159,10 @@ extension TagsViewController_UITableViewDelegate {
 				}
 
 				saveContextAndWait(stack.managedObjectContext)
+
+				dispatch_async(dispatch_get_main_queue(), { [unowned self] in
+					self.dismissViewControllerAnimated(true, completion: nil)
+					})
         }
     }
 

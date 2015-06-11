@@ -9,7 +9,6 @@
 import UIKit
 
 protocol EventCellDelegate : class {
-    func didDeleteEventCell(cell:EventCell)
     func didPressTag(cell:EventCell)
 }
 
