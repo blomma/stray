@@ -290,26 +290,41 @@
                                     <outlet property="delegate" destination="OEB-QV-TsG" id="Bab-dH-I2g"/>
                                 </connections>
                             </tableView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5ee-Uc-iLS">
+                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <items>
+                                    <barButtonItem systemItem="edit" id="lRI-ug-1zl">
+                                        <connections>
+                                            <action selector="toggleEdit:" destination="OEB-QV-TsG" id="eKh-SV-ujZ"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem systemItem="add" id="DQR-Ko-8dO">
+                                        <connections>
+                                            <action selector="addTag:" destination="OEB-QV-TsG" id="ZkF-6h-ggI"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                         <rect key="contentStretch" x="0.050000000000000003" y="0.0" width="1" height="1"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="Drg-ei-boB" secondAttribute="bottom" id="F2a-E9-eEo"/>
+                            <constraint firstItem="RiX-BK-OM9" firstAttribute="top" secondItem="5ee-Uc-iLS" secondAttribute="bottom" id="REu-3m-weS"/>
+                            <constraint firstAttribute="trailing" secondItem="5ee-Uc-iLS" secondAttribute="trailing" id="iiu-4t-mTo"/>
                             <constraint firstAttribute="trailing" secondItem="Drg-ei-boB" secondAttribute="trailing" id="kef-lg-VtM"/>
                             <constraint firstItem="Drg-ei-boB" firstAttribute="top" secondItem="mCL-rm-LtH" secondAttribute="bottom" id="qyv-Vg-ccs"/>
                             <constraint firstItem="Drg-ei-boB" firstAttribute="leading" secondItem="2pB-Jf-Mbs" secondAttribute="leading" id="svA-1D-GIg"/>
+                            <constraint firstItem="5ee-Uc-iLS" firstAttribute="leading" secondItem="2pB-Jf-Mbs" secondAttribute="leading" id="tns-Wv-lvt"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <connections>
-                        <outlet property="addBarButtonItem" destination="g2O-mQ-K5H" id="niP-zG-iyq"/>
-                        <outlet property="editBarButtonItem" destination="0Cv-ho-FHc" id="qlV-PI-hUx"/>
                         <outlet property="tableView" destination="Drg-ei-boB" id="fK6-zH-rkS"/>
                     </connections>
                 </viewController>
-                <barButtonItem tag="1" style="plain" systemItem="edit" id="0Cv-ho-FHc"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ibM-ul-gcy" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <barButtonItem tag="2" style="plain" systemItem="add" id="g2O-mQ-K5H"/>
             </objects>
             <point key="canvasLocation" x="2106" y="-377"/>
         </scene>
@@ -637,10 +652,14 @@
                                 </connections>
                             </tableView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OVS-qR-UeC">
-                                <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <items>
-                                    <barButtonItem title="Item" id="trI-dt-Z78"/>
+                                    <barButtonItem systemItem="edit" id="trI-dt-Z78">
+                                        <connections>
+                                            <action selector="toggleEdit:" destination="MkX-Cq-2XK" id="LJ0-iM-62x"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                         </subviews>
@@ -649,9 +668,9 @@
                             <constraint firstAttribute="trailing" secondItem="OVS-qR-UeC" secondAttribute="trailing" id="0qe-DV-2MM"/>
                             <constraint firstItem="eEg-yt-w1f" firstAttribute="leading" secondItem="0md-r9-gBi" secondAttribute="leading" id="2PQ-iL-k3h"/>
                             <constraint firstItem="CaW-42-4UM" firstAttribute="top" secondItem="eEg-yt-w1f" secondAttribute="bottom" id="Bpf-Bn-Kqs"/>
+                            <constraint firstItem="CaW-42-4UM" firstAttribute="top" secondItem="OVS-qR-UeC" secondAttribute="bottom" id="I7Q-uG-ER1"/>
                             <constraint firstItem="OVS-qR-UeC" firstAttribute="leading" secondItem="0md-r9-gBi" secondAttribute="leading" id="auO-Py-qQg"/>
                             <constraint firstItem="eEg-yt-w1f" firstAttribute="top" secondItem="0md-r9-gBi" secondAttribute="top" constant="20" id="iGs-SS-7u0"/>
-                            <constraint firstItem="OVS-qR-UeC" firstAttribute="top" secondItem="Whe-56-X4F" secondAttribute="bottom" id="kN1-g3-NZs"/>
                             <constraint firstAttribute="trailing" secondItem="eEg-yt-w1f" secondAttribute="trailing" id="vfJ-pN-EeN"/>
                         </constraints>
                     </view>

@@ -11,7 +11,7 @@ import CoreData
 import JSQCoreDataKit
 
 class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCellDelegate, TransitionOperatorDelegate {
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet weak var tableView: UITableView!
 
     private lazy var shortStandaloneMonthSymbols: [AnyObject] = {
         return NSDateFormatter().shortStandaloneMonthSymbols
@@ -77,7 +77,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 			let cell = sender as? UITableViewCell,
 			let indexPath = tableView?.indexPathForCell(cell),
 			let event = fetchedResultsController.objectAtIndexPath(indexPath) as? Event {
-				controller.selectedEvent = event
+				controller.eventGuid = selectedEvent?.guid
 		}
 	}
 
@@ -141,6 +141,14 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
 
+	@IBAction func toggleEdit(sender: UIBarButtonItem) {
+		if tableView.editing {
+			tableView.setEditing(false, animated: true)
+		} else {
+			tableView.setEditing(true, animated: true)
+		}
+	}
+
 	func showSelectMark(cell: EventCell) {
 		UIView.animateWithDuration(0.3, animations: { () -> Void in
 			cell.selectedMark.alpha = 1
@@ -187,12 +195,6 @@ extension EventsViewController_UITableViewDelegate {
 				showSelectMark(cell)
 				selectedEvent = event
                 state.selectedEventGUID = event.guid
-        }
-    }
-
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        if let cell = tableView.cellForRowAtIndexPath(indexPath) as? EventCell {
-            cell.setSelected(false, animated: true)
         }
     }
 

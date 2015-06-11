@@ -12,23 +12,23 @@ import JSQCoreDataKit
 
 class EventViewController: UIViewController, EventTimerControlDelegate, TransitionOperatorDelegate {
     // MARK: IBOutlet
-    @IBOutlet var eventTimerControl: EventTimerControl?
-    @IBOutlet var toggleStartStopButton: UIButton?
+    @IBOutlet weak var eventTimerControl: EventTimerControl?
+    @IBOutlet weak var toggleStartStopButton: UIButton?
 
-    @IBOutlet var eventStartTime: UILabel?
-    @IBOutlet var eventStartDay: UILabel?
-    @IBOutlet var eventStartMonth: UILabel?
-    @IBOutlet var eventStartYear: UILabel?
+    @IBOutlet weak var eventStartTime: UILabel?
+    @IBOutlet weak var eventStartDay: UILabel?
+    @IBOutlet weak var eventStartMonth: UILabel?
+    @IBOutlet weak var eventStartYear: UILabel?
 
-    @IBOutlet var eventTimeHours: UILabel?
-    @IBOutlet var eventTimeMinutes: UILabel?
+    @IBOutlet weak var eventTimeHours: UILabel?
+    @IBOutlet weak var eventTimeMinutes: UILabel?
 
-    @IBOutlet var eventStopTime: UILabel?
-    @IBOutlet var eventStopDay: UILabel?
-    @IBOutlet var eventStopMonth: UILabel?
-    @IBOutlet var eventStopYear: UILabel?
+    @IBOutlet weak var eventStopTime: UILabel?
+    @IBOutlet weak var eventStopDay: UILabel?
+    @IBOutlet weak var eventStopMonth: UILabel?
+    @IBOutlet weak var eventStopYear: UILabel?
 
-    @IBOutlet var tag: UIButton?
+    @IBOutlet weak var tag: UIButton?
 
     // MARK: Private properties
     private var selectedEvent: Event?
@@ -108,7 +108,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 		if segue.identifier == "segueToTagsFromEvent",
 			let controller = segue.destinationViewController as? TagsViewController {
-				controller.selectedEvent = selectedEvent
+				controller.eventGuid = selectedEvent?.guid
 		}
 	}
 

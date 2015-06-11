@@ -12,14 +12,12 @@ import JSQCoreDataKit
 
 class TagsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, TagCellDelegate {
 	@IBOutlet weak var tableView: UITableView!
-	@IBOutlet weak var editBarButtonItem: UIBarButtonItem!
-	@IBOutlet weak var addBarButtonItem: UIBarButtonItem!
 
     var userReorderingCells = false
 	let stack = defaultCoreDataStack()
     let state = State()
 
-    var selectedEvent: Event?
+	var eventGuid: String?
 	private var selectedTag: Tag?
 
 	var maxSortOrderIndex = 0
@@ -54,19 +52,19 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 				maxSortOrderIndex = sortIndex
 		}
 
-		if let event = selectedEvent,
-			let tag = event.inTag,
-			let indexPath = fetchedResultsController.indexPathForObject(tag) {
-				selectedTag = tag
-				tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
-				tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
+		if let guid = eventGuid {
+			let request = FetchRequest<Event>(moc: stack.managedObjectContext, attribute: "guid", value: guid)
+			let result = fetch(request)
+
+			if result.success,
+				let event = result.objects.first,
+				let tag = event.inTag,
+				let indexPath = fetchedResultsController.indexPathForObject(tag) {
+					selectedTag = tag
+					tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
+					tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
+			}
 		}
-
-		editBarButtonItem?.target = self
-		editBarButtonItem?.action = "toggleEdit"
-
-		addBarButtonItem?.target = self
-		addBarButtonItem?.action = "addTagRow"
     }
 
     override func viewWillDisappear(animated: Bool) {
@@ -88,21 +86,21 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
 
-    func toggleEdit() {
-        if tableView.editing {
-            tableView.setEditing(false, animated: true)
-        } else {
-            tableView.setEditing(true, animated: true)
-        }
+	@IBAction func toggleEdit(sender: UIBarButtonItem) {
+		if tableView.editing {
+			tableView.setEditing(false, animated: true)
+		} else {
+			tableView.setEditing(true, animated: true)
+		}
 
 		for cell in tableView.visibleCells() {
 			if let c = cell as? TagCell {
 				c.name.enabled = tableView.editing
 			}
 		}
-    }
+	}
 
-	func addTagRow() {
+	@IBAction func addTag(sender: UIBarButtonItem) {
 		let tag = Tag(stack.managedObjectContext, sortIndex: maxSortOrderIndex)
 		maxSortOrderIndex++
 		saveContextAndWait(stack.managedObjectContext)
@@ -149,28 +147,33 @@ extension TagsViewController_UITableViewDelegate {
                 hideSelectMark(cell)
         }
 
-        if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag,
-            let cell = tableView.cellForRowAtIndexPath(indexPath) as? TagCell,
-			let event = selectedEvent {
-				if let inTag = event.inTag where inTag.isEqual(tag) {
-					event.inTag = nil
-				} else {
-					event.inTag = tag
-				}
+		if let guid = eventGuid {
+			let request = FetchRequest<Event>(moc: stack.managedObjectContext, attribute: "guid", value: guid)
+			let result = fetch(request)
 
-				saveContextAndWait(stack.managedObjectContext)
+			if result.success,
+				let event = result.objects.first,
+				let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
+					if let inTag = event.inTag where inTag.isEqual(tag) {
+						event.inTag = nil
+					} else {
+						event.inTag = tag
+					}
 
-				dispatch_async(dispatch_get_main_queue(), { [unowned self] in
-					self.dismissViewControllerAnimated(true, completion: nil)
-					})
-        }
-    }
+					saveContextAndWait(stack.managedObjectContext)
+
+					dispatch_async(dispatch_get_main_queue(), { [unowned self] in
+						self.dismissViewControllerAnimated(true, completion: nil)
+						})
+			}
+		}
+	}
 
 	func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
             if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
-                    stack.managedObjectContext.deleteObject(tag)
-                    saveContextAndWait(stack.managedObjectContext)
+				stack.managedObjectContext.deleteObject(tag)
+				saveContextAndWait(stack.managedObjectContext)
             }
         }
     }
