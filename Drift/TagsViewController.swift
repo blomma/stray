@@ -41,9 +41,9 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
 
-		let request = FetchRequest<Tag>(moc: stack.managedObjectContext)
+		let request = FetchRequest<Tag>(context: stack.managedObjectContext)
 		request.predicate = NSPredicate(format: "sortIndex == max(sortIndex)")
-		let result = fetch(request)
+		let result = request.fetch()
 
 		if result.success,
 			let tag = result.objects.first,
@@ -52,8 +52,8 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 		}
 
 		if let guid = eventGuid {
-			let request = FetchRequest<Event>(moc: stack.managedObjectContext, attribute: "guid", value: guid)
-			let result = fetch(request)
+			let request = FetchRequest<Event>(context: stack.managedObjectContext)
+			let result = request.fetchWhere("guid", value: guid)
 
 			if result.success,
 				let event = result.objects.first,
@@ -147,8 +147,8 @@ extension TagsViewController_UITableViewDelegate {
         }
 
 		if let guid = eventGuid {
-			let request = FetchRequest<Event>(moc: stack.managedObjectContext, attribute: "guid", value: guid)
-			let result = fetch(request)
+			let request = FetchRequest<Event>(context: stack.managedObjectContext)
+			let result = request.fetchWhere("guid", value: guid)
 
 			if result.success,
 				let event = result.objects.first,

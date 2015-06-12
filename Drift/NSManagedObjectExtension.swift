@@ -15,35 +15,38 @@ struct FetchResult <T: NSManagedObject> {
     let error: NSError?
 }
 
-class FetchRequest <T: NSManagedObject>: NSFetchRequest {
-    var moc: NSManagedObjectContext
+final class FetchRequest <T: NSManagedObject>: NSFetchRequest {
+    private var context: NSManagedObjectContext
 
-    init(moc: NSManagedObjectContext) {
-        self.moc = moc
+    init(context: NSManagedObjectContext) {
+        self.context = context
 
         super.init()
-        self.entity = NSEntityDescription.entityForName(T.entityName, inManagedObjectContext: moc)
-    }
-
-    convenience init(moc: NSManagedObjectContext, attribute: String, value: AnyObject) {
-        self.init(moc: moc)
-        predicate = NSPredicate(format: "%K = %@", attribute, value as! NSObject)
+        self.entity = NSEntityDescription.entityForName(T.entityName, inManagedObjectContext: context)
     }
 }
 
-func fetch<T: NSManagedObject>(request: FetchRequest<T>) -> FetchResult<T> {
-    var error: NSError?
-    var results: [AnyObject]?
-
-    request.moc.performBlockAndWait { () -> Void in
-        results = request.moc.executeFetchRequest(request, error: &error)
+extension FetchRequest {
+    func fetch() -> FetchResult<T> {
+        var error: NSError?
+        var results: [AnyObject]?
+        
+        context.performBlockAndWait { [unowned self] () -> Void in
+            results = self.context.executeFetchRequest(self, error: &error)
+        }
+        
+        if let results = results {
+            return FetchResult(success: true, objects: results as! [T], error: error)
+        }
+        
+        return FetchResult(success: false, objects: [], error: error)
     }
+    
+    func fetchWhere(attribute: String, value: AnyObject) -> FetchResult<T> {
+        predicate = NSPredicate(format: "%K = %@", attribute, value as! NSObject)
 
-    if let results = results {
-        return FetchResult(success: true, objects: results as! [T], error: error)
+        return fetch()
     }
-
-    return FetchResult(success: false, objects: [], error: error)
 }
 
 extension NSManagedObject {

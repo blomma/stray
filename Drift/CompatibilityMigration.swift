@@ -130,8 +130,8 @@ class CompatibilityMigration  {
     private func migrateCoreData() {
         self.migrateToCompatibilityLevel(1, fromLevel: self.coreDataCompatibilityLevel) { () -> () in
             if let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: self.stack.managedObjectContext) {
-                    let request = FetchRequest<Event>(moc: self.stack.managedObjectContext)
-                    let result = fetch(request)
+                    let request = FetchRequest<Event>(context: self.stack.managedObjectContext)
+                    let result = request.fetch()
 
                     if result.success {
                         for event in result.objects {
@@ -141,8 +141,8 @@ class CompatibilityMigration  {
             }
 
             if let entity = NSEntityDescription.entityForName(Tag.entityName, inManagedObjectContext: self.stack.managedObjectContext) {
-                    let request = FetchRequest<Tag>(moc: self.stack.managedObjectContext)
-                    let result = fetch(request)
+                    let request = FetchRequest<Tag>(context: self.stack.managedObjectContext)
+                    let result = request.fetch()
 
                     if result.success {
                         for tag in result.objects {

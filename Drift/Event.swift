@@ -31,3 +31,5 @@ final class Event: NSManagedObject {
             self.inTag = inTag
     }
 }
+
+

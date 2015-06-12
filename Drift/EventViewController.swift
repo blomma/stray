@@ -52,8 +52,8 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
         eventTimerControl?.delegate = self
 
         if let guid = state.selectedEventGUID {
-                let request = FetchRequest<Event>(moc: stack.managedObjectContext, attribute: "guid", value: guid)
-                let result = fetch(request)
+                let request = FetchRequest<Event>(context: stack.managedObjectContext)
+                let result = request.fetchWhere("guid", value: guid)
 
                 if result.success,
                     let event = result.objects.first {
@@ -94,14 +94,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
 
 		eventTimerControl?.delegate = nil
 		eventTimerControl?.stop()
-
-		DLog()
     }
-
-	override func viewDidDisappear(animated: Bool) {
-		super.viewDidDisappear(animated)
-		DLog()
-	}
 
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 		if segue.identifier == "segueToTagsFromEvent",
