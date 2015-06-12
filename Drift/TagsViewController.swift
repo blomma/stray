@@ -13,14 +13,13 @@ import JSQCoreDataKit
 class TagsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, TagCellDelegate {
 	@IBOutlet weak var tableView: UITableView!
 
-    var userReorderingCells = false
-	let stack = defaultCoreDataStack()
-    let state = State()
+    private var userReorderingCells = false
+	private let stack = defaultCoreDataStack()
+    private let state = State()
+    private var selectedTag: Tag?
+    private var maxSortOrderIndex = 0
 
 	var eventGuid: String?
-	private var selectedTag: Tag?
-
-	var maxSortOrderIndex = 0
 
     private lazy var fetchedResultsController: NSFetchedResultsController = {
 		var fetchRequest = NSFetchRequest(entityName: Tag.entityName)
@@ -73,7 +72,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         fetchedResultsController.delegate = nil
     }
 
-    func configureCell(cell: TagCell, atIndexPath: NSIndexPath) -> Void {
+    private func configureCell(cell: TagCell, atIndexPath: NSIndexPath) -> Void {
         if let tag = fetchedResultsController.objectAtIndexPath(atIndexPath) as? Tag {
 			cell.delegate = self
 
@@ -106,13 +105,13 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 		saveContextAndWait(stack.managedObjectContext)
 	}
 
-    func showSelectMark(cell: TagCell) {
+    private func showSelectMark(cell: TagCell) {
         UIView.animateWithDuration(0.3, animations: { () -> Void in
             cell.selectedMark.alpha = 1
         })
     }
 
-    func hideSelectMark(cell: TagCell) {
+    private func hideSelectMark(cell: TagCell) {
         UIView.animateWithDuration(0.3, animations: { () -> Void in
             cell.selectedMark.alpha = 0
         })

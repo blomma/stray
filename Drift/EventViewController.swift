@@ -33,16 +33,15 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
     // MARK: Private properties
     private var selectedEvent: Event?
 
-	private let stack: CoreDataStack = defaultCoreDataStack()
-    private let state: State = State()
-	private let transitionOperator: TransitionOperator = TransitionOperator()
+	private let stack = defaultCoreDataStack()
+    private let state = State()
+	private let transitionOperator = TransitionOperator()
 
     private let calendar = NSCalendar.autoupdatingCurrentCalendar()
     private let shortStandaloneMonthSymbols: NSArray = NSDateFormatter().shortStandaloneMonthSymbols
 
     override func viewDidLoad() {
         super.viewDidLoad()
-		DLog()
 
 		transitionOperator.delegate = self
 		view.addGestureRecognizer(transitionOperator.gestureRecogniser)
@@ -50,7 +49,6 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-		DLog()
         eventTimerControl?.delegate = self
 
         if let guid = state.selectedEventGUID {

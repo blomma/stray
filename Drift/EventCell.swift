@@ -13,21 +13,21 @@ protocol EventCellDelegate : class {
 }
 
 class EventCell: UITableViewCell {
-    @IBOutlet var eventStartTime: UILabel!
-    @IBOutlet var eventStartDay: UILabel!
-    @IBOutlet var eventStartMonth: UILabel!
-    @IBOutlet var eventStartYear: UILabel!
+    @IBOutlet weak var eventStartTime: UILabel!
+    @IBOutlet weak var eventStartDay: UILabel!
+    @IBOutlet weak var eventStartMonth: UILabel!
+    @IBOutlet weak var eventStartYear: UILabel!
 
-    @IBOutlet var eventTimeHours: UILabel!
-    @IBOutlet var eventTimeMinutes: UILabel!
+    @IBOutlet weak var eventTimeHours: UILabel!
+    @IBOutlet weak var eventTimeMinutes: UILabel!
 
-    @IBOutlet var eventStopTime: UILabel!
-    @IBOutlet var eventStopDay: UILabel!
-    @IBOutlet var eventStopMonth: UILabel!
-    @IBOutlet var eventStopYear: UILabel!
+    @IBOutlet weak var eventStopTime: UILabel!
+    @IBOutlet weak var eventStopDay: UILabel!
+    @IBOutlet weak var eventStopMonth: UILabel!
+    @IBOutlet weak var eventStopYear: UILabel!
 
-    @IBOutlet var selectedMark: UIView!
-    @IBOutlet var tagButton: UIButton!
+    @IBOutlet weak var selectedMark: UIView!
+    @IBOutlet weak var tagButton: UIButton!
 
 	weak var delegate:EventCellDelegate?
 

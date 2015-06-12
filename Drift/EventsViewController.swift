@@ -81,7 +81,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 		}
 	}
 
-    func configureCell(cell: EventCell, atIndexPath: NSIndexPath) -> Void {
+    private func configureCell(cell: EventCell, atIndexPath: NSIndexPath) -> Void {
         if let event = fetchedResultsController.objectAtIndexPath(atIndexPath) as? Event {
 			if selectedEvent?.guid == event.guid {
 				showSelectMark(cell)
@@ -149,13 +149,13 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 		}
 	}
 
-	func showSelectMark(cell: EventCell) {
+	private func showSelectMark(cell: EventCell) {
 		UIView.animateWithDuration(0.3, animations: { () -> Void in
 			cell.selectedMark.alpha = 1
 		})
 	}
 
-	func hideSelectMark(cell: EventCell) {
+	private func hideSelectMark(cell: EventCell) {
 		UIView.animateWithDuration(0.3, animations: { () -> Void in
 			cell.selectedMark.alpha = 0
 		})

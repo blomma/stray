@@ -11,10 +11,9 @@ import CoreData
 import JSQCoreDataKit
 
 class CompatibilityMigration  {
-    let stack = defaultCoreDataStack()
-
-    let strayCompatibilityLevelKey = "StrayCompatibilityLevel"
-    let stateCompatibilityLevelKey = "stateCompatibilityLevel"
+    private let stack = defaultCoreDataStack()
+    private let strayCompatibilityLevelKey = "StrayCompatibilityLevel"
+    private let stateCompatibilityLevelKey = "stateCompatibilityLevel"
 
     var stateCompatibilityLevel: Int {
         get {
@@ -44,9 +43,6 @@ class CompatibilityMigration  {
             NSUserDefaults.standardUserDefaults()
 				.setObject(newLevel, forKey: strayCompatibilityLevelKey)
         }
-    }
-
-    init() {
     }
 
     private func migrateToCompatibilityLevel(toLevel: Int, fromLevel: Int, migrationBlock: () -> ()) {
@@ -160,7 +156,7 @@ class CompatibilityMigration  {
     }
 
 	func migrate() {
-        self.migrateCoreData()
-        self.migrateState()
+        migrateCoreData()
+        migrateState()
     }
 }
