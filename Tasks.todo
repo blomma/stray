@@ -1,2 +1,3 @@
+- Unbalanced calls to begin/end appearance transitions
 - Ta bort guides och sätt constraints direkt mot superView, borde fixa så att vyn inte hoppar
 - Kolla efter coredata i pathen som nu först och om den inte finns den så skapa i Documents, just nu får man ett fel då man försöker skapa en ny i default pathen

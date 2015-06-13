@@ -20,11 +20,10 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
 
 	weak var delegate:TransitionOperatorDelegate?
 
-	lazy var gestureRecogniser: UIPanGestureRecognizer = {
-		var recognizer = UIPanGestureRecognizer(target: self, action: "handleGesture:")
-		return recognizer
-		}()
-
+    deinit {
+        DLog()
+    }
+    
 	func handleGesture(recognizer: UIPanGestureRecognizer) {
 		if let view = recognizer.view {
 			let translation = recognizer.translationInView(view)

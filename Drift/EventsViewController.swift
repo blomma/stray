@@ -21,54 +21,55 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return NSDateFormatter().shortStandaloneWeekdaySymbols
     }()
 
-	private let stack = defaultCoreDataStack()
-	private let state = State()
 	private let transitionOperator = TransitionOperator()
 
     private let calendar = NSCalendar.autoupdatingCurrentCalendar()
 	private var selectedEvent: Event?
 
-	private lazy var fetchedResultsController: NSFetchedResultsController = {
-		var fetchRequest = NSFetchRequest(entityName: "Event")
-		fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
-		fetchRequest.fetchBatchSize = 20
-
-		var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.stack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-		controller.delegate = self
-
-		var error: NSErrorPointer = NSErrorPointer()
-		if !controller.performFetch(error) {
-			println("Unresolved error \(error)")
-			exit(-1)
-		}
-
-		return controller
-		}()
+	private var fetchedResultsController: NSFetchedResultsController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
 		transitionOperator.delegate = self
-		view.addGestureRecognizer(transitionOperator.gestureRecogniser)
-
-        if let guid = state.selectedEventGUID {
-			let request = FetchRequest<Event>(context: stack.managedObjectContext)
-			let result = request.fetchWhere("guid", value: guid)
-
-			if result.success,
-				let event = result.objects.first,
-				let indexPath = fetchedResultsController.indexPathForObject(event) {
-					selectedEvent = event
-					tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
-					tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
-			}
-        }
+        view.addGestureRecognizer(UIPanGestureRecognizer(target: transitionOperator, action: "handleGesture:"))
     }
 
+    override func viewWillAppear(animated: Bool) {
+        let stack = defaultCoreDataStack()
+
+        var fetchRequest = NSFetchRequest(entityName: Event.entityName)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
+        fetchRequest.fetchBatchSize = 20
+        
+        var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: stack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        var error: NSErrorPointer = NSErrorPointer()
+        if !controller.performFetch(error) {
+            println("Unresolved error \(error)")
+            exit(-1)
+        }
+        
+        controller.delegate = self
+        fetchedResultsController = controller
+        
+        let state = State()
+        if let guid = state.selectedEventGUID {
+            let request = FetchRequest<Event>(context: stack.managedObjectContext)
+            let result = request.fetchWhere("guid", value: guid)
+            
+            if result.success,
+                let event = result.objects.first,
+                let indexPath = fetchedResultsController?.indexPathForObject(event) {
+                    selectedEvent = event
+                    tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
+                    tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
+            }
+        }
+    }
+    
 	override func viewWillDisappear(animated: Bool) {
 		super.viewWillDisappear(animated)
-
-		fetchedResultsController.delegate = nil
 	}
 
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -76,13 +77,13 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 			let controller = segue.destinationViewController as? TagsViewController,
 			let cell = sender as? UITableViewCell,
 			let indexPath = tableView?.indexPathForCell(cell),
-			let event = fetchedResultsController.objectAtIndexPath(indexPath) as? Event {
+			let event = fetchedResultsController?.objectAtIndexPath(indexPath) as? Event {
 				controller.eventGuid = selectedEvent?.guid
 		}
 	}
 
     private func configureCell(cell: EventCell, atIndexPath: NSIndexPath) -> Void {
-        if let event = fetchedResultsController.objectAtIndexPath(atIndexPath) as? Event {
+        if let event = fetchedResultsController?.objectAtIndexPath(atIndexPath) as? Event {
 			if selectedEvent?.guid == event.guid {
 				showSelectMark(cell)
 			}
@@ -185,28 +186,32 @@ extension EventsViewController_UITableViewDelegate {
 		tableView.deselectRowAtIndexPath(indexPath, animated: false)
 
 		if let event = selectedEvent,
-			let indexPath = fetchedResultsController.indexPathForObject(event),
+			let indexPath = fetchedResultsController?.indexPathForObject(event),
 			let cell = tableView.cellForRowAtIndexPath(indexPath) as? EventCell {
 				hideSelectMark(cell)
 		}
 
-        if let event = fetchedResultsController.objectAtIndexPath(indexPath) as? Event,
+        if let event = fetchedResultsController?.objectAtIndexPath(indexPath) as? Event,
             let cell = tableView.cellForRowAtIndexPath(indexPath) as? EventCell {
 				showSelectMark(cell)
 				selectedEvent = event
+                
+                let state = State()
                 state.selectedEventGUID = event.guid
         }
     }
 
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            if let event = fetchedResultsController.objectAtIndexPath(indexPath) as? Event {
-                if let selectedEventGUID = state.selectedEventGUID where event.guid == selectedEventGUID {
-                    state.selectedEventGUID = nil
-                }
+            if let event = fetchedResultsController?.objectAtIndexPath(indexPath) as? Event,
+                let context = event.managedObjectContext {
+                    let state = State()
+                    if let selectedEventGUID = state.selectedEventGUID where event.guid == selectedEventGUID {
+                        state.selectedEventGUID = nil
+                    }
 
-                stack.managedObjectContext.deleteObject(event)
-                saveContextAndWait(stack.managedObjectContext)
+                    deleteObjects([event], inContext: context)
+                    saveContextAndWait(context)
             }
         }
     }
@@ -216,7 +221,7 @@ extension EventsViewController_UITableViewDelegate {
 typealias EventsViewController_UITableViewDataSource = EventsViewController
 extension EventsViewController_UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let sectionInfo = fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo {
+        if let sectionInfo = fetchedResultsController?.sections?[section] as? NSFetchedResultsSectionInfo {
             return sectionInfo.numberOfObjects
         }
 
@@ -224,7 +229,7 @@ extension EventsViewController_UITableViewDataSource {
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return fetchedResultsController.sections?.count ?? 0
+        return fetchedResultsController?.sections?.count ?? 0
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
