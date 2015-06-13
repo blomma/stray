@@ -14,66 +14,66 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 	@IBOutlet weak var tableView: UITableView!
 
     private var userReorderingCells = false
-	private let stack = defaultCoreDataStack()
-    private let state = State()
     private var selectedTag: Tag?
     private var maxSortOrderIndex = 0
 
 	var eventGuid: String?
 
-    private lazy var fetchedResultsController: NSFetchedResultsController = {
-		var fetchRequest = NSFetchRequest(entityName: Tag.entityName)
-		fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: false)]
-		fetchRequest.fetchBatchSize = 20
-
-		var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.stack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-		controller.delegate = self
-
-		var error: NSErrorPointer = NSErrorPointer()
-		if !controller.performFetch(error) {
-			println("Unresolved error \(error)")
-			exit(-1)
-		}
-
-		return controller
-		}()
+    private var fetchedResultsController: NSFetchedResultsController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-		let request = FetchRequest<Tag>(context: stack.managedObjectContext)
-		request.predicate = NSPredicate(format: "sortIndex == max(sortIndex)")
-		let result = request.fetch()
-
-		if result.success,
-			let tag = result.objects.first,
-			let sortIndex = tag.sortIndex as? Int {
-				maxSortOrderIndex = sortIndex
-		}
-
-		if let guid = eventGuid {
-			let request = FetchRequest<Event>(context: stack.managedObjectContext)
-			let result = request.fetchWhere("guid", value: guid)
-
-			if result.success,
-				let event = result.objects.first,
-				let tag = event.inTag,
-				let indexPath = fetchedResultsController.indexPathForObject(tag) {
-					selectedTag = tag
-					tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
-					tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
-			}
-		}
     }
 
+    override func viewWillAppear(animated: Bool) {
+        let stack = defaultCoreDataStack()
+        
+        let request = FetchRequest<Tag>(context: stack.managedObjectContext)
+        request.predicate = NSPredicate(format: "sortIndex == max(sortIndex)")
+        let result = request.fetch()
+        
+        if result.success,
+            let tag = result.objects.first,
+            let sortIndex = tag.sortIndex as? Int {
+                maxSortOrderIndex = sortIndex
+        }
+        
+        var fetchRequest = NSFetchRequest(entityName: Tag.entityName)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: false)]
+        fetchRequest.fetchBatchSize = 20
+        
+        var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: stack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        var error: NSErrorPointer = NSErrorPointer()
+        if !controller.performFetch(error) {
+            println("Unresolved error \(error)")
+            exit(-1)
+        }
+        
+        controller.delegate = self
+        fetchedResultsController = controller
+
+        if let guid = eventGuid {
+            let request = FetchRequest<Event>(context: stack.managedObjectContext)
+            let result = request.fetchWhere("guid", value: guid)
+            
+            if result.success,
+                let event = result.objects.first,
+                let tag = event.inTag,
+                let indexPath = controller.indexPathForObject(tag) {
+                    selectedTag = tag
+                    tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
+                    tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
+            }
+        }
+    }
+    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-
-        fetchedResultsController.delegate = nil
     }
 
     private func configureCell(cell: TagCell, atIndexPath: NSIndexPath) -> Void {
-        if let tag = fetchedResultsController.objectAtIndexPath(atIndexPath) as? Tag {
+        if let tag = fetchedResultsController?.objectAtIndexPath(atIndexPath) as? Tag {
 			cell.delegate = self
 
 			cell.name.text = tag.name
@@ -100,9 +100,11 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 	}
 
 	@IBAction func addTag(sender: UIBarButtonItem) {
-		let tag = Tag(stack.managedObjectContext, sortIndex: maxSortOrderIndex)
-		maxSortOrderIndex++
-		saveContextAndWait(stack.managedObjectContext)
+        if let context = fetchedResultsController?.managedObjectContext {
+            let tag = Tag(context, sortIndex: maxSortOrderIndex)
+            maxSortOrderIndex++
+            saveContextAndWait(context)
+        }
 	}
 
     private func showSelectMark(cell: TagCell) {
@@ -122,12 +124,13 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 typealias TagsViewControllerTagCellDelegate = TagsViewController
 extension TagsViewControllerTagCellDelegate {
 	func didEndEditing(cell: TagCell) {
-		if let indexPath = tableView.indexPathForCell(cell),
-			let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
-				tag.name = cell.name.text
-				saveContextAndWait(stack.managedObjectContext)
-		}
-	}
+        if let fetchedResultsController = fetchedResultsController,
+            let indexPath = tableView.indexPathForCell(cell),
+            let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
+                tag.name = cell.name.text
+                saveContextAndWait(fetchedResultsController.managedObjectContext)
+        }
+    }
 
 	func shouldBeginEdit() -> Bool {
 		return tableView.editing
@@ -141,42 +144,40 @@ extension TagsViewController_UITableViewDelegate {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
 
         if let selectedTag = selectedTag,
-            let indexPath = fetchedResultsController.indexPathForObject(selectedTag),
+            let indexPath = fetchedResultsController?.indexPathForObject(selectedTag),
             let cell = tableView.cellForRowAtIndexPath(indexPath) as? TagCell {
                 hideSelectMark(cell)
         }
 
-		if let guid = eventGuid {
-			let request = FetchRequest<Event>(context: stack.managedObjectContext)
-			let result = request.fetchWhere("guid", value: guid)
+        if let guid = eventGuid,
+            let fetchedResultsController = fetchedResultsController {
+                let request = FetchRequest<Event>(context: fetchedResultsController.managedObjectContext)
+                let result = request.fetchWhere("guid", value: guid)
 
 			if result.success,
 				let event = result.objects.first,
-				let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
+                let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
 					if let inTag = event.inTag where inTag.isEqual(tag) {
 						event.inTag = nil
 					} else {
 						event.inTag = tag
 					}
 
-					saveContextAndWait(stack.managedObjectContext)
-
+					saveContextAndWait(fetchedResultsController.managedObjectContext)
 					self.performSegueWithIdentifier("unwindToPresenter", sender: self)
-//					dispatch_async(dispatch_get_main_queue(), { [unowned self] in
-//						self.dismissViewControllerAnimated(true, completion: nil)
-//						})
 			}
 		}
 	}
 
 	func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == UITableViewCellEditingStyle.Delete {
-            if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
-				stack.managedObjectContext.deleteObject(tag)
-				saveContextAndWait(stack.managedObjectContext)
-            }
+        if editingStyle == UITableViewCellEditingStyle.Delete,
+            let fetchedResultsController = fetchedResultsController,
+            let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
+                deleteObjects([tag], inContext: fetchedResultsController.managedObjectContext)
+                saveContextAndWait(fetchedResultsController.managedObjectContext)
         }
     }
+
 
 	func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
@@ -187,10 +188,11 @@ extension TagsViewController_UITableViewDelegate {
             return
         }
 
-        if let tag = fetchedResultsController.objectAtIndexPath(sourceIndexPath) as? Tag {
+        if let fetchedResultsController = fetchedResultsController,
+            let tag = fetchedResultsController.objectAtIndexPath(sourceIndexPath) as? Tag {
                 userReorderingCells = true
                 tag.sortIndex = destinationIndexPath.row
-                saveContextAndWait(stack.managedObjectContext)
+                saveContextAndWait(fetchedResultsController.managedObjectContext)
                 userReorderingCells = false
         }
     }
@@ -200,7 +202,7 @@ extension TagsViewController_UITableViewDelegate {
 typealias TagsViewController_UITableViewDataSource = TagsViewController
 extension TagsViewController_UITableViewDataSource {
 	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let sectionInfo = fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo {
+        if let sectionInfo = fetchedResultsController?.sections?[section] as? NSFetchedResultsSectionInfo {
             return sectionInfo.numberOfObjects
         }
 
@@ -208,7 +210,7 @@ extension TagsViewController_UITableViewDataSource {
     }
 
 	func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return fetchedResultsController.sections?.count ?? 0
+        return fetchedResultsController?.sections?.count ?? 0
     }
 
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

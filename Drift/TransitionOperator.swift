@@ -32,6 +32,7 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
 
 			switch recognizer.state {
 			case .Began:
+                DLog("Began")
 				if velocity.x > 0 && !presented {
 					interactionInProgress = true
 					delegate?.transitionControllerInteractionDidStart(presented)
@@ -40,8 +41,10 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
 					delegate?.transitionControllerInteractionDidStart(presented)
 				}
 			case .Changed:
+                DLog("Changed")
 				updateInteractiveTransition(percentage)
 			case .Ended:
+                DLog("Ended")
 				if percentage > 0.4 {
 					finishInteractiveTransition()
 				} else {
@@ -50,6 +53,7 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
 
 				interactionInProgress = false
 			case .Cancelled:
+                DLog("Cancelled")
 				cancelInteractiveTransition()
 
 				interactionInProgress = false
