@@ -34,7 +34,5 @@ func coreDataModel() -> CoreDataModel {
 	return CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle())
 }
 
-func defaultCoreDataStack() -> CoreDataStack {
-	return CoreDataStack(model: coreDataModel())
-}
+let defaultCoreDataStack = CoreDataStack(model: coreDataModel())
 

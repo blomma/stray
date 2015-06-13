@@ -11,7 +11,6 @@ import CoreData
 import JSQCoreDataKit
 
 class CompatibilityMigration  {
-    private let stack = defaultCoreDataStack()
     private let strayCompatibilityLevelKey = "StrayCompatibilityLevel"
     private let stateCompatibilityLevelKey = "stateCompatibilityLevel"
 
@@ -64,8 +63,8 @@ class CompatibilityMigration  {
             //==================================================================================//
             if let uriData = NSUserDefaults.standardUserDefaults().objectForKey("selectedEvent") as? NSData,
                 let uri = NSKeyedUnarchiver.unarchiveObjectWithData(uriData) as? NSURL,
-                let objectID = self.stack.managedObjectContext.persistentStoreCoordinator?.managedObjectIDForURIRepresentation(uri),
-                let event = self.stack.managedObjectContext.objectWithID(objectID) as? Event {
+                let objectID = defaultCoreDataStack.managedObjectContext.persistentStoreCoordinator?.managedObjectIDForURIRepresentation(uri),
+                let event = defaultCoreDataStack.managedObjectContext.objectWithID(objectID) as? Event {
                     NSUserDefaults.standardUserDefaults().setObject(event.guid, forKey: "selectedEventGUID")
             }
 
@@ -84,8 +83,8 @@ class CompatibilityMigration  {
 
                 for uriData in objects! {
                     if let uri = NSKeyedUnarchiver.unarchiveObjectWithData(uriData) as? NSURL,
-                        let objectID = self.stack.managedObjectContext.persistentStoreCoordinator?.managedObjectIDForURIRepresentation(uri),
-                        let tag = self.stack.managedObjectContext.objectWithID(objectID) as? Tag,
+                        let objectID = defaultCoreDataStack.managedObjectContext.persistentStoreCoordinator?.managedObjectIDForURIRepresentation(uri),
+                        let tag = defaultCoreDataStack.managedObjectContext.objectWithID(objectID) as? Tag,
                         let guid = tag.guid {
                             eventsGroupedByDateFilter.insert(guid)
                     }
@@ -110,8 +109,8 @@ class CompatibilityMigration  {
 
                 for uriData in objects! {
                     if let uri = NSKeyedUnarchiver.unarchiveObjectWithData(uriData) as? NSURL,
-                        let objectID = self.stack.managedObjectContext.persistentStoreCoordinator?.managedObjectIDForURIRepresentation(uri),
-                        let tag = self.stack.managedObjectContext.objectWithID(objectID) as? Tag,
+                        let objectID = defaultCoreDataStack.managedObjectContext.persistentStoreCoordinator?.managedObjectIDForURIRepresentation(uri),
+                        let tag = defaultCoreDataStack.managedObjectContext.objectWithID(objectID) as? Tag,
                         let guid = tag.guid {
                             eventsGroupedByStartDateFilter.insert(guid)
                     }
@@ -129,8 +128,8 @@ class CompatibilityMigration  {
 
     private func migrateCoreData() {
         self.migrateToCompatibilityLevel(1, fromLevel: self.coreDataCompatibilityLevel) { () -> () in
-            if let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: self.stack.managedObjectContext) {
-                    let request = FetchRequest<Event>(context: self.stack.managedObjectContext)
+            if let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: defaultCoreDataStack.managedObjectContext) {
+                    let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
                     let result = request.fetch()
 
                     if result.success {
@@ -140,8 +139,8 @@ class CompatibilityMigration  {
                     }
             }
 
-            if let entity = NSEntityDescription.entityForName(Tag.entityName, inManagedObjectContext: self.stack.managedObjectContext) {
-                    let request = FetchRequest<Tag>(context: self.stack.managedObjectContext)
+            if let entity = NSEntityDescription.entityForName(Tag.entityName, inManagedObjectContext: defaultCoreDataStack.managedObjectContext) {
+                    let request = FetchRequest<Tag>(context: defaultCoreDataStack.managedObjectContext)
                     let result = request.fetch()
 
                     if result.success {

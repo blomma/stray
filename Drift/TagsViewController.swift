@@ -26,9 +26,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 
     override func viewWillAppear(animated: Bool) {
-        let stack = defaultCoreDataStack()
-        
-        let request = FetchRequest<Tag>(context: stack.managedObjectContext)
+        let request = FetchRequest<Tag>(context: defaultCoreDataStack.managedObjectContext)
         request.predicate = NSPredicate(format: "sortIndex == max(sortIndex)")
         let result = request.fetch()
         
@@ -42,7 +40,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: false)]
         fetchRequest.fetchBatchSize = 20
         
-        var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: stack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
         
         var error: NSErrorPointer = NSErrorPointer()
         if !controller.performFetch(error) {
@@ -54,7 +52,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         fetchedResultsController = controller
 
         if let guid = eventGuid {
-            let request = FetchRequest<Event>(context: stack.managedObjectContext)
+            let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
             let result = request.fetchWhere("guid", value: guid)
             
             if result.success,
@@ -100,11 +98,11 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 	}
 
 	@IBAction func addTag(sender: UIBarButtonItem) {
-        if let context = fetchedResultsController?.managedObjectContext {
-            let tag = Tag(context, sortIndex: maxSortOrderIndex)
-            maxSortOrderIndex++
-            saveContextAndWait(context)
-        }
+        let tag = Tag(defaultCoreDataStack.managedObjectContext, sortIndex: maxSortOrderIndex)
+        maxSortOrderIndex++
+        saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in
+            
+        })
 	}
 
     private func showSelectMark(cell: TagCell) {
@@ -128,7 +126,8 @@ extension TagsViewControllerTagCellDelegate {
             let indexPath = tableView.indexPathForCell(cell),
             let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
                 tag.name = cell.name.text
-                saveContextAndWait(fetchedResultsController.managedObjectContext)
+                saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in
+                })
         }
     }
 
@@ -151,7 +150,7 @@ extension TagsViewController_UITableViewDelegate {
 
         if let guid = eventGuid,
             let fetchedResultsController = fetchedResultsController {
-                let request = FetchRequest<Event>(context: fetchedResultsController.managedObjectContext)
+                let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
                 let result = request.fetchWhere("guid", value: guid)
 
 			if result.success,
@@ -163,7 +162,9 @@ extension TagsViewController_UITableViewDelegate {
 						event.inTag = tag
 					}
 
-					saveContextAndWait(fetchedResultsController.managedObjectContext)
+                    saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in
+                    })
+                    
 					self.performSegueWithIdentifier("unwindToPresenter", sender: self)
 			}
 		}
@@ -173,8 +174,9 @@ extension TagsViewController_UITableViewDelegate {
         if editingStyle == UITableViewCellEditingStyle.Delete,
             let fetchedResultsController = fetchedResultsController,
             let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
-                deleteObjects([tag], inContext: fetchedResultsController.managedObjectContext)
-                saveContextAndWait(fetchedResultsController.managedObjectContext)
+                deleteObjects([tag], inContext: defaultCoreDataStack.managedObjectContext)
+                saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in
+                })
         }
     }
 
@@ -192,7 +194,8 @@ extension TagsViewController_UITableViewDelegate {
             let tag = fetchedResultsController.objectAtIndexPath(sourceIndexPath) as? Tag {
                 userReorderingCells = true
                 tag.sortIndex = destinationIndexPath.row
-                saveContextAndWait(fetchedResultsController.managedObjectContext)
+                saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in
+                })
                 userReorderingCells = false
         }
     }

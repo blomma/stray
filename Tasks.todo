@@ -1,3 +1,15 @@
 - Unbalanced calls to begin/end appearance transitions
+    [EventViewController.swift viewDidLoad():49]
+    [EventViewController.swift viewWillAppear:56]
+    [EventViewController.swift viewWillDisappear:99]
+    [EventViewController.swift prepareForUnwind:255]
+    [EventViewController.swift viewWillAppear:56]
+    [EventViewController.swift viewWillDisappear:99]
+    [EventViewController.swift prepareForUnwind:255] 
+    [EventViewController.swift viewWillAppear:56]
+    [TransitionOperator.swift handleGesture:35] Began
+    [TransitionOperator.swift handleGesture:47] Ended
+    [EventViewController.swift viewWillDisappear:99]
+    2015-06-13 22:56:02.879 Stray[53399:706163] Unbalanced calls to begin/end appearance transitions for <Stray.EventViewController: 0x7fcf4240f570>.
 - Ta bort guides och sätt constraints direkt mot superView, borde fixa så att vyn inte hoppar
 - Kolla efter coredata i pathen som nu först och om den inte finns den så skapa i Documents, just nu får man ett fel då man försöker skapa en ny i default pathen

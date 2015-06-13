@@ -33,7 +33,6 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
     // MARK: Private properties
     private var selectedEvent: Event?
 
-	private let stack = defaultCoreDataStack()
     private let state = State()
 	private let transitionOperator = TransitionOperator()
 
@@ -58,7 +57,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
         eventTimerControl?.delegate = self
 
         if let guid = state.selectedEventGUID {
-                let request = FetchRequest<Event>(context: stack.managedObjectContext)
+                let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
                 let result = request.fetchWhere("guid", value: guid)
 
                 if result.success,
@@ -267,7 +266,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
         if let selectedEvent = selectedEvent {
             if let _ = selectedEvent.stopDate {
 				// Event is stoped, so start a new
-				let event = Event(stack.managedObjectContext, startDate: NSDate())
+				let event = Event(defaultCoreDataStack.managedObjectContext, startDate: NSDate())
 				self.selectedEvent = event
 
 				state.selectedEventGUID = event.guid
@@ -295,7 +294,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
         } else {
 			// No event exists, start a new
 			// Event is stoped, so start a new
-			let event = Event(stack.managedObjectContext, startDate: NSDate())
+			let event = Event(defaultCoreDataStack.managedObjectContext, startDate: NSDate())
 			selectedEvent = event
 
 			state.selectedEventGUID = event.guid
@@ -315,7 +314,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
 		}
 
         sender.animate()
-		saveContextAndWait(stack.managedObjectContext)
+        saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in })
     }
 }
 
@@ -362,13 +361,13 @@ extension EventViewController_EventTimerControlDelegate {
             animateEventTransforming(transform)
             selectedEvent?.stopDate = eventTimerControl?.nowDate
 
-			saveContextAndWait(stack.managedObjectContext)
+            saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in })
         case .StartDateTransformingStop:
             animateEventTransforming(transform)
             if let startDate = eventTimerControl?.startDate {
                 selectedEvent?.startDate = startDate
 
-				saveContextAndWait(stack.managedObjectContext)
+                saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in })
 			}
         default:
             break

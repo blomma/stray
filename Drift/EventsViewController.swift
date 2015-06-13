@@ -36,13 +36,11 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     override func viewWillAppear(animated: Bool) {
-        let stack = defaultCoreDataStack()
-
         var fetchRequest = NSFetchRequest(entityName: Event.entityName)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
         fetchRequest.fetchBatchSize = 20
         
-        var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: stack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
         
         var error: NSErrorPointer = NSErrorPointer()
         if !controller.performFetch(error) {
@@ -55,7 +53,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         let state = State()
         if let guid = state.selectedEventGUID {
-            let request = FetchRequest<Event>(context: stack.managedObjectContext)
+            let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
             let result = request.fetchWhere("guid", value: guid)
             
             if result.success,
@@ -203,15 +201,15 @@ extension EventsViewController_UITableViewDelegate {
 
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            if let event = fetchedResultsController?.objectAtIndexPath(indexPath) as? Event,
-                let context = event.managedObjectContext {
-                    let state = State()
-                    if let selectedEventGUID = state.selectedEventGUID where event.guid == selectedEventGUID {
-                        state.selectedEventGUID = nil
-                    }
+            if let event = fetchedResultsController?.objectAtIndexPath(indexPath) as? Event {
+                let state = State()
+                if let selectedEventGUID = state.selectedEventGUID where event.guid == selectedEventGUID {
+                    state.selectedEventGUID = nil
+                }
 
-                    deleteObjects([event], inContext: context)
-                    saveContextAndWait(context)
+                deleteObjects([event], inContext: defaultCoreDataStack.managedObjectContext)
+                saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in
+                })
             }
         }
     }
