@@ -25,7 +25,7 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
 		return recognizer
 		}()
 
-	private func handleGesture(recognizer: UIPanGestureRecognizer) {
+	func handleGesture(recognizer: UIPanGestureRecognizer) {
 		if let view = recognizer.view {
 			let translation = recognizer.translationInView(view)
 			let velocity = recognizer.velocityInView(view)

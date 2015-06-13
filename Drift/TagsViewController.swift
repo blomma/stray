@@ -161,9 +161,10 @@ extension TagsViewController_UITableViewDelegate {
 
 					saveContextAndWait(stack.managedObjectContext)
 
-					dispatch_async(dispatch_get_main_queue(), { [unowned self] in
-						self.dismissViewControllerAnimated(true, completion: nil)
-						})
+					self.performSegueWithIdentifier("unwindToPresenter", sender: self)
+//					dispatch_async(dispatch_get_main_queue(), { [unowned self] in
+//						self.dismissViewControllerAnimated(true, completion: nil)
+//						})
 			}
 		}
 	}

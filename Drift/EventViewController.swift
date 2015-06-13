@@ -245,6 +245,10 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
             }, completion: nil)
     }
 
+	@IBAction func prepareForUnwind(sender: UIStoryboardSegue) {
+		DLog()
+	}
+
     @IBAction func showTags(sender: UIButton) {
         if selectedEvent != nil {
             sender.animate()

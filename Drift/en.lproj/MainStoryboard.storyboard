@@ -332,9 +332,11 @@
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <connections>
                         <outlet property="tableView" destination="Drg-ei-boB" id="fK6-zH-rkS"/>
+                        <segue destination="FIX-4A-dzX" kind="unwind" identifier="unwindToPresenter" unwindAction="prepareForUnwind:" id="4p0-ft-4A4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ibM-ul-gcy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="FIX-4A-dzX" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2106" y="-377"/>
         </scene>
