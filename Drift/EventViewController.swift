@@ -258,6 +258,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
     @IBAction func showTags(sender: UIButton) {
         if selectedEvent != nil {
             sender.animate()
+            navigationController?.delegate = nil
             performSegueWithIdentifier("segueToTagsFromEvent", sender: self)
         }
     }

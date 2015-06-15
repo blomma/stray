@@ -76,7 +76,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 			let cell = sender as? UITableViewCell,
 			let indexPath = tableView?.indexPathForCell(cell),
 			let event = fetchedResultsController?.objectAtIndexPath(indexPath) as? Event {
-				controller.eventGuid = selectedEvent?.guid
+				controller.eventGuid = event.guid
 		}
 	}
 
@@ -138,6 +138,10 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
             cell.delegate = self
         }
+    }
+
+    @IBAction func prepareForUnwind(sender: UIStoryboardSegue) {
+        DLog()
     }
 
 	@IBAction func toggleEdit(sender: UIBarButtonItem) {
@@ -242,9 +246,10 @@ extension EventsViewController_UITableViewDataSource {
 typealias EventsViewController_EventCellDelegate = EventsViewController
 extension EventsViewController_EventCellDelegate {
     func didPressTag(cell: EventCell) {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.performSegueWithIdentifier("segueToTagsFromEvents", sender: cell)
-        })
+        navigationController?.delegate = nil
+        performSegueWithIdentifier("segueToTagsFromEvents", sender: cell)
+//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//        })
     }
 }
 

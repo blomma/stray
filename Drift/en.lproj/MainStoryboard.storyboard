@@ -598,7 +598,7 @@
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="showTags:" destination="pW2-Iw-5Bg" eventType="touchUpInside" id="mCu-ee-Qqr"/>
+                                                        <action selector="editTag:forEvent:" destination="qyp-c4-X1Y" eventType="touchUpInside" id="Ka0-3e-6OX"/>
                                                     </connections>
                                                 </button>
                                                 <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fTW-iK-rYI">
