@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import JSQCoreDataKit
 
 class CompatibilityMigration  {
     private let strayCompatibilityLevelKey = "StrayCompatibilityLevel"

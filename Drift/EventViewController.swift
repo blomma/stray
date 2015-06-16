@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import JSQCoreDataKit
 
 class EventViewController: UIViewController, EventTimerControlDelegate, TransitionOperatorDelegate {
     // MARK: IBOutlet

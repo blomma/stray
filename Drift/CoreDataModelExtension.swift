@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import JSQCoreDataKit
 
 func applicationStorageDirectory() -> NSURL? {
 	if let applicationName = NSBundle.mainBundle().infoDictionary?["CFBundleName" as NSObject] as? String,

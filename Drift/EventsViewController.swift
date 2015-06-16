@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import JSQCoreDataKit
 
 class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCellDelegate, TransitionOperatorDelegate {
     @IBOutlet weak var tableView: UITableView!

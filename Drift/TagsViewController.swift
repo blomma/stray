@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import JSQCoreDataKit
 
 class TagsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, TagCellDelegate {
 	@IBOutlet weak var tableView: UITableView!
