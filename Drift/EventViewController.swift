@@ -41,7 +41,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
     deinit {
         DLog()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 

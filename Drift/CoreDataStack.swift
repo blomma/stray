@@ -28,7 +28,7 @@ public final class CoreDataStack: Printable {
     ///
     ///  :param: model           The model describing the stack.
     ///  :param: storeType       A string constant that specifies the store type. The default parameter value is `NSSQLiteStoreType`.
-    ///  :param: options         A dictionary containing key-value pairs that specify options for the store. 
+    ///  :param: options         A dictionary containing key-value pairs that specify options for the store.
     ///                          The default parameter value contains `true` for the following keys: `NSMigratePersistentStoresAutomaticallyOption`, `NSInferMappingModelAutomaticallyOption`.
     ///  :param: concurrencyType The concurrency pattern with which the managed object context will be used. The default parameter value is `.MainQueueConcurrencyType`.
     ///
@@ -78,5 +78,5 @@ public final class CoreDataStack: Printable {
             return "<\(toString(CoreDataStack.self)): model=\(model)>"
         }
     }
-    
+
 }

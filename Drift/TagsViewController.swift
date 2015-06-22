@@ -28,32 +28,32 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         let request = FetchRequest<Tag>(context: defaultCoreDataStack.managedObjectContext)
         request.predicate = NSPredicate(format: "sortIndex == max(sortIndex)")
         let result = request.fetch()
-        
+
         if result.success,
             let tag = result.objects.first,
             let sortIndex = tag.sortIndex as? Int {
                 maxSortOrderIndex = sortIndex
         }
-        
+
         var fetchRequest = NSFetchRequest(entityName: Tag.entityName)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: false)]
         fetchRequest.fetchBatchSize = 20
-        
+
         var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-        
+
         var error: NSErrorPointer = NSErrorPointer()
         if !controller.performFetch(error) {
             println("Unresolved error \(error)")
             exit(-1)
         }
-        
+
         controller.delegate = self
         fetchedResultsController = controller
 
         if let guid = eventGuid {
             let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
             let result = request.fetchWhere("guid", value: guid)
-            
+
             if result.success,
                 let event = result.objects.first,
                 let tag = event.inTag,
@@ -64,7 +64,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
     }
-    
+
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
     }
@@ -100,7 +100,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         let tag = Tag(defaultCoreDataStack.managedObjectContext, sortIndex: maxSortOrderIndex)
         maxSortOrderIndex++
         saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in
-            
+
         })
 	}
 
@@ -163,7 +163,7 @@ extension TagsViewController_UITableViewDelegate {
 
                     saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in
                     })
-                    
+
 					self.performSegueWithIdentifier("unwindToPresenter", sender: self)
 			}
 		}

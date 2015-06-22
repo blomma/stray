@@ -38,23 +38,23 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         var fetchRequest = NSFetchRequest(entityName: Event.entityName)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
         fetchRequest.fetchBatchSize = 20
-        
+
         var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-        
+
         var error: NSErrorPointer = NSErrorPointer()
         if !controller.performFetch(error) {
             println("Unresolved error \(error)")
             exit(-1)
         }
-        
+
         controller.delegate = self
         fetchedResultsController = controller
-        
+
         let state = State()
         if let guid = state.selectedEventGUID {
             let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
             let result = request.fetchWhere("guid", value: guid)
-            
+
             if result.success,
                 let event = result.objects.first,
                 let indexPath = fetchedResultsController?.indexPathForObject(event) {
@@ -64,7 +64,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         }
     }
-    
+
 	override func viewWillDisappear(animated: Bool) {
 		super.viewWillDisappear(animated)
 	}
@@ -196,7 +196,7 @@ extension EventsViewController_UITableViewDelegate {
             let cell = tableView.cellForRowAtIndexPath(indexPath) as? EventCell {
 				showSelectMark(cell)
 				selectedEvent = event
-                
+
                 let state = State()
                 state.selectedEventGUID = event.guid
         }

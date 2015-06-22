@@ -23,7 +23,7 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
     deinit {
         DLog()
     }
-    
+
 	func handleGesture(recognizer: UIPanGestureRecognizer) {
 		if let view = recognizer.view {
 			let translation = recognizer.translationInView(view)
