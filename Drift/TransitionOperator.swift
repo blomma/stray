@@ -20,10 +20,6 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
 
 	weak var delegate:TransitionOperatorDelegate?
 
-    deinit {
-        DLog()
-    }
-
 	func handleGesture(recognizer: UIPanGestureRecognizer) {
 		if let view = recognizer.view {
 			let translation = recognizer.translationInView(view)
@@ -31,20 +27,22 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
 			let percentage = abs(translation.x / CGRectGetWidth(view.bounds))
 
 			switch recognizer.state {
-			case .Began:
-                DLog("Began")
-				if velocity.x > 0 && !presented {
-					interactionInProgress = true
-					delegate?.transitionControllerInteractionDidStart(presented)
-				} else if velocity.x < 0 && presented {
+            case .Began:
+				if (velocity.x > 0 && !presented) || (velocity.x < 0 && presented) {
 					interactionInProgress = true
 					delegate?.transitionControllerInteractionDidStart(presented)
 				}
 			case .Changed:
-                DLog("Changed")
+                if !interactionInProgress {
+                    return
+                }
+                
 				updateInteractiveTransition(percentage)
 			case .Ended:
-                DLog("Ended")
+                if !interactionInProgress {
+                    return
+                }
+                
 				if percentage > 0.4 {
 					finishInteractiveTransition()
 				} else {
@@ -53,7 +51,10 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
 
 				interactionInProgress = false
 			case .Cancelled:
-                DLog("Cancelled")
+                if !interactionInProgress {
+                    return
+                }
+                
 				cancelInteractiveTransition()
 
 				interactionInProgress = false
@@ -116,7 +117,6 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 	}
 
 	func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
-        DLog()
 		let container = transitionContext.containerView()
 		let duration = transitionDuration(transitionContext)
 
