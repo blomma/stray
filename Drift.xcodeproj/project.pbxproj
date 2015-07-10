@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		9E0D048F1AD6A75F00E82A13 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0D048E1AD6A75F00E82A13 /* State.swift */; };
-		9E0D390E1B2D45C1003AA043 /* Warnings.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 9E0D390D1B2D45C1003AA043 /* Warnings.xcconfig */; };
 		9E21F926156EA9510075EAAC /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */; };
 		9E2D61EE1B3043AF000EB45E /* CoreDataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2D61EB1B3043AF000EB45E /* CoreDataExtensions.swift */; };
 		9E2D61EF1B3043AF000EB45E /* CoreDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2D61EC1B3043AF000EB45E /* CoreDataModel.swift */; };
@@ -228,7 +227,7 @@
 		9E42F1E115570FD60087F602 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = Artsoftheinsane;
 				TargetAttributes = {
 					9E42F1E915570FD60087F602 = {
@@ -269,7 +268,6 @@
 				9E42F1F915570FD60087F602 /* InfoPlist.strings in Resources */,
 				9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */,
 				9EAD25D9198E314F006A2779 /* FontAwesome.otf in Resources */,
-				9E0D390E1B2D45C1003AA043 /* Warnings.xcconfig in Resources */,
 				9E338A7519C493FB004C4FA6 /* Images.xcassets in Resources */,
 				9E51708219E44F6900BEF39B /* Launch Screen.xib in Resources */,
 			);
