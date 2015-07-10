@@ -10,8 +10,6 @@
 	<string>Drift</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>4D69E4537B506358948863F60A3C8C5B51241D42</key>
-		<string>https://github.com/jessesquires/JSQCoreDataKit.git</string>
 		<key>94E697CCEFE698384C47277B8A4527A87D158F41</key>
 		<string>https://github.com/blomma/stray.git</string>
 	</dict>
@@ -19,8 +17,6 @@
 	<string>Drift.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>4D69E4537B506358948863F60A3C8C5B51241D42</key>
-		<string>../../JSQCoreDataKit</string>
 		<key>94E697CCEFE698384C47277B8A4527A87D158F41</key>
 		<string>..</string>
 	</dict>
@@ -32,14 +28,6 @@
 	<string>94E697CCEFE698384C47277B8A4527A87D158F41</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>4D69E4537B506358948863F60A3C8C5B51241D42</string>
-			<key>IDESourceControlWCCName</key>
-			<string>JSQCoreDataKit</string>
-		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
