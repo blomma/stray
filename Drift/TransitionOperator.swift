@@ -43,6 +43,7 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
                     return
                 }
                 
+                completionSpeed = 0.5
 				if percentage > 0.4 {
 					finishInteractiveTransition()
 				} else {
@@ -55,6 +56,7 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
                     return
                 }
                 
+                completionSpeed = 0.5
 				cancelInteractiveTransition()
 
 				interactionInProgress = false
@@ -116,9 +118,14 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 		return 0.5
 	}
 
+    typealias Animations = () -> Void
+    typealias Completion = (Bool) -> Void
+    private func animateWithDuration(duration: NSTimeInterval, animations: Animations, completion: Completion) {
+        UIView.animateWithDuration(duration, delay: 0, options: nil, animations: animations, completion: completion)
+    }
+    
 	func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
 		let container = transitionContext.containerView()
-		let duration = transitionDuration(transitionContext)
 
 		var toView: UIView?
 		if let view = transitionContext.viewForKey(UITransitionContextToViewKey) {
@@ -133,9 +140,7 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 		if presenting,
 			let toView = toView,
 			let fromView = fromView {
-                DLog("presenting \(presenting)")
 				if interactionInProgress {
-                    DLog("interactionInProgress \(interactionInProgress)")
 					container.addSubview(toView)
 
 					toView.frame.origin.x = -toView.frame.width
@@ -146,17 +151,15 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 					var fromEndFrame = fromView.frame
 					fromEndFrame.origin.x = 100
 
-					UIView.animateWithDuration(duration, delay: 0, options: nil, animations: {
-						fromView.frame = fromEndFrame
-						toView.frame = toEndFrame
-						}, completion: { finished in
-                            DLog("transitionContext.transitionWasCancelled() \(transitionContext.transitionWasCancelled())")
-							self.presented = !transitionContext.transitionWasCancelled()
-							transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
-							UIApplication.sharedApplication().keyWindow?.addSubview(fromView)
-						})
+                    animateWithDuration(transitionDuration(transitionContext), animations: {
+                        fromView.frame = fromEndFrame
+                        toView.frame = toEndFrame
+                    }, completion: { finished in
+                        self.presented = !transitionContext.transitionWasCancelled()
+                        transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+                        UIApplication.sharedApplication().keyWindow?.addSubview(fromView)
+                    })
 				} else if let oldFromView = UIApplication.sharedApplication().keyWindow?.subviews.last as? UIView {
-                    DLog("interactionInProgress \(interactionInProgress)")
 					container.addSubview(toView)
 
 					toView.frame.origin.x = toView.frame.width
@@ -169,19 +172,17 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 					var fromEndFrame = fromView.frame
 					fromEndFrame.origin.x = -(fromView.frame.width + oldFromView.frame.width)
 
-					UIView.animateWithDuration(duration, delay: 0, options: nil, animations: {
-						fromView.frame = fromEndFrame
-						toView.frame = toEndFrame
-						oldFromView.frame = oldFromEndFrame
-						}, completion: { finished in
-                            DLog("transitionContext.transitionWasCancelled() \(transitionContext.transitionWasCancelled())")
-							oldFromView.removeFromSuperview()
-							transitionContext.completeTransition(true)
-						})
+                    animateWithDuration(transitionDuration(transitionContext), animations: {
+                        fromView.frame = fromEndFrame
+                        toView.frame = toEndFrame
+                        oldFromView.frame = oldFromEndFrame
+                        }, completion: { finished in
+                            oldFromView.removeFromSuperview()
+                            transitionContext.completeTransition(true)
+                    })
 				}
 		} else if let toView = toView,
 			let fromView = fromView  {
-                DLog("presenting \(presenting)")
 				container.addSubview(toView)
 
 				toView.frame.origin.x = 100
@@ -192,18 +193,17 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 				var toEndFrame = toView.frame
 				toEndFrame.origin.x = 0
 
-				UIView.animateWithDuration(duration, delay: 0, options: nil, animations: {
-					fromView.frame = fromEndFrame
-					toView.frame = toEndFrame
-					}, completion: { finished in
-                        DLog("transitionContext.transitionWasCancelled() \(transitionContext.transitionWasCancelled())")
-						self.presented = transitionContext.transitionWasCancelled()
-						transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
-
-						if transitionContext.transitionWasCancelled() {
-							UIApplication.sharedApplication().keyWindow?.addSubview(toView)
-						}
-					})
+                animateWithDuration(transitionDuration(transitionContext), animations: {
+                    fromView.frame = fromEndFrame
+                    toView.frame = toEndFrame
+                    }, completion: { finished in
+                        self.presented = transitionContext.transitionWasCancelled()
+                        transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+                        
+                        if transitionContext.transitionWasCancelled() {
+                            UIApplication.sharedApplication().keyWindow?.addSubview(toView)
+                        }
+                })
 		}
 	}
 }
