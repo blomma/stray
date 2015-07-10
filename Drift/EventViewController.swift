@@ -38,10 +38,6 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
     private let calendar = NSCalendar.autoupdatingCurrentCalendar()
     private let shortStandaloneMonthSymbols: NSArray = NSDateFormatter().shortStandaloneMonthSymbols
 
-    deinit {
-        DLog()
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 

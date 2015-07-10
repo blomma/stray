@@ -35,11 +35,11 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
                 maxSortOrderIndex = sortIndex
         }
 
-        var fetchRequest = NSFetchRequest(entityName: Tag.entityName)
+        let fetchRequest = NSFetchRequest(entityName: Tag.entityName)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: false)]
         fetchRequest.fetchBatchSize = 20
 
-        var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
 
         var error: NSErrorPointer = NSErrorPointer()
         if !controller.performFetch(error) {
@@ -73,7 +73,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
         if let tag = fetchedResultsController?.objectAtIndexPath(atIndexPath) as? Tag {
 			cell.delegate = self
 
-			cell.name.text = tag.name
+            cell.name.text = tag.name
 			cell.name.enabled = tableView.editing
 
             if selectedTag?.guid == tag.guid {
@@ -216,8 +216,11 @@ extension TagsViewController_UITableViewDataSource {
     }
 
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("TagCellIdentifier") as! TagCell
-        configureCell(cell, atIndexPath:indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("TagCellIdentifier", forIndexPath: indexPath) as! UITableViewCell
+        
+        if let cell = cell as? TagCell {
+            configureCell(cell, atIndexPath:indexPath)
+        }
 
         return cell
     }

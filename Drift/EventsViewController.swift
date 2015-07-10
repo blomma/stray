@@ -12,16 +12,8 @@ import CoreData
 class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCellDelegate, TransitionOperatorDelegate {
     @IBOutlet weak var tableView: UITableView!
 
-    private lazy var shortStandaloneMonthSymbols: [AnyObject] = {
-        return NSDateFormatter().shortStandaloneMonthSymbols
-    }()
-
-    private lazy var shortStandaloneWeekdaySymbols: [AnyObject] = {
-        return NSDateFormatter().shortStandaloneWeekdaySymbols
-    }()
-
+    private let shortStandaloneMonthSymbols: NSArray = NSDateFormatter().shortStandaloneMonthSymbols
 	private let transitionOperator = TransitionOperator()
-
     private let calendar = NSCalendar.autoupdatingCurrentCalendar()
 	private var selectedEvent: Event?
 
@@ -35,11 +27,11 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     override func viewWillAppear(animated: Bool) {
-        var fetchRequest = NSFetchRequest(entityName: Event.entityName)
+        let fetchRequest = NSFetchRequest(entityName: Event.entityName)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
         fetchRequest.fetchBatchSize = 20
 
-        var controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
 
         var error: NSErrorPointer = NSErrorPointer()
         if !controller.performFetch(error) {
@@ -234,8 +226,11 @@ extension EventsViewController_UITableViewDataSource {
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell: EventCell = tableView.dequeueReusableCellWithIdentifier("EventCellIdentifier") as! EventCell
-        configureCell(cell, atIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("EventCellIdentifier", forIndexPath: indexPath) as! UITableViewCell
+        
+        if let cell = cell as? EventCell {
+            configureCell(cell, atIndexPath: indexPath)
+        }
 
         return cell
     }
