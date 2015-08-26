@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class EventViewController: UIViewController, EventTimerControlDelegate, TransitionOperatorDelegate {
+class EventViewController: UIViewController, EventTimerControlDelegate, TransitionOperatorDelegate, UIGestureRecognizerDelegate {
     // MARK: IBOutlet
     @IBOutlet weak var eventTimerControl: EventTimerControl?
     @IBOutlet weak var toggleStartStopButton: UIButton?
@@ -41,14 +41,15 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        DLog()
 		transitionOperator.delegate = self
-        view.addGestureRecognizer(UIPanGestureRecognizer(target: transitionOperator, action: "handleGesture:"))
+		var panRecognizer = UIPanGestureRecognizer(target: transitionOperator, action: "handleGesture:")
+		panRecognizer.delegate = self
+		view.addGestureRecognizer(panRecognizer)
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        DLog()
+
         eventTimerControl?.delegate = self
 
         if let guid = state.selectedEventGUID {
@@ -312,6 +313,18 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
         sender.animate()
         saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in })
     }
+}
+
+// MARK: - UIGestureRecognizerDelegate
+private typealias EventViewControllerUIGestureRecognizerDelegate = EventViewController
+extension EventViewControllerUIGestureRecognizerDelegate {
+	func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+		if let eventTimerControl = eventTimerControl {
+			return !eventTimerControl.tracking
+		}
+
+		return true
+	}
 }
 
 // MARK: - TransitionOperatorDelegate
