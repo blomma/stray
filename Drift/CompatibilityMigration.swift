@@ -127,26 +127,25 @@ class CompatibilityMigration  {
 
     private func migrateCoreData() {
         self.migrateToCompatibilityLevel(1, fromLevel: self.coreDataCompatibilityLevel) { () -> () in
-            if let entity = NSEntityDescription.entityForName(Event.entityName, inManagedObjectContext: defaultCoreDataStack.managedObjectContext) {
-                    let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
-                    let result = request.fetch()
-
-                    if result.success {
-                        for event in result.objects {
-                            event.guid = NSProcessInfo.processInfo().globallyUniqueString
-                        }
-                    }
+            let eventRequest = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
+            do {
+                let events = try eventRequest.fetch()
+                for event in events {
+                    event.guid = NSProcessInfo.processInfo().globallyUniqueString
+                }
+            } catch {
+                // TODO: Errorhandling
             }
-
-            if let entity = NSEntityDescription.entityForName(Tag.entityName, inManagedObjectContext: defaultCoreDataStack.managedObjectContext) {
-                    let request = FetchRequest<Tag>(context: defaultCoreDataStack.managedObjectContext)
-                    let result = request.fetch()
-
-                    if result.success {
-                        for tag in result.objects {
-                            tag.guid = NSProcessInfo.processInfo().globallyUniqueString
-                        }
-                    }
+            
+            let tagRequest = FetchRequest<Tag>(context: defaultCoreDataStack.managedObjectContext)
+            do {
+                let tags = try tagRequest.fetch()
+                for tag in tags {
+                    tag.guid = NSProcessInfo.processInfo().globallyUniqueString
+                }
+                
+            } catch {
+                // TODO: Errorhandling
             }
         }
 

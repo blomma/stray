@@ -10,12 +10,12 @@ import Foundation
 
 extension UIButton {
     func animate() {
-        var pathFrame: CGRect = CGRectMake(-CGRectGetMidY(bounds), -CGRectGetMidY(bounds), bounds.size.height, bounds.size.height)
-        var path: UIBezierPath = UIBezierPath(roundedRect: pathFrame, cornerRadius:pathFrame.size.height / 2)
+        let pathFrame: CGRect = CGRectMake(-CGRectGetMidY(bounds), -CGRectGetMidY(bounds), bounds.size.height, bounds.size.height)
+        let path: UIBezierPath = UIBezierPath(roundedRect: pathFrame, cornerRadius:pathFrame.size.height / 2)
 
-        var shapePosition: CGPoint = convertPoint(center, fromView:superview)
+        let shapePosition: CGPoint = convertPoint(center, fromView:superview)
 
-        var circleShape: CAShapeLayer = CAShapeLayer.new()
+        let circleShape: CAShapeLayer = CAShapeLayer()
         circleShape.path        = path.CGPath;
         circleShape.position    = shapePosition;
         circleShape.fillColor   = UIColor.clearColor().CGColor
@@ -25,15 +25,15 @@ extension UIButton {
 
         layer.addSublayer(circleShape)
 
-        var scaleAnimation: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        let scaleAnimation: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
         scaleAnimation.fromValue = NSValue(CATransform3D: CATransform3DIdentity)
         scaleAnimation.toValue   = NSValue(CATransform3D:CATransform3DMakeScale(3, 3, 1))
 
-        var alphaAnimation: CABasicAnimation = CABasicAnimation(keyPath: "opacity")
+        let alphaAnimation: CABasicAnimation = CABasicAnimation(keyPath: "opacity")
         alphaAnimation.fromValue = 1;
         alphaAnimation.toValue   = 0;
 
-        var animation: CAAnimationGroup = CAAnimationGroup.new()
+        let animation: CAAnimationGroup = CAAnimationGroup()
         animation.delegate = self
         animation.animations     = [scaleAnimation, alphaAnimation]
         animation.duration       = 0.5

@@ -13,7 +13,7 @@ class MenuController: UIViewController {
 		if let navigationController = navigationController {
 			if let _ = navigationController.viewControllers.first as? EventViewController {
 				navigationController.popViewControllerAnimated(true)
-			} else if let controller = storyboard?.instantiateViewControllerWithIdentifier("EventViewController") as? UIViewController {
+			} else if let controller = storyboard?.instantiateViewControllerWithIdentifier("EventViewController") {
 				navigationController.setViewControllers([controller], animated: true)
 			}
 		}
@@ -23,7 +23,7 @@ class MenuController: UIViewController {
 		if let navigationController = navigationController {
 			if let _ = navigationController.viewControllers.first as? EventsViewController {
 				navigationController.popViewControllerAnimated(true)
-			} else if let controller = storyboard?.instantiateViewControllerWithIdentifier("EventsViewController") as? UIViewController {
+			} else if let controller = storyboard?.instantiateViewControllerWithIdentifier("EventsViewController") {
 				navigationController.setViewControllers([controller], animated: true)
 			}
 		}

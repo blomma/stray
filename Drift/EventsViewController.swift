@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCellDelegate, TransitionOperatorDelegate {
+class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCellDelegate {
     @IBOutlet weak var tableView: UITableView!
 
     private let shortStandaloneMonthSymbols: NSArray = NSDateFormatter().shortStandaloneMonthSymbols
@@ -22,7 +22,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
 
-		transitionOperator.delegate = self
+		transitionOperator.navigationController = navigationController
         view.addGestureRecognizer(UIPanGestureRecognizer(target: transitionOperator, action: "handleGesture:"))
     }
 
@@ -33,9 +33,12 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
 
-        var error: NSErrorPointer = NSErrorPointer()
-        if !controller.performFetch(error) {
-            println("Unresolved error \(error)")
+        let error: NSErrorPointer = NSErrorPointer()
+        do {
+            try controller.performFetch()
+        } catch let error1 as NSError {
+            error.memory = error1
+            print("Unresolved error \(error)")
             exit(-1)
         }
 
@@ -45,15 +48,17 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let state = State()
         if let guid = state.selectedEventGUID {
             let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
-            let result = request.fetchWhere("guid", value: guid)
-
-            if result.success,
-                let event = result.objects.first,
-                let indexPath = fetchedResultsController?.indexPathForObject(event) {
+            do {
+                let event = try request.fetchFirstWhere("guid", value: guid)
+                if let indexPath = fetchedResultsController?.indexPathForObject(event) {
                     selectedEvent = event
                     tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
                     tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
+                }
+            } catch {
+                // TODO: Errorhandling
             }
+
         }
     }
 
@@ -89,7 +94,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
 
             // StartTime
-            let startTimeFlags: NSCalendarUnit = .CalendarUnitMinute | .CalendarUnitHour | .CalendarUnitDay | .CalendarUnitMonth | .CalendarUnitYear
+            let startTimeFlags: NSCalendarUnit = [.Minute, .Hour, .Day, .Month, .Year]
             let startTimeComponents = calendar.components(startTimeFlags, fromDate: event.startDate)
 
             cell.eventStartTime.text = String(format: "%02ld:%02ld", startTimeComponents.hour, startTimeComponents.minute)
@@ -102,15 +107,15 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
             // EventTime
             let stopDate = event.stopDate != nil ? event.stopDate! : NSDate()
-            let eventTimeFlags: NSCalendarUnit = .CalendarUnitMinute | .CalendarUnitHour
-            let eventTimeComponents = calendar.components(eventTimeFlags, fromDate: event.startDate, toDate: stopDate, options: NSCalendarOptions(0))
+            let eventTimeFlags: NSCalendarUnit = [.Minute, .Hour]
+            let eventTimeComponents = calendar.components(eventTimeFlags, fromDate: event.startDate, toDate: stopDate, options: NSCalendarOptions(rawValue: 0))
 
             cell.eventTimeHours.text = String(format: "%02ld", eventTimeComponents.hour)
             cell.eventTimeMinutes.text = String(format: "%02ld", eventTimeComponents.minute)
 
             // StopTime
             if let stopDate = event.stopDate {
-                let stopTimeFlags: NSCalendarUnit = .CalendarUnitMinute | .CalendarUnitHour | .CalendarUnitDay | .CalendarUnitMonth | .CalendarUnitYear
+                let stopTimeFlags: NSCalendarUnit = [.Minute, .Hour, .Day, .Month, .Year]
                 let stopTimeComponents = calendar.components(stopTimeFlags, fromDate: stopDate)
 
                 cell.eventStopTime.text = String(format: "%02ld:%02ld", stopTimeComponents.hour, stopTimeComponents.minute)
@@ -156,22 +161,6 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 	}
 }
 
-// MARK: - TransitionOperatorDelegate
-typealias EventsViewControllerTransitionOperatorDelegate = EventsViewController
-extension EventsViewControllerTransitionOperatorDelegate {
-	func transitionControllerInteractionDidStart(havePresented: Bool) {
-		if let navigationController = navigationController {
-			navigationController.delegate = transitionOperator
-
-			if havePresented {
-				navigationController.popViewControllerAnimated(true)
-			} else if let controller = storyboard?.instantiateViewControllerWithIdentifier("MenuController") as? UIViewController {
-				navigationController.pushViewController(controller, animated: true)
-			}
-		}
-	}
-}
-
 // MARK: - UITableViewDelegate
 typealias EventsViewController_UITableViewDelegate = EventsViewController
 extension EventsViewController_UITableViewDelegate {
@@ -203,7 +192,7 @@ extension EventsViewController_UITableViewDelegate {
                 }
 
                 deleteObjects([event], inContext: defaultCoreDataStack.managedObjectContext)
-                saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in
+                saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in
                 })
             }
         }
@@ -214,7 +203,7 @@ extension EventsViewController_UITableViewDelegate {
 typealias EventsViewController_UITableViewDataSource = EventsViewController
 extension EventsViewController_UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let sectionInfo = fetchedResultsController?.sections?[section] as? NSFetchedResultsSectionInfo {
+        if let sectionInfo = fetchedResultsController?.sections?[section] {
             return sectionInfo.numberOfObjects
         }
 
@@ -226,7 +215,7 @@ extension EventsViewController_UITableViewDataSource {
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("EventCellIdentifier", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("EventCellIdentifier", forIndexPath: indexPath) 
         
         if let cell = cell as? EventCell {
             configureCell(cell, atIndexPath: indexPath)
@@ -242,8 +231,6 @@ extension EventsViewController_EventCellDelegate {
     func didPressTag(cell: EventCell) {
         navigationController?.delegate = nil
         performSegueWithIdentifier("segueToTagsFromEvents", sender: cell)
-//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//        })
     }
 }
 

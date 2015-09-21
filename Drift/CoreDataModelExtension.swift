@@ -9,12 +9,13 @@
 import Foundation
 
 func applicationStorageDirectory() -> NSURL? {
-	if let applicationName = NSBundle.mainBundle().infoDictionary?["CFBundleName" as NSObject] as? String,
-		let directory = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .UserDomainMask, true).last as? String {
-			return NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(applicationName))
-	}
-
-	return .None
+    guard let infoDictionary = NSBundle.mainBundle().infoDictionary,
+        let applicationName = infoDictionary["CFBundleName"] as? String,
+        let directory = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .UserDomainMask, true).last else {
+            return .None
+    }
+    
+    return NSURL(fileURLWithPath: directory).URLByAppendingPathComponent(applicationName)
 }
 
 func coreDataModel() -> CoreDataModel {
@@ -23,11 +24,11 @@ func coreDataModel() -> CoreDataModel {
 
 	if let applicationStorageDirectory = applicationStorageDirectory() {
 		// Check if we have a preexisting database at this location
-		var storeURL: NSURL = applicationStorageDirectory.URLByAppendingPathComponent(dataBaseFileName)
-		var error:NSError?
-		if storeURL.checkResourceIsReachableAndReturnError(&error) {
-			return CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle(), storeDirectoryURL: applicationStorageDirectory)
-		}
+		let storeURL: NSURL = applicationStorageDirectory.URLByAppendingPathComponent(dataBaseFileName)
+        let error: NSErrorPointer = NSErrorPointer()
+        if storeURL.checkResourceIsReachableAndReturnError(error) {
+            return CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle(), storeDirectoryURL: applicationStorageDirectory)
+        }
 	}
 
 	return CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle())

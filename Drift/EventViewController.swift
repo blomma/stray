@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class EventViewController: UIViewController, EventTimerControlDelegate, TransitionOperatorDelegate {
+class EventViewController: UIViewController, EventTimerControlDelegate {
     // MARK: IBOutlet
     @IBOutlet weak var eventTimerControl: EventTimerControl?
     @IBOutlet weak var toggleStartStopButton: UIButton?
@@ -33,44 +33,43 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
     private var selectedEvent: Event?
 
     private let state = State()
-	private let transitionOperator = TransitionOperator()
+    private var transitionOperator: TransitionOperator?
 
     private let calendar = NSCalendar.autoupdatingCurrentCalendar()
     private let shortStandaloneMonthSymbols: NSArray = NSDateFormatter().shortStandaloneMonthSymbols
 
+    deinit {
+        DLog()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        DLog()
-		transitionOperator.delegate = self
-        view.addGestureRecognizer(UIPanGestureRecognizer(target: transitionOperator, action: "handleGesture:"))
+        self.transitionOperator = TransitionOperator(viewController: self)
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        DLog()
         eventTimerControl?.delegate = self
 
         if let guid = state.selectedEventGUID {
-                let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
-                let result = request.fetchWhere("guid", value: guid)
-
-                if result.success,
-                    let event = result.objects.first {
-                    selectedEvent = event
-
-                    eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
-
-                    if let _ = event.stopDate {
-                        toggleStartStopButton?.setTitle("START", forState: .Normal)
-                        animateStopEvent()
-                    } else {
-                        toggleStartStopButton?.setTitle("STOP", forState: .Normal)
-                        animateStartEvent()
-                    }
+            let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
+            do {
+                let event = try request.fetchFirstWhere("guid", value: guid)
+                selectedEvent = event
+                
+                eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
+                
+                if let _ = event.stopDate {
+                    toggleStartStopButton?.setTitle("START", forState: .Normal)
+                    animateStopEvent()
                 } else {
-                    println("*** ERROR: [\(__LINE__)] \(__FUNCTION__) Error while executing fetch request: \(result.error)")
+                    toggleStartStopButton?.setTitle("STOP", forState: .Normal)
+                    animateStartEvent()
                 }
+            } catch {
+                print("*** ERROR: [\(__LINE__)] \(__FUNCTION__) Error while executing fetch request:")
+            }
         } else {
             selectedEvent = nil
         }
@@ -105,7 +104,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
 	}
 
     private func updateStartLabelWithDate(date: NSDate) {
-        let unitFlags: NSCalendarUnit = .CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitHour | .CalendarUnitMinute
+        let unitFlags: NSCalendarUnit = [.Year, .Month, .Day, .Hour, .Minute]
 
         let components: NSDateComponents = calendar.components(unitFlags, fromDate: date)
 
@@ -119,8 +118,8 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
     }
 
     private func updateEventTimeFromDate(fromDate: NSDate, toDate: NSDate) {
-        let unitFlags: NSCalendarUnit = .CalendarUnitHour | .CalendarUnitMinute
-        let components: NSDateComponents = calendar.components(unitFlags, fromDate: fromDate, toDate: toDate, options: nil)
+        let unitFlags: NSCalendarUnit = [.Hour, .Minute]
+        let components: NSDateComponents = calendar.components(unitFlags, fromDate: fromDate, toDate: toDate, options: [])
 
         let hour: Int = abs(components.hour)
         let minute: Int = abs(components.minute)
@@ -135,7 +134,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
     }
 
     private func updateStopLabelWithDate(date: NSDate) {
-        let unitFlags: NSCalendarUnit = .CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitHour | .CalendarUnitMinute
+        let unitFlags: NSCalendarUnit = [.Year, .Month, .Day, .Hour, .Minute]
 
         let components: NSDateComponents = calendar.components(unitFlags, fromDate: date)
 
@@ -310,24 +309,8 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
 		}
 
         sender.animate()
-        saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in })
+        saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in })
     }
-}
-
-// MARK: - TransitionOperatorDelegate
-typealias EventViewControllerTransitionOperatorDelegate = EventViewController
-extension EventViewControllerTransitionOperatorDelegate {
-	func transitionControllerInteractionDidStart(havePresented: Bool) {
-		if let navigationController = navigationController {
-			navigationController.delegate = transitionOperator
-
-			if havePresented {
-				navigationController.popViewControllerAnimated(true)
-			} else if let controller = storyboard?.instantiateViewControllerWithIdentifier("MenuController") as? UIViewController {
-				navigationController.pushViewController(controller, animated: true)
-			}
-		}
-	}
 }
 
 // MARK: - EventTimerControlDelegate
@@ -357,13 +340,13 @@ extension EventViewController_EventTimerControlDelegate {
             animateEventTransforming(transform)
             selectedEvent?.stopDate = eventTimerControl?.nowDate
 
-            saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in })
+            saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in })
         case .StartDateTransformingStop:
             animateEventTransforming(transform)
             if let startDate = eventTimerControl?.startDate {
                 selectedEvent?.startDate = startDate
 
-                saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in })
+                saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in })
 			}
         default:
             break

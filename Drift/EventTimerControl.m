@@ -131,7 +131,7 @@
     self.nowTouchPathLayer.strokeEnd   = 0;
 
     for (NSUInteger i = 0; i < self.secondProgressTicksLayer.sublayers.count; i++) {
-        CAShapeLayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
+        CALayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
         layer.hidden = NO;
     }
 }
@@ -189,7 +189,7 @@
 
     if (secondTick != self.previousSecondTick) {
         for (NSUInteger i = 0; i < self.secondProgressTicksLayer.sublayers.count; i++) {
-            CAShapeLayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
+            CALayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
 
             if (i < secondTick) {
                 layer.hidden = NO;

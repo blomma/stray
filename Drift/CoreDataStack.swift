@@ -9,7 +9,7 @@ public typealias ChildManagedObjectContext = NSManagedObjectContext
 ///  An instance of `CoreDataStack` encapsulates the entire Core Data stack for a SQLite store type.
 ///  It manages the managed object model, the persistent store coordinator, and the main managed object context.
 ///  It provides convenience methods for initializing a stack for common use-cases as well as creating child contexts.
-public final class CoreDataStack: Printable {
+public final class CoreDataStack: CustomStringConvertible {
 
     // MARK: Properties
 
@@ -26,13 +26,13 @@ public final class CoreDataStack: Printable {
 
     ///  Constructs a new `CoreDataStack` instance with the specified model, storeType, options, and concurrencyType.
     ///
-    ///  :param: model           The model describing the stack.
-    ///  :param: storeType       A string constant that specifies the store type. The default parameter value is `NSSQLiteStoreType`.
-    ///  :param: options         A dictionary containing key-value pairs that specify options for the store.
+    ///  - parameter model:           The model describing the stack.
+    ///  - parameter storeType:       A string constant that specifies the store type. The default parameter value is `NSSQLiteStoreType`.
+    ///  - parameter options:         A dictionary containing key-value pairs that specify options for the store.
     ///                          The default parameter value contains `true` for the following keys: `NSMigratePersistentStoresAutomaticallyOption`, `NSInferMappingModelAutomaticallyOption`.
-    ///  :param: concurrencyType The concurrency pattern with which the managed object context will be used. The default parameter value is `.MainQueueConcurrencyType`.
+    ///  - parameter concurrencyType: The concurrency pattern with which the managed object context will be used. The default parameter value is `.MainQueueConcurrencyType`.
     ///
-    ///  :returns: A new `CoreDataStack` instance.
+    ///  - returns: A new `CoreDataStack` instance.
     public init(model: CoreDataModel,
         storeType: String = NSSQLiteStoreType,
         options: [NSObject : AnyObject]? = [NSMigratePersistentStoresAutomaticallyOption : true, NSInferMappingModelAutomaticallyOption : true],
@@ -44,7 +44,11 @@ public final class CoreDataStack: Printable {
             var error: NSError?
             let modelStoreURL: NSURL? = (storeType == NSInMemoryStoreType) ? nil : model.storeURL
 
-            self.persistentStoreCoordinator.addPersistentStoreWithType(storeType, configuration: nil, URL: modelStoreURL, options: options, error: &error)
+            do {
+                    try self.persistentStoreCoordinator.addPersistentStoreWithType(storeType, configuration: nil, URL: modelStoreURL, options: options)
+            } catch let error1 as NSError {
+                    error = error1
+            }
             assert(error == nil, "*** Error adding persistent store: \(error)")
 
             self.managedObjectContext = NSManagedObjectContext(concurrencyType: concurrencyType)
@@ -55,12 +59,12 @@ public final class CoreDataStack: Printable {
 
     ///  Creates a new child managed object context with the specified concurrencyType and mergePolicyType.
     ///
-    ///  :param: concurrencyType The concurrency pattern with which the managed object context will be used.
+    ///  - parameter concurrencyType: The concurrency pattern with which the managed object context will be used.
     ///                          The default parameter value is `.MainQueueConcurrencyType`.
-    ///  :param: mergePolicyType The merge policy with which the manged object context will be used.
+    ///  - parameter mergePolicyType: The merge policy with which the manged object context will be used.
     ///                          The default parameter value is `.MergeByPropertyObjectTrumpMergePolicyType`.
     ///
-    ///  :returns: A new child managed object context initialized with the given concurrency type and merge policy type.
+    ///  - returns: A new child managed object context initialized with the given concurrency type and merge policy type.
     public func childManagedObjectContext(concurrencyType: NSManagedObjectContextConcurrencyType = .MainQueueConcurrencyType,
         mergePolicyType: NSMergePolicyType = .MergeByPropertyObjectTrumpMergePolicyType) -> ChildManagedObjectContext {
 
@@ -75,7 +79,7 @@ public final class CoreDataStack: Printable {
     /// :nodoc:
     public var description: String {
         get {
-            return "<\(toString(CoreDataStack.self)): model=\(model)>"
+            return "<\(String(CoreDataStack.self)): model=\(model)>"
         }
     }
 

@@ -9,17 +9,20 @@
 import Foundation
 import UIKit
 
-protocol TransitionOperatorDelegate : class {
-    func transitionControllerInteractionDidStart(havePresented: Bool)
-}
-
 class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
 	private var presented: Bool = false
 	private var presenting: Bool = false
 	private var interactionInProgress: Bool = false
 
-	weak var delegate:TransitionOperatorDelegate?
+    weak var navigationController: UINavigationController?
 
+    convenience init(viewController: UIViewController) {
+        self.init()
+        
+        navigationController = viewController.navigationController
+        viewController.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "handleGesture:"))
+    }
+    
 	func handleGesture(recognizer: UIPanGestureRecognizer) {
 		if let view = recognizer.view {
 			let translation = recognizer.translationInView(view)
@@ -28,10 +31,20 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
 
 			switch recognizer.state {
             case .Began:
-				if (velocity.x > 0 && !presented) || (velocity.x < 0 && presented) {
-					interactionInProgress = true
-					delegate?.transitionControllerInteractionDidStart(presented)
-				}
+				if velocity.x > 0 && !presented {
+                    if let navigationController = navigationController,
+                        let controller = navigationController.storyboard?.instantiateViewControllerWithIdentifier("MenuController") {
+                            interactionInProgress = true
+                            navigationController.delegate = self
+                            navigationController.pushViewController(controller, animated: true)
+                    }
+                } else if velocity.x < 0 && presented {
+                    if let navigationController = navigationController {
+                        interactionInProgress = true
+                        navigationController.delegate = self
+                        navigationController.popViewControllerAnimated(true)
+                    }
+                }
 			case .Changed:
                 if !interactionInProgress {
                     return
@@ -114,18 +127,20 @@ extension TransitionOperatorUIViewControllerTransitioningDelegate {
 // MARK: - UIViewControllerAnimatedTransitioning
 typealias TransitionOperatorUIViewControllerAnimatedTransitioning = TransitionOperator
 extension TransitionOperatorUIViewControllerAnimatedTransitioning {
-	func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
+	func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
 		return 0.5
 	}
 
     typealias Animations = () -> Void
     typealias Completion = (Bool) -> Void
     private func animateWithDuration(duration: NSTimeInterval, animations: Animations, completion: Completion) {
-        UIView.animateWithDuration(duration, delay: 0, options: nil, animations: animations, completion: completion)
+        UIView.animateWithDuration(duration, delay: 0, options: [], animations: animations, completion: completion)
     }
     
 	func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
-		let container = transitionContext.containerView()
+        guard let container = transitionContext.containerView() else {
+            return
+        }
 
 		var toView: UIView?
 		if let view = transitionContext.viewForKey(UITransitionContextToViewKey) {
@@ -159,7 +174,7 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
                         transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
                         UIApplication.sharedApplication().keyWindow?.addSubview(fromView)
                     })
-				} else if let oldFromView = UIApplication.sharedApplication().keyWindow?.subviews.last as? UIView {
+				} else if let oldFromView = UIApplication.sharedApplication().keyWindow?.subviews.last {
 					container.addSubview(toView)
 
 					toView.frame.origin.x = toView.frame.width

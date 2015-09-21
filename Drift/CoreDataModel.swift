@@ -3,7 +3,7 @@ import CoreData
 
 ///  An instance of `CoreDataModel` represents a Core Data model.
 ///  It provides the model and store URLs as well as functions for interacting with the store.
-public struct CoreDataModel: Printable {
+public struct CoreDataModel: CustomStringConvertible {
     // MARK: Properties
 
     ///  The name of the Core Data model resource.
@@ -52,10 +52,13 @@ public struct CoreDataModel: Printable {
     public var modelStoreNeedsMigration: Bool {
         get {
             var error: NSError?
-            if let sourceMetaData = NSPersistentStoreCoordinator.metadataForPersistentStoreOfType(nil, URL: storeURL, error: &error) {
+            do {
+                let sourceMetaData = try NSPersistentStoreCoordinator.metadataForPersistentStoreOfType(nil, URL: storeURL)
                 return !managedObjectModel.isConfiguration(nil, compatibleWithStoreMetadata: sourceMetaData)
+            } catch let error1 as NSError {
+                error = error1
             }
-            println("*** \(toString(CoreDataModel.self)) ERROR: [\(__LINE__)] \(__FUNCTION__) Failure checking persistent store coordinator meta data: \(error)")
+            print("*** \(String(CoreDataModel.self)) ERROR: [\(__LINE__)] \(__FUNCTION__) Failure checking persistent store coordinator meta data: \(error)")
             return false
         }
     }
@@ -64,11 +67,11 @@ public struct CoreDataModel: Printable {
 
     ///  Constructs new `CoreDataModel` instance with the specified name and bundle.
     ///
-    ///  :param: name              The name of the Core Data model.
-    ///  :param: bundle            The bundle in which the model is located. The default parameter value is `NSBundle.mainBundle()`.
-    ///  :param: storeDirectoryURL The directory in which the model is located. The default parameter value is the user's documents directory.
+    ///  - parameter name:              The name of the Core Data model.
+    ///  - parameter bundle:            The bundle in which the model is located. The default parameter value is `NSBundle.mainBundle()`.
+    ///  - parameter storeDirectoryURL: The directory in which the model is located. The default parameter value is the user's documents directory.
     ///
-    ///  :returns: A new `CoreDataModel` instance.
+    ///  - returns: A new `CoreDataModel` instance.
     public init(name: String, bundle: NSBundle = NSBundle.mainBundle(), storeDirectoryURL: NSURL = documentsDirectoryURL()) {
         self.name = name
         self.bundle = bundle
@@ -79,16 +82,23 @@ public struct CoreDataModel: Printable {
 
     ///  Removes the existing model store specfied by the receiver.
     ///
-    ///  :returns: A tuple value containing a boolean to indicate success and an error object if an error occurred.
+    ///  - returns: A tuple value containing a boolean to indicate success and an error object if an error occurred.
     public func removeExistingModelStore() -> (success: Bool, error: NSError?) {
         var error: NSError?
         let fileManager = NSFileManager.defaultManager()
 
         if let storePath = storeURL.path {
             if fileManager.fileExistsAtPath(storePath) {
-                let success = fileManager.removeItemAtURL(storeURL, error: &error)
+                let success: Bool
+                do {
+                    try fileManager.removeItemAtURL(storeURL)
+                    success = true
+                } catch let error1 as NSError {
+                    error = error1
+                    success = false
+                }
                 if !success {
-                    println("*** \(toString(CoreDataModel.self)) ERROR: [\(__LINE__)] \(__FUNCTION__) Could not remove model store at url: \(error)")
+                    print("*** \(String(CoreDataModel.self)) ERROR: [\(__LINE__)] \(__FUNCTION__) Could not remove model store at url: \(error)")
                 }
                 return (success, error)
             }
@@ -102,7 +112,7 @@ public struct CoreDataModel: Printable {
     /// :nodoc:
     public var description: String {
         get {
-            return "<\(toString(CoreDataModel.self)): name=\(name), needsMigration=\(modelStoreNeedsMigration), databaseFileName=\(databaseFileName), modelURL=\(modelURL), storeURL=\(storeURL)>"
+            return "<\(String(CoreDataModel.self)): name=\(name), needsMigration=\(modelStoreNeedsMigration), databaseFileName=\(databaseFileName), modelURL=\(modelURL), storeURL=\(storeURL)>"
         }
     }
 
@@ -112,7 +122,13 @@ public struct CoreDataModel: Printable {
 
 private func documentsDirectoryURL() -> NSURL {
     var error: NSError?
-    let url = NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true, error: &error)
+    let url: NSURL?
+    do {
+        url = try NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true)
+    } catch let error1 as NSError {
+        error = error1
+        url = nil
+    }
     assert(url != nil, "*** Error finding documents directory: \(error)")
     return url!
 }

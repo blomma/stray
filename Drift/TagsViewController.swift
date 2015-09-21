@@ -27,13 +27,15 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewWillAppear(animated: Bool) {
         let request = FetchRequest<Tag>(context: defaultCoreDataStack.managedObjectContext)
         request.predicate = NSPredicate(format: "sortIndex == max(sortIndex)")
-        let result = request.fetch()
-
-        if result.success,
-            let tag = result.objects.first,
-            let sortIndex = tag.sortIndex as? Int {
+        do {
+            let tag = try request.fetchFirst()
+            if let sortIndex = tag.sortIndex as? Int {
                 maxSortOrderIndex = sortIndex
+            }
+        } catch {
+            // TODO: Errorhandling
         }
+
 
         let fetchRequest = NSFetchRequest(entityName: Tag.entityName)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: false)]
@@ -41,9 +43,12 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
 
-        var error: NSErrorPointer = NSErrorPointer()
-        if !controller.performFetch(error) {
-            println("Unresolved error \(error)")
+        let error: NSErrorPointer = NSErrorPointer()
+        do {
+            try controller.performFetch()
+        } catch let error1 as NSError {
+            error.memory = error1
+            print("Unresolved error \(error)")
             exit(-1)
         }
 
@@ -52,16 +57,18 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         if let guid = eventGuid {
             let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
-            let result = request.fetchWhere("guid", value: guid)
-
-            if result.success,
-                let event = result.objects.first,
-                let tag = event.inTag,
-                let indexPath = controller.indexPathForObject(tag) {
-                    selectedTag = tag
-                    tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
-                    tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
+            do {
+                let event = try request.fetchFirstWhere("guid", value: guid)
+                if let tag = event.inTag,
+                    let indexPath = controller.indexPathForObject(tag) {
+                        selectedTag = tag
+                        tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
+                        tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
+                }
+            } catch {
+                // TODO: Errorhandling
             }
+
         }
     }
 
@@ -89,7 +96,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 			tableView.setEditing(true, animated: true)
 		}
 
-		for cell in tableView.visibleCells() {
+		for cell in tableView.visibleCells {
 			if let c = cell as? TagCell {
 				c.name.enabled = tableView.editing
 			}
@@ -97,11 +104,9 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 	}
 
 	@IBAction func addTag(sender: UIBarButtonItem) {
-        let tag = Tag(defaultCoreDataStack.managedObjectContext, sortIndex: maxSortOrderIndex)
+        _ = Tag(defaultCoreDataStack.managedObjectContext, sortIndex: maxSortOrderIndex)
         maxSortOrderIndex++
-        saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in
-
-        })
+        saveContext(defaultCoreDataStack.managedObjectContext, completion: nil)
 	}
 
     private func showSelectMark(cell: TagCell) {
@@ -125,7 +130,7 @@ extension TagsViewControllerTagCellDelegate {
             let indexPath = tableView.indexPathForCell(cell),
             let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
                 tag.name = cell.name.text
-                saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in
+                saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in
                 })
         }
     }
@@ -150,22 +155,22 @@ extension TagsViewController_UITableViewDelegate {
         if let guid = eventGuid,
             let fetchedResultsController = fetchedResultsController {
                 let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
-                let result = request.fetchWhere("guid", value: guid)
-
-			if result.success,
-				let event = result.objects.first,
-                let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
-					if let inTag = event.inTag where inTag.isEqual(tag) {
-						event.inTag = nil
-					} else {
-						event.inTag = tag
-					}
-
-                    saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in
-                    })
-
-					self.performSegueWithIdentifier("unwindToPresenter", sender: self)
-			}
+                do {
+                    let event = try request.fetchFirstWhere("guid", value: guid)
+                    if let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
+                        if let inTag = event.inTag where inTag.isEqual(tag) {
+                            event.inTag = nil
+                        } else {
+                            event.inTag = tag
+                        }
+                        
+                        saveContext(defaultCoreDataStack.managedObjectContext, completion: nil)
+                            
+                        self.performSegueWithIdentifier("unwindToPresenter", sender: self)
+                    }
+                } catch {
+                    // TODO: Errorhandling
+                }
 		}
 	}
 
@@ -174,7 +179,7 @@ extension TagsViewController_UITableViewDelegate {
             let fetchedResultsController = fetchedResultsController,
             let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
                 deleteObjects([tag], inContext: defaultCoreDataStack.managedObjectContext)
-                saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in
+                saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in
                 })
         }
     }
@@ -193,7 +198,7 @@ extension TagsViewController_UITableViewDelegate {
             let tag = fetchedResultsController.objectAtIndexPath(sourceIndexPath) as? Tag {
                 userReorderingCells = true
                 tag.sortIndex = destinationIndexPath.row
-                saveContext(defaultCoreDataStack.managedObjectContext, { (ContextSaveResult) -> Void in
+                saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in
                 })
                 userReorderingCells = false
         }
@@ -204,7 +209,7 @@ extension TagsViewController_UITableViewDelegate {
 typealias TagsViewController_UITableViewDataSource = TagsViewController
 extension TagsViewController_UITableViewDataSource {
 	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let sectionInfo = fetchedResultsController?.sections?[section] as? NSFetchedResultsSectionInfo {
+        if let sectionInfo = fetchedResultsController?.sections?[section] {
             return sectionInfo.numberOfObjects
         }
 
@@ -216,7 +221,7 @@ extension TagsViewController_UITableViewDataSource {
     }
 
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("TagCellIdentifier", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("TagCellIdentifier", forIndexPath: indexPath) 
         
         if let cell = cell as? TagCell {
             configureCell(cell, atIndexPath:indexPath)
