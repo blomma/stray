@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class EventViewController: UIViewController, EventTimerControlDelegate {
+class EventViewController: UIViewController, EventTimerControlDelegate, TransitionOperatorDelegate, UIGestureRecognizerDelegate {
     // MARK: IBOutlet
     @IBOutlet weak var eventTimerControl: EventTimerControl?
     @IBOutlet weak var toggleStartStopButton: UIButton?
@@ -45,7 +45,10 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.transitionOperator = TransitionOperator(viewController: self)
+		transitionOperator.delegate = self
+		var panRecognizer = UIPanGestureRecognizer(target: transitionOperator, action: "handleGesture:")
+		panRecognizer.delegate = self
+		view.addGestureRecognizer(panRecognizer)
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -311,6 +314,34 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
         sender.animate()
         saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in })
     }
+}
+
+// MARK: - UIGestureRecognizerDelegate
+private typealias EventViewControllerUIGestureRecognizerDelegate = EventViewController
+extension EventViewControllerUIGestureRecognizerDelegate {
+	func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+		if let eventTimerControl = eventTimerControl {
+			return !eventTimerControl.tracking
+		}
+
+		return true
+	}
+}
+
+// MARK: - TransitionOperatorDelegate
+typealias EventViewControllerTransitionOperatorDelegate = EventViewController
+extension EventViewControllerTransitionOperatorDelegate {
+	func transitionControllerInteractionDidStart(havePresented: Bool) {
+		if let navigationController = navigationController {
+			navigationController.delegate = transitionOperator
+
+			if havePresented {
+				navigationController.popViewControllerAnimated(true)
+			} else if let controller = storyboard?.instantiateViewControllerWithIdentifier("MenuController") as? UIViewController {
+				navigationController.pushViewController(controller, animated: true)
+			}
+		}
+	}
 }
 
 // MARK: - EventTimerControlDelegate
