@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class EventViewController: UIViewController, EventTimerControlDelegate, TransitionOperatorDelegate, UIGestureRecognizerDelegate {
+class EventViewController: UIViewController, EventTimerControlDelegate {
     // MARK: IBOutlet
     @IBOutlet weak var eventTimerControl: EventTimerControl?
     @IBOutlet weak var toggleStartStopButton: UIButton?
@@ -38,17 +38,10 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
     private let calendar = NSCalendar.autoupdatingCurrentCalendar()
     private let shortStandaloneMonthSymbols: NSArray = NSDateFormatter().shortStandaloneMonthSymbols
 
-    deinit {
-        DLog()
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
-		transitionOperator.delegate = self
-		var panRecognizer = UIPanGestureRecognizer(target: transitionOperator, action: "handleGesture:")
-		panRecognizer.delegate = self
-		view.addGestureRecognizer(panRecognizer)
+        self.transitionOperator = TransitionOperator(viewController: self)
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -60,9 +53,9 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
             do {
                 let event = try request.fetchFirstWhere("guid", value: guid)
                 selectedEvent = event
-                
+
                 eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
-                
+
                 if let _ = event.stopDate {
                     toggleStartStopButton?.setTitle("START", forState: .Normal)
                     animateStopEvent()
@@ -93,7 +86,6 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        DLog()
 
 		eventTimerControl?.delegate = nil
 		eventTimerControl?.stop()
@@ -314,34 +306,6 @@ class EventViewController: UIViewController, EventTimerControlDelegate, Transiti
         sender.animate()
         saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in })
     }
-}
-
-// MARK: - UIGestureRecognizerDelegate
-private typealias EventViewControllerUIGestureRecognizerDelegate = EventViewController
-extension EventViewControllerUIGestureRecognizerDelegate {
-	func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
-		if let eventTimerControl = eventTimerControl {
-			return !eventTimerControl.tracking
-		}
-
-		return true
-	}
-}
-
-// MARK: - TransitionOperatorDelegate
-typealias EventViewControllerTransitionOperatorDelegate = EventViewController
-extension EventViewControllerTransitionOperatorDelegate {
-	func transitionControllerInteractionDidStart(havePresented: Bool) {
-		if let navigationController = navigationController {
-			navigationController.delegate = transitionOperator
-
-			if havePresented {
-				navigationController.popViewControllerAnimated(true)
-			} else if let controller = storyboard?.instantiateViewControllerWithIdentifier("MenuController") as? UIViewController {
-				navigationController.pushViewController(controller, animated: true)
-			}
-		}
-	}
 }
 
 // MARK: - EventTimerControlDelegate
