@@ -63,7 +63,7 @@ public func saveContext(context: NSManagedObjectContext, completion: ((ContextSa
         if let completion = completion {
             completion((true, nil))
         }
-        
+
         return
     }
 
@@ -118,7 +118,7 @@ class FetchRequest <T: NSManagedObject>: NSFetchRequest {
 
     func fetch() throws -> [T] {
         var result: [AnyObject]?
-        
+
         context.performBlockAndWait { [unowned self] () -> Void in
             do {
                 result = try self.context.executeFetchRequest(self)
@@ -126,19 +126,19 @@ class FetchRequest <T: NSManagedObject>: NSFetchRequest {
                 DLog(error.localizedDescription)
             }
         }
-        
+
         guard let r = result as? [T] else {
             throw FetchRequestError.InvalidResult
         }
-        
+
         return r
     }
-    
+
     func fetchFirst() throws -> T {
         guard let first = try fetch().first else {
             throw FetchRequestError.InvalidResult
         }
-        
+
         return first
     }
 
