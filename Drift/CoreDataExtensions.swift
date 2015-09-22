@@ -10,86 +10,28 @@ extension NSManagedObject {
     }
 }
 
-///  A tuple value that describes the results of saving a managed object context.
-///
-///  - parameter success: A boolean value indicating whether the save succeeded. It is `true` if successful, otherwise `false`.
-///  - parameter error:   An error object if an error occurred, otherwise `nil`.
-public typealias ContextSaveResult = (success: Bool, error: NSError?)
-
-
-///  Attempts to commit unsaved changes to registered objects to the specified context's parent store.
-///  This method is performed *synchronously* in a block on the context's queue.
-///  If the context returns `false` from `hasChanges`, this function returns immediately.
-///
-///  - parameter context: The managed object context to save.
-///
-///  - returns: A `ContextSaveResult` instance indicating the result from saving the context.
-public func saveContextAndWait(context: NSManagedObjectContext) -> ContextSaveResult {
-    if !context.hasChanges {
-        return (true, nil)
-    }
-
-    var success = false
-    var error: NSError?
-
-    context.performBlockAndWait { () -> Void in
-        do {
-            try context.save()
-            success = true
-        } catch let error1 as NSError {
-            error = error1
-            success = false
-        } catch {
-            fatalError()
-        }
-
-        if !success {
-            print("*** ERROR: [\(__LINE__)] \(__FUNCTION__) Could not save managed object context: \(error)")
-        }
-    }
-
-    return (success, error)
+enum SaveError: ErrorType {
+    case Error(String)
 }
 
-
-///  Attempts to commit unsaved changes to registered objects to the specified context's parent store.
-///  This method is performed *asynchronously* in a block on the context's queue.
-///  If the context returns `false` from `hasChanges`, this function returns immediately.
-///
-///  - parameter context:    The managed object context to save.
-///  - parameter completion: The closure to be executed when the save operation completes.
-public func saveContext(context: NSManagedObjectContext, completion: ((ContextSaveResult) -> Void)?) {
+public func saveContextAndWait(context: NSManagedObjectContext) throws -> Void {
     if !context.hasChanges {
-        if let completion = completion {
-            completion((true, nil))
-        }
-
         return
     }
 
-    context.performBlock { () -> Void in
-        var error: NSError?
-        let success: Bool
+    var error: SaveError?
+    context.performBlockAndWait { () -> Void in
         do {
             try context.save()
-            success = true
-        } catch let error1 as NSError {
-            error = error1
-            success = false
-        } catch {
-            fatalError()
-        }
-
-        if !success {
-            print("*** ERROR: [\(__LINE__)] \(__FUNCTION__) Could not save managed object context: \(error)")
-        }
-
-        if let completion = completion {
-            completion((success, error))
+        } catch let e as NSError {
+            error = SaveError.Error(e.localizedDescription)
         }
     }
-}
 
+    if let error = error {
+        throw error
+    }
+}
 
 ///  Returns the entity with the specified name from the managed object model associated with the specified managed object context’s persistent store coordinator.
 ///
@@ -103,7 +45,7 @@ public func entity(name name: String, context: NSManagedObjectContext) -> NSEnti
 
 
 enum FetchRequestError: ErrorType {
-    case InvalidResult
+    case InvalidResult(String)
 }
 
 class FetchRequest <T: NSManagedObject>: NSFetchRequest {
@@ -119,27 +61,36 @@ class FetchRequest <T: NSManagedObject>: NSFetchRequest {
     func fetch() throws -> [T] {
         var result: [AnyObject]?
 
+        var error: FetchRequestError?
         context.performBlockAndWait { [unowned self] () -> Void in
             do {
                 result = try self.context.executeFetchRequest(self)
-            } catch let error as NSError {
-                DLog(error.localizedDescription)
+            } catch let e as NSError {
+                error = FetchRequestError.InvalidResult(e.localizedDescription)
             }
         }
 
+        if let error = error {
+            throw error
+        }
+
         guard let r = result as? [T] else {
-            throw FetchRequestError.InvalidResult
+            throw FetchRequestError.InvalidResult("Unable to cast to T")
         }
 
         return r
     }
 
     func fetchFirst() throws -> T {
-        guard let first = try fetch().first else {
-            throw FetchRequestError.InvalidResult
-        }
+        do {
+            guard let first = try fetch().first else {
+                throw FetchRequestError.InvalidResult("")
+            }
 
-        return first
+            return first
+        } catch {
+            throw error
+        }
     }
 
     func fetchWhere(attribute: String, value: AnyObject) throws -> [T] {
@@ -149,11 +100,16 @@ class FetchRequest <T: NSManagedObject>: NSFetchRequest {
     }
 
     func fetchFirstWhere(attribute: String, value: AnyObject) throws -> T {
-        guard let first = try fetchWhere(attribute, value: value).first else {
-            throw FetchRequestError.InvalidResult
+        do {
+            guard let first = try fetchWhere(attribute, value: value).first else {
+                throw FetchRequestError.InvalidResult("")
+            }
+
+            return first
+        } catch {
+            throw error
         }
 
-        return first
     }
 }
 

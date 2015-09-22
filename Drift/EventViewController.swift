@@ -304,7 +304,11 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 		}
 
         sender.animate()
-        saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in })
+        do {
+            try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+        } catch {
+            // TODO: Errorhandling
+        }
     }
 }
 
@@ -335,13 +339,21 @@ extension EventViewController_EventTimerControlDelegate {
             animateEventTransforming(transform)
             selectedEvent?.stopDate = eventTimerControl?.nowDate
 
-            saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in })
+            do {
+                try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+            } catch {
+                // TODO: Errorhandling
+            }
         case .StartDateTransformingStop:
             animateEventTransforming(transform)
             if let startDate = eventTimerControl?.startDate {
                 selectedEvent?.startDate = startDate
 
-                saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in })
+                do {
+                    try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+                } catch {
+                    // TODO: Errorhandling
+                }
 			}
         default:
             break

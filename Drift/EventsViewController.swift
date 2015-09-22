@@ -192,8 +192,11 @@ extension EventsViewController_UITableViewDelegate {
                 }
 
                 deleteObjects([event], inContext: defaultCoreDataStack.managedObjectContext)
-                saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in
-                })
+                do {
+                    try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+                } catch {
+                    // TODO: Errorhandling
+                }
             }
         }
     }
@@ -215,8 +218,8 @@ extension EventsViewController_UITableViewDataSource {
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("EventCellIdentifier", forIndexPath: indexPath) 
-        
+        let cell = tableView.dequeueReusableCellWithIdentifier("EventCellIdentifier", forIndexPath: indexPath)
+
         if let cell = cell as? EventCell {
             configureCell(cell, atIndexPath: indexPath)
         }

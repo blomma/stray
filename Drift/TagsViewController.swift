@@ -106,7 +106,11 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 	@IBAction func addTag(sender: UIBarButtonItem) {
         _ = Tag(defaultCoreDataStack.managedObjectContext, sortIndex: maxSortOrderIndex)
         maxSortOrderIndex++
-        saveContext(defaultCoreDataStack.managedObjectContext, completion: nil)
+		do {
+			try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+		} catch {
+			// TODO: Errorhandling
+		}
 	}
 
     private func showSelectMark(cell: TagCell) {
@@ -130,8 +134,11 @@ extension TagsViewControllerTagCellDelegate {
             let indexPath = tableView.indexPathForCell(cell),
             let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
                 tag.name = cell.name.text
-                saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in
-                })
+				do {
+                    try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+                } catch {
+                    // TODO: Errorhandling
+                }
         }
     }
 
@@ -163,9 +170,13 @@ extension TagsViewController_UITableViewDelegate {
                         } else {
                             event.inTag = tag
                         }
-                        
-                        saveContext(defaultCoreDataStack.managedObjectContext, completion: nil)
-                            
+
+						do {
+		                    try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+		                } catch {
+		                    // TODO: Errorhandling
+		                }
+
                         self.performSegueWithIdentifier("unwindToPresenter", sender: self)
                     }
                 } catch {
@@ -179,8 +190,11 @@ extension TagsViewController_UITableViewDelegate {
             let fetchedResultsController = fetchedResultsController,
             let tag = fetchedResultsController.objectAtIndexPath(indexPath) as? Tag {
                 deleteObjects([tag], inContext: defaultCoreDataStack.managedObjectContext)
-                saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in
-                })
+				do {
+                    try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+                } catch {
+                    // TODO: Errorhandling
+                }
         }
     }
 
@@ -198,8 +212,11 @@ extension TagsViewController_UITableViewDelegate {
             let tag = fetchedResultsController.objectAtIndexPath(sourceIndexPath) as? Tag {
                 userReorderingCells = true
                 tag.sortIndex = destinationIndexPath.row
-                saveContext(defaultCoreDataStack.managedObjectContext, completion: { (ContextSaveResult) -> Void in
-                })
+				do {
+                    try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+                } catch {
+                    // TODO: Errorhandling
+                }
                 userReorderingCells = false
         }
     }
@@ -221,8 +238,8 @@ extension TagsViewController_UITableViewDataSource {
     }
 
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("TagCellIdentifier", forIndexPath: indexPath) 
-        
+        let cell = tableView.dequeueReusableCellWithIdentifier("TagCellIdentifier", forIndexPath: indexPath)
+
         if let cell = cell as? TagCell {
             configureCell(cell, atIndexPath:indexPath)
         }
