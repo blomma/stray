@@ -1,11 +1,3 @@
-//
-//  TagsTableViewController.swift
-//  Drift
-//
-//  Created by Mikael Hultgren on 28/11/14.
-//  Copyright (c) 2014 Artsoftheinsane. All rights reserved.
-//
-
 import UIKit
 import CoreData
 

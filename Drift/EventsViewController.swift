@@ -1,11 +1,3 @@
-//
-//  EventsViewController.swift
-//  Drift
-//
-//  Created by Mikael Hultgren on 2014-10-13.
-//  Copyright (c) 2014 Artsoftheinsane. All rights reserved.
-//
-
 import UIKit
 import CoreData
 

@@ -1,11 +1,3 @@
-//
-//  EventTimerControl.m
-//  Drift
-//
-//  Created by Mikael Hultgren on 6/16/12.
-//  Copyright (c) 2012 Artsoftheinsane. All rights reserved.
-//
-
 #define DLog(...) NSLog(@"FUNC %s[%d][%@]->%@", __PRETTY_FUNCTION__, __LINE__, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], [NSString stringWithFormat:__VA_ARGS__])
 
 #import "EventTimerControl.h"

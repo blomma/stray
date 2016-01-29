@@ -1,11 +1,3 @@
-//
-//  MenuController.swift
-//  Drift
-//
-//  Created by Mikael Hultgren on 05/04/15.
-//  Copyright (c) 2015 Artsoftheinsane. All rights reserved.
-//
-
 import UIKit
 
 class MenuController: UIViewController {
