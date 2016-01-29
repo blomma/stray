@@ -30,7 +30,6 @@
 		9EB08FE119E03E1200D20EE5 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB08FE019E03E1200D20EE5 /* EventCell.swift */; };
 		9EB160011ACD153600E041B9 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB160001ACD153600E041B9 /* EventViewController.swift */; };
 		9EB9F0411B217FAE004032C5 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB9F0401B217FAE004032C5 /* Debug.swift */; };
-		9EDD75381B1B62DA000D0CF9 /* CoreDataModelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDD75371B1B62DA000D0CF9 /* CoreDataModelExtension.swift */; };
 		9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */; };
 		9EF492A91AD7FFE2002F1E14 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF492A81AD7FFE2002F1E14 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
@@ -72,7 +71,6 @@
 		9EB9F0401B217FAE004032C5 /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		9EBF34F119BA3ED60046A464 /* Drift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Drift-Bridging-Header.h"; sourceTree = "<group>"; };
 		9ED93ED61B5419F1002ED4C1 /* Stray.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Stray.entitlements; sourceTree = "<group>"; };
-		9EDD75371B1B62DA000D0CF9 /* CoreDataModelExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataModelExtension.swift; sourceTree = "<group>"; };
 		9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EventTimerControl.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventTimerControl.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9EF492A81AD7FFE2002F1E14 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -105,7 +103,6 @@
 				9E2D61EC1B3043AF000EB45E /* CoreDataModel.swift */,
 				9E2D61ED1B3043AF000EB45E /* CoreDataStack.swift */,
 				9E58CDA01B1895A50003CE03 /* AnimationExtension.swift */,
-				9EDD75371B1B62DA000D0CF9 /* CoreDataModelExtension.swift */,
 				9EB9F0401B217FAE004032C5 /* Debug.swift */,
 			);
 			name = Extension;
@@ -308,7 +305,6 @@
 				9EF492A91AD7FFE2002F1E14 /* AppDelegate.swift in Sources */,
 				9EB160011ACD153600E041B9 /* EventViewController.swift in Sources */,
 				9E0D048F1AD6A75F00E82A13 /* State.swift in Sources */,
-				9EDD75381B1B62DA000D0CF9 /* CoreDataModelExtension.swift in Sources */,
 				9E21F926156EA9510075EAAC /* CoreDataModel.xcdatamodeld in Sources */,
 				9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */,
 				9EB9F0411B217FAE004032C5 /* Debug.swift in Sources */,
@@ -395,7 +391,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.artsoftheinsane.Drift;
@@ -423,7 +419,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.artsoftheinsane.Drift;

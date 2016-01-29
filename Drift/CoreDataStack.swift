@@ -1,18 +1,13 @@
 import Foundation
 import CoreData
 
+let defaultCoreDataStack = CoreDataStack(model: coreDataModel())
 
 ///  Describes a child managed object context.
 public typealias ChildManagedObjectContext = NSManagedObjectContext
 
 
-///  An instance of `CoreDataStack` encapsulates the entire Core Data stack for a SQLite store type.
-///  It manages the managed object model, the persistent store coordinator, and the main managed object context.
-///  It provides convenience methods for initializing a stack for common use-cases as well as creating child contexts.
 public final class CoreDataStack: CustomStringConvertible {
-
-    // MARK: Properties
-
     ///  The model for the stack.
     public let model: CoreDataModel
 
@@ -34,25 +29,22 @@ public final class CoreDataStack: CustomStringConvertible {
     ///
     ///  - returns: A new `CoreDataStack` instance.
     public init(model: CoreDataModel,
-        storeType: String = NSSQLiteStoreType,
-        options: [NSObject : AnyObject]? = [NSMigratePersistentStoresAutomaticallyOption : true, NSInferMappingModelAutomaticallyOption : true],
-        concurrencyType: NSManagedObjectContextConcurrencyType = .MainQueueConcurrencyType) {
+           storeType: String = NSSQLiteStoreType,
+           options: [NSObject : AnyObject] = [NSMigratePersistentStoresAutomaticallyOption : true, NSInferMappingModelAutomaticallyOption : true],
+           concurrencyType: NSManagedObjectContextConcurrencyType = .MainQueueConcurrencyType) {
+        self.model = model
+        self.persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: model.managedObjectModel)
+        
+        let modelStoreURL: NSURL? = (storeType == NSInMemoryStoreType) ? nil : model.storeURL
+        
+        do {
+            try self.persistentStoreCoordinator.addPersistentStoreWithType(storeType, configuration: nil, URL: modelStoreURL, options: options)
+        } catch let error as NSError {
+            fatalError("*** Error adding persistent store: \(error)")
+        }
 
-            self.model = model
-            self.persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: model.managedObjectModel)
-
-            var error: NSError?
-            let modelStoreURL: NSURL? = (storeType == NSInMemoryStoreType) ? nil : model.storeURL
-
-            do {
-                    try self.persistentStoreCoordinator.addPersistentStoreWithType(storeType, configuration: nil, URL: modelStoreURL, options: options)
-            } catch let error1 as NSError {
-                    error = error1
-            }
-            assert(error == nil, "*** Error adding persistent store: \(error)")
-
-            self.managedObjectContext = NSManagedObjectContext(concurrencyType: concurrencyType)
-            self.managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator
+        self.managedObjectContext = NSManagedObjectContext(concurrencyType: concurrencyType)
+        self.managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator
     }
 
     // MARK: Child contexts
