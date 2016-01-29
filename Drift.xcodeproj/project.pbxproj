@@ -21,9 +21,9 @@
 		9E58CDA11B1895A50003CE03 /* AnimationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E58CDA01B1895A50003CE03 /* AnimationExtension.swift */; };
 		9E622B701AD06D370062A9FD /* TransitionOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E622B6F1AD06D370062A9FD /* TransitionOperator.swift */; };
 		9E62E17C1A28D0DB0011EDC0 /* TagsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E62E17B1A28D0DB0011EDC0 /* TagsViewController.swift */; };
-		9EA21B8F1ACE7E0F001CD33A /* CompatibilityMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA21B8E1ACE7E0F001CD33A /* CompatibilityMigration.swift */; };
+		9E8287871C5BEFFC004C71A4 /* Event+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8287851C5BEFFC004C71A4 /* Event+CoreDataProperties.swift */; };
+		9E8287881C5BEFFC004C71A4 /* Tag+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8287861C5BEFFC004C71A4 /* Tag+CoreDataProperties.swift */; };
 		9EA8140C1AD455F700BCC956 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA8140B1AD455F700BCC956 /* Event.swift */; };
-		9EA8140E1AD45ED500BCC956 /* Compatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA8140D1AD45ED500BCC956 /* Compatibility.swift */; };
 		9EA814101AD45ED600BCC956 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA8140F1AD45ED600BCC956 /* Tag.swift */; };
 		9EAD25D9198E314F006A2779 /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9EAD25D8198E314F006A2779 /* FontAwesome.otf */; };
 		9EB08FDE19E00C4800D20EE5 /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB08FDD19E00C4800D20EE5 /* TagCell.swift */; };
@@ -37,6 +37,7 @@
 /* Begin PBXFileReference section */
 		9E0D048E1AD6A75F00E82A13 /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		9E0D390D1B2D45C1003AA043 /* Warnings.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Warnings.xcconfig; sourceTree = "<group>"; };
+		9E1527F61C5BEDCC00525FBB /* CoreDataModel-10.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-10.xcdatamodel"; sourceTree = "<group>"; };
 		9E15323F173FDE3800605B65 /* CoreDataModel- 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel- 8.xcdatamodel"; sourceTree = "<group>"; };
 		9E15AB7A163D0C45006D16B3 /* CoreDataModel-5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-5.xcdatamodel"; sourceTree = "<group>"; };
 		9E21F925156EA9510075EAAC /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
@@ -57,12 +58,12 @@
 		9E62E17B1A28D0DB0011EDC0 /* TagsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsViewController.swift; sourceTree = "<group>"; };
 		9E66D0DA16553B3700339E99 /* CoreDataModel-6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-6.xcdatamodel"; sourceTree = "<group>"; };
 		9E6C6C8716BABD5400613E86 /* CoreDataModel-7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-7.xcdatamodel"; sourceTree = "<group>"; };
+		9E8287851C5BEFFC004C71A4 /* Event+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		9E8287861C5BEFFC004C71A4 /* Tag+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Tag+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		9E916E14163197A40058C777 /* CoreDataModel-4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-4.xcdatamodel"; sourceTree = "<group>"; };
 		9E9239E2162DA56900E265E6 /* CoreDataModel-3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-3.xcdatamodel"; sourceTree = "<group>"; };
 		9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-2.xcdatamodel"; sourceTree = "<group>"; };
-		9EA21B8E1ACE7E0F001CD33A /* CompatibilityMigration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompatibilityMigration.swift; sourceTree = "<group>"; };
 		9EA8140B1AD455F700BCC956 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
-		9EA8140D1AD45ED500BCC956 /* Compatibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Compatibility.swift; sourceTree = "<group>"; };
 		9EA8140F1AD45ED600BCC956 /* Tag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		9EAD25D8198E314F006A2779 /* FontAwesome.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.otf; sourceTree = "<group>"; };
 		9EB08FDD19E00C4800D20EE5 /* TagCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
@@ -165,11 +166,11 @@
 		9E63BBF6156EAAA80006FEFC /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				9E8287851C5BEFFC004C71A4 /* Event+CoreDataProperties.swift */,
+				9E8287861C5BEFFC004C71A4 /* Tag+CoreDataProperties.swift */,
 				9EA8140F1AD45ED600BCC956 /* Tag.swift */,
-				9EA8140D1AD45ED500BCC956 /* Compatibility.swift */,
 				9EA8140B1AD455F700BCC956 /* Event.swift */,
 				9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */,
-				9EA21B8E1ACE7E0F001CD33A /* CompatibilityMigration.swift */,
 				9E0D048E1AD6A75F00E82A13 /* State.swift */,
 			);
 			name = Repository;
@@ -311,12 +312,12 @@
 				9E2D61EF1B3043AF000EB45E /* CoreDataModel.swift in Sources */,
 				9E4DFB8C1AD17CBB008C0123 /* MenuController.swift in Sources */,
 				9EA8140C1AD455F700BCC956 /* Event.swift in Sources */,
-				9EA21B8F1ACE7E0F001CD33A /* CompatibilityMigration.swift in Sources */,
+				9E8287871C5BEFFC004C71A4 /* Event+CoreDataProperties.swift in Sources */,
+				9E8287881C5BEFFC004C71A4 /* Tag+CoreDataProperties.swift in Sources */,
 				9E2D61EE1B3043AF000EB45E /* CoreDataExtensions.swift in Sources */,
 				9E58CDA11B1895A50003CE03 /* AnimationExtension.swift in Sources */,
 				9E2D61F01B3043AF000EB45E /* CoreDataStack.swift in Sources */,
 				9E62E17C1A28D0DB0011EDC0 /* TagsViewController.swift in Sources */,
-				9EA8140E1AD45ED500BCC956 /* Compatibility.swift in Sources */,
 				9E378E7119EC35C3004DED67 /* EventsViewController.swift in Sources */,
 				9EB08FDE19E00C4800D20EE5 /* TagCell.swift in Sources */,
 				9EB08FE119E03E1200D20EE5 /* EventCell.swift in Sources */,
@@ -459,6 +460,7 @@
 		9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				9E1527F61C5BEDCC00525FBB /* CoreDataModel-10.xcdatamodel */,
 				9E593C911B14D10E00EA3B00 /* CoreDataModel-9.xcdatamodel */,
 				9E15323F173FDE3800605B65 /* CoreDataModel- 8.xcdatamodel */,
 				9E6C6C8716BABD5400613E86 /* CoreDataModel-7.xcdatamodel */,
@@ -469,7 +471,7 @@
 				9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */,
 				9E21F925156EA9510075EAAC /* CoreDataModel.xcdatamodel */,
 			);
-			currentVersion = 9E593C911B14D10E00EA3B00 /* CoreDataModel-9.xcdatamodel */;
+			currentVersion = 9E1527F61C5BEDCC00525FBB /* CoreDataModel-10.xcdatamodel */;
 			path = CoreDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
