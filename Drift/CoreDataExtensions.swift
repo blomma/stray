@@ -33,18 +33,6 @@ public func saveContextAndWait(context: NSManagedObjectContext) throws -> Void {
     }
 }
 
-///  Returns the entity with the specified name from the managed object model associated with the specified managed object context’s persistent store coordinator.
-///
-///  - parameter name:    The name of an entity.
-///  - parameter context: The managed object context to use.
-///
-///  - returns: The entity with the specified name from the managed object model associated with context’s persistent store coordinator.
-public func entity(name name: String, context: NSManagedObjectContext)
-    -> NSEntityDescription {
-        return NSEntityDescription.entityForName(name, inManagedObjectContext: context)!
-}
-
-
 enum FetchRequestError: ErrorType {
     case InvalidResult(String)
     case EmptyResult
