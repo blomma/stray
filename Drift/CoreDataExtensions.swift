@@ -39,32 +39,34 @@ public func saveContextAndWait(context: NSManagedObjectContext) throws -> Void {
 ///  - parameter context: The managed object context to use.
 ///
 ///  - returns: The entity with the specified name from the managed object model associated with context’s persistent store coordinator.
-public func entity(name name: String, context: NSManagedObjectContext) -> NSEntityDescription {
-    return NSEntityDescription.entityForName(name, inManagedObjectContext: context)!
+public func entity(name name: String, context: NSManagedObjectContext)
+    -> NSEntityDescription {
+        return NSEntityDescription.entityForName(name, inManagedObjectContext: context)!
 }
 
 
 enum FetchRequestError: ErrorType {
     case InvalidResult(String)
+    case EmptyResult
 }
 
-class FetchRequest <T: NSManagedObject>: NSFetchRequest {
+class FetchRequest <T: NSManagedObject> {
     private var context: NSManagedObjectContext
 
     init(context: NSManagedObjectContext) {
         self.context = context
-
-        super.init()
-        self.entity = NSEntityDescription.entityForName(T.entityName, inManagedObjectContext: context)
     }
 
-    func fetch() throws -> [T] {
+    func fetch(predicate: NSPredicate? = nil) throws -> [T] {
         var result: [AnyObject]?
 
         var error: FetchRequestError?
         context.performBlockAndWait { [unowned self] () -> Void in
+            let request = NSFetchRequest(entityName: T.entityName)
+            request.predicate = predicate
+            
             do {
-                result = try self.context.executeFetchRequest(self)
+                result = try self.context.executeFetchRequest(request)
             } catch let e as NSError {
                 error = FetchRequestError.InvalidResult(e.localizedDescription)
             }
@@ -81,35 +83,28 @@ class FetchRequest <T: NSManagedObject>: NSFetchRequest {
         return r
     }
 
-    func fetchFirst() throws -> T {
-        do {
-            guard let first = try fetch().first else {
-                throw FetchRequestError.InvalidResult("")
-            }
-
-            return first
-        } catch {
-            throw error
+    func fetchFirst(predicate: NSPredicate? = nil) throws -> T {
+        let result = try fetch(predicate)
+        guard let first = result.first else {
+            throw FetchRequestError.EmptyResult
         }
+        
+        return first
     }
 
     func fetchWhere(attribute: String, value: AnyObject) throws -> [T] {
-        predicate = NSPredicate(format: "%K = %@", attribute, value as! NSObject)
+        let predicate = NSPredicate(format: "%K = %@", attribute, value as! NSObject)
 
-        return try fetch()
+        return try fetch(predicate)
     }
 
     func fetchFirstWhere(attribute: String, value: AnyObject) throws -> T {
-        do {
-            guard let first = try fetchWhere(attribute, value: value).first else {
-                throw FetchRequestError.InvalidResult("")
-            }
-
-            return first
-        } catch {
-            throw error
+        let result = try fetchWhere(attribute, value: value)
+        guard let first = result.first else {
+            throw FetchRequestError.EmptyResult
         }
-
+        
+        return first
     }
 }
 

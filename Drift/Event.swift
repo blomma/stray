@@ -19,16 +19,18 @@ final class Event: NSManagedObject {
         startDate: NSDate,
         guid: String? = NSUUID().UUIDString,
         stopDate: NSDate? = nil,
-        inTag: Tag? = nil) {
-            let name = self.dynamicType.entityName
-            let entity = NSEntityDescription.entityForName(name, inManagedObjectContext: context)!
+        inTag: Tag? = nil)
+    {
+        guard let entity = NSEntityDescription.entityForName(self.dynamicType.entityName, inManagedObjectContext: context) else {
+            fatalError("Unable to create entity for Event")
+        }
 
-            self.init(entity: entity, insertIntoManagedObjectContext: context)
+        self.init(entity: entity, insertIntoManagedObjectContext: context)
 
-            self.startDate = startDate
-            self.guid = guid
-            self.stopDate = stopDate
-            self.inTag = inTag
+        self.startDate = startDate
+        self.guid = guid
+        self.stopDate = stopDate
+        self.inTag = inTag
     }
 }
 

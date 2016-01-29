@@ -19,15 +19,17 @@ final class Tag: NSManagedObject {
         guid: String? = NSUUID().UUIDString,
         name: String? = nil,
         sortIndex: NSNumber? = nil,
-        heldByEvents: NSSet? = nil) {
-            let name = self.dynamicType.entityName
-            let entity = NSEntityDescription.entityForName(name, inManagedObjectContext: context)!
+        heldByEvents: NSSet? = nil)
+    {
+        guard let entity = NSEntityDescription.entityForName(self.dynamicType.entityName, inManagedObjectContext: context) else {
+            fatalError("Unable to create entity for Tag")
+        }
 
-            self.init(entity: entity, insertIntoManagedObjectContext: context)
+        self.init(entity: entity, insertIntoManagedObjectContext: context)
 
-            self.guid = guid
-            self.name = name
-            self.sortIndex = sortIndex
-            self.heldByEvents = heldByEvents
+        self.guid = guid
+        self.name = name
+        self.sortIndex = sortIndex
+        self.heldByEvents = heldByEvents
     }
 }

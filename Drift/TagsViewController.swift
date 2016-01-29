@@ -26,9 +26,8 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     override func viewWillAppear(animated: Bool) {
         let request = FetchRequest<Tag>(context: defaultCoreDataStack.managedObjectContext)
-        request.predicate = NSPredicate(format: "sortIndex == max(sortIndex)")
         do {
-            let tag = try request.fetchFirst()
+            let tag = try request.fetchFirst(NSPredicate(format: "sortIndex == max(sortIndex)"))
             if let sortIndex = tag.sortIndex as? Int {
                 maxSortOrderIndex = sortIndex
             }
