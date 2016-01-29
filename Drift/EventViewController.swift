@@ -30,7 +30,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
     @IBOutlet weak var tag: UIButton?
 
     // MARK: Private properties
-    private var selectedEvent: Event?
+    private var selectedEventGuid: String?
 
     private let state = State()
     private var transitionOperator: TransitionOperator?
@@ -46,15 +46,22 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        eventTimerControl?.delegate = self
 
+        guard let eventTimerControl = eventTimerControl, let tag = tag else {
+            fatalError("TimerControl or tag is not an instance")
+        }
+        
+        eventTimerControl.delegate = self
+
+        var tagName: String? = nil
         if let guid = state.selectedEventGUID {
             let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
             do {
                 let event = try request.fetchFirstWhere("guid", value: guid)
-                selectedEvent = event
-
-                eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
+                selectedEventGuid = event.guid
+                tagName = event.inTag?.name
+                
+                eventTimerControl.initWithStartDate(event.startDate, andStopDate: event.stopDate)
 
                 if let _ = event.stopDate {
                     toggleStartStopButton?.setTitle("START", forState: .Normal)
@@ -64,37 +71,42 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
                     animateStartEvent()
                 }
             } catch {
-                print("*** ERROR: [\(__LINE__)] \(__FUNCTION__) Error while executing fetch request:")
+                print("*** ERROR: [\(__LINE__)] \(__FUNCTION__) \(error) Error while executing fetch request:")
             }
         } else {
-            selectedEvent = nil
+            selectedEventGuid = nil
         }
 
-        if let name = selectedEvent?.inTag?.name,
+        if let tagName = tagName,
             let font = UIFont(name: "Helvetica Neue", size: 14) {
-                let attriString = NSAttributedString(string:name, attributes:
+                let attriString = NSAttributedString(string:tagName, attributes:
                     [NSFontAttributeName: font])
 
-                tag?.setAttributedTitle(attriString, forState: .Normal)
+                tag.setAttributedTitle(attriString, forState: .Normal)
         } else if let font = UIFont(name: "FontAwesome", size: 20) {
             let attriString = NSAttributedString(string:"\u{f02b}", attributes:
                 [NSFontAttributeName: font])
 
-            tag?.setAttributedTitle(attriString, forState: .Normal)
+            tag.setAttributedTitle(attriString, forState: .Normal)
         }
     }
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
 
-		eventTimerControl?.delegate = nil
-		eventTimerControl?.stop()
+        guard let eventTimerControl = eventTimerControl else {
+            fatalError("TimerControl is not an instance")
+        }
+
+		eventTimerControl.delegate = nil
+		eventTimerControl.stop()
     }
 
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 		if segue.identifier == "segueToTagsFromEvent",
-			let controller = segue.destinationViewController as? TagsViewController {
-				controller.eventGuid = selectedEvent?.guid
+			let controller = segue.destinationViewController as? TagsViewController,
+            let guid = selectedEventGuid {
+				controller.eventGuid = guid
 		}
 	}
 
@@ -188,13 +200,14 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 
                 eventTimeAlpha = 0.2
             case .StartDateTransformingStop:
-                if let _ = self.selectedEvent?.stopDate {
+                if let _ = self.selectedEvent(self.selectedEventGuid)?.stopDate {
                     eventStartAlpha = 0.2
                     eventStopAlpha = 1
                 } else {
                     eventStartAlpha = 1
                     eventStopAlpha = 0.2
                 }
+                
                 eventStartMonthYearAlpha = 1
                 eventStopMonthYearAlpha = 1
 
@@ -208,7 +221,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 
                 eventTimeAlpha = 0.2
             case .NowDateTransformingStop:
-                if let _ = self.selectedEvent?.stopDate {
+                if let _ = self.selectedEvent(self.selectedEventGuid)?.stopDate {
                     eventStartAlpha = 0.2
                     eventStopAlpha = 1
                 } else {
@@ -245,7 +258,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 	}
 
     @IBAction func showTags(sender: UIButton) {
-        if selectedEvent != nil {
+        if selectedEventGuid != nil {
             sender.animate()
             navigationController?.delegate = nil
             performSegueWithIdentifier("segueToTagsFromEvent", sender: self)
@@ -253,15 +266,22 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
     }
 
     @IBAction func toggleEventTouchUpInside(sender: UIButton) {
-        if let selectedEvent = selectedEvent {
-            if let _ = selectedEvent.stopDate {
+        guard let eventTimerControl = eventTimerControl, let tag = tag else {
+            fatalError("TimerControl is not an instance")
+        }
+        
+        if let guid = selectedEventGuid {
+            guard let event = self.selectedEvent(guid) else {
+                fatalError("Have guid but cant find the event")
+            }
+            
+            if let _ = event.stopDate {
 				// Event is stoped, so start a new
 				let event = Event(defaultCoreDataStack.managedObjectContext, startDate: NSDate())
-				self.selectedEvent = event
-
+                selectedEventGuid = event.guid
 				state.selectedEventGUID = event.guid
 
-				eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
+				eventTimerControl.initWithStartDate(event.startDate, andStopDate: event.stopDate)
 
 				toggleStartStopButton?.setTitle("STOP", forState: .Normal)
 
@@ -271,12 +291,12 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 					let attriString = NSAttributedString(string:"\u{f02b}", attributes:
 						[NSFontAttributeName: font])
 
-					tag?.setAttributedTitle(attriString, forState: .Normal)
+					tag.setAttributedTitle(attriString, forState: .Normal)
 				}
             } else {
                 // Event is started
-                eventTimerControl?.stop()
-                selectedEvent.stopDate = eventTimerControl?.nowDate
+                eventTimerControl.stop()
+                event.stopDate = eventTimerControl.nowDate
 
                 toggleStartStopButton?.setTitle("START", forState: .Normal)
                 animateStopEvent()
@@ -285,11 +305,10 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 			// No event exists, start a new
 			// Event is stoped, so start a new
 			let event = Event(defaultCoreDataStack.managedObjectContext, startDate: NSDate())
-			selectedEvent = event
+            selectedEventGuid = event.guid
+            state.selectedEventGUID = event.guid
 
-			state.selectedEventGUID = event.guid
-
-			eventTimerControl?.initWithStartDate(event.startDate, andStopDate: event.stopDate)
+			eventTimerControl.initWithStartDate(event.startDate, andStopDate: event.stopDate)
 
 			toggleStartStopButton?.setTitle("STOP", forState: .Normal)
 
@@ -299,22 +318,38 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 				let attriString = NSAttributedString(string:"\u{f02b}", attributes:
 					[NSFontAttributeName: font])
 
-				tag?.setAttributedTitle(attriString, forState: .Normal)
+				tag.setAttributedTitle(attriString, forState: .Normal)
 			}
 		}
 
         sender.animate()
+        
         do {
             try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
         } catch {
             // TODO: Errorhandling
         }
     }
+    
+    private func selectedEvent(guid: String?) -> Event? {
+        guard let guid = guid else {
+            return nil
+        }
+        
+        let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
+        
+        do {
+            return try request.fetchFirstWhere("guid", value: guid)
+        } catch {
+            print("*** ERROR: [\(__LINE__)] \(__FUNCTION__) Error while executing fetch request:")
+        }
+        
+        return nil
+    }
 }
 
 // MARK: - EventTimerControlDelegate
-typealias EventViewController_EventTimerControlDelegate = EventViewController
-extension EventViewController_EventTimerControlDelegate {
+extension EventViewController {
     func startDateDidUpdate(startDate: NSDate!) {
             updateStartLabelWithDate(startDate)
 
@@ -336,8 +371,12 @@ extension EventViewController_EventTimerControlDelegate {
         case .NowDateTransformingStart, .StartDateTransformingStart:
             animateEventTransforming(transform)
         case .NowDateTransformingStop:
+            guard let event = selectedEvent(selectedEventGuid) else {
+                break
+            }
+            
             animateEventTransforming(transform)
-            selectedEvent?.stopDate = eventTimerControl?.nowDate
+            event.stopDate = eventTimerControl?.nowDate
 
             do {
                 try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
@@ -347,7 +386,10 @@ extension EventViewController_EventTimerControlDelegate {
         case .StartDateTransformingStop:
             animateEventTransforming(transform)
             if let startDate = eventTimerControl?.startDate {
-                selectedEvent?.startDate = startDate
+                guard let event = selectedEvent(selectedEventGuid) else {
+                    break
+                }
+                event.startDate = startDate
 
                 do {
                     try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
