@@ -1,6 +1,2 @@
 
-＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
-Archive:
-    ✔ Unbalanced calls to begin/end appearance transitions @done(2015-07-10 15:38)
-    ✔ Ta bort guides och sätt constraints direkt mot superView, borde fixa så att vyn inte hoppar @done(2015-06-15 15:58)
-    ✔ Kolla efter coredata i pathen som nu först och om den inte finns den så skapa i Documents, just nu får man ett fel då man försöker skapa en ny i default pathen @done(2015-06-15 15:59)
+- When migrating from Stray 1.7 to current the database reads as empty despite the fact that there are data in it
