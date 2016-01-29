@@ -73,7 +73,7 @@ class CompatibilityMigration  {
             // EVENTSGROUPEDBYDATE FILTER
             //==================================================================================//
             var objects = NSUserDefaults.standardUserDefaults().objectForKey("eventGroupsFilter") as? [NSData]
-            if (objects == nil) {
+            if objects == nil {
                 objects = NSUserDefaults.standardUserDefaults().objectForKey("eventsGroupedByDateFilter") as? [NSData]
             }
 
@@ -99,7 +99,7 @@ class CompatibilityMigration  {
             // EVENTSGROUPEDBYSTARTDATE FILTER
             //==================================================================================//
             objects = NSUserDefaults.standardUserDefaults().objectForKey("eventsFilter") as? [NSData]
-            if (objects == nil) {
+            if objects == nil {
                 objects = NSUserDefaults.standardUserDefaults().objectForKey("eventsGroupedByStartDateFilter") as? [NSData]
             }
 

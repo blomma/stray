@@ -93,7 +93,8 @@ class FetchRequest <T: NSManagedObject> {
     }
 
     func fetchWhere(attribute: String, value: AnyObject) throws -> [T] {
-        let predicate = NSPredicate(format: "%K = %@", attribute, value as! NSObject)
+        let arguments: [AnyObject]? = [attribute, value]
+        let predicate = NSPredicate(format: "%K = %@", argumentArray: arguments)
 
         return try fetch(predicate)
     }
