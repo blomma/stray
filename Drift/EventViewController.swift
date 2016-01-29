@@ -50,7 +50,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
         guard let eventTimerControl = eventTimerControl, let tag = tag else {
             fatalError("TimerControl or tag is not an instance")
         }
-        
+
         eventTimerControl.delegate = self
 
         var tagName: String? = nil
@@ -60,7 +60,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
                 let event = try request.fetchFirstWhere("guid", value: guid)
                 selectedEventGuid = event.guid
                 tagName = event.inTag?.name
-                
+
                 eventTimerControl.initWithStartDate(event.startDate, andStopDate: event.stopDate)
 
                 if let _ = event.stopDate {
@@ -207,7 +207,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
                     eventStartAlpha = 1
                     eventStopAlpha = 0.2
                 }
-                
+
                 eventStartMonthYearAlpha = 1
                 eventStopMonthYearAlpha = 1
 
@@ -269,12 +269,12 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
         guard let eventTimerControl = eventTimerControl, let tag = tag else {
             fatalError("TimerControl is not an instance")
         }
-        
+
         if let guid = selectedEventGuid {
             guard let event = self.selectedEvent(guid) else {
                 fatalError("Have guid but cant find the event")
             }
-            
+
             if let _ = event.stopDate {
 				// Event is stoped, so start a new
 				let event = Event(defaultCoreDataStack.managedObjectContext, startDate: NSDate())
@@ -323,27 +323,27 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 		}
 
         sender.animate()
-        
+
         do {
             try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
         } catch {
             // TODO: Errorhandling
         }
     }
-    
+
     private func selectedEvent(guid: String?) -> Event? {
         guard let guid = guid else {
             return nil
         }
-        
+
         let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
-        
+
         do {
             return try request.fetchFirstWhere("guid", value: guid)
         } catch {
             print("*** ERROR: [\(__LINE__)] \(__FUNCTION__) Error while executing fetch request:")
         }
-        
+
         return nil
     }
 }
@@ -374,7 +374,7 @@ extension EventViewController {
             guard let event = selectedEvent(selectedEventGuid) else {
                 break
             }
-            
+
             animateEventTransforming(transform)
             event.stopDate = eventTimerControl?.nowDate
 

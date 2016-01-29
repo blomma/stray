@@ -64,7 +64,7 @@ class FetchRequest <T: NSManagedObject> {
         context.performBlockAndWait { [unowned self] () -> Void in
             let request = NSFetchRequest(entityName: T.entityName)
             request.predicate = predicate
-            
+
             do {
                 result = try self.context.executeFetchRequest(request)
             } catch let e as NSError {
@@ -88,7 +88,7 @@ class FetchRequest <T: NSManagedObject> {
         guard let first = result.first else {
             throw FetchRequestError.EmptyResult
         }
-        
+
         return first
     }
 
@@ -103,7 +103,7 @@ class FetchRequest <T: NSManagedObject> {
         guard let first = result.first else {
             throw FetchRequestError.EmptyResult
         }
-        
+
         return first
     }
 }

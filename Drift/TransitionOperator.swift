@@ -18,11 +18,11 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
 
     convenience init(viewController: UIViewController) {
         self.init()
-        
+
         navigationController = viewController.navigationController
         viewController.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "handleGesture:"))
     }
-    
+
 	func handleGesture(recognizer: UIPanGestureRecognizer) {
 		if let view = recognizer.view {
 			let translation = recognizer.translationInView(view)
@@ -49,13 +49,13 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
                 if !interactionInProgress {
                     return
                 }
-                
+
 				updateInteractiveTransition(percentage)
 			case .Ended:
                 if !interactionInProgress {
                     return
                 }
-                
+
                 completionSpeed = 0.5
 				if percentage > 0.4 {
 					finishInteractiveTransition()
@@ -68,7 +68,7 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
                 if !interactionInProgress {
                     return
                 }
-                
+
                 completionSpeed = 0.5
 				cancelInteractiveTransition()
 
@@ -136,7 +136,7 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
     private func animateWithDuration(duration: NSTimeInterval, animations: Animations, completion: Completion) {
         UIView.animateWithDuration(duration, delay: 0, options: [], animations: animations, completion: completion)
     }
-    
+
 	func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
         guard let container = transitionContext.containerView() else {
             return
@@ -214,7 +214,7 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
                     }, completion: { finished in
                         self.presented = transitionContext.transitionWasCancelled()
                         transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
-                        
+
                         if transitionContext.transitionWasCancelled() {
                             UIApplication.sharedApplication().keyWindow?.addSubview(toView)
                         }

@@ -136,7 +136,7 @@ class CompatibilityMigration  {
             } catch {
                 // TODO: Errorhandling
             }
-            
+
             let tagRequest = FetchRequest<Tag>(context: defaultCoreDataStack.managedObjectContext)
             do {
                 let tags = try tagRequest.fetch()

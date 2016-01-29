@@ -14,7 +14,7 @@ func applicationStorageDirectory() -> NSURL? {
         let directory = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .UserDomainMask, true).last else {
             return .None
     }
-    
+
     return NSURL(fileURLWithPath: directory).URLByAppendingPathComponent(applicationName)
 }
 
@@ -36,4 +36,3 @@ func coreDataModel() -> CoreDataModel {
 }
 
 let defaultCoreDataStack = CoreDataStack(model: coreDataModel())
-
