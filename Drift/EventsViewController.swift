@@ -33,7 +33,7 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
 
-        let error: NSErrorPointer = NSErrorPointer()
+        let error: NSErrorPointer = nil
         do {
             try controller.performFetch()
         } catch let error1 as NSError {

@@ -43,7 +43,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
 
-        let error: NSErrorPointer = NSErrorPointer()
+        let error: NSErrorPointer = nil
         do {
             try controller.performFetch()
         } catch let error1 as NSError {
@@ -105,7 +105,7 @@ class TagsViewController: UIViewController, UITableViewDelegate, UITableViewData
 
 	@IBAction func addTag(sender: UIBarButtonItem) {
         _ = Tag(defaultCoreDataStack.managedObjectContext, sortIndex: maxSortOrderIndex)
-        maxSortOrderIndex++
+        maxSortOrderIndex += 1
 		do {
 			try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
 		} catch {

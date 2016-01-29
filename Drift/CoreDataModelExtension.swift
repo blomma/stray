@@ -25,8 +25,9 @@ func coreDataModel() -> CoreDataModel {
 	if let applicationStorageDirectory = applicationStorageDirectory() {
 		// Check if we have a preexisting database at this location
 		let storeURL: NSURL = applicationStorageDirectory.URLByAppendingPathComponent(dataBaseFileName)
-        let error: NSErrorPointer = NSErrorPointer()
+        let error: NSErrorPointer = nil
         if storeURL.checkResourceIsReachableAndReturnError(error) {
+            DLog("Preexixting database")
             return CoreDataModel(name: "CoreDataModel", bundle: NSBundle.mainBundle(), storeDirectoryURL: applicationStorageDirectory)
         }
 	}

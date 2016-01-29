@@ -44,7 +44,7 @@ class CompatibilityMigration  {
     }
 
     private func migrateToCompatibilityLevel(toLevel: Int, fromLevel: Int, migrationBlock: () -> ()) {
-        if let appCompatibilityLevel = NSBundle.mainBundle().infoDictionary?[strayCompatibilityLevelKey] as? Int
+        if let _ = NSBundle.mainBundle().infoDictionary?[strayCompatibilityLevelKey] as? Int
             where toLevel > fromLevel {
                 migrationBlock()
         }
@@ -126,7 +126,7 @@ class CompatibilityMigration  {
     }
 
     private func migrateCoreData() {
-        self.migrateToCompatibilityLevel(1, fromLevel: self.coreDataCompatibilityLevel) { () -> () in
+        self.migrateToCompatibilityLevel(1, fromLevel: coreDataCompatibilityLevel) { () -> () in
             let eventRequest = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
             do {
                 let events = try eventRequest.fetch()
@@ -143,7 +143,6 @@ class CompatibilityMigration  {
                 for tag in tags {
                     tag.guid = NSProcessInfo.processInfo().globallyUniqueString
                 }
-                
             } catch {
                 // TODO: Errorhandling
             }
