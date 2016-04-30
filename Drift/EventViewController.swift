@@ -63,7 +63,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
                     animateStartEvent()
                 }
             } catch {
-                print("*** ERROR: [\(__LINE__)] \(__FUNCTION__) \(error) Error while executing fetch request:")
+                print("*** ERROR: [\(#line)] \(#function) \(error) Error while executing fetch request:")
             }
         } else {
             selectedEventGuid = nil
@@ -333,7 +333,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
         do {
             return try request.fetchFirstWhere("guid", value: guid)
         } catch {
-            print("*** ERROR: [\(__LINE__)] \(__FUNCTION__) Error while executing fetch request:")
+            print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
         }
 
         return nil

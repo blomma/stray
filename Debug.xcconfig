@@ -1,0 +1,18 @@
+//
+//  Debug.xcconfig
+//  Drift
+//
+//  Created by Mikael Hultgren on 30/04/16.
+//  Copyright © 2016 Artsoftheinsane. All rights reserved.
+//
+
+#include "Vendor.xcconfig"
+#include "Shared.xcconfig"
+
+MTL_ENABLE_DEBUG_INFO = YES
+GCC_OPTIMIZATION_LEVEL = 0
+SWIFT_OPTIMIZATION_LEVEL = -Onone
+ONLY_ACTIVE_ARCH = YES
+DEBUG_INFORMATION_FORMAT = dwarf
+ENABLE_TESTABILITY = YES
+GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1 $(inherited)

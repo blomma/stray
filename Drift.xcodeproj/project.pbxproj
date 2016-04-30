@@ -36,7 +36,6 @@
 
 /* Begin PBXFileReference section */
 		9E0D048E1AD6A75F00E82A13 /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
-		9E0D390D1B2D45C1003AA043 /* Warnings.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Warnings.xcconfig; sourceTree = "<group>"; };
 		9E1527F61C5BEDCC00525FBB /* CoreDataModel-10.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-10.xcdatamodel"; sourceTree = "<group>"; };
 		9E15323F173FDE3800605B65 /* CoreDataModel- 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel- 8.xcdatamodel"; sourceTree = "<group>"; };
 		9E15AB7A163D0C45006D16B3 /* CoreDataModel-5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-5.xcdatamodel"; sourceTree = "<group>"; };
@@ -72,9 +71,13 @@
 		9EB9F0401B217FAE004032C5 /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		9EBF34F119BA3ED60046A464 /* Drift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Drift-Bridging-Header.h"; sourceTree = "<group>"; };
 		9ED93ED61B5419F1002ED4C1 /* Stray.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Stray.entitlements; sourceTree = "<group>"; };
+		9EDCB0AD1CD5339C00CF2DEA /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		9EDCB0AE1CD533D800CF2DEA /* Shared.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
+		9EDCB0AF1CD5340900CF2DEA /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EventTimerControl.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventTimerControl.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9EF492A81AD7FFE2002F1E14 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		9EF8DAEE1CD54F28005CAE24 /* Vendor.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Vendor.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,7 +115,10 @@
 		9E42F1DF15570FD60087F602 = {
 			isa = PBXGroup;
 			children = (
-				9E0D390D1B2D45C1003AA043 /* Warnings.xcconfig */,
+				9EF8DAEE1CD54F28005CAE24 /* Vendor.xcconfig */,
+				9EDCB0AF1CD5340900CF2DEA /* Release.xcconfig */,
+				9EDCB0AE1CD533D800CF2DEA /* Shared.xcconfig */,
+				9EDCB0AD1CD5339C00CF2DEA /* Debug.xcconfig */,
 				9E42F1F415570FD60087F602 /* Drift */,
 				9E42F1EB15570FD60087F602 /* Products */,
 			);
@@ -234,7 +240,7 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = Artsoftheinsane;
 				TargetAttributes = {
 					9E42F1E915570FD60087F602 = {
@@ -350,36 +356,29 @@
 /* Begin XCBuildConfiguration section */
 		9E42F21B15570FD70087F602 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9E0D390D1B2D45C1003AA043 /* Warnings.xcconfig */;
+			baseConfigurationReference = 9EDCB0AD1CD5339C00CF2DEA /* Debug.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
 				ENABLE_TESTABILITY = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TEST_AFTER_BUILD = YES;
 			};
 			name = Debug;
 		};
 		9E42F21C15570FD70087F602 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9E0D390D1B2D45C1003AA043 /* Warnings.xcconfig */;
+			baseConfigurationReference = 9EDCB0AF1CD5340900CF2DEA /* Release.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				SDKROOT = iphoneos;
 				TEST_AFTER_BUILD = YES;
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 		9E42F21E15570FD70087F602 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9E0D390D1B2D45C1003AA043 /* Warnings.xcconfig */;
+			baseConfigurationReference = 9EDCB0AD1CD5339C00CF2DEA /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -389,8 +388,6 @@
 					"$(SRCROOT)",
 					"$(PROJECT_DIR)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -407,7 +404,7 @@
 		};
 		9E42F21F15570FD70087F602 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9E0D390D1B2D45C1003AA043 /* Warnings.xcconfig */;
+			baseConfigurationReference = 9EDCB0AF1CD5340900CF2DEA /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -417,8 +414,6 @@
 					"$(SRCROOT)",
 					"$(PROJECT_DIR)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Drift/Drift-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

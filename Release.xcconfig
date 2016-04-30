@@ -1,0 +1,15 @@
+//
+//  Release.xcconfig
+//  Drift
+//
+//  Created by Mikael Hultgren on 30/04/16.
+//  Copyright © 2016 Artsoftheinsane. All rights reserved.
+//
+
+#include "Vendor.xcconfig"
+#include "Shared.xcconfig"
+
+DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
+ENABLE_NS_ASSERTIONS = NO
+MTL_ENABLE_DEBUG_INFO = NO
+

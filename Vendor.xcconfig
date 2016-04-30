@@ -1,0 +1,11 @@
+//
+//  Vendor.xcconfig
+//  Drift
+//
+//  Created by Mikael Hultgren on 30/04/16.
+//  Copyright © 2016 Artsoftheinsane. All rights reserved.
+//
+
+BUNDLE_IDENTIFIER=com.artsoftheinsane.Drift
+CODE_SIGN_IDENTITY[sdk=*]=iPhone Developer
+PROVISIONING_PROFILE[sdk=*]=7a9f9acf-ddd0-483e-8607-d6a860595c93
