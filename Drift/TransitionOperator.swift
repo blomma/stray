@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
+class TransitionOperator: UIPercentDrivenInteractiveTransition {
 	private var presented: Bool = false
 	private var presenting: Bool = false
 	private var interactionInProgress: Bool = false
@@ -12,20 +12,20 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
         self.init()
 
         navigationController = viewController.navigationController
-        viewController.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "handleGesture:"))
+		viewController.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(self.handleGesture(_:))))
     }
 
-	func handleGesture(recognizer: UIPanGestureRecognizer) {
+	func handleGesture(_ recognizer: UIPanGestureRecognizer) {
 		if let view = recognizer.view {
-			let translation = recognizer.translationInView(view)
-			let velocity = recognizer.velocityInView(view)
-			let percentage = abs(translation.x / CGRectGetWidth(view.bounds))
+			let translation = recognizer.translation(in: view)
+			let velocity = recognizer.velocity(in: view)
+			let percentage = abs(translation.x / view.bounds.width)
 
 			switch recognizer.state {
-            case .Began:
+            case .began:
 				if velocity.x > 0 && !presented {
                     if let navigationController = navigationController,
-                        let controller = navigationController.storyboard?.instantiateViewControllerWithIdentifier("MenuController") {
+                        let controller = navigationController.storyboard?.instantiateViewController(withIdentifier: "MenuController") {
                             interactionInProgress = true
                             navigationController.delegate = self
                             navigationController.pushViewController(controller, animated: true)
@@ -34,35 +34,35 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
                     if let navigationController = navigationController {
                         interactionInProgress = true
                         navigationController.delegate = self
-                        navigationController.popViewControllerAnimated(true)
+                        navigationController.popViewController(animated: true)
                     }
                 }
-			case .Changed:
+			case .changed:
                 if !interactionInProgress {
                     return
                 }
 
-				updateInteractiveTransition(percentage)
-			case .Ended:
+				update(percentage)
+			case .ended:
                 if !interactionInProgress {
                     return
                 }
 
                 completionSpeed = 0.5
 				if percentage > 0.4 {
-					finishInteractiveTransition()
+					finish()
 				} else {
-					cancelInteractiveTransition()
+					cancel()
 				}
 
 				interactionInProgress = false
-			case .Cancelled:
+			case .cancelled:
                 if !interactionInProgress {
                     return
                 }
 
                 completionSpeed = 0.5
-				cancelInteractiveTransition()
+				cancel()
 
 				interactionInProgress = false
 			default:
@@ -73,11 +73,10 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
 }
 
 // MARK: - UINavigationControllerDelegate
-typealias TransitionOperatorUINavigationControllerDelegate = TransitionOperator
-extension TransitionOperatorUINavigationControllerDelegate {
-	func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+extension TransitionOperator: UINavigationControllerDelegate {
+	func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
 		switch operation {
-		case .Push:
+		case .push:
 			presenting = true
 		default:
 			presenting = false
@@ -86,61 +85,57 @@ extension TransitionOperatorUINavigationControllerDelegate {
 		return self
 	}
 
-	func navigationController(navigationController: UINavigationController, interactionControllerForAnimationController animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-		return interactionInProgress ? self : .None
+	func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+		return interactionInProgress ? self : .none
 	}
 }
 
 // MARK: - UIViewControllerTransitioningDelegate
-typealias TransitionOperatorUIViewControllerTransitioningDelegate = TransitionOperator
-extension TransitionOperatorUIViewControllerTransitioningDelegate {
-	func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+extension TransitionOperator: UIViewControllerTransitioningDelegate {
+	func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
 		self.presenting = true
 
 		return self
 	}
 
-	func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+	func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
 		presenting = false
 
 		return self
 	}
 
-	func interactionControllerForPresentation(animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-		return interactionInProgress ? self : .None
+	func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+		return interactionInProgress ? self : .none
 	}
 
-	func interactionControllerForDismissal(animator: UIViewControllerAnimatedTransitioning) ->
+	func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) ->
 		UIViewControllerInteractiveTransitioning? {
-		return interactionInProgress ? self : .None
+		return interactionInProgress ? self : .none
 	}
 }
 
 // MARK: - UIViewControllerAnimatedTransitioning
-typealias TransitionOperatorUIViewControllerAnimatedTransitioning = TransitionOperator
-extension TransitionOperatorUIViewControllerAnimatedTransitioning {
-	func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
+extension TransitionOperator: UIViewControllerAnimatedTransitioning {
+	func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
 		return 0.5
 	}
 
     typealias Animations = () -> Void
     typealias Completion = (Bool) -> Void
-    private func animateWithDuration(duration: NSTimeInterval, animations: Animations, completion: Completion) {
-        UIView.animateWithDuration(duration, delay: 0, options: [], animations: animations, completion: completion)
+    private func animateWithDuration(_ duration: TimeInterval, animations: Animations, completion: Completion) {
+        UIView.animate(withDuration: duration, delay: 0, options: [], animations: animations, completion: completion)
     }
 
-	func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
-        guard let container = transitionContext.containerView() else {
-            return
-        }
+	func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        let container = transitionContext.containerView()
 
 		var toView: UIView?
-		if let view = transitionContext.viewForKey(UITransitionContextToViewKey) {
+		if let view = transitionContext.view(forKey: UITransitionContextToViewKey) {
 			toView = view
 		}
 
 		var fromView: UIView?
-		if let view = transitionContext.viewForKey(UITransitionContextFromViewKey) {
+		if let view = transitionContext.view(forKey: UITransitionContextFromViewKey) {
 			fromView = view
 		}
 
@@ -158,15 +153,15 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 					var fromEndFrame = fromView.frame
 					fromEndFrame.origin.x = 100
 
-                    animateWithDuration(transitionDuration(transitionContext), animations: {
+                    animateWithDuration(transitionDuration(using: transitionContext), animations: {
                         fromView.frame = fromEndFrame
                         toView.frame = toEndFrame
                     }, completion: { finished in
                         self.presented = !transitionContext.transitionWasCancelled()
                         transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
-                        UIApplication.sharedApplication().keyWindow?.addSubview(fromView)
+                        UIApplication.shared().keyWindow?.addSubview(fromView)
                     })
-				} else if let oldFromView = UIApplication.sharedApplication().keyWindow?.subviews.last {
+				} else if let oldFromView = UIApplication.shared().keyWindow?.subviews.last {
 					container.addSubview(toView)
 
 					toView.frame.origin.x = toView.frame.width
@@ -179,7 +174,7 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 					var fromEndFrame = fromView.frame
 					fromEndFrame.origin.x = -(fromView.frame.width + oldFromView.frame.width)
 
-                    animateWithDuration(transitionDuration(transitionContext), animations: {
+                    animateWithDuration(transitionDuration(using: transitionContext), animations: {
                         fromView.frame = fromEndFrame
                         toView.frame = toEndFrame
                         oldFromView.frame = oldFromEndFrame
@@ -200,7 +195,7 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
 				var toEndFrame = toView.frame
 				toEndFrame.origin.x = 0
 
-                animateWithDuration(transitionDuration(transitionContext), animations: {
+                animateWithDuration(transitionDuration(using: transitionContext), animations: {
                     fromView.frame = fromEndFrame
                     toView.frame = toEndFrame
                     }, completion: { finished in
@@ -208,7 +203,7 @@ extension TransitionOperatorUIViewControllerAnimatedTransitioning {
                         transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
 
                         if transitionContext.transitionWasCancelled() {
-                            UIApplication.sharedApplication().keyWindow?.addSubview(toView)
+                            UIApplication.shared().keyWindow?.addSubview(toView)
                         }
                 })
 		}

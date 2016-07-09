@@ -1,7 +1,7 @@
 import UIKit
 
 protocol EventCellDelegate : class {
-    func didPressTag(cell:EventCell)
+    func didPressTag(_ cell:EventCell)
 }
 
 class EventCell: UITableViewCell {
@@ -28,7 +28,7 @@ class EventCell: UITableViewCell {
 	}
 
     // IBActions
-    @IBAction func editTag(sender: UIButton, forEvent event: UIEvent) {
+    @IBAction func editTag(_ sender: UIButton, forEvent event: UIEvent) {
         self.delegate?.didPressTag(self)
     }
 }

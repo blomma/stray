@@ -1,21 +1,21 @@
 import UIKit
 
 class MenuController: UIViewController {
-    @IBAction func presentEvent(sender: UIButton) {
+    @IBAction func presentEvent(_ sender: UIButton) {
 		if let navigationController = navigationController {
 			if let _ = navigationController.viewControllers.first as? EventViewController {
-				navigationController.popViewControllerAnimated(true)
-			} else if let controller = storyboard?.instantiateViewControllerWithIdentifier("EventViewController") {
+				navigationController.popViewController(animated: true)
+			} else if let controller = storyboard?.instantiateViewController(withIdentifier: "EventViewController") {
 				navigationController.setViewControllers([controller], animated: true)
 			}
 		}
     }
 
-    @IBAction func presentEvents(sender: UIButton) {
+    @IBAction func presentEvents(_ sender: UIButton) {
 		if let navigationController = navigationController {
 			if let _ = navigationController.viewControllers.first as? EventsViewController {
-				navigationController.popViewControllerAnimated(true)
-			} else if let controller = storyboard?.instantiateViewControllerWithIdentifier("EventsViewController") {
+				navigationController.popViewController(animated: true)
+			} else if let controller = storyboard?.instantiateViewController(withIdentifier: "EventsViewController") {
 				navigationController.setViewControllers([controller], animated: true)
 			}
 		}

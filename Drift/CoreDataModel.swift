@@ -8,22 +8,22 @@ public struct CoreDataModel: CustomStringConvertible {
     public let name: String
 
     ///  The bundle in which the model is located.
-    public let bundle: NSBundle
+    public let bundle: Bundle
 
     ///  The file URL specifying the directory in which the store is located.
-    public let storeDirectoryURL: NSURL
+    public let storeDirectoryURL: URL
 
     ///  The file URL specifying the full path to the store.
-    public var storeURL: NSURL {
+    public var storeURL: URL {
         get {
-            return storeDirectoryURL.URLByAppendingPathComponent(databaseFileName)
+            return try! storeDirectoryURL.appendingPathComponent(databaseFileName)
         }
     }
 
     ///  The file URL specifying the model file in the bundle specified by `bundle`.
-    public var modelURL: NSURL {
+    public var modelURL: URL {
         get {
-            guard let url = bundle.URLForResource(name, withExtension: "momd") else {
+            guard let url = bundle.urlForResource(name, withExtension: "momd") else {
                 fatalError("*** Error loading resource for model named \(name)")
             }
             
@@ -41,7 +41,7 @@ public struct CoreDataModel: CustomStringConvertible {
     ///  The managed object model for the model specified by `name`.
     public var managedObjectModel: NSManagedObjectModel {
         get {
-            guard let model = NSManagedObjectModel(contentsOfURL: modelURL) else {
+            guard let model = NSManagedObjectModel(contentsOf: modelURL) else {
                 fatalError("*** Error loading managed object model at url: \(modelURL)")
             }
             
@@ -59,8 +59,8 @@ public struct CoreDataModel: CustomStringConvertible {
     ///
     ///  - returns: A new `CoreDataModel` instance.
     public init(name: String,
-           bundle: NSBundle = NSBundle.mainBundle(),
-           storeDirectoryURL: NSURL = documentsDirectoryURL()) {
+           bundle: Bundle = Bundle.main,
+           storeDirectoryURL: URL = documentsDirectoryURL()) {
         self.name = name
         self.bundle = bundle
         self.storeDirectoryURL = storeDirectoryURL
@@ -81,34 +81,36 @@ func coreDataModel() -> CoreDataModel {
     
     if let applicationStorageDirectory = applicationSupportDirectoryURL() {
         // Check if we have a preexisting database at this location
-        let storeURL: NSURL = applicationStorageDirectory.URLByAppendingPathComponent(dataBaseFileName)
-        
-        let error: NSErrorPointer = nil
-        if storeURL.checkResourceIsReachableAndReturnError(error) {
-            DLog("Prexisting database")
-            return CoreDataModel(name: name, storeDirectoryURL: applicationStorageDirectory)
-        }
+        let storeURL: URL = try! applicationStorageDirectory.appendingPathComponent(dataBaseFileName)
+
+		do {
+			if try storeURL.checkResourceIsReachable() {
+				DLog("Prexisting database")
+				return CoreDataModel(name: name, storeDirectoryURL: applicationStorageDirectory)
+			}
+		} catch {
+		}
     }
     
     return CoreDataModel(name: name)
 }
 
-private func applicationSupportDirectoryURL() -> NSURL? {
-    guard let infoDictionary = NSBundle.mainBundle().infoDictionary,
+private func applicationSupportDirectoryURL() -> URL? {
+    guard let infoDictionary = Bundle.main.infoDictionary,
         let applicationName = infoDictionary["CFBundleName"] as? String else {
             return nil
     }
 
-    let manager = NSFileManager.defaultManager()
+    let manager = FileManager.default
     
     do {
         let url = try manager
-            .URLForDirectory(
-                .ApplicationSupportDirectory,
-                inDomain: .UserDomainMask,
-                appropriateForURL: nil,
+            .urlForDirectory(
+                .applicationSupportDirectory,
+                in: .userDomainMask,
+                appropriateFor: nil,
                 create: false)
-            .URLByAppendingPathComponent(applicationName)
+            .appendingPathComponent(applicationName)
         
         return url
     } catch {
@@ -117,15 +119,15 @@ private func applicationSupportDirectoryURL() -> NSURL? {
 }
 
 
-private func documentsDirectoryURL() -> NSURL {
-    let manager = NSFileManager.defaultManager()
+private func documentsDirectoryURL() -> URL {
+    let manager = FileManager.default
     
     do {
         let url = try manager
-            .URLForDirectory(
-                .DocumentDirectory,
-                inDomain: .UserDomainMask,
-                appropriateForURL: nil,
+            .urlForDirectory(
+                .documentDirectory,
+                in: .userDomainMask,
+                appropriateFor: nil,
                 create: true)
         
         return url

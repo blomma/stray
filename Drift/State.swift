@@ -3,10 +3,10 @@ import UIKit
 class State {
     var selectedEventGUID: String? {
         get {
-           return NSUserDefaults.standardUserDefaults().objectForKey("selectedEventGUID") as? String
+           return UserDefaults.standard.object(forKey: "selectedEventGUID") as? String
         }
         set {
-            NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: "selectedEventGUID")
+            UserDefaults.standard.set(newValue, forKey: "selectedEventGUID")
         }
     }
 }
