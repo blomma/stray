@@ -1,8 +1,7 @@
 import Foundation
 import UIKit
 
-class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
-
+class TransitionOperator: UIPercentDrivenInteractiveTransition {
 	private var presented: Bool = false
 	private var presenting: Bool = false
 	private var interactionInProgress: Bool = false
@@ -74,8 +73,8 @@ class TransitionOperator: UIPercentDrivenInteractiveTransition, UIViewController
 }
 
 // MARK: - UINavigationControllerDelegate
-extension TransitionOperator {
-	@objc(navigationController:animationControllerForOperation:fromViewController:toViewController:) func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+extension TransitionOperator: UINavigationControllerDelegate {
+	func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
 		switch operation {
 		case .push:
 			presenting = true
@@ -86,38 +85,38 @@ extension TransitionOperator {
 		return self
 	}
 
-	@objc(navigationController:interactionControllerForAnimationController:) func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+	func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
 		return interactionInProgress ? self : .none
 	}
 }
 
 // MARK: - UIViewControllerTransitioningDelegate
-extension TransitionOperator {
-	@objc(animationControllerForPresentedController:presentingController:sourceController:) func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+extension TransitionOperator: UIViewControllerTransitioningDelegate {
+	func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
 		self.presenting = true
 
 		return self
 	}
 
-	@objc(animationControllerForDismissedController:) func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+	func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
 		presenting = false
 
 		return self
 	}
 
-	@objc(interactionControllerForPresentation:) func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+	func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
 		return interactionInProgress ? self : .none
 	}
 
-	@objc(interactionControllerForDismissal:) func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) ->
+	func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) ->
 		UIViewControllerInteractiveTransitioning? {
 		return interactionInProgress ? self : .none
 	}
 }
 
 // MARK: - UIViewControllerAnimatedTransitioning
-extension TransitionOperator {
-	@objc(transitionDuration:) func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+extension TransitionOperator: UIViewControllerAnimatedTransitioning {
+	func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
 		return 0.5
 	}
 
@@ -127,7 +126,7 @@ extension TransitionOperator {
         UIView.animate(withDuration: duration, delay: 0, options: [], animations: animations, completion: completion)
     }
 
-	@objc(animateTransition:) func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+	func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let container = transitionContext.containerView()
 
 		var toView: UIView?

@@ -1,7 +1,7 @@
 import UIKit
 import CoreData
 
-class TagsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, TagCellDelegate {
+class TagsViewController: UIViewController, TagCellDelegate {
 	@IBOutlet weak var tableView: UITableView!
 
     private var userReorderingCells = false
@@ -139,8 +139,8 @@ extension TagsViewController {
 }
 
 // MARK: - UITableViewDelegate
-extension TagsViewController {
-    @objc(tableView:didSelectRowAtIndexPath:) func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+extension TagsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
 
         if let selectedTag = selectedTag,
@@ -173,10 +173,35 @@ extension TagsViewController {
                 }
 		}
 	}
+}
 
-	@objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == UITableViewCellEditingStyle.delete,
-            let fetchedResultsController = fetchedResultsController
+// MARK: - UITableViewDataSource
+extension TagsViewController: UITableViewDataSource {
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let sectionInfo = fetchedResultsController?.sections?[section] {
+            return sectionInfo.numberOfObjects
+        }
+
+        return 0
+    }
+
+	func numberOfSections(in tableView: UITableView) -> Int {
+        return fetchedResultsController?.sections?.count ?? 0
+    }
+
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TagCellIdentifier", for: indexPath)
+
+        if let cell = cell as? TagCell {
+            configureCell(cell, atIndexPath:indexPath)
+        }
+
+        return cell
+    }
+
+	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+		if editingStyle == UITableViewCellEditingStyle.delete,
+			let fetchedResultsController = fetchedResultsController
 		{
 			let tag = fetchedResultsController.object(at: indexPath)
 			deleteObjects([tag], inContext: defaultCoreDataStack.managedObjectContext)
@@ -186,19 +211,18 @@ extension TagsViewController {
 				// TODO: Errorhandling
 			}
 		}
-    }
+	}
 
+	func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+		return true
+	}
+	
+	func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+		if sourceIndexPath == destinationIndexPath {
+			return
+		}
 
-	@objc(tableView:canMoveRowAtIndexPath:) func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-
-	@objc(tableView:moveRowAtIndexPath:toIndexPath:) func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        if sourceIndexPath == destinationIndexPath {
-            return
-        }
-
-        if let fetchedResultsController = fetchedResultsController
+		if let fetchedResultsController = fetchedResultsController
 		{
 			let tag = fetchedResultsController.object(at: sourceIndexPath)
 			userReorderingCells = true
@@ -210,36 +234,11 @@ extension TagsViewController {
 			}
 			userReorderingCells = false
 		}
-    }
-}
-
-// MARK: - UITableViewDataSource
-extension TagsViewController {
-	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let sectionInfo = fetchedResultsController?.sections?[section] {
-            return sectionInfo.numberOfObjects
-        }
-
-        return 0
-    }
-
-	@objc(numberOfSectionsInTableView:) func numberOfSections(in tableView: UITableView) -> Int {
-        return fetchedResultsController?.sections?.count ?? 0
-    }
-
-	@objc(tableView:cellForRowAtIndexPath:) func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TagCellIdentifier", for: indexPath)
-
-        if let cell = cell as? TagCell {
-            configureCell(cell, atIndexPath:indexPath)
-        }
-
-        return cell
-    }
+	}
 }
 
 // MARK: - NSFetchedResultsControllerDelegate
-extension TagsViewController {
+extension TagsViewController: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         if userReorderingCells {
             return
@@ -248,7 +247,7 @@ extension TagsViewController {
         tableView.beginUpdates()
     }
 
-    @objc(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:) func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: AnyObject, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: AnyObject, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         if userReorderingCells {
             return
         }

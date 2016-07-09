@@ -1,7 +1,8 @@
 import UIKit
 import CoreData
 
-class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCellDelegate {
+class EventsViewController: UIViewController, EventCellDelegate {
+
     @IBOutlet weak var tableView: UITableView!
 
     private let shortStandaloneMonthSymbols: NSArray = DateFormatter().shortStandaloneMonthSymbols
@@ -165,49 +166,29 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 }
 
 // MARK: - UITableViewDelegate
-typealias EventsViewController_UITableViewDelegate = EventsViewController
-extension EventsViewController_UITableViewDelegate {
-    @objc(tableView:didSelectRowAtIndexPath:) func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+extension EventsViewController: UITableViewDelegate {
+	func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: false)
 
 		if let event = selectedEvent,
 			let indexPath = fetchedResultsController?.indexPath(forObject: event),
 			let cell = tableView.cellForRow(at: indexPath) as? EventCell {
-				hideSelectMark(cell)
+			hideSelectMark(cell)
 		}
 
-        if let event = fetchedResultsController?.object(at: indexPath),
-            let cell = tableView.cellForRow(at: indexPath) as? EventCell {
-				showSelectMark(cell)
-				selectedEvent = event
+		if let event = fetchedResultsController?.object(at: indexPath),
+			let cell = tableView.cellForRow(at: indexPath) as? EventCell {
+			showSelectMark(cell)
+			selectedEvent = event
 
-                let state = State()
-                state.selectedEventGUID = event.guid
-        }
-    }
-
-    @objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == UITableViewCellEditingStyle.delete {
-            if let event = fetchedResultsController?.object(at: indexPath) {
-                let state = State()
-                if let selectedEventGUID = state.selectedEventGUID where event.guid == selectedEventGUID {
-                    state.selectedEventGUID = nil
-                }
-
-                deleteObjects([event], inContext: defaultCoreDataStack.managedObjectContext)
-                do {
-                    try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
-                } catch {
-                    // TODO: Errorhandling
-                }
-            }
-        }
-    }
+			let state = State()
+			state.selectedEventGUID = event.guid
+		}
+	}
 }
 
 // MARK: - UITableViewDataSource
-typealias EventsViewController_UITableViewDataSource = EventsViewController
-extension EventsViewController_UITableViewDataSource {
+extension EventsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let sectionInfo = fetchedResultsController?.sections?[section] {
             return sectionInfo.numberOfObjects
@@ -216,24 +197,41 @@ extension EventsViewController_UITableViewDataSource {
         return 0
     }
 
-    @objc(numberOfSectionsInTableView:) func numberOfSections(in tableView: UITableView) -> Int {
-        return fetchedResultsController?.sections?.count ?? 0
-    }
+	func numberOfSections(in tableView: UITableView) -> Int {
+		return fetchedResultsController?.sections?.count ?? 0
+	}
 
-    @objc(tableView:cellForRowAtIndexPath:) func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "EventCellIdentifier", for: indexPath)
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = tableView.dequeueReusableCell(withIdentifier: "EventCellIdentifier", for: indexPath)
+		
+		if let cell = cell as? EventCell {
+			configureCell(cell, atIndexPath: indexPath)
+		}
+		
+		return cell
+	}
 
-        if let cell = cell as? EventCell {
-            configureCell(cell, atIndexPath: indexPath)
-        }
+	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+		if editingStyle == UITableViewCellEditingStyle.delete {
+			if let event = fetchedResultsController?.object(at: indexPath) {
+				let state = State()
+				if let selectedEventGUID = state.selectedEventGUID where event.guid == selectedEventGUID {
+					state.selectedEventGUID = nil
+				}
 
-        return cell
-    }
+				deleteObjects([event], inContext: defaultCoreDataStack.managedObjectContext)
+				do {
+					try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+				} catch {
+					// TODO: Errorhandling
+				}
+			}
+		}
+	}
 }
 
 // MARK: - EventCellDelegate
-typealias EventsViewController_EventCellDelegate = EventsViewController
-extension EventsViewController_EventCellDelegate {
+extension EventsViewController {
     func didPressTag(_ cell: EventCell) {
         navigationController?.delegate = nil
         performSegue(withIdentifier: "segueToTagsFromEvents", sender: cell)
@@ -241,28 +239,26 @@ extension EventsViewController_EventCellDelegate {
 }
 
 // MARK: - NSFetchedResultsControllerDelegate
-typealias EventsViewController_NSFetchedResultsControllerDelegate = EventsViewController
-extension EventsViewController_NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView?.beginUpdates()
-    }
+extension EventsViewController: NSFetchedResultsControllerDelegate {
+	func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+		tableView?.beginUpdates()
+	}
 
-//	func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-//
-//		switch type {
-//		case .insert:
-//			tableView?.insertRows(at: [newIndexPath!], with: .fade)
-//		case .delete:
-//			tableView?.deleteRows(at: [indexPath!], with: .fade)
-//		case .update:
-//			if let cell = tableView?.cellForRow(at: indexPath!) as? EventCell {
-//				configureCell(cell, atIndexPath: indexPath!)
-//			}
-//		case .move:
-//			tableView?.deleteRows(at: [indexPath!], with: .fade)
-//			tableView?.insertRows(at: [newIndexPath!], with: .fade)
-//		}
-//	}
+	func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: AnyObject, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+		switch type {
+		case .insert:
+			tableView?.insertRows(at: [newIndexPath!], with: .fade)
+		case .delete:
+			tableView?.deleteRows(at: [indexPath!], with: .fade)
+		case .update:
+			if let cell = tableView?.cellForRow(at: indexPath!) as? EventCell {
+				configureCell(cell, atIndexPath: indexPath!)
+			}
+		case .move:
+			tableView?.deleteRows(at: [indexPath!], with: .fade)
+			tableView?.insertRows(at: [newIndexPath!], with: .fade)
+		}
+	}
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView?.endUpdates()
