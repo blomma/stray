@@ -4,32 +4,32 @@ import CoreData
 class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCellDelegate {
     @IBOutlet weak var tableView: UITableView!
 
-    private let shortStandaloneMonthSymbols: NSArray = NSDateFormatter().shortStandaloneMonthSymbols
+    private let shortStandaloneMonthSymbols: NSArray = DateFormatter().shortStandaloneMonthSymbols
 	private let transitionOperator = TransitionOperator()
-    private let calendar = NSCalendar.autoupdatingCurrentCalendar()
+    private let calendar = Calendar.autoupdatingCurrent
 	private var selectedEvent: Event?
 
-	private var fetchedResultsController: NSFetchedResultsController?
+	private var fetchedResultsController: NSFetchedResultsController<Event>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
 		transitionOperator.navigationController = navigationController
-        view.addGestureRecognizer(UIPanGestureRecognizer(target: transitionOperator, action: "handleGesture:"))
+        view.addGestureRecognizer(UIPanGestureRecognizer(target: transitionOperator, action: Selector(("handleGesture:"))))
     }
 
-    override func viewWillAppear(animated: Bool) {
-        let fetchRequest = NSFetchRequest(entityName: Event.entityName)
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
+    override func viewWillAppear(_ animated: Bool) {
+        let fetchRequest = NSFetchRequest<Event>(entityName: Event.entityName)
+        fetchRequest.sortDescriptors = [SortDescriptor(key: "startDate", ascending: false)]
         fetchRequest.fetchBatchSize = 20
 
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
 
-        let error: NSErrorPointer = nil
+        let error: NSErrorPointer? = nil
         do {
             try controller.performFetch()
         } catch let error1 as NSError {
-            error.memory = error1
+            error??.pointee = error1
             print("Unresolved error \(error)")
             exit(-1)
         }
@@ -42,10 +42,10 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
             do {
                 let event = try request.fetchFirstWhere("guid", value: guid)
-                if let indexPath = fetchedResultsController?.indexPathForObject(event) {
+                if let indexPath = fetchedResultsController?.indexPath(forObject: event) {
                     selectedEvent = event
-                    tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
-                    tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
+                    tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+                    tableView.scrollToRow(at: indexPath, at: .none, animated: true)
                 }
             } catch {
                 // TODO: Errorhandling
@@ -54,69 +54,80 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
 
-	override func viewWillDisappear(animated: Bool) {
+	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 	}
 
-	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+	override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
 		if segue.identifier == "segueToTagsFromEvents",
 			let controller = segue.destinationViewController as? TagsViewController,
 			let cell = sender as? UITableViewCell,
-			let indexPath = tableView?.indexPathForCell(cell),
-			let event = fetchedResultsController?.objectAtIndexPath(indexPath) as? Event {
-				controller.eventGuid = event.guid
+			let indexPath = tableView?.indexPath(for: cell),
+			let event = fetchedResultsController?.object(at: indexPath)
+		{
+			controller.eventGuid = event.guid
 		}
 	}
 
-    private func configureCell(cell: EventCell, atIndexPath: NSIndexPath) -> Void {
-        if let event = fetchedResultsController?.objectAtIndexPath(atIndexPath) as? Event {
+    private func configureCell(_ cell: EventCell, atIndexPath: IndexPath) -> Void {
+        if let event = fetchedResultsController?.object(at: atIndexPath) {
 			if selectedEvent?.guid == event.guid {
 				showSelectMark(cell)
 			}
 
             if let inTag = event.inTag,
                 let name = inTag.name {
-                let attributedString = NSAttributedString(string: name, attributes:
+                let attributedString = AttributedString(string: name, attributes:
                     [NSFontAttributeName: UIFont(name: "Helvetica Neue", size: 14.0)!])
-                cell.tagButton.setAttributedTitle(attributedString, forState: .Normal)
+                cell.tagButton.setAttributedTitle(attributedString, for: UIControlState())
             } else {
-                let attributedString = NSAttributedString(string: "\u{f02b}", attributes:
+                let attributedString = AttributedString(string: "\u{f02b}", attributes:
                     [NSFontAttributeName: UIFont(name: "FontAwesome", size: 20.0)!])
-                cell.tagButton.setAttributedTitle(attributedString, forState: .Normal)
+                cell.tagButton.setAttributedTitle(attributedString, for: UIControlState())
             }
 
             // StartTime
-            let startTimeFlags: NSCalendarUnit = [.Minute, .Hour, .Day, .Month, .Year]
-            let startTimeComponents = calendar.components(startTimeFlags, fromDate: event.startDate)
+            let startTimeFlags: Calendar.Unit = [.minute, .hour, .day, .month, .year]
+            let startTimeComponents = calendar.components(startTimeFlags, from: event.startDate)
 
-            cell.eventStartTime.text = String(format: "%02ld:%02ld", startTimeComponents.hour, startTimeComponents.minute)
-            cell.eventStartDay.text = String(format: "%02ld", startTimeComponents.day)
-            cell.eventStartYear.text = String(format: "%04ld", startTimeComponents.year)
+			if let hour = startTimeComponents.hour, let minute = startTimeComponents.minute,
+				let day = startTimeComponents.date, let year = startTimeComponents.year, let month = startTimeComponents.month {
 
-            if let startMonth = shortStandaloneMonthSymbols[startTimeComponents.month - 1] as? String {
-                cell.eventStartMonth.text = startMonth
-            }
+				cell.eventStartTime.text = String(format: "%02ld:%02ld", hour, minute)
+				cell.eventStartDay.text = String(format: "%02ld", day)
+				cell.eventStartYear.text = String(format: "%04ld", year)
+
+				if let startMonth = shortStandaloneMonthSymbols[month - 1] as? String {
+					cell.eventStartMonth.text = startMonth
+				}
+			}
 
             // EventTime
-            let stopDate = event.stopDate != nil ? event.stopDate! : NSDate()
-            let eventTimeFlags: NSCalendarUnit = [.Minute, .Hour]
-            let eventTimeComponents = calendar.components(eventTimeFlags, fromDate: event.startDate, toDate: stopDate, options: NSCalendarOptions(rawValue: 0))
+            let stopDate = event.stopDate != nil ? event.stopDate! : Date()
+            let eventTimeFlags: Calendar.Unit = [.minute, .hour]
+            let eventTimeComponents = calendar.components(eventTimeFlags, from: event.startDate, to: stopDate, options: Calendar.Options(rawValue: 0))
 
-            cell.eventTimeHours.text = String(format: "%02ld", eventTimeComponents.hour)
-            cell.eventTimeMinutes.text = String(format: "%02ld", eventTimeComponents.minute)
+			if let hour = eventTimeComponents.hour, let minute = eventTimeComponents.minute {
+				cell.eventTimeHours.text = String(format: "%02ld", hour)
+				cell.eventTimeMinutes.text = String(format: "%02ld", minute)
+			}
 
             // StopTime
             if let stopDate = event.stopDate {
-                let stopTimeFlags: NSCalendarUnit = [.Minute, .Hour, .Day, .Month, .Year]
-                let stopTimeComponents = calendar.components(stopTimeFlags, fromDate: stopDate)
+                let stopTimeFlags: Calendar.Unit = [.minute, .hour, .day, .month, .year]
+                let stopTimeComponents = calendar.components(stopTimeFlags, from: stopDate)
 
-                cell.eventStopTime.text = String(format: "%02ld:%02ld", stopTimeComponents.hour, stopTimeComponents.minute)
-                cell.eventStopDay.text = String(format: "%02ld", stopTimeComponents.day)
-                cell.eventStopYear.text = String(format: "%04ld", stopTimeComponents.year)
+				if let hour = stopTimeComponents.hour, let minute = stopTimeComponents.minute,
+					let day = stopTimeComponents.date, let year = stopTimeComponents.year, let month = stopTimeComponents.month {
 
-                if let stopMonth = shortStandaloneMonthSymbols[stopTimeComponents.month - 1] as? String {
-                    cell.eventStopMonth.text = stopMonth
-                }
+					cell.eventStopTime.text = String(format: "%02ld:%02ld", hour, minute)
+					cell.eventStopDay.text = String(format: "%02ld", day)
+					cell.eventStopYear.text = String(format: "%04ld", year)
+
+					if let stopMonth = shortStandaloneMonthSymbols[month - 1] as? String {
+						cell.eventStopMonth.text = stopMonth
+					}
+				}
             } else {
                 cell.eventStopTime.text = ""
                 cell.eventStopDay.text = ""
@@ -128,26 +139,26 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
 
-    @IBAction func prepareForUnwind(sender: UIStoryboardSegue) {
+    @IBAction func prepareForUnwind(_ sender: UIStoryboardSegue) {
         DLog()
     }
 
-	@IBAction func toggleEdit(sender: UIBarButtonItem) {
-		if tableView.editing {
+	@IBAction func toggleEdit(_ sender: UIBarButtonItem) {
+		if tableView.isEditing {
 			tableView.setEditing(false, animated: true)
 		} else {
 			tableView.setEditing(true, animated: true)
 		}
 	}
 
-	private func showSelectMark(cell: EventCell) {
-		UIView.animateWithDuration(0.3, animations: { () -> Void in
+	private func showSelectMark(_ cell: EventCell) {
+		UIView.animate(withDuration: 0.3, animations: { () -> Void in
 			cell.selectedMark.alpha = 1
 		})
 	}
 
-	private func hideSelectMark(cell: EventCell) {
-		UIView.animateWithDuration(0.3, animations: { () -> Void in
+	private func hideSelectMark(_ cell: EventCell) {
+		UIView.animate(withDuration: 0.3, animations: { () -> Void in
 			cell.selectedMark.alpha = 0
 		})
 	}
@@ -156,17 +167,17 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 // MARK: - UITableViewDelegate
 typealias EventsViewController_UITableViewDelegate = EventsViewController
 extension EventsViewController_UITableViewDelegate {
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		tableView.deselectRowAtIndexPath(indexPath, animated: false)
+    @objc(tableView:didSelectRowAtIndexPath:) func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		tableView.deselectRow(at: indexPath, animated: false)
 
 		if let event = selectedEvent,
-			let indexPath = fetchedResultsController?.indexPathForObject(event),
-			let cell = tableView.cellForRowAtIndexPath(indexPath) as? EventCell {
+			let indexPath = fetchedResultsController?.indexPath(forObject: event),
+			let cell = tableView.cellForRow(at: indexPath) as? EventCell {
 				hideSelectMark(cell)
 		}
 
-        if let event = fetchedResultsController?.objectAtIndexPath(indexPath) as? Event,
-            let cell = tableView.cellForRowAtIndexPath(indexPath) as? EventCell {
+        if let event = fetchedResultsController?.object(at: indexPath),
+            let cell = tableView.cellForRow(at: indexPath) as? EventCell {
 				showSelectMark(cell)
 				selectedEvent = event
 
@@ -175,9 +186,9 @@ extension EventsViewController_UITableViewDelegate {
         }
     }
 
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == UITableViewCellEditingStyle.Delete {
-            if let event = fetchedResultsController?.objectAtIndexPath(indexPath) as? Event {
+    @objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.delete {
+            if let event = fetchedResultsController?.object(at: indexPath) {
                 let state = State()
                 if let selectedEventGUID = state.selectedEventGUID where event.guid == selectedEventGUID {
                     state.selectedEventGUID = nil
@@ -197,7 +208,7 @@ extension EventsViewController_UITableViewDelegate {
 // MARK: - UITableViewDataSource
 typealias EventsViewController_UITableViewDataSource = EventsViewController
 extension EventsViewController_UITableViewDataSource {
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let sectionInfo = fetchedResultsController?.sections?[section] {
             return sectionInfo.numberOfObjects
         }
@@ -205,12 +216,12 @@ extension EventsViewController_UITableViewDataSource {
         return 0
     }
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    @objc(numberOfSectionsInTableView:) func numberOfSections(in tableView: UITableView) -> Int {
         return fetchedResultsController?.sections?.count ?? 0
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("EventCellIdentifier", forIndexPath: indexPath)
+    @objc(tableView:cellForRowAtIndexPath:) func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "EventCellIdentifier", for: indexPath)
 
         if let cell = cell as? EventCell {
             configureCell(cell, atIndexPath: indexPath)
@@ -223,36 +234,37 @@ extension EventsViewController_UITableViewDataSource {
 // MARK: - EventCellDelegate
 typealias EventsViewController_EventCellDelegate = EventsViewController
 extension EventsViewController_EventCellDelegate {
-    func didPressTag(cell: EventCell) {
+    func didPressTag(_ cell: EventCell) {
         navigationController?.delegate = nil
-        performSegueWithIdentifier("segueToTagsFromEvents", sender: cell)
+        performSegue(withIdentifier: "segueToTagsFromEvents", sender: cell)
     }
 }
 
 // MARK: - NSFetchedResultsControllerDelegate
 typealias EventsViewController_NSFetchedResultsControllerDelegate = EventsViewController
 extension EventsViewController_NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView?.beginUpdates()
     }
 
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        switch type {
-        case .Insert:
-            tableView?.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
-        case .Delete:
-            tableView?.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-        case .Update:
-            if let cell = tableView?.cellForRowAtIndexPath(indexPath!) as? EventCell {
-                configureCell(cell, atIndexPath: indexPath!)
-            }
-        case .Move:
-            tableView?.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-            tableView?.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
-        }
-    }
+//	func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+//
+//		switch type {
+//		case .insert:
+//			tableView?.insertRows(at: [newIndexPath!], with: .fade)
+//		case .delete:
+//			tableView?.deleteRows(at: [indexPath!], with: .fade)
+//		case .update:
+//			if let cell = tableView?.cellForRow(at: indexPath!) as? EventCell {
+//				configureCell(cell, atIndexPath: indexPath!)
+//			}
+//		case .move:
+//			tableView?.deleteRows(at: [indexPath!], with: .fade)
+//			tableView?.insertRows(at: [newIndexPath!], with: .fade)
+//		}
+//	}
 
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView?.endUpdates()
     }
 }

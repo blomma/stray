@@ -10,21 +10,21 @@ extension NSManagedObject {
     }
 }
 
-enum SaveError: ErrorType {
-    case Error(String)
+enum SaveError: ErrorProtocol {
+    case error(String)
 }
 
-public func saveContextAndWait(context: NSManagedObjectContext) throws -> Void {
+public func saveContextAndWait(_ context: NSManagedObjectContext) throws -> Void {
     if !context.hasChanges {
         return
     }
 
     var error: SaveError?
-    context.performBlockAndWait { () -> Void in
+    context.performAndWait { () -> Void in
         do {
             try context.save()
         } catch let e as NSError {
-            error = SaveError.Error(e.localizedDescription)
+            error = SaveError.error(e.localizedDescription)
         }
     }
 
@@ -33,9 +33,9 @@ public func saveContextAndWait(context: NSManagedObjectContext) throws -> Void {
     }
 }
 
-enum FetchRequestError: ErrorType {
-    case InvalidResult(String)
-    case EmptyResult
+enum FetchRequestError: ErrorProtocol {
+    case invalidResult(String)
+    case emptyResult
 }
 
 class FetchRequest <T: NSManagedObject> {
@@ -45,18 +45,18 @@ class FetchRequest <T: NSManagedObject> {
         self.context = context
     }
 
-    func fetch(predicate: NSPredicate? = nil) throws -> [T] {
+    func fetch(_ predicate: Predicate? = nil) throws -> [T] {
         var result: [AnyObject]?
 
         var error: FetchRequestError?
-        context.performBlockAndWait { [unowned self] () -> Void in
-            let request = NSFetchRequest(entityName: T.entityName)
+        context.performAndWait { [unowned self] () -> Void in
+            let request = NSFetchRequest<T>(entityName: T.entityName)
             request.predicate = predicate
 
             do {
-                result = try self.context.executeFetchRequest(request)
+                result = try self.context.fetch(request)
             } catch let e as NSError {
-                error = FetchRequestError.InvalidResult(e.localizedDescription)
+                error = FetchRequestError.invalidResult(e.localizedDescription)
             }
         }
 
@@ -65,32 +65,32 @@ class FetchRequest <T: NSManagedObject> {
         }
 
         guard let r = result as? [T] else {
-            throw FetchRequestError.InvalidResult("Unable to cast to T")
+            throw FetchRequestError.invalidResult("Unable to cast to T")
         }
 
         return r
     }
 
-    func fetchFirst(predicate: NSPredicate? = nil) throws -> T {
+    func fetchFirst(_ predicate: Predicate? = nil) throws -> T {
         let result = try fetch(predicate)
         guard let first = result.first else {
-            throw FetchRequestError.EmptyResult
+            throw FetchRequestError.emptyResult
         }
 
         return first
     }
 
-    func fetchWhere(attribute: String, value: AnyObject) throws -> [T] {
+    func fetchWhere(_ attribute: String, value: AnyObject) throws -> [T] {
         let arguments: [AnyObject]? = [attribute, value]
-        let predicate = NSPredicate(format: "%K = %@", argumentArray: arguments)
+        let predicate = Predicate(format: "%K = %@", argumentArray: arguments)
 
         return try fetch(predicate)
     }
 
-    func fetchFirstWhere(attribute: String, value: AnyObject) throws -> T {
+    func fetchFirstWhere(_ attribute: String, value: AnyObject) throws -> T {
         let result = try fetchWhere(attribute, value: value)
         guard let first = result.first else {
-            throw FetchRequestError.EmptyResult
+            throw FetchRequestError.emptyResult
         }
 
         return first
@@ -103,14 +103,14 @@ class FetchRequest <T: NSManagedObject> {
 ///
 ///  - parameter objects: The managed objects to be deleted.
 ///  - parameter context: The context to which the objects belong.
-public func deleteObjects <T: NSManagedObject>(objects: [T], inContext context: NSManagedObjectContext) {
+public func deleteObjects <T: NSManagedObject>(_ objects: [T], inContext context: NSManagedObjectContext) {
     if objects.count == 0 {
         return
     }
 
-    context.performBlockAndWait { () -> Void in
+    context.performAndWait { () -> Void in
         for each in objects {
-            context.deleteObject(each)
+            context.delete(each)
         }
     }
 }

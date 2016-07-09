@@ -15,8 +15,8 @@ import CoreData
 extension Event {
 
     @NSManaged var guid: String?
-    @NSManaged var startDate: NSDate
-    @NSManaged var stopDate: NSDate?
+    @NSManaged var startDate: Date
+    @NSManaged var stopDate: Date?
     @NSManaged var inTag: Tag?
 
 }

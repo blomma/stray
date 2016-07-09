@@ -1,7 +1,7 @@
 import UIKit
 
 protocol TagCellDelegate : class {
-	func didEndEditing(cell:TagCell)
+	func didEndEditing(_ cell:TagCell)
 	func shouldBeginEdit() -> Bool
 }
 
@@ -18,7 +18,7 @@ class TagCell: UITableViewCell, UITextFieldDelegate {
 
 typealias TextFieldDelegate = TagCell
 extension TextFieldDelegate {
-	func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+	func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
 		if let shouldBegin = delegate?.shouldBeginEdit() {
 			return shouldBegin
 		}
@@ -26,13 +26,13 @@ extension TextFieldDelegate {
 		return true
 	}
 
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
 
         return true
     }
 
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         textField.resignFirstResponder()
 		delegate?.didEndEditing(self)
     }

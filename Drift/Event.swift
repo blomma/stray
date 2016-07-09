@@ -3,16 +3,16 @@ import CoreData
 
 final class Event: NSManagedObject {
     convenience init(_ context: NSManagedObjectContext,
-                startDate: NSDate,
-                guid: String? = NSUUID().UUIDString,
-                stopDate: NSDate? = nil,
+                startDate: Date,
+                guid: String? = UUID().uuidString,
+                stopDate: Date? = nil,
                 inTag: Tag? = nil)
     {
-        guard let entity = NSEntityDescription.entityForName(self.dynamicType.entityName, inManagedObjectContext: context) else {
+        guard let entity = NSEntityDescription.entity(forEntityName: self.dynamicType.entityName, in: context) else {
             fatalError("Unable to create entity for Event")
         }
         
-        self.init(entity: entity, insertIntoManagedObjectContext: context)
+        self.init(entity: entity, insertInto: context)
         
         self.startDate = startDate
         self.guid = guid
