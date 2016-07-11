@@ -14,22 +14,22 @@ enum SaveError: ErrorProtocol {
     case error(String)
 }
 
-public func saveContextAndWait(_ context: NSManagedObjectContext) throws -> Void {
+func save(context: NSManagedObjectContext) throws -> Void {
     if !context.hasChanges {
         return
     }
 
-    var error: SaveError?
+    var saveError: SaveError?
     context.performAndWait { () -> Void in
         do {
             try context.save()
-        } catch let e as NSError {
-            error = SaveError.error(e.localizedDescription)
+        } catch let error as NSError {
+            saveError = .error(error.localizedDescription)
         }
     }
 
-    if let error = error {
-        throw error
+    if let saveError = saveError {
+        throw saveError
     }
 }
 
@@ -52,7 +52,7 @@ enum Result<T, X: ErrorProtocol> {
 	}
 }
 
-func fetch<T: NSManagedObject>(inContext context:NSManagedObjectContext, wherePredicate predicate: Predicate? = nil) -> Result<[T], FetchError> {
+func fetch<T: NSManagedObject>(wherePredicate predicate: Predicate, inContext context:NSManagedObjectContext) -> Result<[T], FetchError> {
 	var result: Result<[T], FetchError>?
 	
 	context.performAndWait { () -> Void in
@@ -69,9 +69,10 @@ func fetch<T: NSManagedObject>(inContext context:NSManagedObjectContext, wherePr
 	return result!
 }
 
-func fetchFirst<T: NSManagedObject>(inContext context:NSManagedObjectContext, wherePredicate predicate: Predicate? = nil) -> Result<T, FetchError> {
+func fetchFirst<T: NSManagedObject>(wherePredicate predicate: Predicate, inContext context:NSManagedObjectContext) -> Result<T, FetchError> {
 	
-	let result: Result<[T], FetchError> = fetch(inContext: context, wherePredicate: predicate)
+	let result: Result<[T], FetchError> = fetch(wherePredicate: predicate, inContext: context)
+
 	switch result {
 	case .success(let s):
 		guard let first = s.first else {
@@ -84,7 +85,7 @@ func fetchFirst<T: NSManagedObject>(inContext context:NSManagedObjectContext, wh
 	}
 }
 
-func deleteObjects <T: NSManagedObject>(_ objects: [T], inContext context: NSManagedObjectContext) {
+func remove<T: NSManagedObject>(objects: [T], inContext context: NSManagedObjectContext) {
     if objects.count == 0 {
         return
     }
@@ -94,4 +95,10 @@ func deleteObjects <T: NSManagedObject>(_ objects: [T], inContext context: NSMan
             context.delete(each)
         }
     }
+}
+
+func remove<T: NSManagedObject>(object: T, inContext context: NSManagedObjectContext) {
+	context.performAndWait { () -> Void in
+		context.delete(object)
+	}
 }

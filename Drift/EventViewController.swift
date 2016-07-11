@@ -47,7 +47,8 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 
         var tagName: String? = nil
         if let guid = state.selectedEventGUID {
-			let result: Result<Event, FetchError> = fetchFirst(inContext: persistentContainer.viewContext, wherePredicate: Predicate(format: "guid = %@", argumentArray: [guid]))
+			let predicate = Predicate(format: "guid = %@", argumentArray: [guid])
+			let result: Result<Event, FetchError> = fetchFirst(wherePredicate: predicate, inContext: persistentContainer.viewContext)
 			do {
 				let event = try result.dematerialize()
 				selectedEventGuid = event.guid
@@ -314,9 +315,10 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 		}
 
         do {
-            try saveContextAndWait(persistentContainer.viewContext)
+			try save(context: persistentContainer.viewContext)
         } catch {
-            // TODO: Errorhandling
+			// TODO: Errorhandling
+			print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
         }
     }
 
@@ -325,10 +327,12 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 			return nil
         }
 
-		let result: Result<Event, FetchError> = fetchFirst(inContext: persistentContainer.viewContext, wherePredicate: Predicate(format: "guid = %@", argumentArray: [guid]))
+		let predicate = Predicate(format: "guid = %@", argumentArray: [guid])
+		let result: Result<Event, FetchError> = fetchFirst(wherePredicate: predicate, inContext: persistentContainer.viewContext)
         do {
 			return try result.dematerialize()
 		} catch {
+			// TODO: Errorhandling
             print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
 		}
 
@@ -366,11 +370,12 @@ extension EventViewController {
             animateEventTransforming(transform)
             event.stopDate = eventTimerControl?.nowDate
 
-            do {
-                try saveContextAndWait(persistentContainer.viewContext)
-            } catch {
-                // TODO: Errorhandling
-            }
+			do {
+				try save(context: persistentContainer.viewContext)
+			} catch {
+				// TODO: Errorhandling
+				print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
+			}
         case .startDateTransformingStop:
             animateEventTransforming(transform)
             if let startDate = eventTimerControl?.startDate {
@@ -379,11 +384,12 @@ extension EventViewController {
                 }
                 event.startDate = startDate
 
-                do {
-                    try saveContextAndWait(persistentContainer.viewContext)
-                } catch {
-                    // TODO: Errorhandling
-                }
+				do {
+					try save(context: persistentContainer.viewContext)
+				} catch {
+					// TODO: Errorhandling
+					print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
+				}
 			}
         default:
             break

@@ -40,7 +40,8 @@ class EventsViewController: UIViewController, EventCellDelegate {
 
         let state = State()
         if let guid = state.selectedEventGUID {
-			let result: Result<Event, FetchError> = fetchFirst(inContext: persistentContainer.viewContext, wherePredicate: Predicate(format: "guid = %@", argumentArray: [guid]))
+			let predicate = Predicate(format: "guid = %@", argumentArray: [guid])
+			let result: Result<Event, FetchError> = fetchFirst(wherePredicate: predicate, inContext: persistentContainer.viewContext)
             do {
                 let event = try result.dematerialize()
                 if let indexPath = fetchedResultsController?.indexPath(forObject: event) {
@@ -219,11 +220,12 @@ extension EventsViewController: UITableViewDataSource {
 					state.selectedEventGUID = nil
 				}
 
-				deleteObjects([event], inContext: persistentContainer.viewContext)
+				remove(object: event, inContext: persistentContainer.viewContext)
 				do {
-					try saveContextAndWait(persistentContainer.viewContext)
+					try save(context: persistentContainer.viewContext)
 				} catch {
 					// TODO: Errorhandling
+					print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
 				}
 			}
 		}

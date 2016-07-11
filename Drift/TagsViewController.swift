@@ -17,7 +17,8 @@ class TagsViewController: UIViewController, TagCellDelegate {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-		let result: Result<Tag, FetchError> = fetchFirst(inContext: persistentContainer.viewContext, wherePredicate: Predicate(format: "sortIndex == max(sortIndex)"))
+		let predicate = Predicate(format: "sortIndex == max(sortIndex)")
+		let result: Result<Tag, FetchError> = fetchFirst(wherePredicate: predicate, inContext: persistentContainer.viewContext)
         do {
             let tag = try result.dematerialize()
             if let sortIndex = tag.sortIndex as? Int {
@@ -47,7 +48,8 @@ class TagsViewController: UIViewController, TagCellDelegate {
         fetchedResultsController = controller
 
         if let guid = eventGuid {
-			let result: Result<Event, FetchError> = fetchFirst(inContext: persistentContainer.viewContext, wherePredicate: Predicate(format: "guid = %@", argumentArray: [guid]))
+			let predicate = Predicate(format: "guid = %@", argumentArray: [guid])
+			let result: Result<Event, FetchError> = fetchFirst(wherePredicate: predicate, inContext: persistentContainer.viewContext)
             do {
                 let event = try result.dematerialize()
                 if let tag = event.inTag,
@@ -98,9 +100,10 @@ class TagsViewController: UIViewController, TagCellDelegate {
         _ = Tag(persistentContainer.viewContext, sortIndex: maxSortOrderIndex)
         maxSortOrderIndex += 1
 		do {
-			try saveContextAndWait(persistentContainer.viewContext)
+			try save(context: persistentContainer.viewContext)
 		} catch {
 			// TODO: Errorhandling
+			print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
 		}
 	}
 
@@ -126,7 +129,7 @@ extension TagsViewController {
 			let tag = fetchedResultsController.object(at: indexPath)
 			tag.name = cell.name.text
 			do {
-				try saveContextAndWait(persistentContainer.viewContext)
+				try save(context: persistentContainer.viewContext)
 			} catch {
 				// TODO: Errorhandling
 			}
@@ -151,7 +154,8 @@ extension TagsViewController: UITableViewDelegate {
 
         if let guid = eventGuid,
 			let fetchedResultsController = fetchedResultsController {
-			let result: Result<Event, FetchError> = fetchFirst(inContext: persistentContainer.viewContext, wherePredicate: Predicate(format: "guid = %@", argumentArray: [guid]))
+			let predicate = Predicate(format: "guid = %@", argumentArray: [guid])
+			let result: Result<Event, FetchError> = fetchFirst(wherePredicate: predicate, inContext: persistentContainer.viewContext)
 			do {
 				let event = try result.dematerialize()
 				let tag = fetchedResultsController.object(at: indexPath)
@@ -162,7 +166,7 @@ extension TagsViewController: UITableViewDelegate {
 				}
 				
 				do {
-					try saveContextAndWait(persistentContainer.viewContext)
+					try save(context: persistentContainer.viewContext)
 				} catch {
 					// TODO: Errorhandling
 				}
@@ -204,9 +208,9 @@ extension TagsViewController: UITableViewDataSource {
 			let fetchedResultsController = fetchedResultsController
 		{
 			let tag = fetchedResultsController.object(at: indexPath)
-			deleteObjects([tag], inContext: persistentContainer.viewContext)
+			remove(object: tag, inContext: persistentContainer.viewContext)
 			do {
-				try saveContextAndWait(persistentContainer.viewContext)
+				try save(context: persistentContainer.viewContext)
 			} catch {
 				// TODO: Errorhandling
 			}
@@ -228,7 +232,7 @@ extension TagsViewController: UITableViewDataSource {
 			userReorderingCells = true
 			tag.sortIndex = (destinationIndexPath as NSIndexPath).row
 			do {
-				try saveContextAndWait(persistentContainer.viewContext)
+				try save(context: persistentContainer.viewContext)
 			} catch {
 				// TODO: Errorhandling
 			}
