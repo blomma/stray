@@ -24,7 +24,7 @@ class EventsViewController: UIViewController, EventCellDelegate {
         fetchRequest.sortDescriptors = [SortDescriptor(key: "startDate", ascending: false)]
         fetchRequest.fetchBatchSize = 20
 
-        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
 
         let error: NSErrorPointer? = nil
         do {
@@ -40,9 +40,9 @@ class EventsViewController: UIViewController, EventCellDelegate {
 
         let state = State()
         if let guid = state.selectedEventGUID {
-            let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
+			let result: Result<Event, FetchError> = fetchFirst(inContext: persistentContainer.viewContext, wherePredicate: Predicate(format: "guid = %@", argumentArray: [guid]))
             do {
-                let event = try request.fetchFirstWhere("guid", value: guid)
+                let event = try result.dematerialize()
                 if let indexPath = fetchedResultsController?.indexPath(forObject: event) {
                     selectedEvent = event
                     tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
@@ -219,9 +219,9 @@ extension EventsViewController: UITableViewDataSource {
 					state.selectedEventGUID = nil
 				}
 
-				deleteObjects([event], inContext: defaultCoreDataStack.managedObjectContext)
+				deleteObjects([event], inContext: persistentContainer.viewContext)
 				do {
-					try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+					try saveContextAndWait(persistentContainer.viewContext)
 				} catch {
 					// TODO: Errorhandling
 				}

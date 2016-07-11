@@ -33,77 +33,58 @@ public func saveContextAndWait(_ context: NSManagedObjectContext) throws -> Void
     }
 }
 
-enum FetchRequestError: ErrorProtocol {
+enum FetchError: ErrorProtocol {
     case invalidResult(String)
     case emptyResult
 }
 
-class FetchRequest <T: NSManagedObject> {
-    private var context: NSManagedObjectContext
-
-    init(context: NSManagedObjectContext) {
-        self.context = context
-    }
-
-    func fetch(_ predicate: Predicate? = nil) throws -> [T] {
-        var result: [AnyObject]?
-
-        var error: FetchRequestError?
-        context.performAndWait { [unowned self] () -> Void in
-            let request = NSFetchRequest<T>(entityName: T.entityName)
-            request.predicate = predicate
-
-            do {
-                result = try self.context.fetch(request)
-            } catch let e as NSError {
-                error = FetchRequestError.invalidResult(e.localizedDescription)
-            }
-        }
-
-        if let error = error {
-            throw error
-        }
-
-        guard let r = result as? [T] else {
-            throw FetchRequestError.invalidResult("Unable to cast to T")
-        }
-
-        return r
-    }
-
-    func fetchFirst(_ predicate: Predicate? = nil) throws -> T {
-        let result = try fetch(predicate)
-        guard let first = result.first else {
-            throw FetchRequestError.emptyResult
-        }
-
-        return first
-    }
-
-    func fetchWhere(_ attribute: String, value: AnyObject) throws -> [T] {
-        let arguments: [AnyObject]? = [attribute, value]
-        let predicate = Predicate(format: "%K = %@", argumentArray: arguments)
-
-        return try fetch(predicate)
-    }
-
-    func fetchFirstWhere(_ attribute: String, value: AnyObject) throws -> T {
-        let result = try fetchWhere(attribute, value: value)
-        guard let first = result.first else {
-            throw FetchRequestError.emptyResult
-        }
-
-        return first
-    }
+enum Result<T, X: ErrorProtocol> {
+	case success(T)
+	case failure(X)
+	
+	func dematerialize() throws -> T {
+		switch self {
+		case let .success(value):
+			return value
+		case let .failure(error):
+			throw error
+		}
+	}
 }
 
-///  Deletes the objects from the specified context.
-///  When changes are committed, the objects will be removed from their persistent store.
-///  You must save the context after calling this function to remove objects from the store.
-///
-///  - parameter objects: The managed objects to be deleted.
-///  - parameter context: The context to which the objects belong.
-public func deleteObjects <T: NSManagedObject>(_ objects: [T], inContext context: NSManagedObjectContext) {
+func fetch<T: NSManagedObject>(inContext context:NSManagedObjectContext, wherePredicate predicate: Predicate? = nil) -> Result<[T], FetchError> {
+	var result: Result<[T], FetchError>?
+	
+	context.performAndWait { () -> Void in
+		let request = NSFetchRequest<T>(entityName: T.entityName)
+		request.predicate = predicate
+		
+		do {
+			result = .success(try context.fetch(request))
+		} catch let e as NSError {
+			result = .failure(.invalidResult(e.localizedDescription))
+		}
+	}
+	
+	return result!
+}
+
+func fetchFirst<T: NSManagedObject>(inContext context:NSManagedObjectContext, wherePredicate predicate: Predicate? = nil) -> Result<T, FetchError> {
+	
+	let result: Result<[T], FetchError> = fetch(inContext: context, wherePredicate: predicate)
+	switch result {
+	case .success(let s):
+		guard let first = s.first else {
+			return .failure(.emptyResult)
+		}
+
+		return .success(first)
+	case .failure(let f):
+		return .failure(f)
+	}
+}
+
+func deleteObjects <T: NSManagedObject>(_ objects: [T], inContext context: NSManagedObjectContext) {
     if objects.count == 0 {
         return
     }

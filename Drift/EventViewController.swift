@@ -47,24 +47,24 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 
         var tagName: String? = nil
         if let guid = state.selectedEventGUID {
-            let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
-            do {
-                let event = try request.fetchFirstWhere("guid", value: guid)
-                selectedEventGuid = event.guid
-                tagName = event.inTag?.name
-
-                eventTimerControl.initWithStart(event.startDate, andStop: event.stopDate)
-
-                if let _ = event.stopDate {
-                    toggleStartStopButton?.setTitle("START", for: UIControlState())
-                    animateStopEvent()
-                } else {
-                    toggleStartStopButton?.setTitle("STOP", for: UIControlState())
-                    animateStartEvent()
-                }
-            } catch {
-                print("*** ERROR: [\(#line)] \(#function) \(error) Error while executing fetch request:")
-            }
+			let result: Result<Event, FetchError> = fetchFirst(inContext: persistentContainer.viewContext, wherePredicate: Predicate(format: "guid = %@", argumentArray: [guid]))
+			do {
+				let event = try result.dematerialize()
+				selectedEventGuid = event.guid
+				tagName = event.inTag?.name
+				
+				eventTimerControl.initWithStart(event.startDate, andStop: event.stopDate)
+				
+				if let _ = event.stopDate {
+					toggleStartStopButton?.setTitle("START", for: UIControlState())
+					animateStopEvent()
+				} else {
+					toggleStartStopButton?.setTitle("STOP", for: UIControlState())
+					animateStartEvent()
+				}
+			} catch {
+				// Error handling
+			}
         } else {
             selectedEventGuid = nil
         }
@@ -268,7 +268,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 
             if let _ = event.stopDate {
 				// Event is stoped, so start a new
-				let event = Event(defaultCoreDataStack.managedObjectContext, startDate: Date())
+				let event = Event(persistentContainer.viewContext, startDate: Date())
                 selectedEventGuid = event.guid
 				state.selectedEventGUID = event.guid
 
@@ -295,7 +295,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
         } else {
 			// No event exists, start a new
 			// Event is stoped, so start a new
-			let event = Event(defaultCoreDataStack.managedObjectContext, startDate: Date())
+			let event = Event(persistentContainer.viewContext, startDate: Date())
             selectedEventGuid = event.guid
             state.selectedEventGUID = event.guid
 
@@ -314,24 +314,23 @@ class EventViewController: UIViewController, EventTimerControlDelegate {
 		}
 
         do {
-            try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+            try saveContextAndWait(persistentContainer.viewContext)
         } catch {
             // TODO: Errorhandling
         }
     }
 
     private func selectedEvent(_ guid: String?) -> Event? {
-        guard let guid = guid else {
-            return nil
+		guard let guid = guid else {
+			return nil
         }
 
-        let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
-
+		let result: Result<Event, FetchError> = fetchFirst(inContext: persistentContainer.viewContext, wherePredicate: Predicate(format: "guid = %@", argumentArray: [guid]))
         do {
-            return try request.fetchFirstWhere("guid", value: guid)
-        } catch {
+			return try result.dematerialize()
+		} catch {
             print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
-        }
+		}
 
         return nil
     }
@@ -368,7 +367,7 @@ extension EventViewController {
             event.stopDate = eventTimerControl?.nowDate
 
             do {
-                try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+                try saveContextAndWait(persistentContainer.viewContext)
             } catch {
                 // TODO: Errorhandling
             }
@@ -381,7 +380,7 @@ extension EventViewController {
                 event.startDate = startDate
 
                 do {
-                    try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+                    try saveContextAndWait(persistentContainer.viewContext)
                 } catch {
                     // TODO: Errorhandling
                 }
