@@ -6,7 +6,6 @@
 //  Copyright © 2016 Artsoftheinsane. All rights reserved.
 //
 
-#include "Vendor.xcconfig"
 #include "Shared.xcconfig"
 
 MTL_ENABLE_DEBUG_INFO = YES

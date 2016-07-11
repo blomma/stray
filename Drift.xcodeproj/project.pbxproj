@@ -77,7 +77,6 @@
 		9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EventTimerControl.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventTimerControl.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9EF492A81AD7FFE2002F1E14 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		9EF8DAEE1CD54F28005CAE24 /* Vendor.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Vendor.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,7 +114,6 @@
 		9E42F1DF15570FD60087F602 = {
 			isa = PBXGroup;
 			children = (
-				9EF8DAEE1CD54F28005CAE24 /* Vendor.xcconfig */,
 				9EDCB0AF1CD5340900CF2DEA /* Release.xcconfig */,
 				9EDCB0AE1CD533D800CF2DEA /* Shared.xcconfig */,
 				9EDCB0AD1CD5339C00CF2DEA /* Debug.xcconfig */,
@@ -360,7 +358,7 @@
 			baseConfigurationReference = 9EDCB0AD1CD5339C00CF2DEA /* Debug.xcconfig */;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TEST_AFTER_BUILD = YES;
@@ -371,7 +369,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9EDCB0AF1CD5340900CF2DEA /* Release.xcconfig */;
 			buildSettings = {
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				SDKROOT = iphoneos;
 				TEST_AFTER_BUILD = YES;
 			};
@@ -395,7 +393,6 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.artsoftheinsane.Drift;
 				PRODUCT_NAME = Stray;
-				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Drift/Drift-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -422,7 +419,6 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.artsoftheinsane.Drift;
 				PRODUCT_NAME = Stray;
-				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Drift/Drift-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
