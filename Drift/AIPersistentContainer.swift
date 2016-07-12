@@ -8,15 +8,14 @@ class AIPersistentContainer: NSPersistentContainer {
 				return nil
 		}
 		
-		let manager = FileManager.default
-		
 		do {
-			let url = try manager
+			let url = try FileManager.default
 				.urlForDirectory(
 					.applicationSupportDirectory,
 					in: .userDomainMask,
 					appropriateFor: nil,
-					create: false)
+					create: false
+				)
 				.appendingPathComponent(applicationName)
 			
 			return url
@@ -26,13 +25,11 @@ class AIPersistentContainer: NSPersistentContainer {
 	}
 	
 	func defaultDirectoryURL() -> URL {
-		let dataBaseFileName = name + ".sqlite"
-		
 		if let applicationStorageDirectory = applicationSupportDirectoryURL() {
 			// Check if we have a preexisting database at this location
-			let storeURL: URL = try! applicationStorageDirectory.appendingPathComponent(dataBaseFileName)
-			
+			let dataBaseFileName = name + ".sqlite"
 			do {
+				let storeURL: URL = try applicationStorageDirectory.appendingPathComponent(dataBaseFileName)
 				if try storeURL.checkResourceIsReachable() {
 					return storeURL
 				}
@@ -40,14 +37,14 @@ class AIPersistentContainer: NSPersistentContainer {
 			}
 		}
 		
-		let manager = FileManager.default
 		do {
-			let url = try manager
+			let url = try FileManager.default
 				.urlForDirectory(
 					.documentDirectory,
 					in: .userDomainMask,
 					appropriateFor: nil,
-					create: true)
+					create: true
+			)
 			
 			return url
 		} catch let error as NSError {
