@@ -1,7 +1,7 @@
 import UIKit
 import CoreData
 
-class EventViewController: UIViewController, EventTimerControlDelegate {
+class EventViewController: UIViewController, EventTimerControlDelegate, CoreDataInjected {
     // MARK: IBOutlet
     @IBOutlet weak var eventTimerControl: EventTimerControl?
     @IBOutlet weak var toggleStartStopButton: UIButton?

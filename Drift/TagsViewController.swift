@@ -1,7 +1,7 @@
 import UIKit
 import CoreData
 
-class TagsViewController: UIViewController, TagCellDelegate {
+class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 	@IBOutlet weak var tableView: UITableView!
 
     private var userReorderingCells = false

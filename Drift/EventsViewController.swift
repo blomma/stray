@@ -1,7 +1,7 @@
 import UIKit
 import CoreData
 
-class EventsViewController: UIViewController, EventCellDelegate {
+class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjected {
 
     @IBOutlet weak var tableView: UITableView!
 

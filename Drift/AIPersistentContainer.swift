@@ -1,17 +1,6 @@
 import Foundation
 import CoreData
 
-let persistentContainer: AIPersistentContainer = {
-	let container = AIPersistentContainer(name: "CoreDataModel")
-	container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-		if let error = error {
-			fatalError("Unresolved error \(error), \(error.userInfo)")
-		}
-	})
-	
-	return container
-}()
-
 class AIPersistentContainer: NSPersistentContainer {
 	func applicationSupportDirectoryURL() -> URL? {
 		guard let infoDictionary = Bundle.main.infoDictionary,
