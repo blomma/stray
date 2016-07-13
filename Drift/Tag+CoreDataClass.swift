@@ -1,5 +1,5 @@
 //
-//  Event+CoreDataProperties.swift
+//  Tag+CoreDataClass.swift
 //  Drift
 //
 //  Created by Mikael Hultgren on 12/07/16.
@@ -9,10 +9,7 @@
 import Foundation
 import CoreData
 
-extension Event {
 
-    @NSManaged var startDate: Date
-    @NSManaged var stopDate: Date?
-    @NSManaged var inTag: Tag?
-
+class Tag: NSManagedObject, Entity {
+	static let entityName = "Tag"
 }

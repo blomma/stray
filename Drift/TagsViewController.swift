@@ -1,14 +1,14 @@
 import UIKit
 import CoreData
 
-class TagsViewController: UIViewController, TagCellDelegate {
+class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 	@IBOutlet weak var tableView: UITableView!
 
     private var userReorderingCells = false
-    private var selectedTag: Tag?
+    private var selectedTagID: URL?
     private var maxSortOrderIndex = 0
 
-	var eventGuid: String?
+	var eventID: URL?
 
     private var fetchedResultsController: NSFetchedResultsController<Tag>?
 
@@ -17,9 +17,11 @@ class TagsViewController: UIViewController, TagCellDelegate {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        let request = FetchRequest<Tag>(context: defaultCoreDataStack.managedObjectContext)
+		let request: NSFetchRequest<Tag> = Tag.fetchRequestForEntity(inContext: persistentContainer.viewContext)
+		request.predicate = Predicate(format: "sortIndex == max(sortIndex)")
+		let result: Result<Tag, FetchError> = fetchFirst(request: request, inContext: persistentContainer.viewContext)
         do {
-            let tag = try request.fetchFirst(Predicate(format: "sortIndex == max(sortIndex)"))
+            let tag = try result.dematerialize()
             if let sortIndex = tag.sortIndex as? Int {
                 maxSortOrderIndex = sortIndex
             }
@@ -32,7 +34,7 @@ class TagsViewController: UIViewController, TagCellDelegate {
         fetchRequest.sortDescriptors = [SortDescriptor(key: "sortIndex", ascending: false)]
         fetchRequest.fetchBatchSize = 20
 
-        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
 
         let error: NSErrorPointer? = nil
         do {
@@ -46,13 +48,13 @@ class TagsViewController: UIViewController, TagCellDelegate {
         controller.delegate = self
         fetchedResultsController = controller
 
-        if let guid = eventGuid {
-            let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
+        if let id = eventID {
+			let result: Result<Event, FetchError> = fetch(url: id, inContext: persistentContainer.viewContext)
             do {
-                let event = try request.fetchFirstWhere("guid", value: guid)
+                let event = try result.dematerialize()
                 if let tag = event.inTag,
                     let indexPath = controller.indexPath(forObject: tag) {
-                        selectedTag = tag
+                        selectedTagID = tag.objectID.uriRepresentation()
                         tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
                         tableView.scrollToRow(at: indexPath, at: .none, animated: true)
                 }
@@ -74,9 +76,11 @@ class TagsViewController: UIViewController, TagCellDelegate {
             cell.name.text = tag.name
 			cell.name.isEnabled = tableView.isEditing
 
-            if selectedTag?.guid == tag.guid {
-                showSelectMark(cell)
-            }
+			if let selectedTagID = selectedTagID {
+				if selectedTagID == tag.objectID.uriRepresentation() {
+					showSelectMark(cell)
+				}
+			}
         }
     }
 
@@ -95,12 +99,14 @@ class TagsViewController: UIViewController, TagCellDelegate {
 	}
 
 	@IBAction func addTag(_ sender: UIBarButtonItem) {
-        _ = Tag(defaultCoreDataStack.managedObjectContext, sortIndex: maxSortOrderIndex)
+		let tag = Tag(inContext: persistentContainer.viewContext)
+		tag.sortIndex = maxSortOrderIndex
         maxSortOrderIndex += 1
 		do {
-			try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+			try save(context: persistentContainer.viewContext)
 		} catch {
 			// TODO: Errorhandling
+			print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
 		}
 	}
 
@@ -126,7 +132,7 @@ extension TagsViewController {
 			let tag = fetchedResultsController.object(at: indexPath)
 			tag.name = cell.name.text
 			do {
-				try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+				try save(context: persistentContainer.viewContext)
 			} catch {
 				// TODO: Errorhandling
 			}
@@ -143,34 +149,42 @@ extension TagsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
 
-        if let selectedTag = selectedTag,
-            let indexPath = fetchedResultsController?.indexPath(forObject: selectedTag),
-            let cell = tableView.cellForRow(at: indexPath) as? TagCell {
-                hideSelectMark(cell)
-        }
+		if let selectedTagID = selectedTagID {
+			let result: Result<Tag, FetchError> = fetch(url: selectedTagID, inContext: persistentContainer.viewContext)
+			do {
+				let tag = try result.dematerialize()
+				if let oldIndexPath = fetchedResultsController?.indexPath(forObject: tag),
+					let cell = tableView.cellForRow(at: oldIndexPath) as? TagCell {
+					hideSelectMark(cell)
+				}
+			} catch {
+				// TODO
+			}
+		}
 
-        if let guid = eventGuid,
-            let fetchedResultsController = fetchedResultsController {
-                let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
-                do {
-                    let event = try request.fetchFirstWhere("guid", value: guid)
-					let tag = fetchedResultsController.object(at: indexPath)
-					if let inTag = event.inTag where inTag.isEqual(tag) {
-						event.inTag = nil
-					} else {
-						event.inTag = tag
-					}
+        if let id = eventID,
+			let fetchedResultsController = fetchedResultsController {
+			let result: Result<Event, FetchError> = fetch(url: id, inContext: persistentContainer.viewContext)
+			do {
+				let event = try result.dematerialize()
+				let tag = fetchedResultsController.object(at: indexPath)
 
-					do {
-						try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
-					} catch {
-						// TODO: Errorhandling
-					}
+				if let inTag = event.inTag where inTag.isEqual(tag) {
+					event.inTag = nil
+				} else {
+					event.inTag = tag
+				}
+				
+				do {
+					try save(context: persistentContainer.viewContext)
+				} catch {
+					// TODO: Errorhandling
+				}
 
-					self.performSegue(withIdentifier: "unwindToPresenter", sender: self)
-                } catch {
-                    // TODO: Errorhandling
-                }
+				self.performSegue(withIdentifier: "unwindToPresenter", sender: self)
+			} catch {
+				// TODO: Errorhandling
+			}
 		}
 	}
 }
@@ -204,9 +218,9 @@ extension TagsViewController: UITableViewDataSource {
 			let fetchedResultsController = fetchedResultsController
 		{
 			let tag = fetchedResultsController.object(at: indexPath)
-			deleteObjects([tag], inContext: defaultCoreDataStack.managedObjectContext)
+			remove(object: tag, inContext: persistentContainer.viewContext)
 			do {
-				try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+				try save(context: persistentContainer.viewContext)
 			} catch {
 				// TODO: Errorhandling
 			}
@@ -228,7 +242,7 @@ extension TagsViewController: UITableViewDataSource {
 			userReorderingCells = true
 			tag.sortIndex = (destinationIndexPath as NSIndexPath).row
 			do {
-				try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+				try save(context: persistentContainer.viewContext)
 			} catch {
 				// TODO: Errorhandling
 			}

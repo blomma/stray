@@ -1,78 +1,126 @@
 import Foundation
 import CoreData
 
-let defaultCoreDataStack = CoreDataStack(model: coreDataModel())
+enum SaveError: ErrorProtocol {
+	case error(String)
+}
 
-///  Describes a child managed object context.
-public typealias ChildManagedObjectContext = NSManagedObjectContext
+func save(context: NSManagedObjectContext) throws -> Void {
+	if !context.hasChanges {
+		return
+	}
 
+	var saveError: SaveError?
+	context.performAndWait { () -> Void in
+		do {
+			try context.save()
+		} catch let error as NSError {
+			saveError = .error(error.localizedDescription)
+		}
+	}
 
-public final class CoreDataStack: CustomStringConvertible {
-    ///  The model for the stack.
-    public let model: CoreDataModel
+	if let saveError = saveError {
+		throw saveError
+	}
+}
 
-    ///  The main managed object context for the stack.
-    public let managedObjectContext: NSManagedObjectContext
+enum FetchError: ErrorProtocol {
+	case invalidResult(String)
+	case emptyResult
+	case objectDoesNotExist(String)
+	case typeMisMatch(String)
+}
 
-    ///  The persistent store coordinator for the stack.
-    public let persistentStoreCoordinator: NSPersistentStoreCoordinator
+enum Result<T, X: ErrorProtocol> {
+	case success(T)
+	case failure(X)
 
-    // MARK: Initialization
+	func dematerialize() throws -> T {
+		switch self {
+		case let .success(value):
+			return value
+		case let .failure(error):
+			throw error
+		}
+	}
 
-    ///  Constructs a new `CoreDataStack` instance with the specified model, storeType, options, and concurrencyType.
-    ///
-    ///  - parameter model:           The model describing the stack.
-    ///  - parameter storeType:       A string constant that specifies the store type. The default parameter value is `NSSQLiteStoreType`.
-    ///  - parameter options:         A dictionary containing key-value pairs that specify options for the store.
-    ///                          The default parameter value contains `true` for the following keys: `NSMigratePersistentStoresAutomaticallyOption`, `NSInferMappingModelAutomaticallyOption`.
-    ///  - parameter concurrencyType: The concurrency pattern with which the managed object context will be used. The default parameter value is `.MainQueueConcurrencyType`.
-    ///
-    ///  - returns: A new `CoreDataStack` instance.
-    public init(model: CoreDataModel,
-           storeType: String = NSSQLiteStoreType,
-           options: [NSObject : AnyObject] = [NSMigratePersistentStoresAutomaticallyOption : true, NSInferMappingModelAutomaticallyOption : true],
-           concurrencyType: NSManagedObjectContextConcurrencyType = .mainQueueConcurrencyType) {
-        self.model = model
-        self.persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: model.managedObjectModel)
-        
-        let modelStoreURL: URL? = (storeType == NSInMemoryStoreType) ? nil : model.storeURL as URL
-        
-        do {
-            try self.persistentStoreCoordinator.addPersistentStore(ofType: storeType, configurationName: nil, at: modelStoreURL, options: options)
-        } catch let error as NSError {
-            fatalError("*** Error adding persistent store: \(error)")
-        }
+	func value() -> T? {
+		switch self {
+		case let .success(value):
+			return value
+		case .failure:
+			return nil
+		}
+	}
+}
 
-        self.managedObjectContext = NSManagedObjectContext(concurrencyType: concurrencyType)
-        self.managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator
-    }
+func fetch<T: NSManagedObject>(url: URL, inContext context:NSManagedObjectContext) -> Result<T, FetchError> {
+	guard let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: url) else {
+		return .failure(.objectDoesNotExist("Unable to create id from url: \(url)"))
+	}
 
-    // MARK: Child contexts
+	var object: NSManagedObject?
+	do {
+		object = try context.existingObject(with: id)
+	} catch let error as NSError {
+		return .failure(.objectDoesNotExist(error.localizedDescription))
+	}
 
-    ///  Creates a new child managed object context with the specified concurrencyType and mergePolicyType.
-    ///
-    ///  - parameter concurrencyType: The concurrency pattern with which the managed object context will be used.
-    ///                          The default parameter value is `.MainQueueConcurrencyType`.
-    ///  - parameter mergePolicyType: The merge policy with which the manged object context will be used.
-    ///                          The default parameter value is `.MergeByPropertyObjectTrumpMergePolicyType`.
-    ///
-    ///  - returns: A new child managed object context initialized with the given concurrency type and merge policy type.
-    public func childManagedObjectContext(_ concurrencyType: NSManagedObjectContextConcurrencyType = .mainQueueConcurrencyType,
-        mergePolicyType: NSMergePolicyType = .mergeByPropertyObjectTrumpMergePolicyType) -> ChildManagedObjectContext {
+	guard let TObject = object as? T else {
+		return .failure(.typeMisMatch("Unable to cast object:\(object) to type \(T.self)"))
+	}
 
-            let childContext = NSManagedObjectContext(concurrencyType: concurrencyType)
-            childContext.parent = managedObjectContext
-            childContext.mergePolicy = NSMergePolicy(merge: mergePolicyType)
-            return childContext
-    }
+	return .success(TObject)
+}
 
-    // MARK: Printable
+func fetch<T: NSManagedObject>(request: NSFetchRequest<T>, inContext context:NSManagedObjectContext) -> Result<[T], FetchError> {
+	var result: Result<[T], FetchError>?
 
-    /// :nodoc:
-    public var description: String {
-        get {
-            return "<\(String(CoreDataStack.self)): model=\(model)>"
-        }
-    }
+	context.performAndWait { () -> Void in
+		do {
+			result = .success(try context.fetch(request))
+		} catch let e as NSError {
+			result = .failure(.invalidResult(e.localizedDescription))
+		}
+	}
 
+	return result!
+}
+
+func fetchFirst<T: NSManagedObject>(request: NSFetchRequest<T>, inContext context:NSManagedObjectContext) -> Result<T, FetchError> {
+
+	request.fetchLimit = 1
+	request.returnsObjectsAsFaults = false
+	request.fetchBatchSize = 1
+
+	let result: Result<[T], FetchError> = fetch(request: request, inContext: context)
+
+	switch result {
+	case .success(let s):
+		guard let first = s.first else {
+			return .failure(.emptyResult)
+		}
+
+		return .success(first)
+	case .failure(let f):
+		return .failure(f)
+	}
+}
+
+func remove<T: NSManagedObject>(objects: [T], inContext context: NSManagedObjectContext) {
+	if objects.count == 0 {
+		return
+	}
+
+	context.performAndWait { () -> Void in
+		for each in objects {
+			context.delete(each)
+		}
+	}
+}
+
+func remove<T: NSManagedObject>(object: T, inContext context: NSManagedObjectContext) {
+	context.performAndWait { () -> Void in
+		context.delete(object)
+	}
 }

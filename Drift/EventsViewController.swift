@@ -1,16 +1,17 @@
 import UIKit
 import CoreData
 
-class EventsViewController: UIViewController, EventCellDelegate {
+class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjected {
 
     @IBOutlet weak var tableView: UITableView!
 
     private let shortStandaloneMonthSymbols: NSArray = DateFormatter().shortStandaloneMonthSymbols
 	private let transitionOperator = TransitionOperator()
     private let calendar = Calendar.autoupdatingCurrent
-	private var selectedEvent: Event?
 
 	private var fetchedResultsController: NSFetchedResultsController<Event>?
+
+	private var eventID: URL?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,11 +21,13 @@ class EventsViewController: UIViewController, EventCellDelegate {
     }
 
     override func viewWillAppear(_ animated: Bool) {
+		eventID = State().selectedEventID
+
         let fetchRequest = NSFetchRequest<Event>(entityName: Event.entityName)
         fetchRequest.sortDescriptors = [SortDescriptor(key: "startDate", ascending: false)]
         fetchRequest.fetchBatchSize = 20
 
-        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: defaultCoreDataStack.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
 
         let error: NSErrorPointer? = nil
         do {
@@ -38,13 +41,12 @@ class EventsViewController: UIViewController, EventCellDelegate {
         controller.delegate = self
         fetchedResultsController = controller
 
-        let state = State()
-        if let guid = state.selectedEventGUID {
-            let request = FetchRequest<Event>(context: defaultCoreDataStack.managedObjectContext)
+        if let id = eventID {
+			let result: Result<Event, FetchError> = fetch(url: id, inContext: persistentContainer.viewContext)
             do {
-                let event = try request.fetchFirstWhere("guid", value: guid)
+                let event = try result.dematerialize()
+
                 if let indexPath = fetchedResultsController?.indexPath(forObject: event) {
-                    selectedEvent = event
                     tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
                     tableView.scrollToRow(at: indexPath, at: .none, animated: true)
                 }
@@ -66,13 +68,13 @@ class EventsViewController: UIViewController, EventCellDelegate {
 			let indexPath = tableView?.indexPath(for: cell),
 			let event = fetchedResultsController?.object(at: indexPath)
 		{
-			controller.eventGuid = event.guid
+			controller.eventID = event.objectID.uriRepresentation()
 		}
 	}
 
     private func configureCell(_ cell: EventCell, atIndexPath: IndexPath) -> Void {
         if let event = fetchedResultsController?.object(at: atIndexPath) {
-			if selectedEvent?.guid == event.guid {
+			if eventID == event.objectID.uriRepresentation() {
 				showSelectMark(cell)
 			}
 
@@ -170,19 +172,25 @@ extension EventsViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: false)
 
-		if let event = selectedEvent,
-			let indexPath = fetchedResultsController?.indexPath(forObject: event),
-			let cell = tableView.cellForRow(at: indexPath) as? EventCell {
-			hideSelectMark(cell)
+		if let eventID = eventID {
+			let result: Result<Event, FetchError> = fetch(url: eventID, inContext: persistentContainer.viewContext)
+			do {
+				let event = try result.dematerialize()
+				if let oldIndexPath = fetchedResultsController?.indexPath(forObject: event), let cell = tableView.cellForRow(at: oldIndexPath) as? EventCell {
+					hideSelectMark(cell)
+				}
+			} catch {
+				// TODO
+			}
 		}
 
 		if let event = fetchedResultsController?.object(at: indexPath),
 			let cell = tableView.cellForRow(at: indexPath) as? EventCell {
 			showSelectMark(cell)
-			selectedEvent = event
+			eventID = event.objectID.uriRepresentation()
 
 			let state = State()
-			state.selectedEventGUID = event.guid
+			state.selectedEventID = eventID
 		}
 	}
 }
@@ -215,15 +223,17 @@ extension EventsViewController: UITableViewDataSource {
 		if editingStyle == UITableViewCellEditingStyle.delete {
 			if let event = fetchedResultsController?.object(at: indexPath) {
 				let state = State()
-				if let selectedEventGUID = state.selectedEventGUID where event.guid == selectedEventGUID {
-					state.selectedEventGUID = nil
+
+				if let eventID = eventID where eventID == event.objectID.uriRepresentation() {
+					state.selectedEventID = nil
 				}
 
-				deleteObjects([event], inContext: defaultCoreDataStack.managedObjectContext)
+				remove(object: event, inContext: persistentContainer.viewContext)
 				do {
-					try saveContextAndWait(defaultCoreDataStack.managedObjectContext)
+					try save(context: persistentContainer.viewContext)
 				} catch {
 					// TODO: Errorhandling
+					print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
 				}
 			}
 		}
