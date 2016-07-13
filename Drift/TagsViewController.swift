@@ -5,10 +5,10 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 	@IBOutlet weak var tableView: UITableView!
 
     private var userReorderingCells = false
-    private var selectedTag: Tag?
+    private var selectedTagID: URL?
     private var maxSortOrderIndex = 0
 
-	var eventGuid: String?
+	var eventID: URL?
 
     private var fetchedResultsController: NSFetchedResultsController<Tag>?
 
@@ -17,8 +17,9 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-		let predicate = Predicate(format: "sortIndex == max(sortIndex)")
-		let result: Result<Tag, FetchError> = fetchFirst(wherePredicate: predicate, inContext: persistentContainer.viewContext)
+		let request: NSFetchRequest<Tag> = Tag.fetchRequestForEntity(inContext: persistentContainer.viewContext)
+		request.predicate = Predicate(format: "sortIndex == max(sortIndex)")
+		let result: Result<Tag, FetchError> = fetchFirst(request: request, inContext: persistentContainer.viewContext)
         do {
             let tag = try result.dematerialize()
             if let sortIndex = tag.sortIndex as? Int {
@@ -47,14 +48,13 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
         controller.delegate = self
         fetchedResultsController = controller
 
-        if let guid = eventGuid {
-			let predicate = Predicate(format: "guid = %@", argumentArray: [guid])
-			let result: Result<Event, FetchError> = fetchFirst(wherePredicate: predicate, inContext: persistentContainer.viewContext)
+        if let id = eventID {
+			let result: Result<Event, FetchError> = fetch(url: id, inContext: persistentContainer.viewContext)
             do {
                 let event = try result.dematerialize()
                 if let tag = event.inTag,
                     let indexPath = controller.indexPath(forObject: tag) {
-                        selectedTag = tag
+                        selectedTagID = tag.objectID.uriRepresentation()
                         tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
                         tableView.scrollToRow(at: indexPath, at: .none, animated: true)
                 }
@@ -76,9 +76,11 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
             cell.name.text = tag.name
 			cell.name.isEnabled = tableView.isEditing
 
-            if selectedTag?.guid == tag.guid {
-                showSelectMark(cell)
-            }
+			if let selectedTagID = selectedTagID {
+				if selectedTagID == tag.objectID.uriRepresentation() {
+					showSelectMark(cell)
+				}
+			}
         }
     }
 
@@ -97,7 +99,8 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 	}
 
 	@IBAction func addTag(_ sender: UIBarButtonItem) {
-        _ = Tag(persistentContainer.viewContext, sortIndex: maxSortOrderIndex)
+		let tag = Tag(inContext: persistentContainer.viewContext)
+		tag.sortIndex = maxSortOrderIndex
         maxSortOrderIndex += 1
 		do {
 			try save(context: persistentContainer.viewContext)
@@ -146,19 +149,26 @@ extension TagsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
 
-        if let selectedTag = selectedTag,
-            let indexPath = fetchedResultsController?.indexPath(forObject: selectedTag),
-            let cell = tableView.cellForRow(at: indexPath) as? TagCell {
-                hideSelectMark(cell)
-        }
+		if let selectedTagID = selectedTagID {
+			let result: Result<Tag, FetchError> = fetch(url: selectedTagID, inContext: persistentContainer.viewContext)
+			do {
+				let tag = try result.dematerialize()
+				if let oldIndexPath = fetchedResultsController?.indexPath(forObject: tag),
+					let cell = tableView.cellForRow(at: oldIndexPath) as? TagCell {
+					hideSelectMark(cell)
+				}
+			} catch {
+				// TODO
+			}
+		}
 
-        if let guid = eventGuid,
+        if let id = eventID,
 			let fetchedResultsController = fetchedResultsController {
-			let predicate = Predicate(format: "guid = %@", argumentArray: [guid])
-			let result: Result<Event, FetchError> = fetchFirst(wherePredicate: predicate, inContext: persistentContainer.viewContext)
+			let result: Result<Event, FetchError> = fetch(url: id, inContext: persistentContainer.viewContext)
 			do {
 				let event = try result.dematerialize()
 				let tag = fetchedResultsController.object(at: indexPath)
+
 				if let inTag = event.inTag where inTag.isEqual(tag) {
 					event.inTag = nil
 				} else {

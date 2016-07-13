@@ -27,6 +27,8 @@ func save(context: NSManagedObjectContext) throws -> Void {
 enum FetchError: ErrorProtocol {
 	case invalidResult(String)
 	case emptyResult
+	case objectDoesNotExist(String)
+	case typeMisMatch(String)
 }
 
 enum Result<T, X: ErrorProtocol> {
@@ -41,6 +43,34 @@ enum Result<T, X: ErrorProtocol> {
 			throw error
 		}
 	}
+
+	func value() -> T? {
+		switch self {
+		case let .success(value):
+			return value
+		case .failure:
+			return nil
+		}
+	}
+}
+
+func fetch<T: NSManagedObject>(url: URL, inContext context:NSManagedObjectContext) -> Result<T, FetchError> {
+	guard let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: url) else {
+		return .failure(.objectDoesNotExist("Unable to create id from url: \(url)"))
+	}
+
+	var object: NSManagedObject?
+	do {
+		object = try context.existingObject(with: id)
+	} catch let error as NSError {
+		return .failure(.objectDoesNotExist(error.localizedDescription))
+	}
+
+	guard let TObject = object as? T else {
+		return .failure(.typeMisMatch("Unable to cast object:\(object) to type \(T.self)"))
+	}
+
+	return .success(TObject)
 }
 
 func fetch<T: NSManagedObject>(request: NSFetchRequest<T>, inContext context:NSManagedObjectContext) -> Result<[T], FetchError> {

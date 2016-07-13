@@ -22,7 +22,7 @@ class EventViewController: UIViewController, EventTimerControlDelegate, CoreData
     @IBOutlet weak var tag: UIButton?
 
     // MARK: Private properties
-    private var selectedEventGuid: String?
+    private var selectedEventID: URL?
 
     private let state = State()
     private var transitionOperator: TransitionOperator?
@@ -39,22 +39,17 @@ class EventViewController: UIViewController, EventTimerControlDelegate, CoreData
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        guard let eventTimerControl = eventTimerControl, let tag = tag else {
-            fatalError("TimerControl or tag is not an instance")
-        }
-
-        eventTimerControl.delegate = self
+        eventTimerControl?.delegate = self
 
         var tagName: String? = nil
-        if let guid = state.selectedEventGUID {
-			let predicate = Predicate(format: "guid = %@", argumentArray: [guid])
-			let result: Result<Event, FetchError> = fetchFirst(wherePredicate: predicate, inContext: persistentContainer.viewContext)
+        if let url = state.selectedEventID {
+			let result: Result<Event, FetchError> = fetch(url: url, inContext: persistentContainer.viewContext)
 			do {
 				let event = try result.dematerialize()
-				selectedEventGuid = event.guid
+				selectedEventID = url
+
 				tagName = event.inTag?.name
-				
-				eventTimerControl.initWithStart(event.startDate, andStop: event.stopDate)
+				eventTimerControl?.initWithStart(event.startDate, andStop: event.stopDate)
 				
 				if let _ = event.stopDate {
 					toggleStartStopButton?.setTitle("START", for: UIControlState())
@@ -64,10 +59,10 @@ class EventViewController: UIViewController, EventTimerControlDelegate, CoreData
 					animateStartEvent()
 				}
 			} catch {
-				// Error handling
+				// TODO: Error handling
 			}
         } else {
-            selectedEventGuid = nil
+            selectedEventID = nil
         }
 
         if let tagName = tagName,
@@ -75,31 +70,27 @@ class EventViewController: UIViewController, EventTimerControlDelegate, CoreData
                 let attriString = AttributedString(string:tagName, attributes:
                     [NSFontAttributeName: font])
 
-                tag.setAttributedTitle(attriString, for: UIControlState())
+                tag?.setAttributedTitle(attriString, for: UIControlState())
         } else if let font = UIFont(name: "FontAwesome", size: 20) {
             let attriString = AttributedString(string:"\u{f02b}", attributes:
                 [NSFontAttributeName: font])
 
-            tag.setAttributedTitle(attriString, for: UIControlState())
+            tag?.setAttributedTitle(attriString, for: UIControlState())
         }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        guard let eventTimerControl = eventTimerControl else {
-            fatalError("TimerControl is not an instance")
-        }
-
-		eventTimerControl.delegate = nil
-		eventTimerControl.stop()
+		eventTimerControl?.delegate = nil
+		eventTimerControl?.stop()
     }
 
 	override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
 		if segue.identifier == "segueToTagsFromEvent",
 			let controller = segue.destinationViewController as? TagsViewController,
-            let guid = selectedEventGuid {
-				controller.eventGuid = guid
+            let id = selectedEventID {
+				controller.eventID = id
 		}
 	}
 
@@ -176,74 +167,74 @@ class EventViewController: UIViewController, EventTimerControlDelegate, CoreData
     }
 
     private func animateEventTransforming(_ eventTimerTransformingEnum: EventTimerTransformingEnum) {
-        UIView.animate(withDuration: 0.3, delay: 0.3, options: .curveEaseIn, animations: { () -> Void in
-            var eventStartAlpha: CGFloat = 1
-            var eventStopAlpha: CGFloat = 1
-            var eventTimeAlpha: CGFloat = 1
-            var eventStartMonthYearAlpha: CGFloat = 1
-            var eventStopMonthYearAlpha: CGFloat = 1
-
-            switch eventTimerTransformingEnum {
-            case .startDateTransformingStart:
-                eventStartAlpha = 1
-                eventStartMonthYearAlpha = 1
-
-                eventStopAlpha = 0.2
-                eventStopMonthYearAlpha = 0.2
-
-                eventTimeAlpha = 0.2
-            case .startDateTransformingStop:
-                if let _ = self.selectedEvent(self.selectedEventGuid)?.stopDate {
-                    eventStartAlpha = 0.2
-                    eventStopAlpha = 1
-                } else {
-                    eventStartAlpha = 1
-                    eventStopAlpha = 0.2
-                }
-
-                eventStartMonthYearAlpha = 1
-                eventStopMonthYearAlpha = 1
-
-                eventTimeAlpha = 1
-            case .nowDateTransformingStart:
-                eventStartAlpha = 0.2
-                eventStartMonthYearAlpha = 0.2
-
-                eventStopAlpha = 1
-                eventStopMonthYearAlpha = 1
-
-                eventTimeAlpha = 0.2
-            case .nowDateTransformingStop:
-                if let _ = self.selectedEvent(self.selectedEventGuid)?.stopDate {
-                    eventStartAlpha = 0.2
-                    eventStopAlpha = 1
-                } else {
-                    eventStartAlpha = 1
-                    eventStopAlpha = 0.2
-                }
-
-                eventStartMonthYearAlpha = 1
-                eventStopMonthYearAlpha = 1
-
-                eventTimeAlpha = 1
-            default:
-                break
-            }
-
-            self.eventStartDay?.alpha = eventStartAlpha
-            self.eventStartMonth?.alpha = eventStartMonthYearAlpha
-            self.eventStartTime?.alpha = eventStartAlpha
-            self.eventStartYear?.alpha = eventStartMonthYearAlpha
-
-            self.eventStopDay?.alpha = eventStopAlpha
-            self.eventStopMonth?.alpha = eventStopMonthYearAlpha
-            self.eventStopTime?.alpha = eventStopAlpha
-            self.eventStopYear?.alpha = eventStopMonthYearAlpha
-
-            self.eventTimeHours?.alpha = eventTimeAlpha
-            self.eventTimeMinutes?.alpha = eventTimeAlpha
-
-            }, completion: nil)
+//        UIView.animate(withDuration: 0.3, delay: 0.3, options: .curveEaseIn, animations: { () -> Void in
+//            var eventStartAlpha: CGFloat = 1
+//            var eventStopAlpha: CGFloat = 1
+//            var eventTimeAlpha: CGFloat = 1
+//            var eventStartMonthYearAlpha: CGFloat = 1
+//            var eventStopMonthYearAlpha: CGFloat = 1
+//
+//            switch eventTimerTransformingEnum {
+//            case .startDateTransformingStart:
+//                eventStartAlpha = 1
+//                eventStartMonthYearAlpha = 1
+//
+//                eventStopAlpha = 0.2
+//                eventStopMonthYearAlpha = 0.2
+//
+//                eventTimeAlpha = 0.2
+//            case .startDateTransformingStop:
+//                if let _ = self.selectedEvent(self.selectedEventGuid)?.stopDate {
+//                    eventStartAlpha = 0.2
+//                    eventStopAlpha = 1
+//                } else {
+//                    eventStartAlpha = 1
+//                    eventStopAlpha = 0.2
+//                }
+//
+//                eventStartMonthYearAlpha = 1
+//                eventStopMonthYearAlpha = 1
+//
+//                eventTimeAlpha = 1
+//            case .nowDateTransformingStart:
+//                eventStartAlpha = 0.2
+//                eventStartMonthYearAlpha = 0.2
+//
+//                eventStopAlpha = 1
+//                eventStopMonthYearAlpha = 1
+//
+//                eventTimeAlpha = 0.2
+//            case .nowDateTransformingStop:
+//                if let _ = self.selectedEvent(self.selectedEventGuid)?.stopDate {
+//                    eventStartAlpha = 0.2
+//                    eventStopAlpha = 1
+//                } else {
+//                    eventStartAlpha = 1
+//                    eventStopAlpha = 0.2
+//                }
+//
+//                eventStartMonthYearAlpha = 1
+//                eventStopMonthYearAlpha = 1
+//
+//                eventTimeAlpha = 1
+//            default:
+//                break
+//            }
+//
+//            self.eventStartDay?.alpha = eventStartAlpha
+//            self.eventStartMonth?.alpha = eventStartMonthYearAlpha
+//            self.eventStartTime?.alpha = eventStartAlpha
+//            self.eventStartYear?.alpha = eventStartMonthYearAlpha
+//
+//            self.eventStopDay?.alpha = eventStopAlpha
+//            self.eventStopMonth?.alpha = eventStopMonthYearAlpha
+//            self.eventStopTime?.alpha = eventStopAlpha
+//            self.eventStopYear?.alpha = eventStopMonthYearAlpha
+//
+//            self.eventTimeHours?.alpha = eventTimeAlpha
+//            self.eventTimeMinutes?.alpha = eventTimeAlpha
+//
+//            }, completion: nil)
     }
 
 	@IBAction func prepareForUnwind(_ sender: UIStoryboardSegue) {
@@ -251,29 +242,40 @@ class EventViewController: UIViewController, EventTimerControlDelegate, CoreData
 	}
 
     @IBAction func showTags(_ sender: UIButton) {
-        if selectedEventGuid != nil {
+        if selectedEventID != nil {
             navigationController?.delegate = nil
             performSegue(withIdentifier: "segueToTagsFromEvent", sender: self)
         }
     }
 
     @IBAction func toggleEventTouchUpInside(_ sender: UIButton) {
-        guard let eventTimerControl = eventTimerControl, let tag = tag else {
-            fatalError("TimerControl is not an instance")
-        }
+        if let id = selectedEventID {
+			let result: Result<Event, FetchError> = fetch(url: id, inContext: persistentContainer.viewContext)
 
-        if let guid = selectedEventGuid {
-            guard let event = self.selectedEvent(guid) else {
-                fatalError("Have guid but cant find the event")
-            }
+			guard let event = result.value() else {
+				// For some reason there was no event
+				// attached to this objectid, not at all what
+				// was exspected
+				// TODO: Error handling
+				fatalError()
+			}
 
             if let _ = event.stopDate {
 				// Event is stoped, so start a new
-				let event = Event(persistentContainer.viewContext, startDate: Date())
-                selectedEventGuid = event.guid
-				state.selectedEventGUID = event.guid
+				let event = Event(inContext: persistentContainer.viewContext)
+				event.startDate = Date()
 
-				eventTimerControl.initWithStart(event.startDate as Date, andStop: event.stopDate)
+				do {
+					try save(context: persistentContainer.viewContext)
+				} catch {
+					// TODO: Error handling
+					print("*** ERROR: [\(#line)] \(#function) \(error)")
+				}
+
+                selectedEventID = event.objectID.uriRepresentation()
+				state.selectedEventID = selectedEventID
+
+				eventTimerControl?.initWithStart(event.startDate, andStop: event.stopDate)
 
 				toggleStartStopButton?.setTitle("STOP", for: UIControlState())
 
@@ -283,12 +285,12 @@ class EventViewController: UIViewController, EventTimerControlDelegate, CoreData
 					let attriString = AttributedString(string:"\u{f02b}", attributes:
 						[NSFontAttributeName: font])
 
-					tag.setAttributedTitle(attriString, for: UIControlState())
+					tag?.setAttributedTitle(attriString, for: UIControlState())
 				}
             } else {
                 // Event is started
-                eventTimerControl.stop()
-                event.stopDate = eventTimerControl.nowDate
+                eventTimerControl?.stop()
+                event.stopDate = eventTimerControl?.nowDate
 
                 toggleStartStopButton?.setTitle("START", for: UIControlState())
                 animateStopEvent()
@@ -296,11 +298,21 @@ class EventViewController: UIViewController, EventTimerControlDelegate, CoreData
         } else {
 			// No event exists, start a new
 			// Event is stoped, so start a new
-			let event = Event(persistentContainer.viewContext, startDate: Date())
-            selectedEventGuid = event.guid
-            state.selectedEventGUID = event.guid
+			let event = Event(inContext: persistentContainer.viewContext)
+			event.startDate = Date()
 
-			eventTimerControl.initWithStart(event.startDate as Date, andStop: event.stopDate)
+			// NOTE: Only needed to get permanent object id
+			do {
+				try save(context: persistentContainer.viewContext)
+			} catch {
+				// TODO: Error handling
+				print("*** ERROR: [\(#line)] \(#function) \(error)")
+			}
+
+            selectedEventID = event.objectID.uriRepresentation()
+            state.selectedEventID = selectedEventID
+
+			eventTimerControl?.initWithStart(event.startDate, andStop: event.stopDate)
 
 			toggleStartStopButton?.setTitle("STOP", for: UIControlState())
 
@@ -310,62 +322,55 @@ class EventViewController: UIViewController, EventTimerControlDelegate, CoreData
 				let attriString = AttributedString(string:"\u{f02b}", attributes:
 					[NSFontAttributeName: font])
 
-				tag.setAttributedTitle(attriString, for: UIControlState())
+				tag?.setAttributedTitle(attriString, for: UIControlState())
 			}
 		}
 
-        do {
+		do {
 			try save(context: persistentContainer.viewContext)
-        } catch {
-			// TODO: Errorhandling
-			print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
-        }
-    }
-
-    private func selectedEvent(_ guid: String?) -> Event? {
-		guard let guid = guid else {
-			return nil
-        }
-
-		let predicate = Predicate(format: "guid = %@", argumentArray: [guid])
-		let result: Result<Event, FetchError> = fetchFirst(wherePredicate: predicate, inContext: persistentContainer.viewContext)
-        do {
-			return try result.dematerialize()
 		} catch {
-			// TODO: Errorhandling
-            print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
+			// TODO: Error handling
+			print("*** ERROR: [\(#line)] \(#function) \(error)")
 		}
-
-        return nil
     }
 }
 
 // MARK: - EventTimerControlDelegate
 extension EventViewController {
     func startDateDidUpdate(_ startDate: Date!) {
-            updateStartLabelWithDate(startDate)
+		updateStartLabelWithDate(startDate)
 
-            if let toDate = eventTimerControl?.nowDate {
-                updateEventTimeFromDate(startDate, toDate: toDate)
-            }
+		if let toDate = eventTimerControl?.nowDate {
+			updateEventTimeFromDate(startDate, toDate: toDate)
+		}
     }
 
     func nowDateDidUpdate(_ nowDate: Date!) {
-        updateStopLabelWithDate(nowDate)
+		updateStopLabelWithDate(nowDate)
 
-        if let fromDate = eventTimerControl?.startDate {
-            updateEventTimeFromDate(fromDate, toDate: nowDate)
-        }
-    }
+		if let fromDate = eventTimerControl?.startDate {
+			updateEventTimeFromDate(fromDate, toDate: nowDate)
+		}
+	}
 
     func transformingDidUpdate(_ transform: EventTimerTransformingEnum) {
         switch transform {
         case .nowDateTransformingStart, .startDateTransformingStart:
             animateEventTransforming(transform)
         case .nowDateTransformingStop:
-            guard let event = selectedEvent(selectedEventGuid) else {
-                break
-            }
+			guard let id = selectedEventID else {
+				break
+			}
+
+			let result: Result<Event, FetchError> = fetch(url: id, inContext: persistentContainer.viewContext)
+
+			guard let event = result.value() else {
+				// For some reason there was no event
+				// attached to this objectid, not at all what
+				// was exspected
+				// TODO: Error handling
+				break
+			}
 
             animateEventTransforming(transform)
             event.stopDate = eventTimerControl?.nowDate
@@ -373,22 +378,31 @@ extension EventViewController {
 			do {
 				try save(context: persistentContainer.viewContext)
 			} catch {
-				// TODO: Errorhandling
-				print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
+				// TODO: Error handling
+				print("*** ERROR: [\(#line)] \(#function) \(error)")
 			}
         case .startDateTransformingStop:
             animateEventTransforming(transform)
-            if let startDate = eventTimerControl?.startDate {
-                guard let event = selectedEvent(selectedEventGuid) else {
-                    break
-                }
+            if let startDate = eventTimerControl?.startDate,
+				let id = selectedEventID
+			{
+				let result: Result<Event, FetchError> = fetch(url: id, inContext: persistentContainer.viewContext)
+
+				guard let event = result.value() else {
+					// For some reason there was no event
+					// attached to this objectid, not at all what
+					// was exspected
+					// TODO: Error handling
+					break
+				}
+
                 event.startDate = startDate
 
 				do {
 					try save(context: persistentContainer.viewContext)
 				} catch {
-					// TODO: Errorhandling
-					print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
+					// TODO: Error handling
+					print("*** ERROR: [\(#line)] \(#function) \(error)")
 				}
 			}
         default:
