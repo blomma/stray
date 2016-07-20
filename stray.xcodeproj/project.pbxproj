@@ -17,6 +17,9 @@
 		9E36D3B31D35783300F33D80 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36D3B21D35783300F33D80 /* Entity.swift */; };
 		9E36D3B51D3578B500F33D80 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36D3B41D3578B500F33D80 /* CoreDataStack.swift */; };
 		9E36D3B71D35798900F33D80 /* CoreDataInjected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36D3B61D35798900F33D80 /* CoreDataInjected.swift */; };
+		9E36D3BD1D35884200F33D80 /* Event+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36D3BA1D35884200F33D80 /* Event+CoreDataClass.swift */; };
+		9E36D3BE1D35884200F33D80 /* Tag+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36D3BB1D35884200F33D80 /* Tag+CoreDataClass.swift */; };
+		9E36D3C11D36D62E00F33D80 /* EventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36D3C01D36D62E00F33D80 /* EventViewModel.swift */; };
 		9E378E7119EC35C3004DED67 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E378E7019EC35C3004DED67 /* EventsViewController.swift */; };
 		9E42F20215570FD60087F602 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F20015570FD60087F602 /* Main.storyboard */; };
 		9E4DFB8C1AD17CBB008C0123 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4DFB8B1AD17CBB008C0123 /* MenuController.swift */; };
@@ -44,6 +47,10 @@
 		9E36D3B21D35783300F33D80 /* Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
 		9E36D3B41D3578B500F33D80 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		9E36D3B61D35798900F33D80 /* CoreDataInjected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataInjected.swift; sourceTree = "<group>"; };
+		9E36D3B81D35875800F33D80 /* CoreDataModel-11.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-11.xcdatamodel"; sourceTree = "<group>"; };
+		9E36D3BA1D35884200F33D80 /* Event+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataClass.swift"; sourceTree = "<group>"; };
+		9E36D3BB1D35884200F33D80 /* Tag+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Tag+CoreDataClass.swift"; sourceTree = "<group>"; };
+		9E36D3C01D36D62E00F33D80 /* EventViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventViewModel.swift; sourceTree = "<group>"; };
 		9E378E7019EC35C3004DED67 /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		9E42F1EA15570FD60087F602 /* stray.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stray.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E42F1F615570FD60087F602 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -106,6 +113,14 @@
 			name = CoreDataStack;
 			sourceTree = "<group>";
 		};
+		9E36D3BF1D36D60100F33D80 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				9E36D3C01D36D62E00F33D80 /* EventViewModel.swift */,
+			);
+			name = ViewModels;
+			sourceTree = "<group>";
+		};
 		9E42F1DF15570FD60087F602 = {
 			isa = PBXGroup;
 			children = (
@@ -134,6 +149,7 @@
 				9E42F1F515570FD60087F602 /* Supporting Files */,
 				9E63BBF6156EAAA80006FEFC /* Repository */,
 				9E01309215E39D20005C8765 /* Storyboard */,
+				9E36D3BF1D36D60100F33D80 /* ViewModels */,
 				9E9C232D15F288D400572FB7 /* Controllers */,
 				9EB08FDF19E03C4F00D20EE5 /* Views */,
 				9E561DE415FBB04D008D3895 /* Controls */,
@@ -310,6 +326,7 @@
 				9E2B21C11D43384C0049CA6C /* Event+CoreDataClass.swift in Sources */,
 				9E2B21B41D4331050049CA6C /* stray.xcdatamodeld in Sources */,
 				9E2B21C41D43384C0049CA6C /* Tag+CoreDataProperties.swift in Sources */,
+				9E36D3C11D36D62E00F33D80 /* EventViewModel.swift in Sources */,
 				9E0D048F1AD6A75F00E82A13 /* State.swift in Sources */,
 				9E36D3B71D35798900F33D80 /* CoreDataInjected.swift in Sources */,
 				9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */,
