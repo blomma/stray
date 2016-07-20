@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 47;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -248,6 +248,7 @@
 		9E42F1E115570FD60087F602 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = AI;
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0730;
@@ -268,7 +269,7 @@
 				};
 			};
 			buildConfigurationList = 9E42F1E415570FD60087F602 /* Build configuration list for PBXProject "Drift" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
