@@ -15,10 +15,8 @@ extension Entity where Self: NSManagedObject {
 		return entity
 	}
 
-	static internal func fetchRequestForEntity<T>(inContext context: NSManagedObjectContext) -> NSFetchRequest<T> {
-		let fetchRequest: NSFetchRequest<T> = NSFetchRequest()
-		fetchRequest.entity = entityDescriptionInContext(context: context)
-		return fetchRequest
+	static internal func fetchRequest<T>() -> NSFetchRequest<T> {
+		return NSFetchRequest<T>(entityName: entityName)
 	}
 
 	init(inContext context: NSManagedObjectContext) {

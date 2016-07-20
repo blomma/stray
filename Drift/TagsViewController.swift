@@ -17,7 +17,7 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-		let request: NSFetchRequest<Tag> = Tag.fetchRequestForEntity(inContext: persistentContainer.viewContext)
+		let request: NSFetchRequest<Tag> = Tag.fetchRequest()
 		request.predicate = Predicate(format: "sortIndex == max(sortIndex)")
 		let result: Result<Tag, FetchError> = fetchFirst(request: request, inContext: persistentContainer.viewContext)
         do {
