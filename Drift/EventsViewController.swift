@@ -224,7 +224,7 @@ extension EventsViewController: UITableViewDataSource {
 			if let event = fetchedResultsController?.object(at: indexPath) {
 				let state = State()
 
-				if let eventID = eventID where eventID == event.objectID.uriRepresentation() {
+				if let eventID = eventID, eventID == event.objectID.uriRepresentation() {
 					state.selectedEventID = nil
 				}
 

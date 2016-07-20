@@ -169,7 +169,7 @@ extension TagsViewController: UITableViewDelegate {
 				let event = try result.dematerialize()
 				let tag = fetchedResultsController.object(at: indexPath)
 
-				if let inTag = event.inTag where inTag.isEqual(tag) {
+				if let inTag = event.inTag, inTag.isEqual(tag) {
 					event.inTag = nil
 				} else {
 					event.inTag = tag
