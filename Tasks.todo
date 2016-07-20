@@ -1,2 +1,0 @@
-
-- When migrating from Stray 1.7 to current the database reads as empty despite the fact that there are data in it
