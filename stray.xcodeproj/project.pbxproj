@@ -17,8 +17,7 @@
 		9E36D3BD1D35884200F33D80 /* Event+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36D3BA1D35884200F33D80 /* Event+CoreDataClass.swift */; };
 		9E36D3BE1D35884200F33D80 /* Tag+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36D3BB1D35884200F33D80 /* Tag+CoreDataClass.swift */; };
 		9E378E7119EC35C3004DED67 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E378E7019EC35C3004DED67 /* EventsViewController.swift */; };
-		9E42F1F915570FD60087F602 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F1F715570FD60087F602 /* InfoPlist.strings */; };
-		9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F20015570FD60087F602 /* MainStoryboard.storyboard */; };
+		9E42F20215570FD60087F602 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F20015570FD60087F602 /* Main.storyboard */; };
 		9E4DFB8C1AD17CBB008C0123 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4DFB8B1AD17CBB008C0123 /* MenuController.swift */; };
 		9E51708219E44F6900BEF39B /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E51708119E44F6900BEF39B /* Launch Screen.xib */; };
 		9E58CDA11B1895A50003CE03 /* AnimationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E58CDA01B1895A50003CE03 /* AnimationExtension.swift */; };
@@ -50,10 +49,8 @@
 		9E36D3BA1D35884200F33D80 /* Event+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataClass.swift"; sourceTree = "<group>"; };
 		9E36D3BB1D35884200F33D80 /* Tag+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Tag+CoreDataClass.swift"; sourceTree = "<group>"; };
 		9E378E7019EC35C3004DED67 /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
-		9E42F1EA15570FD60087F602 /* Stray.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stray.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9E42F1F615570FD60087F602 /* Drift-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Drift-Info.plist"; sourceTree = "<group>"; };
-		9E42F1F815570FD60087F602 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		9E42F20115570FD60087F602 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		9E42F1EA15570FD60087F602 /* stray.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stray.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E42F1F615570FD60087F602 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9E4DFB8B1AD17CBB008C0123 /* MenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
 		9E51708119E44F6900BEF39B /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		9E58CDA01B1895A50003CE03 /* AnimationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationExtension.swift; sourceTree = "<group>"; };
@@ -67,13 +64,13 @@
 		9E916E14163197A40058C777 /* CoreDataModel-4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-4.xcdatamodel"; sourceTree = "<group>"; };
 		9E9239E2162DA56900E265E6 /* CoreDataModel-3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-3.xcdatamodel"; sourceTree = "<group>"; };
 		9E92636D15EF2C9400393946 /* CoreDataModel-2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-2.xcdatamodel"; sourceTree = "<group>"; };
+		9E9FACFA1D42C7A100E7CA79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9EAD25D8198E314F006A2779 /* FontAwesome.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.otf; sourceTree = "<group>"; };
 		9EB08FDD19E00C4800D20EE5 /* TagCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
 		9EB08FE019E03E1200D20EE5 /* EventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		9EB160001ACD153600E041B9 /* EventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		9EB9F0401B217FAE004032C5 /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
-		9EBF34F119BA3ED60046A464 /* Drift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Drift-Bridging-Header.h"; sourceTree = "<group>"; };
-		9ED93ED61B5419F1002ED4C1 /* Stray.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Stray.entitlements; sourceTree = "<group>"; };
+		9EBF34F119BA3ED60046A464 /* stray-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "stray-Bridging-Header.h"; sourceTree = "<group>"; };
 		9EDCB0AD1CD5339C00CF2DEA /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		9EDCB0AE1CD533D800CF2DEA /* Shared.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
 		9EDCB0AF1CD5340900CF2DEA /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
@@ -96,7 +93,7 @@
 		9E01309215E39D20005C8765 /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
-				9E42F20015570FD60087F602 /* MainStoryboard.storyboard */,
+				9E42F20015570FD60087F602 /* Main.storyboard */,
 				9E51708119E44F6900BEF39B /* Launch Screen.xib */,
 			);
 			name = Storyboard;
@@ -128,7 +125,7 @@
 				9EDCB0AF1CD5340900CF2DEA /* Release.xcconfig */,
 				9EDCB0AE1CD533D800CF2DEA /* Shared.xcconfig */,
 				9EDCB0AD1CD5339C00CF2DEA /* Debug.xcconfig */,
-				9E42F1F415570FD60087F602 /* Drift */,
+				9E42F1F415570FD60087F602 /* stray */,
 				9E42F1EB15570FD60087F602 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -136,15 +133,14 @@
 		9E42F1EB15570FD60087F602 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9E42F1EA15570FD60087F602 /* Stray.app */,
+				9E42F1EA15570FD60087F602 /* stray.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9E42F1F415570FD60087F602 /* Drift */ = {
+		9E42F1F415570FD60087F602 /* stray */ = {
 			isa = PBXGroup;
 			children = (
-				9ED93ED61B5419F1002ED4C1 /* Stray.entitlements */,
 				9E36D3B11D35771700F33D80 /* CoreDataStack */,
 				9E0D04871AD69DE500E82A13 /* Extension */,
 				9EAD25D7198E3140006A2779 /* Fonts */,
@@ -154,18 +150,17 @@
 				9E9C232D15F288D400572FB7 /* Controllers */,
 				9EB08FDF19E03C4F00D20EE5 /* Views */,
 				9E561DE415FBB04D008D3895 /* Controls */,
-				9EBF34F119BA3ED60046A464 /* Drift-Bridging-Header.h */,
+				9EBF34F119BA3ED60046A464 /* stray-Bridging-Header.h */,
 				9E338A7419C493FB004C4FA6 /* Images.xcassets */,
 				9EF492A81AD7FFE2002F1E14 /* AppDelegate.swift */,
 			);
-			path = Drift;
+			path = stray;
 			sourceTree = "<group>";
 		};
 		9E42F1F515570FD60087F602 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				9E42F1F615570FD60087F602 /* Drift-Info.plist */,
-				9E42F1F715570FD60087F602 /* InfoPlist.strings */,
+				9E42F1F615570FD60087F602 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -182,10 +177,10 @@
 		9E63BBF6156EAAA80006FEFC /* Repository */ = {
 			isa = PBXGroup;
 			children = (
-				9E36D3BA1D35884200F33D80 /* Event+CoreDataClass.swift */,
 				9E36D3BB1D35884200F33D80 /* Tag+CoreDataClass.swift */,
-				9E8287851C5BEFFC004C71A4 /* Event+CoreDataProperties.swift */,
 				9E8287861C5BEFFC004C71A4 /* Tag+CoreDataProperties.swift */,
+				9E36D3BA1D35884200F33D80 /* Event+CoreDataClass.swift */,
+				9E8287851C5BEFFC004C71A4 /* Event+CoreDataProperties.swift */,
 				9E21F924156EA9510075EAAC /* CoreDataModel.xcdatamodeld */,
 				9E0D048E1AD6A75F00E82A13 /* State.swift */,
 			);
@@ -224,9 +219,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9E42F1E915570FD60087F602 /* Drift */ = {
+		9E42F1E915570FD60087F602 /* stray */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9E42F21D15570FD70087F602 /* Build configuration list for PBXNativeTarget "Drift" */;
+			buildConfigurationList = 9E42F21D15570FD70087F602 /* Build configuration list for PBXNativeTarget "stray" */;
 			buildPhases = (
 				9E42F1E615570FD60087F602 /* Sources */,
 				9E42F1E815570FD60087F602 /* Resources */,
@@ -237,9 +232,9 @@
 			);
 			dependencies = (
 			);
-			name = Drift;
-			productName = Drift;
-			productReference = 9E42F1EA15570FD60087F602 /* Stray.app */;
+			name = stray;
+			productName = stray;
+			productReference = 9E42F1EA15570FD60087F602 /* stray.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -268,19 +263,20 @@
 					};
 				};
 			};
-			buildConfigurationList = 9E42F1E415570FD60087F602 /* Build configuration list for PBXProject "Drift" */;
+			buildConfigurationList = 9E42F1E415570FD60087F602 /* Build configuration list for PBXProject "stray" */;
 			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 9E42F1DF15570FD60087F602;
 			productRefGroup = 9E42F1EB15570FD60087F602 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9E42F1E915570FD60087F602 /* Drift */,
+				9E42F1E915570FD60087F602 /* stray */,
 			);
 		};
 /* End PBXProject section */
@@ -290,8 +286,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E42F1F915570FD60087F602 /* InfoPlist.strings in Resources */,
-				9E42F20215570FD60087F602 /* MainStoryboard.storyboard in Resources */,
+				9E42F20215570FD60087F602 /* Main.storyboard in Resources */,
 				9EAD25D9198E314F006A2779 /* FontAwesome.otf in Resources */,
 				9E338A7519C493FB004C4FA6 /* Images.xcassets in Resources */,
 				9E51708219E44F6900BEF39B /* Launch Screen.xib in Resources */,
@@ -348,20 +343,12 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		9E42F1F715570FD60087F602 /* InfoPlist.strings */ = {
+		9E42F20015570FD60087F602 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				9E42F1F815570FD60087F602 /* en */,
+				9E9FACFA1D42C7A100E7CA79 /* Base */,
 			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		9E42F20015570FD60087F602 /* MainStoryboard.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9E42F20115570FD60087F602 /* en */,
-			);
-			name = MainStoryboard.storyboard;
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -397,13 +384,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				INFOPLIST_FILE = "Drift/Drift-Info.plist";
+				INFOPLIST_FILE = stray/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.artsoftheinsane.Drift;
-				PRODUCT_NAME = Stray;
-				SWIFT_OBJC_BRIDGING_HEADER = "Drift/Drift-Bridging-Header.h";
+				PRODUCT_BUNDLE_IDENTIFIER = com.artsoftheinsane.stray;
+				PRODUCT_NAME = stray;
+				SWIFT_OBJC_BRIDGING_HEADER = "stray/stray-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -418,13 +405,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				INFOPLIST_FILE = "Drift/Drift-Info.plist";
+				INFOPLIST_FILE = stray/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.artsoftheinsane.Drift;
-				PRODUCT_NAME = Stray;
-				SWIFT_OBJC_BRIDGING_HEADER = "Drift/Drift-Bridging-Header.h";
+				PRODUCT_BUNDLE_IDENTIFIER = com.artsoftheinsane.stray;
+				PRODUCT_NAME = stray;
+				SWIFT_OBJC_BRIDGING_HEADER = "stray/stray-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -435,7 +422,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9E42F1E415570FD60087F602 /* Build configuration list for PBXProject "Drift" */ = {
+		9E42F1E415570FD60087F602 /* Build configuration list for PBXProject "stray" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9E42F21B15570FD70087F602 /* Debug */,
@@ -444,7 +431,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9E42F21D15570FD70087F602 /* Build configuration list for PBXNativeTarget "Drift" */ = {
+		9E42F21D15570FD70087F602 /* Build configuration list for PBXNativeTarget "stray" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9E42F21E15570FD70087F602 /* Debug */,
