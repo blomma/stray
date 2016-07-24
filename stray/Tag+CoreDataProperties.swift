@@ -12,7 +12,7 @@ import CoreData
 extension Tag {
 
     @NSManaged var name: String?
-    @NSManaged var sortIndex: NSNumber?
+    @NSManaged var sortIndex: Int64
     @NSManaged var heldByEvents: NSSet?
 
 }
