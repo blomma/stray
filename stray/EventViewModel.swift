@@ -86,6 +86,7 @@ class EventViewModel: CoreDataInjected {
 
 	var selectedEventID: URL?
 
+
 	func setup() {
 		if let url = State().selectedEventID {
 			let result: Result<Event, FetchError> = fetch(url: url, inContext: persistentContainer.viewContext)
@@ -145,18 +146,18 @@ class EventViewModel: CoreDataInjected {
 
 		let result: Result<Event, FetchError> = fetch(url: id, inContext: persistentContainer.viewContext)
 
-		guard let event = result.value() else {
-			// For some reason there was no event
-			// attached to this objectid, not at all what
-			// was exspected
-			// TODO: Error handling
-			fatalError()
+		do {
+			let event = try result.dematerialize()
+
+			event.stopDate = Date()
+			updateStop(with: event.stopDate)
+
+			isRunning = false
 		}
-
-		event.stopDate = Date()
-		updateStop(with: event.stopDate)
-
-		isRunning = false
+		catch let e as NSError {
+			// TODO: Error handling
+			fatalError(e.localizedDescription)
+		}
 	}
 
 	func updateStart(with date: Date?) {
