@@ -6,7 +6,7 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 
     private var userReorderingCells = false
     private var selectedTagID: URL?
-    private var maxSortOrderIndex = 0
+	private var maxSortOrderIndex :Int64 = 0
 
 	var eventID: URL?
 
@@ -22,15 +22,13 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 		let result: Result<Tag, FetchError> = fetchFirst(request: request, inContext: persistentContainer.viewContext)
         do {
             let tag = try result.dematerialize()
-            if let sortIndex = tag.sortIndex as? Int {
-                maxSortOrderIndex = sortIndex
-            }
+			maxSortOrderIndex = tag.sortIndex
         } catch {
             // TODO: Errorhandling
         }
 
 
-        let fetchRequest = NSFetchRequest<Tag>(entityName: Tag.entityName)
+		let fetchRequest: NSFetchRequest<Tag> = Tag.fetchRequest()
         fetchRequest.sortDescriptors = [SortDescriptor(key: "sortIndex", ascending: false)]
         fetchRequest.fetchBatchSize = 20
 
@@ -99,7 +97,7 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 	}
 
 	@IBAction func addTag(_ sender: UIBarButtonItem) {
-		let tag = Tag(inContext: persistentContainer.viewContext)
+		let tag = Tag(context: persistentContainer.viewContext)
 		tag.sortIndex = maxSortOrderIndex
         maxSortOrderIndex += 1
 		do {
@@ -240,7 +238,8 @@ extension TagsViewController: UITableViewDataSource {
 		{
 			let tag = fetchedResultsController.object(at: sourceIndexPath)
 			userReorderingCells = true
-			tag.sortIndex = (destinationIndexPath as NSIndexPath).row
+			let i = destinationIndexPath.row
+			tag.sortIndex = Int64(i)
 			do {
 				try save(context: persistentContainer.viewContext)
 			} catch {

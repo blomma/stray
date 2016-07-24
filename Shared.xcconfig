@@ -1,11 +1,3 @@
-//
-//  Shared.xcconfig
-//  Drift
-//
-//  Created by Mikael Hultgren on 30/04/16.
-//  Copyright © 2016 Artsoftheinsane. All rights reserved.
-//
-
 ALWAYS_SEARCH_USER_PATHS = NO
 CLANG_ANALYZER_NONNULL = YES
 CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES

@@ -3,8 +3,8 @@ import CoreData
 
 protocol CoreDataInjected { }
 struct CoreDataInjector {
-	static var persistentContainer:AIPersistentContainer = {
-		let container = AIPersistentContainer(name: "CoreDataModel")
+	static var persistentContainer: NSPersistentContainer = {
+		let container = NSPersistentContainer(name: "stray")
 		container.loadPersistentStores(completionHandler: { (storeDescription, error) in
 			if let error = error {
 				fatalError("Unresolved error \(error), \(error.userInfo)")
@@ -16,7 +16,7 @@ struct CoreDataInjector {
 }
 
 extension CoreDataInjected {
-	var persistentContainer:AIPersistentContainer {
+	var persistentContainer: NSPersistentContainer {
 		get { return CoreDataInjector.persistentContainer }
 	}
 }
