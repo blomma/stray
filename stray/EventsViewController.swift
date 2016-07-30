@@ -42,9 +42,9 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
         fetchedResultsController = controller
 
         if let id = eventID {
-			let result: Result<Event, FetchError> = fetch(url: id, inContext: persistentContainer.viewContext)
+			let result: Result<Event> = fetch(url: id, inContext: persistentContainer.viewContext)
             do {
-                let event = try result.dematerialize()
+				let event: Event = try result.resolve()
 
                 if let indexPath = fetchedResultsController?.indexPath(forObject: event) {
                     tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
@@ -173,9 +173,9 @@ extension EventsViewController: UITableViewDelegate {
 		tableView.deselectRow(at: indexPath, animated: false)
 
 		if let eventID = eventID {
-			let result: Result<Event, FetchError> = fetch(url: eventID, inContext: persistentContainer.viewContext)
+			let result: Result<Event> = fetch(url: eventID, inContext: persistentContainer.viewContext)
 			do {
-				let event = try result.dematerialize()
+				let event: Event = try result.resolve()
 				if let oldIndexPath = fetchedResultsController?.indexPath(forObject: event), let cell = tableView.cellForRow(at: oldIndexPath) as? EventCell {
 					hideSelectMark(cell)
 				}

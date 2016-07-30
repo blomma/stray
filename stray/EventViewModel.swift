@@ -87,24 +87,9 @@ class EventViewModel: CoreDataInjected {
 	var selectedEventID: URL?
 
 
+	/// Sync exeution
 	func setup() {
-		if let url = State().selectedEventID {
-			let result: Result<Event, FetchError> = fetch(url: url, inContext: persistentContainer.viewContext)
-			do {
-				let event = try result.dematerialize()
-
-				updateStart(with: event.startDate)
-				updateStop(with: event.stopDate)
-
-				selectedEventID = url
-
-				tag = event.inTag?.name
-
-				isRunning = event.stopDate == nil
-			} catch {
-				// TODO: Error handling
-			}
-		} else {
+		guard let url = State().selectedEventID else {
 			updateStart(with: nil)
 			updateStop(with: nil)
 
@@ -113,6 +98,26 @@ class EventViewModel: CoreDataInjected {
 			tag = nil
 
 			isRunning = false
+
+			return
+		}
+
+		let result: Result<Event> = fetch(url: url, inContext: persistentContainer.viewContext)
+
+		do {
+			let event: Event = try result.resolve()
+
+			updateStart(with: event.startDate)
+			updateStop(with: event.stopDate)
+
+			selectedEventID = url
+
+			tag = event.inTag?.name
+
+			isRunning = event.stopDate == nil
+		} catch let error {
+			// TODO: Error handling
+			DLog("\(error)")
 		}
 	}
 
@@ -144,10 +149,9 @@ class EventViewModel: CoreDataInjected {
 			fatalError("Missing selectedEventID")
 		}
 
-		let result: Result<Event, FetchError> = fetch(url: id, inContext: persistentContainer.viewContext)
-
+		let result: Result<Event> = fetch(url: id, inContext: persistentContainer.viewContext)
 		do {
-			let event = try result.dematerialize()
+			let event: Event = try result.resolve()
 
 			event.stopDate = Date()
 			updateStop(with: event.stopDate)

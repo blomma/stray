@@ -31,19 +31,18 @@ class EventViewController: UIViewController {
 //        self.transitionOperator = TransitionOperator(viewController: self)
     }
 
+	func startDidUpdate(start: StartComponents) {
+		self.eventStartTime?.text = start.time
+		self.eventStartDay?.text  = start.day
+		self.eventStartYear?.text = start.year
+		self.eventStartMonth?.text = start.month
+	}
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-		let startDidUpdate: (start: StartComponents) -> Void = { [unowned self]
-			(start: StartComponents) in
-
-			self.eventStartTime?.text = start.time
-			self.eventStartDay?.text  = start.day
-			self.eventStartYear?.text = start.year
-			self.eventStartMonth?.text = start.month
-		}
-
-		let stopDidUpdate: (stop: StopComponents) -> Void = { [unowned self]
+		modelView.startDidUpdate = startDidUpdate
+		modelView.stopDidUpdate = { [unowned self]
 			(stop: StopComponents) in
 
 			self.eventStopTime?.text = stop.time
@@ -52,14 +51,14 @@ class EventViewController: UIViewController {
 			self.eventStopMonth?.text = stop.month
 		}
 
-		let runningDidUpdate: (running: RunningComponents) -> Void = { [unowned self]
+		modelView.runningDidUpdate = { [unowned self]
 			(running: RunningComponents) in
 
 			self.eventTimeHours?.text = running.hour
 			self.eventTimeMinutes?.text = running.minute
 		}
 
-		let tagDidUpdate: (tag: String?) -> Void = { [unowned self]
+		modelView.tagDidUpdate = { [unowned self]
 			(tag: String?) in
 
 			if let tag = tag,
@@ -72,7 +71,7 @@ class EventViewController: UIViewController {
 			}
 		}
 
-		let isRunningDidUpdate: (isRunning: Bool, startDate: Date?, stopDate: Date?) -> Void = { [unowned self]
+		modelView.isRunningDidUpdate = { [unowned self]
 			(isRunning: Bool, startDate: Date?, stopDate: Date?) in
 
 			if isRunning {
@@ -85,12 +84,6 @@ class EventViewController: UIViewController {
 				self.animateStopEvent()
 			}
 		}
-
-		modelView.startDidUpdate = startDidUpdate
-		modelView.stopDidUpdate = stopDidUpdate
-		modelView.runningDidUpdate = runningDidUpdate
-		modelView.tagDidUpdate = tagDidUpdate
-		modelView.isRunningDidUpdate = isRunningDidUpdate
 
 		modelView.setup()
 
@@ -166,7 +159,7 @@ extension EventViewController: EventTimerControlDelegate {
 		switch transform {
 		case .nowDateDidStart, .startDateDidStart:
 			break
-		// animateEventTransforming(transform)
+			// animateEventTransforming(transform)
 		case .nowDateDidStop:
 			// animateEventTransforming(transform)
 			modelView.updateStop(with: stopDate)

@@ -102,8 +102,6 @@
     self.isStarted = NO;
     self.isStopped = NO;
 
-    self.transforming = EventTimerNot;
-
     self.previousSecondTick = -1;
     self.previousNow        = -1;
 
