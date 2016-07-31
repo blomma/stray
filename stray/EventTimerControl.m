@@ -29,6 +29,10 @@
 @property (nonatomic) CGFloat previousSecondTick;
 @property (nonatomic) CGFloat previousNow;
 
+@property (nonatomic) NSDate *startDate;
+@property (nonatomic) NSDate *nowDate;
+@property (nonatomic) EventTimerTransformingEnum transforming;
+
 @end
 
 @implementation EventTimerControl
@@ -45,27 +49,19 @@
 #pragma mark -
 #pragma mark Public properties
 
-- (void)setStartDate:(NSDate *)startDate {
-    _startDate = startDate;
-
-    if([self.delegate respondsToSelector:@selector(startDateDidUpdate:)]) {
-        [self.delegate startDateDidUpdate:startDate];
-    }
-}
-
 - (void)setNowDate:(NSDate *)nowDate {
     _nowDate = nowDate;
 
     if([self.delegate respondsToSelector:@selector(nowDateDidUpdate:)]) {
-        [self.delegate nowDateDidUpdate:nowDate];
+		[self.delegate nowDateDidUpdate:nowDate];
     }
 }
 
 - (void)setTransforming:(EventTimerTransformingEnum)transforming {
     _transforming = transforming;
 
-    if([self.delegate respondsToSelector:@selector(transformingDidUpdate:)]) {
-        [self.delegate transformingDidUpdate:transforming];
+    if([self.delegate respondsToSelector:@selector(transformingDidUpdate:withStartDate:andStopDate:)]) {
+		[self.delegate transformingDidUpdate:transforming withStartDate:self.startDate andStopDate:self.nowDate];
     }
 }
 
@@ -94,10 +90,6 @@
     }
 }
 
-- (void)paus {
-    [self.updateTimer invalidate];
-}
-
 - (void)stop {
     [self.updateTimer invalidate];
 
@@ -109,8 +101,6 @@
 
     self.isStarted = NO;
     self.isStopped = NO;
-
-    self.transforming = EventTimerNotTransforming;
 
     self.previousSecondTick = -1;
     self.previousNow        = -1;
@@ -436,7 +426,7 @@
         self.deltaLayer = self.startLayer;
         self.deltaDate  = self.startDate;
 
-        self.transforming = EventTimerStartDateTransformingStart;
+        self.transforming = EventTimerStartDateDidStart;
 
         [self.updateTimer invalidate];
         self.startTouchPathLayer.strokeEnd = 1;
@@ -444,7 +434,7 @@
         self.deltaLayer = self.nowLayer;
         self.deltaDate  = self.nowDate;
 
-        self.transforming = EventTimerNowDateTransformingStart;
+        self.transforming = EventTimerNowDateDidStart;
 
         self.nowTouchPathLayer.strokeEnd = 1;
     }
@@ -524,7 +514,7 @@
         if (self.deltaLayer == self.startLayer) {
             [self drawStart];
 
-            self.transforming = EventTimerStartDateTransformingStop;
+            self.transforming = EventTimerStartDateDidStop;
 
             if (![self.updateTimer isValid] && !self.isStopped) {
                 self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
@@ -538,14 +528,14 @@
         } else if (self.deltaLayer == self.nowLayer) {
             [self drawNow];
 
-            self.transforming                = EventTimerNowDateTransformingStop;
+            self.transforming                = EventTimerNowDateDidStop;
             self.nowTouchPathLayer.strokeEnd = 0;
         }
 
         self.deltaLayer = nil;
     }
 
-    self.transforming = EventTimerNotTransforming;
+    self.transforming = EventTimerNot;
 
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }

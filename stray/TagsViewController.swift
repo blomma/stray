@@ -19,9 +19,9 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
     override func viewWillAppear(_ animated: Bool) {
 		let request: NSFetchRequest<Tag> = Tag.fetchRequest()
 		request.predicate = Predicate(format: "sortIndex == max(sortIndex)")
-		let result: Result<Tag, FetchError> = fetchFirst(request: request, inContext: persistentContainer.viewContext)
+		let result: Result<Tag> = fetchFirst(request: request, inContext: persistentContainer.viewContext)
         do {
-            let tag = try result.dematerialize()
+            let tag = try result.resolve()
 			maxSortOrderIndex = tag.sortIndex
         } catch {
             // TODO: Errorhandling
@@ -47,9 +47,9 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
         fetchedResultsController = controller
 
         if let id = eventID {
-			let result: Result<Event, FetchError> = fetch(url: id, inContext: persistentContainer.viewContext)
+			let result: Result<Event> = fetch(url: id, inContext: persistentContainer.viewContext)
             do {
-                let event = try result.dematerialize()
+				let event: Event = try result.resolve()
                 if let tag = event.inTag,
                     let indexPath = controller.indexPath(forObject: tag) {
                         selectedTagID = tag.objectID.uriRepresentation()
@@ -148,9 +148,9 @@ extension TagsViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: false)
 
 		if let selectedTagID = selectedTagID {
-			let result: Result<Tag, FetchError> = fetch(url: selectedTagID, inContext: persistentContainer.viewContext)
+			let result: Result<Tag> = fetch(url: selectedTagID, inContext: persistentContainer.viewContext)
 			do {
-				let tag = try result.dematerialize()
+				let tag: Tag = try result.resolve()
 				if let oldIndexPath = fetchedResultsController?.indexPath(forObject: tag),
 					let cell = tableView.cellForRow(at: oldIndexPath) as? TagCell {
 					hideSelectMark(cell)
@@ -162,9 +162,9 @@ extension TagsViewController: UITableViewDelegate {
 
         if let id = eventID,
 			let fetchedResultsController = fetchedResultsController {
-			let result: Result<Event, FetchError> = fetch(url: id, inContext: persistentContainer.viewContext)
+			let result: Result<Event> = fetch(url: id, inContext: persistentContainer.viewContext)
 			do {
-				let event = try result.dematerialize()
+				let event: Event = try result.resolve()
 				let tag = fetchedResultsController.object(at: indexPath)
 
 				if let inTag = event.inTag, inTag.isEqual(tag) {
