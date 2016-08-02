@@ -10,7 +10,7 @@ extension UIButton {
         let circleShape: CAShapeLayer = CAShapeLayer()
         circleShape.path        = path.cgPath
         circleShape.position    = shapePosition
-        circleShape.fillColor   = UIColor.clear().cgColor
+        circleShape.fillColor   = UIColor.clear.cgColor
         circleShape.opacity     = 0
         circleShape.strokeColor = titleLabel?.textColor.cgColor
         circleShape.lineWidth   = 2

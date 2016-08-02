@@ -6,7 +6,7 @@ class State {
 			return UserDefaults.standard.url(forKey: "selectedEventID")
 		}
 		set {
-			UserDefaults.standard.setURL(newValue, forKey: "selectedEventID")
+			UserDefaults.standard.set(newValue, forKey: "selectedEventID")
 		}
 	}
 }

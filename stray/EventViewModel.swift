@@ -172,8 +172,8 @@ class EventViewModel: CoreDataInjected {
 			return
 		}
 
-		let unitFlags: Calendar.Unit = [.year, .month, .day, .hour, .minute]
-		let components: DateComponents = calendar.components(unitFlags, from: date)
+		let unitFlags: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
+		let components: DateComponents = calendar.dateComponents(unitFlags, from: date)
 		if let minute = components.minute,
 			let hour = components.hour,
 			let day = components.day,
@@ -202,8 +202,8 @@ class EventViewModel: CoreDataInjected {
 			return
 		}
 
-		let unitFlags: Calendar.Unit = [.year, .month, .day, .hour, .minute]
-		let components: DateComponents = calendar.components(unitFlags, from: date)
+		let unitFlags: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
+		let components: DateComponents = calendar.dateComponents(unitFlags, from: date)
 		if let minute = components.minute,
 			let hour = components.hour,
 			let day = components.day,
@@ -231,9 +231,8 @@ class EventViewModel: CoreDataInjected {
 			fatalError()
 		}
 
-		let unitFlags: Calendar.Unit = [.hour, .minute]
-
-		let components: DateComponents = calendar.components(unitFlags, from: startDate, to: date)
+		let unitFlags: Set<Calendar.Component> = [.hour, .minute]
+		let components: DateComponents = calendar.dateComponents(unitFlags, from: startDate, to: date)
 
 		if let minute = components.minute,
 			let hour = components.hour

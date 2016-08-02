@@ -1,7 +1,7 @@
 import Foundation
 import CoreData
 
-enum SaveError: ErrorProtocol {
+enum SaveError: Error {
 	case error(String)
 }
 
@@ -24,7 +24,7 @@ func save(context: NSManagedObjectContext) throws -> Void {
 	}
 }
 
-enum FetchError: ErrorProtocol, CustomStringConvertible {
+enum FetchError: Error, CustomStringConvertible {
 	case invalidURIRepresentation(url: String)
 	case invalidCast(to: String, from: String)
 	case objectDoesNotExist(withID: NSManagedObjectID, errorMessage: String)

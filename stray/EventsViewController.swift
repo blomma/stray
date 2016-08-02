@@ -24,7 +24,7 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 		eventID = State().selectedEventID
 
         let fetchRequest = NSFetchRequest<Event>(entityName: Event.entityName)
-        fetchRequest.sortDescriptors = [SortDescriptor(key: "startDate", ascending: false)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
         fetchRequest.fetchBatchSize = 20
 
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
@@ -63,7 +63,7 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 
 	override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
 		if segue.identifier == "segueToTagsFromEvents",
-			let controller = segue.destinationViewController as? TagsViewController,
+			let controller = segue.destination as? TagsViewController,
 			let cell = sender as? UITableViewCell,
 			let indexPath = tableView?.indexPath(for: cell),
 			let event = fetchedResultsController?.object(at: indexPath)
@@ -80,18 +80,18 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 
             if let inTag = event.inTag,
                 let name = inTag.name {
-                let attributedString = AttributedString(string: name, attributes:
+                let attributedString = NSAttributedString(string: name, attributes:
                     [NSFontAttributeName: UIFont(name: "Helvetica Neue", size: 14.0)!])
                 cell.tagButton.setAttributedTitle(attributedString, for: UIControlState())
             } else {
-                let attributedString = AttributedString(string: "\u{f02b}", attributes:
+                let attributedString = NSAttributedString(string: "\u{f02b}", attributes:
                     [NSFontAttributeName: UIFont(name: "FontAwesome", size: 20.0)!])
                 cell.tagButton.setAttributedTitle(attributedString, for: UIControlState())
             }
 
             // StartTime
-            let startTimeFlags: Calendar.Unit = [.minute, .hour, .day, .month, .year]
-            let startTimeComponents = calendar.components(startTimeFlags, from: event.startDate)
+            let startTimeFlags: Set<Calendar.Component> = [.minute, .hour, .day, .month, .year]
+            let startTimeComponents = calendar.dateComponents(startTimeFlags, from: event.startDate)
 
 			if let hour = startTimeComponents.hour, let minute = startTimeComponents.minute,
 				let day = startTimeComponents.date, let year = startTimeComponents.year, let month = startTimeComponents.month {
@@ -107,8 +107,8 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 
             // EventTime
             let stopDate = event.stopDate != nil ? event.stopDate! : Date()
-            let eventTimeFlags: Calendar.Unit = [.minute, .hour]
-            let eventTimeComponents = calendar.components(eventTimeFlags, from: event.startDate, to: stopDate, options: Calendar.Options(rawValue: 0))
+            let eventTimeFlags: Set<Calendar.Component> = [.minute, .hour]
+			let eventTimeComponents = calendar.dateComponents(eventTimeFlags, from: event.startDate, to: stopDate)
 
 			if let hour = eventTimeComponents.hour, let minute = eventTimeComponents.minute {
 				cell.eventTimeHours.text = String(format: "%02ld", hour)
@@ -117,8 +117,8 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 
             // StopTime
             if let stopDate = event.stopDate {
-                let stopTimeFlags: Calendar.Unit = [.minute, .hour, .day, .month, .year]
-                let stopTimeComponents = calendar.components(stopTimeFlags, from: stopDate)
+                let stopTimeFlags: Set<Calendar.Component> = [.minute, .hour, .day, .month, .year]
+                let stopTimeComponents = calendar.dateComponents(stopTimeFlags, from: stopDate)
 
 				if let hour = stopTimeComponents.hour, let minute = stopTimeComponents.minute,
 					let day = stopTimeComponents.date, let year = stopTimeComponents.year, let month = stopTimeComponents.month {

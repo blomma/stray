@@ -16,7 +16,7 @@ struct CoreDataInjector {
 		let container = NSPersistentContainer(name: "stray")
 		container.loadPersistentStores(completionHandler: { (storeDescription, error) in
 			if let error = error {
-				fatalError("Unresolved error \(error), \(error.userInfo)")
+				fatalError("Unresolved error \(error)")
 			}
 		})
 

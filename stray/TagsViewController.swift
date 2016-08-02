@@ -18,7 +18,7 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 
     override func viewWillAppear(_ animated: Bool) {
 		let request: NSFetchRequest<Tag> = Tag.fetchRequest()
-		request.predicate = Predicate(format: "sortIndex == max(sortIndex)")
+		request.predicate = NSPredicate(format: "sortIndex == max(sortIndex)")
 		let result: Result<Tag> = fetchFirst(request: request, inContext: persistentContainer.viewContext)
         do {
             let tag = try result.resolve()
@@ -29,7 +29,7 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 
 
 		let fetchRequest: NSFetchRequest<Tag> = Tag.fetchRequest()
-        fetchRequest.sortDescriptors = [SortDescriptor(key: "sortIndex", ascending: false)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: false)]
         fetchRequest.fetchBatchSize = 20
 
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)

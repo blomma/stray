@@ -127,7 +127,7 @@ extension TransitionOperator: UIViewControllerAnimatedTransitioning {
     }
 
 	func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let container = transitionContext.containerView()
+        let container = transitionContext.containerView
 
 		var toView: UIView?
 		if let view = transitionContext.view(forKey: UITransitionContextToViewKey) {
@@ -157,11 +157,11 @@ extension TransitionOperator: UIViewControllerAnimatedTransitioning {
                         fromView.frame = fromEndFrame
                         toView.frame = toEndFrame
                     }, completion: { finished in
-                        self.presented = !transitionContext.transitionWasCancelled()
-                        transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
-                        UIApplication.shared().keyWindow?.addSubview(fromView)
+                        self.presented = !transitionContext.transitionWasCancelled
+                        transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+                        UIApplication.shared.keyWindow?.addSubview(fromView)
                     })
-				} else if let oldFromView = UIApplication.shared().keyWindow?.subviews.last {
+				} else if let oldFromView = UIApplication.shared.keyWindow?.subviews.last {
 					container.addSubview(toView)
 
 					toView.frame.origin.x = toView.frame.width
@@ -199,11 +199,11 @@ extension TransitionOperator: UIViewControllerAnimatedTransitioning {
                     fromView.frame = fromEndFrame
                     toView.frame = toEndFrame
                     }, completion: { finished in
-                        self.presented = transitionContext.transitionWasCancelled()
-                        transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+                        self.presented = transitionContext.transitionWasCancelled
+                        transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
 
-                        if transitionContext.transitionWasCancelled() {
-                            UIApplication.shared().keyWindow?.addSubview(toView)
+                        if transitionContext.transitionWasCancelled {
+                            UIApplication.shared.keyWindow?.addSubview(toView)
                         }
                 })
 		}

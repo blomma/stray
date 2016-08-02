@@ -63,10 +63,10 @@ class EventViewController: UIViewController {
 
 			if let tag = tag,
 				let font = UIFont(name: "Helvetica Neue", size: 14) {
-				let attriString = AttributedString(string:tag, attributes: [NSFontAttributeName: font])
+				let attriString = NSAttributedString(string:tag, attributes: [NSFontAttributeName: font])
 				self.tag?.setAttributedTitle(attriString, for: UIControlState())
 			} else if let font = UIFont(name: "FontAwesome", size: 20) {
-				let attriString = AttributedString(string:"\u{f02b}", attributes: [NSFontAttributeName: font])
+				let attriString = NSAttributedString(string:"\u{f02b}", attributes: [NSFontAttributeName: font])
 				self.tag?.setAttributedTitle(attriString, for: UIControlState())
 			}
 		}
@@ -96,7 +96,7 @@ class EventViewController: UIViewController {
 
 	override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
 		if segue.identifier == "segueToTagsFromEvent",
-			let controller = segue.destinationViewController as? TagsViewController {
+			let controller = segue.destination as? TagsViewController {
 			controller.eventID = modelView.selectedEventID
 		}
 	}
