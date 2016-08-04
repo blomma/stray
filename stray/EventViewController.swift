@@ -27,8 +27,6 @@ class EventViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        self.transitionOperator = TransitionOperator(viewController: self)
     }
 
     override func viewWillAppear(_ animated: Bool) {
