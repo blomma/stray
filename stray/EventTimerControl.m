@@ -37,13 +37,8 @@
 
 @implementation EventTimerControl
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        [self drawClockFace];
-    }
-
-    return self;
+- (void)drawRect:(CGRect)rect {
+	[self drawClockFace];
 }
 
 #pragma mark -
@@ -196,10 +191,6 @@
 - (void)drawClockFace {
     CGFloat angle;
 
-    if ([self.layer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.layer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
-
     // =====================
     // = Ticks initializer =
     // =====================
@@ -208,9 +199,6 @@
 
     for (NSInteger i = 1; i <= 60; ++i) {
         CAShapeLayer *tick = [CAShapeLayer layer];
-        if ([tick respondsToSelector:@selector(setContentsScale:)]) {
-            [tick setContentsScale:[[UIScreen mainScreen] scale]];
-        }
 
         angle = (CGFloat)((M_PI * 2) / 60.0 * i);
 
@@ -245,9 +233,6 @@
     // = Now initializer =
     // ==========================
     self.nowLayer = [CAShapeLayer layer];
-    if ([self.nowLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.nowLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
 
     // We make the bounds larger for the hit test, otherwise the target is
     // to damn small for human hands, martians not included
@@ -257,9 +242,6 @@
     [nowPath addLineToPoint:CGPointMake(30, 0)]; // Move to top right
 
     self.nowPathLayer = [CAShapeLayer layer];
-    if ([self.nowPathLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.nowPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
     self.nowPathLayer.frame = CGRectMake(0, 0, 50, 50);
 
     // drawing
@@ -271,9 +253,6 @@
     UIBezierPath *nowTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-50, -50, 150, 150)];
 
     self.nowTouchPathLayer = [CAShapeLayer layer];
-    if ([self.nowTouchPathLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.nowTouchPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
     self.nowTouchPathLayer.frame = CGRectMake(-10, -30, 70, 70);
 
     self.nowTouchPathLayer.fillColor   = [[UIColor clearColor] CGColor];
@@ -296,9 +275,6 @@
     // = Start initializer =
     // =========================
     self.startLayer = [CAShapeLayer layer];
-    if ([self.startLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.startLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
 
     // We make the bounds larger for the hit test, otherwise the target is
     // to damn small for human hands, martians not included
@@ -308,9 +284,6 @@
     [startPath addLineToPoint:CGPointMake(30, 0)]; // Move to top right
 
     self.startPathLayer = [CAShapeLayer layer];
-    if ([self.startPathLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.startPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
     self.startPathLayer.frame = CGRectMake(0, 0, 50, 50);
 
     // drawing
@@ -322,9 +295,6 @@
     UIBezierPath *startTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-50, -50, 150, 150)];
 
     self.startTouchPathLayer = [CAShapeLayer layer];
-    if ([self.startTouchPathLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.startTouchPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
     self.startTouchPathLayer.frame = CGRectMake(-10, -30, 70, 70);
 
     self.startTouchPathLayer.fillColor   = [[UIColor clearColor] CGColor];
@@ -347,9 +317,6 @@
     // = Second initializer =
     // ==========================
     self.secondLayer = [CAShapeLayer layer];
-    if ([self.secondLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.secondLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
 
     UIBezierPath *secondHandPath = [UIBezierPath bezierPath];
     [secondHandPath moveToPoint:CGPointMake(3.5, 0)];  // Start at the top
@@ -373,9 +340,6 @@
     // = Second progress ticks initializer =
     // =========================================
     self.secondProgressTicksLayer = [CAShapeLayer layer];
-    if ([self.secondProgressTicksLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.secondProgressTicksLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
 
     // position
     self.secondProgressTicksLayer.bounds      = CGRectMake(0.0, 0.0, self.bounds.size.width - 100, self.bounds.size.width - 100);
@@ -389,9 +353,6 @@
         angle = (CGFloat)((M_PI * 2) / 60.0 * i);
 
         CAShapeLayer *tick = [CAShapeLayer layer];
-        if ([tick respondsToSelector:@selector(setContentsScale:)]) {
-            [tick setContentsScale:[[UIScreen mainScreen] scale]];
-        }
 
         // position
         tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.secondProgressTicksLayer.bounds.size.width / 2);

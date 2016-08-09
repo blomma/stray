@@ -26,7 +26,7 @@
                                 <frame key="frameInset" minY="28" width="200" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rc9-rL-bTp" id="coy-Ld-Z5X">
-                                    <frame key="frameInset" width="200" height="43"/>
+                                    <frame key="frameInset" width="200" height="43.666666666666664"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -52,7 +52,7 @@
                         <viewControllerLayoutGuide type="bottom" id="sU9-lB-8ZV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8Qo-UI-s2h">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                         <subviews>
                             <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="99" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T6v-e0-PDz" userLabel="EventTimeHours">
@@ -216,7 +216,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9TD-yZ-86c" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1315" y="-769"/>
+            <point key="canvasLocation" x="1130" y="-1763"/>
         </scene>
         <!--TagsViewController-->
         <scene sceneID="prA-Mw-27C">
@@ -227,7 +227,7 @@
                         <viewControllerLayoutGuide type="bottom" id="RiX-BK-OM9"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="2pB-Jf-Mbs">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="75" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Drg-ei-boB">
@@ -235,10 +235,10 @@
                                 <color key="sectionIndexBackgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="TagCellIdentifier" id="LER-Fa-fU8" customClass="TagCell" customModule="stray" customModuleProvider="target">
-                                        <frame key="frameInset" minY="22" width="375" height="75"/>
+                                        <frame key="frameInset" minY="22" width="414" height="75"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LER-Fa-fU8" id="QaI-Zw-OgH">
-                                            <frame key="frameInset" width="375" height="75"/>
+                                            <frame key="frameInset" width="414" height="75"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="A long tag" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oxh-sQ-qcN">
@@ -330,6 +330,22 @@
             </objects>
             <point key="canvasLocation" x="2106" y="-377"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="DRf-1I-dph">
+            <objects>
+                <navigationController navigationBarHidden="YES" id="Laf-3o-IIT" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="sLd-de-0IM">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="pW2-Iw-5Bg" kind="relationship" relationship="rootViewController" id="Mey-bU-uLv"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="L89-2C-iul" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="374" y="-1763"/>
+        </scene>
         <!--EventsViewController-->
         <scene sceneID="maY-e6-1tb">
             <objects>
@@ -339,17 +355,17 @@
                         <viewControllerLayoutGuide type="bottom" id="CaW-42-4UM"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="0md-r9-gBi">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="120" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="eEg-yt-w1f">
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="EventCellIdentifier" id="qyp-c4-X1Y" customClass="EventCell" customModule="stray" customModuleProvider="target">
-                                        <frame key="frameInset" minY="22" width="375" height="120"/>
+                                        <frame key="frameInset" minY="22" width="414" height="120"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qyp-c4-X1Y" id="qBV-lq-E4n">
-                                            <frame key="frameInset" width="375" height="120"/>
+                                            <frame key="frameInset" width="414" height="120"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="99" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vK0-7y-YP2" userLabel="EventTimeHours">
@@ -541,41 +557,18 @@
                         <viewControllerLayoutGuide type="bottom" id="akb-cA-63c"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="jrw-rE-vwM">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <segue destination="owj-PM-1aJ" kind="custom" identifier="showEvent" customClass="CenterContainmentSegue" customModule="stray" id="Tja-3g-BP5"/>
                         <segue destination="GVF-y0-P5u" kind="custom" identifier="containSideMenu" customClass="SideContainmentSegue" customModule="stray" id="wzt-26-tRd"/>
+                        <segue destination="Laf-3o-IIT" kind="custom" identifier="showEvent" customClass="CenterContainmentSegue" customModule="stray" id="bH2-5K-CXV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a7S-Kv-EF7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-358" y="-1044"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="oFb-t2-JI5">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="owj-PM-1aJ" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="hf3-Gf-nOk">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="A8L-BS-SC1">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </toolbar>
-                    <connections>
-                        <segue destination="pW2-Iw-5Bg" kind="relationship" relationship="rootViewController" id="Vf0-9N-Mow"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hcs-ly-XJl" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="485" y="-1021"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
