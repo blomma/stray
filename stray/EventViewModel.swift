@@ -48,7 +48,7 @@ class EventViewModel: CoreDataInjected {
 	var startDidUpdate: ((start: StartComponents) -> Void)?
 
 
-	var stopDate: Date?
+	private var stopDate: Date?
 	var stop: StopComponents = StopComponents() {
 		didSet {
 			stopDidUpdate?(stop: stop)
@@ -65,7 +65,7 @@ class EventViewModel: CoreDataInjected {
 	var runningDidUpdate: ((running: RunningComponents) -> Void)?
 
 
-	var tag: String? {
+	private var tag: String? {
 		didSet {
 			tagDidUpdate?(tag: tag)
 		}
@@ -73,7 +73,7 @@ class EventViewModel: CoreDataInjected {
 	var tagDidUpdate: ((tag: String?) -> Void)?
 
 
-	var isRunning: Bool = false {
+	private var isRunning: Bool = false {
 		didSet {
 			isRunningDidUpdate?(isRunning: isRunning, startDate: startDate, stopDate: stopDate)
 		}
@@ -82,8 +82,6 @@ class EventViewModel: CoreDataInjected {
 
 
 	private let calendar = Calendar.autoupdatingCurrent
-	private let shortStandaloneMonthSymbols: Array = DateFormatter().shortStandaloneMonthSymbols
-
 	var selectedEventID: URL?
 
 
@@ -121,7 +119,15 @@ class EventViewModel: CoreDataInjected {
 		}
 	}
 
-	func startEvent() {
+	func toggleEventRunning() {
+		if isRunning {
+			stopEvent()
+		} else {
+			startEvent()
+		}
+	}
+
+	private func startEvent() {
 		let event = Event(inContext: persistentContainer.viewContext)
 		event.startDate = Date()
 
@@ -142,7 +148,7 @@ class EventViewModel: CoreDataInjected {
 		isRunning = true
 	}
 
-	func stopEvent() {
+	private func stopEvent() {
 		// We have a running event
 		guard let id = selectedEventID else {
 			// TODO Error handling
@@ -181,7 +187,7 @@ class EventViewModel: CoreDataInjected {
 			let year = components.year
 		{
 			let index = month - 1
-			let shortMonth = shortStandaloneMonthSymbols[index]
+			let shortMonth = calendar.shortStandaloneMonthSymbols[index]
 
 			start = StartComponents(
 				time: String(format: "%02ld:%02ld", hour, minute),
@@ -211,7 +217,7 @@ class EventViewModel: CoreDataInjected {
 			let year = components.year
 		{
 			let index = month - 1
-			let shortMonth = shortStandaloneMonthSymbols[index]
+			let shortMonth = calendar.shortStandaloneMonthSymbols[index]
 
 			stop = StopComponents(
 				time: String(format: "%02ld:%02ld", hour, minute),

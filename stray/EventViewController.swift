@@ -31,17 +31,18 @@ class EventViewController: UIViewController {
 //        self.transitionOperator = TransitionOperator(viewController: self)
     }
 
-	func startDidUpdate(start: StartComponents) {
-		self.eventStartTime?.text = start.time
-		self.eventStartDay?.text  = start.day
-		self.eventStartYear?.text = start.year
-		self.eventStartMonth?.text = start.month
-	}
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-		modelView.startDidUpdate = startDidUpdate
+		modelView.startDidUpdate = { [unowned self]
+			(start: StartComponents) in
+
+			self.eventStartTime?.text = start.time
+			self.eventStartDay?.text  = start.day
+			self.eventStartYear?.text = start.year
+			self.eventStartMonth?.text = start.month
+		}
+
 		modelView.stopDidUpdate = { [unowned self]
 			(stop: StopComponents) in
 
@@ -141,11 +142,7 @@ class EventViewController: UIViewController {
     }
 
     @IBAction func toggleEventTouchUpInside(_ sender: UIButton) {
-		if modelView.isRunning {
-			modelView.stopEvent()
-		} else {
-			modelView.startEvent()
-		}
+		modelView.toggleEventRunning()
     }
 }
 
