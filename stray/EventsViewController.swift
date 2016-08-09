@@ -6,7 +6,6 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
     @IBOutlet weak var tableView: UITableView!
 
     private let shortStandaloneMonthSymbols: NSArray = DateFormatter().shortStandaloneMonthSymbols
-	private let transitionOperator = TransitionOperator()
     private let calendar = Calendar.autoupdatingCurrent
 
 	private var fetchedResultsController: NSFetchedResultsController<Event>?
@@ -15,9 +14,6 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-		transitionOperator.navigationController = navigationController
-        view.addGestureRecognizer(UIPanGestureRecognizer(target: transitionOperator, action: Selector(("handleGesture:"))))
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -57,10 +53,6 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
         }
     }
 
-	override func viewWillDisappear(_ animated: Bool) {
-		super.viewWillDisappear(animated)
-	}
-
 	override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
 		if segue.identifier == "segueToTagsFromEvents",
 			let controller = segue.destination as? TagsViewController,
@@ -82,10 +74,6 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
                 let name = inTag.name {
                 let attributedString = NSAttributedString(string: name, attributes:
                     [NSFontAttributeName: UIFont(name: "Helvetica Neue", size: 14.0)!])
-                cell.tagButton.setAttributedTitle(attributedString, for: UIControlState())
-            } else {
-                let attributedString = NSAttributedString(string: "\u{f02b}", attributes:
-                    [NSFontAttributeName: UIFont(name: "FontAwesome", size: 20.0)!])
                 cell.tagButton.setAttributedTitle(attributedString, for: UIControlState())
             }
 
@@ -243,7 +231,6 @@ extension EventsViewController: UITableViewDataSource {
 // MARK: - EventCellDelegate
 extension EventsViewController {
     func didPressTag(_ cell: EventCell) {
-        navigationController?.delegate = nil
         performSegue(withIdentifier: "segueToTagsFromEvents", sender: cell)
     }
 }

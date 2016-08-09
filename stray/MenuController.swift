@@ -2,7 +2,7 @@ import UIKit
 
 class MenuController: UITableViewController {
 
-	let segues = ["showEvent", "showCenterController2", "showCenterController3"]
+	let segues = ["showEvent", "showEvents", "showCenterController3"]
 	private var previousIndex: IndexPath?
 
 	override func viewDidLoad() {

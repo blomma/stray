@@ -4,6 +4,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11151.4"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -156,10 +157,9 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="320" id="9fW-Gl-fV7"/>
+                                    <constraint firstAttribute="height" secondItem="IgW-Dr-4Bj" secondAttribute="width" multiplier="1:1" id="QCF-9q-dnP"/>
                                     <constraint firstAttribute="centerX" secondItem="dP9-OE-O85" secondAttribute="centerX" id="S7Y-vD-94I"/>
                                     <constraint firstAttribute="centerY" secondItem="dP9-OE-O85" secondAttribute="centerY" id="VKn-59-txk"/>
-                                    <constraint firstAttribute="width" constant="320" id="gUU-je-mxp"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -170,10 +170,10 @@
                             <constraint firstItem="u4G-Rl-FJl" firstAttribute="top" secondItem="T6v-e0-PDz" secondAttribute="baseline" id="3lo-aM-Cq7"/>
                             <constraint firstItem="mQD-9K-Yje" firstAttribute="top" secondItem="RG4-WB-RmJ" secondAttribute="bottom" id="4LM-su-4iP"/>
                             <constraint firstItem="Pfx-uQ-0OF" firstAttribute="top" secondItem="ebw-fH-af8" secondAttribute="top" id="5HQ-Cb-HEJ"/>
-                            <constraint firstAttribute="centerX" secondItem="IgW-Dr-4Bj" secondAttribute="centerX" id="8ry-yJ-aLa"/>
                             <constraint firstItem="f4I-GS-DXr" firstAttribute="leading" secondItem="5mL-xl-tvC" secondAttribute="leading" id="DFL-lv-6dY"/>
                             <constraint firstItem="Pfx-uQ-0OF" firstAttribute="baseline" secondItem="mQD-9K-Yje" secondAttribute="baseline" id="GV5-df-Fk0"/>
-                            <constraint firstItem="T6v-e0-PDz" firstAttribute="top" secondItem="8Qo-UI-s2h" secondAttribute="top" constant="20" id="LjF-Ih-Gsp"/>
+                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="leading" secondItem="8Qo-UI-s2h" secondAttribute="leading" id="KfY-uw-HL2"/>
+                            <constraint firstItem="T6v-e0-PDz" firstAttribute="top" secondItem="b69-WY-Ku9" secondAttribute="bottom" id="LKX-i2-JZm"/>
                             <constraint firstItem="kDP-kd-qe8" firstAttribute="top" secondItem="NKF-pl-TGd" secondAttribute="bottom" id="Qn6-6o-7nB"/>
                             <constraint firstItem="u4G-Rl-FJl" firstAttribute="leading" secondItem="8Qo-UI-s2h" secondAttribute="leadingMargin" id="Qv8-2S-QoY"/>
                             <constraint firstItem="d9a-bg-sgr" firstAttribute="bottom" secondItem="ebw-fH-af8" secondAttribute="bottom" id="RCk-t4-Yiv"/>
@@ -194,6 +194,7 @@
                             <constraint firstItem="d9a-bg-sgr" firstAttribute="top" secondItem="Pfx-uQ-0OF" secondAttribute="bottom" id="qM2-GR-o2V"/>
                             <constraint firstItem="T6v-e0-PDz" firstAttribute="baseline" secondItem="d9a-bg-sgr" secondAttribute="baseline" id="tYX-ye-80H"/>
                             <constraint firstAttribute="trailingMargin" secondItem="u4G-Rl-FJl" secondAttribute="trailing" id="wGk-O5-JrU"/>
+                            <constraint firstItem="IgW-Dr-4Bj" firstAttribute="trailing" secondItem="8Qo-UI-s2h" secondAttribute="trailing" id="wu5-Vh-nnj"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="qwG-vm-3ph"/>
@@ -217,6 +218,22 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9TD-yZ-86c" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1130" y="-1763"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="2do-7V-FNl">
+            <objects>
+                <navigationController navigationBarHidden="YES" id="6dg-ep-DAJ" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="6bY-g5-BYC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="MkX-Cq-2XK" kind="relationship" relationship="rootViewController" id="c2l-Ci-sNZ"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="z1g-aF-gNx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="374" y="-760"/>
         </scene>
         <!--TagsViewController-->
         <scene sceneID="prA-Mw-27C">
@@ -334,7 +351,7 @@
         <scene sceneID="DRf-1I-dph">
             <objects>
                 <navigationController navigationBarHidden="YES" id="Laf-3o-IIT" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="sLd-de-0IM">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="sLd-de-0IM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -539,6 +556,7 @@
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
+                    <navigationItem key="navigationItem" id="Xtv-nk-0Yq"/>
                     <connections>
                         <outlet property="tableView" destination="eEg-yt-w1f" id="yXd-dQ-fPa"/>
                         <segue destination="OEB-QV-TsG" kind="show" identifier="segueToTagsFromEvents" id="r8c-zd-wI8"/>
@@ -546,7 +564,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5d9-Ya-5JT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1315" y="-31"/>
+            <point key="canvasLocation" x="1075" y="-643"/>
         </scene>
         <!--Custom Side Menu Controller-->
         <scene sceneID="tkK-yG-QkA">
@@ -564,6 +582,7 @@
                     <connections>
                         <segue destination="GVF-y0-P5u" kind="custom" identifier="containSideMenu" customClass="SideContainmentSegue" customModule="stray" id="wzt-26-tRd"/>
                         <segue destination="Laf-3o-IIT" kind="custom" identifier="showEvent" customClass="CenterContainmentSegue" customModule="stray" id="bH2-5K-CXV"/>
+                        <segue destination="6dg-ep-DAJ" kind="custom" identifier="showEvents" customClass="CenterContainmentSegue" customModule="stray" id="U6w-IY-TV8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a7S-Kv-EF7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -572,6 +591,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="uIL-Q8-1sK"/>
+        <segue reference="r8c-zd-wI8"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -21,8 +21,6 @@ class EventViewController: UIViewController {
     @IBOutlet weak var tag: UIButton?
 
     // MARK: Private properties
-    private var transitionOperator: TransitionOperator?
-
 	var modelView: EventViewModel = EventViewModel()
 
     override func viewDidLoad() {
@@ -134,7 +132,6 @@ class EventViewController: UIViewController {
 
     @IBAction func showTags(_ sender: UIButton) {
         if modelView.selectedEventID != nil {
-            navigationController?.delegate = nil
             performSegue(withIdentifier: "segueToTagsFromEvent", sender: self)
         }
     }
