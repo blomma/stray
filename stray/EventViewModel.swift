@@ -42,43 +42,43 @@ class EventViewModel: CoreDataInjected {
 	private var startDate: Date?
 	var start: StartComponents = StartComponents() {
 		didSet {
-			startDidUpdate?(start: start)
+			startDidUpdate?(start)
 		}
 	}
-	var startDidUpdate: ((start: StartComponents) -> Void)?
+	var startDidUpdate: ((_ start: StartComponents) -> Void)?
 
 
 	private var stopDate: Date?
 	var stop: StopComponents = StopComponents() {
 		didSet {
-			stopDidUpdate?(stop: stop)
+			stopDidUpdate?(stop)
 		}
 	}
-	var stopDidUpdate: ((stop: StopComponents) -> Void)?
+	var stopDidUpdate: ((_ stop: StopComponents) -> Void)?
 
 
 	private var running: RunningComponents = RunningComponents() {
 		didSet {
-			runningDidUpdate?(running: running)
+			runningDidUpdate?(running)
 		}
 	}
-	var runningDidUpdate: ((running: RunningComponents) -> Void)?
+	var runningDidUpdate: ((_ running: RunningComponents) -> Void)?
 
 
 	private var tag: String? {
 		didSet {
-			tagDidUpdate?(tag: tag)
+			tagDidUpdate?(tag)
 		}
 	}
-	var tagDidUpdate: ((tag: String?) -> Void)?
+	var tagDidUpdate: ((_ tag: String?) -> Void)?
 
 
 	private var isRunning: Bool = false {
 		didSet {
-			isRunningDidUpdate?(isRunning: isRunning, startDate: startDate, stopDate: stopDate)
+			isRunningDidUpdate?(isRunning, startDate, stopDate)
 		}
 	}
-	var isRunningDidUpdate: ((isRunning: Bool, startDate: Date?, stopDate: Date?) -> Void)?
+	var isRunningDidUpdate: ((_ isRunning: Bool, _ startDate: Date?, _ stopDate: Date?) -> Void)?
 
 
 	private let calendar = Calendar.autoupdatingCurrent

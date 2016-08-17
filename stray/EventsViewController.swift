@@ -5,12 +5,12 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 
     @IBOutlet weak var tableView: UITableView!
 
-    private let shortStandaloneMonthSymbols: NSArray = DateFormatter().shortStandaloneMonthSymbols
-    private let calendar = Calendar.autoupdatingCurrent
+	fileprivate let shortStandaloneMonthSymbols: [String] = DateFormatter().shortStandaloneMonthSymbols
+    fileprivate let calendar = Calendar.autoupdatingCurrent
 
-	private var fetchedResultsController: NSFetchedResultsController<Event>?
+	fileprivate var fetchedResultsController: NSFetchedResultsController<Event>?
 
-	private var eventID: URL?
+	fileprivate var eventID: URL?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +53,7 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
         }
     }
 
-	override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "segueToTagsFromEvents",
 			let controller = segue.destination as? TagsViewController,
 			let cell = sender as? UITableViewCell,
@@ -64,7 +64,7 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 		}
 	}
 
-    private func configureCell(_ cell: EventCell, atIndexPath: IndexPath) -> Void {
+    fileprivate func configureCell(_ cell: EventCell, atIndexPath: IndexPath) -> Void {
         if let event = fetchedResultsController?.object(at: atIndexPath) {
 			if eventID == event.objectID.uriRepresentation() {
 				showSelectMark(cell)
@@ -82,15 +82,14 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
             let startTimeComponents = calendar.dateComponents(startTimeFlags, from: event.startDate)
 
 			if let hour = startTimeComponents.hour, let minute = startTimeComponents.minute,
-				let day = startTimeComponents.date, let year = startTimeComponents.year, let month = startTimeComponents.month {
+				let day = startTimeComponents.day, let year = startTimeComponents.year, let month = startTimeComponents.month {
 
 				cell.eventStartTime.text = String(format: "%02ld:%02ld", hour, minute)
 				cell.eventStartDay.text = String(format: "%02ld", day)
 				cell.eventStartYear.text = String(format: "%04ld", year)
 
-				if let startMonth = shortStandaloneMonthSymbols[month - 1] as? String {
-					cell.eventStartMonth.text = startMonth
-				}
+				let startMonth = shortStandaloneMonthSymbols[month - 1]
+				cell.eventStartMonth.text = startMonth
 			}
 
             // EventTime
@@ -108,16 +107,18 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
                 let stopTimeFlags: Set<Calendar.Component> = [.minute, .hour, .day, .month, .year]
                 let stopTimeComponents = calendar.dateComponents(stopTimeFlags, from: stopDate)
 
-				if let hour = stopTimeComponents.hour, let minute = stopTimeComponents.minute,
-					let day = stopTimeComponents.date, let year = stopTimeComponents.year, let month = stopTimeComponents.month {
+				if let hour = stopTimeComponents.hour,
+					let minute = stopTimeComponents.minute,
+					let day = stopTimeComponents.day,
+					let year = stopTimeComponents.year,
+					let month = stopTimeComponents.month {
 
 					cell.eventStopTime.text = String(format: "%02ld:%02ld", hour, minute)
 					cell.eventStopDay.text = String(format: "%02ld", day)
 					cell.eventStopYear.text = String(format: "%04ld", year)
 
-					if let stopMonth = shortStandaloneMonthSymbols[month - 1] as? String {
-						cell.eventStopMonth.text = stopMonth
-					}
+					let stopMonth = shortStandaloneMonthSymbols[month - 1]
+					cell.eventStopMonth.text = stopMonth
 				}
             } else {
                 cell.eventStopTime.text = ""
@@ -142,13 +143,13 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 		}
 	}
 
-	private func showSelectMark(_ cell: EventCell) {
+	fileprivate func showSelectMark(_ cell: EventCell) {
 		UIView.animate(withDuration: 0.3, animations: { () -> Void in
 			cell.selectedMark.alpha = 1
 		})
 	}
 
-	private func hideSelectMark(_ cell: EventCell) {
+	fileprivate func hideSelectMark(_ cell: EventCell) {
 		UIView.animate(withDuration: 0.3, animations: { () -> Void in
 			cell.selectedMark.alpha = 0
 		})
@@ -241,7 +242,7 @@ extension EventsViewController: NSFetchedResultsControllerDelegate {
 		tableView?.beginUpdates()
 	}
 
-	func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: AnyObject, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+	func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
 		switch type {
 		case .insert:
 			tableView?.insertRows(at: [newIndexPath!], with: .fade)

@@ -91,7 +91,7 @@ class EventViewController: UIViewController {
         super.viewWillDisappear(animated)
     }
 
-	override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "segueToTagsFromEvent",
 			let controller = segue.destination as? TagsViewController {
 			controller.eventID = modelView.selectedEventID

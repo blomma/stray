@@ -1,19 +1,13 @@
 import Foundation
 
-/**
-*  Protocol for defining custom animations for when switching the center view controller.
-*  By the time this method is called, the view of the new center view controller has been
-*  added to the center panel and resized. You only need to implement a custom animation.
-*/
 public protocol TransitionAnimatable {
-	static func performTransition(forView view: UIView, completion: () -> Void)
+	static func performTransition(forView view: UIView, completion: (() -> Void)?)
 }
 
-
 public struct FadeAnimator: TransitionAnimatable {
-
-	public static func performTransition(forView view: UIView, completion: () -> Void) {
+	public static func performTransition(forView view: UIView, completion: (() -> Void)?) {
 		CATransaction.begin()
+
 		CATransaction.setCompletionBlock(completion)
 		let fadeAnimation = CABasicAnimation(keyPath: "opacity")
 		fadeAnimation.duration = 0.35
@@ -22,13 +16,13 @@ public struct FadeAnimator: TransitionAnimatable {
 		fadeAnimation.fillMode = kCAFillModeForwards
 		fadeAnimation.isRemovedOnCompletion = true
 		view.layer.add(fadeAnimation, forKey: "fade")
+
 		CATransaction.commit()
 	}
 }
 
 public struct CircleMaskAnimator: TransitionAnimatable {
-
-	public static func performTransition(forView view: UIView, completion: () -> Void) {
+	public static func performTransition(forView view: UIView, completion: (() -> Void)?) {
 		CATransaction.begin()
 		CATransaction.setCompletionBlock(completion)
 
