@@ -13,8 +13,8 @@
 @property (nonatomic) CAShapeLayer *startPathLayer;
 
 @property (nonatomic) CAShapeLayer *nowTouchPathLayer;
-@property (nonatomic) CAShapeLayer      *nowLayer;
-@property (nonatomic) CAShapeLayer      *nowPathLayer;
+@property (nonatomic) CAShapeLayer *nowLayer;
+@property (nonatomic) CAShapeLayer *nowPathLayer;
 
 @property (nonatomic) CAShapeLayer *secondLayer;
 @property (nonatomic) CAShapeLayer *secondProgressTicksLayer;
@@ -24,6 +24,9 @@
 @property (nonatomic) CGFloat       deltaAngle;
 @property (nonatomic) CATransform3D deltaTransform;
 @property (nonatomic) CAShapeLayer  *deltaLayer;
+
+@property (nonatomic) BOOL tracking;
+@property (nonatomic) NSUInteger trackingTouch;
 
 // Caches
 @property (nonatomic) CGFloat previousSecondTick;
@@ -134,14 +137,9 @@
 }
 
 - (void)timerUpdate {
-	//DLog(@"");
     self.nowDate = [NSDate date];
 
     [self drawNow];
-}
-
-- (void)dealloc {
-	DLog(@"DEALLOC");
 }
 
 - (void)drawStart {
@@ -370,135 +368,190 @@
 }
 
 #pragma mark -
-#pragma mark UIControl
+#pragma mark UIView
 
-- (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-    if (!self.isStarted) {
-        return NO;
-    }
-
-    CGPoint point = [touch locationInView:self];
-
-    CGFloat cx, cy, dx, dy, a;
-
-    self.deltaLayer = nil;
-
-    if ([self.startPathLayer.presentationLayer hitTest:[self.startPathLayer convertPoint:point fromLayer:self.layer]]) {
-        self.deltaLayer = self.startLayer;
-        self.deltaDate  = self.startDate;
-
-        self.transforming = EventTimerStartDateDidStart;
-
-        [self.updateTimer invalidate];
-        self.startTouchPathLayer.strokeEnd = 1;
-    } else if ([self.nowPathLayer.presentationLayer hitTest:[self.nowPathLayer convertPoint:point fromLayer:self.layer]] && self.isStopped) {
-        self.deltaLayer = self.nowLayer;
-        self.deltaDate  = self.nowDate;
-
-        self.transforming = EventTimerNowDateDidStart;
-
-        self.nowTouchPathLayer.strokeEnd = 1;
-    }
-
-    if (self.deltaLayer != nil) {
-        // Calculate the angle in radians
-        cx = self.deltaLayer.position.x;
-        cy = self.deltaLayer.position.y;
-
-        dx = point.x - cx;
-        dy = point.y - cy;
-
-        a = (CGFloat)atan2(dy, dx);
-
-        // Save them away for future iteration
-        self.deltaAngle     = a;
-        self.deltaTransform = self.deltaLayer.transform;
-    }
-
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
-
-    return self.deltaLayer != nil;
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+	return !self.tracking;
 }
 
-- (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-    CGPoint point = [touch locationInView:self];
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+	// If we have more than one touch then the intent clearly isn't to
+	// rotate the dial
+	if (touches.count > 1 || !self.isStarted) {
+		[super touchesBegan:touches withEvent:event];
+	}
 
-    CGFloat cx, cy, dx, dy, a, da;
+	UITouch *touch = [touches anyObject];
+	CGPoint point = [touch locationInView:self];
 
-    if (self.deltaLayer != nil) {
-        // Calculate the angle in radians
-        cx = self.deltaLayer.position.x;
-        cy = self.deltaLayer.position.y;
+	self.deltaLayer = nil;
+	if ([self.startPathLayer.presentationLayer hitTest:[self.startPathLayer convertPoint:point fromLayer:self.layer]]) {
+		self.deltaLayer = self.startLayer;
+		self.deltaDate  = self.startDate;
 
-        dx = point.x - cx;
-        dy = point.y - cy;
+		self.transforming = EventTimerStartDateDidStart;
 
-        a  = (CGFloat)atan2(dy, dx);
-        da = [self deltaBetweenAngleA:self.deltaAngle AngleB:a];
+		[self.updateTimer invalidate];
+		self.startTouchPathLayer.strokeEnd = 1;
+	} else if ([self.nowPathLayer.presentationLayer hitTest:[self.nowPathLayer convertPoint:point fromLayer:self.layer]] && self.isStopped) {
+		self.deltaLayer = self.nowLayer;
+		self.deltaDate  = self.nowDate;
 
-        // The deltaangle applied to the transform
-        CATransform3D transform = CATransform3DRotate(self.deltaTransform, da, 0, 0, 1);
+		self.transforming = EventTimerNowDateDidStart;
 
-        // Save for next iteration
-        self.deltaAngle     = a;
-        self.deltaTransform = transform;
+		self.nowTouchPathLayer.strokeEnd = 1;
+	}
 
-        if (self.deltaLayer == self.startLayer) {
-            CGFloat seconds = (CGFloat)[self angleToTimeInterval : da];
+	// If the touch hasnt touched either now or start then forward up
+	// the chain and return
+	if (self.deltaLayer == nil) {
+		[super touchesBegan:touches withEvent:event];
+		return;
+	}
 
-            NSDate *startDate = [self.deltaDate dateByAddingTimeInterval:seconds];
-            self.deltaDate = startDate;
-            self.startDate = startDate;
-        } else if (self.deltaLayer == self.nowLayer) {
-            CGFloat seconds = (CGFloat)[self angleToTimeInterval : da];
+	CGFloat cx, cy, dx, dy, a;
 
-            NSDate *nowDate = [self.deltaDate dateByAddingTimeInterval:seconds];
-            self.deltaDate = nowDate;
-            self.nowDate = nowDate;
-        }
+	// Calculate the angle in radians
+	cx = self.deltaLayer.position.x;
+	cy = self.deltaLayer.position.y;
 
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
+	dx = point.x - cx;
+	dy = point.y - cy;
 
-        self.deltaLayer.transform = transform;
+	a = (CGFloat)atan2(dy, dx);
 
-        [CATransaction commit];
-    }
+	// Save them away for future iteration
+	self.deltaAngle     = a;
+	self.deltaTransform = self.deltaLayer.transform;
 
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
-
-    return self.deltaLayer != nil;
+	self.trackingTouch = touch.hash;
+	self.tracking = true;
 }
 
-- (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-    if (self.deltaLayer != nil) {
-        if (self.deltaLayer == self.startLayer) {
-            [self drawStart];
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+	UITouch *touch = nil;
+	for (UITouch *t in touches) {
+		if (self.trackingTouch == t.hash) {
+			touch = t;
+		}
+	}
 
-            self.transforming = EventTimerStartDateDidStop;
+	if (touch == nil || self.deltaLayer == nil) {
+		self.tracking = false;
+		self.deltaLayer = nil;
 
-            if (![self.updateTimer isValid] && !self.isStopped) {
-                self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
-                                                                    target:self
-                                                                  selector:@selector(timerUpdate)
-                                                                  userInfo:nil
-                                                                   repeats:YES];
-            }
+		[super touchesMoved:touches withEvent:event];
 
-            self.startTouchPathLayer.strokeEnd = 0;
-        } else if (self.deltaLayer == self.nowLayer) {
-            [self drawNow];
+		return;
+	}
 
-            self.transforming                = EventTimerNowDateDidStop;
-            self.nowTouchPathLayer.strokeEnd = 0;
-        }
+	CGPoint point = [touch locationInView:self];
 
-        self.deltaLayer = nil;
-    }
+	CGFloat cx, cy, dx, dy, a, da;
 
-    self.transforming = EventTimerNot;
+	// Calculate the angle in radians
+	cx = self.deltaLayer.position.x;
+	cy = self.deltaLayer.position.y;
 
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
+	dx = point.x - cx;
+	dy = point.y - cy;
+
+	a  = (CGFloat)atan2(dy, dx);
+	da = [self deltaBetweenAngleA:self.deltaAngle AngleB:a];
+
+	// The deltaangle applied to the transform
+	CATransform3D transform = CATransform3DRotate(self.deltaTransform, da, 0, 0, 1);
+
+	// Save for next iteration
+	self.deltaAngle     = a;
+	self.deltaTransform = transform;
+
+	if (self.deltaLayer == self.startLayer) {
+		CGFloat seconds = (CGFloat)[self angleToTimeInterval : da];
+
+		NSDate *startDate = [self.deltaDate dateByAddingTimeInterval:seconds];
+		self.deltaDate = startDate;
+		self.startDate = startDate;
+	} else if (self.deltaLayer == self.nowLayer) {
+		CGFloat seconds = (CGFloat)[self angleToTimeInterval : da];
+
+		NSDate *nowDate = [self.deltaDate dateByAddingTimeInterval:seconds];
+		self.deltaDate = nowDate;
+		self.nowDate = nowDate;
+	}
+
+	[CATransaction begin];
+	[CATransaction setDisableActions:YES];
+
+	self.deltaLayer.transform = transform;
+
+	[CATransaction commit];
+}
+
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+	UITouch *touch = nil;
+	for (UITouch *t in touches) {
+		if (self.trackingTouch == t.hash) {
+			touch = t;
+		}
+	}
+
+	if (touch == nil || self.deltaLayer == nil) {
+		self.tracking = false;
+		self.deltaLayer = nil;
+
+		[super touchesMoved:touches withEvent:event];
+
+		return;
+	}
+
+	if (self.deltaLayer == self.startLayer) {
+		[self drawStart];
+
+		self.transforming = EventTimerStartDateDidStop;
+
+		if (![self.updateTimer isValid] && !self.isStopped) {
+			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
+																target:self
+															  selector:@selector(timerUpdate)
+															  userInfo:nil
+															   repeats:YES];
+		}
+
+		self.startTouchPathLayer.strokeEnd = 0;
+	} else if (self.deltaLayer == self.nowLayer) {
+		[self drawNow];
+
+		self.transforming                = EventTimerNowDateDidStop;
+		self.nowTouchPathLayer.strokeEnd = 0;
+	}
+
+	self.tracking = false;
+	self.deltaLayer = nil;
+	self.transforming = EventTimerNot;
+}
+
+- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+	UITouch *touch = nil;
+	for (UITouch *t in touches) {
+		if (self.trackingTouch == t.hash) {
+			touch = t;
+		}
+	}
+
+	if (touch == nil || self.deltaLayer == nil) {
+		self.tracking = false;
+		self.deltaLayer = nil;
+
+		[super touchesMoved:touches withEvent:event];
+
+		return;
+	}
+
+	self.tracking = false;
+	self.deltaLayer = nil;
+	self.transforming = EventTimerNot;
 }
 
 @end
