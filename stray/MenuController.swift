@@ -1,7 +1,6 @@
 import UIKit
 
-class MenuController: UITableViewController {
-
+class MenuController: UITableViewController, SideMenuInjected {
 	let segues = ["showEvent", "showEvents", "showCenterController3"]
 	private var previousIndex: IndexPath?
 
@@ -22,13 +21,11 @@ class MenuController: UITableViewController {
 	}
 
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
 		if let index = previousIndex {
 			tableView.deselectRow(at: index, animated: true)
 		}
 
-		sideMenuController?.performSegue(withIdentifier: segues[(indexPath as NSIndexPath).row], sender: nil)
 		previousIndex = indexPath
+		sideMenuController.performSegue(withIdentifier: segues[(indexPath as NSIndexPath).row], sender: nil)
 	}
-
 }

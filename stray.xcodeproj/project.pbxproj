@@ -34,9 +34,9 @@
 		9EF339671D4E910D003153A9 /* CenterContainmentSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF339661D4E910D003153A9 /* CenterContainmentSegue.swift */; };
 		9EF3396A1D4E915A003153A9 /* SideContainmentSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF339691D4E915A003153A9 /* SideContainmentSegue.swift */; };
 		9EF3396C1D4E9199003153A9 /* SideMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF3396B1D4E9199003153A9 /* SideMenuController.swift */; };
-		9EF3396E1D4E9227003153A9 /* UIKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF3396D1D4E9227003153A9 /* UIKitExtensions.swift */; };
 		9EF339701D4E9273003153A9 /* TransitionAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF3396F1D4E9273003153A9 /* TransitionAnimator.swift */; };
 		9EF492A91AD7FFE2002F1E14 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF492A81AD7FFE2002F1E14 /* AppDelegate.swift */; };
+		9EFD657B1D620E7700C8D68F /* SideMenuInjected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFD657A1D620E7700C8D68F /* SideMenuInjected.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,9 +74,9 @@
 		9EF339661D4E910D003153A9 /* CenterContainmentSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CenterContainmentSegue.swift; sourceTree = "<group>"; };
 		9EF339691D4E915A003153A9 /* SideContainmentSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideContainmentSegue.swift; sourceTree = "<group>"; };
 		9EF3396B1D4E9199003153A9 /* SideMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideMenuController.swift; sourceTree = "<group>"; };
-		9EF3396D1D4E9227003153A9 /* UIKitExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKitExtensions.swift; sourceTree = "<group>"; };
 		9EF3396F1D4E9273003153A9 /* TransitionAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionAnimator.swift; sourceTree = "<group>"; };
 		9EF492A81AD7FFE2002F1E14 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		9EFD657A1D620E7700C8D68F /* SideMenuInjected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideMenuInjected.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -230,8 +230,8 @@
 			children = (
 				9EF339681D4E9141003153A9 /* Segues */,
 				9EF3396B1D4E9199003153A9 /* SideMenuController.swift */,
-				9EF3396D1D4E9227003153A9 /* UIKitExtensions.swift */,
 				9EF3396F1D4E9273003153A9 /* TransitionAnimator.swift */,
+				9EFD657A1D620E7700C8D68F /* SideMenuInjected.swift */,
 			);
 			name = SideMenu;
 			sourceTree = "<group>";
@@ -349,7 +349,6 @@
 				9EF3396C1D4E9199003153A9 /* SideMenuController.swift in Sources */,
 				9E36D3B51D3578B500F33D80 /* CoreDataStack.swift in Sources */,
 				9EF3396A1D4E915A003153A9 /* SideContainmentSegue.swift in Sources */,
-				9EF3396E1D4E9227003153A9 /* UIKitExtensions.swift in Sources */,
 				9EF492A91AD7FFE2002F1E14 /* AppDelegate.swift in Sources */,
 				9EB160011ACD153600E041B9 /* EventViewController.swift in Sources */,
 				9E2B21C11D43384C0049CA6C /* Event+CoreDataClass.swift in Sources */,
@@ -357,6 +356,7 @@
 				9E2962081D51177B0028628C /* CustomSideMenuController.swift in Sources */,
 				9E2B21C41D43384C0049CA6C /* Tag+CoreDataProperties.swift in Sources */,
 				9E36D3C11D36D62E00F33D80 /* EventViewModel.swift in Sources */,
+				9EFD657B1D620E7700C8D68F /* SideMenuInjected.swift in Sources */,
 				9E0D048F1AD6A75F00E82A13 /* State.swift in Sources */,
 				9E36D3B71D35798900F33D80 /* CoreDataInjected.swift in Sources */,
 				9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */,
