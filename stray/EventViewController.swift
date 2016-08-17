@@ -143,6 +143,10 @@ class EventViewController: UIViewController {
 
 // MARK: - EventTimerControlDelegate
 extension EventViewController: EventTimerControlDelegate {
+	func startDateDidUpdate(_ startDate: Date!) {
+		modelView.updateStart(with: startDate)
+	}
+
 	func nowDateDidUpdate(_ nowDate: Date) {
 		modelView.updateRunning(with: nowDate)
 	}

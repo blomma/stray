@@ -47,6 +47,14 @@
 #pragma mark -
 #pragma mark Public properties
 
+- (void)setStartDate:(NSDate *)startDate {
+	_startDate = startDate;
+
+	if([self.delegate respondsToSelector:@selector(startDateDidUpdate:)]) {
+		[self.delegate startDateDidUpdate:startDate];
+	}
+}
+
 - (void)setNowDate:(NSDate *)nowDate {
     _nowDate = nowDate;
 

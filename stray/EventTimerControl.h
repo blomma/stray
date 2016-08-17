@@ -11,6 +11,7 @@ typedef NS_ENUM(NSInteger, EventTimerTransformingEnum) {
 
 @protocol EventTimerControlDelegate <NSObject>
 
+- (void)startDateDidUpdate:(NSDate *)startDate;
 - (void)nowDateDidUpdate:(NSDate *)nowDate;
 - (void)transformingDidUpdate:(EventTimerTransformingEnum)transform withStartDate:(NSDate *)startDate andStopDate:(NSDate *)stopDate;
 
