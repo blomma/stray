@@ -17,6 +17,7 @@ typedef NS_ENUM(NSInteger, EventTimerTransformingEnum) {
 
 @end
 
+IB_DESIGNABLE
 @interface EventTimerControl : UIView
 
 @property (weak, nonatomic) id <EventTimerControlDelegate> delegate;
