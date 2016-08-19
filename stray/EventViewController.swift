@@ -21,7 +21,8 @@ class EventViewController: UIViewController {
     @IBOutlet weak var tag: UIButton?
 
     // MARK: Private properties
-	var modelView: EventViewModel = EventViewModel()
+	fileprivate var modelView: EventViewModel = EventViewModel()
+	fileprivate var calendar = Calendar.autoupdatingCurrent
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,26 +34,34 @@ class EventViewController: UIViewController {
 		modelView.startDidUpdate = { [unowned self]
 			(start: StartComponents) in
 
-			self.eventStartTime?.text = start.time
-			self.eventStartDay?.text  = start.day
-			self.eventStartYear?.text = start.year
-			self.eventStartMonth?.text = start.month
+			let index = start.month - 1
+			let shortMonth = self.calendar.shortStandaloneMonthSymbols[index]
+
+			self.eventStartTime?.text = String(format: "%02ld:%02ld", start.hour, start.minute)
+			self.eventStartDay?.text  = String(format: "%02ld", start.day)
+			self.eventStartMonth?.text = shortMonth
+			self.eventStartYear?.text = String(format: "%04ld", start.year)
 		}
 
 		modelView.stopDidUpdate = { [unowned self]
 			(stop: StopComponents) in
 
-			self.eventStopTime?.text = stop.time
-			self.eventStopDay?.text  = stop.day
-			self.eventStopYear?.text = stop.year
-			self.eventStopMonth?.text = stop.month
+			let index = stop.month - 1
+			let shortMonth = self.calendar.shortStandaloneMonthSymbols[index]
+
+			self.eventStopTime?.text = String(format: "%02ld:%02ld", stop.hour, stop.minute)
+			self.eventStopDay?.text  = String(format: "%02ld", stop.day)
+			self.eventStopYear?.text = String(format: "%04ld", stop.year)
+			self.eventStopMonth?.text = shortMonth
 		}
 
 		modelView.runningDidUpdate = { [unowned self]
 			(running: RunningComponents) in
 
-			self.eventTimeHours?.text = running.hour
-			self.eventTimeMinutes?.text = running.minute
+			let isFuture: Bool = running.hour < 0 || running.minute < 0
+
+			self.eventTimeHours?.text = isFuture ? String(format:"-%02ld", abs(running.hour)) : String(format:"%02ld", abs(running.hour))
+			self.eventTimeMinutes?.text = String(format:"%02ld", abs(running.minute))
 		}
 
 		modelView.tagDidUpdate = { [unowned self]

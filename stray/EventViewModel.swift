@@ -1,13 +1,15 @@
 import Foundation
 
 struct StartComponents {
-	let time: String
-	let day: String
-	let month: String
-	let year: String
+	let minute: Int
+	let hour: Int
+	let day: Int
+	let month: Int
+	let year: Int
 
-	init(time: String = "", day: String = "", month: String = "", year: String = "") {
-		self.time = time
+	init(minute: Int = 0, hour: Int = 0, day: Int = 0, month: Int = 0, year: Int = 0) {
+		self.minute = minute
+		self.hour = hour
 		self.day = day
 		self.month = month
 		self.year = year
@@ -15,13 +17,15 @@ struct StartComponents {
 }
 
 struct StopComponents {
-	let time: String
-	let day: String
-	let month: String
-	let year: String
+	let minute: Int
+	let hour: Int
+	let day: Int
+	let month: Int
+	let year: Int
 
-	init(time: String = "", day: String = "", month: String = "", year: String = "") {
-		self.time = time
+	init(minute: Int = 0, hour: Int = 0, day: Int = 0, month: Int = 0, year: Int = 0) {
+		self.minute = minute
+		self.hour = hour
 		self.day = day
 		self.month = month
 		self.year = year
@@ -29,10 +33,10 @@ struct StopComponents {
 }
 
 struct RunningComponents {
-	let minute: String
-	let hour: String
+	let minute: Int
+	let hour: Int
 
-	init(minute: String = "", hour: String = "") {
+	init(minute: Int = 0, hour: Int = 0) {
 		self.minute = minute
 		self.hour = hour
 	}
@@ -81,7 +85,7 @@ class EventViewModel: CoreDataInjected {
 	var isRunningDidUpdate: ((_ isRunning: Bool, _ startDate: Date?, _ stopDate: Date?) -> Void)?
 
 
-	private let calendar = Calendar.autoupdatingCurrent
+	fileprivate var calendar = Calendar.autoupdatingCurrent
 	var selectedEventID: URL?
 
 
@@ -186,14 +190,12 @@ class EventViewModel: CoreDataInjected {
 			let month = components.month,
 			let year = components.year
 		{
-			let index = month - 1
-			let shortMonth = calendar.shortStandaloneMonthSymbols[index]
-
 			start = StartComponents(
-				time: String(format: "%02ld:%02ld", hour, minute),
-				day: String(format: "%02ld", day),
-				month: shortMonth,
-				year: String(format: "%04ld", year))
+				minute: minute,
+				hour: hour,
+				day: day,
+				month: month,
+				year: year)
 		}
 
 		let runningDate: Date = stopDate != nil ? stopDate! : Date()
@@ -216,14 +218,12 @@ class EventViewModel: CoreDataInjected {
 			let month = components.month,
 			let year = components.year
 		{
-			let index = month - 1
-			let shortMonth = calendar.shortStandaloneMonthSymbols[index]
-
 			stop = StopComponents(
-				time: String(format: "%02ld:%02ld", hour, minute),
-				day: String(format: "%02ld", day),
-				month: shortMonth,
-				year: String(format: "%04ld", year))
+				minute: minute,
+				hour: hour,
+				day: day,
+				month: month,
+				year: year)
 		}
 
 		updateRunning(with: date)
@@ -243,14 +243,9 @@ class EventViewModel: CoreDataInjected {
 		if let minute = components.minute,
 			let hour = components.hour
 		{
-			var runningHours: String = String(format:"%02ld", hour)
-			if hour < 0 || minute < 0 {
-				runningHours = String(format:"-%@", runningHours)
-			}
-
 			running = RunningComponents(
-				minute: String(format:"%02ld", minute),
-				hour: runningHours)
+				minute: minute,
+				hour: hour)
 		}
 	}
 }
