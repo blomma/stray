@@ -44,29 +44,29 @@ struct RunningComponents {
 
 class EventViewModel: CoreDataInjected {
 	private var startDate: Date?
-	var start: StartComponents = StartComponents() {
+	var start: StartComponents? {
 		didSet {
 			startDidUpdate?(start)
 		}
 	}
-	var startDidUpdate: ((_ start: StartComponents) -> Void)?
+	var startDidUpdate: ((_ start: StartComponents?) -> Void)?
 
 
 	private var stopDate: Date?
-	var stop: StopComponents = StopComponents() {
+	var stop: StopComponents? {
 		didSet {
 			stopDidUpdate?(stop)
 		}
 	}
-	var stopDidUpdate: ((_ stop: StopComponents) -> Void)?
+	var stopDidUpdate: ((_ stop: StopComponents?) -> Void)?
 
 
-	private var running: RunningComponents = RunningComponents() {
+	private var running: RunningComponents? {
 		didSet {
 			runningDidUpdate?(running)
 		}
 	}
-	var runningDidUpdate: ((_ running: RunningComponents) -> Void)?
+	var runningDidUpdate: ((_ running: RunningComponents?) -> Void)?
 
 
 	private var tag: String? {
@@ -94,6 +94,7 @@ class EventViewModel: CoreDataInjected {
 		guard let url = State().selectedEventID else {
 			updateStart(with: nil)
 			updateStop(with: nil)
+			updateRunning(with: nil)
 
 			selectedEventID = nil
 
@@ -178,7 +179,8 @@ class EventViewModel: CoreDataInjected {
 		startDate = date
 
 		guard let date = date else {
-			start = StartComponents()
+			start = nil
+
 			return
 		}
 
@@ -206,7 +208,8 @@ class EventViewModel: CoreDataInjected {
 		stopDate = date
 
 		guard let date = date else {
-			stop = StopComponents()
+			stop = nil
+			
 			return
 		}
 
@@ -229,7 +232,13 @@ class EventViewModel: CoreDataInjected {
 		updateRunning(with: date)
 	}
 
-	func updateRunning(with date: Date) {
+	func updateRunning(with date: Date?) {
+		guard let date = date else {
+			running = nil
+
+			return
+		}
+
 		guard let startDate = startDate else {
 			// We were called without a startDate
 			// this is never right

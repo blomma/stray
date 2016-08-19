@@ -32,7 +32,16 @@ class EventViewController: UIViewController {
         super.viewWillAppear(animated)
 
 		modelView.startDidUpdate = { [unowned self]
-			(start: StartComponents) in
+			(start: StartComponents?) in
+
+			guard let start = start else {
+				self.eventStartTime?.text = ""
+				self.eventStartDay?.text  = ""
+				self.eventStartMonth?.text = ""
+				self.eventStartYear?.text = ""
+
+				return
+			}
 
 			let index = start.month - 1
 			let shortMonth = self.calendar.shortStandaloneMonthSymbols[index]
@@ -44,7 +53,16 @@ class EventViewController: UIViewController {
 		}
 
 		modelView.stopDidUpdate = { [unowned self]
-			(stop: StopComponents) in
+			(stop: StopComponents?) in
+
+			guard let stop = stop else {
+				self.eventStopTime?.text = ""
+				self.eventStopDay?.text  = ""
+				self.eventStopYear?.text = ""
+				self.eventStopMonth?.text = ""
+
+				return
+			}
 
 			let index = stop.month - 1
 			let shortMonth = self.calendar.shortStandaloneMonthSymbols[index]
@@ -56,7 +74,15 @@ class EventViewController: UIViewController {
 		}
 
 		modelView.runningDidUpdate = { [unowned self]
-			(running: RunningComponents) in
+			(running: RunningComponents?) in
+
+			// Initial state
+			guard let running = running else {
+				self.eventTimeHours?.text = String(format:"%02ld", 0)
+				self.eventTimeMinutes?.text = String(format:"%02ld", 0)
+
+				return
+			}
 
 			let isFuture: Bool = running.hour < 0 || running.minute < 0
 
