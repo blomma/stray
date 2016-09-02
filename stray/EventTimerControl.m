@@ -40,7 +40,7 @@
 
 @implementation EventTimerControl
 
-- (void)layoutSubviews {
+- (void)drawRect:(CGRect)rect {
 	[self drawClockFace];
 }
 
