@@ -64,7 +64,7 @@ extension SideMenuContainerController {
 			controller.didMove(toParentViewController: self)
 			self.centerViewController = controller
 		}
-
+	
 		if let animator = transitionAnimator {
 			animator.performTransition(forView: controller.view, completion: completion)
 		} else {
@@ -105,14 +105,18 @@ extension SideMenuContainerController {
 
 			// origin.x or origin.x + width
 			let xPoint: CGFloat = centerPanel.center.x + translation + -1 * centerPanel.frame.width / 2
-
 			if xPoint < sidePanelFrame.minX || xPoint > sidePanelFrame.maxX {
 				return
 			}
 
 			var frame = centerPanel.frame
 			frame.origin.x += translation
-			update(centerPanelFrame: frame)
+
+			// Alpha starts at 0.5 and goes to 1
+			let alpha: CGFloat = 0.5 + (frame.minX / sidePanelWidth / 2)
+
+			update(centerPanelFrame: frame, withAlpha: alpha)
+
 			recognizer.setTranslation(CGPoint.zero, in: view)
 
 		case .ended, .cancelled, .failed:
@@ -215,7 +219,7 @@ class SideMenuContainerController: UIViewController {
 			}
 
 			// reposition center panel
-			self.update(centerPanelFrame: self.centerPanelFrame)
+			self.update(centerPanelFrame: self.centerPanelFrame, withAlpha: 1)
 
 			// reposition side panel
 			sidePanel.frame = self.sidePanelFrame
@@ -245,13 +249,13 @@ class SideMenuContainerController: UIViewController {
 		self.panRecognizer = panRecognizer
 	}
 
-	fileprivate func update(centerPanelFrame frame: CGRect) {
+	fileprivate func update(centerPanelFrame frame: CGRect, withAlpha alpha: CGFloat) {
 		guard let centerPanel = centerPanel, let sidePanel = sidePanel else {
 			return
 		}
 
 		centerPanel.frame = frame
-		sidePanel.alpha = frame.minX / sidePanelWidth
+		sidePanel.alpha = alpha
 	}
 
 	fileprivate func prepare(centerControllerForContainment controller: UIViewController) {
@@ -296,7 +300,7 @@ class SideMenuContainerController: UIViewController {
 		}
 
 		UIView.animate(withDuration: duration, animations: { _ in
-			self.update(centerPanelFrame: centerPanelFrame)
+			self.update(centerPanelFrame: centerPanelFrame, withAlpha: 1)
 			}, completion: { _ in
 				if !reveal {
 					self.prepare(sidePanelForDisplay: false)
