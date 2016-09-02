@@ -1,6 +1,6 @@
 import UIKit
 
-class MenuController: UITableViewController, SideMenuInjected {
+class MenuController: UITableViewController, SideMenuContainerInjected {
 	let segues = ["showEvent", "showEvents", "showCenterController3"]
 	private var previousIndex: IndexPath?
 
@@ -26,6 +26,6 @@ class MenuController: UITableViewController, SideMenuInjected {
 		}
 
 		previousIndex = indexPath
-		sideMenuController.performSegue(withIdentifier: segues[(indexPath as NSIndexPath).row], sender: nil)
+		sideMenuContainerController.performSegue(withIdentifier: segues[(indexPath as NSIndexPath).row], sender: nil)
 	}
 }

@@ -26,6 +26,8 @@ class EventViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+		self.setNeedsStatusBarAppearanceUpdate()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -174,6 +176,10 @@ class EventViewController: UIViewController {
     @IBAction func toggleEventTouchUpInside(_ sender: UIButton) {
 		modelView.toggleEventRunning()
     }
+
+	override var prefersStatusBarHidden: Bool {
+		return true
+	}
 }
 
 // MARK: - EventTimerControlDelegate

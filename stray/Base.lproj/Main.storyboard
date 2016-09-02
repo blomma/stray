@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11191" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="wUP-Vm-4rQ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11198.2" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="wUP-Vm-4rQ">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11156"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -27,7 +27,7 @@
                                 <rect key="frame" x="0.0" y="28" width="200" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rc9-rL-bTp" id="coy-Ld-Z5X">
-                                    <frame key="frameInset" width="200" height="43.5"/>
+                                    <frame key="frameInset" width="200" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -223,7 +223,7 @@
         <scene sceneID="2do-7V-FNl">
             <objects>
                 <navigationController navigationBarHidden="YES" id="6dg-ep-DAJ" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="6bY-g5-BYC">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="6bY-g5-BYC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -252,10 +252,10 @@
                                 <color key="sectionIndexBackgroundColor" red="0.94117647059999998" green="0.93333333330000001" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="TagCellIdentifier" id="LER-Fa-fU8" customClass="TagCell" customModule="stray" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="22" width="375" height="75"/>
+                                        <rect key="frame" x="0.0" y="22" width="1000" height="75"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LER-Fa-fU8" id="QaI-Zw-OgH">
-                                            <frame key="frameInset" width="375" height="75"/>
+                                            <frame key="frameInset" width="1000" height="75"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="A long tag" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oxh-sQ-qcN">
@@ -351,7 +351,7 @@
         <scene sceneID="DRf-1I-dph">
             <objects>
                 <navigationController navigationBarHidden="YES" id="Laf-3o-IIT" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="sLd-de-0IM">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="sLd-de-0IM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -555,10 +555,10 @@
             </objects>
             <point key="canvasLocation" x="1075" y="-643"/>
         </scene>
-        <!--Custom Side Menu Controller-->
+        <!--Custom Side Menu Container Controller-->
         <scene sceneID="tkK-yG-QkA">
             <objects>
-                <viewController storyboardIdentifier="Side" useStoryboardIdentifierAsRestorationIdentifier="YES" id="wUP-Vm-4rQ" customClass="CustomSideMenuController" customModule="stray" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Side" useStoryboardIdentifierAsRestorationIdentifier="YES" id="wUP-Vm-4rQ" customClass="CustomSideMenuContainerController" customModule="stray" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ffd-rU-xxR"/>
                         <viewControllerLayoutGuide type="bottom" id="akb-cA-63c"/>
@@ -580,6 +580,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="r8c-zd-wI8"/>
+        <segue reference="uIL-Q8-1sK"/>
     </inferredMetricsTieBreakers>
 </document>

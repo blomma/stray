@@ -40,7 +40,7 @@
 
 @implementation EventTimerControl
 
-- (void)drawRect:(CGRect)rect {
+- (void)layoutSubviews {
 	[self drawClockFace];
 }
 
@@ -56,142 +56,142 @@
 }
 
 - (void)setNowDate:(NSDate *)nowDate {
-    _nowDate = nowDate;
+	_nowDate = nowDate;
 
-    if([self.delegate respondsToSelector:@selector(nowDateDidUpdate:)]) {
+	if([self.delegate respondsToSelector:@selector(nowDateDidUpdate:)]) {
 		[self.delegate nowDateDidUpdate:nowDate];
-    }
+	}
 }
 
 - (void)setTransforming:(EventTimerTransformingEnum)transforming {
-    _transforming = transforming;
+	_transforming = transforming;
 
-    if([self.delegate respondsToSelector:@selector(transformingDidUpdate:withStartDate:andStopDate:)]) {
+	if([self.delegate respondsToSelector:@selector(transformingDidUpdate:withStartDate:andStopDate:)]) {
 		[self.delegate transformingDidUpdate:transforming withStartDate:self.startDate andStopDate:self.nowDate];
-    }
+	}
 }
 
 #pragma mark -
 #pragma mark Public methods
 
 - (void)initWithStartDate:(NSDate *)startDate andStopDate:(NSDate *)stopDate {
-    [self reset];
+	[self reset];
 
-    self.startDate = startDate;
-    [self drawStart];
+	self.startDate = startDate;
+	[self drawStart];
 
-    self.isStarted = YES;
-    self.isStopped = stopDate != nil ? YES : NO;
+	self.isStarted = YES;
+	self.isStopped = stopDate != nil ? YES : NO;
 
-    self.nowDate = self.isStopped ? stopDate : [NSDate date];
+	self.nowDate = self.isStopped ? stopDate : [NSDate date];
 
-    [self drawNow];
+	[self drawNow];
 
-    if (!self.isStopped) {
-        self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
-                                                            target:self
-                                                          selector:@selector(timerUpdate)
-                                                          userInfo:nil
-                                                           repeats:YES];
-    }
+	if (!self.isStopped) {
+		self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
+															target:self
+														  selector:@selector(timerUpdate)
+														  userInfo:nil
+														   repeats:YES];
+	}
 }
 
 - (void)stop {
-    [self.updateTimer invalidate];
+	[self.updateTimer invalidate];
 
-    self.isStopped = YES;
+	self.isStopped = YES;
 }
 
 - (void)reset {
-    [self.updateTimer invalidate];
+	[self.updateTimer invalidate];
 
-    self.isStarted = NO;
-    self.isStopped = NO;
+	self.isStarted = NO;
+	self.isStopped = NO;
 
-    self.previousSecondTick = -1;
-    self.previousNow        = -1;
+	self.previousSecondTick = -1;
+	self.previousNow        = -1;
 
-    self.secondLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
-    self.startLayer.transform  = CATransform3DMakeRotation(0, 0, 0, 1);
-    self.nowLayer.transform    = CATransform3DMakeRotation(0, 0, 0, 1);
+	self.secondLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
+	self.startLayer.transform  = CATransform3DMakeRotation(0, 0, 0, 1);
+	self.nowLayer.transform    = CATransform3DMakeRotation(0, 0, 0, 1);
 
-    self.startTouchPathLayer.strokeEnd = 0;
-    self.nowTouchPathLayer.strokeEnd   = 0;
+	self.startTouchPathLayer.strokeEnd = 0;
+	self.nowTouchPathLayer.strokeEnd   = 0;
 
-    for (NSUInteger i = 0; i < self.secondProgressTicksLayer.sublayers.count; i++) {
-        CALayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
-        layer.hidden = NO;
-    }
+	for (NSUInteger i = 0; i < self.secondProgressTicksLayer.sublayers.count; i++) {
+		CALayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
+		layer.hidden = NO;
+	}
 }
 
 #pragma mark -
 #pragma mark Private methods
 
 - (NSTimeInterval)angleToTimeInterval:(CGFloat)a {
-    return ((a / (2 * M_PI)) * 3600);
+	return ((a / (2 * M_PI)) * 3600);
 }
 
 - (CGFloat)deltaBetweenAngleA:(CGFloat)a AngleB:(CGFloat)b {
-    CGFloat difference = b - a;
+	CGFloat difference = b - a;
 
-    while (difference < -M_PI) {
-        difference += 2 * M_PI;
-    }
-    while (difference > M_PI) {
-        difference -= 2 * M_PI;
-    }
+	while (difference < -M_PI) {
+		difference += 2 * M_PI;
+	}
+	while (difference > M_PI) {
+		difference -= 2 * M_PI;
+	}
 
-    return difference;
+	return difference;
 }
 
 - (void)timerUpdate {
-    self.nowDate = [NSDate date];
+	self.nowDate = [NSDate date];
 
-    [self drawNow];
+	[self drawNow];
 }
 
 - (void)drawStart {
-    NSTimeInterval startSeconds = [self.startDate timeIntervalSince1970];
+	NSTimeInterval startSeconds = [self.startDate timeIntervalSince1970];
 
-    CGFloat a = (CGFloat)((M_PI * 2) * floor(fmod(startSeconds, 3600) / 60) / 60);
-    self.startLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
+	CGFloat a = (CGFloat)((M_PI * 2) * floor(fmod(startSeconds, 3600) / 60) / 60);
+	self.startLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
 }
 
 - (void)drawNow {
-    NSTimeInterval nowSeconds = [self.nowDate timeIntervalSince1970];
+	NSTimeInterval nowSeconds = [self.nowDate timeIntervalSince1970];
 
-    // We want fluid updates to the seconds
-    double secondsIntoMinute = fmod(nowSeconds, 60);
+	// We want fluid updates to the seconds
+	double secondsIntoMinute = fmod(nowSeconds, 60);
 
-    CGFloat a = (CGFloat)(M_PI * 2 * (secondsIntoMinute / 60));
+	CGFloat a = (CGFloat)(M_PI * 2 * (secondsIntoMinute / 60));
 
-    self.secondLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
+	self.secondLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
 
-    // Update the tick marks for the seconds
-    CGFloat secondTick = (CGFloat)floor(secondsIntoMinute);
+	// Update the tick marks for the seconds
+	CGFloat secondTick = (CGFloat)floor(secondsIntoMinute);
 
-    if (secondTick != self.previousSecondTick) {
-        for (NSUInteger i = 0; i < self.secondProgressTicksLayer.sublayers.count; i++) {
-            CALayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
+	if (secondTick != self.previousSecondTick) {
+		for (NSUInteger i = 0; i < self.secondProgressTicksLayer.sublayers.count; i++) {
+			CALayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
 
-            if (i < secondTick) {
-                layer.hidden = NO;
-            } else {
-                layer.hidden = YES;
-            }
-        }
+			if (i < secondTick) {
+				layer.hidden = NO;
+			} else {
+				layer.hidden = YES;
+			}
+		}
 
-        self.previousSecondTick = secondTick;
-    }
+		self.previousSecondTick = secondTick;
+	}
 
-    double secondsIntoHour = fmod(nowSeconds, 3600);
+	double secondsIntoHour = fmod(nowSeconds, 3600);
 
-    // And for the minutes we want a more tick/tock behavior
-    a = (CGFloat)(M_PI * 2 * (floor(secondsIntoHour / 60) / 60));
-    if (a != self.previousNow) {
-        self.nowLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
-        self.previousNow        = a;
-    }
+	// And for the minutes we want a more tick/tock behavior
+	a = (CGFloat)(M_PI * 2 * (floor(secondsIntoHour / 60) / 60));
+	if (a != self.previousNow) {
+		self.nowLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
+		self.previousNow        = a;
+	}
 }
 
 - (void)drawClockFace {
@@ -495,7 +495,6 @@
 
 	[CATransaction commit];
 }
-
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
 	UITouch *touch = nil;

@@ -1,6 +1,6 @@
 import Foundation
 
-class CustomSideMenuController: SideMenuController {
+class CustomSideMenuContainerController: SideMenuContainerController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
