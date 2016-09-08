@@ -15,7 +15,7 @@ class MenuController: UITableViewController, SideMenuContainerInjected {
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "menuCell")!
 		cell.textLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 15)
-		cell.textLabel?.text = "Switch to controller \((indexPath as NSIndexPath).row + 1)"
+		cell.textLabel?.text = "\((indexPath as NSIndexPath).row + 1)"
 
 		return cell
 	}

@@ -64,7 +64,7 @@ extension SideMenuContainerController {
 			controller.didMove(toParentViewController: self)
 			self.centerViewController = controller
 		}
-	
+
 		if let animator = transitionAnimator {
 			animator.performTransition(forView: controller.view, completion: completion)
 		} else {
@@ -101,21 +101,21 @@ extension SideMenuContainerController {
 			}
 
 			let translation = recognizer.translation(in: view).x
-			let sidePanelFrame = sidePanel.frame
 
 			// origin.x or origin.x + width
 			let xPoint: CGFloat = centerPanel.center.x + translation + -1 * centerPanel.frame.width / 2
-			if xPoint < sidePanelFrame.minX || xPoint > sidePanelFrame.maxX {
+			if xPoint < 0 || xPoint > sidePanelWidth {
 				return
 			}
 
 			var frame = centerPanel.frame
 			frame.origin.x += translation
 
-			// Alpha starts at 0.5 and goes to 1
-			let alpha: CGFloat = 0.5 + (frame.minX / sidePanelWidth / 2)
+			var sidePanelFrame = sidePanel.frame
+			sidePanelFrame.origin.x += translation
 
-			update(centerPanelFrame: frame, withAlpha: alpha)
+			update(centerPanelFrame: frame)
+			update(sidePanelFrame: sidePanelFrame)
 
 			recognizer.setTranslation(CGPoint.zero, in: view)
 
@@ -146,7 +146,7 @@ extension SideMenuContainerController {
 
 class SideMenuContainerController: UIViewController {
 	// MARK: - Private configurable constants
-	fileprivate let sidePanelWidth: CGFloat = 200
+	fileprivate let sidePanelWidth: CGFloat = 100
 	fileprivate let reavealDuration = 0.3
 	fileprivate let hideDuration = 0.2
 	fileprivate let transitionAnimator: TransitionAnimatable.Type? = FadeAnimator.self
@@ -214,15 +214,11 @@ class SideMenuContainerController: UIViewController {
 		screenSize = size
 
 		coordinator.animate(alongsideTransition: { _ in
-			guard let sidePanel = self.sidePanel else {
-				fatalError("Missing sidePanel")
-			}
-
 			// reposition center panel
-			self.update(centerPanelFrame: self.centerPanelFrame, withAlpha: 1)
+			self.update(centerPanelFrame: self.centerPanelFrame)
 
 			// reposition side panel
-			sidePanel.frame = self.sidePanelFrame
+			self.update(sidePanelFrame: self.sidePanelFrame)
 
 			self.view.layoutIfNeeded()
 
@@ -233,7 +229,7 @@ class SideMenuContainerController: UIViewController {
 		view = UIView(frame: UIScreen.main.bounds)
 
 		// configure views
-		let centerPanel = UIView(frame: CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height))
+		let centerPanel = UIView(frame: centerPanelFrame)
 		view.addSubview(centerPanel)
 		self.centerPanel = centerPanel
 
@@ -249,13 +245,20 @@ class SideMenuContainerController: UIViewController {
 		self.panRecognizer = panRecognizer
 	}
 
-	fileprivate func update(centerPanelFrame frame: CGRect, withAlpha alpha: CGFloat) {
-		guard let centerPanel = centerPanel, let sidePanel = sidePanel else {
+	fileprivate func update(centerPanelFrame frame: CGRect) {
+		guard let centerPanel = centerPanel else {
 			return
 		}
 
 		centerPanel.frame = frame
-		sidePanel.alpha = alpha
+	}
+
+	fileprivate func update(sidePanelFrame frame: CGRect) {
+		guard let sidePanel = sidePanel else {
+			return
+		}
+
+		sidePanel.frame = frame
 	}
 
 	fileprivate func prepare(centerControllerForContainment controller: UIViewController) {
@@ -271,6 +274,13 @@ class SideMenuContainerController: UIViewController {
 		}
 
 		sidePanel.isHidden = !display
+		if display {
+			// We are about to display the sidepanel, so we move it into position
+			var frame = sidePanel.frame
+			frame.origin.x = -sidePanelWidth
+
+			sidePanel.frame = frame
+		}
 	}
 
 	fileprivate func animate(toReveal reveal: Bool) {
@@ -282,10 +292,13 @@ class SideMenuContainerController: UIViewController {
 		sidePanelVisible = reveal
 
 		var centerPanelFrame = centerPanel.frame
+		var sidePanelFrame = sidePanel.frame
 		if reveal {
-			centerPanelFrame.origin.x = sidePanel.frame.maxX
+			centerPanelFrame.origin.x = sidePanelWidth
+			sidePanelFrame.origin = CGPoint.zero
 		} else {
 			centerPanelFrame.origin = CGPoint.zero
+			sidePanelFrame.origin.x = -sidePanelWidth
 		}
 
 		var duration = reveal
@@ -300,7 +313,8 @@ class SideMenuContainerController: UIViewController {
 		}
 
 		UIView.animate(withDuration: duration, animations: { _ in
-			self.update(centerPanelFrame: centerPanelFrame, withAlpha: 1)
+			self.update(centerPanelFrame: centerPanelFrame)
+			self.update(sidePanelFrame: sidePanelFrame)
 			}, completion: { _ in
 				if !reveal {
 					self.prepare(sidePanelForDisplay: false)
