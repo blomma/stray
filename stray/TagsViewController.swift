@@ -4,13 +4,13 @@ import CoreData
 class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 	@IBOutlet weak var tableView: UITableView!
 
-    private var userReorderingCells = false
-    private var selectedTagID: URL?
-	private var maxSortOrderIndex :Int64 = 0
+    fileprivate var userReorderingCells = false
+    fileprivate var selectedTagID: URL?
+	fileprivate var maxSortOrderIndex :Int64 = 0
 
 	var eventID: URL?
 
-    private var fetchedResultsController: NSFetchedResultsController<Tag>?
+    var fetchedResultsController: NSFetchedResultsController<Tag>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +67,7 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
         super.viewWillDisappear(animated)
     }
 
-    private func configureCell(_ cell: TagCell, atIndexPath: IndexPath) -> Void {
+    fileprivate func configureCell(_ cell: TagCell, atIndexPath: IndexPath) -> Void {
         if let tag = fetchedResultsController?.object(at: atIndexPath) {
 			cell.delegate = self
 
@@ -108,13 +108,13 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 		}
 	}
 
-    private func showSelectMark(_ cell: TagCell) {
+    fileprivate func showSelectMark(_ cell: TagCell) {
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
             cell.selectedMark.alpha = 1
         })
     }
 
-    private func hideSelectMark(_ cell: TagCell) {
+    fileprivate func hideSelectMark(_ cell: TagCell) {
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
             cell.selectedMark.alpha = 0
         })
@@ -260,24 +260,24 @@ extension TagsViewController: NSFetchedResultsControllerDelegate {
         tableView.beginUpdates()
     }
 
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: AnyObject, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        if userReorderingCells {
-            return
-        }
+	func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+		if userReorderingCells {
+			return
+		}
 
-        switch type {
-        case .insert:
-            tableView.insertRows(at: [newIndexPath!], with: .fade)
-        case .delete:
-            tableView.deleteRows(at: [indexPath!], with: .fade)
-        case .update:
-            if let cell = tableView.cellForRow(at: indexPath!) as? TagCell {
-                configureCell(cell, atIndexPath: indexPath!)
-            }
-        case .move:
-            tableView.moveRow(at: indexPath!, to: newIndexPath!)
-        }
-    }
+		switch type {
+		case .insert:
+			tableView.insertRows(at: [newIndexPath!], with: .fade)
+		case .delete:
+			tableView.deleteRows(at: [indexPath!], with: .fade)
+		case .update:
+			if let cell = tableView.cellForRow(at: indexPath!) as? TagCell {
+				configureCell(cell, atIndexPath: indexPath!)
+			}
+		case .move:
+			tableView.moveRow(at: indexPath!, to: newIndexPath!)
+		}
+	}
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         if userReorderingCells {

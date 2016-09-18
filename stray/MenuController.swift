@@ -1,23 +1,31 @@
 import UIKit
 
-class MenuController: UIViewController {
-    @IBAction func presentEvent(_ sender: UIButton) {
-		if let navigationController = navigationController {
-			if let _ = navigationController.viewControllers.first as? EventViewController {
-				navigationController.popViewController(animated: true)
-			} else if let controller = storyboard?.instantiateViewController(withIdentifier: "EventViewController") {
-				navigationController.setViewControllers([controller], animated: true)
-			}
-		}
-    }
+class MenuController: UITableViewController, SideMenuContainerInjected {
+	let segues = ["showEvent", "showEvents", "showCenterController3"]
+	private var previousIndex: IndexPath?
 
-    @IBAction func presentEvents(_ sender: UIButton) {
-		if let navigationController = navigationController {
-			if let _ = navigationController.viewControllers.first as? EventsViewController {
-				navigationController.popViewController(animated: true)
-			} else if let controller = storyboard?.instantiateViewController(withIdentifier: "EventsViewController") {
-				navigationController.setViewControllers([controller], animated: true)
-			}
+	override func viewDidLoad() {
+		super.viewDidLoad()
+	}
+
+	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return segues.count
+	}
+
+	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = tableView.dequeueReusableCell(withIdentifier: "menuCell")!
+		cell.textLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 15)
+		cell.textLabel?.text = "\((indexPath as NSIndexPath).row + 1)"
+
+		return cell
+	}
+
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		if let index = previousIndex {
+			tableView.deselectRow(at: index, animated: true)
 		}
-    }
+
+		previousIndex = indexPath
+		sideMenuContainerController.performSegue(withIdentifier: segues[(indexPath as NSIndexPath).row], sender: nil)
+	}
 }

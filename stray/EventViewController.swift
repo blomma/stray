@@ -21,42 +21,75 @@ class EventViewController: UIViewController {
     @IBOutlet weak var tag: UIButton?
 
     // MARK: Private properties
-    private var transitionOperator: TransitionOperator?
-
-	var modelView: EventViewModel = EventViewModel()
+	fileprivate var modelView: EventViewModel = EventViewModel()
+	fileprivate var calendar = Calendar.autoupdatingCurrent
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        self.transitionOperator = TransitionOperator(viewController: self)
+		self.setNeedsStatusBarAppearanceUpdate()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
 		modelView.startDidUpdate = { [unowned self]
-			(start: StartComponents) in
+			(start: StartComponents?) in
 
-			self.eventStartTime?.text = start.time
-			self.eventStartDay?.text  = start.day
-			self.eventStartYear?.text = start.year
-			self.eventStartMonth?.text = start.month
+			guard let start = start else {
+				self.eventStartTime?.text = ""
+				self.eventStartDay?.text  = ""
+				self.eventStartMonth?.text = ""
+				self.eventStartYear?.text = ""
+
+				return
+			}
+
+			let index = start.month - 1
+			let shortMonth = self.calendar.shortStandaloneMonthSymbols[index]
+
+			self.eventStartTime?.text = String(format: "%02ld:%02ld", start.hour, start.minute)
+			self.eventStartDay?.text  = String(format: "%02ld", start.day)
+			self.eventStartMonth?.text = shortMonth
+			self.eventStartYear?.text = String(format: "%04ld", start.year)
 		}
 
 		modelView.stopDidUpdate = { [unowned self]
-			(stop: StopComponents) in
+			(stop: StopComponents?) in
 
-			self.eventStopTime?.text = stop.time
-			self.eventStopDay?.text  = stop.day
-			self.eventStopYear?.text = stop.year
-			self.eventStopMonth?.text = stop.month
+			guard let stop = stop else {
+				self.eventStopTime?.text = ""
+				self.eventStopDay?.text  = ""
+				self.eventStopYear?.text = ""
+				self.eventStopMonth?.text = ""
+
+				return
+			}
+
+			let index = stop.month - 1
+			let shortMonth = self.calendar.shortStandaloneMonthSymbols[index]
+
+			self.eventStopTime?.text = String(format: "%02ld:%02ld", stop.hour, stop.minute)
+			self.eventStopDay?.text  = String(format: "%02ld", stop.day)
+			self.eventStopYear?.text = String(format: "%04ld", stop.year)
+			self.eventStopMonth?.text = shortMonth
 		}
 
 		modelView.runningDidUpdate = { [unowned self]
-			(running: RunningComponents) in
+			(running: RunningComponents?) in
 
-			self.eventTimeHours?.text = running.hour
-			self.eventTimeMinutes?.text = running.minute
+			// Initial state
+			guard let running = running else {
+				self.eventTimeHours?.text = String(format:"%02ld", 0)
+				self.eventTimeMinutes?.text = String(format:"%02ld", 0)
+
+				return
+			}
+
+			let isFuture: Bool = running.hour < 0 || running.minute < 0
+
+			self.eventTimeHours?.text = isFuture ? String(format:"-%02ld", abs(running.hour)) : String(format:"%02ld", abs(running.hour))
+			self.eventTimeMinutes?.text = String(format:"%02ld", abs(running.minute))
 		}
 
 		modelView.tagDidUpdate = { [unowned self]
@@ -95,7 +128,7 @@ class EventViewController: UIViewController {
         super.viewWillDisappear(animated)
     }
 
-	override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "segueToTagsFromEvent",
 			let controller = segue.destination as? TagsViewController {
 			controller.eventID = modelView.selectedEventID
@@ -136,7 +169,6 @@ class EventViewController: UIViewController {
 
     @IBAction func showTags(_ sender: UIButton) {
         if modelView.selectedEventID != nil {
-            navigationController?.delegate = nil
             performSegue(withIdentifier: "segueToTagsFromEvent", sender: self)
         }
     }
@@ -144,10 +176,18 @@ class EventViewController: UIViewController {
     @IBAction func toggleEventTouchUpInside(_ sender: UIButton) {
 		modelView.toggleEventRunning()
     }
+
+	override var prefersStatusBarHidden: Bool {
+		return true
+	}
 }
 
 // MARK: - EventTimerControlDelegate
 extension EventViewController: EventTimerControlDelegate {
+	func startDateDidUpdate(_ startDate: Date!) {
+		modelView.updateStart(with: startDate)
+	}
+
 	func nowDateDidUpdate(_ nowDate: Date) {
 		modelView.updateRunning(with: nowDate)
 	}

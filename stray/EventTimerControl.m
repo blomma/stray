@@ -13,8 +13,8 @@
 @property (nonatomic) CAShapeLayer *startPathLayer;
 
 @property (nonatomic) CAShapeLayer *nowTouchPathLayer;
-@property (nonatomic) CAShapeLayer      *nowLayer;
-@property (nonatomic) CAShapeLayer      *nowPathLayer;
+@property (nonatomic) CAShapeLayer *nowLayer;
+@property (nonatomic) CAShapeLayer *nowPathLayer;
 
 @property (nonatomic) CAShapeLayer *secondLayer;
 @property (nonatomic) CAShapeLayer *secondProgressTicksLayer;
@@ -24,6 +24,9 @@
 @property (nonatomic) CGFloat       deltaAngle;
 @property (nonatomic) CATransform3D deltaTransform;
 @property (nonatomic) CAShapeLayer  *deltaLayer;
+
+@property (nonatomic) BOOL tracking;
+@property (nonatomic) NSUInteger trackingTouch;
 
 // Caches
 @property (nonatomic) CGFloat previousSecondTick;
@@ -37,168 +40,162 @@
 
 @implementation EventTimerControl
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        [self drawClockFace];
-    }
-
-    return self;
+- (void)drawRect:(CGRect)rect {
+	[self drawClockFace];
 }
 
 #pragma mark -
 #pragma mark Public properties
 
-- (void)setNowDate:(NSDate *)nowDate {
-    _nowDate = nowDate;
+- (void)setStartDate:(NSDate *)startDate {
+	_startDate = startDate;
 
-    if([self.delegate respondsToSelector:@selector(nowDateDidUpdate:)]) {
+	if([self.delegate respondsToSelector:@selector(startDateDidUpdate:)]) {
+		[self.delegate startDateDidUpdate:startDate];
+	}
+}
+
+- (void)setNowDate:(NSDate *)nowDate {
+	_nowDate = nowDate;
+
+	if([self.delegate respondsToSelector:@selector(nowDateDidUpdate:)]) {
 		[self.delegate nowDateDidUpdate:nowDate];
-    }
+	}
 }
 
 - (void)setTransforming:(EventTimerTransformingEnum)transforming {
-    _transforming = transforming;
+	_transforming = transforming;
 
-    if([self.delegate respondsToSelector:@selector(transformingDidUpdate:withStartDate:andStopDate:)]) {
+	if([self.delegate respondsToSelector:@selector(transformingDidUpdate:withStartDate:andStopDate:)]) {
 		[self.delegate transformingDidUpdate:transforming withStartDate:self.startDate andStopDate:self.nowDate];
-    }
+	}
 }
 
 #pragma mark -
 #pragma mark Public methods
 
 - (void)initWithStartDate:(NSDate *)startDate andStopDate:(NSDate *)stopDate {
-    [self reset];
+	[self reset];
 
-    self.startDate = startDate;
-    [self drawStart];
+	self.startDate = startDate;
+	[self drawStart];
 
-    self.isStarted = YES;
-    self.isStopped = stopDate != nil ? YES : NO;
+	self.isStarted = YES;
+	self.isStopped = stopDate != nil ? YES : NO;
 
-    self.nowDate = self.isStopped ? stopDate : [NSDate date];
+	self.nowDate = self.isStopped ? stopDate : [NSDate date];
 
-    [self drawNow];
+	[self drawNow];
 
-    if (!self.isStopped) {
-        self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
-                                                            target:self
-                                                          selector:@selector(timerUpdate)
-                                                          userInfo:nil
-                                                           repeats:YES];
-    }
+	if (!self.isStopped) {
+		self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
+															target:self
+														  selector:@selector(timerUpdate)
+														  userInfo:nil
+														   repeats:YES];
+	}
 }
 
 - (void)stop {
-    [self.updateTimer invalidate];
+	[self.updateTimer invalidate];
 
-    self.isStopped = YES;
+	self.isStopped = YES;
 }
 
 - (void)reset {
-    [self.updateTimer invalidate];
+	[self.updateTimer invalidate];
 
-    self.isStarted = NO;
-    self.isStopped = NO;
+	self.isStarted = NO;
+	self.isStopped = NO;
 
-    self.previousSecondTick = -1;
-    self.previousNow        = -1;
+	self.previousSecondTick = -1;
+	self.previousNow        = -1;
 
-    self.secondLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
-    self.startLayer.transform  = CATransform3DMakeRotation(0, 0, 0, 1);
-    self.nowLayer.transform    = CATransform3DMakeRotation(0, 0, 0, 1);
+	self.secondLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1);
+	self.startLayer.transform  = CATransform3DMakeRotation(0, 0, 0, 1);
+	self.nowLayer.transform    = CATransform3DMakeRotation(0, 0, 0, 1);
 
-    self.startTouchPathLayer.strokeEnd = 0;
-    self.nowTouchPathLayer.strokeEnd   = 0;
+	self.startTouchPathLayer.strokeEnd = 0;
+	self.nowTouchPathLayer.strokeEnd   = 0;
 
-    for (NSUInteger i = 0; i < self.secondProgressTicksLayer.sublayers.count; i++) {
-        CALayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
-        layer.hidden = NO;
-    }
+	for (NSUInteger i = 0; i < self.secondProgressTicksLayer.sublayers.count; i++) {
+		CALayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
+		layer.hidden = NO;
+	}
 }
 
 #pragma mark -
 #pragma mark Private methods
 
 - (NSTimeInterval)angleToTimeInterval:(CGFloat)a {
-    return ((a / (2 * M_PI)) * 3600);
+	return ((a / (2 * M_PI)) * 3600);
 }
 
 - (CGFloat)deltaBetweenAngleA:(CGFloat)a AngleB:(CGFloat)b {
-    CGFloat difference = b - a;
+	CGFloat difference = b - a;
 
-    while (difference < -M_PI) {
-        difference += 2 * M_PI;
-    }
-    while (difference > M_PI) {
-        difference -= 2 * M_PI;
-    }
+	while (difference < -M_PI) {
+		difference += 2 * M_PI;
+	}
+	while (difference > M_PI) {
+		difference -= 2 * M_PI;
+	}
 
-    return difference;
+	return difference;
 }
 
 - (void)timerUpdate {
-	//DLog(@"");
-    self.nowDate = [NSDate date];
+	self.nowDate = [NSDate date];
 
-    [self drawNow];
-}
-
-- (void)dealloc {
-	DLog(@"DEALLOC");
+	[self drawNow];
 }
 
 - (void)drawStart {
-    NSTimeInterval startSeconds = [self.startDate timeIntervalSince1970];
+	NSTimeInterval startSeconds = [self.startDate timeIntervalSince1970];
 
-    CGFloat a = (CGFloat)((M_PI * 2) * floor(fmod(startSeconds, 3600) / 60) / 60);
-    self.startLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
+	CGFloat a = (CGFloat)((M_PI * 2) * floor(fmod(startSeconds, 3600) / 60) / 60);
+	self.startLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
 }
 
 - (void)drawNow {
-    NSTimeInterval nowSeconds = [self.nowDate timeIntervalSince1970];
+	NSTimeInterval nowSeconds = [self.nowDate timeIntervalSince1970];
 
-    // We want fluid updates to the seconds
-    double secondsIntoMinute = fmod(nowSeconds, 60);
+	// We want fluid updates to the seconds
+	double secondsIntoMinute = fmod(nowSeconds, 60);
 
-    CGFloat a = (CGFloat)(M_PI * 2 * (secondsIntoMinute / 60));
+	CGFloat a = (CGFloat)(M_PI * 2 * (secondsIntoMinute / 60));
 
-    self.secondLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
+	self.secondLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
 
-    // Update the tick marks for the seconds
-    CGFloat secondTick = (CGFloat)floor(secondsIntoMinute);
+	// Update the tick marks for the seconds
+	CGFloat secondTick = (CGFloat)floor(secondsIntoMinute);
 
-    if (secondTick != self.previousSecondTick) {
-        for (NSUInteger i = 0; i < self.secondProgressTicksLayer.sublayers.count; i++) {
-            CALayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
+	if (secondTick != self.previousSecondTick) {
+		for (NSUInteger i = 0; i < self.secondProgressTicksLayer.sublayers.count; i++) {
+			CALayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
 
-            if (i < secondTick) {
-                layer.hidden = NO;
-            } else {
-                layer.hidden = YES;
-            }
-        }
+			if (i < secondTick) {
+				layer.hidden = NO;
+			} else {
+				layer.hidden = YES;
+			}
+		}
 
-        self.previousSecondTick = secondTick;
-    }
+		self.previousSecondTick = secondTick;
+	}
 
-    double secondsIntoHour = fmod(nowSeconds, 3600);
+	double secondsIntoHour = fmod(nowSeconds, 3600);
 
-    // And for the minutes we want a more tick/tock behavior
-    a = (CGFloat)(M_PI * 2 * (floor(secondsIntoHour / 60) / 60));
-    if (a != self.previousNow) {
-        self.nowLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
-        self.previousNow        = a;
-    }
+	// And for the minutes we want a more tick/tock behavior
+	a = (CGFloat)(M_PI * 2 * (floor(secondsIntoHour / 60) / 60));
+	if (a != self.previousNow) {
+		self.nowLayer.transform = CATransform3DMakeRotation(a, 0, 0, 1);
+		self.previousNow        = a;
+	}
 }
 
 - (void)drawClockFace {
     CGFloat angle;
-
-    if ([self.layer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.layer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
 
     // =====================
     // = Ticks initializer =
@@ -208,9 +205,6 @@
 
     for (NSInteger i = 1; i <= 60; ++i) {
         CAShapeLayer *tick = [CAShapeLayer layer];
-        if ([tick respondsToSelector:@selector(setContentsScale:)]) {
-            [tick setContentsScale:[[UIScreen mainScreen] scale]];
-        }
 
         angle = (CGFloat)((M_PI * 2) / 60.0 * i);
 
@@ -245,9 +239,6 @@
     // = Now initializer =
     // ==========================
     self.nowLayer = [CAShapeLayer layer];
-    if ([self.nowLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.nowLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
 
     // We make the bounds larger for the hit test, otherwise the target is
     // to damn small for human hands, martians not included
@@ -257,9 +248,6 @@
     [nowPath addLineToPoint:CGPointMake(30, 0)]; // Move to top right
 
     self.nowPathLayer = [CAShapeLayer layer];
-    if ([self.nowPathLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.nowPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
     self.nowPathLayer.frame = CGRectMake(0, 0, 50, 50);
 
     // drawing
@@ -271,9 +259,6 @@
     UIBezierPath *nowTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-50, -50, 150, 150)];
 
     self.nowTouchPathLayer = [CAShapeLayer layer];
-    if ([self.nowTouchPathLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.nowTouchPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
     self.nowTouchPathLayer.frame = CGRectMake(-10, -30, 70, 70);
 
     self.nowTouchPathLayer.fillColor   = [[UIColor clearColor] CGColor];
@@ -296,9 +281,6 @@
     // = Start initializer =
     // =========================
     self.startLayer = [CAShapeLayer layer];
-    if ([self.startLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.startLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
 
     // We make the bounds larger for the hit test, otherwise the target is
     // to damn small for human hands, martians not included
@@ -308,9 +290,6 @@
     [startPath addLineToPoint:CGPointMake(30, 0)]; // Move to top right
 
     self.startPathLayer = [CAShapeLayer layer];
-    if ([self.startPathLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.startPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
     self.startPathLayer.frame = CGRectMake(0, 0, 50, 50);
 
     // drawing
@@ -322,9 +301,6 @@
     UIBezierPath *startTouchPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(-50, -50, 150, 150)];
 
     self.startTouchPathLayer = [CAShapeLayer layer];
-    if ([self.startTouchPathLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.startTouchPathLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
     self.startTouchPathLayer.frame = CGRectMake(-10, -30, 70, 70);
 
     self.startTouchPathLayer.fillColor   = [[UIColor clearColor] CGColor];
@@ -347,9 +323,6 @@
     // = Second initializer =
     // ==========================
     self.secondLayer = [CAShapeLayer layer];
-    if ([self.secondLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.secondLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
 
     UIBezierPath *secondHandPath = [UIBezierPath bezierPath];
     [secondHandPath moveToPoint:CGPointMake(3.5, 0)];  // Start at the top
@@ -373,9 +346,6 @@
     // = Second progress ticks initializer =
     // =========================================
     self.secondProgressTicksLayer = [CAShapeLayer layer];
-    if ([self.secondProgressTicksLayer respondsToSelector:@selector(setContentsScale:)]) {
-        [self.secondProgressTicksLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    }
 
     // position
     self.secondProgressTicksLayer.bounds      = CGRectMake(0.0, 0.0, self.bounds.size.width - 100, self.bounds.size.width - 100);
@@ -389,9 +359,6 @@
         angle = (CGFloat)((M_PI * 2) / 60.0 * i);
 
         CAShapeLayer *tick = [CAShapeLayer layer];
-        if ([tick respondsToSelector:@selector(setContentsScale:)]) {
-            [tick setContentsScale:[[UIScreen mainScreen] scale]];
-        }
 
         // position
         tick.bounds      = CGRectMake(0.0, 0.0, 3.0, self.secondProgressTicksLayer.bounds.size.width / 2);
@@ -409,135 +376,189 @@
 }
 
 #pragma mark -
-#pragma mark UIControl
+#pragma mark UIView
 
-- (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-    if (!self.isStarted) {
-        return NO;
-    }
-
-    CGPoint point = [touch locationInView:self];
-
-    CGFloat cx, cy, dx, dy, a;
-
-    self.deltaLayer = nil;
-
-    if ([self.startPathLayer.presentationLayer hitTest:[self.startPathLayer convertPoint:point fromLayer:self.layer]]) {
-        self.deltaLayer = self.startLayer;
-        self.deltaDate  = self.startDate;
-
-        self.transforming = EventTimerStartDateDidStart;
-
-        [self.updateTimer invalidate];
-        self.startTouchPathLayer.strokeEnd = 1;
-    } else if ([self.nowPathLayer.presentationLayer hitTest:[self.nowPathLayer convertPoint:point fromLayer:self.layer]] && self.isStopped) {
-        self.deltaLayer = self.nowLayer;
-        self.deltaDate  = self.nowDate;
-
-        self.transforming = EventTimerNowDateDidStart;
-
-        self.nowTouchPathLayer.strokeEnd = 1;
-    }
-
-    if (self.deltaLayer != nil) {
-        // Calculate the angle in radians
-        cx = self.deltaLayer.position.x;
-        cy = self.deltaLayer.position.y;
-
-        dx = point.x - cx;
-        dy = point.y - cy;
-
-        a = (CGFloat)atan2(dy, dx);
-
-        // Save them away for future iteration
-        self.deltaAngle     = a;
-        self.deltaTransform = self.deltaLayer.transform;
-    }
-
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
-
-    return self.deltaLayer != nil;
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+	return !self.tracking;
 }
 
-- (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-    CGPoint point = [touch locationInView:self];
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+	// If we have more than one touch then the intent clearly isn't to
+	// rotate the dial
+	if (touches.count > 1 || !self.isStarted) {
+		[super touchesBegan:touches withEvent:event];
+	}
 
-    CGFloat cx, cy, dx, dy, a, da;
+	UITouch *touch = [touches anyObject];
+	CGPoint point = [touch locationInView:self];
 
-    if (self.deltaLayer != nil) {
-        // Calculate the angle in radians
-        cx = self.deltaLayer.position.x;
-        cy = self.deltaLayer.position.y;
+	self.deltaLayer = nil;
+	if ([self.startPathLayer.presentationLayer hitTest:[self.startPathLayer convertPoint:point fromLayer:self.layer]]) {
+		self.deltaLayer = self.startLayer;
+		self.deltaDate  = self.startDate;
 
-        dx = point.x - cx;
-        dy = point.y - cy;
+		self.transforming = EventTimerStartDateDidStart;
 
-        a  = (CGFloat)atan2(dy, dx);
-        da = [self deltaBetweenAngleA:self.deltaAngle AngleB:a];
+		[self.updateTimer invalidate];
+		self.startTouchPathLayer.strokeEnd = 1;
+	} else if ([self.nowPathLayer.presentationLayer hitTest:[self.nowPathLayer convertPoint:point fromLayer:self.layer]] && self.isStopped) {
+		self.deltaLayer = self.nowLayer;
+		self.deltaDate  = self.nowDate;
 
-        // The deltaangle applied to the transform
-        CATransform3D transform = CATransform3DRotate(self.deltaTransform, da, 0, 0, 1);
+		self.transforming = EventTimerNowDateDidStart;
 
-        // Save for next iteration
-        self.deltaAngle     = a;
-        self.deltaTransform = transform;
+		self.nowTouchPathLayer.strokeEnd = 1;
+	}
 
-        if (self.deltaLayer == self.startLayer) {
-            CGFloat seconds = (CGFloat)[self angleToTimeInterval : da];
+	// If the touch hasnt touched either now or start then forward up
+	// the chain and return
+	if (self.deltaLayer == nil) {
+		[super touchesBegan:touches withEvent:event];
+		return;
+	}
 
-            NSDate *startDate = [self.deltaDate dateByAddingTimeInterval:seconds];
-            self.deltaDate = startDate;
-            self.startDate = startDate;
-        } else if (self.deltaLayer == self.nowLayer) {
-            CGFloat seconds = (CGFloat)[self angleToTimeInterval : da];
+	CGFloat cx, cy, dx, dy, a;
 
-            NSDate *nowDate = [self.deltaDate dateByAddingTimeInterval:seconds];
-            self.deltaDate = nowDate;
-            self.nowDate = nowDate;
-        }
+	// Calculate the angle in radians
+	cx = self.deltaLayer.position.x;
+	cy = self.deltaLayer.position.y;
 
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
+	dx = point.x - cx;
+	dy = point.y - cy;
 
-        self.deltaLayer.transform = transform;
+	a = (CGFloat)atan2(dy, dx);
 
-        [CATransaction commit];
-    }
+	// Save them away for future iteration
+	self.deltaAngle     = a;
+	self.deltaTransform = self.deltaLayer.transform;
 
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
-
-    return self.deltaLayer != nil;
+	self.trackingTouch = touch.hash;
+	self.tracking = true;
 }
 
-- (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-    if (self.deltaLayer != nil) {
-        if (self.deltaLayer == self.startLayer) {
-            [self drawStart];
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+	UITouch *touch = nil;
+	for (UITouch *t in touches) {
+		if (self.trackingTouch == t.hash) {
+			touch = t;
+		}
+	}
 
-            self.transforming = EventTimerStartDateDidStop;
+	if (touch == nil || self.deltaLayer == nil) {
+		self.tracking = false;
+		self.deltaLayer = nil;
 
-            if (![self.updateTimer isValid] && !self.isStopped) {
-                self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
-                                                                    target:self
-                                                                  selector:@selector(timerUpdate)
-                                                                  userInfo:nil
-                                                                   repeats:YES];
-            }
+		[super touchesMoved:touches withEvent:event];
 
-            self.startTouchPathLayer.strokeEnd = 0;
-        } else if (self.deltaLayer == self.nowLayer) {
-            [self drawNow];
+		return;
+	}
 
-            self.transforming                = EventTimerNowDateDidStop;
-            self.nowTouchPathLayer.strokeEnd = 0;
-        }
+	CGPoint point = [touch locationInView:self];
 
-        self.deltaLayer = nil;
-    }
+	CGFloat cx, cy, dx, dy, a, da;
 
-    self.transforming = EventTimerNot;
+	// Calculate the angle in radians
+	cx = self.deltaLayer.position.x;
+	cy = self.deltaLayer.position.y;
 
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
+	dx = point.x - cx;
+	dy = point.y - cy;
+
+	a  = (CGFloat)atan2(dy, dx);
+	da = [self deltaBetweenAngleA:self.deltaAngle AngleB:a];
+
+	// The deltaangle applied to the transform
+	CATransform3D transform = CATransform3DRotate(self.deltaTransform, da, 0, 0, 1);
+
+	// Save for next iteration
+	self.deltaAngle     = a;
+	self.deltaTransform = transform;
+
+	if (self.deltaLayer == self.startLayer) {
+		CGFloat seconds = (CGFloat)[self angleToTimeInterval : da];
+
+		NSDate *startDate = [self.deltaDate dateByAddingTimeInterval:seconds];
+		self.deltaDate = startDate;
+		self.startDate = startDate;
+	} else if (self.deltaLayer == self.nowLayer) {
+		CGFloat seconds = (CGFloat)[self angleToTimeInterval : da];
+
+		NSDate *nowDate = [self.deltaDate dateByAddingTimeInterval:seconds];
+		self.deltaDate = nowDate;
+		self.nowDate = nowDate;
+	}
+
+	[CATransaction begin];
+	[CATransaction setDisableActions:YES];
+
+	self.deltaLayer.transform = transform;
+
+	[CATransaction commit];
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+	UITouch *touch = nil;
+	for (UITouch *t in touches) {
+		if (self.trackingTouch == t.hash) {
+			touch = t;
+		}
+	}
+
+	if (touch == nil || self.deltaLayer == nil) {
+		self.tracking = false;
+		self.deltaLayer = nil;
+
+		[super touchesMoved:touches withEvent:event];
+
+		return;
+	}
+
+	if (self.deltaLayer == self.startLayer) {
+		[self drawStart];
+
+		self.transforming = EventTimerStartDateDidStop;
+
+		if (![self.updateTimer isValid] && !self.isStopped) {
+			self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.2
+																target:self
+															  selector:@selector(timerUpdate)
+															  userInfo:nil
+															   repeats:YES];
+		}
+
+		self.startTouchPathLayer.strokeEnd = 0;
+	} else if (self.deltaLayer == self.nowLayer) {
+		[self drawNow];
+
+		self.transforming                = EventTimerNowDateDidStop;
+		self.nowTouchPathLayer.strokeEnd = 0;
+	}
+
+	self.tracking = false;
+	self.deltaLayer = nil;
+	self.transforming = EventTimerNot;
+}
+
+- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+	UITouch *touch = nil;
+	for (UITouch *t in touches) {
+		if (self.trackingTouch == t.hash) {
+			touch = t;
+		}
+	}
+
+	if (touch == nil || self.deltaLayer == nil) {
+		self.tracking = false;
+		self.deltaLayer = nil;
+
+		[super touchesMoved:touches withEvent:event];
+
+		return;
+	}
+
+	self.tracking = false;
+	self.deltaLayer = nil;
+	self.transforming = EventTimerNot;
 }
 
 @end

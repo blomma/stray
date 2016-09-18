@@ -7,13 +7,13 @@ protocol TagCellDelegate : class {
 
 class TagCell: UITableViewCell, UITextFieldDelegate {
 	@IBOutlet weak var name: UITextField!
-    @IBOutlet weak var selectedMark: UIView!
+	@IBOutlet weak var selectedMark: UIView!
 
 	weak var delegate: TagCellDelegate?
 
-    override func prepareForReuse() {
-        selectedMark.alpha = 0
-    }
+	override func prepareForReuse() {
+		selectedMark.alpha = 0
+	}
 }
 
 typealias TextFieldDelegate = TagCell
@@ -26,14 +26,14 @@ extension TextFieldDelegate {
 		return true
 	}
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
 
-        return true
-    }
+		return true
+	}
 
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        textField.resignFirstResponder()
+	func textFieldDidEndEditing(_ textField: UITextField) {
+		textField.resignFirstResponder()
 		delegate?.didEndEditing(self)
-    }
+	}
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9E0D048F1AD6A75F00E82A13 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0D048E1AD6A75F00E82A13 /* State.swift */; };
+		9E2962081D51177B0028628C /* CustomSideMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2962071D51177B0028628C /* CustomSideMenuController.swift */; };
 		9E2B21B41D4331050049CA6C /* stray.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9E2B21B21D4331050049CA6C /* stray.xcdatamodeld */; };
 		9E2B21C11D43384C0049CA6C /* Event+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2B21BD1D43384C0049CA6C /* Event+CoreDataClass.swift */; };
 		9E2B21C21D43384C0049CA6C /* Event+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2B21BE1D43384C0049CA6C /* Event+CoreDataProperties.swift */; };
@@ -17,15 +18,12 @@
 		9E36D3B31D35783300F33D80 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36D3B21D35783300F33D80 /* Entity.swift */; };
 		9E36D3B51D3578B500F33D80 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36D3B41D3578B500F33D80 /* CoreDataStack.swift */; };
 		9E36D3B71D35798900F33D80 /* CoreDataInjected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36D3B61D35798900F33D80 /* CoreDataInjected.swift */; };
-		9E36D3BD1D35884200F33D80 /* Event+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36D3BA1D35884200F33D80 /* Event+CoreDataClass.swift */; };
-		9E36D3BE1D35884200F33D80 /* Tag+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36D3BB1D35884200F33D80 /* Tag+CoreDataClass.swift */; };
 		9E36D3C11D36D62E00F33D80 /* EventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36D3C01D36D62E00F33D80 /* EventViewModel.swift */; };
 		9E378E7119EC35C3004DED67 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E378E7019EC35C3004DED67 /* EventsViewController.swift */; };
 		9E42F20215570FD60087F602 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F20015570FD60087F602 /* Main.storyboard */; };
 		9E4DFB8C1AD17CBB008C0123 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4DFB8B1AD17CBB008C0123 /* MenuController.swift */; };
 		9E51708219E44F6900BEF39B /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E51708119E44F6900BEF39B /* Launch Screen.xib */; };
 		9E58CDA11B1895A50003CE03 /* AnimationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E58CDA01B1895A50003CE03 /* AnimationExtension.swift */; };
-		9E622B701AD06D370062A9FD /* TransitionOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E622B6F1AD06D370062A9FD /* TransitionOperator.swift */; };
 		9E62E17C1A28D0DB0011EDC0 /* TagsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E62E17B1A28D0DB0011EDC0 /* TagsViewController.swift */; };
 		9EAD25D9198E314F006A2779 /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9EAD25D8198E314F006A2779 /* FontAwesome.otf */; };
 		9EB08FDE19E00C4800D20EE5 /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB08FDD19E00C4800D20EE5 /* TagCell.swift */; };
@@ -33,11 +31,17 @@
 		9EB160011ACD153600E041B9 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB160001ACD153600E041B9 /* EventViewController.swift */; };
 		9EB9F0411B217FAE004032C5 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB9F0401B217FAE004032C5 /* Debug.swift */; };
 		9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */; };
+		9EF339671D4E910D003153A9 /* CenterContainmentSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF339661D4E910D003153A9 /* CenterContainmentSegue.swift */; };
+		9EF3396A1D4E915A003153A9 /* SideContainmentSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF339691D4E915A003153A9 /* SideContainmentSegue.swift */; };
+		9EF3396C1D4E9199003153A9 /* SideMenuContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF3396B1D4E9199003153A9 /* SideMenuContainerController.swift */; };
+		9EF339701D4E9273003153A9 /* TransitionAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF3396F1D4E9273003153A9 /* TransitionAnimator.swift */; };
 		9EF492A91AD7FFE2002F1E14 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF492A81AD7FFE2002F1E14 /* AppDelegate.swift */; };
+		9EFD657B1D620E7700C8D68F /* SideMenuContainerInjected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFD657A1D620E7700C8D68F /* SideMenuContainerInjected.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		9E0D048E1AD6A75F00E82A13 /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
+		9E2962071D51177B0028628C /* CustomSideMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSideMenuController.swift; sourceTree = "<group>"; };
 		9E2B21B31D4331050049CA6C /* stray.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = stray.xcdatamodel; sourceTree = "<group>"; };
 		9E2B21BD1D43384C0049CA6C /* Event+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataClass.swift"; sourceTree = "<group>"; };
 		9E2B21BE1D43384C0049CA6C /* Event+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -47,9 +51,6 @@
 		9E36D3B21D35783300F33D80 /* Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
 		9E36D3B41D3578B500F33D80 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		9E36D3B61D35798900F33D80 /* CoreDataInjected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataInjected.swift; sourceTree = "<group>"; };
-		9E36D3B81D35875800F33D80 /* CoreDataModel-11.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CoreDataModel-11.xcdatamodel"; sourceTree = "<group>"; };
-		9E36D3BA1D35884200F33D80 /* Event+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataClass.swift"; sourceTree = "<group>"; };
-		9E36D3BB1D35884200F33D80 /* Tag+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Tag+CoreDataClass.swift"; sourceTree = "<group>"; };
 		9E36D3C01D36D62E00F33D80 /* EventViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventViewModel.swift; sourceTree = "<group>"; };
 		9E378E7019EC35C3004DED67 /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		9E42F1EA15570FD60087F602 /* stray.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stray.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,7 +58,6 @@
 		9E4DFB8B1AD17CBB008C0123 /* MenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
 		9E51708119E44F6900BEF39B /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		9E58CDA01B1895A50003CE03 /* AnimationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationExtension.swift; sourceTree = "<group>"; };
-		9E622B6F1AD06D370062A9FD /* TransitionOperator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionOperator.swift; sourceTree = "<group>"; };
 		9E62E17B1A28D0DB0011EDC0 /* TagsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsViewController.swift; sourceTree = "<group>"; };
 		9E9FACFA1D42C7A100E7CA79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9EAD25D8198E314F006A2779 /* FontAwesome.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.otf; sourceTree = "<group>"; };
@@ -71,7 +71,12 @@
 		9EDCB0AF1CD5340900CF2DEA /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		9EE6EC5B158CF5F70063E666 /* EventTimerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EventTimerControl.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9EE6EC5C158CF5F70063E666 /* EventTimerControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventTimerControl.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		9EF339661D4E910D003153A9 /* CenterContainmentSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CenterContainmentSegue.swift; sourceTree = "<group>"; };
+		9EF339691D4E915A003153A9 /* SideContainmentSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideContainmentSegue.swift; sourceTree = "<group>"; };
+		9EF3396B1D4E9199003153A9 /* SideMenuContainerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideMenuContainerController.swift; sourceTree = "<group>"; };
+		9EF3396F1D4E9273003153A9 /* TransitionAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionAnimator.swift; sourceTree = "<group>"; };
 		9EF492A81AD7FFE2002F1E14 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		9EFD657A1D620E7700C8D68F /* SideMenuContainerInjected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideMenuContainerInjected.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +148,7 @@
 		9E42F1F415570FD60087F602 /* stray */ = {
 			isa = PBXGroup;
 			children = (
+				9EF339651D4E90DA003153A9 /* SideMenu */,
 				9E36D3B11D35771700F33D80 /* CoreDataStack */,
 				9E0D04871AD69DE500E82A13 /* Extension */,
 				9EAD25D7198E3140006A2779 /* Fonts */,
@@ -196,8 +202,8 @@
 				9E378E7019EC35C3004DED67 /* EventsViewController.swift */,
 				9E62E17B1A28D0DB0011EDC0 /* TagsViewController.swift */,
 				9EB160001ACD153600E041B9 /* EventViewController.swift */,
-				9E622B6F1AD06D370062A9FD /* TransitionOperator.swift */,
 				9E4DFB8B1AD17CBB008C0123 /* MenuController.swift */,
+				9E2962071D51177B0028628C /* CustomSideMenuController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -217,6 +223,26 @@
 				9EB08FE019E03E1200D20EE5 /* EventCell.swift */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		9EF339651D4E90DA003153A9 /* SideMenu */ = {
+			isa = PBXGroup;
+			children = (
+				9EF339681D4E9141003153A9 /* Segues */,
+				9EF3396B1D4E9199003153A9 /* SideMenuContainerController.swift */,
+				9EF3396F1D4E9273003153A9 /* TransitionAnimator.swift */,
+				9EFD657A1D620E7700C8D68F /* SideMenuContainerInjected.swift */,
+			);
+			name = SideMenu;
+			sourceTree = "<group>";
+		};
+		9EF339681D4E9141003153A9 /* Segues */ = {
+			isa = PBXGroup;
+			children = (
+				9EF339661D4E910D003153A9 /* CenterContainmentSegue.swift */,
+				9EF339691D4E915A003153A9 /* SideContainmentSegue.swift */,
+			);
+			name = Segues;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -320,13 +346,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E2B21C21D43384C0049CA6C /* Event+CoreDataProperties.swift in Sources */,
+				9EF3396C1D4E9199003153A9 /* SideMenuContainerController.swift in Sources */,
 				9E36D3B51D3578B500F33D80 /* CoreDataStack.swift in Sources */,
+				9EF3396A1D4E915A003153A9 /* SideContainmentSegue.swift in Sources */,
 				9EF492A91AD7FFE2002F1E14 /* AppDelegate.swift in Sources */,
 				9EB160011ACD153600E041B9 /* EventViewController.swift in Sources */,
 				9E2B21C11D43384C0049CA6C /* Event+CoreDataClass.swift in Sources */,
 				9E2B21B41D4331050049CA6C /* stray.xcdatamodeld in Sources */,
+				9E2962081D51177B0028628C /* CustomSideMenuController.swift in Sources */,
 				9E2B21C41D43384C0049CA6C /* Tag+CoreDataProperties.swift in Sources */,
 				9E36D3C11D36D62E00F33D80 /* EventViewModel.swift in Sources */,
+				9EFD657B1D620E7700C8D68F /* SideMenuContainerInjected.swift in Sources */,
 				9E0D048F1AD6A75F00E82A13 /* State.swift in Sources */,
 				9E36D3B71D35798900F33D80 /* CoreDataInjected.swift in Sources */,
 				9EE6EC5D158CF5F70063E666 /* EventTimerControl.m in Sources */,
@@ -334,12 +364,13 @@
 				9E4DFB8C1AD17CBB008C0123 /* MenuController.swift in Sources */,
 				9E58CDA11B1895A50003CE03 /* AnimationExtension.swift in Sources */,
 				9E62E17C1A28D0DB0011EDC0 /* TagsViewController.swift in Sources */,
+				9EF339671D4E910D003153A9 /* CenterContainmentSegue.swift in Sources */,
 				9E2B21C31D43384C0049CA6C /* Tag+CoreDataClass.swift in Sources */,
 				9E378E7119EC35C3004DED67 /* EventsViewController.swift in Sources */,
 				9EB08FDE19E00C4800D20EE5 /* TagCell.swift in Sources */,
 				9E36D3B31D35783300F33D80 /* Entity.swift in Sources */,
 				9EB08FE119E03E1200D20EE5 /* EventCell.swift in Sources */,
-				9E622B701AD06D370062A9FD /* TransitionOperator.swift in Sources */,
+				9EF339701D4E9273003153A9 /* TransitionAnimator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
