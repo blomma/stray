@@ -124,9 +124,11 @@ class EventViewController: UIViewController {
 		eventTimerControl?.delegate = self
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+
+		eventTimerControl?.delegate = nil
+	}
 
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "segueToTagsFromEvent",
