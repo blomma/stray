@@ -6,7 +6,7 @@ func save(context: NSManagedObjectContext) -> Result<Bool> {
 		guard context.hasChanges else {
 			return true
 		}
-		
+
 		var thrown: Error?
 		context.performAndWait({
 			do {
@@ -18,7 +18,7 @@ func save(context: NSManagedObjectContext) -> Result<Bool> {
 		if let thrown = thrown {
 			throw thrown
 		}
-		
+
 		return true
 	}
 }
@@ -45,7 +45,7 @@ func fetch<T: NSManagedObject>(forURIRepresentation url: URL, inContext context:
 		guard let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: url) else {
 			throw FetchError.invalidURIRepresentation(url: url.description)
 		}
-		
+
 		var object: NSManagedObject?
 		var thrown: Error?
 		context.performAndWait({
@@ -58,11 +58,11 @@ func fetch<T: NSManagedObject>(forURIRepresentation url: URL, inContext context:
 		if let thrown = thrown {
 			throw thrown
 		}
-		
+
 		guard let TObject = object as? T else {
 			throw FetchError.invalidCast(to: "\(T.self)", from: "\(object)")
 		}
-		
+
 		return TObject
 	}
 }
@@ -81,7 +81,7 @@ func fetch<T: NSManagedObject>(request: NSFetchRequest<T>, inContext context:NSM
 		if let thrown = thrown {
 			throw thrown
 		}
-		
+
 		return objects
 	}
 }
@@ -91,7 +91,7 @@ func fetchFirst<T: NSManagedObject>(request: NSFetchRequest<T>, inContext contex
 		request.fetchLimit = 1
 		request.returnsObjectsAsFaults = false
 		request.fetchBatchSize = 1
-		
+
 		var objects: [T]!
 		var thrown: Error?
 		context.performAndWait({
@@ -104,11 +104,11 @@ func fetchFirst<T: NSManagedObject>(request: NSFetchRequest<T>, inContext contex
 		if let thrown = thrown {
 			throw thrown
 		}
-		
+
 		guard let first = objects.first, objects.count == 1 else {
 			throw FetchError.invalidResult(expectedCount: 1, was: objects.count)
 		}
-		
+
 		return first
 	}
 }

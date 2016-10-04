@@ -57,7 +57,7 @@
 
 - (void)setRunningDate:(NSDate *)runningDate {
 	_runningDate = runningDate;
-	
+
 	if([self.delegate respondsToSelector:@selector(runningDateDidUpdateFrom:to:)]) {
 		[self.delegate runningDateDidUpdateFrom:self.startDate to:runningDate];
 	}
@@ -97,10 +97,10 @@
 
 	self.isStarted = YES;
 	self.isStopped = stopDate != nil ? YES : NO;
-	
+
 	self.runningDate = self.isStopped ? stopDate : [NSDate date];
 	self.stopDate = stopDate;
-	
+
 	[self drawStop:self.isStopped ? self.stopDate : self.runningDate];
 
 	if (!self.isStopped) {
@@ -185,7 +185,7 @@
 	CGFloat secondTick = (CGFloat)floor(secondsIntoMinute);
 	for (NSUInteger i = 0; i < self.secondProgressTicksLayer.sublayers.count; i++) {
 		CALayer *layer = [self.secondProgressTicksLayer.sublayers objectAtIndex:i];
-		
+
 		if (i < secondTick) {
 			layer.hidden = NO;
 		} else {

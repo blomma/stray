@@ -39,7 +39,7 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 				// TODO: Error handling
 				fatalError("\(result.error)")
 			}
-			
+
 			if let indexPath = fetchedResultsController?.indexPath(forObject: event) {
 				tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
 				tableView.scrollToRow(at: indexPath, at: .none, animated: true)
@@ -160,7 +160,7 @@ extension EventsViewController: UITableViewDelegate {
 			guard let event: Event = result.value else {
 				fatalError("\(result.error)")
 			}
-			
+
 			if let oldIndexPath = fetchedResultsController?.indexPath(forObject: event), let cell = tableView.cellForRow(at: oldIndexPath) as? EventCell {
 				hideSelectMark(cell)
 			}
@@ -169,7 +169,7 @@ extension EventsViewController: UITableViewDelegate {
 		if let event = fetchedResultsController?.object(at: indexPath),
 			let cell = tableView.cellForRow(at: indexPath) as? EventCell {
 			showSelectMark(cell)
-			
+
 			state.selectedEventID = event.objectID.uriRepresentation()
 		}
 	}
@@ -191,11 +191,11 @@ extension EventsViewController: UITableViewDataSource {
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "EventCellIdentifier", for: indexPath)
-		
+
 		if let cell = cell as? EventCell {
 			configureCell(cell, atIndexPath: indexPath)
 		}
-		
+
 		return cell
 	}
 

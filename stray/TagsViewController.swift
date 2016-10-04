@@ -19,15 +19,15 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
     override func viewWillAppear(_ animated: Bool) {
 		let request: NSFetchRequest<Tag> = Tag.fetchRequest()
 		request.predicate = NSPredicate(format: "sortIndex == max(sortIndex)")
-		
+
 		let result: Result<Tag> = fetchFirst(request: request, inContext: persistentContainer.viewContext)
 		guard let tag: Tag = result.value else {
 			// TODO: Error handling
 			fatalError("\(result.error)")
 		}
-		
+
 		maxSortOrderIndex = tag.sortIndex
-		
+
 
 		let fetchRequest: NSFetchRequest<Tag> = Tag.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: false)]
@@ -52,7 +52,7 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 			guard let event: Event = result.value else {
 				fatalError("\(result.error)")
 			}
-			
+
 			if let tag = event.inTag,
 				let indexPath = controller.indexPath(forObject: tag) {
 				selectedTagID = tag.objectID.uriRepresentation()
@@ -99,13 +99,13 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 		let tag = Tag(context: persistentContainer.viewContext)
 		tag.sortIndex = maxSortOrderIndex
         maxSortOrderIndex += 1
-		
+
 		let saveResult = save(context: persistentContainer.viewContext)
 		if saveResult.isError {
 			// TODO: Error handling
 			fatalError("\(saveResult.error)")
 		}
-		
+
 	}
 
     fileprivate func showSelectMark(_ cell: TagCell) {
@@ -129,7 +129,7 @@ extension TagsViewController {
 		{
 			let tag = fetchedResultsController.object(at: indexPath)
 			tag.name = cell.name.text
-			
+
 			let saveResult = save(context: persistentContainer.viewContext)
 			if saveResult.isError {
 				// TODO: Error handling
@@ -165,19 +165,19 @@ extension TagsViewController: UITableViewDelegate {
 			guard let event: Event = result.value else {
 				fatalError("\(result.error)")
 			}
-			
+
 			let tag = fetchedResultsController.object(at: indexPath)
 			if let inTag = event.inTag, inTag.isEqual(tag) {
 				event.inTag = nil
 			} else {
 				event.inTag = tag
 			}
-			
+
 			let saveResult = save(context: persistentContainer.viewContext)
 			if saveResult.isError {
 				fatalError("\(saveResult.error)")
 			}
-			
+
 			self.performSegue(withIdentifier: "unwindToPresenter", sender: self)
 		}
 	}
@@ -213,7 +213,7 @@ extension TagsViewController: UITableViewDataSource {
 		{
 			let tag = fetchedResultsController.object(at: indexPath)
 			remove(object: tag, inContext: persistentContainer.viewContext)
-			
+
 			let saveResult = save(context: persistentContainer.viewContext)
 			if saveResult.isError {
 				// TODO: Error handling
@@ -225,7 +225,7 @@ extension TagsViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
 		return true
 	}
-	
+
 	func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
 		if sourceIndexPath == destinationIndexPath {
 			return
@@ -237,13 +237,13 @@ extension TagsViewController: UITableViewDataSource {
 			userReorderingCells = true
 			let i = destinationIndexPath.row
 			tag.sortIndex = Int64(i)
-			
+
 			let saveResult = save(context: persistentContainer.viewContext)
 			if saveResult.isError {
 				// TODO: Error handling
 				fatalError("\(saveResult.error)")
 			}
-			
+
 			userReorderingCells = false
 		}
 	}

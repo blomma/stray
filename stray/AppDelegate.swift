@@ -27,13 +27,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateInjected, CoreDataIn
 			guard let event: Event = result.value else {
 				fatalError("\(result.error)")
 			}
-			
+
 			let saveResult = save(context: self.persistentContainer.viewContext)
 			if saveResult.isError {
 				// TODO: Error handling
 				fatalError("\(saveResult.error)")
 			}
-			
+
 			UserDefaults.standard.set(event.objectID.uriRepresentation(), forKey: "selectedEventID")
 		}
 	}
@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateInjected, CoreDataIn
 		// Restart any tasks that were paused (or not yet started) while the
 		// application was inactive. If the application was previously in the
 		// background, optionally refresh the user interface.
-		
+
 		state.selectedEventID = UserDefaults.standard.url(forKey: "selectedEventID")
 	}
 

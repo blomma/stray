@@ -73,7 +73,7 @@ class EventViewController: UIViewController {
 			(value: IsRunning) in
 
 			self.toggleStartStopButton?.setTitle(value.startStop, for: UIControlState())
-			
+
 			if value.isRunning {
 				self.eventTimerControl?.initWithStart(value.startDate, andStop: value.stopDate)
 				self.animateStartEvent()
@@ -157,7 +157,7 @@ extension EventViewController: EventTimerControlDelegate {
 	func runningDateDidUpdate(from fromDate: Date, to toDate: Date?) {
 		modelView.updateRunning(from: fromDate, to: toDate)
 	}
-	
+
 	func stopDateDidUpdate(_ stopDate: Date?) {
 		modelView.updateStop(with: stopDate)
 	}

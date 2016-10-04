@@ -126,10 +126,10 @@ class EventViewModel: CoreDataInjected, StateInjected {
 			// TODO: Error handling
 			fatalError("\(result.error)")
 		}
-		
+
 		updateStart(with: event.startDate)
 		updateStop(with: event.stopDate)
-		
+
 		state.selectedEventID = url
 		tag = event.inTag?.name
 		isRunning = event.stopDate == nil
@@ -145,10 +145,10 @@ class EventViewModel: CoreDataInjected, StateInjected {
 
 	private func startEvent() {
 		let startDate = Date()
-		
+
 		let event = Event(inContext: persistentContainer.viewContext)
 		event.startDate = startDate
-		
+
 		self.state.selectedEventID = event.objectID.uriRepresentation()
 
 		updateStart(with: startDate)
@@ -170,7 +170,7 @@ class EventViewModel: CoreDataInjected, StateInjected {
 			fatalError("\(result.error)")
 		}
 		event.stopDate = stopDate
-		
+
 		updateStop(with: stopDate)
 
 		isRunning = false
@@ -188,7 +188,7 @@ class EventViewModel: CoreDataInjected, StateInjected {
 			// TODO Error handling
 			fatalError("Missing selectedEventID")
 		}
-		
+
 		let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
 		guard let event: Event = result.value else {
 			fatalError("\(result.error)")
@@ -229,7 +229,7 @@ class EventViewModel: CoreDataInjected, StateInjected {
 			// TODO Error handling
 			fatalError("Missing selectedEventID")
 		}
-		
+
 		let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
 		guard let event: Event = result.value else {
 			fatalError("\(result.error)")
