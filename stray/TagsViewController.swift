@@ -19,14 +19,15 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
     override func viewWillAppear(_ animated: Bool) {
 		let request: NSFetchRequest<Tag> = Tag.fetchRequest()
 		request.predicate = NSPredicate(format: "sortIndex == max(sortIndex)")
+		
 		let result: Result<Tag> = fetchFirst(request: request, inContext: persistentContainer.viewContext)
-        do {
-            let tag = try result.resolve()
-			maxSortOrderIndex = tag.sortIndex
-        } catch {
-            // TODO: Errorhandling
-        }
-
+		guard let tag: Tag = result.value else {
+			// TODO: Error handling
+			fatalError("\(result.error)")
+		}
+		
+		maxSortOrderIndex = tag.sortIndex
+		
 
 		let fetchRequest: NSFetchRequest<Tag> = Tag.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: false)]
@@ -47,19 +48,17 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
         fetchedResultsController = controller
 
         if let id = eventID {
-			let result: Result<Event> = fetch(url: id, inContext: persistentContainer.viewContext)
-            do {
-				let event: Event = try result.resolve()
-                if let tag = event.inTag,
-                    let indexPath = controller.indexPath(forObject: tag) {
-                        selectedTagID = tag.objectID.uriRepresentation()
-                        tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
-                        tableView.scrollToRow(at: indexPath, at: .none, animated: true)
-                }
-            } catch {
-                // TODO: Errorhandling
-            }
-
+			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
+			guard let event: Event = result.value else {
+				fatalError("\(result.error)")
+			}
+			
+			if let tag = event.inTag,
+				let indexPath = controller.indexPath(forObject: tag) {
+				selectedTagID = tag.objectID.uriRepresentation()
+				tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+				tableView.scrollToRow(at: indexPath, at: .none, animated: true)
+			}
         }
     }
 
@@ -100,12 +99,13 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 		let tag = Tag(context: persistentContainer.viewContext)
 		tag.sortIndex = maxSortOrderIndex
         maxSortOrderIndex += 1
-		do {
-			try save(context: persistentContainer.viewContext)
-		} catch {
-			// TODO: Errorhandling
-			print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
+		
+		let saveResult = save(context: persistentContainer.viewContext)
+		if saveResult.isError {
+			// TODO: Error handling
+			fatalError("\(saveResult.error)")
 		}
+		
 	}
 
     fileprivate func showSelectMark(_ cell: TagCell) {
@@ -129,10 +129,11 @@ extension TagsViewController {
 		{
 			let tag = fetchedResultsController.object(at: indexPath)
 			tag.name = cell.name.text
-			do {
-				try save(context: persistentContainer.viewContext)
-			} catch {
-				// TODO: Errorhandling
+			
+			let saveResult = save(context: persistentContainer.viewContext)
+			if saveResult.isError {
+				// TODO: Error handling
+				fatalError("\(saveResult.error)")
 			}
 		}
 	}
@@ -148,41 +149,36 @@ extension TagsViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: false)
 
 		if let selectedTagID = selectedTagID {
-			let result: Result<Tag> = fetch(url: selectedTagID, inContext: persistentContainer.viewContext)
-			do {
-				let tag: Tag = try result.resolve()
-				if let oldIndexPath = fetchedResultsController?.indexPath(forObject: tag),
-					let cell = tableView.cellForRow(at: oldIndexPath) as? TagCell {
-					hideSelectMark(cell)
-				}
-			} catch {
-				// TODO
+			let result: Result<Tag> = fetch(forURIRepresentation: selectedTagID, inContext: persistentContainer.viewContext)
+			guard let tag: Tag = result.value else {
+				fatalError("\(result.error)")
+			}
+			if let oldIndexPath = fetchedResultsController?.indexPath(forObject: tag),
+				let cell = tableView.cellForRow(at: oldIndexPath) as? TagCell {
+				hideSelectMark(cell)
 			}
 		}
 
         if let id = eventID,
 			let fetchedResultsController = fetchedResultsController {
-			let result: Result<Event> = fetch(url: id, inContext: persistentContainer.viewContext)
-			do {
-				let event: Event = try result.resolve()
-				let tag = fetchedResultsController.object(at: indexPath)
-
-				if let inTag = event.inTag, inTag.isEqual(tag) {
-					event.inTag = nil
-				} else {
-					event.inTag = tag
-				}
-				
-				do {
-					try save(context: persistentContainer.viewContext)
-				} catch {
-					// TODO: Errorhandling
-				}
-
-				self.performSegue(withIdentifier: "unwindToPresenter", sender: self)
-			} catch {
-				// TODO: Errorhandling
+			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
+			guard let event: Event = result.value else {
+				fatalError("\(result.error)")
 			}
+			
+			let tag = fetchedResultsController.object(at: indexPath)
+			if let inTag = event.inTag, inTag.isEqual(tag) {
+				event.inTag = nil
+			} else {
+				event.inTag = tag
+			}
+			
+			let saveResult = save(context: persistentContainer.viewContext)
+			if saveResult.isError {
+				fatalError("\(saveResult.error)")
+			}
+			
+			self.performSegue(withIdentifier: "unwindToPresenter", sender: self)
 		}
 	}
 }
@@ -217,10 +213,11 @@ extension TagsViewController: UITableViewDataSource {
 		{
 			let tag = fetchedResultsController.object(at: indexPath)
 			remove(object: tag, inContext: persistentContainer.viewContext)
-			do {
-				try save(context: persistentContainer.viewContext)
-			} catch {
-				// TODO: Errorhandling
+			
+			let saveResult = save(context: persistentContainer.viewContext)
+			if saveResult.isError {
+				// TODO: Error handling
+				fatalError("\(saveResult.error)")
 			}
 		}
 	}
@@ -240,11 +237,13 @@ extension TagsViewController: UITableViewDataSource {
 			userReorderingCells = true
 			let i = destinationIndexPath.row
 			tag.sortIndex = Int64(i)
-			do {
-				try save(context: persistentContainer.viewContext)
-			} catch {
-				// TODO: Errorhandling
+			
+			let saveResult = save(context: persistentContainer.viewContext)
+			if saveResult.isError {
+				// TODO: Error handling
+				fatalError("\(saveResult.error)")
 			}
+			
 			userReorderingCells = false
 		}
 	}

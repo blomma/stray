@@ -1,34 +1,31 @@
 import Foundation
 import CoreData
 
-enum SaveError: Error {
-	case error(String)
-}
-
-func save(context: NSManagedObjectContext) throws -> Void {
-	if !context.hasChanges {
-		return
-	}
-
-	var saveError: SaveError?
-	context.performAndWait { () -> Void in
-		do {
-			try context.save()
-		} catch let error as NSError {
-			saveError = .error(error.localizedDescription)
+func save(context: NSManagedObjectContext) -> Result<Bool> {
+	return Result<Bool> {
+		guard context.hasChanges else {
+			return true
 		}
-	}
-
-	if let saveError = saveError {
-		throw saveError
+		
+		var thrown: Error?
+		context.performAndWait({
+			do {
+				try context.save()
+			} catch {
+				thrown = error
+			}
+		})
+		if let thrown = thrown {
+			throw thrown
+		}
+		
+		return true
 	}
 }
 
 enum FetchError: Error, CustomStringConvertible {
 	case invalidURIRepresentation(url: String)
 	case invalidCast(to: String, from: String)
-	case objectDoesNotExist(withID: NSManagedObjectID, errorMessage: String)
-	case invalidFetch(message: String)
 	case invalidResult(expectedCount: Int, was: Int)
 
 	var description: String {
@@ -37,84 +34,82 @@ enum FetchError: Error, CustomStringConvertible {
 			return "\(self) - No matching store was found for uri:\(url)"
 		case .invalidCast(to: let to, from: let from):
 			return "\(self) - Unable to cast \(from) -> \(to)"
-		case .objectDoesNotExist(withID: let id, errorMessage: let message):
-			return "\(self) - Unable to find object with id: \(id), message: \(message)"
-		case .invalidFetch(message: let message):
-			return "\(self) - Something went wrong with the fetch, message: \(message)"
 		case .invalidResult(expectedCount: let expectedCount, was: let was):
 			return "\(self) - Expected count of: \(expectedCount), but was: \(was)"
 		}
 	}
 }
 
-enum Result<T> {
-	case success(T)
-	case failure(FetchError)
-
-	func resolve() throws -> T {
-		switch self {
-		case .success(let value):
-			return value
-		case .failure(let error):
-			throw error
+func fetch<T: NSManagedObject>(forURIRepresentation url: URL, inContext context:NSManagedObjectContext) -> Result<T> {
+	return Result<T> {
+		guard let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: url) else {
+			throw FetchError.invalidURIRepresentation(url: url.description)
 		}
-	}
-}
-
-/// Fetches a NSManagedObject as T
-///
-/// - parameter url:     the managedobject id to find
-/// - parameter context: the context to find it in
-///
-/// - returns: Result<T, FetchError>
-func fetch<T: NSManagedObject>(url: URL, inContext context:NSManagedObjectContext) -> Result<T> {
-	guard let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: url) else {
-		return .failure(FetchError.invalidURIRepresentation(url: url.description))
-	}
-
-	do {
-		let object = try context.existingObject(with: id)
+		
+		var object: NSManagedObject?
+		var thrown: Error?
+		context.performAndWait({
+			do {
+				object = try context.existingObject(with: id)
+			} catch {
+				thrown = error
+			}
+		})
+		if let thrown = thrown {
+			throw thrown
+		}
+		
 		guard let TObject = object as? T else {
-			return .failure(FetchError.invalidCast(to: "\(T.self)", from: "\(object)"))
+			throw FetchError.invalidCast(to: "\(T.self)", from: "\(object)")
 		}
-
-		return .success(TObject)
-	} catch let error as NSError {
-		return .failure(FetchError.objectDoesNotExist(withID: id, errorMessage: error.localizedDescription))
+		
+		return TObject
 	}
 }
 
 func fetch<T: NSManagedObject>(request: NSFetchRequest<T>, inContext context:NSManagedObjectContext) -> Result<[T]> {
-	var result: Result<[T]>?
-
-	context.performAndWait { () -> Void in
-		do {
-			result = .success(try context.fetch(request))
-		} catch {
-			result = .failure(FetchError.invalidFetch(message: "\(error)"))
+	return Result<[T]> {
+		var objects: [T]!
+		var thrown: Error?
+		context.performAndWait({
+			do {
+				objects = try context.fetch(request)
+			} catch {
+				thrown = error
+			}
+		})
+		if let thrown = thrown {
+			throw thrown
 		}
+		
+		return objects
 	}
-
-	return result!
 }
 
 func fetchFirst<T: NSManagedObject>(request: NSFetchRequest<T>, inContext context:NSManagedObjectContext) -> Result<T> {
-
-	request.fetchLimit = 1
-	request.returnsObjectsAsFaults = false
-	request.fetchBatchSize = 1
-
-	let result: Result<[T]> = fetch(request: request, inContext: context)
-
-	switch result {
-	case .success(let s):
-		guard let first = s.first, s.count == 1 else {
-			return .failure(FetchError.invalidResult(expectedCount: 1, was: s.count))
+	return Result<T> {
+		request.fetchLimit = 1
+		request.returnsObjectsAsFaults = false
+		request.fetchBatchSize = 1
+		
+		var objects: [T]!
+		var thrown: Error?
+		context.performAndWait({
+			do {
+				objects = try context.fetch(request)
+			} catch {
+				thrown = error
+			}
+		})
+		if let thrown = thrown {
+			throw thrown
 		}
-
-		return .success(first)
-	case .failure(let f):
-		return .failure(f)
+		
+		guard let first = objects.first, objects.count == 1 else {
+			throw FetchError.invalidResult(expectedCount: 1, was: objects.count)
+		}
+		
+		return first
 	}
 }
 

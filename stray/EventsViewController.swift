@@ -1,7 +1,7 @@
 import UIKit
 import CoreData
 
-class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjected {
+class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjected, StateInjected {
 
     @IBOutlet weak var tableView: UITableView!
 
@@ -10,16 +10,12 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 
 	fileprivate var fetchedResultsController: NSFetchedResultsController<Event>?
 
-	fileprivate var eventID: URL?
-
     override func viewDidLoad() {
         super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-		eventID = State().selectedEventID
-
-        let fetchRequest = NSFetchRequest<Event>(entityName: Event.entityName)
+		let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
         fetchRequest.fetchBatchSize = 20
 
@@ -37,19 +33,17 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
         controller.delegate = self
         fetchedResultsController = controller
 
-        if let id = eventID {
-			let result: Result<Event> = fetch(url: id, inContext: persistentContainer.viewContext)
-            do {
-				let event: Event = try result.resolve()
-
-                if let indexPath = fetchedResultsController?.indexPath(forObject: event) {
-                    tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
-                    tableView.scrollToRow(at: indexPath, at: .none, animated: true)
-                }
-            } catch {
-                // TODO: Errorhandling
-            }
-
+        if let id = state.selectedEventID {
+			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
+			guard let event: Event = result.value else {
+				// TODO: Error handling
+				fatalError("\(result.error)")
+			}
+			
+			if let indexPath = fetchedResultsController?.indexPath(forObject: event) {
+				tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+				tableView.scrollToRow(at: indexPath, at: .none, animated: true)
+			}
         }
     }
 
@@ -66,7 +60,7 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 
     fileprivate func configureCell(_ cell: EventCell, atIndexPath: IndexPath) -> Void {
         if let event = fetchedResultsController?.object(at: atIndexPath) {
-			if eventID == event.objectID.uriRepresentation() {
+			if state.selectedEventID == event.objectID.uriRepresentation() {
 				showSelectMark(cell)
 			}
 
@@ -161,25 +155,22 @@ extension EventsViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: false)
 
-		if let eventID = eventID {
-			let result: Result<Event> = fetch(url: eventID, inContext: persistentContainer.viewContext)
-			do {
-				let event: Event = try result.resolve()
-				if let oldIndexPath = fetchedResultsController?.indexPath(forObject: event), let cell = tableView.cellForRow(at: oldIndexPath) as? EventCell {
-					hideSelectMark(cell)
-				}
-			} catch {
-				// TODO
+		if let eventID = state.selectedEventID {
+			let result: Result<Event> = fetch(forURIRepresentation: eventID, inContext: persistentContainer.viewContext)
+			guard let event: Event = result.value else {
+				fatalError("\(result.error)")
+			}
+			
+			if let oldIndexPath = fetchedResultsController?.indexPath(forObject: event), let cell = tableView.cellForRow(at: oldIndexPath) as? EventCell {
+				hideSelectMark(cell)
 			}
 		}
 
 		if let event = fetchedResultsController?.object(at: indexPath),
 			let cell = tableView.cellForRow(at: indexPath) as? EventCell {
 			showSelectMark(cell)
-			eventID = event.objectID.uriRepresentation()
-
-			let state = State()
-			state.selectedEventID = eventID
+			
+			state.selectedEventID = event.objectID.uriRepresentation()
 		}
 	}
 }
@@ -211,19 +202,11 @@ extension EventsViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == UITableViewCellEditingStyle.delete {
 			if let event = fetchedResultsController?.object(at: indexPath) {
-				let state = State()
-
-				if let eventID = eventID, eventID == event.objectID.uriRepresentation() {
+				if state.selectedEventID == event.objectID.uriRepresentation() {
 					state.selectedEventID = nil
 				}
 
 				remove(object: event, inContext: persistentContainer.viewContext)
-				do {
-					try save(context: persistentContainer.viewContext)
-				} catch {
-					// TODO: Errorhandling
-					print("*** ERROR: [\(#line)] \(#function) Error while executing fetch request:")
-				}
 			}
 		}
 	}

@@ -22,11 +22,9 @@ class EventViewController: UIViewController {
 
     // MARK: Private properties
 	fileprivate var modelView: EventViewModel = EventViewModel()
-	fileprivate var calendar = Calendar.autoupdatingCurrent
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
 		self.setNeedsStatusBarAppearanceUpdate()
     }
 
@@ -34,62 +32,28 @@ class EventViewController: UIViewController {
         super.viewWillAppear(animated)
 
 		modelView.startDidUpdate = { [unowned self]
-			(start: StartComponents?) in
+			(value: Start) in
 
-			guard let start = start else {
-				self.eventStartTime?.text = ""
-				self.eventStartDay?.text  = ""
-				self.eventStartMonth?.text = ""
-				self.eventStartYear?.text = ""
-
-				return
-			}
-
-			let index = start.month - 1
-			let shortMonth = self.calendar.shortStandaloneMonthSymbols[index]
-
-			self.eventStartTime?.text = String(format: "%02ld:%02ld", start.hour, start.minute)
-			self.eventStartDay?.text  = String(format: "%02ld", start.day)
-			self.eventStartMonth?.text = shortMonth
-			self.eventStartYear?.text = String(format: "%04ld", start.year)
+			self.eventStartTime?.text = value.time
+			self.eventStartDay?.text  = value.day
+			self.eventStartMonth?.text = value.month
+			self.eventStartYear?.text = value.year
 		}
 
 		modelView.stopDidUpdate = { [unowned self]
-			(stop: StopComponents?) in
+			(value: Stop) in
 
-			guard let stop = stop else {
-				self.eventStopTime?.text = ""
-				self.eventStopDay?.text  = ""
-				self.eventStopYear?.text = ""
-				self.eventStopMonth?.text = ""
-
-				return
-			}
-
-			let index = stop.month - 1
-			let shortMonth = self.calendar.shortStandaloneMonthSymbols[index]
-
-			self.eventStopTime?.text = String(format: "%02ld:%02ld", stop.hour, stop.minute)
-			self.eventStopDay?.text  = String(format: "%02ld", stop.day)
-			self.eventStopYear?.text = String(format: "%04ld", stop.year)
-			self.eventStopMonth?.text = shortMonth
+			self.eventStopTime?.text = value.time
+			self.eventStopDay?.text  = value.day
+			self.eventStopYear?.text = value.year
+			self.eventStopMonth?.text = value.month
 		}
 
 		modelView.runningDidUpdate = { [unowned self]
-			(running: RunningComponents?) in
+			(value: Running) in
 
-			// Initial state
-			guard let running = running else {
-				self.eventTimeHours?.text = String(format:"%02ld", 0)
-				self.eventTimeMinutes?.text = String(format:"%02ld", 0)
-
-				return
-			}
-
-			let isFuture: Bool = running.hour < 0 || running.minute < 0
-
-			self.eventTimeHours?.text = isFuture ? String(format:"-%02ld", abs(running.hour)) : String(format:"%02ld", abs(running.hour))
-			self.eventTimeMinutes?.text = String(format:"%02ld", abs(running.minute))
+			self.eventTimeMinutes?.text = value.minute
+			self.eventTimeHours?.text = value.hour
 		}
 
 		modelView.tagDidUpdate = { [unowned self]
@@ -106,15 +70,15 @@ class EventViewController: UIViewController {
 		}
 
 		modelView.isRunningDidUpdate = { [unowned self]
-			(isRunning: Bool, startDate: Date?, stopDate: Date?) in
+			(value: IsRunning) in
 
-			if isRunning {
-				self.eventTimerControl?.initWithStart(startDate, andStop: stopDate)
-				self.toggleStartStopButton?.setTitle("STOP", for: UIControlState())
+			self.toggleStartStopButton?.setTitle(value.startStop, for: UIControlState())
+			
+			if value.isRunning {
+				self.eventTimerControl?.initWithStart(value.startDate, andStop: value.stopDate)
 				self.animateStartEvent()
 			} else {
 				self.eventTimerControl?.stop()
-				self.toggleStartStopButton?.setTitle("START", for: UIControlState())
 				self.animateStopEvent()
 			}
 		}
@@ -186,27 +150,24 @@ class EventViewController: UIViewController {
 
 // MARK: - EventTimerControlDelegate
 extension EventViewController: EventTimerControlDelegate {
-	func startDateDidUpdate(_ startDate: Date!) {
+	func startDateDidUpdate(_ startDate: Date) {
 		modelView.updateStart(with: startDate)
 	}
 
-	func nowDateDidUpdate(_ nowDate: Date) {
-		modelView.updateRunning(with: nowDate)
+	func runningDateDidUpdate(from fromDate: Date, to toDate: Date?) {
+		modelView.updateRunning(from: fromDate, to: toDate)
+	}
+	
+	func stopDateDidUpdate(_ stopDate: Date?) {
+		modelView.updateStop(with: stopDate)
 	}
 
-	func transformingDidUpdate(_ transform: EventTimerTransformingEnum, withStart startDate: Date, andStop stopDate: Date) {
+	func transformingDidUpdate(_ transform: EventTimerTransformingEnum, with date: Date) {
 		switch transform {
-		case .nowDateDidStart, .startDateDidStart:
-			break
-			// animateEventTransforming(transform)
-		case .nowDateDidStop:
-			// animateEventTransforming(transform)
-			modelView.updateStop(with: stopDate)
-		case .startDateDidStop:
-			// animateEventTransforming(transform)
-			modelView.updateStart(with: startDate)
-		default:
-			break
+		case .startDateDidChange:
+			modelView.updateStart(with: date)
+		case .stopDateDidChange:
+			modelView.updateStop(with: date)
 		}
 	}
 }

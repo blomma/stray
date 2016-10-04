@@ -1,72 +1,82 @@
 import Foundation
 
-struct StartComponents {
-	let minute: Int
-	let hour: Int
-	let day: Int
-	let month: Int
-	let year: Int
+struct Start {
+	let time: String
+	let day: String
+	let month: String
+	let year: String
 
-	init(minute: Int = 0, hour: Int = 0, day: Int = 0, month: Int = 0, year: Int = 0) {
-		self.minute = minute
-		self.hour = hour
+	init(time: String = "", day: String = "", month: String = "", year: String = "") {
+		self.time = time
 		self.day = day
 		self.month = month
 		self.year = year
 	}
 }
 
-struct StopComponents {
-	let minute: Int
-	let hour: Int
-	let day: Int
-	let month: Int
-	let year: Int
+struct Stop {
+	let time: String
+	let day: String
+	let month: String
+	let year: String
 
-	init(minute: Int = 0, hour: Int = 0, day: Int = 0, month: Int = 0, year: Int = 0) {
-		self.minute = minute
-		self.hour = hour
+	init(time: String = "", day: String = "", month: String = "", year: String = "") {
+		self.time = time
 		self.day = day
 		self.month = month
 		self.year = year
 	}
 }
 
-struct RunningComponents {
-	let minute: Int
-	let hour: Int
+struct Running {
+	let minute: String
+	let hour: String
 
-	init(minute: Int = 0, hour: Int = 0) {
+	init(minute: String = "", hour: String = "") {
 		self.minute = minute
 		self.hour = hour
 	}
 }
 
-class EventViewModel: CoreDataInjected {
+struct IsRunning {
+	let isRunning: Bool
+	let startDate: Date?
+	let stopDate: Date?
+	let startStop: String
+
+	init(isRunning: Bool = false, startDate: Date? = nil, stopDate: Date? = nil, startStop: String = "") {
+		self.isRunning = isRunning
+		self.startDate = startDate
+		self.stopDate = stopDate
+		self.startStop = startStop
+	}
+}
+
+class EventViewModel: CoreDataInjected, StateInjected {
 	private var startDate: Date?
-	var start: StartComponents? {
+	private var start: Start = Start() {
 		didSet {
 			startDidUpdate?(start)
 		}
 	}
-	var startDidUpdate: ((_ start: StartComponents?) -> Void)?
+	var startDidUpdate: ((_ value: Start) -> Void)?
 
 
 	private var stopDate: Date?
-	var stop: StopComponents? {
+	private var stop: Stop = Stop() {
 		didSet {
 			stopDidUpdate?(stop)
 		}
 	}
-	var stopDidUpdate: ((_ stop: StopComponents?) -> Void)?
+	var stopDidUpdate: ((_ value: Stop) -> Void)?
 
 
-	private var running: RunningComponents? {
+	private var running: Running = Running() {
 		didSet {
 			runningDidUpdate?(running)
 		}
 	}
-	var runningDidUpdate: ((_ running: RunningComponents?) -> Void)?
+	var runningDidUpdate: ((_ value: Running) -> Void)?
 
 
 	private var tag: String? {
@@ -79,24 +89,30 @@ class EventViewModel: CoreDataInjected {
 
 	private var isRunning: Bool = false {
 		didSet {
-			isRunningDidUpdate?(isRunning, startDate, stopDate)
+			isRunningDidUpdate?(
+				IsRunning(
+					isRunning: isRunning,
+					startDate: startDate,
+					stopDate: stopDate,
+					startStop: isRunning ? "STOP" : "START"
+			))
 		}
 	}
-	var isRunningDidUpdate: ((_ isRunning: Bool, _ startDate: Date?, _ stopDate: Date?) -> Void)?
+	var isRunningDidUpdate: ((_ value: IsRunning) -> Void)?
 
 
 	fileprivate var calendar = Calendar.autoupdatingCurrent
-	var selectedEventID: URL?
 
+	var selectedEventID: URL? {
+		get { return state.selectedEventID }
+	}
 
 	/// Sync exeution
 	func setup() {
-		guard let url = State().selectedEventID else {
+		guard let url = state.selectedEventID else {
 			updateStart(with: nil)
 			updateStop(with: nil)
-			updateRunning(with: nil)
-
-			selectedEventID = nil
+			updateRunning(from: nil, to: nil)
 
 			tag = nil
 
@@ -105,23 +121,18 @@ class EventViewModel: CoreDataInjected {
 			return
 		}
 
-		let result: Result<Event> = fetch(url: url, inContext: persistentContainer.viewContext)
-
-		do {
-			let event: Event = try result.resolve()
-
-			updateStart(with: event.startDate)
-			updateStop(with: event.stopDate)
-
-			selectedEventID = url
-
-			tag = event.inTag?.name
-
-			isRunning = event.stopDate == nil
-		} catch let error {
+		let result: Result<Event> = fetch(forURIRepresentation: url, inContext: persistentContainer.viewContext)
+		guard let event: Event = result.value else {
 			// TODO: Error handling
-			DLog("\(error)")
+			fatalError("\(result.error)")
 		}
+		
+		updateStart(with: event.startDate)
+		updateStop(with: event.stopDate)
+		
+		state.selectedEventID = url
+		tag = event.inTag?.name
+		isRunning = event.stopDate == nil
 	}
 
 	func toggleEventRunning() {
@@ -133,56 +144,56 @@ class EventViewModel: CoreDataInjected {
 	}
 
 	private func startEvent() {
+		let startDate = Date()
+		
 		let event = Event(inContext: persistentContainer.viewContext)
-		event.startDate = Date()
+		event.startDate = startDate
+		
+		self.state.selectedEventID = event.objectID.uriRepresentation()
 
-		// TODO: Only needed to get permanent object id, maybe a better way to do this
-		do {
-			try save(context: persistentContainer.viewContext)
-		} catch {
-			// TODO: Error handling
-		}
-
-		selectedEventID = event.objectID.uriRepresentation()
-
-		updateStart(with: event.startDate)
-		updateStop(with: event.stopDate)
+		updateStart(with: startDate)
+		updateStop(with: nil)
 
 		tag = nil
-
 		isRunning = true
 	}
 
 	private func stopEvent() {
-		// We have a running event
-		guard let id = selectedEventID else {
+		guard let id = state.selectedEventID else {
 			// TODO Error handling
 			fatalError("Missing selectedEventID")
 		}
 
-		let result: Result<Event> = fetch(url: id, inContext: persistentContainer.viewContext)
-		do {
-			let event: Event = try result.resolve()
-
-			event.stopDate = Date()
-			updateStop(with: event.stopDate)
-
-			isRunning = false
+		let stopDate = Date()
+		let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
+		guard let event: Event = result.value else {
+			fatalError("\(result.error)")
 		}
-		catch let e as NSError {
-			// TODO: Error handling
-			fatalError(e.localizedDescription)
-		}
+		event.stopDate = stopDate
+		
+		updateStop(with: stopDate)
+
+		isRunning = false
 	}
 
 	func updateStart(with date: Date?) {
 		startDate = date
-
 		guard let date = date else {
-			start = nil
+			start = Start()
 
 			return
 		}
+
+		guard let id = self.state.selectedEventID else {
+			// TODO Error handling
+			fatalError("Missing selectedEventID")
+		}
+		
+		let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
+		guard let event: Event = result.value else {
+			fatalError("\(result.error)")
+		}
+		event.startDate = date
 
 		let unitFlags: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
 		let components: DateComponents = calendar.dateComponents(unitFlags, from: date)
@@ -192,26 +203,38 @@ class EventViewModel: CoreDataInjected {
 			let month = components.month,
 			let year = components.year
 		{
-			start = StartComponents(
-				minute: minute,
-				hour: hour,
-				day: day,
-				month: month,
-				year: year)
+			let index = month - 1
+			let shortMonth = self.calendar.shortStandaloneMonthSymbols[index]
+
+			start = Start(
+				time: String(format: "%02ld:%02ld", hour, minute),
+				day: String(format: "%02ld", day),
+				month: shortMonth,
+				year: String(format: "%04ld", year))
 		}
 
-		let runningDate: Date = stopDate != nil ? stopDate! : Date()
-		updateRunning(with: runningDate)
+		updateRunning(from: startDate, to: stopDate != nil ? stopDate! : Date())
 	}
 
 	func updateStop(with date: Date?) {
 		stopDate = date
 
 		guard let date = date else {
-			stop = nil
-			
+			stop = Stop()
+
 			return
 		}
+
+		guard let id = self.state.selectedEventID else {
+			// TODO Error handling
+			fatalError("Missing selectedEventID")
+		}
+		
+		let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
+		guard let event: Event = result.value else {
+			fatalError("\(result.error)")
+		}
+		event.stopDate = stopDate
 
 		let unitFlags: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
 		let components: DateComponents = calendar.dateComponents(unitFlags, from: date)
@@ -221,40 +244,37 @@ class EventViewModel: CoreDataInjected {
 			let month = components.month,
 			let year = components.year
 		{
-			stop = StopComponents(
-				minute: minute,
-				hour: hour,
-				day: day,
-				month: month,
-				year: year)
+			let index = month - 1
+			let shortMonth = self.calendar.shortStandaloneMonthSymbols[index]
+
+			stop = Stop(
+				time: String(format: "%02ld:%02ld", hour, minute),
+				day: String(format: "%02ld", day),
+				month: shortMonth,
+				year: String(format: "%04ld", year))
 		}
 
-		updateRunning(with: date)
+		updateRunning(from: startDate, to: stopDate)
 	}
 
-	func updateRunning(with date: Date?) {
-		guard let date = date else {
-			running = nil
+	func updateRunning(from startDate: Date?, to stopDate: Date?) {
+		guard let startDate = startDate, let stopDate = stopDate else {
+			running = Running(minute: "00", hour: "00")
 
 			return
 		}
 
-		guard let startDate = startDate else {
-			// We were called without a startDate
-			// this is never right
-			// TODO: Error handling
-			fatalError()
-		}
-
 		let unitFlags: Set<Calendar.Component> = [.hour, .minute]
-		let components: DateComponents = calendar.dateComponents(unitFlags, from: startDate, to: date)
+		let components: DateComponents = calendar.dateComponents(unitFlags, from: startDate, to: stopDate)
 
 		if let minute = components.minute,
 			let hour = components.hour
 		{
-			running = RunningComponents(
-				minute: minute,
-				hour: hour)
+			let isFuture: Bool = hour < 0 || minute < 0
+			running = Running(
+				minute: String(format:"%02ld", abs(minute)),
+				hour: isFuture ? String(format:"-%02ld", abs(hour)) : String(format:"%02ld", abs(hour))
+			)
 		}
 	}
 }

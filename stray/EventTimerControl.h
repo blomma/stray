@@ -2,18 +2,16 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, EventTimerTransformingEnum) {
-    EventTimerNot,
-    EventTimerStartDateDidStart,
-    EventTimerStartDateDidStop,
-    EventTimerNowDateDidStart,
-    EventTimerNowDateDidStop
+    EventTimerStartDateDidChange,
+    EventTimerStopDateDidChange
 };
 
 @protocol EventTimerControlDelegate <NSObject>
 
 - (void)startDateDidUpdate:(NSDate *)startDate;
-- (void)nowDateDidUpdate:(NSDate *)nowDate;
-- (void)transformingDidUpdate:(EventTimerTransformingEnum)transform withStartDate:(NSDate *)startDate andStopDate:(NSDate *)stopDate;
+- (void)runningDateDidUpdateFrom:(NSDate *)fromDate to:(NSDate *)toDate;
+- (void)stopDateDidUpdate:(NSDate *)stopDate;
+- (void)transformingDidUpdate:(EventTimerTransformingEnum)transform with:(NSDate *)date;
 
 @end
 
