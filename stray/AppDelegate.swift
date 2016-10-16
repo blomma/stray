@@ -1,7 +1,7 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, StateInjected, CoreDataInjected {
+class AppDelegate: UIResponder, UIApplicationDelegate, StateInjected, CoreDataInjected, CloudInjected {
 	var window: UIWindow?
 
 	func applicationWillResignActive(_ application: UIApplication) {
@@ -36,6 +36,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateInjected, CoreDataIn
 
 			UserDefaults.standard.set(event.objectID.uriRepresentation(), forKey: "selectedEventID")
 		}
+
+		cloud.unregister()
 	}
 
 	func applicationWillEnterForeground(_ application: UIApplication) {
@@ -48,8 +50,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateInjected, CoreDataIn
 		// Restart any tasks that were paused (or not yet started) while the
 		// application was inactive. If the application was previously in the
 		// background, optionally refresh the user interface.
-
 		state.selectedEventID = UserDefaults.standard.url(forKey: "selectedEventID")
+
+		cloud.register(context: persistentContainer.viewContext)
 	}
 
 	func applicationWillTerminate(_ application: UIApplication) {
