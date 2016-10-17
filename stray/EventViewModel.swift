@@ -102,26 +102,23 @@ class EventViewModel: CoreDataInjected, StateInjected {
 
 
 	fileprivate var calendar = Calendar.autoupdatingCurrent
-
-	var selectedEventID: URL? {
-		get { return state.selectedEventID }
-	}
-
+	var selectedEventID: URL?
+	
 	/// Sync exeution
 	func setup() {
-		guard let url = state.selectedEventID else {
+		guard let id = state.selectedEventID else {
 			updateStart(with: nil)
 			updateStop(with: nil)
 			updateRunning(from: nil, to: nil)
 
 			tag = nil
-
 			isRunning = false
+			selectedEventID = nil
 
 			return
 		}
 
-		let result: Result<Event> = fetch(forURIRepresentation: url, inContext: persistentContainer.viewContext)
+		let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
 		guard let event: Event = result.value else {
 			// TODO: Error handling
 			fatalError("\(result.error)")
@@ -130,9 +127,9 @@ class EventViewModel: CoreDataInjected, StateInjected {
 		updateStart(with: event.startDate)
 		updateStop(with: event.stopDate)
 
-		state.selectedEventID = url
 		tag = event.inTag?.name
 		isRunning = event.stopDate == nil
+		selectedEventID = id
 	}
 
 	func toggleEventRunning() {
@@ -149,28 +146,22 @@ class EventViewModel: CoreDataInjected, StateInjected {
 		let event = Event(inContext: persistentContainer.viewContext)
 		event.startDate = startDate
 
-		self.state.selectedEventID = event.objectID.uriRepresentation()
-
 		updateStart(with: startDate)
 		updateStop(with: nil)
-
+		
 		tag = nil
 		isRunning = true
+		state.selectedEventID = event.objectID.uriRepresentation()
+		selectedEventID = state.selectedEventID
 	}
 
 	private func stopEvent() {
-		guard let id = state.selectedEventID else {
+		guard (state.selectedEventID != nil) else {
 			// TODO Error handling
 			fatalError("Missing selectedEventID")
 		}
 
 		let stopDate = Date()
-		let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
-		guard let event: Event = result.value else {
-			fatalError("\(result.error)")
-		}
-		event.stopDate = stopDate
-
 		updateStop(with: stopDate)
 
 		isRunning = false
@@ -178,22 +169,20 @@ class EventViewModel: CoreDataInjected, StateInjected {
 
 	func updateStart(with date: Date?) {
 		startDate = date
+		
 		guard let date = date else {
 			start = Start()
 
 			return
 		}
 
-		guard let id = self.state.selectedEventID else {
-			// TODO Error handling
-			fatalError("Missing selectedEventID")
+		if let id = selectedEventID {
+			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
+			guard let event: Event = result.value else {
+				fatalError("\(result.error)")
+			}
+			event.startDate = date
 		}
-
-		let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
-		guard let event: Event = result.value else {
-			fatalError("\(result.error)")
-		}
-		event.startDate = date
 
 		let unitFlags: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
 		let components: DateComponents = calendar.dateComponents(unitFlags, from: date)
@@ -225,16 +214,13 @@ class EventViewModel: CoreDataInjected, StateInjected {
 			return
 		}
 
-		guard let id = self.state.selectedEventID else {
-			// TODO Error handling
-			fatalError("Missing selectedEventID")
+		if let id = selectedEventID {
+			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
+			guard let event: Event = result.value else {
+				fatalError("\(result.error)")
+			}
+			event.stopDate = stopDate
 		}
-
-		let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
-		guard let event: Event = result.value else {
-			fatalError("\(result.error)")
-		}
-		event.stopDate = stopDate
 
 		let unitFlags: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
 		let components: DateComponents = calendar.dateComponents(unitFlags, from: date)
