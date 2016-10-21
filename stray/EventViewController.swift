@@ -25,6 +25,7 @@ class EventViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
 		self.setNeedsStatusBarAppearanceUpdate()
     }
 
@@ -78,7 +79,7 @@ class EventViewController: UIViewController {
 				self.eventTimerControl?.initWithStart(value.startDate, andStop: value.stopDate)
 				self.animateStartEvent()
 			} else {
-				self.eventTimerControl?.stop()
+				self.eventTimerControl?.stop(value.stopDate)
 				self.animateStopEvent()
 			}
 		}

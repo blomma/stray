@@ -47,30 +47,6 @@
 #pragma mark -
 #pragma mark Public properties
 
-- (void)setStartDate:(NSDate *)startDate {
-	_startDate = startDate;
-
-	if([self.delegate respondsToSelector:@selector(startDateDidUpdate:)]) {
-		[self.delegate startDateDidUpdate:startDate];
-	}
-}
-
-- (void)setRunningDate:(NSDate *)runningDate {
-	_runningDate = runningDate;
-
-	if([self.delegate respondsToSelector:@selector(runningDateDidUpdateFrom:to:)]) {
-		[self.delegate runningDateDidUpdateFrom:self.startDate to:runningDate];
-	}
-}
-
-- (void)setStopDate:(NSDate *)stopDate {
-	_stopDate = stopDate;
-
-	if([self.delegate respondsToSelector:@selector(stopDateDidUpdate:)]) {
-		[self.delegate stopDateDidUpdate:stopDate];
-	}
-}
-
 - (void)setTransforming:(EventTimerTransformingEnum)transforming {
 	_transforming = transforming;
 
@@ -112,11 +88,11 @@
 	}
 }
 
-- (void)stop {
+- (void)stop:(NSDate *)stopDate {
 	[self.updateTimer invalidate];
 
 	self.isStopped = YES;
-	self.stopDate = [NSDate date];
+	self.stopDate = stopDate;
 }
 
 - (void)reset {
@@ -160,8 +136,11 @@
 
 - (void)timerUpdate {
 	self.runningDate = [NSDate date];
-
 	[self drawStop:self.runningDate];
+	
+	if([self.delegate respondsToSelector:@selector(runningDateDidUpdateFrom:to:)]) {
+		[self.delegate runningDateDidUpdateFrom:self.startDate to:self.runningDate];
+	}
 }
 
 - (void)drawStart:(NSDate *)startDate {
@@ -479,11 +458,17 @@
 
 		NSDate *startDate = [self.startDate dateByAddingTimeInterval:seconds];
 		self.startDate = startDate;
+		if([self.delegate respondsToSelector:@selector(startDateDidUpdate:)]) {
+			[self.delegate startDateDidUpdate:startDate];
+		}
 	} else if (self.deltaLayer == self.stopLayer) {
 		CGFloat seconds = (CGFloat)[self angleToTimeInterval : da];
 
 		NSDate *stopDate = [self.stopDate dateByAddingTimeInterval:seconds];
 		self.stopDate = stopDate;
+		if([self.delegate respondsToSelector:@selector(stopDateDidUpdate:)]) {
+			[self.delegate stopDateDidUpdate:stopDate];
+		}
 	}
 
 	[CATransaction begin];

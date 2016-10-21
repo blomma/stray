@@ -21,7 +21,7 @@ IB_DESIGNABLE
 @property (weak, nonatomic) id <EventTimerControlDelegate> delegate;
 
 - (void)initWithStartDate:(NSDate *)startDate andStopDate:(NSDate *)stopDate;
-- (void)stop;
+- (void)stop:(NSDate *)stopDate;
 - (void)reset;
 
 @end
