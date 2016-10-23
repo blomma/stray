@@ -1,5 +1,3 @@
-import Foundation
-
 enum Result<T> {
 	case success(T)
 	case failure(Error)
@@ -40,6 +38,27 @@ enum Result<T> {
 		case .success: return false
 		case .failure: return true
 		}
+	}
+}
+
+extension Result : CustomStringConvertible, CustomDebugStringConvertible {
+	public func analysis<Result>(ifSuccess: (T) -> Result, ifFailure: (Error) -> Result) -> Result {
+		switch self {
+		case let .success(value):
+			return ifSuccess(value)
+		case let .failure(value):
+			return ifFailure(value)
+		}
+	}
+
+	public var description: String {
+		return analysis(
+			ifSuccess: { ".success(\($0))" },
+			ifFailure: { ".failure(\($0))" })
+	}
+
+	public var debugDescription: String {
+		return description
 	}
 }
 

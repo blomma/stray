@@ -11,6 +11,8 @@ protocol CloudEntity: class {
 	var recordType: String { get }
 	var recordName: String { get }
 	var recordZoneName: String { get }
+
+	func record() -> CKRecord
 }
 
 extension CloudEntity {
@@ -19,8 +21,4 @@ extension CloudEntity {
 		return CKRecordID(recordName: recordName, zoneID: zoneID)
 	}
 
-	func record(with zoneName: String) -> CKRecord {
-		let id = recordID()
-		return CKRecord(recordType: recordType, recordID: id)
-	}
 }

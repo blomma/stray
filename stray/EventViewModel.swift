@@ -52,7 +52,7 @@ struct IsRunning {
 	}
 }
 
-class EventViewModel: CoreDataInjected, StateInjected {
+class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 	private var startDate: Date?
 	private var start: Start = Start() {
 		didSet {
@@ -103,7 +103,7 @@ class EventViewModel: CoreDataInjected, StateInjected {
 
 	fileprivate var calendar = Calendar.autoupdatingCurrent
 	var selectedEventID: URL?
-	
+
 	/// Sync exeution
 	func setup() {
 		guard let id = state.selectedEventID else {
@@ -127,7 +127,7 @@ class EventViewModel: CoreDataInjected, StateInjected {
 		updateStart(with: event.startDate)
 		updateStop(with: event.stopDate)
 
-		tag = event.inTag?.name
+		tag = event.tag
 		isRunning = event.stopDate == nil
 		selectedEventID = id
 	}
@@ -141,18 +141,39 @@ class EventViewModel: CoreDataInjected, StateInjected {
 	}
 
 	private func startEvent() {
-		let startDate = Date()
+		selectedEventID = nil
 
-		let event = Event(inContext: persistentContainer.viewContext)
+		let startDate = Date()
+		let context = persistentContainer.viewContext
+
+		let event = Event(inContext: context)
 		event.startDate = startDate
+
+		let inserted = context.insertedObjects
+			.flatMap { $0 as? CloudEntity }
+			.map{ $0.record() }
+		let updated = context.updatedObjects
+			.flatMap { $0 as? CloudEntity }
+			.map{ $0.record() }
+		let deleted = context.deletedObjects
+			.flatMap { $0 as? CloudEntity }
+			.map{ $0.recordID() }
+
+		let result = save(context: context)
+		if let error = result.error {
+			fatalError("\(error)")
+		}
+
+		cloud.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
 
 		updateStart(with: startDate)
 		updateStop(with: nil)
-		
-		tag = nil
-		isRunning = true
+
 		state.selectedEventID = event.objectID.uriRepresentation()
 		selectedEventID = state.selectedEventID
+
+		tag = nil
+		isRunning = true
 	}
 
 	private func stopEvent() {
@@ -169,7 +190,7 @@ class EventViewModel: CoreDataInjected, StateInjected {
 
 	func updateStart(with date: Date?) {
 		startDate = date
-		
+
 		guard let date = date else {
 			start = Start()
 
@@ -177,11 +198,30 @@ class EventViewModel: CoreDataInjected, StateInjected {
 		}
 
 		if let id = selectedEventID {
-			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
+			let context = persistentContainer.viewContext
+
+			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: context)
 			guard let event: Event = result.value else {
 				fatalError("\(result.error)")
 			}
 			event.startDate = date
+
+			let inserted = context.insertedObjects
+				.flatMap { $0 as? CloudEntity }
+				.map{ $0.record() }
+			let updated = context.updatedObjects
+				.flatMap { $0 as? CloudEntity }
+				.map{ $0.record() }
+			let deleted = context.deletedObjects
+				.flatMap { $0 as? CloudEntity }
+				.map{ $0.recordID() }
+
+			let saveResult = save(context: context)
+			if let error = saveResult.error {
+				fatalError("\(error)")
+			}
+
+			cloud.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
 		}
 
 		let unitFlags: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
@@ -215,11 +255,30 @@ class EventViewModel: CoreDataInjected, StateInjected {
 		}
 
 		if let id = selectedEventID {
-			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
+			let context = persistentContainer.viewContext
+
+			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: context)
 			guard let event: Event = result.value else {
 				fatalError("\(result.error)")
 			}
 			event.stopDate = stopDate
+
+			let inserted = context.insertedObjects
+				.flatMap { $0 as? CloudEntity }
+				.map{ $0.record() }
+			let updated = context.updatedObjects
+				.flatMap { $0 as? CloudEntity }
+				.map{ $0.record() }
+			let deleted = context.deletedObjects
+				.flatMap { $0 as? CloudEntity }
+				.map{ $0.recordID() }
+
+			let saveResult = save(context: context)
+			if let error = saveResult.error {
+				fatalError("\(error)")
+			}
+
+			cloud.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
 		}
 
 		let unitFlags: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]

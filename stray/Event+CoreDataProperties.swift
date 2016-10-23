@@ -3,9 +3,9 @@ import CoreData
 
 extension Event {
 
-    @NSManaged var startDate: Date
-    @NSManaged var stopDate: Date?
-    @NSManaged var inTag: Tag?
+	@NSManaged var tag: String?
+	@NSManaged var startDate: Date
+	@NSManaged var stopDate: Date?
 	@NSManaged var id: String
 
 }
