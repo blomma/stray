@@ -64,8 +64,7 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 				showSelectMark(cell)
 			}
 
-            if let inTag = event.inTag,
-                let name = inTag.name {
+            if let name = event.tag {
                 let attributedString = NSAttributedString(string: name, attributes:
                     [NSFontAttributeName: UIFont(name: "Helvetica Neue", size: 14.0)!])
                 cell.tagButton.setAttributedTitle(attributedString, for: UIControlState())

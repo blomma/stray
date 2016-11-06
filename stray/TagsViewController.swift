@@ -6,7 +6,7 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 
     fileprivate var userReorderingCells = false
     fileprivate var selectedTagID: URL?
-	fileprivate var maxSortOrderIndex :Int64 = 0
+	fileprivate var maxSortOrderIndex :Int = 0
 
 	var eventID: URL?
 
@@ -46,20 +46,6 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 
         controller.delegate = self
         fetchedResultsController = controller
-
-        if let id = eventID {
-			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
-			guard let event: Event = result.value else {
-				fatalError("\(result.error)")
-			}
-
-			if let tag = event.inTag,
-				let indexPath = controller.indexPath(forObject: tag) {
-				selectedTagID = tag.objectID.uriRepresentation()
-				tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
-				tableView.scrollToRow(at: indexPath, at: .none, animated: true)
-			}
-        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -167,11 +153,7 @@ extension TagsViewController: UITableViewDelegate {
 			}
 
 			let tag = fetchedResultsController.object(at: indexPath)
-			if let inTag = event.inTag, inTag.isEqual(tag) {
-				event.inTag = nil
-			} else {
-				event.inTag = tag
-			}
+			event.tag = tag.name
 
 			let saveResult = save(context: persistentContainer.viewContext)
 			if saveResult.isError {
@@ -235,8 +217,7 @@ extension TagsViewController: UITableViewDataSource {
 		{
 			let tag = fetchedResultsController.object(at: sourceIndexPath)
 			userReorderingCells = true
-			let i = destinationIndexPath.row
-			tag.sortIndex = Int64(i)
+			tag.sortIndex = destinationIndexPath.row
 
 			let saveResult = save(context: persistentContainer.viewContext)
 			if saveResult.isError {

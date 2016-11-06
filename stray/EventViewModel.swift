@@ -52,7 +52,7 @@ struct IsRunning {
 	}
 }
 
-class EventViewModel: CoreDataInjected, StateInjected {
+class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 	private var startDate: Date?
 	private var start: Start = Start() {
 		didSet {
@@ -102,26 +102,23 @@ class EventViewModel: CoreDataInjected, StateInjected {
 
 
 	fileprivate var calendar = Calendar.autoupdatingCurrent
-
-	var selectedEventID: URL? {
-		get { return state.selectedEventID }
-	}
+	var selectedEventID: URL?
 
 	/// Sync exeution
 	func setup() {
-		guard let url = state.selectedEventID else {
+		guard let id = state.selectedEventID else {
 			updateStart(with: nil)
 			updateStop(with: nil)
 			updateRunning(from: nil, to: nil)
 
 			tag = nil
-
 			isRunning = false
+			selectedEventID = nil
 
 			return
 		}
 
-		let result: Result<Event> = fetch(forURIRepresentation: url, inContext: persistentContainer.viewContext)
+		let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
 		guard let event: Event = result.value else {
 			// TODO: Error handling
 			fatalError("\(result.error)")
@@ -130,9 +127,9 @@ class EventViewModel: CoreDataInjected, StateInjected {
 		updateStart(with: event.startDate)
 		updateStop(with: event.stopDate)
 
-		state.selectedEventID = url
-		tag = event.inTag?.name
+		tag = event.tag
 		isRunning = event.stopDate == nil
+		selectedEventID = id
 	}
 
 	func toggleEventRunning() {
@@ -144,33 +141,48 @@ class EventViewModel: CoreDataInjected, StateInjected {
 	}
 
 	private func startEvent() {
-		let startDate = Date()
+		selectedEventID = nil
 
-		let event = Event(inContext: persistentContainer.viewContext)
+		let startDate = Date()
+		let context = persistentContainer.viewContext
+
+		let event = Event(inContext: context)
 		event.startDate = startDate
 
-		self.state.selectedEventID = event.objectID.uriRepresentation()
+		let inserted = context.insertedObjects
+			.flatMap { $0 as? CloudEntity }
+			.map{ $0.record() }
+		let updated = context.updatedObjects
+			.flatMap { $0 as? CloudEntity }
+			.map{ $0.record() }
+		let deleted = context.deletedObjects
+			.flatMap { $0 as? CloudEntity }
+			.map{ $0.recordID() }
+
+		let result = save(context: context)
+		if let error = result.error {
+			fatalError("\(error)")
+		}
+
+		cloud.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
 
 		updateStart(with: startDate)
 		updateStop(with: nil)
+
+		state.selectedEventID = event.objectID.uriRepresentation()
+		selectedEventID = state.selectedEventID
 
 		tag = nil
 		isRunning = true
 	}
 
 	private func stopEvent() {
-		guard let id = state.selectedEventID else {
+		guard (state.selectedEventID != nil) else {
 			// TODO Error handling
 			fatalError("Missing selectedEventID")
 		}
 
 		let stopDate = Date()
-		let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
-		guard let event: Event = result.value else {
-			fatalError("\(result.error)")
-		}
-		event.stopDate = stopDate
-
 		updateStop(with: stopDate)
 
 		isRunning = false
@@ -178,22 +190,39 @@ class EventViewModel: CoreDataInjected, StateInjected {
 
 	func updateStart(with date: Date?) {
 		startDate = date
+
 		guard let date = date else {
 			start = Start()
 
 			return
 		}
 
-		guard let id = self.state.selectedEventID else {
-			// TODO Error handling
-			fatalError("Missing selectedEventID")
-		}
+		if let id = selectedEventID {
+			let context = persistentContainer.viewContext
 
-		let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
-		guard let event: Event = result.value else {
-			fatalError("\(result.error)")
+			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: context)
+			guard let event: Event = result.value else {
+				fatalError("\(result.error)")
+			}
+			event.startDate = date
+
+			let inserted = context.insertedObjects
+				.flatMap { $0 as? CloudEntity }
+				.map{ $0.record() }
+			let updated = context.updatedObjects
+				.flatMap { $0 as? CloudEntity }
+				.map{ $0.record() }
+			let deleted = context.deletedObjects
+				.flatMap { $0 as? CloudEntity }
+				.map{ $0.recordID() }
+
+			let saveResult = save(context: context)
+			if let error = saveResult.error {
+				fatalError("\(error)")
+			}
+
+			cloud.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
 		}
-		event.startDate = date
 
 		let unitFlags: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
 		let components: DateComponents = calendar.dateComponents(unitFlags, from: date)
@@ -225,16 +254,32 @@ class EventViewModel: CoreDataInjected, StateInjected {
 			return
 		}
 
-		guard let id = self.state.selectedEventID else {
-			// TODO Error handling
-			fatalError("Missing selectedEventID")
-		}
+		if let id = selectedEventID {
+			let context = persistentContainer.viewContext
 
-		let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
-		guard let event: Event = result.value else {
-			fatalError("\(result.error)")
+			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: context)
+			guard let event: Event = result.value else {
+				fatalError("\(result.error)")
+			}
+			event.stopDate = stopDate
+
+			let inserted = context.insertedObjects
+				.flatMap { $0 as? CloudEntity }
+				.map{ $0.record() }
+			let updated = context.updatedObjects
+				.flatMap { $0 as? CloudEntity }
+				.map{ $0.record() }
+			let deleted = context.deletedObjects
+				.flatMap { $0 as? CloudEntity }
+				.map{ $0.recordID() }
+
+			let saveResult = save(context: context)
+			if let error = saveResult.error {
+				fatalError("\(error)")
+			}
+
+			cloud.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
 		}
-		event.stopDate = stopDate
 
 		let unitFlags: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
 		let components: DateComponents = calendar.dateComponents(unitFlags, from: date)

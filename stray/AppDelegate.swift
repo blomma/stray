@@ -1,7 +1,7 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, StateInjected, CoreDataInjected {
+class AppDelegate: UIResponder, UIApplicationDelegate, StateInjected, CoreDataInjected, CloudInjected {
 	var window: UIWindow?
 
 	func applicationWillResignActive(_ application: UIApplication) {
@@ -12,6 +12,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateInjected, CoreDataIn
 		// state. Use this method to pause ongoing tasks, disable timers, and
 		// throttle down OpenGL ES frame rates. Games should use this method to
 		// pause the game.
+		UserDefaults.standard.set(state.selectedEventID, forKey: "selectedEventID")
 	}
 
 	func applicationDidEnterBackground(_ application: UIApplication) {
@@ -21,21 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateInjected, CoreDataIn
 		// terminated later. If your application supports background execution,
 		// this method is called instead of applicationWillTerminate: when the
 		// user quits.
-
-		if let id = state.selectedEventID {
-			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
-			guard let event: Event = result.value else {
-				fatalError("\(result.error)")
-			}
-
-			let saveResult = save(context: self.persistentContainer.viewContext)
-			if saveResult.isError {
-				// TODO: Error handling
-				fatalError("\(saveResult.error)")
-			}
-
-			UserDefaults.standard.set(event.objectID.uriRepresentation(), forKey: "selectedEventID")
-		}
 	}
 
 	func applicationWillEnterForeground(_ application: UIApplication) {
@@ -48,7 +34,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateInjected, CoreDataIn
 		// Restart any tasks that were paused (or not yet started) while the
 		// application was inactive. If the application was previously in the
 		// background, optionally refresh the user interface.
-
 		state.selectedEventID = UserDefaults.standard.url(forKey: "selectedEventID")
 	}
 
