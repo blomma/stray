@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 public class CenterContainmentSegue: UIStoryboardSegue {
 	override public func perform() {

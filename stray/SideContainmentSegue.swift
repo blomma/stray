@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 public class SideContainmentSegue: UIStoryboardSegue {
 	override public func perform() {

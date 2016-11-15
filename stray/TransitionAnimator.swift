@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 public protocol TransitionAnimatable {
 	static func performTransition(forView view: UIView, completion: (() -> Void)?)

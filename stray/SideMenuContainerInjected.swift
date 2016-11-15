@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 protocol SideMenuContainerInjected: class {
 	var sideMenuContainerController: SideMenuContainerController { get }

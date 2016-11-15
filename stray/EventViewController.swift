@@ -2,7 +2,7 @@ import UIKit
 
 class EventViewController: UIViewController {
 	// MARK: IBOutlet
-	@IBOutlet weak var eventTimerControl: EventTimerControl?
+	@IBOutlet weak var eventTimer: EventTimer?
 	@IBOutlet weak var toggleStartStopButton: UIButton?
 
 	@IBOutlet weak var eventStartTime: UILabel?
@@ -75,23 +75,43 @@ class EventViewController: UIViewController {
 			self.toggleStartStopButton?.setTitle(value.startStop, for: UIControlState())
 
 			if value.isRunning {
-				self.eventTimerControl?.initWithStart(value.startDate, andStop: value.stopDate)
+                if let startDate = value.startDate {
+                    self.eventTimer?.setup(with: startDate, and: value.stopDate)
+                }
 				self.animateStartEvent()
 			} else {
-				self.eventTimerControl?.stop(value.stopDate)
+                if let stopDate = value.stopDate {
+                    self.eventTimer?.stop(with: stopDate)
+                }
 				self.animateStopEvent()
 			}
 		}
 
+        eventTimer?.startDidUpdate = { [unowned self] (_ to: Date) in
+            self.modelView.updateStart(with: to)
+        }
+        
+        eventTimer?.runningDidUpdate = { [unowned self] (_ from: Date, _ to: Date) in
+            self.modelView.updateRunning(from: from, to: to)
+        }
+        
+        eventTimer?.stopDidUpdate = { [unowned self] (_ to: Date) in
+            self.modelView.updateStop(with: to)
+        }
+        
+        eventTimer?.transformingStartDidUpdate = { [unowned self] (_ to: Date) in
+            self.modelView.updateStart(with: to)
+        }
+        
+        eventTimer?.transformingStopDidUpdate = { [unowned self] (_ to: Date) in
+            self.modelView.updateStop(with: to)
+        }
+        
 		modelView.setup()
-
-		eventTimerControl?.delegate = self
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
-
-		eventTimerControl?.delegate = nil
 	}
 
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -144,29 +164,5 @@ class EventViewController: UIViewController {
 
 	override var prefersStatusBarHidden: Bool {
 		return true
-	}
-}
-
-// MARK: - EventTimerControlDelegate
-extension EventViewController: EventTimerControlDelegate {
-	func startDateDidUpdate(_ startDate: Date) {
-		modelView.updateStart(with: startDate)
-	}
-
-	func runningDateDidUpdate(from fromDate: Date, to toDate: Date?) {
-		modelView.updateRunning(from: fromDate, to: toDate)
-	}
-
-	func stopDateDidUpdate(_ stopDate: Date?) {
-		modelView.updateStop(with: stopDate)
-	}
-
-	func transformingDidUpdate(_ transform: EventTimerTransformingEnum, with date: Date) {
-		switch transform {
-		case .startDateDidChange:
-			modelView.updateStart(with: date)
-		case .stopDateDidChange:
-			modelView.updateStop(with: date)
-		}
 	}
 }
