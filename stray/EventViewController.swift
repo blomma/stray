@@ -87,24 +87,16 @@ class EventViewController: UIViewController {
 			}
 		}
 
-        eventTimer?.startDidUpdate = { [unowned self] (_ to: Date) in
-            self.modelView.updateStart(with: to)
+		eventTimer?.startDidUpdate = { [unowned self] (_ to: Date, _ isTransforming: Bool) in
+            self.modelView.updateStart(with: to, isTransforming: isTransforming)
         }
         
         eventTimer?.runningDidUpdate = { [unowned self] (_ from: Date, _ to: Date) in
             self.modelView.updateRunning(from: from, to: to)
         }
         
-        eventTimer?.stopDidUpdate = { [unowned self] (_ to: Date) in
-            self.modelView.updateStop(with: to)
-        }
-        
-        eventTimer?.transformingStartDidUpdate = { [unowned self] (_ to: Date) in
-            self.modelView.updateStart(with: to)
-        }
-        
-        eventTimer?.transformingStopDidUpdate = { [unowned self] (_ to: Date) in
-            self.modelView.updateStop(with: to)
+        eventTimer?.stopDidUpdate = { [unowned self] (_ to: Date, _ isTransforming: Bool) in
+            self.modelView.updateStop(with: to, isTransforming: isTransforming)
         }
         
 		modelView.setup()

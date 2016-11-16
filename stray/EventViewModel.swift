@@ -188,7 +188,7 @@ class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 		isRunning = false
 	}
 
-	func updateStart(with date: Date?) {
+	func updateStart(with date: Date?, isTransforming: Bool = false) {
 		startDate = date
 
 		guard let date = date else {
@@ -197,7 +197,7 @@ class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 			return
 		}
 
-		if let id = selectedEventID {
+		if let id = selectedEventID, !isTransforming {
 			let context = persistentContainer.viewContext
 
 			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: context)
@@ -245,7 +245,7 @@ class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 		updateRunning(from: startDate, to: stopDate != nil ? stopDate! : Date())
 	}
 
-	func updateStop(with date: Date?) {
+	func updateStop(with date: Date?, isTransforming: Bool = false) {
 		stopDate = date
 
 		guard let date = date else {
@@ -254,7 +254,7 @@ class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 			return
 		}
 
-		if let id = selectedEventID {
+		if let id = selectedEventID, !isTransforming {
 			let context = persistentContainer.viewContext
 
 			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: context)

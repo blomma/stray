@@ -8,13 +8,11 @@ import UIKit
 
 @IBDesignable
 class EventTimer: UIView {
-    // Delegates
-    var startDidUpdate: ((_ to: Date) -> Void)?
-    var runningDidUpdate: ((_ from: Date, _ to: Date) -> Void)?
-    var stopDidUpdate: ((_ to: Date) -> Void)?
-    var transformingStartDidUpdate: ((_ to: Date) -> Void)?
-    var transformingStopDidUpdate: ((_ to: Date) -> Void)?
-    
+	// Delegates
+	var startDidUpdate: ((_ startDate: Date, _ isTransforming: Bool) -> Void)?
+    var runningDidUpdate: ((_ startDate: Date, _ stopDate: Date) -> Void)?
+    var stopDidUpdate: ((_ stopDate: Date, _ isTransforming: Bool) -> Void)?
+	
     // Private
     fileprivate let pi2 = M_PI * 2.0
     fileprivate let pi2_60 = M_PI * 2.0 / 60
@@ -78,6 +76,7 @@ class EventTimer: UIView {
 		
         let point = touch.location(in: self)
         deltaLayer = nil
+		
         if let presentation = startPathLayer.presentation(),
 			presentation.hitTest(startPathLayer.convert(point, from: layer)) != nil {
             deltaLayer = startLayer
@@ -155,14 +154,14 @@ class EventTimer: UIView {
 			startDate = startDate?.addingTimeInterval(seconds)
 			
 			if let startDate = startDate {
-				startDidUpdate?(startDate)
+				startDidUpdate?(startDate, true)
 			}
 		} else if deltaLayer == self.stopLayer {
 			let seconds = timeInterval(from: da)
 			stopDate = stopDate?.addingTimeInterval(seconds)
 			
 			if let stopDate = stopDate {
-				stopDidUpdate?(stopDate)
+				stopDidUpdate?(stopDate, true)
 			}
 		}
 		
@@ -191,7 +190,7 @@ class EventTimer: UIView {
 		if deltaLayer == self.startLayer, let startDate = startDate {
 			drawStart(with: startDate)
 			
-			transformingStartDidUpdate?(startDate)
+			startDidUpdate?(startDate, false)
 			startTouchPathLayer.strokeEnd = 0
 			
 			if !isStopped {
@@ -208,7 +207,7 @@ class EventTimer: UIView {
 		} else if deltaLayer == self.stopLayer, let stopDate = stopDate {
 			drawStop(with: stopDate)
 			
-			transformingStopDidUpdate?(stopDate)
+			stopDidUpdate?(stopDate, false)
 			stopTouchPathLayer.strokeEnd = 0
 		}
 		
