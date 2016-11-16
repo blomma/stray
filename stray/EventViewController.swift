@@ -87,18 +87,8 @@ class EventViewController: UIViewController {
 			}
 		}
 
-		eventTimer?.startDidUpdate = { [unowned self] (_ to: Date, _ isTransforming: Bool) in
-            self.modelView.updateStart(with: to, isTransforming: isTransforming)
-        }
-        
-        eventTimer?.runningDidUpdate = { [unowned self] (_ from: Date, _ to: Date) in
-            self.modelView.updateRunning(from: from, to: to)
-        }
-        
-        eventTimer?.stopDidUpdate = { [unowned self] (_ to: Date, _ isTransforming: Bool) in
-            self.modelView.updateStop(with: to, isTransforming: isTransforming)
-        }
-        
+		eventTimer?.delegate = self
+
 		modelView.setup()
 	}
 
@@ -156,5 +146,20 @@ class EventViewController: UIViewController {
 
 	override var prefersStatusBarHidden: Bool {
 		return true
+	}
+}
+
+// MARK: EventTimerDelegate
+extension EventViewController: EventTimerDelegate {
+	func updatedStart(to: Date, whileEditing: Bool) {
+		modelView.updateStart(with: to, isTransforming: whileEditing)
+	}
+
+	func updatedStop(to: Date, whileEditing: Bool) {
+		modelView.updateStop(with: to, isTransforming: whileEditing)
+	}
+
+	func updatedRunningWith(start: Date, stop: Date) {
+		modelView.updateRunning(from: start, to: stop)
 	}
 }
