@@ -20,14 +20,14 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 		let request: NSFetchRequest<Tag> = Tag.fetchRequest()
 		request.predicate = NSPredicate(format: "sortIndex == max(sortIndex)")
 
-		let result: Result<Tag> = fetchFirst(request: request, inContext: persistentContainer.viewContext)
-		guard let tag: Tag = result.value else {
-			// TODO: Error handling
+		let result: Result<[Tag]> = fetch(request: request, inContext: persistentContainer.viewContext)
+		if result.isError {
 			fatalError("\(result.error)")
 		}
-
-		maxSortOrderIndex = tag.sortIndex
-
+		
+		if let tag = result.value?.first {
+			maxSortOrderIndex = tag.sortIndex
+		}
 
 		let fetchRequest: NSFetchRequest<Tag> = Tag.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortIndex", ascending: false)]
@@ -191,8 +191,7 @@ extension TagsViewController: UITableViewDataSource {
 
 	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == UITableViewCellEditingStyle.delete,
-			let fetchedResultsController = fetchedResultsController
-		{
+			let fetchedResultsController = fetchedResultsController {
 			let tag = fetchedResultsController.object(at: indexPath)
 			remove(object: tag, inContext: persistentContainer.viewContext)
 
@@ -213,8 +212,7 @@ extension TagsViewController: UITableViewDataSource {
 			return
 		}
 
-		if let fetchedResultsController = fetchedResultsController
-		{
+		if let fetchedResultsController = fetchedResultsController {
 			let tag = fetchedResultsController.object(at: sourceIndexPath)
 			userReorderingCells = true
 			tag.sortIndex = destinationIndexPath.row

@@ -241,6 +241,7 @@ class SideMenuContainerController: UIViewController {
 
 		// gesture recognizers
 		let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleCenterPanelPan))
+		panRecognizer.cancelsTouchesInView = false
 		centerPanel.addGestureRecognizer(panRecognizer)
 		self.panRecognizer = panRecognizer
 	}
