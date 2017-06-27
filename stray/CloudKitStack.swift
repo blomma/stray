@@ -4,10 +4,9 @@
 //
 
 import Foundation
-import CoreData
 import CloudKit
 
-class Cloud {
+class CloudKitStack {
 	let queue: DispatchQueue = DispatchQueue(label: "com.artsoftheinsane.cloudsync")
 
 	var insertedRecords:[CKRecord] = [CKRecord]()

@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 import CloudKit
 
-class Event: NSManagedObject, Entity {
+class Event: NSManagedObject, CoreDataStackEntity {
 	override func awakeFromInsert() {
 		super.awakeFromInsert()
 
@@ -11,7 +11,7 @@ class Event: NSManagedObject, Entity {
 }
 
 // CloudEntity
-extension Event: CloudEntity {
+extension Event: CloudKitStackEntity {
 	var recordType: String { return Event.entityName }
 	var recordName: String { return "\(recordType).\(id)" }
 	var recordZoneName: String { return Event.entityName }

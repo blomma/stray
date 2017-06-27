@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 import CloudKit
 
-class Tag: NSManagedObject, Entity {
+class Tag: NSManagedObject, CoreDataStackEntity {
 	override func awakeFromInsert() {
 		super.awakeFromInsert()
 
@@ -10,7 +10,7 @@ class Tag: NSManagedObject, Entity {
 	}
 }
 
-extension Tag: CloudEntity {
+extension Tag: CloudKitStackEntity {
 	var recordType: String { return Tag.entityName }
 	var recordName: String { return "\(recordType).\(id)" }
 	var recordZoneName: String { return Tag.entityName }

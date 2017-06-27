@@ -1,11 +1,11 @@
 import Foundation
 import CoreData
 
-protocol Entity: class {
+protocol CoreDataStackEntity: class {
 	static var entityName: String { get }
 }
 
-extension Entity where Self: NSManagedObject {
+extension CoreDataStackEntity where Self: NSManagedObject {
 	static var entityName: String {
 		return "\(Self.self)"
 	}

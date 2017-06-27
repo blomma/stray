@@ -52,7 +52,7 @@ struct IsRunning {
 	}
 }
 
-class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
+class EventViewModel: CoreDataStackInjected, StateInjected, CloudKitStackInjected {
 	private var startDate: Date?
 	private var start: Start = Start() {
 		didSet {
@@ -150,13 +150,13 @@ class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 		event.startDate = startDate
 
 		let inserted = context.insertedObjects
-			.flatMap { $0 as? CloudEntity }
+			.flatMap { $0 as? CloudKitStackEntity }
 			.map{ $0.record() }
 		let updated = context.updatedObjects
-			.flatMap { $0 as? CloudEntity }
+			.flatMap { $0 as? CloudKitStackEntity }
 			.map{ $0.record() }
 		let deleted = context.deletedObjects
-			.flatMap { $0 as? CloudEntity }
+			.flatMap { $0 as? CloudKitStackEntity }
 			.map{ $0.recordID() }
 
 		let result = save(context: context)
@@ -164,7 +164,7 @@ class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 			fatalError("\(error)")
 		}
 
-		cloud.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
+		cloudKitStack.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
 
 		updateStart(with: startDate)
 		updateStop(with: nil)
@@ -207,13 +207,13 @@ class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 			event.startDate = date
 
 			let inserted = context.insertedObjects
-				.flatMap { $0 as? CloudEntity }
+				.flatMap { $0 as? CloudKitStackEntity }
 				.map{ $0.record() }
 			let updated = context.updatedObjects
-				.flatMap { $0 as? CloudEntity }
+				.flatMap { $0 as? CloudKitStackEntity }
 				.map{ $0.record() }
 			let deleted = context.deletedObjects
-				.flatMap { $0 as? CloudEntity }
+				.flatMap { $0 as? CloudKitStackEntity }
 				.map{ $0.recordID() }
 
 			let saveResult = save(context: context)
@@ -221,7 +221,7 @@ class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 				fatalError("\(error)")
 			}
 
-			cloud.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
+			cloudKitStack.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
 		}
 
 		let unitFlags: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
@@ -264,13 +264,13 @@ class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 			event.stopDate = stopDate
 
 			let inserted = context.insertedObjects
-				.flatMap { $0 as? CloudEntity }
+				.flatMap { $0 as? CloudKitStackEntity }
 				.map{ $0.record() }
 			let updated = context.updatedObjects
-				.flatMap { $0 as? CloudEntity }
+				.flatMap { $0 as? CloudKitStackEntity }
 				.map{ $0.record() }
 			let deleted = context.deletedObjects
-				.flatMap { $0 as? CloudEntity }
+				.flatMap { $0 as? CloudKitStackEntity }
 				.map{ $0.recordID() }
 
 			let saveResult = save(context: context)
@@ -278,7 +278,7 @@ class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 				fatalError("\(error)")
 			}
 
-			cloud.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
+			cloudKitStack.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
 		}
 
 		let unitFlags: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]

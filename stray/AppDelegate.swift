@@ -1,7 +1,7 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, StateInjected, CoreDataInjected, CloudInjected {
+class AppDelegate: UIResponder, UIApplicationDelegate, StateInjected, CoreDataStackInjected, CloudKitStackInjected {
 	var window: UIWindow?
 
 	func applicationWillResignActive(_ application: UIApplication) {

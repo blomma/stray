@@ -4,10 +4,9 @@
 //
 
 import Foundation
-import CoreData
 import CloudKit
 
-protocol CloudEntity: class {
+protocol CloudKitStackEntity: class {
 	var recordType: String { get }
 	var recordName: String { get }
 	var recordZoneName: String { get }
@@ -15,10 +14,9 @@ protocol CloudEntity: class {
 	func record() -> CKRecord
 }
 
-extension CloudEntity {
+extension CloudKitStackEntity {
 	func recordID() -> CKRecordID {
 		let zoneID = CKRecordZoneID(zoneName: recordZoneName, ownerName: CKCurrentUserDefaultName)
 		return CKRecordID(recordName: recordName, zoneID: zoneID)
 	}
-
 }

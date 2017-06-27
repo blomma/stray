@@ -1,17 +1,17 @@
 import Foundation
 import CoreData
 
-protocol CoreDataInjected {
+protocol CoreDataStackInjected {
 	var persistentContainer: NSPersistentContainer { get }
 }
 
-extension CoreDataInjected {
+extension CoreDataStackInjected {
 	var persistentContainer: NSPersistentContainer {
-		get { return CoreDataInjector.persistentContainer }
+		get { return CoreDataStackInjector.persistentContainer }
 	}
 }
 
-struct CoreDataInjector {
+struct CoreDataStackInjector {
 	static var persistentContainer: NSPersistentContainer = {
 		let container = NSPersistentContainer(name: "stray")
 		container.loadPersistentStores(completionHandler: { (storeDescription, error) in
