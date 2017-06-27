@@ -27,7 +27,7 @@ class Cloud {
 	}
 
 	private func run(insertedRecords: [CKRecord]? = nil, updatedRecords: [CKRecord]? = nil, deletedRecords: [CKRecordID]? = nil) {
-		DLog("insertedRecords: \(insertedRecords) - updatedRecords: \(updatedRecords) - deletedRecords: \(deletedRecords)")
+		DLog("insertedRecords: \(String(describing: insertedRecords)) - updatedRecords: \(String(describing: updatedRecords)) - deletedRecords: \(String(describing: deletedRecords))")
 		let database = CKContainer.default().privateCloudDatabase
 
 		let modifyRecordZonesOperation = CKModifyRecordZonesOperation()
@@ -37,7 +37,7 @@ class Cloud {
 		insertRecordsOperation.recordsToSave = insertedRecords
 		insertRecordsOperation.modifyRecordsCompletionBlock = {
 			(savedRecords, deletedRecordIDs, error) in
-			DLog("insertRecordsOperation: \(savedRecords) - \(deletedRecordIDs) - \(error)")
+			DLog("insertRecordsOperation: \(String(describing: savedRecords)) - \(String(describing: deletedRecordIDs)) - \(String(describing: error))")
 		}
 		insertRecordsOperation.qualityOfService = .utility
 		insertRecordsOperation.addDependency(modifyRecordZonesOperation)
@@ -48,18 +48,18 @@ class Cloud {
 
 		// Insert
 		if let insertedRecords = insertedRecords, insertedRecords.count > 0 {
-			var expectedZoneNames = Set(insertedRecords.flatMap {
+			var expectedZoneNames = Set(insertedRecords.map {
 				$0.recordID.zoneID.zoneName
 			})
 
 			let fetchAllRecordZonesOperation = CKFetchRecordZonesOperation.fetchAllRecordZonesOperation()
 			fetchAllRecordZonesOperation.fetchRecordZonesCompletionBlock = { (recordZonesByZoneID, error) in
-				DLog("fetchAllRecordZonesOperation: \(recordZonesByZoneID) - \(error)")
+				DLog("fetchAllRecordZonesOperation: \(String(describing: recordZonesByZoneID)) - \(String(describing: error))")
 				if let zones = recordZonesByZoneID {
 					let serverZoneNames = Set(zones.map { $0.key.zoneName })
 					expectedZoneNames.subtract(serverZoneNames)
 				}
-
+				
 				let missingZones = expectedZoneNames.map { CKRecordZone(zoneName: $0) }
 				modifyRecordZonesOperation.recordZonesToSave = missingZones
 			}
@@ -110,7 +110,7 @@ class Cloud {
 				updateRecordsOperation.recordsToSave = recordsToSave
 				updateRecordsOperation.modifyRecordsCompletionBlock = {
 					(savedRecords, deletedRecordIDs, error) in
-					DLog("updateRecordsOperation: \(savedRecords) - \(deletedRecordIDs) - \(error)")
+					DLog("updateRecordsOperation: \(String(describing: savedRecords)) - \(String(describing: deletedRecordIDs)) - \(String(describing: error))")
 				}
 				database.add(updateRecordsOperation)
 			}
@@ -119,7 +119,7 @@ class Cloud {
 			fetchRecordsOperation.fetchRecordsCompletionBlock = completion
 			fetchRecordsOperation.perRecordCompletionBlock = {
 				(record, recordID, error) in
-				DLog("fetchRecordsOperation: \(record) - \(recordID) - \(error)")
+				DLog("fetchRecordsOperation: \(String(describing: record)) - \(String(describing: recordID)) - \(String(describing: error))")
 			}
 			database.add(fetchRecordsOperation)
 		}

@@ -60,7 +60,7 @@ func fetch<T: NSManagedObject>(forURIRepresentation url: URL, inContext context:
 		}
 
 		guard let TObject = object as? T else {
-			throw FetchError.invalidCast(to: "\(T.self)", from: "\(object)")
+			throw FetchError.invalidCast(to: "\(T.self)", from: "\(String(describing: object))")
 		}
 
 		return TObject

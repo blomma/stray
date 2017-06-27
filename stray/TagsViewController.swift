@@ -4,9 +4,9 @@ import CoreData
 class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 	@IBOutlet weak var tableView: UITableView!
 
-    fileprivate var userReorderingCells = false
-    fileprivate var selectedTagID: URL?
-	fileprivate var maxSortOrderIndex :Int = 0
+    private var userReorderingCells = false
+    private var selectedTagID: URL?
+	private var maxSortOrderIndex :Int = 0
 
 	var eventID: URL?
 
@@ -22,7 +22,7 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 
 		let result: Result<[Tag]> = fetch(request: request, inContext: persistentContainer.viewContext)
 		if result.isError {
-			fatalError("\(result.error)")
+			fatalError("\(String(describing: result.error))")
 		}
 		
 		if let tag = result.value?.first {
@@ -40,7 +40,7 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
             try controller.performFetch()
         } catch let error1 as NSError {
             error??.pointee = error1
-            print("Unresolved error \(error)")
+			print("Unresolved error \(String(describing: error))")
             exit(-1)
         }
 
@@ -52,7 +52,7 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
         super.viewWillDisappear(animated)
     }
 
-    fileprivate func configureCell(_ cell: TagCell, atIndexPath: IndexPath) -> Void {
+    private func configureCell(_ cell: TagCell, atIndexPath: IndexPath) -> Void {
         if let tag = fetchedResultsController?.object(at: atIndexPath) {
 			cell.delegate = self
 
@@ -89,18 +89,18 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataInjected {
 		let saveResult = save(context: persistentContainer.viewContext)
 		if saveResult.isError {
 			// TODO: Error handling
-			fatalError("\(saveResult.error)")
+			fatalError("\(String(describing: saveResult.error))")
 		}
 
 	}
 
-    fileprivate func showSelectMark(_ cell: TagCell) {
+    private func showSelectMark(_ cell: TagCell) {
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
             cell.selectedMark.alpha = 1
         })
     }
 
-    fileprivate func hideSelectMark(_ cell: TagCell) {
+    private func hideSelectMark(_ cell: TagCell) {
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
             cell.selectedMark.alpha = 0
         })
@@ -119,7 +119,7 @@ extension TagsViewController {
 			let saveResult = save(context: persistentContainer.viewContext)
 			if saveResult.isError {
 				// TODO: Error handling
-				fatalError("\(saveResult.error)")
+				fatalError("\(String(describing: saveResult.error))")
 			}
 		}
 	}
@@ -137,7 +137,7 @@ extension TagsViewController: UITableViewDelegate {
 		if let selectedTagID = selectedTagID {
 			let result: Result<Tag> = fetch(forURIRepresentation: selectedTagID, inContext: persistentContainer.viewContext)
 			guard let tag: Tag = result.value else {
-				fatalError("\(result.error)")
+				fatalError("\(String(describing: result.error))")
 			}
 			if let oldIndexPath = fetchedResultsController?.indexPath(forObject: tag),
 				let cell = tableView.cellForRow(at: oldIndexPath) as? TagCell {
@@ -149,7 +149,7 @@ extension TagsViewController: UITableViewDelegate {
 			let fetchedResultsController = fetchedResultsController {
 			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
 			guard let event: Event = result.value else {
-				fatalError("\(result.error)")
+				fatalError("\(String(describing: result.error))")
 			}
 
 			let tag = fetchedResultsController.object(at: indexPath)
@@ -157,7 +157,7 @@ extension TagsViewController: UITableViewDelegate {
 
 			let saveResult = save(context: persistentContainer.viewContext)
 			if saveResult.isError {
-				fatalError("\(saveResult.error)")
+				fatalError("\(String(describing: saveResult.error))")
 			}
 
 			self.performSegue(withIdentifier: "unwindToPresenter", sender: self)
@@ -198,7 +198,7 @@ extension TagsViewController: UITableViewDataSource {
 			let saveResult = save(context: persistentContainer.viewContext)
 			if saveResult.isError {
 				// TODO: Error handling
-				fatalError("\(saveResult.error)")
+				fatalError("\(String(describing: saveResult.error))")
 			}
 		}
 	}
@@ -220,7 +220,7 @@ extension TagsViewController: UITableViewDataSource {
 			let saveResult = save(context: persistentContainer.viewContext)
 			if saveResult.isError {
 				// TODO: Error handling
-				fatalError("\(saveResult.error)")
+				fatalError("\(String(describing: saveResult.error))")
 			}
 
 			userReorderingCells = false

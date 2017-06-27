@@ -80,7 +80,7 @@ extension SideMenuContainerController {
 
 // MARK: - GestureRecognizer
 extension SideMenuContainerController {
-	func handleCenterPanelPan(_ recognizer: UIPanGestureRecognizer) {
+	@objc func handleCenterPanelPan(_ recognizer: UIPanGestureRecognizer) {
 		guard sideViewController != nil else {
 			return
 		}
@@ -146,31 +146,31 @@ extension SideMenuContainerController {
 
 class SideMenuContainerController: UIViewController {
 	// MARK: - Private configurable constants
-	fileprivate let sidePanelWidth: CGFloat = 100
-	fileprivate let reavealDuration = 0.3
-	fileprivate let hideDuration = 0.2
-	fileprivate let transitionAnimator: TransitionAnimatable.Type? = FadeAnimator.self
-	fileprivate let shouldOpenPercentage: CGFloat = 0.2
-	fileprivate let shouldHidePercentage: CGFloat = 0.8
+	private let sidePanelWidth: CGFloat = 100
+	private let reavealDuration = 0.3
+	private let hideDuration = 0.2
+	private let transitionAnimator: TransitionAnimatable.Type? = FadeAnimator.self
+	private let shouldOpenPercentage: CGFloat = 0.2
+	private let shouldHidePercentage: CGFloat = 0.8
 
 	// MARK: - Private properties
-	fileprivate(set) public var sidePanelVisible = false
+	private(set) public var sidePanelVisible = false
 
-	fileprivate var centerViewController: UIViewController?
-	fileprivate var sideViewController: UIViewController?
+	private var centerViewController: UIViewController?
+	private var sideViewController: UIViewController?
 
-	fileprivate var centerPanel: UIView?
-	fileprivate var sidePanel: UIView?
-	fileprivate var panRecognizer: UIPanGestureRecognizer?
+	private var centerPanel: UIView?
+	private var sidePanel: UIView?
+	private var panRecognizer: UIPanGestureRecognizer?
 
-	fileprivate var transitionInProgress = false
-	fileprivate var flickVelocity: CGFloat = 0
+	private var transitionInProgress = false
+	private var flickVelocity: CGFloat = 0
 
-	fileprivate lazy var screenSize: CGSize = {
+	private lazy var screenSize: CGSize = {
 		return UIScreen.main.bounds.size
 	}()
 
-	fileprivate var centerPanelFrame: CGRect {
+	private var centerPanelFrame: CGRect {
 		return CGRect(
 			x: sidePanelVisible ? sidePanelWidth : 0,
 			y: 0,
@@ -179,7 +179,7 @@ class SideMenuContainerController: UIViewController {
 		)
 	}
 
-	fileprivate var sidePanelFrame: CGRect {
+	private var sidePanelFrame: CGRect {
 		return CGRect(
 			x: 0,
 			y: 0,
@@ -225,7 +225,7 @@ class SideMenuContainerController: UIViewController {
 			}, completion: nil)
 	}
 
-	fileprivate func setUpViewHierarchy() {
+	private func setUpViewHierarchy() {
 		view = UIView(frame: UIScreen.main.bounds)
 
 		// configure views
@@ -246,7 +246,7 @@ class SideMenuContainerController: UIViewController {
 		self.panRecognizer = panRecognizer
 	}
 
-	fileprivate func update(centerPanelFrame frame: CGRect) {
+	private func update(centerPanelFrame frame: CGRect) {
 		guard let centerPanel = centerPanel else {
 			return
 		}
@@ -254,7 +254,7 @@ class SideMenuContainerController: UIViewController {
 		centerPanel.frame = frame
 	}
 
-	fileprivate func update(sidePanelFrame frame: CGRect) {
+	private func update(sidePanelFrame frame: CGRect) {
 		guard let sidePanel = sidePanel else {
 			return
 		}
@@ -262,14 +262,14 @@ class SideMenuContainerController: UIViewController {
 		sidePanel.frame = frame
 	}
 
-	fileprivate func prepare(centerControllerForContainment controller: UIViewController) {
+	private func prepare(centerControllerForContainment controller: UIViewController) {
 		guard let centerPanel = centerPanel else {
 			fatalError("Missing centerPanel")
 		}
 		controller.view.frame = centerPanel.bounds
 	}
 
-	fileprivate func prepare(sidePanelForDisplay display: Bool) {
+	private func prepare(sidePanelForDisplay display: Bool) {
 		guard let sidePanel = sidePanel else {
 			return
 		}
@@ -284,7 +284,7 @@ class SideMenuContainerController: UIViewController {
 		}
 	}
 
-	fileprivate func animate(toReveal reveal: Bool) {
+	private func animate(toReveal reveal: Bool) {
 		guard let centerPanel = centerPanel, let sidePanel = sidePanel else {
 			fatalError("Missing centerPanel or sidePanel")
 		}
@@ -313,7 +313,7 @@ class SideMenuContainerController: UIViewController {
 			duration = min(newDuration, duration)
 		}
 
-		UIView.animate(withDuration: duration, animations: { _ in
+		UIView.animate(withDuration: duration, animations: {
 			self.update(centerPanelFrame: centerPanelFrame)
 			self.update(sidePanelFrame: sidePanelFrame)
 			}, completion: { _ in

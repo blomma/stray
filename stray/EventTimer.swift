@@ -18,34 +18,34 @@ class EventTimer: UIView {
 	public weak var delegate: EventTimerDelegate?
 
     // Private
-    fileprivate let pi2 = M_PI * 2.0
-    fileprivate let pi2_60 = M_PI * 2.0 / 60
+    private let pi2 = .pi * 2.0
+    private let pi2_60 = .pi * 2.0 / 60
 
-    fileprivate var updateTimer: Timer?
-    fileprivate var isStopped: Bool = false
-    fileprivate var isStarted: Bool = false
+    private var updateTimer: Timer?
+    private var isStopped: Bool = false
+    private var isStarted: Bool = false
 
-    fileprivate var startTouchPathLayer: CAShapeLayer = CAShapeLayer()
-    fileprivate var startLayer: CAShapeLayer = CAShapeLayer()
-    fileprivate var startPathLayer: CAShapeLayer = CAShapeLayer()
+    private var startTouchPathLayer: CAShapeLayer = CAShapeLayer()
+    private var startLayer: CAShapeLayer = CAShapeLayer()
+    private var startPathLayer: CAShapeLayer = CAShapeLayer()
 
-    fileprivate var stopTouchPathLayer: CAShapeLayer = CAShapeLayer()
-    fileprivate var stopLayer: CAShapeLayer = CAShapeLayer()
-    fileprivate var stopPathLayer: CAShapeLayer = CAShapeLayer()
+    private var stopTouchPathLayer: CAShapeLayer = CAShapeLayer()
+    private var stopLayer: CAShapeLayer = CAShapeLayer()
+    private var stopPathLayer: CAShapeLayer = CAShapeLayer()
 
-    fileprivate var secondLayer: CAShapeLayer = CAShapeLayer()
-    fileprivate var secondProgressTicksLayer: CAShapeLayer = CAShapeLayer()
+    private var secondLayer: CAShapeLayer = CAShapeLayer()
+    private var secondProgressTicksLayer: CAShapeLayer = CAShapeLayer()
 
-    fileprivate var deltaAngle: Double = 0
-    fileprivate var deltaTransform: CATransform3D?
-    fileprivate var deltaLayer: CAShapeLayer?
+    private var deltaAngle: Double = 0
+    private var deltaTransform: CATransform3D?
+    private var deltaLayer: CAShapeLayer?
 
-    fileprivate var tracking: Bool = false
-    fileprivate var trackingTouch: Int = 0
+    private var tracking: Bool = false
+    private var trackingTouch: Int = 0
 
-    fileprivate var startDate: Date?
-    fileprivate var runningDate: Date?
-    fileprivate var stopDate: Date?
+    private var startDate: Date?
+    private var runningDate: Date?
+    private var stopDate: Date?
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -308,10 +308,10 @@ extension EventTimer {
     internal func delta(from angleA: Double, to angleB: Double) -> Double {
         var diff = angleB - angleA
 
-        while diff < -M_PI {
+        while diff < -.pi {
             diff += pi2
         }
-        while diff > M_PI {
+        while diff > .pi {
             diff -= pi2
         }
 

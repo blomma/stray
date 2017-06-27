@@ -5,10 +5,10 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 
     @IBOutlet weak var tableView: UITableView!
 
-	fileprivate let shortStandaloneMonthSymbols: [String] = DateFormatter().shortStandaloneMonthSymbols
-    fileprivate let calendar = Calendar.autoupdatingCurrent
+	private let shortStandaloneMonthSymbols: [String] = DateFormatter().shortStandaloneMonthSymbols
+    private let calendar = Calendar.autoupdatingCurrent
 
-	fileprivate var fetchedResultsController: NSFetchedResultsController<Event>?
+	private var fetchedResultsController: NSFetchedResultsController<Event>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +26,7 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
             try controller.performFetch()
         } catch let error1 as NSError {
             error??.pointee = error1
-            print("Unresolved error \(error)")
+			print("Unresolved error \(String(describing: error))")
             exit(-1)
         }
 
@@ -37,7 +37,7 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
 			guard let event: Event = result.value else {
 				// TODO: Error handling
-				fatalError("\(result.error)")
+				fatalError("\(String(describing: result.error))")
 			}
 
 			if let indexPath = fetchedResultsController?.indexPath(forObject: event) {
@@ -58,7 +58,7 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 		}
 	}
 
-    fileprivate func configureCell(_ cell: EventCell, atIndexPath: IndexPath) -> Void {
+    private func configureCell(_ cell: EventCell, atIndexPath: IndexPath) -> Void {
         if let event = fetchedResultsController?.object(at: atIndexPath) {
 			if state.selectedEventID == event.objectID.uriRepresentation() {
 				showSelectMark(cell)
@@ -66,7 +66,7 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 
             if let name = event.tag {
                 let attributedString = NSAttributedString(string: name, attributes:
-                    [NSFontAttributeName: UIFont(name: "Helvetica Neue", size: 14.0)!])
+					[NSAttributedStringKey.font: UIFont(name: "Helvetica Neue", size: 14.0)!])
                 cell.tagButton.setAttributedTitle(attributedString, for: UIControlState())
             }
 
@@ -136,13 +136,13 @@ class EventsViewController: UIViewController, EventCellDelegate, CoreDataInjecte
 		}
 	}
 
-	fileprivate func showSelectMark(_ cell: EventCell) {
+	private func showSelectMark(_ cell: EventCell) {
 		UIView.animate(withDuration: 0.3, animations: { () -> Void in
 			cell.selectedMark.alpha = 1
 		})
 	}
 
-	fileprivate func hideSelectMark(_ cell: EventCell) {
+	private func hideSelectMark(_ cell: EventCell) {
 		UIView.animate(withDuration: 0.3, animations: { () -> Void in
 			cell.selectedMark.alpha = 0
 		})
@@ -157,7 +157,7 @@ extension EventsViewController: UITableViewDelegate {
 		if let eventID = state.selectedEventID {
 			let result: Result<Event> = fetch(forURIRepresentation: eventID, inContext: persistentContainer.viewContext)
 			guard let event: Event = result.value else {
-				fatalError("\(result.error)")
+				fatalError("\(String(describing: result.error))")
 			}
 
 			if let oldIndexPath = fetchedResultsController?.indexPath(forObject: event), let cell = tableView.cellForRow(at: oldIndexPath) as? EventCell {
@@ -244,3 +244,4 @@ extension EventsViewController: NSFetchedResultsControllerDelegate {
         tableView?.endUpdates()
     }
 }
+

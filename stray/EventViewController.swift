@@ -21,7 +21,7 @@ class EventViewController: UIViewController {
 	@IBOutlet weak var tag: UIButton?
 
 	// MARK: Private properties
-	fileprivate var modelView: EventViewModel = EventViewModel()
+	private var modelView: EventViewModel = EventViewModel()
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -61,10 +61,10 @@ class EventViewController: UIViewController {
 			(tag: String?) in
 
 			if let tag = tag, let font = UIFont(name: "Helvetica Neue", size: 14) {
-				let attriString = NSAttributedString(string:tag, attributes: [NSFontAttributeName: font])
+				let attriString = NSAttributedString(string:tag, attributes: [NSAttributedStringKey.font: font])
 				self.tag?.setAttributedTitle(attriString, for: UIControlState())
 			} else if let font = UIFont(name: "FontAwesome", size: 20) {
-				let attriString = NSAttributedString(string:"\u{f02b}", attributes: [NSFontAttributeName: font])
+				let attriString = NSAttributedString(string:"\u{f02b}", attributes: [NSAttributedStringKey.font: font])
 				self.tag?.setAttributedTitle(attriString, for: UIControlState())
 			}
 		}

@@ -101,7 +101,7 @@ class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 	var isRunningDidUpdate: ((_ value: IsRunning) -> Void)?
 
 
-	fileprivate var calendar = Calendar.autoupdatingCurrent
+	private var calendar = Calendar.autoupdatingCurrent
 	var selectedEventID: URL?
 
 	/// Sync exeution
@@ -121,7 +121,7 @@ class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 		let result: Result<Event> = fetch(forURIRepresentation: id, inContext: persistentContainer.viewContext)
 		guard let event: Event = result.value else {
 			// TODO: Error handling
-			fatalError("\(result.error)")
+			fatalError("\(String(describing: result.error))")
 		}
 
 		updateStart(with: event.startDate)
@@ -202,7 +202,7 @@ class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 
 			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: context)
 			guard let event: Event = result.value else {
-				fatalError("\(result.error)")
+				fatalError("\(String(describing: result.error))")
 			}
 			event.startDate = date
 
@@ -259,7 +259,7 @@ class EventViewModel: CoreDataInjected, StateInjected, CloudInjected {
 
 			let result: Result<Event> = fetch(forURIRepresentation: id, inContext: context)
 			guard let event: Event = result.value else {
-				fatalError("\(result.error)")
+				fatalError("\(String(describing: result.error))")
 			}
 			event.stopDate = stopDate
 
