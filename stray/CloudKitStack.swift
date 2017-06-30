@@ -7,18 +7,14 @@ import Foundation
 import CloudKit
 
 class CloudKitStack {
-	let queue: DispatchQueue = DispatchQueue(label: "com.artsoftheinsane.cloudsync")
-
-	var insertedRecords:[CKRecord] = [CKRecord]()
-	var updatedRecords:[CKRecord] = [CKRecord]()
-	var deletedRecords:[CKRecordID] = [CKRecordID]()
+	let queue: DispatchQueue = DispatchQueue(label: "com.artsoftheinsane.cloudsync", qos: .userInitiated)
 
 	func sync(
-		insertedRecords: [CKRecord],
-		updatedRecords: [CKRecord],
-		deletedRecords: [CKRecordID]) {
-		queue.async {
-			self.run(
+		insertedRecords: [CKRecord]?,
+		updatedRecords: [CKRecord]?,
+		deletedRecords: [CKRecordID]?) {
+		queue.async { [weak self] in
+			self?.run(
 				insertedRecords: insertedRecords,
 				updatedRecords: updatedRecords,
 				deletedRecords: deletedRecords)
@@ -30,7 +26,6 @@ class CloudKitStack {
 		let database = CKContainer.default().privateCloudDatabase
 
 		let modifyRecordZonesOperation = CKModifyRecordZonesOperation()
-		modifyRecordZonesOperation.qualityOfService = .utility
 
 		let insertRecordsOperation = CKModifyRecordsOperation()
 		insertRecordsOperation.recordsToSave = insertedRecords
@@ -38,11 +33,9 @@ class CloudKitStack {
 			(savedRecords, deletedRecordIDs, error) in
 			DLog("insertRecordsOperation: \(String(describing: savedRecords)) - \(String(describing: deletedRecordIDs)) - \(String(describing: error))")
 		}
-		insertRecordsOperation.qualityOfService = .utility
 		insertRecordsOperation.addDependency(modifyRecordZonesOperation)
 
 		let fetchRecordsOperation = CKFetchRecordsOperation()
-		fetchRecordsOperation.qualityOfService = .utility
 		fetchRecordsOperation.addDependency(insertRecordsOperation)
 
 		// Insert
@@ -58,7 +51,7 @@ class CloudKitStack {
 					let serverZoneNames = Set(zones.map { $0.key.zoneName })
 					expectedZoneNames.subtract(serverZoneNames)
 				}
-				
+
 				let missingZones = expectedZoneNames.map { CKRecordZone(zoneName: $0) }
 				modifyRecordZonesOperation.recordZonesToSave = missingZones
 			}
@@ -75,6 +68,8 @@ class CloudKitStack {
 
 			let completion = { (records: [CKRecordID : CKRecord]?, error: Error?) in
 				if let error = error as? CKError {
+					DLog("updatedRecordsCompletion: error: \(String(describing: error))")
+					
 					switch error.code {
 					case .networkUnavailable:
 						guard let retryAfterSeconds = error.retryAfterSeconds else {
@@ -105,7 +100,6 @@ class CloudKitStack {
 				}
 
 				let updateRecordsOperation = CKModifyRecordsOperation()
-				updateRecordsOperation.qualityOfService = .utility
 				updateRecordsOperation.recordsToSave = recordsToSave
 				updateRecordsOperation.modifyRecordsCompletionBlock = {
 					(savedRecords, deletedRecordIDs, error) in

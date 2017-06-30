@@ -23,6 +23,7 @@
 		9E42F20215570FD60087F602 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E42F20015570FD60087F602 /* Main.storyboard */; };
 		9E4DFB8C1AD17CBB008C0123 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4DFB8B1AD17CBB008C0123 /* MenuController.swift */; };
 		9E51708219E44F6900BEF39B /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E51708119E44F6900BEF39B /* Launch Screen.xib */; };
+		9E517CDF1F05A03F001E51DB /* Event+CloudKitStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E517CDE1F05A03F001E51DB /* Event+CloudKitStack.swift */; };
 		9E58CDA11B1895A50003CE03 /* AnimationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E58CDA01B1895A50003CE03 /* AnimationExtension.swift */; };
 		9E62E17C1A28D0DB0011EDC0 /* TagsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E62E17B1A28D0DB0011EDC0 /* TagsViewController.swift */; };
 		9E91F5051DD9DA4200C1E05B /* EventTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E91F5041DD9DA4200C1E05B /* EventTimer.swift */; };
@@ -63,6 +64,7 @@
 		9E42F1F615570FD60087F602 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9E4DFB8B1AD17CBB008C0123 /* MenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
 		9E51708119E44F6900BEF39B /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
+		9E517CDE1F05A03F001E51DB /* Event+CloudKitStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+CloudKitStack.swift"; sourceTree = "<group>"; };
 		9E58CDA01B1895A50003CE03 /* AnimationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationExtension.swift; sourceTree = "<group>"; };
 		9E62E17B1A28D0DB0011EDC0 /* TagsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsViewController.swift; sourceTree = "<group>"; };
 		9E91F5041DD9DA4200C1E05B /* EventTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTimer.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				9EDB5FED1D9BDD6F008024E2 /* StateInjected.swift */,
 				9E2B21BD1D43384C0049CA6C /* Event+CoreDataClass.swift */,
 				9E2B21BE1D43384C0049CA6C /* Event+CoreDataProperties.swift */,
+				9E517CDE1F05A03F001E51DB /* Event+CloudKitStack.swift */,
 				9E2B21BF1D43384C0049CA6C /* Tag+CoreDataClass.swift */,
 				9E2B21C01D43384C0049CA6C /* Tag+CoreDataProperties.swift */,
 				9E0D048E1AD6A75F00E82A13 /* State.swift */,
@@ -411,6 +414,7 @@
 				9EF339671D4E910D003153A9 /* CenterContainmentSegue.swift in Sources */,
 				9E2B21C31D43384C0049CA6C /* Tag+CoreDataClass.swift in Sources */,
 				9E378E7119EC35C3004DED67 /* EventsViewController.swift in Sources */,
+				9E517CDF1F05A03F001E51DB /* Event+CloudKitStack.swift in Sources */,
 				9EB08FDE19E00C4800D20EE5 /* TagCell.swift in Sources */,
 				9E36D3B31D35783300F33D80 /* CoreDataStackEntity.swift in Sources */,
 				9EB08FE119E03E1200D20EE5 /* EventCell.swift in Sources */,

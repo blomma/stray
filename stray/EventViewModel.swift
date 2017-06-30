@@ -1,4 +1,6 @@
 import Foundation
+import CoreData
+import CloudKit
 
 struct Start {
 	let time: String
@@ -103,9 +105,35 @@ class EventViewModel: CoreDataStackInjected, StateInjected, CloudKitStackInjecte
 
 	private var calendar = Calendar.autoupdatingCurrent
 	var selectedEventID: URL?
-
+	
+	
+	var observer: NSObjectProtocol?
+	
 	/// Sync exeution
 	func setup() {
+		observer = NotificationCenter.default.addObserver(forName: Notification.Name.NSManagedObjectContextDidSave, object: persistentContainer.viewContext, queue: nil) { (notification: Notification) in
+			guard let changes = notification.userInfo else {
+				return
+			}
+			
+			var inserted: [CKRecord]? = nil
+			if let i = changes[NSInsertedObjectsKey] as? Set<Event>, i.count > 0 {
+				inserted = i.map { $0.record() }
+			}
+			
+			var updated: [CKRecord]? = nil
+			if let u = changes[NSUpdatedObjectsKey] as? Set<Event>, u.count > 0 {
+				updated = u.map { $0.record() }
+			}
+			
+			var deleted: [CKRecordID]? = nil
+			if let d = changes[NSDeletedObjectsKey] as? Set<Event>, d.count > 0 {
+				deleted = d.map { $0.recordID() }
+			}
+			
+			self.cloudKitStack.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
+		}
+		
 		guard let id = state.selectedEventID else {
 			updateStart(with: nil)
 			updateStop(with: nil)
@@ -131,7 +159,13 @@ class EventViewModel: CoreDataStackInjected, StateInjected, CloudKitStackInjecte
 		isRunning = event.stopDate == nil
 		selectedEventID = id
 	}
-
+	
+	deinit {
+		if let observer = observer {
+			NotificationCenter.default.removeObserver(observer)
+		}
+	}
+	
 	func toggleEventRunning() {
 		if isRunning {
 			stopEvent()
@@ -149,23 +183,11 @@ class EventViewModel: CoreDataStackInjected, StateInjected, CloudKitStackInjecte
 		let event = Event(inContext: context)
 		event.startDate = startDate
 
-		let inserted = context.insertedObjects
-			.flatMap { $0 as? CloudKitStackEntity }
-			.map{ $0.record() }
-		let updated = context.updatedObjects
-			.flatMap { $0 as? CloudKitStackEntity }
-			.map{ $0.record() }
-		let deleted = context.deletedObjects
-			.flatMap { $0 as? CloudKitStackEntity }
-			.map{ $0.recordID() }
-
 		let result = save(context: context)
 		if let error = result.error {
 			fatalError("\(error)")
 		}
-
-		cloudKitStack.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
-
+		
 		updateStart(with: startDate)
 		updateStop(with: nil)
 
@@ -205,23 +227,11 @@ class EventViewModel: CoreDataStackInjected, StateInjected, CloudKitStackInjecte
 				fatalError("\(String(describing: result.error))")
 			}
 			event.startDate = date
-
-			let inserted = context.insertedObjects
-				.flatMap { $0 as? CloudKitStackEntity }
-				.map{ $0.record() }
-			let updated = context.updatedObjects
-				.flatMap { $0 as? CloudKitStackEntity }
-				.map{ $0.record() }
-			let deleted = context.deletedObjects
-				.flatMap { $0 as? CloudKitStackEntity }
-				.map{ $0.recordID() }
-
+			
 			let saveResult = save(context: context)
 			if let error = saveResult.error {
 				fatalError("\(error)")
 			}
-
-			cloudKitStack.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
 		}
 
 		let unitFlags: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
@@ -263,22 +273,10 @@ class EventViewModel: CoreDataStackInjected, StateInjected, CloudKitStackInjecte
 			}
 			event.stopDate = stopDate
 
-			let inserted = context.insertedObjects
-				.flatMap { $0 as? CloudKitStackEntity }
-				.map{ $0.record() }
-			let updated = context.updatedObjects
-				.flatMap { $0 as? CloudKitStackEntity }
-				.map{ $0.record() }
-			let deleted = context.deletedObjects
-				.flatMap { $0 as? CloudKitStackEntity }
-				.map{ $0.recordID() }
-
 			let saveResult = save(context: context)
 			if let error = saveResult.error {
 				fatalError("\(error)")
 			}
-
-			cloudKitStack.sync(insertedRecords: inserted, updatedRecords: updated, deletedRecords: deleted)
 		}
 
 		let unitFlags: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
