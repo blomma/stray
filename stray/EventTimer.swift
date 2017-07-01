@@ -56,7 +56,11 @@ class EventTimer: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-
+	
+	deinit {
+		updateTimer?.invalidate()
+	}
+	
     override func prepareForInterfaceBuilder() {
         setup(frame: CGRect(x: 0, y: 0, width: bounds.size.width, height: bounds.size.height))
     }
@@ -198,13 +202,13 @@ class EventTimer: UIView {
 			startTouchPathLayer.strokeEnd = 0
 
 			if !isStopped {
-				updateTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { [unowned self] (timer) in
+				updateTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { [weak self] (timer) in
 					let now = Date()
-					self.runningDate = now
-					self.drawStop(with: now)
+					self?.runningDate = now
+					self?.drawStop(with: now)
 
-					if let startDate = self.startDate {
-						self.delegate?.updatedRunningWith(start: startDate, stop: now)
+					if let startDate = self?.startDate {
+						self?.delegate?.updatedRunningWith(start: startDate, stop: now)
 					}
 				})
 			}
@@ -258,13 +262,13 @@ extension EventTimer {
             runningDate = now
             drawStop(with: now)
 
-            updateTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { [unowned self] (timer) in
+            updateTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { [weak self] (timer) in
                 let now = Date()
-                self.runningDate = now
-                self.drawStop(with: now)
+                self?.runningDate = now
+                self?.drawStop(with: now)
 
-                if let startDate = self.startDate {
-                    self.delegate?.updatedRunningWith(start: startDate, stop: now)
+                if let startDate = self?.startDate {
+                    self?.delegate?.updatedRunningWith(start: startDate, stop: now)
                 }
             })
         }

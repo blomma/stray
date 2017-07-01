@@ -28,62 +28,90 @@ class EventViewController: UIViewController {
 
 		self.setNeedsStatusBarAppearanceUpdate()
 	}
-
+	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 
-		modelView.startDidUpdate = { [unowned self]
+		modelView.startDidUpdate = { [weak self]
 			(value: Start) in
-
-			self.eventStartTime?.text = value.time
-			self.eventStartDay?.text  = value.day
-			self.eventStartMonth?.text = value.month
-			self.eventStartYear?.text = value.year
+			
+			guard
+				let eventStartTime = self?.eventStartTime,
+				let eventStartDay = self?.eventStartDay,
+				let eventStartMonth = self?.eventStartMonth,
+				let eventStartYear = self?.eventStartYear
+				else { return }
+			
+			eventStartTime.text = value.time
+			eventStartDay.text  = value.day
+			eventStartMonth.text = value.month
+			eventStartYear.text = value.year
 		}
 
-		modelView.stopDidUpdate = { [unowned self]
+		modelView.stopDidUpdate = { [weak self]
 			(value: Stop) in
-
-			self.eventStopTime?.text = value.time
-			self.eventStopDay?.text  = value.day
-			self.eventStopYear?.text = value.year
-			self.eventStopMonth?.text = value.month
+			
+			guard
+				let eventStopTime = self?.eventStopTime,
+				let eventStopDay = self?.eventStopDay,
+				let eventStopYear = self?.eventStopYear,
+				let eventStopMonth = self?.eventStopMonth
+				else { return }
+			
+			eventStopTime.text = value.time
+			eventStopDay.text  = value.day
+			eventStopYear.text = value.year
+			eventStopMonth.text = value.month
 		}
 
-		modelView.runningDidUpdate = { [unowned self]
+		modelView.runningDidUpdate = { [weak self]
 			(value: Running) in
-
-			self.eventTimeMinutes?.text = value.minute
-			self.eventTimeHours?.text = value.hour
+			
+			guard
+				let eventTimeMinutes = self?.eventTimeMinutes,
+				let eventTimeHours = self?.eventTimeHours
+				else { return }
+			
+			eventTimeMinutes.text = value.minute
+			eventTimeHours.text = value.hour
 		}
 
-		modelView.tagDidUpdate = { [unowned self]
-			(tag: String?) in
-
-			if let tag = tag, let font = UIFont(name: "Helvetica Neue", size: 14) {
-				let attriString = NSAttributedString(string:tag, attributes: [NSAttributedStringKey.font: font])
-				self.tag?.setAttributedTitle(attriString, for: UIControlState())
+		modelView.tagDidUpdate = { [weak self]
+			(value: String?) in
+			
+			guard
+				let tag = self?.tag
+				else { return }
+			
+			if let value = value, let font = UIFont(name: "Helvetica Neue", size: 14) {
+				let attriString = NSAttributedString(string:value, attributes: [NSAttributedStringKey.font: font])
+				tag.setAttributedTitle(attriString, for: UIControlState())
 			} else if let font = UIFont(name: "FontAwesome", size: 20) {
 				let attriString = NSAttributedString(string:"\u{f02b}", attributes: [NSAttributedStringKey.font: font])
-				self.tag?.setAttributedTitle(attriString, for: UIControlState())
+				tag.setAttributedTitle(attriString, for: UIControlState())
 			}
 		}
 
-		modelView.isRunningDidUpdate = { [unowned self]
+		modelView.isRunningDidUpdate = { [weak self]
 			(value: IsRunning) in
-
-			self.toggleStartStopButton?.setTitle(value.startStop, for: UIControlState())
+			
+			guard
+				let toggleStartStopButton = self?.toggleStartStopButton,
+				let eventTimer = self?.eventTimer
+				else { return }
+				
+			toggleStartStopButton.setTitle(value.startStop, for: UIControlState())
 
 			if value.isRunning {
                 if let startDate = value.startDate {
-                    self.eventTimer?.setup(with: startDate, and: value.stopDate)
+                    eventTimer.setup(with: startDate, and: value.stopDate)
                 }
-				self.animateStartEvent()
+				self?.animateStartEvent()
 			} else {
                 if let stopDate = value.stopDate {
-                    self.eventTimer?.stop(with: stopDate)
+                    eventTimer.stop(with: stopDate)
                 }
-				self.animateStopEvent()
+				self?.animateStopEvent()
 			}
 		}
 
