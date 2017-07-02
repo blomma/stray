@@ -353,11 +353,11 @@ extension EventTimer {
         // =====================
         // = Ticks initializer =
         // =====================
-        let largeTickPathWidth: Double = 5
-        let smallTickPathWidth: Double = 3
+        let largeTickPathWidth: Double = 7
+        let smallTickPathWidth: Double = 5
 
-        let largeTickPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: largeTickPathWidth, height: 14))
-        let smallTickPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: smallTickPathWidth, height: 11))
+        let largeTickPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: largeTickPathWidth, height: 16))
+        let smallTickPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: smallTickPathWidth, height: 13))
 
         for i in 1...60 {
             let tick = CAShapeLayer()
@@ -365,7 +365,7 @@ extension EventTimer {
 
             if i % 15 == 0 {
                 // position
-                tick.bounds = CGRect(x: 0.0, y: 0.0, width: largeTickPathWidth, height: Double(frame.size.width / 2.0 - 30))
+                tick.bounds = CGRect(x: 0.0, y: 0.0, width: largeTickPathWidth, height: Double(frame.size.width / 2.0 - 28))
                 tick.position = CGPoint(x: frame.midX, y: frame.midY)
                 tick.anchorPoint = CGPoint(x: 0.5, y: 1)
 
@@ -376,7 +376,7 @@ extension EventTimer {
                 tick.path = largeTickPath.cgPath
             } else {
                 // position
-                tick.bounds = CGRect(x: 0.0, y: 0.0, width: smallTickPathWidth, height: Double(frame.size.width / 2.0 - 31.5))
+                tick.bounds = CGRect(x: 0.0, y: 0.0, width: smallTickPathWidth, height: Double(frame.size.width / 2.0 - 29.5))
                 tick.position = CGPoint(x: frame.midX, y: frame.midY)
                 tick.anchorPoint = CGPoint(x: 0.5, y: 1)
 
