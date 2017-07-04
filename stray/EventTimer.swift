@@ -59,72 +59,81 @@ class EventTimer: UIView {
 	
 	deinit {
 		updateTimer?.invalidate()
+	}	
+}
+
+// MARK: UINibLoadingAdditions
+extension EventTimer {
+	override func prepareForInterfaceBuilder() {
+		setup(frame: CGRect(x: 0, y: 0, width: bounds.size.width, height: bounds.size.height))
+		super.prepareForInterfaceBuilder()
 	}
-	
-    override func prepareForInterfaceBuilder() {
-        setup(frame: CGRect(x: 0, y: 0, width: bounds.size.width, height: bounds.size.height))
-    }
+}
 
-    // MARK: Gestures
-    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return !tracking
-    }
+// MARK: UIViewGestureRecognizers
+extension EventTimer {
+	override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+		return !tracking
+	}
+}
 
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        // If we have more than one touch then the intent clearly isn't to
-        // rotate the dial
-        guard
+// MARK: UIResponder
+extension EventTimer {
+	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+		// If we have more than one touch then the intent clearly isn't to
+		// rotate the dial
+		guard
 			isStarted,
 			touches.count == 1,
 			let touch = touches.first else {
 				super.touchesBegan(touches, with: event)
-
+				
 				return
 		}
-
-        let point = touch.location(in: self)
-        deltaLayer = nil
-
-        if let presentation = startPathLayer.presentation(),
+		
+		let point = touch.location(in: self)
+		deltaLayer = nil
+		
+		if let presentation = startPathLayer.presentation(),
 			presentation.hitTest(startPathLayer.convert(point, from: layer)) != nil {
-            deltaLayer = startLayer
-
-            startTouchPathLayer.strokeEnd = 1
-        } else if isStopped, let presentation = stopPathLayer.presentation(),
+			deltaLayer = startLayer
+			
+			startTouchPathLayer.strokeEnd = 1
+		} else if isStopped, let presentation = stopPathLayer.presentation(),
 			presentation.hitTest(stopPathLayer.convert(point, from: layer)) != nil {
-            deltaLayer = stopLayer
-
+			deltaLayer = stopLayer
+			
 			stopTouchPathLayer.strokeEnd = 1
-        }
-
-        // If the touch hasnt touched either stop or start then forward up
-        // the chain and return
-        guard let deltaLayer = deltaLayer else {
-            super.touchesBegan(touches, with: event)
-
-            return
-        }
-
+		}
+		
+		// If the touch hasnt touched either stop or start then forward up
+		// the chain and return
+		guard let deltaLayer = deltaLayer else {
+			super.touchesBegan(touches, with: event)
+			
+			return
+		}
+		
 		updateTimer?.invalidate()
-
-        // Calculate the angle in radians
-        let cx = deltaLayer.position.x
-        let cy = deltaLayer.position.y
-
-        let dx = point.x - cx
-        let dy = point.y - cy
-
-        let angle = atan2(dy, dx)
-
-        deltaAngle = Double(angle)
-        deltaTransform = deltaLayer.transform
-
-        trackingTouch = touch.hash
-        tracking = true
-    }
-
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard
+		
+		// Calculate the angle in radians
+		let cx = deltaLayer.position.x
+		let cy = deltaLayer.position.y
+		
+		let dx = point.x - cx
+		let dy = point.y - cy
+		
+		let angle = atan2(dy, dx)
+		
+		deltaAngle = Double(angle)
+		deltaTransform = deltaLayer.transform
+		
+		trackingTouch = touch.hash
+		tracking = true
+	}
+	
+	override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+		guard
 			let deltaLayer = deltaLayer,
 			let deltaTransform = deltaTransform,
 			let touch = touches.filter({ (t: UITouch) -> Bool in
@@ -132,55 +141,55 @@ class EventTimer: UIView {
 			}).first else {
 				tracking = false
 				self.deltaLayer = nil
-
+				
 				super.touchesMoved(touches, with: event)
-
+				
 				return
 		}
-
-        let point = touch.location(in: self)
-
-        // Calculate the angle in radians
-        let cx = deltaLayer.position.x
-        let cy = deltaLayer.position.y
-
-        let dx = point.x - cx
-        let dy = point.y - cy
-
-        let angle = Double(atan2(dy, dx))
-        let da = delta(from: deltaAngle, to: angle)
-
+		
+		let point = touch.location(in: self)
+		
+		// Calculate the angle in radians
+		let cx = deltaLayer.position.x
+		let cy = deltaLayer.position.y
+		
+		let dx = point.x - cx
+		let dy = point.y - cy
+		
+		let angle = Double(atan2(dy, dx))
+		let da = delta(from: deltaAngle, to: angle)
+		
 		// The deltaangle applied to the transform
-        let transform = CATransform3DRotate(deltaTransform, CGFloat(da), 0, 0, 1)
-
+		let transform = CATransform3DRotate(deltaTransform, CGFloat(da), 0, 0, 1)
+		
 		// Save for next iteration
 		self.deltaAngle = angle
 		self.deltaTransform = transform
-
+		
 		if deltaLayer == self.startLayer {
 			let seconds = timeInterval(from: da)
 			startDate = startDate?.addingTimeInterval(seconds)
-
+			
 			if let startDate = startDate {
 				delegate?.updatedStart(to: startDate, whileEditing: true)
 			}
 		} else if deltaLayer == self.stopLayer {
 			let seconds = timeInterval(from: da)
 			stopDate = stopDate?.addingTimeInterval(seconds)
-
+			
 			if let stopDate = stopDate {
 				delegate?.updatedStop(to: stopDate, whileEditing: true)
 			}
 		}
-
+		
 		CATransaction.begin()
 		CATransaction.setDisableActions(true)
-
+		
 		deltaLayer.transform = transform
-
+		
 		CATransaction.commit()
-    }
-
+	}
+	
 	override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
 		guard
 			let deltaLayer = deltaLayer,
@@ -189,24 +198,24 @@ class EventTimer: UIView {
 			}).first != nil else {
 				tracking = false
 				self.deltaLayer = nil
-
+				
 				super.touchesEnded(touches, with: event)
-
+				
 				return
 		}
-
+		
 		if deltaLayer == self.startLayer, let startDate = startDate {
 			drawStart(with: startDate)
-
+			
 			delegate?.updatedStart(to: startDate, whileEditing: false)
 			startTouchPathLayer.strokeEnd = 0
-
+			
 			if !isStopped {
 				updateTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { [weak self] (timer) in
 					let now = Date()
 					self?.runningDate = now
 					self?.drawStop(with: now)
-
+					
 					if let startDate = self?.startDate {
 						self?.delegate?.updatedRunningWith(start: startDate, stop: now)
 					}
@@ -214,15 +223,15 @@ class EventTimer: UIView {
 			}
 		} else if deltaLayer == self.stopLayer, let stopDate = stopDate {
 			drawStop(with: stopDate)
-
+			
 			delegate?.updatedStop(to: stopDate, whileEditing: false)
 			stopTouchPathLayer.strokeEnd = 0
 		}
-
+		
 		tracking = false
 		self.deltaLayer = nil
 	}
-
+	
 	override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
 		guard
 			deltaLayer != nil,
@@ -231,12 +240,12 @@ class EventTimer: UIView {
 			}).first != nil else {
 				tracking = false
 				self.deltaLayer = nil
-
+				
 				super.touchesCancelled(touches, with: event)
-
+				
 				return
 		}
-
+		
 		tracking = false
 		deltaLayer = nil
 	}
@@ -286,7 +295,7 @@ extension EventTimer {
 
 // MARK: Private functions
 extension EventTimer {
-    internal func reset() {
+    private func reset() {
         updateTimer?.invalidate()
 
         isStarted = false
@@ -305,11 +314,11 @@ extension EventTimer {
         })
     }
 
-    internal func timeInterval(from angle: Double) -> TimeInterval {
+    private func timeInterval(from angle: Double) -> TimeInterval {
         return angle / pi2 * 3600
     }
 
-    internal func delta(from angleA: Double, to angleB: Double) -> Double {
+    private func delta(from angleA: Double, to angleB: Double) -> Double {
         var diff = angleB - angleA
 
         while diff < -.pi {
@@ -322,12 +331,12 @@ extension EventTimer {
         return diff
     }
 
-    internal func drawStart(with date: Date) {
+    private func drawStart(with date: Date) {
         let angle = pi2 * floor(fmod(date.timeIntervalSince1970, 3600) / 60) / 60
         startLayer.transform = CATransform3DMakeRotation(CGFloat(angle), 0, 0, 1)
     }
 
-    internal func drawStop(with date: Date) {
+    private func drawStop(with date: Date) {
         let stopSeconds = date.timeIntervalSince1970
 
         // We want a fluid update to the seconds
@@ -349,7 +358,7 @@ extension EventTimer {
         stopLayer.transform = CATransform3DMakeRotation(CGFloat(minuteAngle), 0, 0, 1)
     }
 
-    internal func setup(frame: CGRect) {
+    private func setup(frame: CGRect) {
         // =====================
         // = Ticks initializer =
         // =====================
