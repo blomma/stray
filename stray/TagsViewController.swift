@@ -6,7 +6,7 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataStackInject
 
     private var userReorderingCells = false
     private var selectedTagID: URL?
-	private var maxSortOrderIndex :Int = 0
+	private var maxSortOrderIndex: Int = 0
 
 	var eventID: URL?
 
@@ -24,7 +24,7 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataStackInject
 		if result.isError {
 			fatalError("\(String(describing: result.error))")
 		}
-		
+
 		if let tag = result.value?.first {
 			maxSortOrderIndex = tag.sortIndex
 		}
@@ -52,7 +52,7 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataStackInject
         super.viewWillDisappear(animated)
     }
 
-    private func configureCell(_ cell: TagCell, atIndexPath: IndexPath) -> Void {
+    private func configureCell(_ cell: TagCell, atIndexPath: IndexPath) {
         if let tag = fetchedResultsController?.object(at: atIndexPath) {
 			cell.delegate = self
 
@@ -111,8 +111,7 @@ class TagsViewController: UIViewController, TagCellDelegate, CoreDataStackInject
 extension TagsViewController {
 	func didEndEditing(_ cell: TagCell) {
         if let fetchedResultsController = fetchedResultsController,
-            let indexPath = tableView.indexPath(for: cell)
-		{
+            let indexPath = tableView.indexPath(for: cell) {
 			let tag = fetchedResultsController.object(at: indexPath)
 			tag.name = cell.name.text
 

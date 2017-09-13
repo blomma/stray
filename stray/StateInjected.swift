@@ -13,4 +13,3 @@ class StateInjector {
 		return State()
 	}()
 }
-

@@ -40,7 +40,7 @@ enum FetchError: Error, CustomStringConvertible {
 	}
 }
 
-func fetch<T: NSManagedObject>(forURIRepresentation url: URL, inContext context:NSManagedObjectContext) -> Result<T> {
+func fetch<T: NSManagedObject>(forURIRepresentation url: URL, inContext context: NSManagedObjectContext) -> Result<T> {
 	return Result<T> {
 		guard let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: url) else {
 			throw FetchError.invalidURIRepresentation(url: url.description)
@@ -67,7 +67,7 @@ func fetch<T: NSManagedObject>(forURIRepresentation url: URL, inContext context:
 	}
 }
 
-func fetch<T: NSManagedObject>(request: NSFetchRequest<T>, inContext context:NSManagedObjectContext) -> Result<[T]> {
+func fetch<T: NSManagedObject>(request: NSFetchRequest<T>, inContext context: NSManagedObjectContext) -> Result<[T]> {
 	return Result<[T]> {
 		var objects: [T]!
 		var thrown: Error?
@@ -86,7 +86,7 @@ func fetch<T: NSManagedObject>(request: NSFetchRequest<T>, inContext context:NSM
 	}
 }
 
-func fetchFirst<T: NSManagedObject>(request: NSFetchRequest<T>, inContext context:NSManagedObjectContext) -> Result<T> {
+func fetchFirst<T: NSManagedObject>(request: NSFetchRequest<T>, inContext context: NSManagedObjectContext) -> Result<T> {
 	return Result<T> {
 		request.fetchLimit = 1
 		request.returnsObjectsAsFaults = false

@@ -1,16 +1,20 @@
 protocol CloudKitStackInjected {
-	var cloudKitStack: CloudKitStack { get }
+	func resolve() -> CloudKitStack
+	func resolveStatic() -> CloudKitStack
 }
 
 extension CloudKitStackInjected {
-	var cloudKitStack: CloudKitStack {
-		get { return CloudKitStackInjector.cloudKitStack }
+	func resolve() -> CloudKitStack {
+		return CloudKitStack()
+	}
+
+	func resolveStatic() -> CloudKitStack {
+		return CloudKitStackInjector.cloudKitStack
 	}
 }
 
-class CloudKitStackInjector {
+fileprivate class CloudKitStackInjector {
 	static var cloudKitStack: CloudKitStack = {
 		return CloudKitStack()
 	}()
 }
-

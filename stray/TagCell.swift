@@ -1,7 +1,7 @@
 import UIKit
 
 protocol TagCellDelegate : class {
-	func didEndEditing(_ cell:TagCell)
+	func didEndEditing(_ cell: TagCell)
 	func shouldBeginEdit() -> Bool
 }
 
