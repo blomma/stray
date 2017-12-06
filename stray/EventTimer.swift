@@ -412,7 +412,7 @@ extension EventTimer {
 
         stopPathLayer.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
 
-        let stopPathFillColor = UIColor(colorLiteralRed: 0.427, green: 0.784, blue: 0.992, alpha: 1)
+        let stopPathFillColor = UIColor(red: 0.427, green: 0.784, blue: 0.992, alpha: 1)
         // drawing
         stopPathLayer.fillColor = stopPathFillColor.cgColor
         stopPathLayer.lineWidth = 1
@@ -450,7 +450,7 @@ extension EventTimer {
 
         startPathLayer.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
 
-        let startPathFillColor = UIColor(colorLiteralRed: 0.941, green: 0.686, blue: 0.314, alpha: 1)
+        let startPathFillColor = UIColor(red: 0.941, green: 0.686, blue: 0.314, alpha: 1)
         // drawing
         startPathLayer.fillColor = startPathFillColor.cgColor
         startPathLayer.lineWidth = 1
@@ -488,7 +488,7 @@ extension EventTimer {
         secondLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
         secondLayer.position = CGPoint(x: frame.midX, y: frame.midY)
 
-        let secondPathFillColor = UIColor(colorLiteralRed: 0.843, green: 0.306, blue: 0.314, alpha: 1)
+        let secondPathFillColor = UIColor(red: 0.843, green: 0.306, blue: 0.314, alpha: 1)
         // drawing
         secondLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1)
         secondLayer.fillColor = secondPathFillColor.cgColor
